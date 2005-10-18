@@ -3,9 +3,9 @@
 /* SVN FILE: $Id$ */
 
 /**
- * Short description for file.
+ * Bake startup script
  * 
- * Long description for file
+ * Invokes the Bake class with given parameters.
  *
  * PHP versions 4 and 5
  *
