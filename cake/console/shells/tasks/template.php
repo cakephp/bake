@@ -17,6 +17,8 @@
  * @since         CakePHP(tm) v 1.3
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+App::import('Core', 'Folder');
+
 class TemplateTask extends Shell {
 
 /**
@@ -55,7 +57,7 @@ class TemplateTask extends Shell {
 		$paths = App::path('shells');
 		$core = array_pop($paths);
 		$separator = DS === '/' ? '/' : '\\\\';
-		$core = preg_replace('#libs' . $separator . '$#', '', $core);
+		$core = preg_replace('#shells' . $separator . '$#', '', $core);
 		$paths[] = $core;
 		$Folder =& new Folder($core . 'templates' . DS . 'default');
 		$contents = $Folder->read();
@@ -63,6 +65,7 @@ class TemplateTask extends Shell {
 
 		$plugins = App::objects('plugin');
 		foreach ($plugins as $plugin) {
+			$paths[] = $this->_pluginPath($plugin) . 'console' . DS . 'shells' . DS;
 			$paths[] = $this->_pluginPath($plugin) . 'vendors' . DS . 'shells' . DS;
 		}
 
@@ -178,7 +181,7 @@ class TemplateTask extends Shell {
 		}
 		$index = $this->in(__('Which bake theme would you like to use?'), range(1, $i - 1), 1);
 		$themeNames = array_keys($this->templatePaths);
-		$this->Dispatch->params['theme'] = $themeNames[$index - 1];
+		$this->params['theme'] = $themeNames[$index - 1];
 		return $indexedPaths[$index];
 	}
 

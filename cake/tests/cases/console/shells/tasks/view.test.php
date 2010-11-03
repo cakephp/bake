@@ -20,23 +20,15 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::import('Shell', 'Shell', false);
+App::import('Shell', array(
+	'tasks/view',
+	'tasks/controller',
+	'tasks/template',
+	'tasks/project',
+	'tasks/db_config'
+));
 
-if (!defined('DISABLE_AUTO_DISPATCH')) {
-	define('DISABLE_AUTO_DISPATCH', true);
-}
-
-if (!class_exists('ShellDispatcher')) {
-	ob_start();
-	$argv = false;
-	require CAKE . 'console' .  DS . 'cake.php';
-	ob_end_clean();
-}
-
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'view.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'controller.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'template.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'project.php';
-
+require_once CAKE . 'console' .  DS . 'shell_dispatcher.php';
 
 /**
  * Test View Task Comment Model
@@ -232,18 +224,18 @@ class ViewTaskTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->Dispatcher = $this->getMock('ShellDispatcher', array(
-			'getInput', 'stdout', 'stderr', '_stop', '_initEnvironment', 'clear'
-		));
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+
 		$this->Task = $this->getMock('ViewTask',
 			array('in', 'err', 'createFile', '_stop'),
-			array(&$this->Dispatcher)
+			array($out, $out, $in)
 		);
-		$this->Task->Template = new TemplateTask($this->Dispatcher);
-		$this->Task->Controller = $this->getMock('ControllerTask', array(), array(&$this->Dispatcher));
-		$this->Task->Project = $this->getMock('ProjectTask', array(), array(&$this->Dispatcher));
+		$this->Task->Template = new TemplateTask($out, $out, $in);
+		$this->Task->Controller = $this->getMock('ControllerTask', array(), array($out, $out, $in));
+		$this->Task->Project = $this->getMock('ProjectTask', array(), array($out, $out, $in));
+		$this->Task->DbConfig = $this->getMock('DbConfigTask', array(), array($out, $out, $in));
 
-		$this->Dispatcher->shellPaths = App::path('shells');
 		$this->Task->path = TMP;
 		$this->Task->Template->params['theme'] = 'default';
 	}
@@ -401,7 +393,7 @@ class ViewTaskTest extends CakeTestCase {
 		$this->Task->controllerName = 'ViewTaskComments';
 		$this->Task->controllerPath = 'view_task_comments';
 		$this->Task->plugin = 'TestTest';
-		$this->Task->name = 'ViewTask';
+		$this->Task->name = 'View';
 
 		$path = APP . 'plugins' . DS . 'test_test' . DS . 'views' . DS . 'view_task_comments' . DS  . 'view.ctp';
 		$this->Task->expects($this->once())->method('createFile')

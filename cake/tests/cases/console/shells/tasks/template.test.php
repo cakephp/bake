@@ -21,19 +21,9 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::import('Shell', 'Shell', false);
+App::import('Shell', 'tasks/template');
 
-if (!defined('DISABLE_AUTO_DISPATCH')) {
-	define('DISABLE_AUTO_DISPATCH', true);
-}
-
-if (!class_exists('ShellDispatcher')) {
-	ob_start();
-	$argv = false;
-	require CAKE . 'console' .  DS . 'cake.php';
-	ob_end_clean();
-}
-
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'template.php';
+require_once CAKE . 'console' .  DS . 'shell_dispatcher.php';
 
 /**
  * TemplateTaskTest class
@@ -49,14 +39,14 @@ class TemplateTaskTest extends CakeTestCase {
  * @return void
  */
 	public function setup() {
-		$this->Dispatcher = $this->getMock('ShellDispatcher', array(
-			'getInput', 'stdout', 'stderr', '_stop', '_initEnvironment', 'clear'
-		));
+		parent::setUp();
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+
 		$this->Task = $this->getMock('TemplateTask', 
-			array('in', 'err', 'createFile', '_stop'),
-			array(&$this->Dispatcher)
+			array('in', 'err', 'createFile', '_stop', 'clear'),
+			array($out, $out, $in)
 		);
-		$this->Task->Dispatch->shellPaths = App::path('shells');
 	}
 
 /**
@@ -64,10 +54,9 @@ class TemplateTaskTest extends CakeTestCase {
  *
  * @return void
  */
-	public function teardown() {
-		unset($this->Task, $this->Dispatcher);
-		ClassRegistry::flush();
-		App::build();
+	public function tearDown() {
+		parent::tearDown();
+		unset($this->Task);
 	}
 
 /**
@@ -100,7 +89,6 @@ class TemplateTaskTest extends CakeTestCase {
  */
 	public function testFindingInstalledThemesForBake() {
 		$consoleLibs = CAKE_CORE_INCLUDE_PATH . DS . CAKE . 'console' . DS;
-		$this->Task->Dispatch->shellPaths = array($consoleLibs);
 		$this->Task->initialize();
 		$this->assertEqual($this->Task->templatePaths, array('default' => $consoleLibs . 'templates' . DS . 'default' . DS));
 	}
@@ -128,7 +116,7 @@ class TemplateTaskTest extends CakeTestCase {
 		$this->Task->params = array();
 		$result = $this->Task->getThemePath();
 		$this->assertEqual($result, $defaultTheme);
-		$this->assertEqual($this->Dispatcher->params['theme'], 'default');
+		$this->assertEqual($this->Task->params['theme'], 'default');
 	}
 
 /**
@@ -139,7 +127,7 @@ class TemplateTaskTest extends CakeTestCase {
 	public function testGenerate() {
 		App::build(array(
 			'shells' => array(
-				TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS .  'test_app' . DS . 'vendors' . DS . 'shells' . DS
+				TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS .  'test_app' . DS . 'console' . DS
 			)
 		));
 		$this->Task->initialize();
@@ -159,7 +147,7 @@ class TemplateTaskTest extends CakeTestCase {
 	public function testGenerateWithTemplateFallbacks() {
 		App::build(array(
 			'shells' => array(
-				TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS .  'test_app' . DS . 'vendors' . DS . 'shells' . DS,
+				TEST_CAKE_CORE_INCLUDE_PATH . 'tests' . DS .  'test_app' . DS . 'console' . DS,
 				CAKE_CORE_INCLUDE_PATH . DS . 'console' . DS
 			)
 		));

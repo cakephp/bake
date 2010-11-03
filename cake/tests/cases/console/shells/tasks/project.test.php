@@ -20,21 +20,11 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::import('Shell', 'Shell', false);
+App::import('Shell', 'tasks/project');
+
 App::import('Core', 'File');
 
-
-if (!defined('DISABLE_AUTO_DISPATCH')) {
-	define('DISABLE_AUTO_DISPATCH', true);
-}
-
-if (!class_exists('ShellDispatcher')) {
-	ob_start();
-	$argv = false;
-	require CAKE . 'console' .  DS . 'cake.php';
-	ob_end_clean();
-}
-
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'project.php';
+require_once CAKE . 'console' .  DS . 'shell_dispatcher.php';
 
 /**
  * ProjectTask Test class
@@ -51,14 +41,13 @@ class ProjectTaskTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->Dispatcher = $this->getMock('ShellDispatcher', array(
-			'getInput', 'stdout', 'stderr', '_stop', '_initEnvironment', 'clear'
-		));
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+		
 		$this->Task = $this->getMock('ProjectTask', 
 			array('in', 'err', 'createFile', '_stop'),
-			array(&$this->Dispatcher)
+			array($out, $out, $in)
 		);
-		$this->Dispatcher->shellPaths = App::path('shells');
 		$this->Task->path = TMP . 'tests' . DS;
 	}
 
@@ -72,7 +61,7 @@ class ProjectTaskTest extends CakeTestCase {
 
 		$Folder = new Folder($this->Task->path . 'bake_test_app');
 		$Folder->delete();
-		unset($this->Dispatcher, $this->Task);
+		unset($this->Task);
 	}
 
 /**
@@ -83,7 +72,6 @@ class ProjectTaskTest extends CakeTestCase {
 	protected function _setupTestProject() {
 		$skel = CAKE_CORE_INCLUDE_PATH . DS . CAKE . 'console' . DS . 'templates' . DS . 'skel';
 		$this->Task->expects($this->at(0))->method('in')->will($this->returnValue('y'));
-		$this->Task->expects($this->at(1))->method('in')->will($this->returnValue('n'));
 		$this->Task->bake($this->Task->path . 'bake_test_app', $skel);
 	}
 
@@ -94,18 +82,32 @@ class ProjectTaskTest extends CakeTestCase {
  */
 	public function testBake() {
 		$this->_setupTestProject();
-
 		$path = $this->Task->path . 'bake_test_app';
+
 		$this->assertTrue(is_dir($path), 'No project dir %s');
-		$this->assertTrue(is_dir($path . DS . 'controllers'), 'No controllers dir %s');
-		$this->assertTrue(is_dir($path . DS . 'controllers' . DS .'components'), 'No components dir %s');
-		$this->assertTrue(is_dir($path . DS . 'models'), 'No models dir %s');
-		$this->assertTrue(is_dir($path . DS . 'views'), 'No views dir %s');
-		$this->assertTrue(is_dir($path . DS . 'views' . DS . 'helpers'), 'No helpers dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests'), 'No tests dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests' . DS . 'cases'), 'No cases dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests' . DS . 'groups'), 'No groups dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests' . DS . 'fixtures'), 'No fixtures dir %s');
+		$dirs = array(
+			'config',
+			'config' . DS . 'schema',
+			'console',
+			'console' . DS . 'shells',
+			'console' . DS . 'shells' . DS . 'tasks',
+			'controllers', 
+			'models', 
+			'views',
+			'views' . DS . 'helpers',
+			'tests',
+			'tests' . DS . 'cases', 
+			'tests' . DS . 'cases' . DS . 'models', 
+			'tests' . DS . 'cases', 
+			'tests' . DS . 'fixtures',
+			'tmp',
+			'webroot',
+			'webroot' . DS . 'js',
+			'webroot' . DS . 'css',
+		);
+		foreach ($dirs as $dir) {
+			$this->assertTrue(is_dir($path . DS . $dir), 'Missing ' . $dir);
+		}
 	}
 
 /**
@@ -117,36 +119,24 @@ class ProjectTaskTest extends CakeTestCase {
 		$this->Task->params['empty'] = true;
 		$this->_setupTestProject();
 		$path = $this->Task->path . 'bake_test_app';
-		$this->assertTrue(is_dir($path), 'No project dir %s');
-		$this->assertTrue(is_dir($path . DS . 'controllers'), 'No controllers dir %s');
-		$this->assertTrue(is_dir($path . DS . 'controllers' . DS .'components'), 'No components dir %s');
-		$this->assertTrue(is_dir($path . DS . 'models'), 'No models dir %s');
-		$this->assertTrue(is_dir($path . DS . 'views'), 'No views dir %s');
-		$this->assertTrue(is_dir($path . DS . 'views' . DS . 'helpers'), 'No helpers dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests'), 'No tests dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests' . DS . 'cases'), 'No cases dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests' . DS . 'groups'), 'No groups dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests' . DS . 'fixtures'), 'No fixtures dir %s');
-
-		$this->assertTrue(is_file($path . DS . 'controllers' . DS .'components' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'locale' . DS . 'eng' . DS . 'LC_MESSAGES' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'models' . DS . 'behaviors' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'models' . DS . 'datasources' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'plugins' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'tests' . DS . 'cases' . DS . 'behaviors' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'tests' . DS . 'cases' . DS . 'components' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'tests' . DS . 'cases' . DS . 'controllers' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'tests' . DS . 'cases' . DS . 'datasources' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'tests' . DS . 'cases' . DS . 'helpers' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'tests' . DS . 'cases' . DS . 'models' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'tests' . DS . 'cases' . DS . 'shells' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'tests' . DS . 'fixtures' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'tests' . DS . 'groups' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'vendors' . DS . 'shells' . DS . 'tasks' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'views' . DS . 'errors' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'views' . DS . 'helpers' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'views' . DS . 'scaffolds' . DS . 'empty'), 'No empty file in dir %s');
-		$this->assertTrue(is_file($path . DS . 'webroot' . DS . 'js' . DS . 'empty'), 'No empty file in dir %s');
+	
+		$empty = array(
+			'console' . DS . 'shells' . DS . 'tasks',
+			'controllers' . DS . 'components', 
+			'models' . DS . 'behaviors', 
+			'views' . DS . 'helpers',
+			'views' . DS . 'errors',
+			'views' . DS . 'scaffolds',
+			'tests' . DS . 'cases' . DS . 'models', 
+			'tests' . DS . 'cases' . DS . 'controllers',
+			'tests' . DS . 'cases' . DS . 'helpers',
+			'tests' . DS . 'fixtures',
+			'webroot' . DS . 'js'
+		);
+	
+		foreach ($empty as $dir) {
+			$this->assertTrue(is_file($path . DS . $dir . DS . 'empty'), 'Missing empty file in ' . $dir);
+		}
 	}
 
 /**
@@ -275,14 +265,30 @@ class ProjectTaskTest extends CakeTestCase {
 
 		$this->Task->execute();
 		$this->assertTrue(is_dir($path), 'No project dir %s');
-		$this->assertTrue(is_dir($path . DS . 'controllers'), 'No controllers dir %s');
-		$this->assertTrue(is_dir($path . DS . 'controllers' . DS .'components'), 'No components dir %s');
-		$this->assertTrue(is_dir($path . DS . 'models'), 'No models dir %s');
-		$this->assertTrue(is_dir($path . DS . 'views'), 'No views dir %s');
-		$this->assertTrue(is_dir($path . DS . 'views' . DS . 'helpers'), 'No helpers dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests'), 'No tests dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests' . DS . 'cases'), 'No cases dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests' . DS . 'groups'), 'No groups dir %s');
-		$this->assertTrue(is_dir($path . DS . 'tests' . DS . 'fixtures'), 'No fixtures dir %s');
+		$this->assertTrue(is_dir($path . DS . 'controllers'), 'No controllers dir ');
+		$this->assertTrue(is_dir($path . DS . 'controllers' . DS .'components'), 'No components dir ');
+		$this->assertTrue(is_dir($path . DS . 'models'), 'No models dir');
+		$this->assertTrue(is_dir($path . DS . 'views'), 'No views dir');
+		$this->assertTrue(is_dir($path . DS . 'views' . DS . 'helpers'), 'No helpers dir');
+		$this->assertTrue(is_dir($path . DS . 'tests'), 'No tests dir');
+		$this->assertTrue(is_dir($path . DS . 'tests' . DS . 'cases'), 'No cases dir');
+		$this->assertTrue(is_dir($path . DS . 'tests' . DS . 'fixtures'), 'No fixtures dir');
+	}
+
+/**
+ * test console path
+ *
+ * @return void
+ */
+	function testConsolePath() {
+		$this->_setupTestProject();
+		
+		$path = $this->Task->path . 'bake_test_app' . DS;
+		$result = $this->Task->consolePath($path);
+		$this->assertTrue($result);
+
+		$file = new File($path . 'console' . DS . 'cake.php');
+		$contents = $file->read();
+		$this->assertNoPattern('/__CAKE_PATH__/', $contents, 'Console path placeholder left behind.');
 	}
 }

@@ -17,6 +17,7 @@
  * @since         CakePHP(tm) v 1.2
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+App::import('Core', 'File');
 
 /**
  * Task class for creating a plugin
@@ -25,12 +26,6 @@
  * @subpackage    cake.cake.console.libs.tasks
  */
 class PluginTask extends Shell {
-
-/**
- * Tasks
- *
- */
-	public $tasks = array('Model', 'Controller', 'View');
 
 /**
  * path to CONTROLLERS directory
@@ -55,44 +50,19 @@ class PluginTask extends Shell {
  * @return void
  */
 	public function execute() {
-		if (empty($this->params['skel'])) {
-			$this->params['skel'] = '';
-			if (is_dir(CAKE_CORE_INCLUDE_PATH . DS . CAKE . 'console' . DS . 'templates' . DS . 'skel') === true) {
-				$this->params['skel'] = CAKE_CORE_INCLUDE_PATH . DS . CAKE . 'console' . DS . 'templates' . DS . 'skel';
-			}
-		}
 		$plugin = null;
 
 		if (isset($this->args[0])) {
 			$plugin = Inflector::camelize($this->args[0]);
 			$pluginPath = $this->_pluginPath($plugin);
-			$this->Dispatch->shiftArgs();
 			if (is_dir($pluginPath)) {
 				$this->out(sprintf(__('Plugin: %s'), $plugin));
 				$this->out(sprintf(__('Path: %s'), $pluginPath));
-			} elseif (isset($this->args[0])) {
-				$this->err(sprintf(__('%s in path %s not found.'), $plugin, $pluginPath));
-				$this->_stop();
 			} else {
 				$this->_interactive($plugin);
 			}
 		} else {
 			return $this->_interactive();
-		}
-
-		if (isset($this->args[0])) {
-			$task = Inflector::classify($this->args[0]);
-			$this->Dispatch->shiftArgs();
-			if (in_array($task, $this->tasks)) {
-				$this->{$task}->plugin = $plugin;
-				$this->{$task}->path = $pluginPath . Inflector::underscore(Inflector::pluralize($task)) . DS;
-
-				if (!is_dir($this->{$task}->path)) {
-					$this->err(sprintf(__("%s directory could not be found.\nBe sure you have created %s"), $task, $this->{$task}->path));
-				}
-				$this->{$task}->loadTasks();
-				return $this->{$task}->execute();
-			}
 		}
 	}
 
@@ -108,7 +78,7 @@ class PluginTask extends Shell {
 		}
 
 		if (!$this->bake($plugin)) {
-			$this->err(sprintf(__("An error occured trying to bake: %s in %s"), $plugin, $this->path . Inflector::underscore($pluginPath)));
+			$this->error(sprintf(__("An error occured trying to bake: %s in %s"), $plugin, $this->path . Inflector::underscore($pluginPath)));
 		}
 	}
 
@@ -127,20 +97,19 @@ class PluginTask extends Shell {
 			$this->findPath($pathOptions);
 		}
 		$this->hr();
-		$this->out(sprintf(__("Plugin Name: %s"),  $plugin));
-		$this->out(sprintf(__("Plugin Directory: %s"), $this->path . $pluginPath));
+		$this->out(sprintf(__("<info>Plugin Name:</info> %s"),  $plugin));
+		$this->out(sprintf(__("<info>Plugin Directory:</info> %s"), $this->path . $pluginPath));
 		$this->hr();
 
 		$looksGood = $this->in(__('Look okay?'), array('y', 'n', 'q'), 'y');
 
 		if (strtolower($looksGood) == 'y') {
-			$verbose = $this->in(__('Do you want verbose output?'), array('y', 'n'), 'n');
-
 			$Folder =& new Folder($this->path . $pluginPath);
 			$directories = array(
 				'config' . DS . 'schema',
 				'models' . DS . 'behaviors',
 				'models' . DS . 'datasources',
+				'console' . DS . 'shells' . DS . 'tasks',
 				'controllers' . DS . 'components',
 				'libs',
 				'views' . DS . 'helpers',
@@ -152,7 +121,6 @@ class PluginTask extends Shell {
 				'tests' . DS . 'groups',
 				'tests' . DS . 'fixtures',
 				'vendors',
-				'vendors' . DS . 'shells' . DS . 'tasks',
 				'webroot'
 			);
 
@@ -162,10 +130,8 @@ class PluginTask extends Shell {
 				$File =& new File($dirPath . DS . 'empty', true);
 			}
 
-			if (strtolower($verbose) == 'y') {
-				foreach ($Folder->messages() as $message) {
-					$this->out($message);
-				}
+			foreach ($Folder->messages() as $message) {
+				$this->out($message, 1, Shell::VERBOSE);
 			}
 
 			$errors = $Folder->errors();
@@ -190,8 +156,7 @@ class PluginTask extends Shell {
 			$this->createFile($this->path . $pluginPath . DS . $modelFileName, $out);
 
 			$this->hr();
-			$this->out(sprintf(__('Created: %s in %s'), $plugin, $this->path . $pluginPath));
-			$this->hr();
+			$this->out(sprintf(__('<success>Created:</success> %s in %s'), $plugin, $this->path . $pluginPath), 2);
 		}
 
 		return true;
@@ -219,28 +184,19 @@ class PluginTask extends Shell {
 	}
 
 /**
- * Help
+ * get the option parser for the plugin task
  *
  * @return void
  */
-	public function help() {
-		$this->hr();
-		$this->out("Usage: cake bake plugin <arg1> <arg2>...");
-		$this->hr();
-		$this->out('Commands:');
-		$this->out();
-		$this->out("plugin <name>");
-		$this->out("\tbakes plugin directory structure");
-		$this->out();
-		$this->out("plugin <name> model");
-		$this->out("\tbakes model. Run 'cake bake model help' for more info.");
-		$this->out();
-		$this->out("plugin <name> controller");
-		$this->out("\tbakes controller. Run 'cake bake controller help' for more info.");
-		$this->out();
-		$this->out("plugin <name> view");
-		$this->out("\tbakes view. Run 'cake bake view help' for more info.");
-		$this->out();
-		$this->_stop();
+	public function getOptionParser() {
+		$parser = parent::getOptionParser();
+		return $parser->description(
+			'Create the directory structure, AppModel and AppController classes for a new plugin. ' .
+			'Can create plugins in any of your bootstrapped plugin paths.'
+		)->addArgument('name', array(
+			'help' => __('CamelCased name of the plugin to create.')
+		));
+
 	}
+
 }

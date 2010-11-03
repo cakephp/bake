@@ -43,21 +43,12 @@ class BakeShell extends Shell {
  * Override loadTasks() to handle paths
  *
  */
-	public function loadTasks() {
-		parent::loadTasks();
+	public function startup() {
+		parent::startup();
 		$task = Inflector::classify($this->command);
 		if (isset($this->{$task}) && !in_array($task, array('Project', 'DbConfig'))) {
 			if (isset($this->params['connection'])) {
 				$this->{$task}->connection = $this->params['connection'];
-			}
-			foreach($this->args as $i => $arg) {
-				if (strpos($arg, '.')) {
-					list($this->params['plugin'], $this->args[$i]) = pluginSplit($arg);
-					break;
-				}
-			}
-			if (isset($this->params['plugin'])) {
-				$this->{$task}->plugin = $this->params['plugin'];
 			}
 		}
 	}
@@ -68,8 +59,9 @@ class BakeShell extends Shell {
  */
 	public function main() {
 		if (!is_dir($this->DbConfig->path)) {
-			if ($this->Project->execute()) {
-				$this->DbConfig->path = $this->params['working'] . DS . 'config' . DS;
+			$path = $this->Project->execute();
+			if (!empty($path)) {
+				$this->DbConfig->path = $path . 'config' . DS;
 			} else {
 				return false;
 			}
@@ -188,38 +180,54 @@ class BakeShell extends Shell {
 			$this->out(__('Bake All complete'));
 			array_shift($this->args);
 		} else {
-			$this->err(__('Bake All could not continue without a valid model'));
+			$this->error(__('Bake All could not continue without a valid model'));
 		}
 		$this->_stop();
 	}
 
 /**
- * Displays help contents
+ * get the option parser.
  *
+ * @return void
  */
-	public function help() {
-		$this->out('CakePHP Bake:');
-		$this->hr();
-		$this->out('The Bake script generates controllers, views and models for your application.');
-		$this->out('If run with no command line arguments, Bake guides the user through the class');
-		$this->out('creation process. You can customize the generation process by telling Bake');
-		$this->out('where different parts of your application are using command line arguments.');
-		$this->hr();
-		$this->out("Usage: cake bake <command> <arg1> <arg2>...");
-		$this->hr();
-		$this->out('Params:');
-		$this->out("\t-app <path> Absolute/Relative path to your app folder.\n");
-		$this->out('Commands:');
-		$this->out("\n\tbake help\n\t\tshows this help message.");
-		$this->out("\n\tbake all <name>\n\t\tbakes complete MVC. optional <name> of a Model");
-		$this->out("\n\tbake project <path>\n\t\tbakes a new app folder in the path supplied\n\t\tor in current directory if no path is specified");
-		$this->out("\n\tbake plugin <name>\n\t\tbakes a new plugin folder in the path supplied\n\t\tor in current directory if no path is specified.");
-		$this->out("\n\tbake db_config\n\t\tbakes a database.php file in config directory.");
-		$this->out("\n\tbake model\n\t\tbakes a model. run 'bake model help' for more info");
-		$this->out("\n\tbake view\n\t\tbakes views. run 'bake view help' for more info");
-		$this->out("\n\tbake controller\n\t\tbakes a controller. run 'bake controller help' for more info");
-		$this->out("\n\tbake fixture\n\t\tbakes fixtures. run 'bake fixture help' for more info.");
-		$this->out("\n\tbake test\n\t\tbakes unit tests. run 'bake test help' for more info.");
-		$this->out();
+	public function getOptionParser() {
+		$parser = parent::getOptionParser();
+		return $parser->description(
+			'The Bake script generates controllers, views and models for your application.' . 
+			'If run with no command line arguments, Bake guides the user through the class' . 
+			'creation process. You can customize the generation process by telling Bake' . 
+			'where different parts of your application are using command line arguments.'
+		)->addSubcommand('all', array(
+			'help' => __('Bake a complete MVC. optional <name> of a Model'),
+		))->addSubcommand('project', array(
+			'help' => __('Bake a new app folder in the path supplied or in current directory if no path is specified'),
+			'parser' => $this->Project->getOptionParser()
+		))->addSubcommand('plugin', array(
+			'help' => __('Bake a new plugin folder in the path supplied or in current directory if no path is specified.'),
+			'parser' => $this->Plugin->getOptionParser()
+		))->addSubcommand('db_config', array(
+			'help' => __('Bake a database.php file in config directory.'),
+			'parser' => $this->DbConfig->getOptionParser()
+		))->addSubcommand('model', array(
+			'help' => __('Bake a model.'),
+			'parser' => $this->Model->getOptionParser()
+		))->addSubcommand('view', array(
+			'help' => __('Bake views for controllers.'),
+			'parser' => $this->View->getOptionParser()
+		))->addSubcommand('controller', array(
+			'help' => __('Bake a controller.'),
+			'parser' => $this->Controller->getOptionParser()
+		))->addSubcommand('fixture', array(
+			'help' => __('Bake a fixture.'),
+			'parser' => $this->Fixture->getOptionParser()
+		))->addSubcommand('test', array(
+			'help' => __('Bake a unit test.'),
+			'parser' => $this->Test->getOptionParser()
+		))->addOption('connection', array(
+			'help' => __('Database connection to use in conjunction with     `bake all`.'),
+			'short' => 'c',
+			'default' => 'default'
+		));
 	}
+
 }

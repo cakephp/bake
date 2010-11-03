@@ -20,22 +20,15 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::import('Shell', 'Shell', false);
+App::import('Shell', array(
+	'tasks/test',
+	'tasks/template'
+));
+
 App::import('Controller', 'Controller', false);
 App::import('Model', 'Model', false);
 
-if (!defined('DISABLE_AUTO_DISPATCH')) {
-	define('DISABLE_AUTO_DISPATCH', true);
-}
-
-if (!class_exists('ShellDispatcher')) {
-	ob_start();
-	$argv = false;
-	require CAKE . 'console' .  DS . 'cake.php';
-	ob_end_clean();
-}
-
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'test.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'template.php';
+require_once CAKE . 'console' .  DS . 'shell_dispatcher.php';
 
 /**
  * Test Article model
@@ -249,16 +242,15 @@ class TestTaskTest extends CakeTestCase {
  */
 	public function setup() {
 		parent::setup();
-		$this->Dispatcher = $this->getMock('ShellDispatcher', array(
-			'getInput', 'stdout', 'stderr', '_stop', '_initEnvironment', 'clear'
-		));
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+
 		$this->Task = $this->getMock('TestTask', 
 			array('in', 'err', 'createFile', '_stop', 'isLoadableClass'),
-			array(&$this->Dispatcher)
+			array($out, $out, $in)
 		);
-		$this->Dispatcher->shellPaths = App::path('shells');
-		$this->Task->name = 'TestTask';
-		$this->Task->Template = new TemplateTask($this->Dispatcher);
+		$this->Task->name = 'Test';
+		$this->Task->Template = new TemplateTask($out, $out, $in);
 	}
 
 /**
@@ -266,9 +258,9 @@ class TestTaskTest extends CakeTestCase {
  *
  * @return void
  */
-	public function teardown() {
-		parent::teardown();
-		ClassRegistry::flush();
+	public function tearDown() {
+		parent::tearDown();
+		unset($this->Task);
 	}
 
 /**
@@ -277,8 +269,8 @@ class TestTaskTest extends CakeTestCase {
  * @return void
  */
 	public function testFilePathGenerationModelRepeated() {
-		$this->Dispatcher->expects($this->never())->method('stderr');
-		$this->Dispatcher->expects($this->never())->method('_stop');
+		$this->Task->expects($this->never())->method('err');
+		$this->Task->expects($this->never())->method('_stop');
 
 		$file = TESTS . 'cases' . DS . 'models' . DS . 'my_class.test.php';
 

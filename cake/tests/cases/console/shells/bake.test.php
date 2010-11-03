@@ -19,23 +19,13 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::import('Shell', 'Shell', false);
+App::import('Shell', 'Bake', false);
+App::import('Shell', 'tasks/model', false);
+App::import('Shell', 'tasks/controller', false);
+App::import('Shell', 'tasks/db_config', false);
+
 App::import('Core', 'Controller');
-
-if (!defined('DISABLE_AUTO_DISPATCH')) {
-	define('DISABLE_AUTO_DISPATCH', true);
-}
-
-if (!class_exists('ShellDispatcher')) {
-	ob_start();
-	$argv = false;
-	require CAKE . 'console' .  DS . 'cake.php';
-	ob_end_clean();
-}
-
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'bake.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'model.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'controller.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'db_config.php';
+require_once CAKE . 'console' .  DS . 'shell_dispatcher.php';
 
 if (!class_exists('UsersController')) {
 	class UsersController extends Controller {
@@ -60,16 +50,14 @@ class BakeShellTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->Dispatcher = $this->getMock(
-			'ShellDispatcher', 
-			array('getInput', 'stdout', 'stderr', '_stop', '_initEnvironment', 'clear')
-		);
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+
 		$this->Shell = $this->getMock(
 			'BakeShell',
 			array('in', 'out', 'hr', 'err', 'createFile', '_stop', '_checkUnitTest'),
-			array(&$this->Dispatcher)
+			array($out, $out, $in)
 		);
-		$this->Shell->Dispatch->shellPaths = App::path('shells');
 	}
 
 /**

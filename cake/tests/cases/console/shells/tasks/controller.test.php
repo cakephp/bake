@@ -20,24 +20,15 @@
 App::import('Core', 'ClassRegistry');
 App::import('View', 'Helper', false);
 App::import('Shell', 'Shell', false);
+App::import('Shell', array(
+	'tasks/project',
+	'tasks/controller',
+	'tasks/model',
+	'tasks/template',
+	'tasks/test'
+));
 
-if (!defined('DISABLE_AUTO_DISPATCH')) {
-	define('DISABLE_AUTO_DISPATCH', true);
-}
-
-if (!class_exists('ShellDispatcher')) {
-	ob_start();
-	$argv = false;
-	require CAKE . 'console' .  DS . 'cake.php';
-	ob_end_clean();
-}
-
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'project.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'controller.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'model.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'template.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'test.php';
-
+require_once CAKE . 'console' .  DS . 'shell_dispatcher.php';
 
 $imported = App::import('Model', 'BakeArticle');
 $imported = $imported || App::import('Model', 'BakeComment');
@@ -77,27 +68,25 @@ class ControllerTaskTest extends CakeTestCase {
  * @return void
  */
 	public function setUp() {
-		$this->Dispatcher = $this->getMock('ShellDispatcher', array(
-			'getInput', 'stdout', 'stderr', '_stop', '_initEnvironment', 'clear'
-		));
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
 		$this->Task = $this->getMock('ControllerTask', 
 			array('in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest'),
-			array(&$this->Dispatcher)
+			array($out, $out, $in)
 		);
-		$this->Task->name = 'ControllerTask';
-		$this->Task->Dispatch->shellPaths = App::path('shells');
-		$this->Task->Template =& new TemplateTask($this->Task->Dispatch);
+		$this->Task->name = 'Controller';
+		$this->Task->Template = new TemplateTask($out, $out, $in);
 		$this->Task->Template->params['theme'] = 'default';
 
 		$this->Task->Model = $this->getMock('ModelTask', 
 			array('in', 'out', 'err', 'createFile', '_stop', '_checkUnitTest'), 
-			array(&$this->Dispatcher)
+			array($out, $out, $in)
 		);
 		$this->Task->Project = $this->getMock('ProjectTask', 
 			array('in', 'out', 'err', 'createFile', '_stop', '_checkUnitTest', 'getPrefix'), 
-			array(&$this->Dispatcher)
+			array($out, $out, $in)
 		);
-		$this->Task->Test = $this->getMock('TestTask', array(), array(&$this->Dispatcher));
+		$this->Task->Test = $this->getMock('TestTask', array(), array($out, $out, $in));
 	}
 
 /**
@@ -106,7 +95,7 @@ class ControllerTaskTest extends CakeTestCase {
  * @return void
  */
 	public function teardown() {
-		unset($this->Task, $this->Dispatcher);
+		unset($this->Task);
 		ClassRegistry::flush();
 	}
 
@@ -600,7 +589,8 @@ class ControllerTaskTest extends CakeTestCase {
 		}
 		$this->Task->connection = 'test';
 		$this->Task->path = '/my/path/';
-		$this->Task->args = array('BakeArticles', 'public');
+		$this->Task->args = array('BakeArticles');
+		$this->Task->params = array('public' => true);
 
 		$filename = '/my/path/bake_articles_controller.php';
 		$expected = new PHPUnit_Framework_Constraint_Not(new PHPUnit_Framework_Constraint_PCREMatch('/\$scaffold/'));
@@ -622,7 +612,8 @@ class ControllerTaskTest extends CakeTestCase {
 		$this->Task->Project->expects($this->any())->method('getPrefix')->will($this->returnValue('admin_'));
 		$this->Task->connection = 'test';
 		$this->Task->path = '/my/path/';
-		$this->Task->args = array('BakeArticles', 'public', 'admin');
+		$this->Task->args = array('BakeArticles');
+		$this->Task->params = array('public' => true, 'admin' => true);
 
 		$filename = '/my/path/bake_articles_controller.php';
 		$this->Task->expects($this->once())->method('createFile')->with(
@@ -643,7 +634,8 @@ class ControllerTaskTest extends CakeTestCase {
 		$this->Task->Project->expects($this->any())->method('getPrefix')->will($this->returnValue('admin_'));
 		$this->Task->connection = 'test';
 		$this->Task->path = '/my/path/';
-		$this->Task->args = array('BakeArticles', 'admin');
+		$this->Task->args = array('BakeArticles');
+		$this->Task->params = array('admin' => true);
 
 		$filename = '/my/path/bake_articles_controller.php';
 		$this->Task->expects($this->once())->method('createFile')->with(

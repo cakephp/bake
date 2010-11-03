@@ -20,21 +20,13 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::import('Shell', 'Shell', false);
+App::import('Shell', array(
+	'tasks/model',
+	'tasks/fixture',
+	'tasks/template'
+));
 
-if (!defined('DISABLE_AUTO_DISPATCH')) {
-	define('DISABLE_AUTO_DISPATCH', true);
-}
-
-if (!class_exists('ShellDispatcher')) {
-	ob_start();
-	$argv = false;
-	require CAKE . 'console' .  DS . 'cake.php';
-	ob_end_clean();
-}
-
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'model.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'fixture.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'template.php';
+require_once CAKE . 'console' .  DS . 'shell_dispatcher.php';
 
 /**
  * ModelTaskTest class
@@ -59,12 +51,12 @@ class ModelTaskTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->Dispatcher = $this->getMock('ShellDispatcher', array(
-			'getInput', 'stdout', 'stderr', '_stop', '_initEnvironment', 'clear'
-		));
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+
 		$this->Task = $this->getMock('ModelTask',
 			array('in', 'err', 'createFile', '_stop', '_checkUnitTest'),
-			array(&$this->Dispatcher)
+			array($out, $out, $in)
 		);
 		$this->_setupOtherMocks();
 	}
@@ -75,9 +67,12 @@ class ModelTaskTest extends CakeTestCase {
  * @return void
  */
 	protected function _useMockedOut() {
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+
 		$this->Task = $this->getMock('ModelTask',
 			array('in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest'),
-			array(&$this->Dispatcher)
+			array($out, $out, $in)
 		);
 		$this->_setupOtherMocks();
 	}
@@ -88,13 +83,15 @@ class ModelTaskTest extends CakeTestCase {
  * @return void
  */
 	protected function _setupOtherMocks() {
-		$this->Task->Fixture = $this->getMock('FixtureTask', array(), array(&$this->Dispatcher));
-		$this->Task->Test = $this->getMock('FixtureTask', array(), array(&$this->Dispatcher));
-		$this->Task->Template =& new TemplateTask($this->Task->Dispatch);
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
 
-		$this->Task->name = 'ModelTask';
+		$this->Task->Fixture = $this->getMock('FixtureTask', array(), array($out, $out, $in));
+		$this->Task->Test = $this->getMock('FixtureTask', array(), array($out, $out, $in));
+		$this->Task->Template = new TemplateTask($out, $out, $in);
+
+		$this->Task->name = 'Model';
 		$this->Task->interactive = true;
-		$this->Task->Dispatch->shellPaths = App::path('shells');
 	}
 
 /**
@@ -104,7 +101,7 @@ class ModelTaskTest extends CakeTestCase {
  */
 	public function tearDown() {
 		parent::tearDown();
-		unset($this->Task, $this->Dispatcher);
+		unset($this->Task);
 	}
 
 /**

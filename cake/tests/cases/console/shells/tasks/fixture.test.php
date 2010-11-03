@@ -18,20 +18,13 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 App::import('Shell', 'Shell', false);
+App::import('Shell', array(
+	'tasks/fixture',
+	'tasks/template',
+	'tasks/db_config'
+));
 
-if (!defined('DISABLE_AUTO_DISPATCH')) {
-	define('DISABLE_AUTO_DISPATCH', true);
-}
-
-if (!class_exists('ShellDispatcher')) {
-	ob_start();
-	$argv = false;
-	require CAKE . 'console' .  DS . 'cake.php';
-	ob_end_clean();
-}
-
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'template.php';
-require_once CAKE . 'console' .  DS . 'libs' . DS . 'tasks' . DS . 'fixture.php';
+require_once CAKE . 'console' .  DS . 'shell_dispatcher.php';
 
 /**
  * FixtureTaskTest class
@@ -56,19 +49,19 @@ class FixtureTaskTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->Dispatcher = $this->getMock('ShellDispatcher', array(
-			'getInput', 'stdout', 'stderr', '_stop', '_initEnvironment', 'clear'
-		));
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
+
 		$this->Task = $this->getMock('FixtureTask', 
-			array('in', 'err', 'createFile', '_stop'),
-			array(&$this->Dispatcher)
+			array('in', 'err', 'createFile', '_stop', 'clear'),
+			array($out, $out, $in)
 		);
 		$this->Task->Model = $this->getMock('Shell',
-			array('in', 'out', 'erro', 'createFile', 'getName', 'getTable', 'listAll'),
-			array(&$this->Dispatcher)
+			array('in', 'out', 'error', 'createFile', 'getName', 'getTable', 'listAll'),
+			array($out, $out, $in)
 		);
-		$this->Task->Template =& new TemplateTask($this->Dispatcher);
-		$this->Task->Dispatch->shellPaths = App::path('shells');
+		$this->Task->Template = new TemplateTask($out, $out, $in);
+		$this->Task->DbConfig = $this->getMock('DbConfigTask', array(), array($out, $out, $in));
 		$this->Task->Template->initialize();
 	}
 
@@ -79,7 +72,7 @@ class FixtureTaskTest extends CakeTestCase {
  */
 	public function tearDown() {
 		parent::tearDown();
-		unset($this->Task, $this->Dispatcher);
+		unset($this->Task);
 	}
 
 /**
@@ -88,11 +81,11 @@ class FixtureTaskTest extends CakeTestCase {
  * @return void
  */
 	public function testConstruct() {
-		$this->Dispatcher->params['working'] = DS . 'my' . DS . 'path';
-		$Task = new FixtureTask($this->Dispatcher);
+		$out = $this->getMock('ConsoleOutput', array(), array(), '', false);
+		$in = $this->getMock('ConsoleInput', array(), array(), '', false);
 
-		$expected = DS . 'my' . DS . 'path' . DS . 'tests' . DS . 'fixtures' . DS;
-		$this->assertEqual($Task->path, $expected);
+		$Task = new FixtureTask($out, $out, $in);
+		$this->assertEqual($Task->path, APP . 'tests' . DS . 'fixtures' . DS);
 	}
 
 /**
@@ -143,7 +136,7 @@ class FixtureTaskTest extends CakeTestCase {
  *
  * @return void
  */
-	public function testImportRecordsFromDatabaseWithConditions() {
+	public function testImportRecordsFromDatabaseWithConditionsPoo() {
 		$this->Task->interactive = true;
 		$this->Task->expects($this->at(0))->method('in')
 			->will($this->returnValue('WHERE 1=1 LIMIT 10'));
