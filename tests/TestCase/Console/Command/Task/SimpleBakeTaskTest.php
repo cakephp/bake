@@ -20,10 +20,10 @@ use Cake\Core\Plugin;
 use Cake\TestSuite\TestCase;
 
 /**
- * BehaviorTaskTest class
+ * SimpleBakeTaskTest class
  *
  */
-class BehaviorTaskTest extends TestCase {
+class SimpleBakeTaskTest extends TestCase {
 
 /**
  * setup method
@@ -35,7 +35,7 @@ class BehaviorTaskTest extends TestCase {
 		$out = $this->getMock('Cake\Console\ConsoleOutput', [], [], '', false);
 		$in = $this->getMock('Cake\Console\ConsoleInput', [], [], '', false);
 
-		$this->Task = $this->getMock('Cake\Console\Command\Task\BehaviorTask',
+		$this->Task = $this->getMock('Cake\Console\Command\Task\SimpleBakeTask',
 			['in', 'err', 'createFile', '_stop', 'clear'],
 			[$out, $out, $in]
 		);
@@ -45,6 +45,11 @@ class BehaviorTaskTest extends TestCase {
 		);
 		$this->Task->Template = new TemplateTask($out, $out, $in);
 		$this->Task->Template->initialize();
+
+		$this->Task->pathFragment = 'Model/Behavior/';
+		$this->Task->suffix = 'Behavior';
+		$this->Task->template = 'behavior';
+		$this->Task->name = 'behavior';
 	}
 
 /**
