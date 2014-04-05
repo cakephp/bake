@@ -45,7 +45,6 @@ class BehaviorTaskTest extends TestCase {
 		);
 		$this->Task->Template = new TemplateTask($out, $out, $in);
 		$this->Task->Template->initialize();
-		$this->Task->path = '/app/Model/Behavior/';
 	}
 
 /**
@@ -58,12 +57,12 @@ class BehaviorTaskTest extends TestCase {
 		$this->Task->expects($this->once())
 			->method('createFile')
 			->with(
-				'/app/Model/Behavior/ExampleBehavior.php',
+				APP . 'Model/Behavior/ExampleBehavior.php',
 				$this->stringContains('class ExampleBehavior extends Behavior')
 			);
 		$this->Task->Test->expects($this->once())
 			->method('bake')
-			->with('Behavior', 'Example');
+			->with('behavior', 'Example');
 
 		$this->Task->execute();
 	}
@@ -79,7 +78,7 @@ class BehaviorTaskTest extends TestCase {
 		$this->Task->expects($this->once())
 			->method('createFile')
 			->with(
-				'/app/Model/Behavior/ExampleBehavior.php',
+				APP . 'Model/Behavior/ExampleBehavior.php',
 				$this->stringContains('class ExampleBehavior extends Behavior')
 			);
 
@@ -98,7 +97,7 @@ class BehaviorTaskTest extends TestCase {
 		$this->Task->plugin = 'TestPlugin';
 		$this->Task->Test->expects($this->once())
 			->method('bake')
-			->with('Behavior', 'Example');
+			->with('behavior', 'Example');
 
 		$this->Task->bakeTest('Example');
 		$this->assertEquals($this->Task->plugin, $this->Task->Test->plugin);
