@@ -1,4 +1,4 @@
-<?php
+<%
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -12,30 +12,43 @@
  * @since         3.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-echo "<?php\n"; ?>
-namespace <?= $namespace ?>\View\Cell;
+%>
+<?php
+namespace <%= $namespace %>\Model\Entity;
 
-use Cake\View\Cell;
+use Cake\ORM\Entity;
 
 /**
- * <?= $name ?> cell
+ * <%= $name %> Entity.
  */
-class <?= $name ?>Cell extends Cell {
+class <%= $name %> extends Entity {
 
+<% if (!empty($fields)): %>
 /**
- * List of valid options that can be passed into this
- * cell's constructor.
+ * Fields that can be mass assigned using newEntity() or patchEntity().
  *
  * @var array
  */
-	protected $_validCellOptions = [];
+	protected $_accessible = [
+<% foreach ($fields as $field): %>
+		'<%= $field %>' => true,
+<% endforeach; %>
+	];
 
+<% endif %>
+<% if (!empty($hidden)): %>
+<%
+$hidden = array_map(function($el) { return "'$el'"; }, $hidden);
+%>
 /**
- * Default display method.
+ * Fields that are excluded from JSON an array versions of the entity.
  *
- * @return void
+ * @var array
  */
-	public function display() {
-	}
+	protected $_hidden = [
+		<%= implode(",\n\t\t", $hidden) %>
 
+	];
+
+<% endif %>
 }
