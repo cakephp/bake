@@ -12,7 +12,7 @@
  * @since         1.2.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\TestCase\View;
+namespace Bake\Test\TestCase\View;
 
 use Cake\Network\Request;
 use Cake\Network\Response;

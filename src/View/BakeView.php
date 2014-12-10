@@ -12,11 +12,12 @@
  * @since         3.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\View;
+namespace Bake\View;
 
 use Cake\Core\ConventionsTrait;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Utility\Inflector;
+use Cake\View\View;
 
 class BakeView extends View {
 
