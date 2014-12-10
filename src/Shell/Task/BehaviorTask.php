@@ -12,9 +12,7 @@
  * @since         3.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Shell\Task;
-
-use Cake\Shell\Task\SimpleBakeTask;
+namespace Bake\Shell\Task;
 
 /**
  * Behavior code generator.

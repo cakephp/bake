@@ -1,5 +1,5 @@
 <?php
-namespace Cake\View\Helper;
+namespace Bake\View\Helper;
 
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;

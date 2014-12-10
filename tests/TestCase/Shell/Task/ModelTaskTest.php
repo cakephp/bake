@@ -12,7 +12,7 @@
  * @since         1.2.6
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Shell\Task;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
