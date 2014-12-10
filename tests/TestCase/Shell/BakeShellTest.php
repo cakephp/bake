@@ -14,8 +14,6 @@
  */
 namespace Bake\Test\TestCase\Shell;
 
-use Cake\Controller\Controller;
-use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Shell\BakeShellShell;

@@ -18,12 +18,10 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Model\Model;
 use Cake\ORM\TableRegistry;
-use Cake\Shell\Task\ModelTask;
 use Cake\Shell\Task\TemplateTask;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\ClassRegistry;
-use Cake\Utility\Inflector;
 
 /**
  * ModelTaskTest class

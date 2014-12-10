@@ -20,7 +20,6 @@ use Cake\Core\Plugin;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Shell\Task\TemplateTask;
-use Cake\Shell\Task\ViewTask;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
 

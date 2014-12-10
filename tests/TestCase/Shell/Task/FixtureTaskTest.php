@@ -15,9 +15,7 @@
 namespace Bake\Test\TestCase\Shell\Task;
 
 use Cake\Core\Plugin;
-use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
-use Cake\Shell\Task\FixtureTask;
 use Cake\Shell\Task\TemplateTask;
 use Cake\TestSuite\TestCase;
 

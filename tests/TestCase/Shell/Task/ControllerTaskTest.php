@@ -14,12 +14,9 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Cake\Console\Shell;
-use Cake\Core\App;
 use Cake\Core\Plugin;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use Cake\Shell\Task\ControllerTask;
 use Cake\Shell\Task\TemplateTask;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
