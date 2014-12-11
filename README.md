@@ -21,7 +21,7 @@ And run `php composer.phar update`
 
 ## License
 
-Copyright (c) [CURRENT_YEAR] [YOUR_NAME]
+Copyright (c) 2014 Cake Software Foundation, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
