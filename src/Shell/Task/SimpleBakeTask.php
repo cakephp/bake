@@ -15,7 +15,6 @@
 namespace Bake\Shell\Task;
 
 use Cake\Core\Configure;
-use Cake\Shell\Task\BakeTask;
 use Cake\Utility\Inflector;
 
 /**

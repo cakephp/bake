@@ -15,7 +15,6 @@
 namespace Bake\Shell\Task;
 
 use Cake\Filesystem\Folder;
-use Cake\Shell\Task\BakeTask;
 
 /**
  * Task class for creating new project apps and plugins
