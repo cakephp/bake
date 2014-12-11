@@ -7,17 +7,14 @@ This is a pre-alpha version of the "bake" system for CakePHP 3.0. It is currentl
 
 ## Installation
 
-You can install this plugin into your CakePHP application using
-[composer](http://getcomposer.org). For existing applications you can add the
-following to your `composer.json` file:
+You can install this plugin into your CakePHP application using [composer](http://getcomposer.org). 
 
-```javascript
-"require": {
-	"cakephp/bake": "dev-master"
-}
+The recommended way to install composer packages is:
+
+```
+composer require cakephp/bake
 ```
 
-And run `php composer.phar update`
 
 ## License
 
