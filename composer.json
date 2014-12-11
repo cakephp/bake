@@ -11,9 +11,6 @@
             "homepage": "https://github.com/cakephp/bake/graphs/contributors"
         }
     ],
-    "extra": {
-            "installer-name": "Bake"
-        },
     "support": {
         "issues": "https://github.com/cakephp/bake/issues",
         "forum": "http://stackoverflow.com/tags/cakephp",
@@ -30,7 +27,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Bake\\": "src"
+            "Bake\\": "src",
+            "Bake\\Test\\Fixture\\": "plugins\\Bake\\tests\\Fixture"
         }
     },
     "autoload-dev": {
