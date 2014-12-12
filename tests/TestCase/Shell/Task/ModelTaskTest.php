@@ -49,7 +49,7 @@ class ModelTaskTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->_compareBasePath = CORE_TESTS . 'bake_compare' . DS . 'Model' . DS;
+		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock('Cake\Shell\Task\ModelTask',

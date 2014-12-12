@@ -57,7 +57,7 @@ class ControllerTaskTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->_compareBasePath = CORE_TESTS . 'bake_compare' . DS . 'Controller' . DS;
+		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 		$this->Task = $this->getMock('Cake\Shell\Task\ControllerTask',
 			array('in', 'out', 'err', 'hr', 'createFile', '_stop'),
@@ -92,6 +92,7 @@ class ControllerTaskTest extends TestCase {
 		unset($this->Task);
 		TableRegistry::clear();
 		parent::tearDown();
+		Plugin::unload('ControllerTest');
 	}
 
 /**
@@ -234,8 +235,8 @@ class ControllerTaskTest extends TestCase {
 			)->will($this->returnValue(true));
 
 		$result = $this->Task->bake('BakeArticles');
+
 		$this->assertSameAsFile(__FUNCTION__ . '.php', $result);
-		Plugin::unload();
 	}
 
 /**

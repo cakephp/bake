@@ -58,7 +58,7 @@ class TestTaskTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->_compareBasePath = CORE_TESTS . 'bake_compare' . DS . 'Test' . DS;
+		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Test' . DS;
 		$this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock('Cake\Shell\Task\TestTask',
@@ -78,7 +78,6 @@ class TestTaskTest extends TestCase {
 	public function tearDown() {
 		parent::tearDown();
 		unset($this->Task);
-		Plugin::unload();
 	}
 
 /**

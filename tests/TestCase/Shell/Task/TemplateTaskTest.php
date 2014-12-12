@@ -32,7 +32,7 @@ class TemplateTaskTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->_compareBasePath = CORE_TESTS . 'bake_compare' . DS . 'Template' . DS;
+		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock('Cake\Shell\Task\TemplateTask',
@@ -49,7 +49,7 @@ class TemplateTaskTest extends TestCase {
 	public function tearDown() {
 		parent::tearDown();
 		unset($this->Task);
-		Plugin::unload();
+		Plugin::unload('TestBakeTheme');
 	}
 
 /**

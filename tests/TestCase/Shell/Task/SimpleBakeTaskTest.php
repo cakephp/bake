@@ -34,7 +34,7 @@ class SimpleBakeTaskTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->_compareBasePath = CORE_TESTS . 'bake_compare' . DS . 'Simple' . DS;
+		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Simple' . DS;
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock(

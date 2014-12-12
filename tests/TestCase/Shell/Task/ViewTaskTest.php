@@ -102,7 +102,7 @@ class ViewTaskTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->_compareBasePath = CORE_TESTS . 'bake_compare' . DS . 'View' . DS;
+		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'View' . DS;
 
 		Configure::write('App.namespace', 'TestApp');
 		$this->_setupTask(['in', 'err', 'error', 'createFile', '_stop']);

@@ -16,6 +16,7 @@ namespace Bake\Test\TestCase\View;
 
 use Cake\Network\Request;
 use Cake\Network\Response;
+use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
 use Cake\View\BakeView;
 
@@ -25,6 +26,8 @@ use Cake\View\BakeView;
  */
 class BakeViewTest extends TestCase {
 
+	use StringCompareTrait;
+
 /**
  * setUp method
  *
@@ -32,6 +35,7 @@ class BakeViewTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
+		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'BakeView' . DS;
 
 		$request = new Request();
 		$response = new Response();
@@ -113,22 +117,7 @@ class BakeViewTest extends TestCase {
  */
 	public function testSwallowLeadingWhitespace() {
 		$result = $this->View->render('view_tests/leading_whitespace');
-		$expected = $this->_getCompareTemplate('leading_whitespace');
-
-		$this->assertSame(
-			$expected,
-			$result,
-			'Leading whitespace in bake templates should not result in leading/loose whitespace in rendered results'
-		);
+		$this->assertSameAsFile(__FUNCTION__ . '.php', $result);
 	}
 
-/**
- * _getCompareTemplate
- *
- * @param string $template
- * @return string
- */
-	protected function _getCompareTemplate($template) {
-		return file_get_contents(dirname(dirname(__DIR__)) . "/test_app/TestApp/Template/Bake/view_tests_compare/$template.ctp");
-	}
 }
