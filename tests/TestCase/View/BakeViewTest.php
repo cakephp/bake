@@ -14,6 +14,7 @@
  */
 namespace Bake\Test\TestCase\View;
 
+use Cake\Core\Plugin;
 use Cake\Network\Request;
 use Cake\Network\Response;
 use Cake\TestSuite\StringCompareTrait;
