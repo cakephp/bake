@@ -27,8 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Bake\\": "src",
-            "Bake\\Test\\Fixture\\": "plugins\\Bake\\tests\\Fixture"
+            "Bake\\": "src"
         }
     },
     "autoload-dev": {
