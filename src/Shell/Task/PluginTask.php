@@ -12,13 +12,12 @@
  * @since         1.2.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Shell\Task;
+namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\App;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
-use Cake\Shell\Task\BakeTask;
 
 /**
  * The Plugin Task handles creating an empty plugin, ready to be used

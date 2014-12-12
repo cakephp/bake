@@ -12,7 +12,7 @@
  * @since         1.2.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Shell\Task;
 
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
@@ -20,7 +20,6 @@ use Cake\Core\Plugin;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Shell\Task\TemplateTask;
-use Cake\Shell\Task\ViewTask;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
 
@@ -103,7 +102,7 @@ class ViewTaskTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->_compareBasePath = CORE_TESTS . 'bake_compare' . DS . 'View' . DS;
+		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'View' . DS;
 
 		Configure::write('App.namespace', 'TestApp');
 		$this->_setupTask(['in', 'err', 'error', 'createFile', '_stop']);

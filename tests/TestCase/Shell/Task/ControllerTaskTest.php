@@ -12,14 +12,11 @@
  * @since         1.3.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Shell\Task;
 
-use Cake\Console\Shell;
-use Cake\Core\App;
 use Cake\Core\Plugin;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use Cake\Shell\Task\ControllerTask;
 use Cake\Shell\Task\TemplateTask;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
@@ -60,7 +57,7 @@ class ControllerTaskTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->_compareBasePath = CORE_TESTS . 'bake_compare' . DS . 'Controller' . DS;
+		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 		$this->Task = $this->getMock('Cake\Shell\Task\ControllerTask',
 			array('in', 'out', 'err', 'hr', 'createFile', '_stop'),
@@ -95,6 +92,7 @@ class ControllerTaskTest extends TestCase {
 		unset($this->Task);
 		TableRegistry::clear();
 		parent::tearDown();
+		Plugin::unload('ControllerTest');
 	}
 
 /**
@@ -237,8 +235,8 @@ class ControllerTaskTest extends TestCase {
 			)->will($this->returnValue(true));
 
 		$result = $this->Task->bake('BakeArticles');
+
 		$this->assertSameAsFile(__FUNCTION__ . '.php', $result);
-		Plugin::unload();
 	}
 
 /**

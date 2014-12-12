@@ -12,18 +12,16 @@
  * @since         1.2.6
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Shell\Task;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Model\Model;
 use Cake\ORM\TableRegistry;
-use Cake\Shell\Task\ModelTask;
 use Cake\Shell\Task\TemplateTask;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\ClassRegistry;
-use Cake\Utility\Inflector;
 
 /**
  * ModelTaskTest class
@@ -51,7 +49,7 @@ class ModelTaskTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->_compareBasePath = CORE_TESTS . 'bake_compare' . DS . 'Model' . DS;
+		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock('Cake\Shell\Task\ModelTask',

@@ -12,15 +12,12 @@
  * @since         1.3.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Cake\Shell\Task;
+namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
-use Cake\Core\App;
 use Cake\Core\ConventionsTrait;
-use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
-use Cake\Filesystem\Folder;
 use Cake\Network\Request;
 use Cake\Network\Response;
 use Cake\View\BakeView;
