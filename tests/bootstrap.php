@@ -19,7 +19,6 @@ if (file_exists($root . '/config/bootstrap.php')) {
 	return;
 }
 require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
-$loader->addNamespace('Cake\Test', './vendor/cakephp/cakephp/tests');
 Plugin::load('Bake', [
 	'path' => dirname(dirname(__FILE__)) . DS,
 	'autoload' => true
