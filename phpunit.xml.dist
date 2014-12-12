@@ -6,16 +6,12 @@
 	syntaxCheck="false"
 	bootstrap="./tests/bootstrap.php"
 	>
-	<php>
-		<ini name="memory_limit" value="-1"/>
-	</php>
 
 	<!-- Add any additional test suites you want to run here -->
 	<testsuites>
-		<testsuite name="All Tests">
+		<testsuite name="Bake Test Suite">
 			<directory>./tests/TestCase</directory>
 		</testsuite>
-		<!-- Add plugin test suites here. -->
 	</testsuites>
 
 	<!-- Setup a listener for fixtures -->
@@ -29,12 +25,15 @@
 		</listener>
 	</listeners>
 
-	<php>
-		<!-- Postgres
-		<env name="db_dsn" value="postgres://root@localhost/cake_test_db"/>
-		-->
-		<!-- Mysql
-		<env name="db_dsn" value="mysql://root@localhost/cake_test_db"/>
-		-->
-	</php>
+	<!-- Prevent coverage reports from looking in tests and vendors -->
+	<filter>
+		<blacklist>
+			<directory suffix=".php">./vendor/</directory>
+			<directory suffix=".ctp">./vendor/</directory>
+
+			<directory suffix=".php">./tests/</directory>
+			<directory suffix=".ctp">./tests/</directory>
+		</blacklist>
+	</filter>
+
 </phpunit>
