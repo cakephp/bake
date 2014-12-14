@@ -16,6 +16,8 @@ namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\App;
+use Cake\Core\Plugin;
+use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 
@@ -95,62 +97,17 @@ class PluginTask extends BakeTask {
 
 		$looksGood = $this->in('Look okay?', ['y', 'n', 'q'], 'y');
 
-		if (strtolower($looksGood) === 'y') {
-			$Folder = new Folder($this->path . $plugin);
-			$directories = [
-				'config',
-				$classBase . DS . 'Model' . DS . 'Behavior',
-				$classBase . DS . 'Model' . DS . 'Table',
-				$classBase . DS . 'Model' . DS . 'Entity',
-				$classBase . DS . 'Shell' . DS . 'Task',
-				$classBase . DS . 'Controller' . DS . 'Component',
-				$classBase . DS . 'View' . DS . 'Helper',
-				$classBase . DS . 'Template',
-				'tests' . DS . 'TestCase' . DS . 'Controller' . DS . 'Component',
-				'tests' . DS . 'TestCase' . DS . 'View' . DS . 'Helper',
-				'tests' . DS . 'TestCase' . DS . 'Model' . DS . 'Behavior',
-				'tests' . DS . 'Fixture',
-				'webroot'
-			];
-
-			foreach ($directories as $directory) {
-				$dirPath = $this->path . $plugin . DS . $directory;
-				$Folder->create($dirPath);
-				new File($dirPath . DS . 'empty', true);
-			}
-
-			foreach ($Folder->messages() as $message) {
-				$this->out($message, 1, Shell::VERBOSE);
-			}
-
-			$errors = $Folder->errors();
-			if (!empty($errors)) {
-				foreach ($errors as $message) {
-					$this->error($message);
-				}
-				return false;
-			}
-
-			$controllerFileName = 'AppController.php';
-
-			$out = "<?php\n\n";
-			$out .= "namespace {$plugin}\\Controller;\n\n";
-			$out .= "use App\\Controller\\AppController as BaseController;\n\n";
-			$out .= "class AppController extends BaseController {\n\n";
-			$out .= "}\n";
-			$this->createFile($this->path . $plugin . DS . $classBase . DS . 'Controller' . DS . $controllerFileName, $out);
-			$emptyFile = $this->path . 'empty';
-			$this->_deleteEmptyFile($emptyFile);
-
-			$hasAutoloader = $this->_modifyAutoloader($plugin, $this->path);
-			$this->_generateRoutes($plugin, $this->path);
-			$this->_modifyBootstrap($plugin, $hasAutoloader);
-			$this->_generatePhpunitXml($plugin, $this->path);
-			$this->_generateTestBootstrap($plugin, $this->path);
-
-			$this->hr();
-			$this->out(sprintf('<success>Created:</success> %s in %s', $plugin, $this->path . $plugin), 2);
+		if (strtolower($looksGood) !== 'y') {
+			return;
 		}
+
+		$this->_generateFiles($plugin, $this->path);
+
+		$hasAutoloader = $this->_modifyAutoloader($plugin, $this->path);
+		$this->_modifyBootstrap($plugin, $hasAutoloader);
+
+		$this->hr();
+		$this->out(sprintf('<success>Created:</success> %s in %s', $plugin, $this->path . $plugin), 2);
 
 		return true;
 	}
@@ -178,58 +135,46 @@ class PluginTask extends BakeTask {
 		}
 	}
 
-/**
- * Generate a routes file for the plugin being baked.
- *
- * @param string $plugin The plugin to generate routes for.
- * @param string $path The path to save the routes.php file in.
- * @return void
- */
-	protected function _generateRoutes($plugin, $path) {
-		$this->Template->set([
-			'plugin' => $plugin,
-		]);
-		$this->out('Generating routes.php file...');
-		$out = $this->Template->generate('config/routes');
-		$file = $path . $plugin . DS . 'config' . DS . 'routes.php';
-		$this->createFile($file, $out);
-	}
-
-/**
- * Generate a phpunit.xml stub for the plugin.
- *
- * @param string $plugin Name of plugin
- * @param string $path The path to save the phpunit.xml file to.
- * @return void
- */
-	protected function _generatePhpunitXml($plugin, $path) {
-		$this->Template->set([
-			'plugin' => $plugin,
-			'path' => $path
-		]);
-		$this->out('Generating phpunit.xml file...');
-		$out = $this->Template->generate('tests/phpunit.xml');
-		$file = $path . $plugin . DS . 'phpunit.xml';
-		$this->createFile($file, $out);
-	}
-
-/**
- * Generate a Test/bootstrap.php stub for the plugin.
- *
- * @param string $plugin Name of plugin
- * @param string $path The path to save the phpunit.xml file to.
- * @return void
- */
-	protected function _generateTestBootstrap($plugin, $path) {
+	protected function _generateFiles($plugin, $path) {
 		$this->Template->set([
 			'plugin' => $plugin,
 			'path' => $path,
 			'root' => ROOT
 		]);
-		$this->out('Generating tests/bootstrap.php file...');
-		$out = $this->Template->generate('tests/bootstrap');
-		$file = $path . $plugin . DS . 'tests' . DS . 'bootstrap.php';
-		$this->createFile($file, $out);
+
+		$root = $path . $plugin . DS;
+
+		$paths = [];
+		if (!empty($this->params['theme'])) {
+			$paths[] = Plugin::path($this->params['theme']) . 'src/Template/';
+		}
+
+		$paths = array_merge($paths, Configure::read('App.paths.templates'));
+		$paths[] = Plugin::path('Bake') . 'src/Template/';
+
+		do {
+			$templatesPath = array_shift($paths) . 'Bake/Plugin';
+			$templatesDir = new Folder($templatesPath);
+			$templates = $templatesDir->findRecursive('.*\.ctp');
+		} while (!$templates);
+
+		foreach($templates as $template) {
+			$template = substr($template, strrpos($template, 'Plugin') + 7, -4);
+			$this->_generateFile($template, $root);
+		}
+	}
+
+/**
+ * Generate a file
+ *
+ * @param string $template The template to render
+ * @param string $root The path to the plugin's root
+ * @return void
+ */
+	protected function _generateFile($template, $root) {
+		$this->out(sprintf('Generating %s file...', $template));
+		$out = $this->Template->generate('Plugin/' . $template);
+		$this->createFile($root . $template, $out);
 	}
 
 /**
