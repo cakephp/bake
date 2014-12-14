@@ -32,7 +32,10 @@ class FixtureTask extends BakeTask {
  *
  * @var array
  */
-	public $tasks = ['Model', 'Template'];
+	public $tasks = [
+		'Bake.Model',
+		'Bake.Template'
+	];
 
 /**
  * Get the file path.

@@ -29,7 +29,11 @@ class ControllerTask extends BakeTask {
  *
  * @var array
  */
-	public $tasks = ['Model', 'Test', 'Template'];
+	public $tasks = [
+		'Bake.Model',
+		'Bake.Template',
+		'Bake.Test'
+	];
 
 /**
  * Path fragment for generated code.

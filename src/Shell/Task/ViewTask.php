@@ -32,7 +32,10 @@ class ViewTask extends BakeTask {
  *
  * @var array
  */
-	public $tasks = ['Model', 'Template'];
+	public $tasks = [
+		'Bake.Model',
+		'Bake.Template'
+	];
 
 /**
  * path to View directory

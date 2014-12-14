@@ -27,7 +27,10 @@ abstract class SimpleBakeTask extends BakeTask {
  *
  * @var array
  */
-	public $tasks = ['Test', 'Template'];
+	public $tasks = [
+		'Bake.Template',
+		'Bake.Test'
+	];
 
 /**
  * Get the generated object's name.

@@ -37,7 +37,10 @@ class PluginTask extends BakeTask {
  *
  * @var array
  */
-	public $tasks = ['Template', 'Project'];
+	public $tasks = [
+		'Bake.Project',
+		'Bake.Template'
+	];
 
 /**
  * initialize

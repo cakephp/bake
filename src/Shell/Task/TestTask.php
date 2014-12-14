@@ -39,7 +39,7 @@ class TestTask extends BakeTask {
  *
  * @var array
  */
-	public $tasks = ['Template'];
+	public $tasks = ['Bake.Template'];
 
 /**
  * class types that methods can be generated for
