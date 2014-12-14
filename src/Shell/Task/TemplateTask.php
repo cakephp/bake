@@ -14,13 +14,14 @@
  */
 namespace Bake\Shell\Task;
 
+use Bake\View\BakeView;
 use Cake\Console\Shell;
+use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\Network\Request;
 use Cake\Network\Response;
-use Cake\View\BakeView;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\View\ViewVarsTrait;
 
@@ -55,7 +56,7 @@ class TemplateTask extends Shell {
 		$theme = isset($this->params['theme']) ? $this->params['theme'] : '';
 
 		$viewOptions = [
-			'helpers' => ['Bake'],
+			'helpers' => ['Bake.Bake'],
 			'theme' => $theme
 		];
 		$view = new BakeView(new Request(), new Response(), null, $viewOptions);

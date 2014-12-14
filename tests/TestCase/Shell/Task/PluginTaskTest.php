@@ -14,11 +14,11 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
+use Bake\Shell\Task\TemplateTask;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
-use Cake\Shell\Task\TemplateTask;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -35,7 +35,7 @@ class PluginTaskTest extends TestCase {
 		parent::setUp();
 		$this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-		$this->Task = $this->getMock('Cake\Shell\Task\PluginTask',
+		$this->Task = $this->getMock('Bake\Shell\Task\PluginTask',
 			array('in', 'err', 'createFile', '_stop', 'clear', 'callProcess'),
 			array($this->io)
 		);
@@ -73,15 +73,15 @@ class PluginTaskTest extends TestCase {
 	public function testBakeFoldersAndFiles() {
 		$this->Task->expects($this->at(0))->method('in')->will($this->returnValue('y'));
 
-		$path = $this->Task->path . 'BakeTestPlugin';
+		$path = $this->Task->path . 'BakeTestBake';
 
 		$file = $path . DS . 'src' . DS . 'Controller' . DS . 'AppController.php';
 		$this->Task->expects($this->at(1))->method('createFile')
-			->with($file, $this->stringContains('namespace BakeTestPlugin\Controller;'));
+			->with($file, $this->stringContains('namespace BakeTestBake\Controller;'));
 
-		$this->Task->bake('BakeTestPlugin');
+		$this->Task->bake('BakeTestBake');
 
-		$path = $this->Task->path . 'BakeTestPlugin';
+		$path = $this->Task->path . 'BakeTestBake';
 		$this->assertTrue(is_dir($path), 'No plugin dir');
 
 		$directories = array(
@@ -103,7 +103,7 @@ class PluginTaskTest extends TestCase {
 			$this->assertTrue(is_dir($path . DS . $dir), 'Missing directory for ' . $dir);
 		}
 
-		$Folder = new Folder($this->Task->path . 'BakeTestPlugin');
+		$Folder = new Folder($this->Task->path . 'BakeTestBake');
 		$Folder->delete();
 	}
 
@@ -113,7 +113,7 @@ class PluginTaskTest extends TestCase {
  * @return void
  */
 	public function testExecuteWithNoArgs() {
-		$path = $this->Task->path . 'TestPlugin';
+		$path = $this->Task->path . 'TestBake';
 
 		$this->Task->expects($this->at(0))
 			->method('err')
@@ -137,14 +137,14 @@ class PluginTaskTest extends TestCase {
 		$this->Task->expects($this->at(0))->method('in')
 			->will($this->returnValue('y'));
 
-		$path = $this->Task->path . 'BakeTestPlugin';
+		$path = $this->Task->path . 'BakeTestBake';
 		$file = $path . DS . 'src' . DS . 'Controller' . DS . 'AppController.php';
 		$this->Task->expects($this->at(1))->method('createFile')
 			->with($file, $this->stringContains('class AppController extends BaseController {'));
 
 		$file = $path . DS . 'config' . DS . 'routes.php';
 		$this->Task->expects($this->at(2))->method('createFile')
-			->with($file, $this->stringContains("Router::plugin('BakeTestPlugin', function (\$routes)"));
+			->with($file, $this->stringContains("Router::plugin('BakeTestBake', function (\$routes)"));
 
 		$file = $path . DS . 'phpunit.xml';
 		$this->Task->expects($this->at(3))->method('createFile')
@@ -154,9 +154,9 @@ class PluginTaskTest extends TestCase {
 		$this->Task->expects($this->at(4))->method('createFile')
 			->with($file, $this->anything());
 
-		$this->Task->main('BakeTestPlugin');
+		$this->Task->main('BakeTestBake');
 
-		$Folder = new Folder($this->Task->path . 'BakeTestPlugin');
+		$Folder = new Folder($this->Task->path . 'BakeTestBake');
 		$Folder->delete();
 	}
 
@@ -182,12 +182,12 @@ class PluginTaskTest extends TestCase {
 		$config = [
 			'autoload' => [
 				'psr-4' => [
-					'BakeTestPlugin\\' => './plugins/BakeTestPlugin/src',
+					'BakeTestBake\\' => './plugins/BakeTestBake/src',
 				],
 			],
 			'autoload-dev' => [
 				'psr-4' => [
-					'BakeTestPlugin\\Test\\' => './plugins/BakeTestPlugin/tests',
+					'BakeTestBake\\Test\\' => './plugins/BakeTestBake/tests',
 				],
 			],
 		];
@@ -201,9 +201,9 @@ class PluginTaskTest extends TestCase {
 			->method('callProcess')
 			->with('php ' . escapeshellarg('composer.phar') . ' dump-autoload');
 
-		$this->Task->main('BakeTestPlugin');
+		$this->Task->main('BakeTestBake');
 
-		$Folder = new Folder($this->Task->path . 'BakeTestPlugin');
+		$Folder = new Folder($this->Task->path . 'BakeTestBake');
 		$Folder->delete();
 
 		$File = new File($file);
@@ -222,7 +222,7 @@ class PluginTaskTest extends TestCase {
 		array_unshift($paths, '/fake/path');
 		$paths[] = '/fake/path2';
 
-		$this->Task = $this->getMock('Cake\Shell\Task\PluginTask',
+		$this->Task = $this->getMock('Bake\Shell\Task\PluginTask',
 			array('in', 'out', 'err', 'createFile', '_stop'),
 			array($this->io)
 		);

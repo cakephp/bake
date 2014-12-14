@@ -14,12 +14,11 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
+use Bake\Shell\Task\TemplateTask;
+use Bake\Test\TestCase\TestCase;
 use Cake\Core\Plugin;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use Cake\Shell\Task\TemplateTask;
-use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
 use Cake\View\Helper;
 
 /**
@@ -41,14 +40,17 @@ class BakeArticlesTable extends Table {
  */
 class ControllerTaskTest extends TestCase {
 
-	use StringCompareTrait;
-
 /**
  * fixtures
  *
  * @var array
  */
-	public $fixtures = ['core.bake_articles', 'core.bake_articles_bake_tags', 'core.bake_comments', 'core.bake_tags'];
+	public $fixtures = [
+		'plugin.bake.bake_articles',
+		'plugin.bake.bake_articles_bake_tags',
+		'plugin.bake.bake_comments',
+		'plugin.bake.bake_tags'
+	];
 
 /**
  * setUp method
@@ -59,7 +61,7 @@ class ControllerTaskTest extends TestCase {
 		parent::setUp();
 		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
-		$this->Task = $this->getMock('Cake\Shell\Task\ControllerTask',
+		$this->Task = $this->getMock('Bake\Shell\Task\ControllerTask',
 			array('in', 'out', 'err', 'hr', 'createFile', '_stop'),
 			array($io)
 		);
@@ -68,12 +70,12 @@ class ControllerTaskTest extends TestCase {
 
 		$this->Task->Template = new TemplateTask($io);
 
-		$this->Task->Model = $this->getMock('Cake\Shell\Task\ModelTask',
+		$this->Task->Model = $this->getMock('Bake\Shell\Task\ModelTask',
 			array('in', 'out', 'err', 'createFile', '_stop'),
 			array($io)
 		);
 		$this->Task->Test = $this->getMock(
-			'Cake\Shell\Task\TestTask',
+			'Bake\Shell\Task\TestTask',
 			[],
 			[$io]
 		);
@@ -150,7 +152,7 @@ class ControllerTaskTest extends TestCase {
 			->will($this->returnValue(true));
 
 		$this->Task->params['no-actions'] = true;
-		$this->Task->params['components'] = 'Csrf, Auth, Company/TestPluginThree.Something, TestPlugin.Other, Apple, NonExistent';
+		$this->Task->params['components'] = 'Csrf, Auth, Company/TestBakeThree.Something, TestBake.Other, Apple, NonExistent';
 
 		$result = $this->Task->bake('BakeArticles');
 		$this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -229,10 +231,8 @@ class ControllerTaskTest extends TestCase {
 
 		$this->Task->expects($this->at(1))
 			->method('createFile')
-			->with(
-				$this->_normalizePath($path),
-				$this->stringContains('BakeArticlesController extends AppController')
-			)->will($this->returnValue(true));
+			->with($this->_normalizePath($path))
+			->will($this->returnValue(true));
 
 		$result = $this->Task->bake('BakeArticles');
 
@@ -315,7 +315,7 @@ class ControllerTaskTest extends TestCase {
 		$this->Task->Test->expects($this->atLeastOnce())
 			->method('bake');
 
-		$filename = $this->_normalizePath(APP . 'Controller/BakeArticlesController.php');
+		$filename = $this->_normalizePath(ROOT . 'Controller/BakeArticlesController.php');
 		$this->Task->expects($this->at(1))
 			->method('createFile')
 			->with($filename, $this->logicalAnd(

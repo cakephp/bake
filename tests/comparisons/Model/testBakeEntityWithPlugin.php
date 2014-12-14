@@ -1,5 +1,5 @@
 <?php
-namespace ControllerTest\Model\Entity;
+namespace ModelTest\Model\Entity;
 
 use Cake\ORM\Entity;
 

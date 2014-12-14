@@ -14,16 +14,13 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
+use Bake\Test\TestCase\TestCase;
 use Cake\Core\Plugin;
-use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
 
 /**
  * TemplateTaskTest class
  */
 class TemplateTaskTest extends TestCase {
-
-	use StringCompareTrait;
 
 /**
  * setUp method
@@ -35,7 +32,7 @@ class TemplateTaskTest extends TestCase {
 		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-		$this->Task = $this->getMock('Cake\Shell\Task\TemplateTask',
+		$this->Task = $this->getMock('Bake\Shell\Task\TemplateTask',
 			array('in', 'err', 'createFile', '_stop', 'clear'),
 			array($io)
 		);
@@ -70,7 +67,7 @@ class TemplateTaskTest extends TestCase {
  * @return void
  */
 	public function testGenerateWithTemplateOverride() {
-		Plugin::load('TestBakeTheme');
+		$this->_loadTestPlugin('TestBakeTheme');
 		$this->Task->params['theme'] = 'TestBakeTheme';
 		$this->Task->set(array(
 			'plugin' => 'Special'
@@ -85,7 +82,7 @@ class TemplateTaskTest extends TestCase {
  * @return void
  */
 	public function testGenerateWithTemplateFallbacks() {
-		Plugin::load('TestBakeTheme');
+		$this->_loadTestPlugin('TestBakeTheme');
 		$this->Task->params['theme'] = 'TestBakeTheme';
 		$this->Task->set(array(
 			'name' => 'Articles',

@@ -14,18 +14,15 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
+use Bake\Test\TestCase\TestCase;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Shell\Task\TemplateTask;
-use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
+use Bake\Shell\Task\TemplateTask;
 
 /**
  * CellTaskTest class
  */
 class CellTaskTest extends TestCase {
-
-	use StringCompareTrait;
 
 /**
  * setup method
@@ -38,11 +35,11 @@ class CellTaskTest extends TestCase {
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock(
-			'Cake\Shell\Task\CellTask',
+			'Bake\Shell\Task\CellTask',
 			['in', 'err', 'createFile', '_stop'],
 			[$io]
 		);
-		$this->Task->Test = $this->getMock('Cake\Shell\Task\TestTask',
+		$this->Task->Test = $this->getMock('Bake\Shell\Task\TestTask',
 			[],
 			[$io]
 		);
@@ -83,8 +80,8 @@ class CellTaskTest extends TestCase {
  * @return void
  */
 	public function testMainPlugin() {
-		Plugin::load('TestPlugin');
-		$path = Plugin::path('TestPlugin');
+		$this->_loadTestPlugin('TestBake');
+		$path = Plugin::path('TestBake');
 
 		$this->Task->expects($this->at(0))
 			->method('createFile')
@@ -99,7 +96,7 @@ class CellTaskTest extends TestCase {
 				$this->stringContains('class ExampleCell extends Cell')
 			);
 
-		$this->Task->main('TestPlugin.Example');
+		$this->Task->main('TestBake.Example');
 	}
 
 /**
@@ -108,11 +105,10 @@ class CellTaskTest extends TestCase {
  * @return void
  */
 	public function testBakePlugin() {
-		Plugin::load('TestPlugin');
+		$this->_loadTestPlugin('TestBake');
+		$path = Plugin::path('TestBake');
 
-		$path = Plugin::path('TestPlugin');
-
-		$this->Task->plugin = 'TestPlugin';
+		$this->Task->plugin = 'TestBake';
 		$this->Task->expects($this->at(0))
 			->method('createFile')
 			->with(

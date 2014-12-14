@@ -102,6 +102,7 @@ class BakeShell extends Shell {
 	public function loadTasks() {
 		$tasks = [];
 		$tasks = $this->_findTasks($tasks, CAKE, 'Cake');
+
 		$tasks = $this->_findTasks($tasks, APP, Configure::read('App.namespace'));
 		foreach (Plugin::loaded() as $plugin) {
 			$tasks = $this->_findTasks(
@@ -111,6 +112,7 @@ class BakeShell extends Shell {
 				$plugin
 			);
 		}
+
 		$this->tasks = array_values($tasks);
 		parent::loadTasks();
 	}
@@ -176,7 +178,7 @@ class BakeShell extends Shell {
 			if (!$reflect->isInstantiable()) {
 				continue;
 			}
-			if (!$reflect->isSubclassOf('Cake\Shell\Task\BakeTask')) {
+			if (!$reflect->isSubclassOf('Bake\Shell\Task\BakeTask')) {
 				continue;
 			}
 			$classes[] = $className;

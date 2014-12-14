@@ -1,5 +1,5 @@
 <?php
-namespace ControllerTest\Model\Table;
+namespace ModelTest\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\Table;

@@ -14,14 +14,13 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
+use Bake\Shell\Task\TemplateTask;
+use Bake\Test\TestCase\TestCase;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use Cake\Shell\Task\TemplateTask;
-use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
 
 /**
  * Test View Task Comment Model
@@ -78,8 +77,6 @@ class ViewTaskCommentsController extends Controller {
  */
 class ViewTaskTest extends TestCase {
 
-	use StringCompareTrait;
-
 /**
  * Fixtures
  *
@@ -120,12 +117,12 @@ class ViewTaskTest extends TestCase {
 	protected function _setupTask($methods) {
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-		$this->Task = $this->getMock('Cake\Shell\Task\ViewTask',
+		$this->Task = $this->getMock('Bake\Shell\Task\ViewTask',
 			$methods,
 			[$io]
 		);
 		$this->Task->Template = new TemplateTask($io);
-		$this->Task->Model = $this->getMock('Cake\Shell\Task\ModelTask', [], [$io]);
+		$this->Task->Model = $this->getMock('Bake\Shell\Task\ModelTask', [], [$io]);
 	}
 
 /**
@@ -267,10 +264,10 @@ class ViewTaskTest extends TestCase {
 	public function testGetPathPlugin() {
 		$this->Task->controllerName = 'Posts';
 
-		$pluginPath = APP . 'Plugin/TestPlugin/';
-		Plugin::load('TestPlugin', array('path' => $pluginPath));
+		$pluginPath = APP . 'Plugin/TestView/';
+		Plugin::load('TestView', array('path' => $pluginPath));
 
-		$this->Task->params['plugin'] = $this->Task->plugin = 'TestPlugin';
+		$this->Task->params['plugin'] = $this->Task->plugin = 'TestView';
 		$result = $this->Task->getPath();
 		$this->assertPathEquals($pluginPath . 'src/Template/Posts/', $result);
 
@@ -278,7 +275,7 @@ class ViewTaskTest extends TestCase {
 		$result = $this->Task->getPath();
 		$this->assertPathEquals($pluginPath . 'src/Template/Admin/Posts/', $result);
 
-		Plugin::unload('TestPlugin');
+		Plugin::unload('TestView');
 	}
 
 /**
@@ -654,14 +651,14 @@ class ViewTaskTest extends TestCase {
 		$this->_setupTask(['in', 'err', 'createFile']);
 
 		$this->Task->connection = 'test';
-		$filename = $this->_normalizePath(TEST_APP . 'Plugin/TestPlugin/src/Template/ViewTaskComments/index.ctp');
+		$filename = $this->_normalizePath(APP . 'Plugin/TestView/src/Template/ViewTaskComments/index.ctp');
 
-		Plugin::load('TestPlugin');
+		Plugin::load('TestView', array('path' => APP . 'Plugin/TestView/'));
 
 		$this->Task->expects($this->at(0))
 			->method('createFile')
 			->with($filename);
-		$this->Task->main('TestPlugin.ViewTaskComments');
+		$this->Task->main('TestView.ViewTaskComments');
 	}
 
 /**

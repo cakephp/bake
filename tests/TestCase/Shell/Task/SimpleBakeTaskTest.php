@@ -14,18 +14,15 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
+use Bake\Shell\Task\TemplateTask;
+use Bake\Test\TestCase\TestCase;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Shell\Task\TemplateTask;
-use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
 
 /**
  * SimpleBakeTaskTest class
  */
 class SimpleBakeTaskTest extends TestCase {
-
-	use StringCompareTrait;
 
 /**
  * setup method
@@ -38,11 +35,11 @@ class SimpleBakeTaskTest extends TestCase {
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock(
-			'Cake\Shell\Task\SimpleBakeTask',
+			'Bake\Shell\Task\SimpleBakeTask',
 			['in', 'err', 'createFile', '_stop', 'name', 'template', 'fileName'],
 			[$io]
 		);
-		$this->Task->Test = $this->getMock('Cake\Shell\Task\TestTask',
+		$this->Task->Test = $this->getMock('Bake\Shell\Task\TestTask',
 			[],
 			[$io]
 		);
@@ -90,8 +87,8 @@ class SimpleBakeTaskTest extends TestCase {
  * @return void
  */
 	public function testMainWithPlugin() {
-		Plugin::load('TestPlugin');
-		$filename = $this->_normalizePath(TEST_APP . 'Plugin/TestPlugin/src/Model/Behavior/ExampleBehavior.php');
+		Plugin::load('SimpleBakeTest', array('path' => APP . 'Plugin' . DS . 'SimpleBakeTest' . DS));
+		$filename = $this->_normalizePath(APP . 'Plugin/SimpleBakeTest/src/Model/Behavior/ExampleBehavior.php');
 		$this->Task->expects($this->once())
 			->method('createFile')
 			->with(
@@ -102,7 +99,7 @@ class SimpleBakeTaskTest extends TestCase {
 			->method('bake')
 			->with('behavior', 'Example');
 
-		$this->Task->main('TestPlugin.Example');
+		$this->Task->main('SimpleBakeTest.Example');
 	}
 
 /**
@@ -130,7 +127,7 @@ class SimpleBakeTaskTest extends TestCase {
  * @return void
  */
 	public function testBakeTest() {
-		$this->Task->plugin = 'TestPlugin';
+		$this->Task->plugin = 'TestBake';
 		$this->Task->Test->expects($this->once())
 			->method('bake')
 			->with('behavior', 'Example');
@@ -158,11 +155,11 @@ class SimpleBakeTaskTest extends TestCase {
  * @return void
  */
 	public function testBakePlugin() {
-		Plugin::load('TestPlugin');
+		$this->_loadTestPlugin('TestBake');
 
-		$path = Plugin::path('TestPlugin');
+		$path = Plugin::path('TestBake');
 
-		$this->Task->plugin = 'TestPlugin';
+		$this->Task->plugin = 'TestBake';
 		$this->Task->expects($this->once())
 			->method('createFile')
 			->with(
@@ -181,10 +178,10 @@ class SimpleBakeTaskTest extends TestCase {
  */
 	public function subclassProvider() {
 		return [
-			['Cake\Shell\Task\BehaviorTask'],
-			['Cake\Shell\Task\ComponentTask'],
-			['Cake\Shell\Task\HelperTask'],
-			['Cake\Shell\Task\ShellTask'],
+			['Bake\Shell\Task\BehaviorTask'],
+			['Bake\Shell\Task\ComponentTask'],
+			['Bake\Shell\Task\HelperTask'],
+			['Bake\Shell\Task\ShellTask'],
 		];
 	}
 

@@ -14,10 +14,10 @@
  */
 namespace Bake\Test\TestCase\Shell;
 
+use Bake\Test\TestCase\TestCase;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Shell\BakeShellShell;
-use Cake\TestSuite\TestCase;
 
 class BakeShellTest extends TestCase {
 
@@ -38,7 +38,7 @@ class BakeShellTest extends TestCase {
 		$this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Shell = $this->getMock(
-			'Cake\Shell\BakeShell',
+			'Bake\Shell\BakeShell',
 			['in', 'out', 'hr', 'err', 'createFile', '_stop'],
 			[$this->io]
 		);
@@ -61,9 +61,9 @@ class BakeShellTest extends TestCase {
  * @return void
  */
 	public function testAllWithModelName() {
-		$this->Shell->Model = $this->getMock('Cake\Shell\Task\ModelTask');
-		$this->Shell->Controller = $this->getMock('Cake\Shell\Task\ControllerTask');
-		$this->Shell->View = $this->getMock('Cake\Shell\Task\ModelTask');
+		$this->Shell->Model = $this->getMock('Bake\Shell\Task\ModelTask');
+		$this->Shell->Controller = $this->getMock('Bake\Shell\Task\ControllerTask');
+		$this->Shell->View = $this->getMock('Bake\Shell\Task\ModelTask');
 
 		$this->Shell->Model->expects($this->once())
 			->method('bake')
@@ -102,7 +102,7 @@ class BakeShellTest extends TestCase {
 			->method('out')
 			->with($this->stringContains('The following commands'));
 
-		$this->Shell->expects($this->exactly(18))
+		$this->Shell->expects($this->exactly(17))
 			->method('out');
 
 		$this->Shell->loadTasks();
@@ -132,19 +132,18 @@ class BakeShellTest extends TestCase {
 	public function testLoadTasksCoreAndApp() {
 		$this->Shell->loadTasks();
 		$expected = [
-			'Behavior',
-			'Cell',
-			'Component',
-			'Controller',
-			'Fixture',
-			'Helper',
-			'Model',
-			'Plugin',
-			'Project',
-			'Shell',
-			'Test',
-			'View',
-			'Zerg',
+			'Bake.Behavior',
+			'Bake.Cell',
+			'Bake.Component',
+			'Bake.Controller',
+			'Bake.Fixture',
+			'Bake.Helper',
+			'Bake.Model',
+			'Bake.Plugin',
+			'Bake.Project',
+			'Bake.Shell',
+			'Bake.Test',
+			'Bake.View'
 		];
 		sort($this->Shell->tasks);
 		sort($expected);
@@ -157,10 +156,10 @@ class BakeShellTest extends TestCase {
  * @return void
  */
 	public function testLoadTasksPlugin() {
-		Plugin::load('TestPlugin');
+		$this->_loadTestPlugin('BakeTest');
 		$this->Shell->loadTasks();
-		$this->assertContains('TestPlugin.Widget', $this->Shell->tasks);
-		$this->assertContains('TestPlugin.Zerg', $this->Shell->tasks);
+		$this->assertContains('BakeTest.Widget', $this->Shell->tasks);
+		$this->assertContains('BakeTest.Zerg', $this->Shell->tasks);
 	}
 
 }

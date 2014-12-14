@@ -14,13 +14,12 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
+use Bake\Shell\Task\TemplateTask;
+use Bake\Test\TestCase\TestCase;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Model\Model;
 use Cake\ORM\TableRegistry;
-use Cake\Shell\Task\TemplateTask;
-use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
 use Cake\Utility\ClassRegistry;
 
 /**
@@ -28,18 +27,23 @@ use Cake\Utility\ClassRegistry;
  */
 class ModelTaskTest extends TestCase {
 
-	use StringCompareTrait;
-
 /**
  * fixtures
  *
  * @var array
  */
 	public $fixtures = array(
-		'core.bake_articles', 'core.bake_comments', 'core.bake_articles_bake_tags',
-		'core.bake_tags', 'core.users', 'core.category_threads', 'core.number_trees',
-		'core.counter_cache_users', 'core.counter_cache_posts',
-		'core.tags', 'core.articles_tags'
+		'core.articles_tags',
+		'core.category_threads',
+		'core.counter_cache_posts',
+		'core.counter_cache_users',
+		'core.number_trees',
+		'core.tags',
+		'core.users',
+		'plugin.bake.bake_articles',
+		'plugin.bake.bake_articles_bake_tags',
+		'plugin.bake.bake_comments',
+		'plugin.bake.bake_tags',
 	);
 
 /**
@@ -52,7 +56,7 @@ class ModelTaskTest extends TestCase {
 		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-		$this->Task = $this->getMock('Cake\Shell\Task\ModelTask',
+		$this->Task = $this->getMock('Bake\Shell\Task\ModelTask',
 			array('in', 'err', 'createFile', '_stop', '_checkUnitTest'),
 			array($io)
 		);
@@ -69,7 +73,7 @@ class ModelTaskTest extends TestCase {
 	protected function _useMockedOut() {
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-		$this->Task = $this->getMock('Cake\Shell\Task\ModelTask',
+		$this->Task = $this->getMock('Bake\Shell\Task\ModelTask',
 			array('in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest'),
 			array($io)
 		);
@@ -84,8 +88,8 @@ class ModelTaskTest extends TestCase {
 	protected function _setupOtherMocks() {
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-		$this->Task->Fixture = $this->getMock('Cake\Shell\Task\FixtureTask', [], [$io]);
-		$this->Task->Test = $this->getMock('Cake\Shell\Task\FixtureTask', [], [$io]);
+		$this->Task->Fixture = $this->getMock('Bake\Shell\Task\FixtureTask', [], [$io]);
+		$this->Task->Test = $this->getMock('Bake\Shell\Task\FixtureTask', [], [$io]);
 		$this->Task->Template = new TemplateTask($io);
 		$this->Task->Template->interactive = false;
 
@@ -271,28 +275,28 @@ class ModelTaskTest extends TestCase {
  */
 	public function testGetAssociationsPlugin() {
 		$articles = TableRegistry::get('BakeArticles');
-		$this->Task->plugin = 'TestPlugin';
+		$this->Task->plugin = 'TestBake';
 
 		$result = $this->Task->getAssociations($articles);
 		$expected = [
 			'belongsTo' => [
 				[
 					'alias' => 'BakeUsers',
-					'className' => 'TestPlugin.BakeUsers',
+					'className' => 'TestBake.BakeUsers',
 					'foreignKey' => 'bake_user_id'
 				],
 			],
 			'hasMany' => [
 				[
 					'alias' => 'BakeComments',
-					'className' => 'TestPlugin.BakeComments',
+					'className' => 'TestBake.BakeComments',
 					'foreignKey' => 'bake_article_id',
 				],
 			],
 			'belongsToMany' => [
 				[
 					'alias' => 'BakeTags',
-					'className' => 'TestPlugin.BakeTags',
+					'className' => 'TestBake.BakeTags',
 					'foreignKey' => 'bake_article_id',
 					'joinTable' => 'bake_articles_bake_tags',
 					'targetForeignKey' => 'bake_tag_id',
@@ -697,7 +701,7 @@ class ModelTaskTest extends TestCase {
  * @return void
  */
 	public function testBakeFixture() {
-		$this->Task->plugin = 'TestPlugin';
+		$this->Task->plugin = 'TestBake';
 		$this->Task->Fixture->expects($this->at(0))
 			->method('bake')
 			->with('BakeArticle', 'bake_articles');
@@ -715,7 +719,7 @@ class ModelTaskTest extends TestCase {
  */
 	public function testBakeFixtureDisabled() {
 		$this->Task->params['no-fixture'] = true;
-		$this->Task->plugin = 'TestPlugin';
+		$this->Task->plugin = 'TestBake';
 		$this->Task->Fixture->expects($this->never())
 			->method('bake');
 		$this->Task->bakeFixture('BakeArticle', 'bake_articles');
@@ -727,7 +731,7 @@ class ModelTaskTest extends TestCase {
  * @return void
  */
 	public function testBakeTest() {
-		$this->Task->plugin = 'TestPlugin';
+		$this->Task->plugin = 'TestBake';
 		$this->Task->Test->expects($this->at(0))
 			->method('bake')
 			->with('Table', 'BakeArticle');
@@ -745,7 +749,7 @@ class ModelTaskTest extends TestCase {
  */
 	public function testBakeTestDisabled() {
 		$this->Task->params['no-test'] = true;
-		$this->Task->plugin = 'TestPlugin';
+		$this->Task->plugin = 'TestBake';
 		$this->Task->Test->expects($this->never())
 			->method('bake');
 		$this->Task->bakeTest('BakeArticle');
@@ -888,11 +892,11 @@ class ModelTaskTest extends TestCase {
  * @return void
  */
 	public function testBakeTableWithPlugin() {
-		$this->Task->plugin = 'ControllerTest';
+		$this->Task->plugin = 'ModelTest';
 
 		// fake plugin path
-		Plugin::load('ControllerTest', array('path' => APP . 'Plugin' . DS . 'ControllerTest' . DS));
-		$path = $this->_normalizePath(APP . 'Plugin/ControllerTest/src/Model/Table/BakeArticlesTable.php');
+		Plugin::load('ModelTest', array('path' => APP . 'Plugin' . DS . 'ModelTest' . DS));
+		$path = $this->_normalizePath(APP . 'Plugin/ModelTest/src/Model/Table/BakeArticlesTable.php');
 		$this->Task->expects($this->once())->method('createFile')
 			->with($path);
 
@@ -907,11 +911,11 @@ class ModelTaskTest extends TestCase {
  * @return void
  */
 	public function testBakeEntityWithPlugin() {
-		$this->Task->plugin = 'ControllerTest';
+		$this->Task->plugin = 'ModelTest';
 
 		// fake plugin path
-		Plugin::load('ControllerTest', array('path' => APP . 'Plugin' . DS . 'ControllerTest' . DS));
-		$path = APP . 'Plugin' . DS . 'ControllerTest' . DS . 'src' . DS . 'Model' . DS . 'Entity' . DS . 'BakeArticle.php';
+		Plugin::load('ModelTest', array('path' => APP . 'Plugin' . DS . 'ModelTest' . DS));
+		$path = APP . 'Plugin' . DS . 'ModelTest' . DS . 'src' . DS . 'Model' . DS . 'Entity' . DS . 'BakeArticle.php';
 		$path = $this->_normalizePath($path);
 		$this->Task->expects($this->once())->method('createFile')
 			->with($path);

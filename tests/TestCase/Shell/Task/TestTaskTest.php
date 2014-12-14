@@ -14,6 +14,9 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
+use Bake\Shell\Task\TemplateTask;
+use Bake\Shell\Task\TestTask;
+use Bake\Test\TestCase\TestCase;
 use Cake\Controller\Controller;
 use Cake\Core\App;
 use Cake\Core\Configure;
@@ -22,10 +25,6 @@ use Cake\Network\Request;
 use Cake\Network\Response;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use Cake\Shell\Task\TemplateTask;
-use Cake\Shell\Task\TestTask;
-use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
 use TestApp\Controller\PostsController;
 use TestApp\Model\Table\ArticlesTable;
 use TestApp\Model\Table\CategoryThreadsTable;
@@ -35,8 +34,6 @@ use TestApp\Model\Table\CategoryThreadsTable;
  *
  */
 class TestTaskTest extends TestCase {
-
-	use StringCompareTrait;
 
 /**
  * Fixtures
@@ -61,7 +58,7 @@ class TestTaskTest extends TestCase {
 		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Test' . DS;
 		$this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-		$this->Task = $this->getMock('Cake\Shell\Task\TestTask',
+		$this->Task = $this->getMock('Bake\Shell\Task\TestTask',
 			array('in', 'err', 'createFile', '_stop', 'isLoadableClass'),
 			array($this->io)
 		);
@@ -87,7 +84,7 @@ class TestTaskTest extends TestCase {
  * @return void
  */
 	public function testExecuteNoArgsPrintsTypeOptions() {
-		$this->Task = $this->getMockBuilder('Cake\Shell\Task\TestTask')
+		$this->Task = $this->getMockBuilder('Bake\Shell\Task\TestTask')
 			->disableOriginalConstructor()
 			->setMethods(['outputTypeChoices'])
 			->getMock();
@@ -126,7 +123,7 @@ class TestTaskTest extends TestCase {
  * @return void
  */
 	public function testExecuteOneArgPrintsClassOptions() {
-		$this->Task = $this->getMockBuilder('Cake\Shell\Task\TestTask')
+		$this->Task = $this->getMockBuilder('Bake\Shell\Task\TestTask')
 			->disableOriginalConstructor()
 			->setMethods(['outputClassChoices'])
 			->getMock();
@@ -302,10 +299,10 @@ class TestTaskTest extends TestCase {
  * @return void
  */
 	public function testGetRealClassnamePlugin() {
-		Plugin::load('TestPlugin');
-		$this->Task->plugin = 'TestPlugin';
+		$this->_loadTestPlugin('TestBake');
+		$this->Task->plugin = 'TestBake';
 		$result = $this->Task->getRealClassname('Helper', 'Asset');
-		$expected = 'TestPlugin\View\Helper\AssetHelper';
+		$expected = 'TestBake\View\Helper\AssetHelper';
 		$this->assertEquals($expected, $result);
 	}
 
@@ -465,7 +462,7 @@ class TestTaskTest extends TestCase {
 		$expected = ["\$view = new View();", "new FormHelper(\$view);", ''];
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Task->generateConstructor('entity', 'TestPlugin\Model\Entity\Article');
+		$result = $this->Task->generateConstructor('entity', 'TestBake\Model\Entity\Article');
 		$expected = ["", "new Article();", ''];
 		$this->assertEquals($expected, $result);
 	}
@@ -520,10 +517,10 @@ class TestTaskTest extends TestCase {
  * @return void
  */
 	public function testBakeWithPlugin() {
-		$this->Task->plugin = 'TestPlugin';
+		$this->Task->plugin = 'TestTest';
 
-		Plugin::load('TestPlugin');
-		$path = TEST_APP . 'Plugin/TestPlugin/tests/TestCase/View/Helper/FormHelperTest.php';
+		Plugin::load('TestTest', array('path' => APP . 'Plugin' . DS . 'TestTest' . DS));
+		$path = APP . 'Plugin/TestTest/tests/TestCase/View/Helper/FormHelperTest.php';
 		$path = str_replace('/', DS, $path);
 		$this->Task->expects($this->once())->method('createFile')
 			->with($path, $this->anything());
@@ -564,7 +561,7 @@ class TestTaskTest extends TestCase {
  */
 	public function testTestCaseFileName($type, $class, $expected) {
 		$result = $this->Task->testCaseFileName($type, $class);
-		$expected = ROOT . DS . 'tests/' . $expected;
+		$expected = APP . 'tests/' . $expected;
 		$this->assertPathEquals($expected, $result);
 	}
 
@@ -576,12 +573,12 @@ class TestTaskTest extends TestCase {
 	public function testTestCaseFileNamePlugin() {
 		$this->Task->path = DS . 'my/path/tests/';
 
-		Plugin::load('TestPlugin');
-		$this->Task->plugin = 'TestPlugin';
-		$class = 'TestPlugin\Model\Entity\Post';
+		Plugin::load('TestTest', array('path' => APP . 'Plugin' . DS . 'TestTest' . DS));
+		$this->Task->plugin = 'TestTest';
+		$class = 'TestBake\Model\Entity\Post';
 		$result = $this->Task->testCaseFileName('entity', $class);
 
-		$expected = TEST_APP . 'Plugin/TestPlugin/tests/TestCase/Model/Entity/PostTest.php';
+		$expected = APP . 'Plugin/TestTest/tests/TestCase/Model/Entity/PostTest.php';
 		$this->assertPathEquals($expected, $result);
 	}
 

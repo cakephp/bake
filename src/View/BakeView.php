@@ -14,8 +14,12 @@
  */
 namespace Bake\View;
 
+use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Core\InstanceConfigTrait;
+use Cake\Event\EventManager;
+use Cake\Network\Request;
+use Cake\Network\Response;
 use Cake\Utility\Inflector;
 use Cake\View\View;
 
@@ -57,6 +61,28 @@ class BakeView extends View {
 			'%>' => '?>'
 		]
 	];
+
+/**
+ * Upon construction, append the plugin's template paths to the paths to check
+ *
+ * @param \Cake\Network\Request|null $request Request instance.
+ * @param \Cake\Network\Response|null $response Response instance.
+ * @param \Cake\Event\EventManager|null $eventManager Event manager instance.
+ * @param array $viewOptions View options. See View::$_passedVars for list of
+ *   options which get set as class properties.
+ */
+	public function __construct(Request $request = null, Response $response = null,
+		EventManager $eventManager = null, array $viewOptions = []) {
+		parent::__construct($request, $response, $eventManager, $viewOptions);
+
+		$bakeTemplates = dirname(dirname(__FILE__)) . DS . 'Template' . DS;
+		$paths = (array)Configure::read('App.paths.templates');
+
+		if (!in_array($bakeTemplates, $paths)) {
+			$paths[] = $bakeTemplates;
+			Configure::write('App.paths.templates', $paths);
+		}
+	}
 
 /**
  * Renders view for given view file and layout.

@@ -9,8 +9,8 @@ use App\Controller\AppController;
  * @property \App\Model\Table\BakeArticlesTable $BakeArticles
  * @property \Cake\Controller\Component\CsrfComponent $Csrf
  * @property \Cake\Controller\Component\AuthComponent $Auth
- * @property \Company\TestPluginThree\Controller\Component\SomethingComponent $Something
- * @property \TestPlugin\Controller\Component\OtherComponent $Other
+ * @property \Company\TestBakeThree\Controller\Component\SomethingComponent $Something
+ * @property \TestBake\Controller\Component\OtherComponent $Other
  * @property \App\Controller\Component\AppleComponent $Apple
  * @property \App\Controller\Component\NonExistentComponent $NonExistent
  */
@@ -21,6 +21,6 @@ class BakeArticlesController extends AppController {
  *
  * @var array
  */
-	public $components = ['Csrf', 'Auth', 'Company/TestPluginThree.Something', 'TestPlugin.Other', 'Apple', 'NonExistent'];
+	public $components = ['Csrf', 'Auth', 'Company/TestBakeThree.Something', 'TestBake.Other', 'Apple', 'NonExistent'];
 
 }

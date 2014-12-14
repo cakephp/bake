@@ -1,5 +1,5 @@
 <?php
-namespace TestPlugin\Model\Behavior;
+namespace TestBake\Model\Behavior;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;

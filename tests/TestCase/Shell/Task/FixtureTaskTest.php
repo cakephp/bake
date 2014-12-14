@@ -14,10 +14,10 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
+use Bake\Shell\Task\TemplateTask;
+use Bake\Test\TestCase\TestCase;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
-use Cake\Shell\Task\TemplateTask;
-use Cake\TestSuite\TestCase;
 
 /**
  * FixtureTaskTest class
@@ -41,11 +41,11 @@ class FixtureTaskTest extends TestCase {
 		parent::setUp();
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-		$this->Task = $this->getMock('Cake\Shell\Task\FixtureTask',
+		$this->Task = $this->getMock('Bake\Shell\Task\FixtureTask',
 			array('in', 'err', 'createFile', '_stop', 'clear'),
 			array($io)
 		);
-		$this->Task->Model = $this->getMock('Cake\Shell\Task\ModelTask',
+		$this->Task->Model = $this->getMock('Bake\Shell\Task\ModelTask',
 			array('in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listAll'),
 			array($io)
 		);
@@ -83,7 +83,7 @@ class FixtureTaskTest extends TestCase {
  * @return void
  */
 	public function testGetPath() {
-		$this->assertPathEquals(ROOT . '/tests/Fixture/', $this->Task->getPath());
+		$this->assertPathEquals(APP . 'tests/Fixture/', $this->Task->getPath());
 	}
 
 /**
@@ -142,7 +142,7 @@ class FixtureTaskTest extends TestCase {
 	public function testMainWithTableOption() {
 		$this->Task->connection = 'test';
 		$this->Task->params = ['table' => 'comments'];
-		$filename = $this->_normalizePath(ROOT . '/tests/Fixture/ArticlesFixture.php');
+		$filename = $this->_normalizePath(APP . 'tests/Fixture/ArticlesFixture.php');
 
 		$this->Task->expects($this->at(0))
 			->method('createFile')
@@ -158,15 +158,15 @@ class FixtureTaskTest extends TestCase {
  */
 	public function testMainWithPluginModel() {
 		$this->Task->connection = 'test';
-		$filename = $this->_normalizePath(TEST_APP . 'Plugin/TestPlugin/tests/Fixture/ArticlesFixture.php');
+		$filename = $this->_normalizePath(APP . 'Plugin/FixtureTest/tests/Fixture/ArticlesFixture.php');
 
-		Plugin::load('TestPlugin');
+		Plugin::load('FixtureTest', array('path' => APP . 'Plugin/FixtureTest/'));
 
 		$this->Task->expects($this->at(0))
 			->method('createFile')
 			->with($filename, $this->stringContains('class ArticlesFixture'));
 
-		$this->Task->main('TestPlugin.Articles');
+		$this->Task->main('FixtureTest.Articles');
 	}
 
 /**
@@ -180,12 +180,12 @@ class FixtureTaskTest extends TestCase {
 			->method('listAll')
 			->will($this->returnValue(array('articles', 'comments')));
 
-		$filename = $this->_normalizePath(ROOT . '/tests/Fixture/ArticlesFixture.php');
+		$filename = $this->_normalizePath(APP . 'tests/Fixture/ArticlesFixture.php');
 		$this->Task->expects($this->at(0))
 			->method('createFile')
 			->with($filename, $this->stringContains('class ArticlesFixture'));
 
-		$filename = $this->_normalizePath(ROOT . '/tests/Fixture/CommentsFixture.php');
+		$filename = $this->_normalizePath(APP . 'tests/Fixture/CommentsFixture.php');
 		$this->Task->expects($this->at(1))
 			->method('createFile')
 			->with($filename, $this->stringContains('class CommentsFixture'));
@@ -205,15 +205,16 @@ class FixtureTaskTest extends TestCase {
 		$this->Task->Model->expects($this->any())->method('listAll')
 			->will($this->returnValue(array('Articles', 'comments')));
 
-		$filename = $this->_normalizePath(ROOT . '/tests/Fixture/ArticlesFixture.php');
+		$filename = $this->_normalizePath(APP . 'tests/Fixture/ArticlesFixture.php');
 		$this->Task->expects($this->at(0))
 			->method('createFile')
 			->with($filename, $this->stringContains("'title' => 'Third Article'"));
 
-		$filename = $this->_normalizePath(ROOT . '/tests/Fixture/CommentsFixture.php');
+		$filename = $this->_normalizePath(APP . 'tests/Fixture/CommentsFixture.php');
 		$this->Task->expects($this->at(1))
 			->method('createFile')
 			->with($filename, $this->stringContains("'comment' => 'First Comment for First Article'"));
+
 		$this->Task->expects($this->exactly(2))->method('createFile');
 
 		$this->Task->all();
@@ -231,11 +232,11 @@ class FixtureTaskTest extends TestCase {
 		$this->Task->Model->expects($this->any())->method('listAll')
 			->will($this->returnValue(array('Articles', 'comments')));
 
-		$filename = $this->_normalizePath(ROOT . '/tests/Fixture/ArticlesFixture.php');
+		$filename = $this->_normalizePath(APP . 'tests/Fixture/ArticlesFixture.php');
 		$this->Task->expects($this->at(0))->method('createFile')
 			->with($filename, $this->stringContains("public \$import = ['model' => 'Articles'"));
 
-		$filename = $this->_normalizePath(ROOT . '/tests/Fixture/CommentsFixture.php');
+		$filename = $this->_normalizePath(APP . 'tests/Fixture/CommentsFixture.php');
 		$this->Task->expects($this->at(1))->method('createFile')
 			->with($filename, $this->stringContains("public \$import = ['model' => 'Comments'"));
 		$this->Task->expects($this->exactly(2))->method('createFile');
@@ -345,7 +346,7 @@ class FixtureTaskTest extends TestCase {
  */
 	public function testGenerateFixtureFile() {
 		$this->Task->connection = 'test';
-		$filename = $this->_normalizePath(ROOT . '/tests/Fixture/ArticlesFixture.php');
+		$filename = $this->_normalizePath(APP . 'tests/Fixture/ArticlesFixture.php');
 
 		$this->Task->expects($this->at(0))
 			->method('createFile')
@@ -362,17 +363,19 @@ class FixtureTaskTest extends TestCase {
  * @return void
  */
 	public function testGeneratePluginFixtureFile() {
-		$this->Task->connection = 'test';
-		$this->Task->plugin = 'TestPlugin';
-		$filename = $this->_normalizePath(TEST_APP . 'Plugin/TestPlugin/tests/Fixture/ArticlesFixture.php');
+		$this->_loadTestPlugin('TestBake');
+		$root = Plugin::path('TestBake');
 
-		Plugin::load('TestPlugin');
+		$this->Task->connection = 'test';
+		$this->Task->plugin = 'TestBake';
+		$filename = $this->_normalizePath($root . 'tests/Fixture/ArticlesFixture.php');
+
 		$this->Task->expects($this->at(0))->method('createFile')
 			->with($filename, $this->stringContains('class Articles'));
 
 		$result = $this->Task->generateFixtureFile('Articles', []);
 		$this->assertContains('<?php', $result);
-		$this->assertContains('namespace TestPlugin\Test\Fixture;', $result);
+		$this->assertContains('namespace TestBake\Test\Fixture;', $result);
 	}
 
 }

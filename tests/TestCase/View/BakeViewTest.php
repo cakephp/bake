@@ -14,13 +14,13 @@
  */
 namespace Bake\Test\TestCase\View;
 
+use Bake\View\BakeView;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Network\Request;
 use Cake\Network\Response;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
-use Cake\View\BakeView;
 
 /**
  * BakeViewTest class
@@ -43,7 +43,7 @@ class BakeViewTest extends TestCase {
 		$response = new Response();
 		$this->View = new BakeView($request, $response);
 
-		Configure::write('App.paths.templates', [Plugin::path('Bake') . 'tests' . DS . 'test_app' . DS . 'App' . DS . 'Template' . DS]);
+		Configure::write('App.paths.templates.x', Plugin::path('Bake') . 'tests' . DS . 'test_app' . DS . 'App' . DS . 'Template' . DS);
 	}
 
 /**
