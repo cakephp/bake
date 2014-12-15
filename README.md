@@ -3,11 +3,12 @@
 [![Build Status](https://api.travis-ci.org/cakephp/bake.png)](https://travis-ci.org/cakephp/bake)
 [![License](https://poser.pugx.org/cakephp/bake/license.svg)](https://packagist.org/packages/cakephp/bake)
 
-This is a pre-alpha version of the "bake" system for CakePHP 3.0. It is currently under development and should be considered experimental.
+This is a beta version of the "bake" system for CakePHP 3.0. It is currently under
+development and should be considered experimental.
 
 ## Installation
 
-You can install this plugin into your CakePHP application using [composer](http://getcomposer.org). 
+You can install this plugin into your CakePHP application using [composer](http://getcomposer.org).
 
 The recommended way to install composer packages is:
 
