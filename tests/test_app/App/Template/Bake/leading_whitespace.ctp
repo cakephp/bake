@@ -1,3 +1,4 @@
+<?php // Dummy php code ?>
 <% foreach([1,2,3] as $number): %>
 	<%= $number %>
 <% endforeach; %>

@@ -15,8 +15,8 @@
 namespace Bake\Test\TestCase;
 
 use Cake\Core\Plugin;
-use Cake\TestSuite\TestCase as ParentTestCase;
 use Cake\TestSuite\StringCompareTrait;
+use Cake\TestSuite\TestCase as ParentTestCase;
 
 abstract class TestCase extends ParentTestCase {
 
