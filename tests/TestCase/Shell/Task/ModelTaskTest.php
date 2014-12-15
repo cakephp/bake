@@ -30,20 +30,23 @@ class ModelTaskTest extends TestCase {
 /**
  * fixtures
  *
+ * Don't sort this list alphabetically - otherwise there are table constraints
+ * which fail when using postgres
+ *
  * @var array
  */
 	public $fixtures = array(
-		'core.articles_tags',
-		'core.category_threads',
-		'core.counter_cache_posts',
-		'core.counter_cache_users',
-		'core.number_trees',
-		'core.tags',
-		'core.users',
 		'plugin.bake.bake_articles',
-		'plugin.bake.bake_articles_bake_tags',
 		'plugin.bake.bake_comments',
+		'plugin.bake.bake_articles_bake_tags',
 		'plugin.bake.bake_tags',
+		'core.users',
+		'core.category_threads',
+		'core.number_trees',
+		'core.counter_cache_users',
+		'core.counter_cache_posts',
+		'core.tags',
+		'core.articles_tags'
 	);
 
 /**
