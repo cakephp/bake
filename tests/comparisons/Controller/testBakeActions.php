@@ -67,8 +67,8 @@ class BakeArticlesController extends AppController {
 				$this->Flash->error('The bake article could not be saved. Please, try again.');
 			}
 		}
-		$bakeUsers = $this->BakeArticles->BakeUsers->find('list');
-		$bakeTags = $this->BakeArticles->BakeTags->find('list');
+		$bakeUsers = $this->BakeArticles->BakeUsers->find('list', ['limit' => 200]);
+		$bakeTags = $this->BakeArticles->BakeTags->find('list', ['limit' => 200]);
 		$this->set(compact('bakeArticle', 'bakeUsers', 'bakeTags'));
 	}
 
@@ -92,8 +92,8 @@ class BakeArticlesController extends AppController {
 				$this->Flash->error('The bake article could not be saved. Please, try again.');
 			}
 		}
-		$bakeUsers = $this->BakeArticles->BakeUsers->find('list');
-		$bakeTags = $this->BakeArticles->BakeTags->find('list');
+		$bakeUsers = $this->BakeArticles->BakeUsers->find('list', ['limit' => 200]);
+		$bakeTags = $this->BakeArticles->BakeTags->find('list', ['limit' => 200]);
 		$this->set(compact('bakeArticle', 'bakeUsers', 'bakeTags'));
 	}
 
