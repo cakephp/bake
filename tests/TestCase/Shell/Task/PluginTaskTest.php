@@ -14,6 +14,7 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
+use Bake\Shell\Task\ProjectTask;
 use Bake\Shell\Task\TemplateTask;
 use Cake\Core\App;
 use Cake\Core\Configure;
@@ -39,6 +40,9 @@ class PluginTaskTest extends TestCase {
 			array('in', 'err', 'createFile', '_stop', 'clear', 'callProcess'),
 			array($this->io)
 		);
+
+		$this->Task->Project = new ProjectTask($this->io);
+
 		$this->Task->Template = new TemplateTask($this->io);
 		$this->Task->Template->interactive = false;
 
@@ -75,36 +79,24 @@ class PluginTaskTest extends TestCase {
 
 		$path = $this->Task->path . 'BakeTestBake';
 
-		$file = $path . DS . 'src' . DS . 'Controller' . DS . 'AppController.php';
-		$this->Task->expects($this->at(1))->method('createFile')
-			->with($file, $this->stringContains('namespace BakeTestBake\Controller;'));
+		$files = [
+			'README.md',
+			'composer.json',
+			'config/routes.php',
+			'phpunit.xml.dist',
+			'src/Controller/AppController.php',
+			'tests/bootstrap.php',
+			'webroot/empty'
+		];
 
-		$this->Task->bake('BakeTestBake');
-
-		$path = $this->Task->path . 'BakeTestBake';
-		$this->assertTrue(is_dir($path), 'No plugin dir');
-
-		$directories = array(
-			'config',
-			'src/Model/Behavior',
-			'src/Model/Table',
-			'src/Model/Entity',
-			'src/Shell/Task',
-			'src/Controller/Component',
-			'src/View/Helper',
-			'tests/TestCase/Controller/Component',
-			'tests/TestCase/View/Helper',
-			'tests/TestCase/Model/Behavior',
-			'tests/Fixture',
-			'src/Template',
-			'webroot'
-		);
-		foreach ($directories as $dir) {
-			$this->assertTrue(is_dir($path . DS . $dir), 'Missing directory for ' . $dir);
+		$i = 1;
+		foreach($files as $file) {
+				$this->Task->expects($this->at($i++))
+					->method('createFile')
+					->with($path . DS . $file);
 		}
 
-		$Folder = new Folder($this->Task->path . 'BakeTestBake');
-		$Folder->delete();
+		$this->Task->bake('BakeTestBake');
 	}
 
 /**
@@ -138,26 +130,24 @@ class PluginTaskTest extends TestCase {
 			->will($this->returnValue('y'));
 
 		$path = $this->Task->path . 'BakeTestBake';
-		$file = $path . DS . 'src' . DS . 'Controller' . DS . 'AppController.php';
-		$this->Task->expects($this->at(1))->method('createFile')
-			->with($file, $this->stringContains('class AppController extends BaseController {'));
+		$files = [
+			'README.md',
+			'composer.json',
+			'config/routes.php',
+			'phpunit.xml.dist',
+			'src/Controller/AppController.php',
+			'tests/bootstrap.php',
+			'webroot/empty'
+		];
 
-		$file = $path . DS . 'config' . DS . 'routes.php';
-		$this->Task->expects($this->at(2))->method('createFile')
-			->with($file, $this->stringContains("Router::plugin('BakeTestBake', function (\$routes)"));
-
-		$file = $path . DS . 'phpunit.xml';
-		$this->Task->expects($this->at(3))->method('createFile')
-			->with($file, $this->anything());
-
-		$file = $path . DS . 'tests' . DS . 'bootstrap.php';
-		$this->Task->expects($this->at(4))->method('createFile')
-			->with($file, $this->anything());
+		$i = 1;
+		foreach($files as $file) {
+				$this->Task->expects($this->at($i++))
+					->method('createFile')
+					->with($path . DS . $file);
+		}
 
 		$this->Task->main('BakeTestBake');
-
-		$Folder = new Folder($this->Task->path . 'BakeTestBake');
-		$Folder->delete();
 	}
 
 /**
@@ -175,29 +165,44 @@ class PluginTaskTest extends TestCase {
 			->method('findComposer')
 			->will($this->returnValue('composer.phar'));
 
-		$path = dirname($this->Task->path);
+		$path = $this->Task->path . 'BakeTestBake';
+		if (!is_dir($path)) {
+			mkdir($path);
+		}
 		$file = $path . DS . 'composer.json';
 		file_put_contents($file, '{}');
 
 		$config = [
+			'name' => 'your-name-here/BakeTestBake',
+			'description' => 'BakeTestBake plugin for CakePHP',
+			'type' => 'cakephp-plugin',
+			'require' => [
+				'php' => '>=5.4',
+				'cakephp/plugin-installer' => '*',
+				'cakephp/cakephp' => '3.0.x-dev'
+			],
+			'require-dev' => [
+				'phpunit/phpunit' => '*'
+			],
 			'autoload' => [
 				'psr-4' => [
-					'BakeTestBake\\' => './plugins/BakeTestBake/src',
+					'BakeTestBake\\' => 'src',
 				],
 			],
 			'autoload-dev' => [
 				'psr-4' => [
-					'BakeTestBake\\Test\\' => './plugins/BakeTestBake/tests',
+					'BakeTestBake\\Test\\' => 'tests',
+					'Cake\\Test\\' => './vendor/cakephp/cakephp/tests',
 				],
 			],
 		];
-		$config = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+		$config = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
 
 		$this->Task->expects($this->at(2))
 			->method('createFile')
 			->with($file, $config);
 
-		$this->Task->expects($this->at(3))
+		$this->Task->expects($this->once())
 			->method('callProcess')
 			->with('php ' . escapeshellarg('composer.phar') . ' dump-autoload');
 

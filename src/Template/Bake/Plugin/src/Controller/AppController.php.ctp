@@ -1,6 +1,6 @@
 <?php
 
-namespace <%= $plugin =>\Controller;
+namespace <%= $plugin %>\Controller;
 
 use App\Controller\AppController as BaseController;
 

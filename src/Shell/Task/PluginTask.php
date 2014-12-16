@@ -158,6 +158,7 @@ class PluginTask extends BakeTask {
 			$templates = $templatesDir->findRecursive('.*\.ctp');
 		} while (!$templates);
 
+		sort($templates);
 		foreach($templates as $template) {
 			$template = substr($template, strrpos($template, 'Plugin') + 7, -4);
 			$this->_generateFile($template, $root);
