@@ -22,7 +22,8 @@ use Cake\Controller\ComponentRegistry;
 /**
  * <%= $name %> component
  */
-class <%= $name %>Component extends Component {
+class <%= $name %>Component extends Component
+{
 
     /**
      * Default configuration.

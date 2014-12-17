@@ -24,7 +24,8 @@ use Cake\Validation\Validator;
 /**
  * <%= $name %> Model
  */
-class <%= $name %>Table extends Table {
+class <%= $name %>Table extends Table
+{
 
     /**
      * Initialize method

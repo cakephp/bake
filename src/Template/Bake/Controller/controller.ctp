@@ -36,7 +36,8 @@ foreach ($components as $component):
  * @property <%= $classInfo['fqn'] %> $<%= $classInfo['name'] %>
 <% endforeach; %>
  */
-class <%= $name %>Controller extends AppController {
+class <%= $name %>Controller extends AppController
+{
 <%
 echo $this->Bake->arrayProperty('helpers', $helpers, ['indent' => false]);
 echo $this->Bake->arrayProperty('components', $components, ['indent' => false]);
