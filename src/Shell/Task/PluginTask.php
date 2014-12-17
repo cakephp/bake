@@ -187,10 +187,10 @@ class PluginTask extends BakeTask {
  * @return bool True if composer could be modified correctly
  */
 	protected function _modifyAutoloader($plugin, $path) {
-		$path = dirname($path);
-		$file = $path . DS . 'composer.json';
+		$file = $this->_rootComposerFilePath();
 
 		if (!file_exists($file)) {
+			$this->out(sprintf('<info>Main composer file %s not found</info>', $file));
 			return false;
 		}
 
@@ -200,7 +200,7 @@ class PluginTask extends BakeTask {
 
 		$this->out('<info>Modifying composer autoloader</info>');
 
-		$out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+		$out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES). "\n";
 		$this->createFile($file, $out);
 
 		$composer = $this->Project->findComposer();
@@ -214,7 +214,7 @@ class PluginTask extends BakeTask {
 			$cwd = getcwd();
 
 			// Windows makes running multiple commands at once hard.
-			chdir($path);
+			chdir(dirname($path));
 			$command = 'php ' . escapeshellarg($composer) . ' dump-autoload';
 			$this->callProcess($command);
 
@@ -226,6 +226,17 @@ class PluginTask extends BakeTask {
 		}
 
 		return true;
+	}
+
+/**
+ * The path to the main application's composer file
+ *
+ * This is a test issolation wrapper
+ *
+ * @return string the abs file path
+ */
+	protected function _rootComposerFilePath() {
+		return ROOT . DS . 'composer.json';
 	}
 
 /**
