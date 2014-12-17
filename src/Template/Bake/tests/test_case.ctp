@@ -36,9 +36,11 @@ use <%= $dependency; %>;
  * <%= $fullClassName %> Test Case
  */
 <% if ($isController): %>
-class <%= $className %>Test extends IntegrationTestCase {
+class <%= $className %>Test extends IntegrationTestCase
+{
 <% else: %>
-class <%= $className %>Test extends TestCase {
+class <%= $className %>Test extends TestCase
+{
 <% endif; %>
 
 <% if (!empty($fixtures)): %>
@@ -56,7 +58,8 @@ class <%= $className %>Test extends TestCase {
      *
      * @return void
      */
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
     <%- if ($preConstruct): %>
         <%= $preConstruct %>
@@ -72,7 +75,8 @@ class <%= $className %>Test extends TestCase {
      *
      * @return void
      */
-    public function tearDown() {
+    public function tearDown()
+    {
         unset($this-><%= $subject %>);
 
         parent::tearDown();
@@ -85,7 +89,8 @@ class <%= $className %>Test extends TestCase {
      *
      * @return void
      */
-    public function test<%= Inflector::camelize($method) %>() {
+    public function test<%= Inflector::camelize($method) %>()
+    {
         $this->markTestIncomplete('Not implemented yet.');
     }
 
@@ -96,7 +101,8 @@ class <%= $className %>Test extends TestCase {
      *
      * @return void
      */
-    public function testInitialization() {
+    public function testInitialization()
+    {
         $this->markTestIncomplete('Not implemented yet.');
     }
 

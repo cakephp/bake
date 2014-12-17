@@ -21,7 +21,8 @@ use Cake\Console\Shell;
 /**
  * <%= $name %> shell command.
  */
-class <%= $name %>Shell extends Shell {
+class <%= $name %>Shell extends Shell
+{
 
     /**
      * main() method.

@@ -21,7 +21,8 @@ use Cake\ORM\Entity;
 /**
  * <%= $name %> Entity.
  */
-class <%= $name %> extends Entity {
+class <%= $name %> extends Entity
+{
 <% if (!empty($fields)): %>
 
     /**

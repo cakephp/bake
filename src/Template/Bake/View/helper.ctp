@@ -22,7 +22,8 @@ use Cake\View\View;
 /**
  * <%= $name %> helper
  */
-class <%= $name %>Helper extends Helper {
+class <%= $name %>Helper extends Helper
+{
 
     /**
      * Default configuration.

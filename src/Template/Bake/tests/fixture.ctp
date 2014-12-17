@@ -26,7 +26,8 @@ use Cake\TestSuite\Fixture\TestFixture;
  * <%= $name %>Fixture
  *
  */
-class <%= $name %>Fixture extends TestFixture {
+class <%= $name %>Fixture extends TestFixture
+{
 
 <% if ($table): %>
     /**

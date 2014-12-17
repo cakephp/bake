@@ -21,7 +21,8 @@ use Cake\View\Cell;
 /**
  * <%= $name %> cell
  */
-class <%= $name %>Cell extends Cell {
+class <%= $name %>Cell extends Cell
+{
 
     /**
      * List of valid options that can be passed into this
@@ -36,7 +37,8 @@ class <%= $name %>Cell extends Cell {
      *
      * @return void
      */
-    public function display() {
+    public function display()
+    {
     }
 
 }
