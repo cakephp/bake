@@ -27,18 +27,18 @@ class BakeTagsFixture extends TestFixture {
  *
  * @var array
  */
-	public $fields = array(
+	public $fields = [
 		'id' => ['type' => 'integer'],
 		'tag' => ['type' => 'string', 'null' => false],
 		'created' => 'datetime',
 		'updated' => 'datetime',
 		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
-	);
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array();
+	public $records = [];
 }

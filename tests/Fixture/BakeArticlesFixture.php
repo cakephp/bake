@@ -27,7 +27,7 @@ class BakeArticlesFixture extends TestFixture {
  *
  * @var array
  */
-	public $fields = array(
+	public $fields = [
 		'id' => ['type' => 'integer'],
 		'bake_user_id' => ['type' => 'integer', 'null' => false],
 		'title' => ['type' => 'string', 'null' => false],
@@ -36,12 +36,12 @@ class BakeArticlesFixture extends TestFixture {
 		'created' => 'datetime',
 		'updated' => 'datetime',
 		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
-	);
+	];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array();
+	public $records = [];
 }

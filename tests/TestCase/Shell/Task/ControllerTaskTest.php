@@ -62,8 +62,8 @@ class ControllerTaskTest extends TestCase {
 		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 		$this->Task = $this->getMock('Bake\Shell\Task\ControllerTask',
-			array('in', 'out', 'err', 'hr', 'createFile', '_stop'),
-			array($io)
+			['in', 'out', 'err', 'hr', 'createFile', '_stop'],
+			[$io]
 		);
 		$this->Task->name = 'Controller';
 		$this->Task->connection = 'test';
@@ -71,8 +71,8 @@ class ControllerTaskTest extends TestCase {
 		$this->Task->Template = new TemplateTask($io);
 
 		$this->Task->Model = $this->getMock('Bake\Shell\Task\ModelTask',
-			array('in', 'out', 'err', 'createFile', '_stop'),
-			array($io)
+			['in', 'out', 'err', 'createFile', '_stop'],
+			[$io]
 		);
 		$this->Task->Test = $this->getMock(
 			'Bake\Shell\Task\TestTask',
@@ -109,7 +109,7 @@ class ControllerTaskTest extends TestCase {
 		}
 
 		$result = $this->Task->listAll();
-		$expected = array('bake_articles', 'bake_articles_bake_tags', 'bake_comments', 'bake_tags');
+		$expected = ['bake_articles', 'bake_articles_bake_tags', 'bake_comments', 'bake_tags'];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -226,7 +226,7 @@ class ControllerTaskTest extends TestCase {
 	public function testBakeWithPlugin() {
 		$this->Task->plugin = 'ControllerTest';
 
-		Plugin::load('ControllerTest', array('path' => APP . 'Plugin/ControllerTest/'));
+		Plugin::load('ControllerTest', ['path' => APP . 'Plugin/ControllerTest/']);
 		$path = APP . 'Plugin/ControllerTest/src/Controller/BakeArticlesController.php';
 
 		$this->Task->expects($this->at(1))
@@ -333,9 +333,9 @@ class ControllerTaskTest extends TestCase {
  * @return void
  */
 	public static function nameVariations() {
-		return array(
-			array('BakeArticles'), array('bake_articles')
-		);
+		return [
+			['BakeArticles'], ['bake_articles']
+		];
 	}
 
 /**
@@ -362,7 +362,7 @@ class ControllerTaskTest extends TestCase {
 	public function testMainWithPluginDot() {
 		$this->Task->connection = 'test';
 
-		Plugin::load('ControllerTest', array('path' => APP . 'Plugin/ControllerTest/'));
+		Plugin::load('ControllerTest', ['path' => APP . 'Plugin/ControllerTest/']);
 		$path = APP . 'Plugin/ControllerTest/src/Controller/BakeArticlesController.php';
 
 		$this->Task->expects($this->at(1))

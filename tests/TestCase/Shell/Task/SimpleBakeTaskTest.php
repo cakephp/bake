@@ -87,7 +87,7 @@ class SimpleBakeTaskTest extends TestCase {
  * @return void
  */
 	public function testMainWithPlugin() {
-		Plugin::load('SimpleBakeTest', array('path' => APP . 'Plugin' . DS . 'SimpleBakeTest' . DS));
+		Plugin::load('SimpleBakeTest', ['path' => APP . 'Plugin' . DS . 'SimpleBakeTest' . DS]);
 		$filename = $this->_normalizePath(APP . 'Plugin/SimpleBakeTest/src/Model/Behavior/ExampleBehavior.php');
 		$this->Task->expects($this->once())
 			->method('createFile')

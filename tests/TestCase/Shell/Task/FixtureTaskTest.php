@@ -30,7 +30,7 @@ class FixtureTaskTest extends TestCase {
  *
  * @var array
  */
-	public $fixtures = array('core.articles', 'core.comments', 'core.datatypes', 'core.binary_tests', 'core.users');
+	public $fixtures = ['core.articles', 'core.comments', 'core.datatypes', 'core.binary_tests', 'core.users'];
 
 /**
  * setUp method
@@ -42,12 +42,12 @@ class FixtureTaskTest extends TestCase {
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock('Bake\Shell\Task\FixtureTask',
-			array('in', 'err', 'createFile', '_stop', 'clear'),
-			array($io)
+			['in', 'err', 'createFile', '_stop', 'clear'],
+			[$io]
 		);
 		$this->Task->Model = $this->getMock('Bake\Shell\Task\ModelTask',
-			array('in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listAll'),
-			array($io)
+			['in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listAll'],
+			[$io]
 		);
 		$this->Task->Template = new TemplateTask($io);
 		$this->Task->Template->interactive = false;
@@ -160,7 +160,7 @@ class FixtureTaskTest extends TestCase {
 		$this->Task->connection = 'test';
 		$filename = $this->_normalizePath(APP . 'Plugin/FixtureTest/tests/Fixture/ArticlesFixture.php');
 
-		Plugin::load('FixtureTest', array('path' => APP . 'Plugin/FixtureTest/'));
+		Plugin::load('FixtureTest', ['path' => APP . 'Plugin/FixtureTest/']);
 
 		$this->Task->expects($this->at(0))
 			->method('createFile')
@@ -178,7 +178,7 @@ class FixtureTaskTest extends TestCase {
 		$this->Task->connection = 'test';
 		$this->Task->Model->expects($this->any())
 			->method('listAll')
-			->will($this->returnValue(array('articles', 'comments')));
+			->will($this->returnValue(['articles', 'comments']));
 
 		$filename = $this->_normalizePath(APP . 'tests/Fixture/ArticlesFixture.php');
 		$this->Task->expects($this->at(0))
@@ -203,7 +203,7 @@ class FixtureTaskTest extends TestCase {
 		$this->Task->params = ['count' => 10, 'records' => true];
 
 		$this->Task->Model->expects($this->any())->method('listAll')
-			->will($this->returnValue(array('Articles', 'comments')));
+			->will($this->returnValue(['Articles', 'comments']));
 
 		$filename = $this->_normalizePath(APP . 'tests/Fixture/ArticlesFixture.php');
 		$this->Task->expects($this->at(0))
@@ -227,10 +227,10 @@ class FixtureTaskTest extends TestCase {
  */
 	public function testAllWithSchemaImport() {
 		$this->Task->connection = 'test';
-		$this->Task->params = array('schema' => true);
+		$this->Task->params = ['schema' => true];
 
 		$this->Task->Model->expects($this->any())->method('listAll')
-			->will($this->returnValue(array('Articles', 'comments')));
+			->will($this->returnValue(['Articles', 'comments']));
 
 		$filename = $this->_normalizePath(APP . 'tests/Fixture/ArticlesFixture.php');
 		$this->Task->expects($this->at(0))->method('createFile')

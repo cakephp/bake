@@ -35,7 +35,7 @@ class ModelTaskTest extends TestCase {
  *
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'plugin.bake.bake_articles',
 		'plugin.bake.bake_comments',
 		'plugin.bake.bake_articles_bake_tags',
@@ -47,7 +47,7 @@ class ModelTaskTest extends TestCase {
 		'core.counter_cache_posts',
 		'core.tags',
 		'core.articles_tags'
-	);
+	];
 
 /**
  * setUp method
@@ -60,8 +60,8 @@ class ModelTaskTest extends TestCase {
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock('Bake\Shell\Task\ModelTask',
-			array('in', 'err', 'createFile', '_stop', '_checkUnitTest'),
-			array($io)
+			['in', 'err', 'createFile', '_stop', '_checkUnitTest'],
+			[$io]
 		);
 		$this->Task->connection = 'test';
 		$this->_setupOtherMocks();
@@ -77,8 +77,8 @@ class ModelTaskTest extends TestCase {
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock('Bake\Shell\Task\ModelTask',
-			array('in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest'),
-			array($io)
+			['in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest'],
+			[$io]
 		);
 		$this->_setupOtherMocks();
 	}
@@ -332,7 +332,7 @@ class ModelTaskTest extends TestCase {
 		$this->assertEquals($expected, $result);
 
 		$model = TableRegistry::get('CategoryThreads');
-		$result = $this->Task->findBelongsTo($model, array());
+		$result = $this->Task->findBelongsTo($model, []);
 		$expected = [
 			'belongsTo' => [
 				[
@@ -345,7 +345,7 @@ class ModelTaskTest extends TestCase {
 		$this->assertEquals($expected, $result);
 
 		$this->Task->plugin = 'Blog';
-		$result = $this->Task->findBelongsTo($model, array());
+		$result = $this->Task->findBelongsTo($model, []);
 		$expected = [
 			'belongsTo' => [
 				[
@@ -430,7 +430,7 @@ class ModelTaskTest extends TestCase {
 		$this->assertEquals($expected, $result);
 
 		$this->Task->plugin = 'Blog';
-		$result = $this->Task->findHasMany($model, array());
+		$result = $this->Task->findHasMany($model, []);
 		$expected = [
 			'hasMany' => [
 				[
@@ -766,10 +766,10 @@ class ModelTaskTest extends TestCase {
 	public function testBakeTableValidation() {
 		$validation = [
 			'id' => [
-				'valid' => array(
+				'valid' => [
 					'allowEmpty' => 'create',
 					'rule' => 'numeric',
-				)
+				]
 			],
 			'name' => [
 				'valid' => [
@@ -898,7 +898,7 @@ class ModelTaskTest extends TestCase {
 		$this->Task->plugin = 'ModelTest';
 
 		// fake plugin path
-		Plugin::load('ModelTest', array('path' => APP . 'Plugin' . DS . 'ModelTest' . DS));
+		Plugin::load('ModelTest', ['path' => APP . 'Plugin' . DS . 'ModelTest' . DS]);
 		$path = $this->_normalizePath(APP . 'Plugin/ModelTest/src/Model/Table/BakeArticlesTable.php');
 		$this->Task->expects($this->once())->method('createFile')
 			->with($path);
@@ -917,7 +917,7 @@ class ModelTaskTest extends TestCase {
 		$this->Task->plugin = 'ModelTest';
 
 		// fake plugin path
-		Plugin::load('ModelTest', array('path' => APP . 'Plugin' . DS . 'ModelTest' . DS));
+		Plugin::load('ModelTest', ['path' => APP . 'Plugin' . DS . 'ModelTest' . DS]);
 		$path = APP . 'Plugin' . DS . 'ModelTest' . DS . 'src' . DS . 'Model' . DS . 'Entity' . DS . 'BakeArticle.php';
 		$path = $this->_normalizePath($path);
 		$this->Task->expects($this->once())->method('createFile')
@@ -972,9 +972,9 @@ class ModelTaskTest extends TestCase {
  * @return void
  */
 	public static function nameVariations() {
-		return array(
-			array('BakeArticles'), array('bake_articles')
-		);
+		return [
+			['BakeArticles'], ['bake_articles']
+		];
 	}
 
 /**
