@@ -9,10 +9,10 @@ use Cake\ORM\Entity;
 class testBakeEntityHidden extends Entity
 {
     /**
- * Fields that are excluded from JSON an array versions of the entity.
- *
- * @var array
- */
+     * Fields that are excluded from JSON an array versions of the entity.
+     *
+     * @var array
+     */
     protected $_hidden = [
         'password'
     ];

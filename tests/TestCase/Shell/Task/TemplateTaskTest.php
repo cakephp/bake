@@ -23,10 +23,10 @@ use Cake\Core\Plugin;
 class TemplateTaskTest extends TestCase
 {
     /**
- * setUp method
- *
- * @return void
- */
+     * setUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -39,11 +39,11 @@ class TemplateTaskTest extends TestCase
         );
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         parent::tearDown();
@@ -51,11 +51,11 @@ class TemplateTaskTest extends TestCase
         Plugin::unload('TestBakeTheme');
     }
 
-/**
- * test generate
- *
- * @return void
- */
+    /**
+     * test generate
+     *
+     * @return void
+     */
     public function testGenerate()
     {
         $this->Task->expects($this->any())->method('in')->will($this->returnValue(1));
@@ -64,11 +64,11 @@ class TemplateTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
 
-/**
- * test generate with an overriden template it gets used
- *
- * @return void
- */
+    /**
+     * test generate with an overriden template it gets used
+     *
+     * @return void
+     */
     public function testGenerateWithTemplateOverride()
     {
         $this->_loadTestPlugin('TestBakeTheme');
@@ -79,12 +79,12 @@ class TemplateTaskTest extends TestCase
         $result = $this->Task->generate('config/routes');
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
-/**
- * test generate with a missing template in the chosen template.
- * ensure fallback to default works.
- *
- * @return void
- */
+    /**
+     * test generate with a missing template in the chosen template.
+     * ensure fallback to default works.
+     *
+     * @return void
+     */
     public function testGenerateWithTemplateFallbacks()
     {
         $this->_loadTestPlugin('TestBakeTheme');

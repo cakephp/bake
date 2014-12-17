@@ -23,10 +23,10 @@ use Cake\TestSuite\Fixture\TestFixture;
 class BakeTagsFixture extends TestFixture
 {
     /**
- * fields property
- *
- * @var array
- */
+     * fields property
+     *
+     * @var array
+     */
     public $fields = [
         'id' => ['type' => 'integer'],
         'tag' => ['type' => 'string', 'null' => false],
@@ -35,10 +35,10 @@ class BakeTagsFixture extends TestFixture
         '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
     ];
 
-/**
- * records property
- *
- * @var array
- */
+    /**
+     * records property
+     *
+     * @var array
+     */
     public $records = [];
 }

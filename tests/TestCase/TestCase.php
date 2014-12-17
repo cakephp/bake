@@ -22,12 +22,12 @@ abstract class TestCase extends ParentTestCase
 {
     use StringCompareTrait;
 
-/**
- * Load a plugin from the tests folder, and add to the autoloader
- *
- * @param string $name plugin name to load
- * @return void
- */
+    /**
+     * Load a plugin from the tests folder, and add to the autoloader
+     *
+     * @param string $name plugin name to load
+     * @return void
+     */
     protected function _loadTestPlugin($name)
     {
         $root = dirname(dirname(__FILE__)) . DS;

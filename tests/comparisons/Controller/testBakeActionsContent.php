@@ -11,10 +11,10 @@ use App\Controller\AppController;
 class testBakeActionsContent extends AppController
 {
     /**
- * Index method
- *
- * @return void
- */
+     * Index method
+     *
+     * @return void
+     */
     public function index()
     {
         $this->paginate = [
@@ -23,13 +23,13 @@ class testBakeActionsContent extends AppController
         $this->set('bakeArticles', $this->paginate($this->BakeArticles));
     }
 
-/**
- * View method
- *
- * @param string|null $id Bake Article id
- * @return void
- * @throws \Cake\Network\Exception\NotFoundException
- */
+    /**
+     * View method
+     *
+     * @param string|null $id Bake Article id
+     * @return void
+     * @throws \Cake\Network\Exception\NotFoundException
+     */
     public function view($id = null)
     {
         $bakeArticle = $this->BakeArticles->get($id, [
@@ -38,11 +38,11 @@ class testBakeActionsContent extends AppController
         $this->set('bakeArticle', $bakeArticle);
     }
 
-/**
- * Add method
- *
- * @return void
- */
+    /**
+     * Add method
+     *
+     * @return void
+     */
     public function add()
     {
         $bakeArticle = $this->BakeArticles->newEntity($this->request->data);
@@ -59,13 +59,13 @@ class testBakeActionsContent extends AppController
         $this->set(compact('bakeArticle', 'bakeUsers', 'bakeTags'));
     }
 
-/**
- * Edit method
- *
- * @param string|null $id Bake Article id
- * @return void
- * @throws \Cake\Network\Exception\NotFoundException
- */
+    /**
+     * Edit method
+     *
+     * @param string|null $id Bake Article id
+     * @return void
+     * @throws \Cake\Network\Exception\NotFoundException
+     */
     public function edit($id = null)
     {
         $bakeArticle = $this->BakeArticles->get($id, [
@@ -85,13 +85,13 @@ class testBakeActionsContent extends AppController
         $this->set(compact('bakeArticle', 'bakeUsers', 'bakeTags'));
     }
 
-/**
- * Delete method
- *
- * @param string|null $id Bake Article id
- * @return void
- * @throws \Cake\Network\Exception\NotFoundException
- */
+    /**
+     * Delete method
+     *
+     * @param string|null $id Bake Article id
+     * @return void
+     * @throws \Cake\Network\Exception\NotFoundException
+     */
     public function delete($id = null)
     {
         $bakeArticle = $this->BakeArticles->get($id);

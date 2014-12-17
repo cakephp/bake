@@ -29,46 +29,46 @@ class BakeTask extends Shell
 {
     use ConventionsTrait;
 
-/**
- * The pathFragment appended to the plugin/app path.
- *
- * @var string
- */
+    /**
+     * The pathFragment appended to the plugin/app path.
+     *
+     * @var string
+     */
     public $pathFragment;
 
-/**
- * Name of plugin
- *
- * @var string
- */
+    /**
+     * Name of plugin
+     *
+     * @var string
+     */
     public $plugin = null;
 
-/**
- * The db connection being used for baking
- *
- * @var string
- */
+    /**
+     * The db connection being used for baking
+     *
+     * @var string
+     */
     public $connection = null;
 
-/**
- * Disable caching and enable debug for baking.
- * This forces the most current database schema to be used.
- *
- * @return void
- */
+    /**
+     * Disable caching and enable debug for baking.
+     * This forces the most current database schema to be used.
+     *
+     * @return void
+     */
     public function startup()
     {
         Configure::write('debug', true);
         Cache::disable();
     }
 
-/**
- * Initialize hook.
- *
- * Populates the connection property, which is useful for tasks of tasks.
- *
- * @return void
- */
+    /**
+     * Initialize hook.
+     *
+     * Populates the connection property, which is useful for tasks of tasks.
+     *
+     * @return void
+     */
     public function initialize()
     {
         if (empty($this->connection) && !empty($this->params['connection'])) {
@@ -76,12 +76,12 @@ class BakeTask extends Shell
         }
     }
 
-/**
- * Gets the path for output. Checks the plugin property
- * and returns the correct path.
- *
- * @return string Path to output.
- */
+    /**
+     * Gets the path for output. Checks the plugin property
+     * and returns the correct path.
+     *
+     * @return string Path to output.
+     */
     public function getPath()
     {
         $path = APP . $this->pathFragment;
@@ -91,12 +91,12 @@ class BakeTask extends Shell
         return str_replace('/', DS, $path);
     }
 
-/**
- * Base execute method parses some parameters and sets some properties on the bake tasks.
- * call when overriding execute()
- *
- * @return void
- */
+    /**
+     * Base execute method parses some parameters and sets some properties on the bake tasks.
+     * call when overriding execute()
+     *
+     * @return void
+     */
     public function main()
     {
         if (isset($this->params['plugin'])) {
@@ -110,13 +110,13 @@ class BakeTask extends Shell
         }
     }
 
-/**
- * Executes an external shell command and pipes its output to the stdout
- *
- * @param string $command the command to execute
- * @return void
- * @throws \RuntimeException if any errors occurred during the execution
- */
+    /**
+     * Executes an external shell command and pipes its output to the stdout
+     *
+     * @param string $command the command to execute
+     * @return void
+     * @throws \RuntimeException if any errors occurred during the execution
+     */
     public function callProcess($command)
     {
         $descriptorSpec = [
@@ -150,14 +150,14 @@ class BakeTask extends Shell
         $this->out($output);
     }
 
-/**
- * Handles splitting up the plugin prefix and classname.
- *
- * Sets the plugin parameter and plugin property.
- *
- * @param string $name The name to possibly split.
- * @return string The name without the plugin prefix.
- */
+    /**
+     * Handles splitting up the plugin prefix and classname.
+     *
+     * Sets the plugin parameter and plugin property.
+     *
+     * @param string $name The name to possibly split.
+     * @return string The name without the plugin prefix.
+     */
     protected function _getName($name)
     {
         if (strpos($name, '.')) {
@@ -167,12 +167,12 @@ class BakeTask extends Shell
         return $name;
     }
 
-/**
- * Delete empty file in a given path
- *
- * @param string $path Path to folder which contains 'empty' file.
- * @return void
- */
+    /**
+     * Delete empty file in a given path
+     *
+     * @param string $path Path to folder which contains 'empty' file.
+     * @return void
+     */
     protected function _deleteEmptyFile($path)
     {
         $File = new File($path);
@@ -182,13 +182,13 @@ class BakeTask extends Shell
         }
     }
 
-/**
- * Get the option parser for this task.
- *
- * This base class method sets up some commonly used options.
- *
- * @return \Cake\Console\ConsoleOptionParser
- */
+    /**
+     * Get the option parser for this task.
+     *
+     * This base class method sets up some commonly used options.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     */
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();

@@ -35,19 +35,19 @@ class TemplateTask extends Shell
 
     use ViewVarsTrait;
 
-/**
- * BakeView instance
- *
- * @var Cake\View\BakeView
- */
+    /**
+     * BakeView instance
+     *
+     * @var Cake\View\BakeView
+     */
     public $View;
 
-/**
- * Get view instance
- *
- * @return \Cake\View\View
- * @triggers Bake.initialize $view
- */
+    /**
+     * Get view instance
+     *
+     * @return \Cake\View\View
+     * @triggers Bake.initialize $view
+     */
     public function getView()
     {
         if ($this->View) {
@@ -68,13 +68,13 @@ class TemplateTask extends Shell
         return $this->View;
     }
 
-/**
- * Runs the template
- *
- * @param string $template bake template to render
- * @param array|null $vars Additional vars to set to template scope.
- * @return string contents of generated code template
- */
+    /**
+     * Runs the template
+     *
+     * @param string $template bake template to render
+     * @param array|null $vars Additional vars to set to template scope.
+     * @return string contents of generated code template
+     */
     public function generate($template, $vars = null)
     {
         if ($vars !== null) {

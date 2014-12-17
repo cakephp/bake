@@ -26,10 +26,10 @@ use Cake\TestSuite\TestCase;
 class ProjectTaskTest extends TestCase
 {
     /**
- * setUp method
- *
- * @return void
- */
+     * setUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -42,11 +42,11 @@ class ProjectTaskTest extends TestCase
         $this->Task->path = TMP;
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         parent::tearDown();
@@ -56,22 +56,22 @@ class ProjectTaskTest extends TestCase
         unset($this->Task);
     }
 
-/**
- * creates a test project that is used for testing project task.
- *
- * @return void
- */
+    /**
+     * creates a test project that is used for testing project task.
+     *
+     * @return void
+     */
     protected function _setupTestProject()
     {
         $this->Task->expects($this->at(0))->method('in')->will($this->returnValue('y'));
         $this->Task->bake($this->Task->path . 'BakeTestApp');
     }
 
-/**
- * test bake with an absolute path.
- *
- * @return void
- */
+    /**
+     * test bake with an absolute path.
+     *
+     * @return void
+     */
     public function testExecuteWithAbsolutePath()
     {
         $this->markTestIncomplete('Need to figure this out');
@@ -85,11 +85,11 @@ class ProjectTaskTest extends TestCase
         $this->assertRegExp('/define\(\'CAKE_CORE_INCLUDE_PATH\', .*?DS/', $contents);
     }
 
-/**
- * Copy the TestApp route file so it can be modified.
- *
- * @return void
- */
+    /**
+     * Copy the TestApp route file so it can be modified.
+     *
+     * @return void
+     */
     protected function _cloneRoutes()
     {
         $File = new File(TEST_APP . 'TestApp/Config/routes.php');

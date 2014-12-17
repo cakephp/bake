@@ -28,39 +28,39 @@ use Cake\Filesystem\Folder;
 class PluginTask extends BakeTask
 {
     /**
- * Path to the bootstrap file. Changed in tests.
- *
- * @var string
- */
+     * Path to the bootstrap file. Changed in tests.
+     *
+     * @var string
+     */
     public $bootstrap = null;
 
-/**
- * Tasks this task uses.
- *
- * @var array
- */
+    /**
+     * Tasks this task uses.
+     *
+     * @var array
+     */
     public $tasks = [
         'Bake.Project',
         'Bake.Template'
     ];
 
-/**
- * initialize
- *
- * @return void
- */
+    /**
+     * initialize
+     *
+     * @return void
+     */
     public function initialize()
     {
         $this->path = current(App::path('Plugin'));
         $this->bootstrap = ROOT . DS . 'config' . DS . 'bootstrap.php';
     }
 
-/**
- * Execution method always used for tasks
- *
- * @param string|null $name The name of the plugin to bake.
- * @return void
- */
+    /**
+     * Execution method always used for tasks
+     *
+     * @param string|null $name The name of the plugin to bake.
+     * @return void
+     */
     public function main($name = null)
     {
         if (empty($name)) {
@@ -80,14 +80,14 @@ class PluginTask extends BakeTask
         }
     }
 
-/**
- * Bake the plugin's contents
- *
- * Also update the autoloader and the root composer.json file if it can be found
- *
- * @param string $plugin Name of the plugin in CamelCased format
- * @return bool
- */
+    /**
+     * Bake the plugin's contents
+     *
+     * Also update the autoloader and the root composer.json file if it can be found
+     *
+     * @param string $plugin Name of the plugin in CamelCased format
+     * @return bool
+     */
     public function bake($plugin)
     {
         $pathOptions = App::path('Plugin');
@@ -117,14 +117,14 @@ class PluginTask extends BakeTask
         return true;
     }
 
-/**
- * Update the app's bootstrap.php file.
- *
- * @param string $plugin Name of plugin
- * @param bool $hasAutoloader Whether or not there is an autoloader configured for
- * the plugin
- * @return void
- */
+    /**
+     * Update the app's bootstrap.php file.
+     *
+     * @param string $plugin Name of plugin
+     * @param bool $hasAutoloader Whether or not there is an autoloader configured for
+     * the plugin
+     * @return void
+     */
     protected function _modifyBootstrap($plugin, $hasAutoloader)
     {
         $bootstrap = new File($this->bootstrap, false);
@@ -141,18 +141,18 @@ class PluginTask extends BakeTask
         }
     }
 
-/**
- * Generate all files for a plugin
- *
- * Find the first path which contains `src/Template/Bake/Plugin` that contains
- * something, and use that as the template to recursively render a plugin's
- * contents. Allows the creation of a bake them containing a `Plugin` folder
- * to provide customized bake output for plugins.
- *
- * @param string $pluginName the CamelCase name of the plugin
- * @param string $path the path to the plugins dir (the containing folder)
- * @return void
- */
+    /**
+     * Generate all files for a plugin
+     *
+     * Find the first path which contains `src/Template/Bake/Plugin` that contains
+     * something, and use that as the template to recursively render a plugin's
+     * contents. Allows the creation of a bake them containing a `Plugin` folder
+     * to provide customized bake output for plugins.
+     *
+     * @param string $pluginName the CamelCase name of the plugin
+     * @param string $path the path to the plugins dir (the containing folder)
+     * @return void
+     */
     protected function _generateFiles($pluginName, $path)
     {
         $this->Template->set([
@@ -184,13 +184,13 @@ class PluginTask extends BakeTask
         }
     }
 
-/**
- * Generate a file
- *
- * @param string $template The template to render
- * @param string $root The path to the plugin's root
- * @return void
- */
+    /**
+     * Generate a file
+     *
+     * @param string $template The template to render
+     * @param string $root The path to the plugin's root
+     * @return void
+     */
     protected function _generateFile($template, $root)
     {
         $this->out(sprintf('Generating %s file...', $template));
@@ -198,14 +198,14 @@ class PluginTask extends BakeTask
         $this->createFile($root . $template, $out);
     }
 
-/**
- * Modifies App's composer.json to include the plugin and tries to call
- * composer dump-autoload to refresh the autoloader cache
- *
- * @param string $plugin Name of plugin
- * @param string $path The path to save the phpunit.xml file to.
- * @return bool True if composer could be modified correctly
- */
+    /**
+     * Modifies App's composer.json to include the plugin and tries to call
+     * composer dump-autoload to refresh the autoloader cache
+     *
+     * @param string $plugin Name of plugin
+     * @param string $path The path to save the phpunit.xml file to.
+     * @return bool True if composer could be modified correctly
+     */
     protected function _modifyAutoloader($plugin, $path)
     {
         $file = $this->_rootComposerFilePath();
@@ -249,24 +249,24 @@ class PluginTask extends BakeTask
         return true;
     }
 
-/**
- * The path to the main application's composer file
- *
- * This is a test issolation wrapper
- *
- * @return string the abs file path
- */
+    /**
+     * The path to the main application's composer file
+     *
+     * This is a test issolation wrapper
+     *
+     * @return string the abs file path
+     */
     protected function _rootComposerFilePath()
     {
         return ROOT . DS . 'composer.json';
     }
 
-/**
- * find and change $this->path to the user selection
- *
- * @param array $pathOptions The list of paths to look in.
- * @return void
- */
+    /**
+     * find and change $this->path to the user selection
+     *
+     * @param array $pathOptions The list of paths to look in.
+     * @return void
+     */
     public function findPath(array $pathOptions)
     {
         $valid = false;
@@ -291,11 +291,11 @@ class PluginTask extends BakeTask
         $this->path = $pathOptions[$choice - 1];
     }
 
-/**
- * Gets the option parser instance and configures it.
- *
- * @return \Cake\Console\ConsoleOptionParser
- */
+    /**
+     * Gets the option parser instance and configures it.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     */
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();

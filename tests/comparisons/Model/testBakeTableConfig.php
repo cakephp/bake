@@ -11,11 +11,11 @@ use Cake\Validation\Validator;
 class testBakeTableConfig extends Table
 {
     /**
- * Initialize method
- *
- * @param array $config The configuration for the Table.
- * @return void
- */
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
     public function initialize(array $config)
     {
         $this->table('articles');

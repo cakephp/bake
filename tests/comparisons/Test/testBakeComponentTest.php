@@ -11,10 +11,10 @@ use TestApp\Controller\Component\AppleComponent;
 class testBakeComponentTest extends TestCase
 {
     /**
- * setUp method
- *
- * @return void
- */
+     * setUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -22,11 +22,11 @@ class testBakeComponentTest extends TestCase
         $this->Apple = new AppleComponent($registry);
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         unset($this->Apple);
@@ -34,11 +34,11 @@ class testBakeComponentTest extends TestCase
         parent::tearDown();
     }
 
-/**
- * Test startup method
- *
- * @return void
- */
+    /**
+     * Test startup method
+     *
+     * @return void
+     */
     public function testStartup()
     {
         $this->markTestIncomplete('Not implemented yet.');

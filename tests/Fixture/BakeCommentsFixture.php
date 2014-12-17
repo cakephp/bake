@@ -23,10 +23,10 @@ use Cake\TestSuite\Fixture\TestFixture;
 class BakeCommentsFixture extends TestFixture
 {
     /**
- * fields property
- *
- * @var array
- */
+     * fields property
+     *
+     * @var array
+     */
     public $fields = [
         'otherid' => ['type' => 'integer'],
         'bake_article_id' => ['type' => 'integer', 'null' => false],
@@ -38,10 +38,10 @@ class BakeCommentsFixture extends TestFixture
         '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['otherid']]]
     ];
 
-/**
- * records property
- *
- * @var array
- */
+    /**
+     * records property
+     *
+     * @var array
+     */
     public $records = [];
 }

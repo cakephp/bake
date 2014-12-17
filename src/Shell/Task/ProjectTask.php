@@ -23,18 +23,18 @@ use Cake\Filesystem\Folder;
 class ProjectTask extends BakeTask
 {
     /**
- * App path (used in testing).
- *
- * @var string
- */
+     * App path (used in testing).
+     *
+     * @var string
+     */
     public $appPath = null;
 
-/**
- * Checks that given project path does not already exist, and
- * finds the app directory in it. Then it calls bake() with that information.
- *
- * @return mixed
- */
+    /**
+     * Checks that given project path does not already exist, and
+     * finds the app directory in it. Then it calls bake() with that information.
+     *
+     * @return mixed
+     */
     public function main()
     {
         $project = null;
@@ -85,11 +85,11 @@ class ProjectTask extends BakeTask
         }
     }
 
-/**
- * Uses either the CLI option or looks in $PATH and cwd for composer.
- *
- * @return string|false Either the path to composer or false if it cannot be found.
- */
+    /**
+     * Uses either the CLI option or looks in $PATH and cwd for composer.
+     *
+     * @return string|false Either the path to composer or false if it cannot be found.
+     */
     public function findComposer()
     {
         if (!empty($this->params['composer'])) {
@@ -107,12 +107,12 @@ class ProjectTask extends BakeTask
         return $composer;
     }
 
-/**
- * Search the $PATH for composer.
- *
- * @param array $path The paths to search.
- * @return string|bool
- */
+    /**
+     * Search the $PATH for composer.
+     *
+     * @param array $path The paths to search.
+     * @return string|bool
+     */
     protected function _searchPath($path)
     {
         $composer = ['composer.phar', 'composer'];
@@ -127,12 +127,12 @@ class ProjectTask extends BakeTask
         return false;
     }
 
-/**
- * Uses composer to generate a new package using the cakephp/app project.
- *
- * @param string $path Project path
- * @return mixed
- */
+    /**
+     * Uses composer to generate a new package using the cakephp/app project.
+     *
+     * @param string $path Project path
+     * @return mixed
+     */
     public function bake($path)
     {
         $composer = $this->findComposer();
@@ -155,11 +155,11 @@ class ProjectTask extends BakeTask
         return true;
     }
 
-/**
- * get the option parser.
- *
- * @return \Cake\Console\ConsoleOptionParser
- */
+    /**
+     * get the option parser.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     */
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();

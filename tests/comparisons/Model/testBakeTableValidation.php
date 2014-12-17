@@ -11,22 +11,22 @@ use Cake\Validation\Validator;
 class testBakeTableValidation extends Table
 {
     /**
- * Initialize method
- *
- * @param array $config The configuration for the Table.
- * @return void
- */
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
     public function initialize(array $config)
     {
         $this->primaryKey('id');
     }
 
-/**
- * Default validation rules.
- *
- * @param \Cake\Validation\Validator $validator instance
- * @return \Cake\Validation\Validator
- */
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator instance
+     * @return \Cake\Validation\Validator
+     */
     public function validationDefault(Validator $validator)
     {
         $validator

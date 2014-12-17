@@ -20,31 +20,31 @@ namespace Bake\Shell\Task;
 class BehaviorTask extends SimpleBakeTask
 {
     /**
- * Task name used in path generation.
- *
- * @var string
- */
+     * Task name used in path generation.
+     *
+     * @var string
+     */
     public $pathFragment = 'Model/Behavior/';
 
-/**
- * {@inheritDoc}
- */
+    /**
+     * {@inheritDoc}
+     */
     public function name()
     {
         return 'behavior';
     }
 
-/**
- * {@inheritDoc}
- */
+    /**
+     * {@inheritDoc}
+     */
     public function fileName($name)
     {
         return $name . 'Behavior.php';
     }
 
-/**
- * {@inheritDoc}
- */
+    /**
+     * {@inheritDoc}
+     */
     public function template()
     {
         return 'Model/behavior';

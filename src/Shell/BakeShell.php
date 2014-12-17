@@ -35,18 +35,18 @@ class BakeShell extends Shell
 {
     use ConventionsTrait;
 
-/**
- * The connection being used.
- *
- * @var string
- */
+    /**
+     * The connection being used.
+     *
+     * @var string
+     */
     public $connection = 'default';
 
-/**
- * Assign $this->connection to the active task if a connection param is set.
- *
- * @return void
- */
+    /**
+     * Assign $this->connection to the active task if a connection param is set.
+     *
+     * @return void
+     */
     public function startup()
     {
         parent::startup();
@@ -64,11 +64,11 @@ class BakeShell extends Shell
         }
     }
 
-/**
- * Override main() to handle action
- *
- * @return mixed
- */
+    /**
+     * Override main() to handle action
+     *
+     * @return mixed
+     */
     public function main()
     {
         $connections = ConnectionManager::configured();
@@ -89,18 +89,18 @@ class BakeShell extends Shell
         return false;
     }
 
-/**
- * Locate the tasks bake will use.
- *
- * Scans the following paths for tasks that are subclasses of
- * Cake\Shell\Task\BakeTask:
- *
- * - Cake/Shell/Task/
- * - App/Shell/Task/
- * - Shell/Task for each loaded plugin
- *
- * @return void
- */
+    /**
+     * Locate the tasks bake will use.
+     *
+     * Scans the following paths for tasks that are subclasses of
+     * Cake\Shell\Task\BakeTask:
+     *
+     * - Cake/Shell/Task/
+     * - App/Shell/Task/
+     * - Shell/Task for each loaded plugin
+     *
+     * @return void
+     */
     public function loadTasks()
     {
         $tasks = [];
@@ -120,15 +120,15 @@ class BakeShell extends Shell
         parent::loadTasks();
     }
 
-/**
- * Append matching tasks in $path to the $tasks array.
- *
- * @param array $tasks The task list to modify and return.
- * @param string $path The base path to look in.
- * @param string $namespace The base namespace.
- * @param string|null $prefix The prefix to append.
- * @return array Updated tasks.
- */
+    /**
+     * Append matching tasks in $path to the $tasks array.
+     *
+     * @param array $tasks The task list to modify and return.
+     * @param string $path The base path to look in.
+     * @param string $namespace The base namespace.
+     * @param string|null $prefix The prefix to append.
+     * @return array Updated tasks.
+     */
     protected function _findTasks($tasks, $path, $namespace, $prefix = null)
     {
         $path .= 'Shell/Task';
@@ -146,13 +146,13 @@ class BakeShell extends Shell
         return $tasks;
     }
 
-/**
- * Find task classes in a given path.
- *
- * @param string $path The path to scan.
- * @param string $namespace Namespace.
- * @return array An array of files that may contain bake tasks.
- */
+    /**
+     * Find task classes in a given path.
+     *
+     * @param string $path The path to scan.
+     * @param string $namespace Namespace.
+     * @return array An array of files that may contain bake tasks.
+     */
     protected function _findClassFiles($path, $namespace)
     {
         $iterator = new \DirectoryIterator($path);
@@ -167,12 +167,12 @@ class BakeShell extends Shell
         return $candidates;
     }
 
-/**
- * Find bake tasks in a given set of files.
- *
- * @param array $files The array of files.
- * @return array An array of matching classes.
- */
+    /**
+     * Find bake tasks in a given set of files.
+     *
+     * @param array $files The array of files.
+     * @return array An array of matching classes.
+     */
     protected function _findTaskClasses($files)
     {
         $classes = [];
@@ -192,12 +192,12 @@ class BakeShell extends Shell
         return $classes;
     }
 
-/**
- * Quickly bake the MVC
- *
- * @param string|null $name Name.
- * @return void
- */
+    /**
+     * Quickly bake the MVC
+     *
+     * @param string|null $name Name.
+     * @return void
+     */
     public function all($name = null)
     {
         $this->out('Bake All');
@@ -232,11 +232,11 @@ class BakeShell extends Shell
         return true;
     }
 
-/**
- * Gets the option parser instance and configures it.
- *
- * @return \Cake\Console\ConsoleOptionParser
- */
+    /**
+     * Gets the option parser instance and configures it.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     */
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();

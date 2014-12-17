@@ -9,18 +9,18 @@ use Cake\View\Cell;
 class testBakePlugin extends Cell
 {
     /**
- * List of valid options that can be passed into this
- * cell's constructor.
- *
- * @var array
- */
+     * List of valid options that can be passed into this
+     * cell's constructor.
+     *
+     * @var array
+     */
     protected $_validCellOptions = [];
 
-/**
- * Default display method.
- *
- * @return void
- */
+    /**
+     * Default display method.
+     *
+     * @return void
+     */
     public function display()
     {
     }

@@ -10,21 +10,21 @@ use Cake\TestSuite\TestCase;
 class testBakeBehaviorTest extends TestCase
 {
     /**
- * setUp method
- *
- * @return void
- */
+     * setUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
         $this->Example = new ExampleBehavior();
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         unset($this->Example);
@@ -32,11 +32,11 @@ class testBakeBehaviorTest extends TestCase
         parent::tearDown();
     }
 
-/**
- * Test initial setup
- *
- * @return void
- */
+    /**
+     * Test initial setup
+     *
+     * @return void
+     */
     public function testInitialization()
     {
         $this->markTestIncomplete('Not implemented yet.');

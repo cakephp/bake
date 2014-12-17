@@ -36,10 +36,10 @@ use TestApp\Model\Table\CategoryThreadsTable;
 class TestTaskTest extends TestCase
 {
     /**
- * Fixtures
- *
- * @var string
- */
+     * Fixtures
+     *
+     * @var string
+     */
     public $fixtures = [
         'core.articles',
         'core.authors',
@@ -48,11 +48,11 @@ class TestTaskTest extends TestCase
         'core.articles_tags',
     ];
 
-/**
- * setUp method
- *
- * @return void
- */
+    /**
+     * setUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -68,23 +68,23 @@ class TestTaskTest extends TestCase
         $this->Task->Template->interactive = false;
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         parent::tearDown();
         unset($this->Task);
     }
 
-/**
- * Test that with no args execute() outputs the types you can generate
- * tests for.
- *
- * @return void
- */
+    /**
+     * Test that with no args execute() outputs the types you can generate
+     * tests for.
+     *
+     * @return void
+     */
     public function testExecuteNoArgsPrintsTypeOptions()
     {
         $this->Task = $this->getMockBuilder('Bake\Shell\Task\TestTask')
@@ -98,11 +98,11 @@ class TestTaskTest extends TestCase
         $this->Task->main();
     }
 
-/**
- * Test outputTypeChoices method
- *
- * @return void
- */
+    /**
+     * Test outputTypeChoices method
+     *
+     * @return void
+     */
     public function testOutputTypeChoices()
     {
         $this->io->expects($this->at(0))
@@ -120,12 +120,12 @@ class TestTaskTest extends TestCase
         $this->Task->outputTypeChoices();
     }
 
-/**
- * Test that with no args execute() outputs the types you can generate
- * tests for.
- *
- * @return void
- */
+    /**
+     * Test that with no args execute() outputs the types you can generate
+     * tests for.
+     *
+     * @return void
+     */
     public function testExecuteOneArgPrintsClassOptions()
     {
         $this->Task = $this->getMockBuilder('Bake\Shell\Task\TestTask')
@@ -139,11 +139,11 @@ class TestTaskTest extends TestCase
         $this->Task->main('Entity');
     }
 
-/**
- * test execute with type and class name defined
- *
- * @return void
- */
+    /**
+     * test execute with type and class name defined
+     *
+     * @return void
+     */
     public function testExecuteWithTwoArgs()
     {
         $this->Task->expects($this->once())->method('createFile')
@@ -154,11 +154,11 @@ class TestTaskTest extends TestCase
         $this->Task->main('Table', 'TestTaskTag');
     }
 
-/**
- * Test generating class options for table.
- *
- * @return void
- */
+    /**
+     * Test generating class options for table.
+     *
+     * @return void
+     */
     public function testOutputClassOptionsForTable()
     {
         $this->io->expects($this->at(0))
@@ -180,11 +180,11 @@ class TestTaskTest extends TestCase
         $this->Task->outputClassChoices('Table');
     }
 
-/**
- * Test generating class options for table.
- *
- * @return void
- */
+    /**
+     * Test generating class options for table.
+     *
+     * @return void
+     */
     public function testOutputClassOptionsForTablePlugin()
     {
         Plugin::load('TestPlugin');
@@ -206,12 +206,12 @@ class TestTaskTest extends TestCase
         $this->Task->outputClassChoices('Table');
     }
 
-/**
- * Test that method introspection pulls all relevant non parent class
- * methods into the test case.
- *
- * @return void
- */
+    /**
+     * Test that method introspection pulls all relevant non parent class
+     * methods into the test case.
+     *
+     * @return void
+     */
     public function testMethodIntrospection()
     {
         $result = $this->Task->getTestableMethods('TestApp\Model\Table\ArticlesTable');
@@ -219,11 +219,11 @@ class TestTaskTest extends TestCase
         $this->assertEquals($expected, array_map('strtolower', $result));
     }
 
-/**
- * test that the generation of fixtures works correctly.
- *
- * @return void
- */
+    /**
+     * test that the generation of fixtures works correctly.
+     *
+     * @return void
+     */
     public function testFixtureArrayGenerationFromModel()
     {
         $subject = new ArticlesTable();
@@ -237,11 +237,11 @@ class TestTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * test that the generation of fixtures works correctly.
- *
- * @return void
- */
+    /**
+     * test that the generation of fixtures works correctly.
+     *
+     * @return void
+     */
     public function testFixtureArrayGenerationIgnoreSelfAssociation()
     {
         TableRegistry::clear();
@@ -253,11 +253,11 @@ class TestTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * test that the generation of fixtures works correctly.
- *
- * @return void
- */
+    /**
+     * test that the generation of fixtures works correctly.
+     *
+     * @return void
+     */
     public function testFixtureArrayGenerationFromController()
     {
         $subject = new PostsController(new Request(), new Response());
@@ -268,11 +268,11 @@ class TestTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Dataprovider for class name generation.
- *
- * @return array
- */
+    /**
+     * Dataprovider for class name generation.
+     *
+     * @return array
+     */
     public static function realClassProvider()
     {
         return [
@@ -295,23 +295,23 @@ class TestTaskTest extends TestCase
         ];
     }
 
-/**
- * test that resolving class names works
- *
- * @dataProvider realClassProvider
- * @return void
- */
+    /**
+     * test that resolving class names works
+     *
+     * @dataProvider realClassProvider
+     * @return void
+     */
     public function testGetRealClassname($type, $name, $expected)
     {
         $result = $this->Task->getRealClassname($type, $name);
         $this->assertEquals($expected, $result);
     }
 
-/**
- * test resolving class names with plugins
- *
- * @return void
- */
+    /**
+     * test resolving class names with plugins
+     *
+     * @return void
+     */
     public function testGetRealClassnamePlugin()
     {
         $this->_loadTestPlugin('TestBake');
@@ -321,11 +321,11 @@ class TestTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test baking a test for a concrete model with fixtures arg
- *
- * @return void
- */
+    /**
+     * Test baking a test for a concrete model with fixtures arg
+     *
+     * @return void
+     */
     public function testBakeFixturesParam()
     {
         $this->Task->expects($this->once())
@@ -337,11 +337,11 @@ class TestTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * Test baking a test for a cell.
- *
- * @return void
- */
+    /**
+     * Test baking a test for a cell.
+     *
+     * @return void
+     */
     public function testBakeCellTest()
     {
         $this->Task->expects($this->once())
@@ -352,11 +352,11 @@ class TestTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * Test baking a test for a concrete model.
- *
- * @return void
- */
+    /**
+     * Test baking a test for a concrete model.
+     *
+     * @return void
+     */
     public function testBakeModelTest()
     {
         $this->Task->expects($this->once())
@@ -367,11 +367,11 @@ class TestTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test baking controller test files
- *
- * @return void
- */
+    /**
+     * test baking controller test files
+     *
+     * @return void
+     */
     public function testBakeControllerTest()
     {
         Configure::write('App.namespace', 'TestApp');
@@ -384,11 +384,11 @@ class TestTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test baking controller test files
- *
- * @return void
- */
+    /**
+     * test baking controller test files
+     *
+     * @return void
+     */
     public function testBakePrefixControllerTest()
     {
         Configure::write('App.namespace', 'TestApp');
@@ -402,11 +402,11 @@ class TestTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test baking component test files,
- *
- * @return void
- */
+    /**
+     * test baking component test files,
+     *
+     * @return void
+     */
     public function testBakeComponentTest()
     {
         Configure::write('App.namespace', 'TestApp');
@@ -419,11 +419,11 @@ class TestTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test baking behavior test files,
- *
- * @return void
- */
+    /**
+     * test baking behavior test files,
+     *
+     * @return void
+     */
     public function testBakeBehaviorTest()
     {
         $this->Task->expects($this->once())
@@ -434,11 +434,11 @@ class TestTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test baking helper test files,
- *
- * @return void
- */
+    /**
+     * test baking helper test files,
+     *
+     * @return void
+     */
     public function testBakeHelperTest()
     {
         $this->Task->expects($this->once())
@@ -449,11 +449,11 @@ class TestTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * Test baking a test for a concrete model.
- *
- * @return void
- */
+    /**
+     * Test baking a test for a concrete model.
+     *
+     * @return void
+     */
     public function testBakeShellTest()
     {
         $this->Task->expects($this->once())
@@ -464,11 +464,11 @@ class TestTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test Constructor generation ensure that constructClasses is called for controllers
- *
- * @return void
- */
+    /**
+     * test Constructor generation ensure that constructClasses is called for controllers
+     *
+     * @return void
+     */
     public function testGenerateConstructor()
     {
         $result = $this->Task->generateConstructor('controller', 'PostsController');
@@ -492,11 +492,11 @@ class TestTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test generateUses()
- *
- * @return void
- */
+    /**
+     * Test generateUses()
+     *
+     * @return void
+     */
     public function testGenerateUses()
     {
         $result = $this->Task->generateUses('table', 'App\Model\Table\PostsTable');
@@ -527,22 +527,22 @@ class TestTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test that mock class generation works for the appropriate classes
- *
- * @return void
- */
+    /**
+     * Test that mock class generation works for the appropriate classes
+     *
+     * @return void
+     */
     public function testMockClassGeneration()
     {
         $result = $this->Task->hasMockClass('controller');
         $this->assertTrue($result);
     }
 
-/**
- * test bake() with a -plugin param
- *
- * @return void
- */
+    /**
+     * test bake() with a -plugin param
+     *
+     * @return void
+     */
     public function testBakeWithPlugin()
     {
         $this->Task->plugin = 'TestTest';
@@ -556,11 +556,11 @@ class TestTaskTest extends TestCase
         $this->Task->bake('Helper', 'Form');
     }
 
-/**
- * Provider for test case file names.
- *
- * @return array
- */
+    /**
+     * Provider for test case file names.
+     *
+     * @return array
+     */
     public static function caseFileNameProvider()
     {
         return [
@@ -582,12 +582,12 @@ class TestTaskTest extends TestCase
         ];
     }
 
-/**
- * Test filename generation for each type + plugins
- *
- * @dataProvider caseFileNameProvider
- * @return void
- */
+    /**
+     * Test filename generation for each type + plugins
+     *
+     * @dataProvider caseFileNameProvider
+     * @return void
+     */
     public function testTestCaseFileName($type, $class, $expected)
     {
         $result = $this->Task->testCaseFileName($type, $class);
@@ -595,11 +595,11 @@ class TestTaskTest extends TestCase
         $this->assertPathEquals($expected, $result);
     }
 
-/**
- * Test filename generation for plugins.
- *
- * @return void
- */
+    /**
+     * Test filename generation for plugins.
+     *
+     * @return void
+     */
     public function testTestCaseFileNamePlugin()
     {
         $this->Task->path = DS . 'my/path/tests/';
@@ -613,11 +613,11 @@ class TestTaskTest extends TestCase
         $this->assertPathEquals($expected, $result);
     }
 
-/**
- * Data provider for mapType() tests.
- *
- * @return array
- */
+    /**
+     * Data provider for mapType() tests.
+     *
+     * @return array
+     */
     public static function mapTypeProvider()
     {
         return [
@@ -637,12 +637,12 @@ class TestTaskTest extends TestCase
         ];
     }
 
-/**
- * Test that mapType returns the correct package names.
- *
- * @dataProvider mapTypeProvider
- * @return void
- */
+    /**
+     * Test that mapType returns the correct package names.
+     *
+     * @dataProvider mapTypeProvider
+     * @return void
+     */
     public function testMapType($original, $expected)
     {
         $this->assertEquals($expected, $this->Task->mapType($original));

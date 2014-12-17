@@ -13,16 +13,16 @@ use App\Controller\AppController;
 class testBakeNoActions extends AppController
 {
     /**
- * Helpers
- *
- * @var array
- */
+     * Helpers
+     *
+     * @var array
+     */
     public $helpers = ['Html', 'Time'];
 
-/**
- * Components
- *
- * @var array
- */
+    /**
+     * Components
+     *
+     * @var array
+     */
     public $components = ['Csrf', 'Auth'];
 }

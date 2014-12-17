@@ -27,17 +27,17 @@ use Cake\Utility\Inflector;
 class ModelTask extends BakeTask
 {
     /**
- * path to Model directory
- *
- * @var string
- */
+     * path to Model directory
+     *
+     * @var string
+     */
     public $pathFragment = 'Model/';
 
-/**
- * tasks
- *
- * @var array
- */
+    /**
+     * tasks
+     *
+     * @var array
+     */
     public $tasks = [
         'Bake.DbConfig',
         'Bake.Fixture',
@@ -45,40 +45,40 @@ class ModelTask extends BakeTask
         'Bake.Test'
     ];
 
-/**
- * Tables to skip when running all()
- *
- * @var array
- */
+    /**
+     * Tables to skip when running all()
+     *
+     * @var array
+     */
     public $skipTables = ['i18n'];
 
-/**
- * Holds tables found on connection.
- *
- * @var array
- */
+    /**
+     * Holds tables found on connection.
+     *
+     * @var array
+     */
     protected $_tables = [];
 
-/**
- * Holds the model names
- *
- * @var array
- */
+    /**
+     * Holds the model names
+     *
+     * @var array
+     */
     protected $_modelNames = [];
 
-/**
- * Holds validation method map.
- *
- * @var array
- */
+    /**
+     * Holds validation method map.
+     *
+     * @var array
+     */
     protected $_validations = [];
 
-/**
- * Execution method always used for tasks
- *
- * @param string|null $name The name of the table to bake.
- * @return void
- */
+    /**
+     * Execution method always used for tasks
+     *
+     * @param string|null $name The name of the table to bake.
+     * @return void
+     */
     public function main($name = null)
     {
         parent::main();
@@ -95,12 +95,12 @@ class ModelTask extends BakeTask
         $this->bake($this->_camelize($name));
     }
 
-/**
- * Generate code for the given model name.
- *
- * @param string $name The model name to generate.
- * @return void
- */
+    /**
+     * Generate code for the given model name.
+     *
+     * @param string $name The model name to generate.
+     * @return void
+     */
     public function bake($name)
     {
         $table = $this->getTable($name);
@@ -125,11 +125,11 @@ class ModelTask extends BakeTask
         $this->bakeTest($model->alias());
     }
 
-/**
- * Bake all models at once.
- *
- * @return void
- */
+    /**
+     * Bake all models at once.
+     *
+     * @return void
+     */
     public function all()
     {
         $this->listAll($this->connection, false);
@@ -142,13 +142,13 @@ class ModelTask extends BakeTask
         }
     }
 
-/**
- * Get a model object for a class name.
- *
- * @param string $className Name of class you want model to be.
- * @param string $table Table name
- * @return \Cake\ORM\Table Table instance
- */
+    /**
+     * Get a model object for a class name.
+     *
+     * @param string $className Name of class you want model to be.
+     * @param string $table Table name
+     * @return \Cake\ORM\Table Table instance
+     */
     public function getTableObject($className, $table)
     {
         if (TableRegistry::exists($className)) {
@@ -161,12 +161,12 @@ class ModelTask extends BakeTask
         ]);
     }
 
-/**
- * Get the array of associations to generate.
- *
- * @param \Cake\ORM\Table $table The table to get associations for.
- * @return array
- */
+    /**
+     * Get the array of associations to generate.
+     *
+     * @param \Cake\ORM\Table $table The table to get associations for.
+     * @return array
+     */
     public function getAssociations(Table $table)
     {
         if (!empty($this->params['no-associations'])) {
@@ -197,17 +197,17 @@ class ModelTask extends BakeTask
         return $associations;
     }
 
-/**
- * Sync the in memory table object.
- *
- * Composer's class cache prevents us from loading the
- * newly generated class. Applying associations if we have a
- * generic table object means fields will be detected correctly.
- *
- * @param \Cake\ORM\Table $model The table to apply associations to.
- * @param array $associations The associations to append.
- * @return void
- */
+    /**
+     * Sync the in memory table object.
+     *
+     * Composer's class cache prevents us from loading the
+     * newly generated class. Applying associations if we have a
+     * generic table object means fields will be detected correctly.
+     *
+     * @param \Cake\ORM\Table $model The table to apply associations to.
+     * @param array $associations The associations to append.
+     * @return void
+     */
     public function applyAssociations($model, $associations)
     {
         if (get_class($model) !== 'Cake\ORM\Table') {
@@ -222,13 +222,13 @@ class ModelTask extends BakeTask
         }
     }
 
-/**
- * Find belongsTo relations and add them to the associations list.
- *
- * @param \Cake\ORM\Table $model Database\Table instance of table being generated.
- * @param array $associations Array of in progress associations
- * @return array Associations with belongsTo added in.
- */
+    /**
+     * Find belongsTo relations and add them to the associations list.
+     *
+     * @param \Cake\ORM\Table $model Database\Table instance of table being generated.
+     * @param array $associations Array of in progress associations
+     * @return array Associations with belongsTo added in.
+     */
     public function findBelongsTo($model, array $associations)
     {
         $schema = $model->schema();
@@ -260,13 +260,13 @@ class ModelTask extends BakeTask
         return $associations;
     }
 
-/**
- * Find the hasMany relations and add them to associations list
- *
- * @param \Cake\ORM\Table $model Model instance being generated
- * @param array $associations Array of in progress associations
- * @return array Associations with hasMany added in.
- */
+    /**
+     * Find the hasMany relations and add them to associations list
+     *
+     * @param \Cake\ORM\Table $model Model instance being generated
+     * @param array $associations Array of in progress associations
+     * @return array Associations with hasMany added in.
+     */
     public function findHasMany($model, array $associations)
     {
         $schema = $model->schema();
@@ -311,13 +311,13 @@ class ModelTask extends BakeTask
         return $associations;
     }
 
-/**
- * Find the BelongsToMany relations and add them to associations list
- *
- * @param \Cake\ORM\Table $model Model instance being generated
- * @param array $associations Array of in-progress associations
- * @return array Associations with belongsToMany added in.
- */
+    /**
+     * Find the BelongsToMany relations and add them to associations list
+     *
+     * @param \Cake\ORM\Table $model Model instance being generated
+     * @param array $associations Array of in-progress associations
+     * @return array Associations with belongsToMany added in.
+     */
     public function findBelongsToMany($model, array $associations)
     {
         $schema = $model->schema();
@@ -352,12 +352,12 @@ class ModelTask extends BakeTask
         return $associations;
     }
 
-/**
- * Get the display field from the model or parameters
- *
- * @param \Cake\ORM\Table $model The model to introspect.
- * @return string
- */
+    /**
+     * Get the display field from the model or parameters
+     *
+     * @param \Cake\ORM\Table $model The model to introspect.
+     * @return string
+     */
     public function getDisplayField($model)
     {
         if (!empty($this->params['display-field'])) {
@@ -366,12 +366,12 @@ class ModelTask extends BakeTask
         return $model->displayField();
     }
 
-/**
- * Get the primary key field from the model or parameters
- *
- * @param \Cake\ORM\Table $model The model to introspect.
- * @return array The columns in the primary key
- */
+    /**
+     * Get the primary key field from the model or parameters
+     *
+     * @param \Cake\ORM\Table $model The model to introspect.
+     * @return array The columns in the primary key
+     */
     public function getPrimaryKey($model)
     {
         if (!empty($this->params['primary-key'])) {
@@ -381,14 +381,14 @@ class ModelTask extends BakeTask
         return (array)$model->primaryKey();
     }
 
-/**
- * Get the fields from a model.
- *
- * Uses the fields and no-fields options.
- *
- * @param \Cake\ORM\Table $model The model to introspect.
- * @return array The columns to make accessible
- */
+    /**
+     * Get the fields from a model.
+     *
+     * Uses the fields and no-fields options.
+     *
+     * @param \Cake\ORM\Table $model The model to introspect.
+     * @return array The columns to make accessible
+     */
     public function getFields($model)
     {
         if (!empty($this->params['no-fields'])) {
@@ -410,14 +410,14 @@ class ModelTask extends BakeTask
         return array_values(array_diff($columns, $exclude));
     }
 
-/**
- * Get the hidden fields from a model.
- *
- * Uses the hidden and no-hidden options.
- *
- * @param \Cake\ORM\Table $model The model to introspect.
- * @return array The columns to make accessible
- */
+    /**
+     * Get the hidden fields from a model.
+     *
+     * Uses the hidden and no-hidden options.
+     *
+     * @param \Cake\ORM\Table $model The model to introspect.
+     * @return array The columns to make accessible
+     */
     public function getHiddenFields($model)
     {
         if (!empty($this->params['no-hidden'])) {
@@ -433,12 +433,12 @@ class ModelTask extends BakeTask
         return array_values(array_intersect($columns, $whitelist));
     }
 
-/**
- * Generate default validation rules.
- *
- * @param \Cake\ORM\Table $model The model to introspect.
- * @return array The validation rules.
- */
+    /**
+     * Generate default validation rules.
+     *
+     * @param \Cake\ORM\Table $model The model to introspect.
+     * @return array The validation rules.
+     */
     public function getValidation($model)
     {
         if (!empty($this->params['no-validation'])) {
@@ -463,14 +463,14 @@ class ModelTask extends BakeTask
         return $validate;
     }
 
-/**
- * Does individual field validation handling.
- *
- * @param string $fieldName Name of field to be validated.
- * @param array $metaData metadata for field
- * @param string $primaryKey The primary key field
- * @return array Array of validation for the field.
- */
+    /**
+     * Does individual field validation handling.
+     *
+     * @param string $fieldName Name of field to be validated.
+     * @param array $metaData metadata for field
+     * @param string $primaryKey The primary key field
+     * @return array Array of validation for the field.
+     */
     public function fieldValidation($fieldName, array $metaData, $primaryKey)
     {
         $ignoreFields = ['created', 'modified', 'updated'];
@@ -525,12 +525,12 @@ class ModelTask extends BakeTask
         return $validation;
     }
 
-/**
- * Get behaviors
- *
- * @param \Cake\ORM\Table $model The model to generate behaviors for.
- * @return array Behaviors
- */
+    /**
+     * Get behaviors
+     *
+     * @param \Cake\ORM\Table $model The model to generate behaviors for.
+     * @return array Behaviors
+     */
     public function getBehaviors($model)
     {
         $behaviors = [];
@@ -557,12 +557,12 @@ class ModelTask extends BakeTask
         return $behaviors;
     }
 
-/**
- * Get CounterCaches
- *
- * @param \Cake\ORM\Table $model The table to get counter cache fields for.
- * @return array CounterCache configurations
- */
+    /**
+     * Get CounterCaches
+     *
+     * @param \Cake\ORM\Table $model The table to get counter cache fields for.
+     * @return array CounterCache configurations
+     */
     public function getCounterCache($model)
     {
         $belongsTo = $this->findBelongsTo($model, ['belongsTo' => []]);
@@ -587,13 +587,13 @@ class ModelTask extends BakeTask
         return $counterCache;
     }
 
-/**
- * Bake an entity class.
- *
- * @param \Cake\ORM\Table $model Model name or object
- * @param array $data An array to use to generate the Table
- * @return string
- */
+    /**
+     * Bake an entity class.
+     *
+     * @param \Cake\ORM\Table $model Model name or object
+     * @param array $data An array to use to generate the Table
+     * @return string
+     */
     public function bakeEntity($model, array $data = [])
     {
         if (!empty($this->params['no-entity'])) {
@@ -628,13 +628,13 @@ class ModelTask extends BakeTask
         return $out;
     }
 
-/**
- * Bake a table class.
- *
- * @param \Cake\ORM\Table $model Model name or object
- * @param array $data An array to use to generate the Table
- * @return string
- */
+    /**
+     * Bake a table class.
+     *
+     * @param \Cake\ORM\Table $model Model name or object
+     * @param array $data An array to use to generate the Table
+     * @return string
+     */
     public function bakeTable($model, array $data = [])
     {
         if (!empty($this->params['no-table'])) {
@@ -682,11 +682,11 @@ class ModelTask extends BakeTask
         return $out;
     }
 
-/**
- * Outputs the a list of possible models or controllers from database
- *
- * @return array
- */
+    /**
+     * Outputs the a list of possible models or controllers from database
+     *
+     * @return array
+     */
     public function listAll()
     {
         if (!empty($this->_tables)) {
@@ -701,14 +701,14 @@ class ModelTask extends BakeTask
         return $this->_tables;
     }
 
-/**
- * Get an Array of all the tables in the supplied connection
- * will halt the script if no tables are found.
- *
- * @return array Array of tables in the database.
- * @throws \InvalidArgumentException When connection class
- *   does not have a schemaCollection method.
- */
+    /**
+     * Get an Array of all the tables in the supplied connection
+     * will halt the script if no tables are found.
+     *
+     * @return array Array of tables in the database.
+     * @throws \InvalidArgumentException When connection class
+     *   does not have a schemaCollection method.
+     */
     protected function _getAllTables()
     {
         $db = ConnectionManager::get($this->connection);
@@ -728,14 +728,14 @@ class ModelTask extends BakeTask
         return $tables;
     }
 
-/**
- * Get the table name for the model being baked.
- *
- * Uses the `table` option if it is set.
- *
- * @param string $name Table name
- * @return string
- */
+    /**
+     * Get the table name for the model being baked.
+     *
+     * Uses the `table` option if it is set.
+     *
+     * @param string $name Table name
+     * @return string
+     */
     public function getTable($name)
     {
         if (isset($this->params['table'])) {
@@ -744,11 +744,11 @@ class ModelTask extends BakeTask
         return Inflector::underscore($name);
     }
 
-/**
- * Gets the option parser instance and configures it.
- *
- * @return \Cake\Console\ConsoleOptionParser
- */
+    /**
+     * Gets the option parser instance and configures it.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     */
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();
@@ -800,14 +800,14 @@ class ModelTask extends BakeTask
         return $parser;
     }
 
-/**
- * Interact with FixtureTask to automatically bake fixtures when baking models.
- *
- * @param string $className Name of class to bake fixture for
- * @param string|null $useTable Optional table name for fixture to use.
- * @return void
- * @see FixtureTask::bake
- */
+    /**
+     * Interact with FixtureTask to automatically bake fixtures when baking models.
+     *
+     * @param string $className Name of class to bake fixture for
+     * @param string|null $useTable Optional table name for fixture to use.
+     * @return void
+     * @see FixtureTask::bake
+     */
     public function bakeFixture($className, $useTable = null)
     {
         if (!empty($this->params['no-fixture'])) {
@@ -818,12 +818,12 @@ class ModelTask extends BakeTask
         $this->Fixture->bake($className, $useTable);
     }
 
-/**
- * Assembles and writes a unit test file
- *
- * @param string $className Model class name
- * @return string
- */
+    /**
+     * Assembles and writes a unit test file
+     *
+     * @param string $className Model class name
+     * @return string
+     */
     public function bakeTest($className)
     {
         if (!empty($this->params['no-test'])) {

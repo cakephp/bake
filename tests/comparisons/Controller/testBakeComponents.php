@@ -17,9 +17,9 @@ use App\Controller\AppController;
 class testBakeComponents extends AppController
 {
     /**
- * Components
- *
- * @var array
- */
+     * Components
+     *
+     * @var array
+     */
     public $components = ['Csrf', 'Auth', 'Company/TestBakeThree.Something', 'TestBake.Other', 'Apple', 'NonExistent'];
 }

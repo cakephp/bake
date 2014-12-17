@@ -31,11 +31,11 @@ class PluginTaskTest extends TestCase
 {
     use StringCompareTrait;
 
-/**
- * setUp method
- *
- * @return void
- */
+    /**
+     * setUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -59,11 +59,11 @@ class PluginTaskTest extends TestCase
         $this->_path = App::path('Plugin');
     }
 
-/**
- * tearDown()
- *
- * @return void
- */
+    /**
+     * tearDown()
+     *
+     * @return void
+     */
     public function tearDown()
     {
         $Folder = new Folder(TMP . 'tests' . DS . 'BakedPlugins');
@@ -72,11 +72,11 @@ class PluginTaskTest extends TestCase
         parent::tearDown();
     }
 
-/**
- * test bake()
- *
- * @return void
- */
+    /**
+     * test bake()
+     *
+     * @return void
+     */
     public function testBake()
     {
         $this->Task->expects($this->at(0))->method('in')
@@ -86,11 +86,11 @@ class PluginTaskTest extends TestCase
         $this->assertPluginContents('SimpleExample');
     }
 
-/**
- * Test the main method
- *
- * @return void
- */
+    /**
+     * Test the main method
+     *
+     * @return void
+     */
     public function testMain()
     {
         $this->Task->expects($this->at(0))->method('in')
@@ -100,11 +100,11 @@ class PluginTaskTest extends TestCase
         $this->assertPluginContents('SimpleExample');
     }
 
-/**
- * With no args, main should do nothing
- *
- * @return void
- */
+    /**
+     * With no args, main should do nothing
+     *
+     * @return void
+     */
     public function testMainWithNoArgs()
     {
         $this->Task->expects($this->at(0))
@@ -114,12 +114,12 @@ class PluginTaskTest extends TestCase
         $this->Task->main();
     }
 
-/**
- * Test that baking a plugin for a project that contains a composer.json, the later
- * will be updated
- *
- * @return void
- */
+    /**
+     * Test that baking a plugin for a project that contains a composer.json, the later
+     * will be updated
+     *
+     * @return void
+     */
     public function testMainUpdateComposer()
     {
         $this->Task->expects($this->at(0))->method('in')
@@ -151,11 +151,11 @@ class PluginTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.json', $result);
     }
 
-/**
- * Test that findPath ignores paths that don't exist.
- *
- * @return void
- */
+    /**
+     * Test that findPath ignores paths that don't exist.
+     *
+     * @return void
+     */
     public function testFindPathNonExistant()
     {
         $paths = App::path('Plugin');
@@ -181,14 +181,14 @@ class PluginTaskTest extends TestCase
         $this->Task->findPath($paths);
     }
 
-/**
- * Check the baked plugin matches the expected output
- *
- * Compare to a static copy of the plugin in the comparison folder
- *
- * @param string $pluginName the name of the plugin to compare to
- * @return void
- */
+    /**
+     * Check the baked plugin matches the expected output
+     *
+     * Compare to a static copy of the plugin in the comparison folder
+     *
+     * @param string $pluginName the name of the plugin to compare to
+     * @return void
+     */
     public function assertPluginContents($pluginName)
     {
         $comparisonRoot = $this->_compareBasePath . $pluginName . DS;

@@ -23,42 +23,42 @@ use Cake\Utility\Inflector;
 abstract class SimpleBakeTask extends BakeTask
 {
     /**
- * Tasks to be loaded by this Task
- *
- * @var array
- */
+     * Tasks to be loaded by this Task
+     *
+     * @var array
+     */
     public $tasks = [
         'Bake.Template',
         'Bake.Test'
     ];
 
-/**
- * Get the generated object's name.
- *
- * @return string
- */
+    /**
+     * Get the generated object's name.
+     *
+     * @return string
+     */
     abstract public function name();
 
-/**
- * Get the generated object's filename without the leading path.
- *
- * @param string $name The name of the object being generated
- * @return string
- */
+    /**
+     * Get the generated object's filename without the leading path.
+     *
+     * @param string $name The name of the object being generated
+     * @return string
+     */
     abstract public function fileName($name);
 
-/**
- * Get the template name.
- *
- * @return string
- */
+    /**
+     * Get the template name.
+     *
+     * @return string
+     */
     abstract public function template();
 
-/**
- * Get template data.
- *
- * @return array
- */
+    /**
+     * Get template data.
+     *
+     * @return array
+     */
     public function templateData()
     {
         $namespace = Configure::read('App.namespace');
@@ -68,12 +68,12 @@ abstract class SimpleBakeTask extends BakeTask
         return ['namespace' => $namespace];
     }
 
-/**
- * Execute method
- *
- * @param string|null $name The name of the object to bake.
- * @return void
- */
+    /**
+     * Execute method
+     *
+     * @param string|null $name The name of the object to bake.
+     * @return void
+     */
     public function main($name = null)
     {
         parent::main();
@@ -86,12 +86,12 @@ abstract class SimpleBakeTask extends BakeTask
         $this->bakeTest($name);
     }
 
-/**
- * Generate a class stub
- *
- * @param string $name The classname to generate.
- * @return void
- */
+    /**
+     * Generate a class stub
+     *
+     * @param string $name The classname to generate.
+     * @return void
+     */
     public function bake($name)
     {
         $this->Template->set('name', $name);
@@ -105,12 +105,12 @@ abstract class SimpleBakeTask extends BakeTask
         return $contents;
     }
 
-/**
- * Generate a test case.
- *
- * @param string $className The class to bake a test for.
- * @return void
- */
+    /**
+     * Generate a test case.
+     *
+     * @param string $className The class to bake a test for.
+     * @return void
+     */
     public function bakeTest($className)
     {
         if (!empty($this->params['no-test'])) {
@@ -120,11 +120,11 @@ abstract class SimpleBakeTask extends BakeTask
         return $this->Test->bake($this->name(), $className);
     }
 
-/**
- * Gets the option parser instance and configures it.
- *
- * @return \Cake\Console\ConsoleOptionParser
- */
+    /**
+     * Gets the option parser instance and configures it.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     */
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();
