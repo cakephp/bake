@@ -26,8 +26,8 @@ matrix:
       env: COVERALLS=1 DEFAULT=0 DB=mysql db_dsn='mysql://travis@0.0.0.0/cakephp_test'
 
 before_script:
-  - composer self-update
-  - composer install --no-interaction --dev
+  - sh -c "if [ '$DEFAULT' = '1' ]; then composer self-update; fi"
+  - sh -c "if [ '$DEFAULT' = '1' ]; then composer install --no-interaction --dev; fi"
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE cakephp_test;'; fi"
   - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE DATABASE cakephp_test;' -U postgres; fi"
   - sh -c "if [ '$PHPCS' = '1' ]; then composer require cakephp/cakephp-codesniffer:*; fi"
