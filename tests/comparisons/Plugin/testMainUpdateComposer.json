@@ -1,0 +1,12 @@
+{
+    "autoload": {
+        "psr-4": {
+            "ComposerExample\\": "./plugins/ComposerExample/src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ComposerExample\\Test\\": "./plugins/ComposerExample/tests"
+        }
+    }
+}
