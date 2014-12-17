@@ -13,7 +13,8 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 %>
-<?xml version="1.0" encoding="UTF-8"?><phpunit
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
 	colors="true"
 	processIsolation="false"
 	stopOnFailure="false"
