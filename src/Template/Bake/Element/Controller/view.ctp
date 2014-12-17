@@ -13,23 +13,24 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 $allAssociations = array_merge(
-	$this->Bake->aliasExtractor($modelObj, 'BelongsTo'),
-	$this->Bake->aliasExtractor($modelObj, 'BelongsToMany'),
-	$this->Bake->aliasExtractor($modelObj, 'HasOne'),
-	$this->Bake->aliasExtractor($modelObj, 'HasMany')
+    $this->Bake->aliasExtractor($modelObj, 'BelongsTo'),
+    $this->Bake->aliasExtractor($modelObj, 'BelongsToMany'),
+    $this->Bake->aliasExtractor($modelObj, 'HasOne'),
+    $this->Bake->aliasExtractor($modelObj, 'HasMany')
 );
 %>
 
-/**
- * View method
- *
- * @param string|null $id <%= $singularHumanName %> id
- * @return void
- * @throws \Cake\Network\Exception\NotFoundException
- */
-	public function view($id = null) {
-		$<%= $singularName%> = $this-><%= $currentModelName %>->get($id, [
-			'contain' => [<%= $this->Bake->stringifyList($allAssociations, ['indent' => false]) %>]
-		]);
-		$this->set('<%= $singularName %>', $<%= $singularName %>);
-	}
+    /**
+     * View method
+     *
+     * @param string|null $id <%= $singularHumanName %> id
+     * @return void
+     * @throws \Cake\Network\Exception\NotFoundException
+     */
+    public function view($id = null)
+    {
+        $<%= $singularName%> = $this-><%= $currentModelName %>->get($id, [
+            'contain' => [<%= $this->Bake->stringifyList($allAssociations, ['indent' => false]) %>]
+        ]);
+        $this->set('<%= $singularName %>', $<%= $singularName %>);
+    }

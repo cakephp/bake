@@ -23,12 +23,12 @@ use Cake\Console\Shell;
  */
 class <%= $name %>Shell extends Shell {
 
-/**
- * main() method.
- *
- * @return bool|int Success or error code.
- */
-	public function main() {
-	}
+    /**
+     * main() method.
+     *
+     * @return bool|int Success or error code.
+     */
+    public function main() {
+    }
 
 }

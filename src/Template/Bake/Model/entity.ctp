@@ -24,25 +24,25 @@ use Cake\ORM\Entity;
 class <%= $name %> extends Entity {
 <% if (!empty($fields)): %>
 
-/**
- * Fields that can be mass assigned using newEntity() or patchEntity().
- *
- * @var array
- */
-	protected $_accessible = [
+    /**
+     * Fields that can be mass assigned using newEntity() or patchEntity().
+     *
+     * @var array
+     */
+    protected $_accessible = [
 <% foreach ($fields as $field): %>
-		'<%= $field %>' => true,
+        '<%= $field %>' => true,
 <% endforeach; %>
-	];
+    ];
 <% endif %>
 <% if (!empty($hidden)): %>
 
-/**
- * Fields that are excluded from JSON an array versions of the entity.
- *
- * @var array
- */
-	protected $_hidden = [<%= $this->Bake->stringifyList($hidden) %>];
+    /**
+     * Fields that are excluded from JSON an array versions of the entity.
+     *
+     * @var array
+     */
+    protected $_hidden = [<%= $this->Bake->stringifyList($hidden) %>];
 <% endif %>
 
 }

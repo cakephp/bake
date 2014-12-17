@@ -24,11 +24,11 @@ use Cake\View\View;
  */
 class <%= $name %>Helper extends Helper {
 
-/**
- * Default configuration.
- *
- * @var array
- */
-	protected $_defaultConfig = [];
+    /**
+     * Default configuration.
+     *
+     * @var array
+     */
+    protected $_defaultConfig = [];
 
 }
