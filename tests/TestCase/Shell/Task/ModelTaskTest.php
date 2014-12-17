@@ -1036,7 +1036,7 @@ class ModelTaskTest extends TestCase
 
         $this->Task->expects($this->at(0))
             ->method('createFile')
-            ->with($filename, $this->stringContains('class BakeArticlesTable extends Table {'));
+            ->with($filename, $this->stringContains('class BakeArticlesTable extends Table'));
         $this->Task->main($name);
     }
 
