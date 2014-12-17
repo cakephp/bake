@@ -240,31 +240,31 @@ class FixtureTask extends BakeTask
         foreach ($table->columns() as $field) {
             $fieldData = $table->column($field);
             $properties = implode(', ', $this->_values($fieldData));
-            $cols[] = "\t\t'$field' => [$properties],";
+            $cols[] = "        '$field' => [$properties],";
         }
         foreach ($table->indexes() as $index) {
             $fieldData = $table->index($index);
             $properties = implode(', ', $this->_values($fieldData));
-            $indexes[] = "\t\t\t'$index' => [$properties],";
+            $indexes[] = "            '$index' => [$properties],";
         }
         foreach ($table->constraints() as $index) {
             $fieldData = $table->constraint($index);
             $properties = implode(', ', $this->_values($fieldData));
-            $constraints[] = "\t\t\t'$index' => [$properties],";
+            $constraints[] = "            '$index' => [$properties],";
         }
         $options = $this->_values($table->options());
 
         $content = implode("\n", $cols) . "\n";
         if (!empty($indexes)) {
-            $content .= "\t\t'_indexes' => [\n" . implode("\n", $indexes) . "\n\t\t],\n";
+            $content .= "        '_indexes' => [\n" . implode("\n", $indexes) . "\n        ],\n";
         }
         if (!empty($constraints)) {
-            $content .= "\t\t'_constraints' => [\n" . implode("\n", $constraints) . "\n\t\t],\n";
+            $content .= "        '_constraints' => [\n" . implode("\n", $constraints) . "\n        ],\n";
         }
         if (!empty($options)) {
-            $content .= "\t\t'_options' => [\n" . implode(', ', $options) . "\n\t\t],\n";
+            $content .= "        '_options' => [\n" . implode(', ', $options) . "\n        ],\n";
         }
-        return "[\n$content\t]";
+        return "[\n$content    ]";
     }
 
     /**
@@ -377,13 +377,13 @@ class FixtureTask extends BakeTask
                 if ($val === 'NULL') {
                     $val = 'null';
                 }
-                $values[] = "\t\t\t'$field' => $val";
+                $values[] = "            '$field' => $val";
             }
-            $out .= "\t\t[\n";
+            $out .= "        [\n";
             $out .= implode(",\n", $values);
-            $out .= "\n\t\t],\n";
+            $out .= "\n        ],\n";
         }
-        $out .= "\t]";
+        $out .= "    ]";
         return $out;
     }
 
