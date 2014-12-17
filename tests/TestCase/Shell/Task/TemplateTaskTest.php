@@ -33,8 +33,8 @@ class TemplateTaskTest extends TestCase {
 		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock('Bake\Shell\Task\TemplateTask',
-			array('in', 'err', 'createFile', '_stop', 'clear'),
-			array($io)
+			['in', 'err', 'createFile', '_stop', 'clear'],
+			[$io]
 		);
 	}
 
@@ -57,7 +57,7 @@ class TemplateTaskTest extends TestCase {
 	public function testGenerate() {
 		$this->Task->expects($this->any())->method('in')->will($this->returnValue(1));
 
-		$result = $this->Task->generate('classes/test_object', array('test' => 'foo'));
+		$result = $this->Task->generate('classes/test_object', ['test' => 'foo']);
 		$this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
 	}
 
@@ -69,9 +69,9 @@ class TemplateTaskTest extends TestCase {
 	public function testGenerateWithTemplateOverride() {
 		$this->_loadTestPlugin('TestBakeTheme');
 		$this->Task->params['theme'] = 'TestBakeTheme';
-		$this->Task->set(array(
+		$this->Task->set([
 			'plugin' => 'Special'
-		));
+		]);
 		$result = $this->Task->generate('config/routes');
 		$this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
 	}
@@ -84,14 +84,14 @@ class TemplateTaskTest extends TestCase {
 	public function testGenerateWithTemplateFallbacks() {
 		$this->_loadTestPlugin('TestBakeTheme');
 		$this->Task->params['theme'] = 'TestBakeTheme';
-		$this->Task->set(array(
+		$this->Task->set([
 			'name' => 'Articles',
 			'table' => 'articles',
 			'import' => false,
 			'records' => false,
 			'schema' => '',
 			'namespace' => ''
-		));
+		]);
 		$result = $this->Task->generate('tests/fixture');
 		$this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
 	}

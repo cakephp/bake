@@ -59,8 +59,8 @@ class TestTaskTest extends TestCase {
 		$this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock('Bake\Shell\Task\TestTask',
-			array('in', 'err', 'createFile', '_stop', 'isLoadableClass'),
-			array($this->io)
+			['in', 'err', 'createFile', '_stop', 'isLoadableClass'],
+			[$this->io]
 		);
 		$this->Task->name = 'Test';
 		$this->Task->Template = new TemplateTask($this->io);
@@ -474,30 +474,30 @@ class TestTaskTest extends TestCase {
  */
 	public function testGenerateUses() {
 		$result = $this->Task->generateUses('table', 'App\Model\Table\PostsTable');
-		$expected = array(
+		$expected = [
 			'Cake\ORM\TableRegistry',
 			'App\Model\Table\PostsTable',
-		);
+		];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Task->generateUses('controller', 'App\Controller\PostsController');
-		$expected = array(
+		$expected = [
 			'App\Controller\PostsController',
-		);
+		];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Task->generateUses('helper', 'App\View\Helper\FormHelper');
-		$expected = array(
+		$expected = [
 			'Cake\View\View',
 			'App\View\Helper\FormHelper',
-		);
+		];
 		$this->assertEquals($expected, $result);
 
 		$result = $this->Task->generateUses('component', 'App\Controller\Component\AuthComponent');
-		$expected = array(
+		$expected = [
 			'Cake\Controller\ComponentRegistry',
 			'App\Controller\Component\AuthComponent',
-		);
+		];
 		$this->assertEquals($expected, $result);
 	}
 
@@ -519,7 +519,7 @@ class TestTaskTest extends TestCase {
 	public function testBakeWithPlugin() {
 		$this->Task->plugin = 'TestTest';
 
-		Plugin::load('TestTest', array('path' => APP . 'Plugin' . DS . 'TestTest' . DS));
+		Plugin::load('TestTest', ['path' => APP . 'Plugin' . DS . 'TestTest' . DS]);
 		$path = APP . 'Plugin/TestTest/tests/TestCase/View/Helper/FormHelperTest.php';
 		$path = str_replace('/', DS, $path);
 		$this->Task->expects($this->once())->method('createFile')
@@ -534,23 +534,23 @@ class TestTaskTest extends TestCase {
  * @return array
  */
 	public static function caseFileNameProvider() {
-		return array(
-			array('Table', 'App\Model\Table\PostsTable', 'TestCase/Model/Table/PostsTableTest.php'),
-			array('Entity', 'App\Model\Entity\Article', 'TestCase/Model/Entity/ArticleTest.php'),
-			array('Helper', 'App\View\Helper\FormHelper', 'TestCase/View/Helper/FormHelperTest.php'),
-			array('Controller', 'App\Controller\PostsController', 'TestCase/Controller/PostsControllerTest.php'),
-			array('Controller', 'App\Controller\Admin\PostsController', 'TestCase/Controller/Admin/PostsControllerTest.php'),
-			array('Behavior', 'App\Model\Behavior\TreeBehavior', 'TestCase/Model/Behavior/TreeBehaviorTest.php'),
-			array('Component', 'App\Controller\Component\AuthComponent', 'TestCase/Controller/Component/AuthComponentTest.php'),
-			array('entity', 'App\Model\Entity\Article', 'TestCase/Model/Entity/ArticleTest.php'),
-			array('table', 'App\Model\Table\PostsTable', 'TestCase/Model/Table/PostsTableTest.php'),
-			array('helper', 'App\View\Helper\FormHelper', 'TestCase/View/Helper/FormHelperTest.php'),
-			array('controller', 'App\Controller\PostsController', 'TestCase/Controller/PostsControllerTest.php'),
-			array('behavior', 'App\Model\Behavior\TreeBehavior', 'TestCase/Model/Behavior/TreeBehaviorTest.php'),
-			array('component', 'App\Controller\Component\AuthComponent', 'TestCase/Controller/Component/AuthComponentTest.php'),
+		return [
+			['Table', 'App\Model\Table\PostsTable', 'TestCase/Model/Table/PostsTableTest.php'],
+			['Entity', 'App\Model\Entity\Article', 'TestCase/Model/Entity/ArticleTest.php'],
+			['Helper', 'App\View\Helper\FormHelper', 'TestCase/View/Helper/FormHelperTest.php'],
+			['Controller', 'App\Controller\PostsController', 'TestCase/Controller/PostsControllerTest.php'],
+			['Controller', 'App\Controller\Admin\PostsController', 'TestCase/Controller/Admin/PostsControllerTest.php'],
+			['Behavior', 'App\Model\Behavior\TreeBehavior', 'TestCase/Model/Behavior/TreeBehaviorTest.php'],
+			['Component', 'App\Controller\Component\AuthComponent', 'TestCase/Controller/Component/AuthComponentTest.php'],
+			['entity', 'App\Model\Entity\Article', 'TestCase/Model/Entity/ArticleTest.php'],
+			['table', 'App\Model\Table\PostsTable', 'TestCase/Model/Table/PostsTableTest.php'],
+			['helper', 'App\View\Helper\FormHelper', 'TestCase/View/Helper/FormHelperTest.php'],
+			['controller', 'App\Controller\PostsController', 'TestCase/Controller/PostsControllerTest.php'],
+			['behavior', 'App\Model\Behavior\TreeBehavior', 'TestCase/Model/Behavior/TreeBehaviorTest.php'],
+			['component', 'App\Controller\Component\AuthComponent', 'TestCase/Controller/Component/AuthComponentTest.php'],
 			['Shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
 			['shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
-		);
+		];
 	}
 
 /**
@@ -573,7 +573,7 @@ class TestTaskTest extends TestCase {
 	public function testTestCaseFileNamePlugin() {
 		$this->Task->path = DS . 'my/path/tests/';
 
-		Plugin::load('TestTest', array('path' => APP . 'Plugin' . DS . 'TestTest' . DS));
+		Plugin::load('TestTest', ['path' => APP . 'Plugin' . DS . 'TestTest' . DS]);
 		$this->Task->plugin = 'TestTest';
 		$class = 'TestBake\Model\Entity\Post';
 		$result = $this->Task->testCaseFileName('entity', $class);
@@ -588,21 +588,21 @@ class TestTaskTest extends TestCase {
  * @return array
  */
 	public static function mapTypeProvider() {
-		return array(
-			array('controller', 'Controller'),
-			array('Controller', 'Controller'),
-			array('component', 'Controller\Component'),
-			array('Component', 'Controller\Component'),
-			array('table', 'Model\Table'),
-			array('Table', 'Model\Table'),
-			array('entity', 'Model\Entity'),
-			array('Entity', 'Model\Entity'),
-			array('behavior', 'Model\Behavior'),
-			array('Behavior', 'Model\Behavior'),
-			array('helper', 'View\Helper'),
-			array('Helper', 'View\Helper'),
-			array('Helper', 'View\Helper'),
-		);
+		return [
+			['controller', 'Controller'],
+			['Controller', 'Controller'],
+			['component', 'Controller\Component'],
+			['Component', 'Controller\Component'],
+			['table', 'Model\Table'],
+			['Table', 'Model\Table'],
+			['entity', 'Model\Entity'],
+			['Entity', 'Model\Entity'],
+			['behavior', 'Model\Behavior'],
+			['Behavior', 'Model\Behavior'],
+			['helper', 'View\Helper'],
+			['Helper', 'View\Helper'],
+			['Helper', 'View\Helper'],
+		];
 	}
 
 /**

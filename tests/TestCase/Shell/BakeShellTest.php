@@ -26,7 +26,7 @@ class BakeShellTest extends TestCase {
  *
  * @var array
  */
-	public $fixtures = array('core.comments');
+	public $fixtures = ['core.comments'];
 
 /**
  * setup test

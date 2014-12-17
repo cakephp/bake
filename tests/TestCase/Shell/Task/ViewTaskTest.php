@@ -82,13 +82,13 @@ class ViewTaskTest extends TestCase {
  *
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'core.articles', 'core.posts', 'core.comments',
 		'core.articles_tags',
 		'core.tags',
 		'core.test_plugin_comments',
 		'core.category_threads',
-	);
+	];
 
 /**
  * setUp method
@@ -265,7 +265,7 @@ class ViewTaskTest extends TestCase {
 		$this->Task->controllerName = 'Posts';
 
 		$pluginPath = APP . 'Plugin/TestView/';
-		Plugin::load('TestView', array('path' => $pluginPath));
+		Plugin::load('TestView', ['path' => $pluginPath]);
 
 		$this->Task->params['plugin'] = $this->Task->plugin = 'TestView';
 		$result = $this->Task->getPath();
@@ -284,7 +284,7 @@ class ViewTaskTest extends TestCase {
  * @return void
  */
 	public function testGetContent() {
-		$vars = array(
+		$vars = [
 			'modelClass' => 'TestViewModel',
 			'schema' => TableRegistry::get('ViewTaskComments')->schema(),
 			'primaryKey' => ['id'],
@@ -296,7 +296,7 @@ class ViewTaskTest extends TestCase {
 			'fields' => ['id', 'name', 'body'],
 			'associations' => [],
 			'keyFields' => [],
-		);
+		];
 		$result = $this->Task->getContent('view', $vars);
 		$this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
 	}
@@ -307,7 +307,7 @@ class ViewTaskTest extends TestCase {
  * @return void
  */
 	public function testGetContentAssociations() {
-		$vars = array(
+		$vars = [
 			'modelClass' => 'ViewTaskComments',
 			'schema' => TableRegistry::get('ViewTaskComments')->schema(),
 			'primaryKey' => ['id'],
@@ -332,7 +332,7 @@ class ViewTaskTest extends TestCase {
 				]
 			],
 			'keyFields' => [],
-		);
+		];
 		$result = $this->Task->getContent('view', $vars);
 		$this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
 	}
@@ -343,7 +343,7 @@ class ViewTaskTest extends TestCase {
  * @return void
  */
 	public function testGetContentWithNoPrimaryKey() {
-		$vars = array(
+		$vars = [
 			'modelClass' => 'TestViewModel',
 			'schema' => TableRegistry::get('ViewTaskComments')->schema(),
 			'primaryKey' => [],
@@ -355,7 +355,7 @@ class ViewTaskTest extends TestCase {
 			'fields' => ['id', 'name', 'body'],
 			'associations' => [],
 			'keyFields' => [],
-		);
+		];
 		$this->Task->expects($this->once())
 			->method('error')
 			->with($this->stringContains('Cannot generate views for models'));
@@ -370,7 +370,7 @@ class ViewTaskTest extends TestCase {
  * @return void
  */
 	public function testGetContentWithRoutingPrefix() {
-		$vars = array(
+		$vars = [
 			'modelClass' => 'TestViewModel',
 			'schema' => TableRegistry::get('ViewTaskComments')->schema(),
 			'primaryKey' => ['id'],
@@ -382,7 +382,7 @@ class ViewTaskTest extends TestCase {
 			'fields' => ['id', 'name', 'body'],
 			'keyFields' => [],
 			'associations' => []
-		);
+		];
 		$this->Task->params['prefix'] = 'Admin';
 		$result = $this->Task->getContent('view', $vars);
 		$this->assertSameAsFile(__FUNCTION__ . '-view.ctp', $result);
@@ -530,7 +530,7 @@ class ViewTaskTest extends TestCase {
 				$this->stringContains('ViewTaskComment')
 			);
 
-		$this->Task->bakeActions(array('view', 'edit', 'index'), array());
+		$this->Task->bakeActions(['view', 'edit', 'index'], []);
 	}
 
 /**
@@ -653,7 +653,7 @@ class ViewTaskTest extends TestCase {
 		$this->Task->connection = 'test';
 		$filename = $this->_normalizePath(APP . 'Plugin/TestView/src/Template/ViewTaskComments/index.ctp');
 
-		Plugin::load('TestView', array('path' => APP . 'Plugin/TestView/'));
+		Plugin::load('TestView', ['path' => APP . 'Plugin/TestView/']);
 
 		$this->Task->expects($this->at(0))
 			->method('createFile')
@@ -681,7 +681,7 @@ class ViewTaskTest extends TestCase {
 		$this->Task->expects($this->exactly(4))
 			->method('createFile');
 
-		$views = array('index.ctp', 'view.ctp', 'add.ctp', 'edit.ctp');
+		$views = ['index.ctp', 'view.ctp', 'add.ctp', 'edit.ctp'];
 		foreach ($views as $i => $view) {
 			$this->Task->expects($this->at($i))->method('createFile')
 				->with(
@@ -702,7 +702,7 @@ class ViewTaskTest extends TestCase {
 		$this->Task->expects($this->exactly(2))
 			->method('createFile');
 
-		$views = array('index.ctp', 'add.ctp');
+		$views = ['index.ctp', 'add.ctp'];
 		foreach ($views as $i => $view) {
 			$this->Task->expects($this->at($i))->method('createFile')
 				->with(

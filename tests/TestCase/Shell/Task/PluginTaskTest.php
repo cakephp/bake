@@ -42,8 +42,8 @@ class PluginTaskTest extends TestCase {
 		$this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
 		$this->Task = $this->getMock('Bake\Shell\Task\PluginTask',
-			array('in', 'err', '_stop', 'clear', 'callProcess', '_rootComposerFilePath'),
-			array($this->io)
+			['in', 'err', '_stop', 'clear', 'callProcess', '_rootComposerFilePath'],
+			[$this->io]
 		);
 
 		$this->Task->Template = new TemplateTask($this->io);
@@ -158,8 +158,8 @@ class PluginTaskTest extends TestCase {
 		$paths[] = '/fake/path2';
 
 		$this->Task = $this->getMock('Bake\Shell\Task\PluginTask',
-			array('in', 'out', 'err', '_stop'),
-			array($this->io)
+			['in', 'out', 'err', '_stop'],
+			[$this->io]
 		);
 		$this->Task->path = TMP . 'tests' . DS;
 
