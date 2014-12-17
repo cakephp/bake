@@ -7,12 +7,14 @@ use Cake\ORM\Table;
 /**
  * Example behavior
  */
-class testBakePlugin extends Behavior
+class ExampleBehavior extends Behavior
 {
+
     /**
      * Default configuration.
      *
      * @var array
      */
     protected $_defaultConfig = [];
+
 }

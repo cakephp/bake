@@ -7,16 +7,17 @@ use TestApp\Controller\Admin\PostsController;
 /**
  * TestApp\Controller\Admin\PostsController Test Case
  */
-class testBakePrefixControllerTest extends IntegrationTestCase
+class PostsControllerTest extends IntegrationTestCase
 {
+
     /**
      * Fixtures
      *
      * @var array
      */
     public $fixtures = [
-        'Posts' => 'app.posts'
-    ];
+		'Posts' => 'app.posts'
+	];
 
     /**
      * Test index method
@@ -37,4 +38,5 @@ class testBakePrefixControllerTest extends IntegrationTestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
 }

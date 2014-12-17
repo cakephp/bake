@@ -8,18 +8,19 @@ use Cake\TestSuite\TestCase;
 /**
  * App\Model\Table\ArticlesTable Test Case
  */
-class testBakeFixturesParam extends TestCase
+class ArticlesTableTest extends TestCase
 {
+
     /**
      * Fixtures
      *
      * @var array
      */
     public $fixtures = [
-        'app.posts',
-        'app.comments',
-        'app.users'
-    ];
+		'app.posts',
+		'app.comments',
+		'app.users'
+	];
 
     /**
      * setUp method
@@ -54,4 +55,5 @@ class testBakeFixturesParam extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
 }

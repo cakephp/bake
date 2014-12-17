@@ -8,8 +8,9 @@ use Cake\View\View;
 /**
  * App\View\Helper\ExampleHelper Test Case
  */
-class testBakeHelperTest extends TestCase
+class ExampleHelperTest extends TestCase
 {
+
     /**
      * setUp method
      *
@@ -43,4 +44,5 @@ class testBakeHelperTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
 }

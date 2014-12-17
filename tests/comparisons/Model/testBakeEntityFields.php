@@ -6,8 +6,9 @@ use Cake\ORM\Entity;
 /**
  * BakeArticle Entity.
  */
-class testBakeEntityFields extends Entity
+class BakeArticle extends Entity
 {
+
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -18,4 +19,5 @@ class testBakeEntityFields extends Entity
         'body' => true,
         'published' => true,
     ];
+
 }

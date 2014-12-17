@@ -6,8 +6,9 @@ use Cake\View\Cell;
 /**
  * Example cell
  */
-class testBakePlugin extends Cell
+class ExampleCell extends Cell
 {
+
     /**
      * List of valid options that can be passed into this
      * cell's constructor.
@@ -24,4 +25,5 @@ class testBakePlugin extends Cell
     public function display()
     {
     }
+
 }
