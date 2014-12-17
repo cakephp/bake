@@ -79,7 +79,9 @@ class PluginTask extends BakeTask {
 	}
 
 /**
- * Bake the plugin, create directories and files
+ * Bake the plugin's contents
+ *
+ * Also update the autoloader and the root composer.json file if it can be found
  *
  * @param string $plugin Name of the plugin in CamelCased format
  * @return bool
@@ -135,14 +137,26 @@ class PluginTask extends BakeTask {
 		}
 	}
 
-	protected function _generateFiles($plugin, $path) {
+/**
+ * Generate all files for a plugin
+ *
+ * Find the first path which contains `src/Template/Bake/Plugin` that contains
+ * something, and use that as the template to recursively render a plugin's
+ * contents. Allows the creation of a bake them containing a `Plugin` folder
+ * to provide customized bake output for plugins.
+ *
+ * @param string $pluginName the CamelCase name of the plugin
+ * @param string $path the path to the plugins dir (the containing folder)
+ * @return void
+ */
+	protected function _generateFiles($pluginName, $path) {
 		$this->Template->set([
-			'plugin' => $plugin,
+			'plugin' => $pluginName,
 			'path' => $path,
 			'root' => ROOT
 		]);
 
-		$root = $path . $plugin . DS;
+		$root = $path . $pluginName . DS;
 
 		$paths = [];
 		if (!empty($this->params['theme'])) {
@@ -159,7 +173,7 @@ class PluginTask extends BakeTask {
 		} while (!$templates);
 
 		sort($templates);
-		foreach($templates as $template) {
+		foreach ($templates as $template) {
 			$template = substr($template, strrpos($template, 'Plugin') + 7, -4);
 			$this->_generateFile($template, $root);
 		}
@@ -200,7 +214,7 @@ class PluginTask extends BakeTask {
 
 		$this->out('<info>Modifying composer autoloader</info>');
 
-		$out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES). "\n";
+		$out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
 		$this->createFile($file, $out);
 
 		$composer = $this->Project->findComposer();
