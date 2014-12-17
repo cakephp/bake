@@ -461,7 +461,7 @@ class TestTask extends BakeTask
         }
         if ($type === 'cell') {
             $pre = "\$this->request = \$this->getMock('Cake\Network\Request');\n";
-            $pre .= "\t\t\$this->response = \$this->getMock('Cake\Network\Response');";
+            $pre .= "        \$this->response = \$this->getMock('Cake\Network\Response');";
             $construct = "new {$className}(\$this->request, \$this->response);";
         }
         return [$pre, $construct, $post];

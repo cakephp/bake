@@ -113,7 +113,7 @@ foreach ($validation as $field => $rules):
     endforeach;
 endforeach;
 %>
-<%= "\t\t\t" . implode("\n\t\t\t", $validationMethods) . ";" %>
+<%= "            " . implode("\n            ", $validationMethods) . ";" %>
 
 
         return $validator;
