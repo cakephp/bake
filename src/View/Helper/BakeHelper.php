@@ -72,9 +72,9 @@ class BakeHelper extends Helper
         $join = ', ';
         if ($options['indent']) {
             $join = ',';
-            $start = "\n" . str_repeat("\t", $options['indent']);
+            $start = "\n" . str_repeat("    ", $options['indent']);
             $join .= $start;
-            $end = "\n" . str_repeat("\t", $options['indent'] - 1);
+            $end = "\n" . str_repeat("    ", $options['indent'] - 1);
         }
 
         return $start . implode($join, $list) . $end;
