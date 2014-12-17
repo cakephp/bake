@@ -23,7 +23,7 @@
  * has been installed as a dependency of the plugin, or the plugin is itself
  * installed as a dependency of an application.
  */
-$findRoot = function($root) {
+$findRoot = function ($root) {
 	do {
 		$lastRoot = $root;
 		$root = dirname($root);
