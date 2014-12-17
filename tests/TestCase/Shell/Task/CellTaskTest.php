@@ -40,7 +40,8 @@ class CellTaskTest extends TestCase
             ['in', 'err', 'createFile', '_stop'],
             [$io]
         );
-        $this->Task->Test = $this->getMock('Bake\Shell\Task\TestTask',
+        $this->Task->Test = $this->getMock(
+            'Bake\Shell\Task\TestTask',
             [],
             [$io]
         );

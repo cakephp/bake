@@ -44,5 +44,4 @@ class ArticlesCellTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
-
 }

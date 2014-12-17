@@ -59,7 +59,8 @@ class TestTaskTest extends TestCase
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Test' . DS;
         $this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-        $this->Task = $this->getMock('Bake\Shell\Task\TestTask',
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\TestTask',
             ['in', 'err', 'createFile', '_stop', 'isLoadableClass'],
             [$this->io]
         );

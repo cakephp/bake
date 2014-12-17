@@ -284,11 +284,17 @@ class ViewTask extends BakeTask
         $pluralHumanName = $this->_pluralHumanName($this->controllerName);
 
         return compact(
-            'modelClass', 'schema',
-            'primaryKey', 'displayField',
-            'singularVar', 'pluralVar',
-            'singularHumanName', 'pluralHumanName',
-            'fields', 'associations', 'keyFields'
+            'modelClass',
+            'schema',
+            'primaryKey',
+            'displayField',
+            'singularVar',
+            'pluralVar',
+            'singularHumanName',
+            'pluralHumanName',
+            'fields',
+            'associations',
+            'keyFields'
         );
     }
 

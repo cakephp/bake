@@ -203,9 +203,20 @@ class TestTask extends BakeTask
         $this->Template->set('fixtures', $this->_fixtures);
         $this->Template->set('plugin', $this->plugin);
         $this->Template->set(compact(
-            'subject', 'className', 'methods', 'type', 'fullClassName', 'mock',
-            'realType', 'preConstruct', 'postConstruct', 'construction',
-            'uses', 'baseNamespace', 'subNamespace', 'namespace'
+            'subject',
+            'className',
+            'methods',
+            'type',
+            'fullClassName',
+            'mock',
+            'realType',
+            'preConstruct',
+            'postConstruct',
+            'construction',
+            'uses',
+            'baseNamespace',
+            'subNamespace',
+            'namespace'
         ));
         $out = $this->Template->generate('tests/test_case');
 

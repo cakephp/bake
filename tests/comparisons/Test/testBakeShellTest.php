@@ -43,5 +43,4 @@ class ArticlesShellTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
-
 }

@@ -164,8 +164,8 @@ class ProjectTask extends BakeTask
     {
         $parser = parent::getOptionParser();
         return $parser->description(
-                'Generate a new CakePHP project skeleton.'
-            )->addArgument('name', [
+            'Generate a new CakePHP project skeleton.'
+        )->addArgument('name', [
                 'help' => 'Application directory to make, if it starts with "/" the path is absolute.'
             ])->addOption('empty', [
                 'boolean' => true,

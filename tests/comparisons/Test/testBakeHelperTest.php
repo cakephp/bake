@@ -44,5 +44,4 @@ class ExampleHelperTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
-
 }

@@ -120,7 +120,8 @@ class ViewTaskTest extends TestCase
     {
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-        $this->Task = $this->getMock('Bake\Shell\Task\ViewTask',
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\ViewTask',
             $methods,
             [$io]
         );

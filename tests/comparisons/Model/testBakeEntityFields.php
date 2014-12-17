@@ -19,5 +19,4 @@ class BakeArticle extends Entity
         'body' => true,
         'published' => true,
     ];
-
 }

@@ -23,5 +23,4 @@ class BakeArticlesController extends AppController
      * @var array
      */
     public $components = ['Csrf', 'Auth', 'Company/TestBakeThree.Something', 'TestBake.Other', 'Apple', 'NonExistent'];
-
 }

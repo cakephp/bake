@@ -120,5 +120,4 @@ class BakeArticlesController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
-
 }

@@ -42,5 +42,4 @@ class ExampleBehaviorTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
-
 }

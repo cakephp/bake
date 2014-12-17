@@ -38,12 +38,12 @@ class BakeView extends View
      *
      * replacements are applied in order on the template contents before the template is evaluated
      * In order these:
-     * 	swallow leading whitespace for <%- tags
-     * 	swallow trailing whitespace for -%> tags
-     * 	Add an extra newline to <%=, to counteract php automatically removing a newline
-     * 	Replace remaining <=% with php short echo tags
-     * 	Replace <% with php open tags
-     * 	Replace %> with php close tags
+     *     swallow leading whitespace for <%- tags
+     *     swallow trailing whitespace for -%> tags
+     *     Add an extra newline to <%=, to counteract php automatically removing a newline
+     *     Replace remaining <=% with php short echo tags
+     *     Replace <% with php open tags
+     *     Replace %> with php close tags
      *
      * @var array
      */
@@ -71,9 +71,12 @@ class BakeView extends View
      * @param array $viewOptions View options. See View::$_passedVars for list of
      *   options which get set as class properties.
      */
-    public function __construct(Request $request = null, Response $response = null,
-        EventManager $eventManager = null, array $viewOptions = [])
-    {
+    public function __construct(
+        Request $request = null,
+        Response $response = null,
+        EventManager $eventManager = null,
+        array $viewOptions = []
+    ) {
         parent::__construct($request, $response, $eventManager, $viewOptions);
 
         $bakeTemplates = dirname(dirname(__FILE__)) . DS . 'Template' . DS;

@@ -116,8 +116,13 @@ class ModelTask extends BakeTask
         $behaviors = $this->getBehaviors($model);
 
         $data = compact(
-            'associations', 'primaryKey', 'displayField',
-            'table', 'fields', 'validation', 'behaviors'
+            'associations',
+            'primaryKey',
+            'displayField',
+            'table',
+            'fields',
+            'validation',
+            'behaviors'
         );
         $this->bakeTable($model, $data);
         $this->bakeEntity($model, $data);

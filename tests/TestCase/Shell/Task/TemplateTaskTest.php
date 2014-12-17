@@ -33,7 +33,8 @@ class TemplateTaskTest extends TestCase
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-        $this->Task = $this->getMock('Bake\Shell\Task\TemplateTask',
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\TemplateTask',
             ['in', 'err', 'createFile', '_stop', 'clear'],
             [$io]
         );

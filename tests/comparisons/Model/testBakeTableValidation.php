@@ -17,7 +17,8 @@ class BakeArticlesTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config) {
+    public function initialize(array $config)
+    {
         $this->primaryKey('id');
     }
 
@@ -27,7 +28,8 @@ class BakeArticlesTable extends Table
      * @param \Cake\Validation\Validator $validator instance
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator) {
+    public function validationDefault(Validator $validator)
+    {
         $validator
             ->add('id', 'valid', ['rule' => 'numeric'])
             ->allowEmpty('id', 'create')
@@ -39,5 +41,4 @@ class BakeArticlesTable extends Table
 
         return $validator;
     }
-
 }

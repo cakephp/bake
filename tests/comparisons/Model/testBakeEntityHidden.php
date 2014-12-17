@@ -17,5 +17,4 @@ class BakeUser extends Entity
     protected $_hidden = [
         'password'
     ];
-
 }

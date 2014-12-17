@@ -44,5 +44,4 @@ class AppleComponentTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
-
 }

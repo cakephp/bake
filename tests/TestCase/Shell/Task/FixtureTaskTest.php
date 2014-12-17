@@ -42,11 +42,13 @@ class FixtureTaskTest extends TestCase
         parent::setUp();
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-        $this->Task = $this->getMock('Bake\Shell\Task\FixtureTask',
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\FixtureTask',
             ['in', 'err', 'createFile', '_stop', 'clear'],
             [$io]
         );
-        $this->Task->Model = $this->getMock('Bake\Shell\Task\ModelTask',
+        $this->Task->Model = $this->getMock(
+            'Bake\Shell\Task\ModelTask',
             ['in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listAll'],
             [$io]
         );

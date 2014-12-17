@@ -26,5 +26,4 @@ class BakeArticlesController extends AppController
      * @var array
      */
     public $components = ['Csrf', 'Auth'];
-
 }

@@ -60,7 +60,8 @@ class ModelTaskTest extends TestCase
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-        $this->Task = $this->getMock('Bake\Shell\Task\ModelTask',
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\ModelTask',
             ['in', 'err', 'createFile', '_stop', '_checkUnitTest'],
             [$io]
         );
@@ -78,7 +79,8 @@ class ModelTaskTest extends TestCase
     {
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-        $this->Task = $this->getMock('Bake\Shell\Task\ModelTask',
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\ModelTask',
             ['in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest'],
             [$io]
         );

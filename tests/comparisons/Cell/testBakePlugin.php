@@ -25,5 +25,4 @@ class ExampleCell extends Cell
     public function display()
     {
     }
-
 }

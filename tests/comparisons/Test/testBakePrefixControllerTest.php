@@ -38,5 +38,4 @@ class PostsControllerTest extends IntegrationTestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
-
 }

@@ -42,7 +42,8 @@ class PluginTaskTest extends TestCase
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Plugin' . DS;
         $this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-        $this->Task = $this->getMock('Bake\Shell\Task\PluginTask',
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\PluginTask',
             ['in', 'err', '_stop', 'clear', 'callProcess', '_rootComposerFilePath'],
             [$this->io]
         );
@@ -164,7 +165,8 @@ class PluginTaskTest extends TestCase
         array_unshift($paths, '/fake/path');
         $paths[] = '/fake/path2';
 
-        $this->Task = $this->getMock('Bake\Shell\Task\PluginTask',
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\PluginTask',
             ['in', 'out', 'err', '_stop'],
             [$this->io]
         );

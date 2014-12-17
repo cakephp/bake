@@ -35,7 +35,8 @@ class ProjectTaskTest extends TestCase
         parent::setUp();
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-        $this->Task = $this->getMock('Bake\Shell\Task\ProjectTask',
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\ProjectTask',
             ['in', 'err', 'createFile', '_stop'],
             [$io]
         );

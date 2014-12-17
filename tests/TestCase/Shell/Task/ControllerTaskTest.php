@@ -62,7 +62,8 @@ class ControllerTaskTest extends TestCase
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
-        $this->Task = $this->getMock('Bake\Shell\Task\ControllerTask',
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\ControllerTask',
             ['in', 'out', 'err', 'hr', 'createFile', '_stop'],
             [$io]
         );
@@ -71,7 +72,8 @@ class ControllerTaskTest extends TestCase
 
         $this->Task->Template = new TemplateTask($io);
 
-        $this->Task->Model = $this->getMock('Bake\Shell\Task\ModelTask',
+        $this->Task->Model = $this->getMock(
+            'Bake\Shell\Task\ModelTask',
             ['in', 'out', 'err', 'createFile', '_stop'],
             [$io]
         );
