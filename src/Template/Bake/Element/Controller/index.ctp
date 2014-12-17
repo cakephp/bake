@@ -14,17 +14,18 @@
  */
 %>
 
-/**
- * Index method
- *
- * @return void
- */
-	public function index() {
+    /**
+     * Index method
+     *
+     * @return void
+     */
+    public function index()
+    {
 <% $belongsTo = $this->Bake->aliasExtractor($modelObj, 'BelongsTo'); %>
 <% if ($belongsTo): %>
-		$this->paginate = [
-			'contain' => [<%= $this->Bake->stringifyList($belongsTo, ['indent' => false]) %>]
-		];
+        $this->paginate = [
+            'contain' => [<%= $this->Bake->stringifyList($belongsTo, ['indent' => false]) %>]
+        ];
 <% endif; %>
-		$this->set('<%= $pluralName %>', $this->paginate($this-><%= $currentModelName %>));
-	}
+        $this->set('<%= $pluralName %>', $this->paginate($this-><%= $currentModelName %>));
+    }

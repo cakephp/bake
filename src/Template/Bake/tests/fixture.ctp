@@ -29,39 +29,39 @@ use Cake\TestSuite\Fixture\TestFixture;
 class <%= $name %>Fixture extends TestFixture {
 
 <% if ($table): %>
-/**
- * Table name
- *
- * @var string
- */
-	public $table = '<%= $table %>';
+    /**
+     * Table name
+     *
+     * @var string
+     */
+    public $table = '<%= $table %>';
 
 <% endif; %>
 <% if ($import): %>
-/**
- * Import
- *
- * @var array
- */
-	public $import = <%= $import %>;
+    /**
+     * Import
+     *
+     * @var array
+     */
+    public $import = <%= $import %>;
 
 <% endif; %>
 <% if ($schema): %>
-/**
- * Fields
- *
- * @var array
- */
-	public $fields = <%= $schema %>;
+    /**
+     * Fields
+     *
+     * @var array
+     */
+    public $fields = <%= $schema %>;
 
 <% endif; %>
 <% if ($records): %>
-/**
- * Records
- *
- * @var array
- */
-	public $records = <%= $records %>;
+    /**
+     * Records
+     *
+     * @var array
+     */
+    public $records = <%= $records %>;
 
 <% endif; %>
 }

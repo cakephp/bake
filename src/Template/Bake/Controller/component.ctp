@@ -24,11 +24,11 @@ use Cake\Controller\ComponentRegistry;
  */
 class <%= $name %>Component extends Component {
 
-/**
- * Default configuration.
- *
- * @var array
- */
-	protected $_defaultConfig = [];
+    /**
+     * Default configuration.
+     *
+     * @var array
+     */
+    protected $_defaultConfig = [];
 
 }
