@@ -10,8 +10,9 @@ use App\Controller\AppController;
  * @property \Cake\Controller\Component\CsrfComponent $Csrf
  * @property \Cake\Controller\Component\AuthComponent $Auth
  */
-class testBakeActions extends AppController
+class BakeArticlesController extends AppController
 {
+
     /**
      * Helpers
      *
@@ -119,4 +120,5 @@ class testBakeActions extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
 }

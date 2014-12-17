@@ -7,8 +7,9 @@ use Cake\TestSuite\TestCase;
 /**
  * App\View\Cell\ArticlesCell Test Case
  */
-class testBakeCellTest extends TestCase
+class ArticlesCellTest extends TestCase
 {
+
     /**
      * setUp method
      *
@@ -18,7 +19,7 @@ class testBakeCellTest extends TestCase
     {
         parent::setUp();
         $this->request = $this->getMock('Cake\Network\Request');
-        $this->response = $this->getMock('Cake\Network\Response');
+		$this->response = $this->getMock('Cake\Network\Response');
         $this->Articles = new ArticlesCell($this->request, $this->response);
     }
 
@@ -43,4 +44,5 @@ class testBakeCellTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
 }

@@ -10,8 +10,9 @@ use App\Controller\AppController;
  * @property \Cake\Controller\Component\CsrfComponent $Csrf
  * @property \Cake\Controller\Component\AuthComponent $Auth
  */
-class testBakeNoActions extends AppController
+class BakeArticlesController extends AppController
 {
+
     /**
      * Helpers
      *
@@ -25,4 +26,5 @@ class testBakeNoActions extends AppController
      * @var array
      */
     public $components = ['Csrf', 'Auth'];
+
 }

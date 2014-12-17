@@ -8,8 +8,9 @@ use TestApp\Controller\Component\AppleComponent;
 /**
  * TestApp\Controller\Component\AppleComponent Test Case
  */
-class testBakeComponentTest extends TestCase
+class AppleComponentTest extends TestCase
 {
+
     /**
      * setUp method
      *
@@ -43,4 +44,5 @@ class testBakeComponentTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
 }

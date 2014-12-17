@@ -8,8 +8,9 @@ use ControllerTest\Controller\AppController;
  *
  * @property \ControllerTest\Model\Table\BakeArticlesTable $BakeArticles
  */
-class testBakeWithPlugin extends AppController
+class BakeArticlesController extends AppController
 {
+
     /**
      * Index method
      *
@@ -103,4 +104,5 @@ class testBakeWithPlugin extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
 }

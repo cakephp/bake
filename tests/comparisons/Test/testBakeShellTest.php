@@ -7,8 +7,9 @@ use Cake\TestSuite\TestCase;
 /**
  * App\Shell\ArticlesShell Test Case
  */
-class testBakeShellTest extends TestCase
+class ArticlesShellTest extends TestCase
 {
+
     /**
      * setUp method
      *
@@ -42,4 +43,5 @@ class testBakeShellTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
 }

@@ -7,8 +7,9 @@ use Cake\TestSuite\TestCase;
 /**
  * App\Model\Behavior\ExampleBehavior Test Case
  */
-class testBakeBehaviorTest extends TestCase
+class ExampleBehaviorTest extends TestCase
 {
+
     /**
      * setUp method
      *
@@ -41,4 +42,5 @@ class testBakeBehaviorTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
 }

@@ -8,8 +8,9 @@ use Cake\TestSuite\TestCase;
 /**
  * App\Model\Table\ArticlesTable Test Case
  */
-class testBakeModelTest extends TestCase
+class ArticlesTableTest extends TestCase
 {
+
     /**
      * setUp method
      *
@@ -43,4 +44,5 @@ class testBakeModelTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
 }
