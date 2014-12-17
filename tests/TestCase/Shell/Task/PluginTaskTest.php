@@ -17,8 +17,8 @@ namespace Bake\Test\TestCase\Shell\Task;
 use Bake\Shell\Task\ProjectTask;
 use Bake\Shell\Task\TemplateTask;
 use Cake\Core\App;
-use Cake\Core\Plugin;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\TestSuite\StringCompareTrait;
@@ -183,7 +183,7 @@ class PluginTaskTest extends TestCase {
  * @param string $pluginName the name of the plugin to compare to
  * @return void
  */
-	protected function assertPluginContents($pluginName) {
+	public function assertPluginContents($pluginName) {
 		$comparisonRoot = $this->_compareBasePath . $pluginName . DS;
 		$comparisonDir = new Folder($comparisonRoot);
 		$comparisonFiles = $comparisonDir->findRecursive();

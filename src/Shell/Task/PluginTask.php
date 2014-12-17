@@ -16,8 +16,8 @@ namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\App;
-use Cake\Core\Plugin;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 
