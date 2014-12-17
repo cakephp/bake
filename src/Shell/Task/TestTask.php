@@ -32,53 +32,53 @@ use ReflectionClass;
  * Task class for creating and updating test files.
  *
  */
-class TestTask extends BakeTask {
-
-/**
+class TestTask extends BakeTask
+{
+    /**
  * Tasks used.
  *
  * @var array
  */
-	public $tasks = ['Bake.Template'];
+    public $tasks = ['Bake.Template'];
 
 /**
  * class types that methods can be generated for
  *
  * @var array
  */
-	public $classTypes = [
-		'Entity' => 'Model\Entity',
-		'Table' => 'Model\Table',
-		'Controller' => 'Controller',
-		'Component' => 'Controller\Component',
-		'Behavior' => 'Model\Behavior',
-		'Helper' => 'View\Helper',
-		'Shell' => 'Shell',
-		'Cell' => 'View\Cell',
-	];
+    public $classTypes = [
+        'Entity' => 'Model\Entity',
+        'Table' => 'Model\Table',
+        'Controller' => 'Controller',
+        'Component' => 'Controller\Component',
+        'Behavior' => 'Model\Behavior',
+        'Helper' => 'View\Helper',
+        'Shell' => 'Shell',
+        'Cell' => 'View\Cell',
+    ];
 
 /**
  * class types that methods can be generated for
  *
  * @var array
  */
-	public $classSuffixes = [
-		'entity' => '',
-		'table' => 'Table',
-		'controller' => 'Controller',
-		'component' => 'Component',
-		'behavior' => 'Behavior',
-		'helper' => 'Helper',
-		'shell' => 'Shell',
-		'cell' => 'Cell',
-	];
+    public $classSuffixes = [
+        'entity' => '',
+        'table' => 'Table',
+        'controller' => 'Controller',
+        'component' => 'Component',
+        'behavior' => 'Behavior',
+        'helper' => 'Helper',
+        'shell' => 'Shell',
+        'cell' => 'Cell',
+    ];
 
 /**
  * Internal list of fixtures that have been added so far.
  *
  * @var array
  */
-	protected $_fixtures = [];
+    protected $_fixtures = [];
 
 /**
  * Execution method always used for tasks
@@ -87,38 +87,40 @@ class TestTask extends BakeTask {
  * @param string|null $name Name.
  * @return void
  */
-	public function main($type = null, $name = null) {
-		parent::main();
-		if (empty($type) && empty($name)) {
-			return $this->outputTypeChoices();
-		}
+    public function main($type = null, $name = null)
+    {
+        parent::main();
+        if (empty($type) && empty($name)) {
+            return $this->outputTypeChoices();
+        }
 
-		if (empty($name)) {
-			return $this->outputClassChoices($type);
-		}
+        if (empty($name)) {
+            return $this->outputClassChoices($type);
+        }
 
-		if ($this->bake($type, $name)) {
-			$this->out('<success>Done</success>');
-		}
-	}
+        if ($this->bake($type, $name)) {
+            $this->out('<success>Done</success>');
+        }
+    }
 
 /**
  * Output a list of class types you can bake a test for.
  *
  * @return void
  */
-	public function outputTypeChoices() {
-		$this->out(
-			'You must provide a class type to bake a test for. The valid types are:',
-			2
-		);
-		$i = 0;
-		foreach ($this->classTypes as $option => $package) {
-			$this->out(++$i . '. ' . $option);
-		}
-		$this->out('');
-		$this->out('Re-run your command as `cake bake <type> <classname>`');
-	}
+    public function outputTypeChoices()
+    {
+        $this->out(
+            'You must provide a class type to bake a test for. The valid types are:',
+            2
+        );
+        $i = 0;
+        foreach ($this->classTypes as $option => $package) {
+            $this->out(++$i . '. ' . $option);
+        }
+        $this->out('');
+        $this->out('Re-run your command as `cake bake <type> <classname>`');
+    }
 
 /**
  * Output a list of possible classnames you might want to generate a test for.
@@ -126,20 +128,21 @@ class TestTask extends BakeTask {
  * @param string $type The typename to get classes for.
  * @return void
  */
-	public function outputClassChoices($type) {
-		$type = $this->mapType($type);
-		$this->out(
-			'You must provide a class to bake a test for. Some possible options are:',
-			2
-		);
-		$options = $this->_getClassOptions($type);
-		$i = 0;
-		foreach ($options as $option) {
-			$this->out(++$i . '. ' . $option);
-		}
-		$this->out('');
-		$this->out('Re-run your command as `cake bake ' . $type . ' <classname>`');
-	}
+    public function outputClassChoices($type)
+    {
+        $type = $this->mapType($type);
+        $this->out(
+            'You must provide a class to bake a test for. Some possible options are:',
+            2
+        );
+        $options = $this->_getClassOptions($type);
+        $i = 0;
+        foreach ($options as $option) {
+            $this->out(++$i . '. ' . $option);
+        }
+        $this->out('');
+        $this->out('Re-run your command as `cake bake ' . $type . ' <classname>`');
+    }
 
 /**
  * Get the possible classes for a given type.
@@ -147,20 +150,21 @@ class TestTask extends BakeTask {
  * @param string $namespace The namespace fragment to look for classes in.
  * @return array
  */
-	protected function _getClassOptions($namespace) {
-		$classes = [];
-		$base = APP;
-		if ($this->plugin) {
-			$base = Plugin::classPath($this->plugin);
-		}
-		$path = $base . str_replace('\\', DS, $namespace);
-		$folder = new Folder($path);
-		list(, $files) = $folder->read();
-		foreach ($files as $file) {
-			$classes[] = str_replace('.php', '', $file);
-		}
-		return $classes;
-	}
+    protected function _getClassOptions($namespace)
+    {
+        $classes = [];
+        $base = APP;
+        if ($this->plugin) {
+            $base = Plugin::classPath($this->plugin);
+        }
+        $path = $base . str_replace('\\', DS, $namespace);
+        $folder = new Folder($path);
+        list(, $files) = $folder->read();
+        foreach ($files as $file) {
+            $classes[] = str_replace('.php', '', $file);
+        }
+        return $classes;
+    }
 
 /**
  * Completes final steps for generating data to create test case.
@@ -169,49 +173,50 @@ class TestTask extends BakeTask {
  * @param string $className the 'cake name' for the class ie. Posts for the PostsController
  * @return string|bool
  */
-	public function bake($type, $className) {
-		$fullClassName = $this->getRealClassName($type, $className);
+    public function bake($type, $className)
+    {
+        $fullClassName = $this->getRealClassName($type, $className);
 
-		if (!empty($this->params['fixtures'])) {
-			$fixtures = array_map('trim', explode(',', $this->params['fixtures']));
-			$this->_fixtures = array_filter($fixtures);
-		} elseif ($this->typeCanDetectFixtures($type) && class_exists($fullClassName)) {
-			$this->out('Bake is detecting possible fixtures...');
-			$testSubject = $this->buildTestSubject($type, $fullClassName);
-			$this->generateFixtureList($testSubject);
-		}
+        if (!empty($this->params['fixtures'])) {
+            $fixtures = array_map('trim', explode(',', $this->params['fixtures']));
+            $this->_fixtures = array_filter($fixtures);
+        } elseif ($this->typeCanDetectFixtures($type) && class_exists($fullClassName)) {
+            $this->out('Bake is detecting possible fixtures...');
+            $testSubject = $this->buildTestSubject($type, $fullClassName);
+            $this->generateFixtureList($testSubject);
+        }
 
-		$methods = [];
-		if (class_exists($fullClassName)) {
-			$methods = $this->getTestableMethods($fullClassName);
-		}
-		$mock = $this->hasMockClass($type, $fullClassName);
-		list($preConstruct, $construction, $postConstruct) = $this->generateConstructor($type, $fullClassName);
-		$uses = $this->generateUses($type, $fullClassName);
+        $methods = [];
+        if (class_exists($fullClassName)) {
+            $methods = $this->getTestableMethods($fullClassName);
+        }
+        $mock = $this->hasMockClass($type, $fullClassName);
+        list($preConstruct, $construction, $postConstruct) = $this->generateConstructor($type, $fullClassName);
+        $uses = $this->generateUses($type, $fullClassName);
 
-		$subject = $className;
-		list($namespace, $className) = namespaceSplit($fullClassName);
-		list($baseNamespace, $subNamespace) = explode('\\', $namespace, 2);
+        $subject = $className;
+        list($namespace, $className) = namespaceSplit($fullClassName);
+        list($baseNamespace, $subNamespace) = explode('\\', $namespace, 2);
 
-		$this->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, Shell::QUIET);
+        $this->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, Shell::QUIET);
 
-		$this->Template->set('fixtures', $this->_fixtures);
-		$this->Template->set('plugin', $this->plugin);
-		$this->Template->set(compact(
-			'subject', 'className', 'methods', 'type', 'fullClassName', 'mock',
-			'realType', 'preConstruct', 'postConstruct', 'construction',
-			'uses', 'baseNamespace', 'subNamespace', 'namespace'
-		));
-		$out = $this->Template->generate('tests/test_case');
+        $this->Template->set('fixtures', $this->_fixtures);
+        $this->Template->set('plugin', $this->plugin);
+        $this->Template->set(compact(
+            'subject', 'className', 'methods', 'type', 'fullClassName', 'mock',
+            'realType', 'preConstruct', 'postConstruct', 'construction',
+            'uses', 'baseNamespace', 'subNamespace', 'namespace'
+        ));
+        $out = $this->Template->generate('tests/test_case');
 
-		$filename = $this->testCaseFileName($type, $fullClassName);
-		$emptyFile = $this->getPath() . $this->getSubspacePath($type) . DS . 'empty';
-		$this->_deleteEmptyFile($emptyFile);
-		if ($this->createFile($filename, $out)) {
-			return $out;
-		}
-		return false;
-	}
+        $filename = $this->testCaseFileName($type, $fullClassName);
+        $emptyFile = $this->getPath() . $this->getSubspacePath($type) . DS . 'empty';
+        $this->_deleteEmptyFile($emptyFile);
+        if ($this->createFile($filename, $out)) {
+            return $out;
+        }
+        return false;
+    }
 
 /**
  * Checks whether the chosen type can find its own fixtures.
@@ -220,10 +225,11 @@ class TestTask extends BakeTask {
  * @param string $type The Type of object you are generating tests for eg. controller
  * @return bool
  */
-	public function typeCanDetectFixtures($type) {
-		$type = strtolower($type);
-		return in_array($type, ['controller', 'table']);
-	}
+    public function typeCanDetectFixtures($type)
+    {
+        $type = strtolower($type);
+        return in_array($type, ['controller', 'table']);
+    }
 
 /**
  * Construct an instance of the class to be tested.
@@ -233,21 +239,22 @@ class TestTask extends BakeTask {
  * @param string $class The classname of the class the test is being generated for.
  * @return object And instance of the class that is going to be tested.
  */
-	public function buildTestSubject($type, $class) {
-		if (strtolower($type) === 'table') {
-			list(, $name) = namespaceSplit($class);
-			$name = str_replace('Table', '', $name);
-			if ($this->plugin) {
-				$name = $this->plugin . '.' . $name;
-			}
-			$instance = TableRegistry::get($name);
-		} elseif (strtolower($type) === 'controller') {
-			$instance = new $class(new Request(), new Response());
-		} else {
-			$instance = new $class();
-		}
-		return $instance;
-	}
+    public function buildTestSubject($type, $class)
+    {
+        if (strtolower($type) === 'table') {
+            list(, $name) = namespaceSplit($class);
+            $name = str_replace('Table', '', $name);
+            if ($this->plugin) {
+                $name = $this->plugin . '.' . $name;
+            }
+            $instance = TableRegistry::get($name);
+        } elseif (strtolower($type) === 'controller') {
+            $instance = new $class(new Request(), new Response());
+        } else {
+            $instance = new $class();
+        }
+        return $instance;
+    }
 
 /**
  * Gets the real class name from the cake short form. If the class name is already
@@ -257,18 +264,19 @@ class TestTask extends BakeTask {
  * @param string $class the Classname of the class the test is being generated for.
  * @return string Real class name
  */
-	public function getRealClassName($type, $class) {
-		$namespace = Configure::read('App.namespace');
-		if ($this->plugin) {
-			$namespace = str_replace('/', '\\', $this->plugin);
-		}
-		$suffix = $this->classSuffixes[strtolower($type)];
-		$subSpace = $this->mapType($type);
-		if ($suffix && strpos($class, $suffix) === false) {
-			$class .= $suffix;
-		}
-		return $namespace . '\\' . $subSpace . '\\' . $class;
-	}
+    public function getRealClassName($type, $class)
+    {
+        $namespace = Configure::read('App.namespace');
+        if ($this->plugin) {
+            $namespace = str_replace('/', '\\', $this->plugin);
+        }
+        $suffix = $this->classSuffixes[strtolower($type)];
+        $subSpace = $this->mapType($type);
+        if ($suffix && strpos($class, $suffix) === false) {
+            $class .= $suffix;
+        }
+        return $namespace . '\\' . $subSpace . '\\' . $class;
+    }
 
 /**
  * Gets the subspace path for a test.
@@ -276,11 +284,12 @@ class TestTask extends BakeTask {
  * @param string $type The Type of object you are generating tests for eg. controller.
  * @return string Path of the subspace.
  */
-	public function getSubspacePath($type) {
-		$suffix = $this->classSuffixes[strtolower($type)];
-		$subspace = $this->mapType($type);
-		return str_replace('\\', DS, $subspace);
-	}
+    public function getSubspacePath($type)
+    {
+        $suffix = $this->classSuffixes[strtolower($type)];
+        $subspace = $this->mapType($type);
+        return str_replace('\\', DS, $subspace);
+    }
 
 /**
  * Map the types that TestTask uses to concrete types that App::className can use.
@@ -289,13 +298,14 @@ class TestTask extends BakeTask {
  * @return string
  * @throws \Cake\Core\Exception\Exception When invalid object types are requested.
  */
-	public function mapType($type) {
-		$type = ucfirst($type);
-		if (empty($this->classTypes[$type])) {
-			throw new Exception('Invalid object type.');
-		}
-		return $this->classTypes[$type];
-	}
+    public function mapType($type)
+    {
+        $type = ucfirst($type);
+        if (empty($this->classTypes[$type])) {
+            throw new Exception('Invalid object type.');
+        }
+        return $this->classTypes[$type];
+    }
 
 /**
  * Get methods declared in the class given.
@@ -304,20 +314,21 @@ class TestTask extends BakeTask {
  * @param string $className Name of class to look at.
  * @return array Array of method names.
  */
-	public function getTestableMethods($className) {
-		$class = new ReflectionClass($className);
-		$out = [];
-		foreach ($class->getMethods() as $method) {
-			if ($method->getDeclaringClass()->getName() != $className) {
-				continue;
-			}
-			if (!$method->isPublic()) {
-				continue;
-			}
-			$out[] = $method->getName();
-		}
-		return $out;
-	}
+    public function getTestableMethods($className)
+    {
+        $class = new ReflectionClass($className);
+        $out = [];
+        foreach ($class->getMethods() as $method) {
+            if ($method->getDeclaringClass()->getName() != $className) {
+                continue;
+            }
+            if (!$method->isPublic()) {
+                continue;
+            }
+            $out[] = $method->getName();
+        }
+        return $out;
+    }
 
 /**
  * Generate the list of fixtures that will be required to run this test based on
@@ -326,15 +337,16 @@ class TestTask extends BakeTask {
  * @param object $subject The object you want to generate fixtures for.
  * @return array Array of fixtures to be included in the test.
  */
-	public function generateFixtureList($subject) {
-		$this->_fixtures = [];
-		if ($subject instanceof Table) {
-			$this->_processModel($subject);
-		} elseif ($subject instanceof Controller) {
-			$this->_processController($subject);
-		}
-		return array_values($this->_fixtures);
-	}
+    public function generateFixtureList($subject)
+    {
+        $this->_fixtures = [];
+        if ($subject instanceof Table) {
+            $this->_processModel($subject);
+        } elseif ($subject instanceof Controller) {
+            $this->_processController($subject);
+        }
+        return array_values($this->_fixtures);
+    }
 
 /**
  * Process a model recursively and pull out all the
@@ -343,29 +355,30 @@ class TestTask extends BakeTask {
  * @param Model $subject A Model class to scan for associations and pull fixtures off of.
  * @return void
  */
-	protected function _processModel($subject) {
-		$this->_addFixture($subject->alias());
-		foreach ($subject->associations()->keys() as $alias) {
-			$assoc = $subject->association($alias);
-			$target = $assoc->target();
-			$name = $target->alias();
-			$subjectClass = get_class($subject);
+    protected function _processModel($subject)
+    {
+        $this->_addFixture($subject->alias());
+        foreach ($subject->associations()->keys() as $alias) {
+            $assoc = $subject->association($alias);
+            $target = $assoc->target();
+            $name = $target->alias();
+            $subjectClass = get_class($subject);
 
-			if ($subjectClass !== 'Cake\ORM\Table' && $subjectClass === get_class($target)) {
-				continue;
-			}
+            if ($subjectClass !== 'Cake\ORM\Table' && $subjectClass === get_class($target)) {
+                continue;
+            }
 
-			if (!isset($this->_fixtures[$name])) {
-				$this->_processModel($target);
-			}
-			if ($assoc->type() === Association::MANY_TO_MANY) {
-				$junction = $assoc->junction();
-				if (!isset($this->_fixtures[$junction->alias()])) {
-					$this->_processModel($junction);
-				}
-			}
-		}
-	}
+            if (!isset($this->_fixtures[$name])) {
+                $this->_processModel($target);
+            }
+            if ($assoc->type() === Association::MANY_TO_MANY) {
+                $junction = $assoc->junction();
+                if (!isset($this->_fixtures[$junction->alias()])) {
+                    $this->_processModel($junction);
+                }
+            }
+        }
+    }
 
 /**
  * Process all the models attached to a controller
@@ -374,13 +387,14 @@ class TestTask extends BakeTask {
  * @param \Cake\Controller\Controller $subject A controller to pull model names off of.
  * @return void
  */
-	protected function _processController($subject) {
-		$models = [$subject->modelClass];
-		foreach ($models as $model) {
-			list(, $model) = pluginSplit($model);
-			$this->_processModel($subject->{$model});
-		}
-	}
+    protected function _processController($subject)
+    {
+        $models = [$subject->modelClass];
+        foreach ($models as $model) {
+            list(, $model) = pluginSplit($model);
+            $this->_processModel($subject->{$model});
+        }
+    }
 
 /**
  * Add class name to the fixture list.
@@ -389,15 +403,16 @@ class TestTask extends BakeTask {
  * @param string $name Name of the Model class that a fixture might be required for.
  * @return void
  */
-	protected function _addFixture($name) {
-		if ($this->plugin) {
-			$prefix = 'plugin.' . Inflector::underscore($this->plugin) . '.';
-		} else {
-			$prefix = 'app.';
-		}
-		$fixture = $prefix . $this->_fixtureName($name);
-		$this->_fixtures[$name] = $fixture;
-	}
+    protected function _addFixture($name)
+    {
+        if ($this->plugin) {
+            $prefix = 'plugin.' . Inflector::underscore($this->plugin) . '.';
+        } else {
+            $prefix = 'app.';
+        }
+        $fixture = $prefix . $this->_fixtureName($name);
+        $this->_fixtures[$name] = $fixture;
+    }
 
 /**
  * Is a mock class required for this type of test?
@@ -406,10 +421,11 @@ class TestTask extends BakeTask {
  * @param string $type The type of object tests are being generated for eg. controller.
  * @return bool
  */
-	public function hasMockClass($type) {
-		$type = strtolower($type);
-		return $type === 'controller';
-	}
+    public function hasMockClass($type)
+    {
+        $type = strtolower($type);
+        return $type === 'controller';
+    }
 
 /**
  * Generate a constructor code snippet for the type and class name
@@ -418,37 +434,38 @@ class TestTask extends BakeTask {
  * @param string $fullClassName The full classname of the class the test is being generated for.
  * @return array Constructor snippets for the thing you are building.
  */
-	public function generateConstructor($type, $fullClassName) {
-		list(, $className) = namespaceSplit($fullClassName);
-		$type = strtolower($type);
-		$pre = $construct = $post = '';
-		if ($type === 'table') {
-			$className = str_replace('Table', '', $className);
-			$pre = "\$config = TableRegistry::exists('{$className}') ? [] : ['className' => '{$fullClassName}'];";
-			$construct = "TableRegistry::get('{$className}', \$config);";
-		}
-		if ($type === 'behavior' || $type === 'entity') {
-			$construct = "new {$className}();";
-		}
-		if ($type === 'helper') {
-			$pre = "\$view = new View();";
-			$construct = "new {$className}(\$view);";
-		}
-		if ($type === 'component') {
-			$pre = "\$registry = new ComponentRegistry();";
-			$construct = "new {$className}(\$registry);";
-		}
-		if ($type === 'shell') {
-			$pre = "\$this->io = \$this->getMock('Cake\Console\ConsoleIo');";
-			$construct = "new {$className}(\$this->io);";
-		}
-		if ($type === 'cell') {
-			$pre = "\$this->request = \$this->getMock('Cake\Network\Request');\n";
-			$pre .= "\t\t\$this->response = \$this->getMock('Cake\Network\Response');";
-			$construct = "new {$className}(\$this->request, \$this->response);";
-		}
-		return [$pre, $construct, $post];
-	}
+    public function generateConstructor($type, $fullClassName)
+    {
+        list(, $className) = namespaceSplit($fullClassName);
+        $type = strtolower($type);
+        $pre = $construct = $post = '';
+        if ($type === 'table') {
+            $className = str_replace('Table', '', $className);
+            $pre = "\$config = TableRegistry::exists('{$className}') ? [] : ['className' => '{$fullClassName}'];";
+            $construct = "TableRegistry::get('{$className}', \$config);";
+        }
+        if ($type === 'behavior' || $type === 'entity') {
+            $construct = "new {$className}();";
+        }
+        if ($type === 'helper') {
+            $pre = "\$view = new View();";
+            $construct = "new {$className}(\$view);";
+        }
+        if ($type === 'component') {
+            $pre = "\$registry = new ComponentRegistry();";
+            $construct = "new {$className}(\$registry);";
+        }
+        if ($type === 'shell') {
+            $pre = "\$this->io = \$this->getMock('Cake\Console\ConsoleIo');";
+            $construct = "new {$className}(\$this->io);";
+        }
+        if ($type === 'cell') {
+            $pre = "\$this->request = \$this->getMock('Cake\Network\Request');\n";
+            $pre .= "\t\t\$this->response = \$this->getMock('Cake\Network\Response');";
+            $construct = "new {$className}(\$this->request, \$this->response);";
+        }
+        return [$pre, $construct, $post];
+    }
 
 /**
  * Generate the uses() calls for a type & class name
@@ -457,35 +474,37 @@ class TestTask extends BakeTask {
  * @param string $fullClassName The Classname of the class the test is being generated for.
  * @return array An array containing used classes
  */
-	public function generateUses($type, $fullClassName) {
-		$uses = [];
-		$type = strtolower($type);
-		if ($type === 'component') {
-			$uses[] = 'Cake\Controller\ComponentRegistry';
-		}
-		if ($type === 'table') {
-			$uses[] = 'Cake\ORM\TableRegistry';
-		}
-		if ($type === 'helper') {
-			$uses[] = 'Cake\View\View';
-		}
-		$uses[] = $fullClassName;
-		return $uses;
-	}
+    public function generateUses($type, $fullClassName)
+    {
+        $uses = [];
+        $type = strtolower($type);
+        if ($type === 'component') {
+            $uses[] = 'Cake\Controller\ComponentRegistry';
+        }
+        if ($type === 'table') {
+            $uses[] = 'Cake\ORM\TableRegistry';
+        }
+        if ($type === 'helper') {
+            $uses[] = 'Cake\View\View';
+        }
+        $uses[] = $fullClassName;
+        return $uses;
+    }
 
 /**
  * Get the file path.
  *
  * @return string
  */
-	public function getPath() {
-		$dir = 'tests/TestCase/';
-		$path = APP . $dir;
-		if (isset($this->plugin)) {
-			$path = $this->_pluginPath($this->plugin) . 'tests/TestCase/';
-		}
-		return $path;
-	}
+    public function getPath()
+    {
+        $dir = 'tests/TestCase/';
+        $path = APP . $dir;
+        if (isset($this->plugin)) {
+            $path = $this->_pluginPath($this->plugin) . 'tests/TestCase/';
+        }
+        return $path;
+    }
 
 /**
  * Make the filename for the test case. resolve the suffixes for controllers
@@ -495,46 +514,47 @@ class TestTask extends BakeTask {
  * @param string $className The fully qualified classname of the class the test is being generated for.
  * @return string filename the test should be created on.
  */
-	public function testCaseFileName($type, $className) {
-		$path = $this->getPath();
-		$namespace = Configure::read('App.namespace');
-		if ($this->plugin) {
-			$namespace = $this->plugin;
-		}
-		$classTail = substr($className, strlen($namespace) + 1);
-		$path = $path . $classTail . 'Test.php';
-		return str_replace(['/', '\\'], DS, $path);
-	}
+    public function testCaseFileName($type, $className)
+    {
+        $path = $this->getPath();
+        $namespace = Configure::read('App.namespace');
+        if ($this->plugin) {
+            $namespace = $this->plugin;
+        }
+        $classTail = substr($className, strlen($namespace) + 1);
+        $path = $path . $classTail . 'Test.php';
+        return str_replace(['/', '\\'], DS, $path);
+    }
 
 /**
  * Gets the option parser instance and configures it.
  *
  * @return \Cake\Console\ConsoleOptionParser
  */
-	public function getOptionParser() {
-		$parser = parent::getOptionParser();
+    public function getOptionParser()
+    {
+        $parser = parent::getOptionParser();
 
-		$parser->description(
-			'Bake test case skeletons for classes.'
-		)->addArgument('type', [
-			'help' => 'Type of class to bake, can be any of the following: controller, model, helper, component or behavior.',
-			'choices' => [
-				'Controller', 'controller',
-				'Table', 'table',
-				'Entity', 'entity',
-				'Helper', 'helper',
-				'Component', 'component',
-				'Behavior', 'behavior',
-				'Shell', 'shell',
-				'Cell', 'cell',
-			]
-		])->addArgument('name', [
-			'help' => 'An existing class to bake tests for.'
-		])->addOption('fixtures', [
-			'help' => 'A comma separated list of fixture names you want to include.'
-		]);
+        $parser->description(
+            'Bake test case skeletons for classes.'
+        )->addArgument('type', [
+            'help' => 'Type of class to bake, can be any of the following: controller, model, helper, component or behavior.',
+            'choices' => [
+                'Controller', 'controller',
+                'Table', 'table',
+                'Entity', 'entity',
+                'Helper', 'helper',
+                'Component', 'component',
+                'Behavior', 'behavior',
+                'Shell', 'shell',
+                'Cell', 'cell',
+            ]
+        ])->addArgument('name', [
+            'help' => 'An existing class to bake tests for.'
+        ])->addOption('fixtures', [
+            'help' => 'A comma separated list of fixture names you want to include.'
+        ]);
 
-		return $parser;
-	}
-
+        return $parser;
+    }
 }

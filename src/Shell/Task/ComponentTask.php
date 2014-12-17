@@ -17,34 +17,36 @@ namespace Bake\Shell\Task;
 /**
  * Component code generator.
  */
-class ComponentTask extends SimpleBakeTask {
-
-/**
+class ComponentTask extends SimpleBakeTask
+{
+    /**
  * Task name used in path generation.
  *
  * @var string
  */
-	public $pathFragment = 'Controller/Component/';
+    public $pathFragment = 'Controller/Component/';
 
 /**
  * {@inheritDoc}
  */
-	public function name() {
-		return 'component';
-	}
+    public function name()
+    {
+        return 'component';
+    }
 
 /**
  * {@inheritDoc}
  */
-	public function fileName($name) {
-		return $name . 'Component.php';
-	}
+    public function fileName($name)
+    {
+        return $name . 'Component.php';
+    }
 
 /**
  * {@inheritDoc}
  */
-	public function template() {
-		return 'Controller/component';
-	}
-
+    public function template()
+    {
+        return 'Controller/component';
+    }
 }

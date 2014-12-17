@@ -7,38 +7,40 @@ use Cake\TestSuite\TestCase;
 /**
  * App\View\Cell\ArticlesCell Test Case
  */
-class ArticlesCellTest extends TestCase {
-
-/**
+class testBakeCellTest extends TestCase
+{
+    /**
  * setUp method
  *
  * @return void
  */
-	public function setUp() {
-		parent::setUp();
-		$this->request = $this->getMock('Cake\Network\Request');
-		$this->response = $this->getMock('Cake\Network\Response');
-		$this->Articles = new ArticlesCell($this->request, $this->response);
-	}
+    public function setUp()
+    {
+        parent::setUp();
+        $this->request = $this->getMock('Cake\Network\Request');
+        $this->response = $this->getMock('Cake\Network\Response');
+        $this->Articles = new ArticlesCell($this->request, $this->response);
+    }
 
 /**
  * tearDown method
  *
  * @return void
  */
-	public function tearDown() {
-		unset($this->Articles);
+    public function tearDown()
+    {
+        unset($this->Articles);
 
-		parent::tearDown();
-	}
+        parent::tearDown();
+    }
 
 /**
  * Test initial setup
  *
  * @return void
  */
-	public function testInitialization() {
-		$this->markTestIncomplete('Not implemented yet.');
-	}
-
+    public function testInitialization()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 }

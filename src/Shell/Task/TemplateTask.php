@@ -29,18 +29,18 @@ use Cake\View\ViewVarsTrait;
  * Template Task can generate templated output Used in other Tasks.
  * Acts like a simplified View class.
  */
-class TemplateTask extends Shell {
+class TemplateTask extends Shell
+{
+    use ConventionsTrait;
 
-	use ConventionsTrait;
-
-	use ViewVarsTrait;
+    use ViewVarsTrait;
 
 /**
  * BakeView instance
  *
  * @var Cake\View\BakeView
  */
-	public $View;
+    public $View;
 
 /**
  * Get view instance
@@ -48,24 +48,25 @@ class TemplateTask extends Shell {
  * @return \Cake\View\View
  * @triggers Bake.initialize $view
  */
-	public function getView() {
-		if ($this->View) {
-			return $this->View;
-		}
+    public function getView()
+    {
+        if ($this->View) {
+            return $this->View;
+        }
 
-		$theme = isset($this->params['theme']) ? $this->params['theme'] : '';
+        $theme = isset($this->params['theme']) ? $this->params['theme'] : '';
 
-		$viewOptions = [
-			'helpers' => ['Bake.Bake'],
-			'theme' => $theme
-		];
-		$view = new BakeView(new Request(), new Response(), null, $viewOptions);
-		$event = new Event('Bake.initialize', $view);
-		EventManager::instance()->dispatch($event);
-		$this->View = $event->subject;
+        $viewOptions = [
+            'helpers' => ['Bake.Bake'],
+            'theme' => $theme
+        ];
+        $view = new BakeView(new Request(), new Response(), null, $viewOptions);
+        $event = new Event('Bake.initialize', $view);
+        EventManager::instance()->dispatch($event);
+        $this->View = $event->subject;
 
-		return $this->View;
-	}
+        return $this->View;
+    }
 
 /**
  * Runs the template
@@ -74,19 +75,19 @@ class TemplateTask extends Shell {
  * @param array|null $vars Additional vars to set to template scope.
  * @return string contents of generated code template
  */
-	public function generate($template, $vars = null) {
-		if ($vars !== null) {
-			$this->set($vars);
-		}
+    public function generate($template, $vars = null)
+    {
+        if ($vars !== null) {
+            $this->set($vars);
+        }
 
-		$this->getView()->set($this->viewVars);
+        $this->getView()->set($this->viewVars);
 
-		try {
-			return $this->View->render($template);
-		} catch (MissingTemplateException $e) {
-			$this->_io->verbose(sprintf('No bake template found for "%s"', $template));
-			return '';
-		}
-	}
-
+        try {
+            return $this->View->render($template);
+        } catch (MissingTemplateException $e) {
+            $this->_io->verbose(sprintf('No bake template found for "%s"', $template));
+            return '';
+        }
+    }
 }

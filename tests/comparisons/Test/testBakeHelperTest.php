@@ -8,37 +8,39 @@ use Cake\View\View;
 /**
  * App\View\Helper\ExampleHelper Test Case
  */
-class ExampleHelperTest extends TestCase {
-
-/**
+class testBakeHelperTest extends TestCase
+{
+    /**
  * setUp method
  *
  * @return void
  */
-	public function setUp() {
-		parent::setUp();
-		$view = new View();
-		$this->Example = new ExampleHelper($view);
-	}
+    public function setUp()
+    {
+        parent::setUp();
+        $view = new View();
+        $this->Example = new ExampleHelper($view);
+    }
 
 /**
  * tearDown method
  *
  * @return void
  */
-	public function tearDown() {
-		unset($this->Example);
+    public function tearDown()
+    {
+        unset($this->Example);
 
-		parent::tearDown();
-	}
+        parent::tearDown();
+    }
 
 /**
  * Test initial setup
  *
  * @return void
  */
-	public function testInitialization() {
-		$this->markTestIncomplete('Not implemented yet.');
-	}
-
+    public function testInitialization()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 }

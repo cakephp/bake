@@ -18,9 +18,9 @@ use Cake\Core\Plugin;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase as ParentTestCase;
 
-abstract class TestCase extends ParentTestCase {
-
-	use StringCompareTrait;
+abstract class TestCase extends ParentTestCase
+{
+    use StringCompareTrait;
 
 /**
  * Load a plugin from the tests folder, and add to the autoloader
@@ -28,14 +28,14 @@ abstract class TestCase extends ParentTestCase {
  * @param string $name plugin name to load
  * @return void
  */
-	protected function _loadTestPlugin($name) {
-		$root = dirname(dirname(__FILE__)) . DS;
-		$path = $root . 'test_app' . DS . 'Plugin' . DS . $name . DS;
+    protected function _loadTestPlugin($name)
+    {
+        $root = dirname(dirname(__FILE__)) . DS;
+        $path = $root . 'test_app' . DS . 'Plugin' . DS . $name . DS;
 
-		Plugin::load($name, [
-			'path' => $path,
-			'autoload' => true
-		]);
-	}
-
+        Plugin::load($name, [
+            'path' => $path,
+            'autoload' => true
+        ]);
+    }
 }
