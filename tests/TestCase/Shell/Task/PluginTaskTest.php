@@ -56,7 +56,6 @@ class PluginTaskTest extends TestCase {
 		touch($this->Task->bootstrap);
 
 		$this->_path = App::path('Plugin');
-
 	}
 
 /**
