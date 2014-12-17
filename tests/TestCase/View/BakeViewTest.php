@@ -30,11 +30,11 @@ class BakeViewTest extends TestCase
 {
     use StringCompareTrait;
 
-/**
- * setUp method
- *
- * @return void
- */
+    /**
+     * setUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -47,22 +47,22 @@ class BakeViewTest extends TestCase
         Configure::write('App.paths.templates.x', Plugin::path('Bake') . 'tests' . DS . 'test_app' . DS . 'App' . DS . 'Template' . DS);
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         parent::tearDown();
         unset($this->View);
     }
 
-/**
- * test rendering a template file
- *
- * @return void
- */
+    /**
+     * test rendering a template file
+     *
+     * @return void
+     */
     public function testRenderTemplate()
     {
         $this->View->set(['aVariable' => 123]);
@@ -72,11 +72,11 @@ class BakeViewTest extends TestCase
         $this->assertSame($expected, $result, 'variables in erb-style tags should be evaluated');
     }
 
-/**
- * verify that php tags are ignored
- *
- * @return void
- */
+    /**
+     * verify that php tags are ignored
+     *
+     * @return void
+     */
     public function testRenderIgnorePhpTags()
     {
         $this->View->set(['aVariable' => 123]);
@@ -86,11 +86,11 @@ class BakeViewTest extends TestCase
         $this->assertSame($expected, $result, 'variables in php tags should be treated as strings');
     }
 
-/**
- * verify that short php tags are ignored
- *
- * @return void
- */
+    /**
+     * verify that short php tags are ignored
+     *
+     * @return void
+     */
     public function testRenderIgnorePhpShortTags()
     {
         $this->View->set(['aVariable' => 123]);
@@ -100,11 +100,11 @@ class BakeViewTest extends TestCase
         $this->assertSame($expected, $result, 'variables in php tags should be treated as strings');
     }
 
-/**
- * Newlines after template tags should act predictably
- *
- * @return void
- */
+    /**
+     * Newlines after template tags should act predictably
+     *
+     * @return void
+     */
     public function testRenderNewlines()
     {
         $result = $this->View->render('newlines');
@@ -120,11 +120,11 @@ class BakeViewTest extends TestCase
         );
     }
 
-/**
- * Verify that template tags with leading whitespace don't leave a mess
- *
- * @return void
- */
+    /**
+     * Verify that template tags with leading whitespace don't leave a mess
+     *
+     * @return void
+     */
     public function testSwallowLeadingWhitespace()
     {
         $result = $this->View->render('leading_whitespace');

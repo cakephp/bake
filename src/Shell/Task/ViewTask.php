@@ -28,83 +28,83 @@ use Cake\Utility\Inflector;
 class ViewTask extends BakeTask
 {
     /**
- * Tasks to be loaded by this Task
- *
- * @var array
- */
+     * Tasks to be loaded by this Task
+     *
+     * @var array
+     */
     public $tasks = [
         'Bake.Model',
         'Bake.Template'
     ];
 
-/**
- * path to View directory
- *
- * @var array
- */
+    /**
+     * path to View directory
+     *
+     * @var array
+     */
     public $pathFragment = 'Template/';
 
-/**
- * Name of the controller being used
- *
- * @var string
- */
+    /**
+     * Name of the controller being used
+     *
+     * @var string
+     */
     public $controllerName = null;
 
-/**
- * Classname of the controller being used
- *
- * @var string
- */
+    /**
+     * Classname of the controller being used
+     *
+     * @var string
+     */
     public $controllerClass = null;
 
-/**
- * Name with plugin of the model being used
- *
- * @var string
- */
+    /**
+     * Name with plugin of the model being used
+     *
+     * @var string
+     */
     public $modelName = null;
 
-/**
- * The template file to use
- *
- * @var string
- */
+    /**
+     * The template file to use
+     *
+     * @var string
+     */
     public $template = null;
 
-/**
- * Actions to use for scaffolding
- *
- * @var array
- */
+    /**
+     * Actions to use for scaffolding
+     *
+     * @var array
+     */
     public $scaffoldActions = ['index', 'view', 'add', 'edit'];
 
-/**
- * An array of action names that don't require templates. These
- * actions will not emit errors when doing bakeActions()
- *
- * @var array
- */
+    /**
+     * An array of action names that don't require templates. These
+     * actions will not emit errors when doing bakeActions()
+     *
+     * @var array
+     */
     public $noTemplateActions = ['delete'];
 
-/**
- * Override initialize
- *
- * @return void
- */
+    /**
+     * Override initialize
+     *
+     * @return void
+     */
     public function initialize()
     {
         $this->path = current(App::path('Template'));
     }
 
-/**
- * Execution method always used for tasks
- *
- * @param string|null $name The name of the controller to bake views for.
- * @param string|null $template The template to bake with.
- * @param string|null $action The action to bake with.
- * @return mixed
- */
+    /**
+     * Execution method always used for tasks
+     *
+     * @param string|null $name The name of the controller to bake views for.
+     * @param string|null $template The template to bake with.
+     * @param string|null $action The action to bake with.
+     * @return mixed
+     */
     public function main($name = null, $template = null, $action = null)
     {
         parent::main();
@@ -147,12 +147,12 @@ class ViewTask extends BakeTask
         }
     }
 
-/**
- * Set the model class for the table.
- *
- * @param string $table The table/model that is being baked.
- * @return void
- */
+    /**
+     * Set the model class for the table.
+     *
+     * @param string $table The table/model that is being baked.
+     * @return void
+     */
     public function model($table)
     {
         $tableName = $this->_camelize($table);
@@ -163,13 +163,13 @@ class ViewTask extends BakeTask
         $this->modelName = $plugin . $tableName;
     }
 
-/**
- * Set the controller related properties.
- *
- * @param string $table The table/model that is being baked.
- * @param string|null $controller The controller name if specified.
- * @return void
- */
+    /**
+     * Set the controller related properties.
+     *
+     * @param string $table The table/model that is being baked.
+     * @param string|null $controller The controller name if specified.
+     * @return void
+     */
     public function controller($table, $controller = null)
     {
         $tableName = $this->_camelize($table);
@@ -188,11 +188,11 @@ class ViewTask extends BakeTask
         $this->controllerClass = App::className($plugin . $prefix . $controller, 'Controller', 'Controller');
     }
 
-/**
- * Get the path base for views.
- *
- * @return string
- */
+    /**
+     * Get the path base for views.
+     *
+     * @return string
+     */
     public function getPath()
     {
         $path = parent::getPath();
@@ -203,11 +203,11 @@ class ViewTask extends BakeTask
         return $path;
     }
 
-/**
- * Get a list of actions that can / should have views baked for them.
- *
- * @return array Array of action names that should be baked
- */
+    /**
+     * Get a list of actions that can / should have views baked for them.
+     *
+     * @return array Array of action names that should be baked
+     */
     protected function _methodsToBake()
     {
         $base = Configure::read('App.namespace');
@@ -230,11 +230,11 @@ class ViewTask extends BakeTask
         return $methods;
     }
 
-/**
- * Bake All views for All controllers.
- *
- * @return void
- */
+    /**
+     * Bake All views for All controllers.
+     *
+     * @return void
+     */
     public function all()
     {
         $this->Model->connection = $this->connection;
@@ -245,23 +245,23 @@ class ViewTask extends BakeTask
         }
     }
 
-/**
- * Loads Controller and sets variables for the template
- * Available template variables:
- *
- * - 'modelClass'
- * - 'primaryKey'
- * - 'displayField'
- * - 'singularVar'
- * - 'pluralVar'
- * - 'singularHumanName'
- * - 'pluralHumanName'
- * - 'fields'
- * - 'keyFields'
- * - 'schema'
- *
- * @return array Returns variables to be made available to a view template
- */
+    /**
+     * Loads Controller and sets variables for the template
+     * Available template variables:
+     *
+     * - 'modelClass'
+     * - 'primaryKey'
+     * - 'displayField'
+     * - 'singularVar'
+     * - 'pluralVar'
+     * - 'singularHumanName'
+     * - 'pluralHumanName'
+     * - 'fields'
+     * - 'keyFields'
+     * - 'schema'
+     *
+     * @return array Returns variables to be made available to a view template
+     */
     protected function _loadController()
     {
         $modelObj = TableRegistry::get($this->modelName);
@@ -292,13 +292,13 @@ class ViewTask extends BakeTask
         );
     }
 
-/**
- * Bake a view file for each of the supplied actions
- *
- * @param array $actions Array of actions to make files for.
- * @param array $vars The context for generating views.
- * @return void
- */
+    /**
+     * Bake a view file for each of the supplied actions
+     *
+     * @param array $actions Array of actions to make files for.
+     * @param array $vars The context for generating views.
+     * @return void
+     */
     public function bakeActions(array $actions, $vars)
     {
         foreach ($actions as $action) {
@@ -307,11 +307,11 @@ class ViewTask extends BakeTask
         }
     }
 
-/**
- * handle creation of baking a custom action view file
- *
- * @return void
- */
+    /**
+     * handle creation of baking a custom action view file
+     *
+     * @return void
+     */
     public function customAction()
     {
         $action = '';
@@ -337,13 +337,13 @@ class ViewTask extends BakeTask
         $this->out('Bake Aborted.');
     }
 
-/**
- * Assembles and writes bakes the view file.
- *
- * @param string $action Action to bake.
- * @param string $content Content to write.
- * @return string Generated file content.
- */
+    /**
+     * Assembles and writes bakes the view file.
+     *
+     * @param string $action Action to bake.
+     * @param string $content Content to write.
+     * @return string Generated file content.
+     */
     public function bake($action, $content = '')
     {
         if ($content === true) {
@@ -359,13 +359,13 @@ class ViewTask extends BakeTask
         return $content;
     }
 
-/**
- * Builds content from template and variables
- *
- * @param string $action name to generate content to
- * @param array|null $vars passed for use in templates
- * @return string content from template
- */
+    /**
+     * Builds content from template and variables
+     *
+     * @param string $action name to generate content to
+     * @param array|null $vars passed for use in templates
+     * @return string content from template
+     */
     public function getContent($action, $vars = null)
     {
         if (!$vars) {
@@ -383,11 +383,11 @@ class ViewTask extends BakeTask
         return $this->Template->generate("Template/$action");
     }
 
-/**
- * Gets the option parser instance and configures it.
- *
- * @return \Cake\Console\ConsoleOptionParser
- */
+    /**
+     * Gets the option parser instance and configures it.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     */
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();
@@ -411,12 +411,12 @@ class ViewTask extends BakeTask
         return $parser;
     }
 
-/**
- * Returns associations for controllers models.
- *
- * @param Table $model The model to build associations for.
- * @return array associations
- */
+    /**
+     * Returns associations for controllers models.
+     *
+     * @param Table $model The model to build associations for.
+     * @return array associations
+     */
     protected function _associations(Table $model)
     {
         $keys = ['BelongsTo', 'HasOne', 'HasMany', 'BelongsToMany'];

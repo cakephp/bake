@@ -22,17 +22,17 @@ use Cake\Shell\BakeShellShell;
 class BakeShellTest extends TestCase
 {
     /**
- * fixtures
- *
- * @var array
- */
+     * fixtures
+     *
+     * @var array
+     */
     public $fixtures = ['core.comments'];
 
-/**
- * setup test
- *
- * @return void
- */
+    /**
+     * setup test
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -46,22 +46,22 @@ class BakeShellTest extends TestCase
         Configure::write('App.namespace', 'TestApp');
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         parent::tearDown();
         unset($this->Shell);
     }
 
-/**
- * test bake all
- *
- * @return void
- */
+    /**
+     * test bake all
+     *
+     * @return void
+     */
     public function testAllWithModelName()
     {
         $this->Shell->Model = $this->getMock('Bake\Shell\Task\ModelTask');
@@ -95,11 +95,11 @@ class BakeShellTest extends TestCase
         $this->Shell->all('Comments');
     }
 
-/**
- * Test the main function.
- *
- * @return void
- */
+    /**
+     * Test the main function.
+     *
+     * @return void
+     */
     public function testMain()
     {
         $this->Shell->expects($this->at(0))
@@ -113,11 +113,11 @@ class BakeShellTest extends TestCase
         $this->Shell->main();
     }
 
-/**
- * Test that the generated option parser reflects all tasks.
- *
- * @return void
- */
+    /**
+     * Test that the generated option parser reflects all tasks.
+     *
+     * @return void
+     */
     public function testGetOptionParser()
     {
         $this->Shell->loadTasks();
@@ -129,11 +129,11 @@ class BakeShellTest extends TestCase
         $this->assertArrayHasKey('model', $commands);
     }
 
-/**
- * Test loading tasks from core directories.
- *
- * @return void
- */
+    /**
+     * Test loading tasks from core directories.
+     *
+     * @return void
+     */
     public function testLoadTasksCoreAndApp()
     {
         $this->Shell->loadTasks();
@@ -156,11 +156,11 @@ class BakeShellTest extends TestCase
         $this->assertEquals($expected, $this->Shell->tasks);
     }
 
-/**
- * Test loading tasks from plugins
- *
- * @return void
- */
+    /**
+     * Test loading tasks from plugins
+     *
+     * @return void
+     */
     public function testLoadTasksPlugin()
     {
         $this->_loadTestPlugin('BakeTest');

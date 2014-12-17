@@ -25,29 +25,29 @@ use Cake\ORM\TableRegistry;
 class ControllerTask extends BakeTask
 {
     /**
- * Tasks to be loaded by this Task
- *
- * @var array
- */
+     * Tasks to be loaded by this Task
+     *
+     * @var array
+     */
     public $tasks = [
         'Bake.Model',
         'Bake.Template',
         'Bake.Test'
     ];
 
-/**
- * Path fragment for generated code.
- *
- * @var string
- */
+    /**
+     * Path fragment for generated code.
+     *
+     * @var string
+     */
     public $pathFragment = 'Controller/';
 
-/**
- * Execution method always used for tasks
- *
- * @param string|null $name The name of the controller to bake.
- * @return void
- */
+    /**
+     * Execution method always used for tasks
+     *
+     * @param string|null $name The name of the controller to bake.
+     * @return void
+     */
     public function main($name = null)
     {
         parent::main();
@@ -65,11 +65,11 @@ class ControllerTask extends BakeTask
         $this->bake($controller);
     }
 
-/**
- * Bake All the controllers at once. Will only bake controllers for models that exist.
- *
- * @return void
- */
+    /**
+     * Bake All the controllers at once. Will only bake controllers for models that exist.
+     *
+     * @return void
+     */
     public function all()
     {
         foreach ($this->listAll() as $table) {
@@ -78,12 +78,12 @@ class ControllerTask extends BakeTask
         }
     }
 
-/**
- * Assembles and writes a Controller file
- *
- * @param string $controllerName Controller name already pluralized and correctly cased.
- * @return string Baked controller
- */
+    /**
+     * Assembles and writes a Controller file
+     *
+     * @param string $controllerName Controller name already pluralized and correctly cased.
+     * @return string Baked controller
+     */
     public function bake($controllerName)
     {
         $this->out("\n" . sprintf('Baking controller class for %s...', $controllerName), 1, Shell::QUIET);
@@ -141,13 +141,13 @@ class ControllerTask extends BakeTask
         return $out;
     }
 
-/**
- * Generate the controller code
- *
- * @param string $controllerName The name of the controller.
- * @param array $data The data to turn into code.
- * @return string The generated controller file.
- */
+    /**
+     * Generate the controller code
+     *
+     * @param string $controllerName The name of the controller.
+     * @param array $data The data to turn into code.
+     * @return string The generated controller file.
+     */
     public function bakeController($controllerName, array $data)
     {
         $data += [
@@ -171,12 +171,12 @@ class ControllerTask extends BakeTask
         return $contents;
     }
 
-/**
- * Gets the path for output. Checks the plugin property
- * and returns the correct path.
- *
- * @return string Path to output.
- */
+    /**
+     * Gets the path for output. Checks the plugin property
+     * and returns the correct path.
+     *
+     * @return string Path to output.
+     */
     public function getPath()
     {
         $path = parent::getPath();
@@ -186,12 +186,12 @@ class ControllerTask extends BakeTask
         return $path;
     }
 
-/**
- * Assembles and writes a unit test file
- *
- * @param string $className Controller class name
- * @return string Baked test
- */
+    /**
+     * Assembles and writes a unit test file
+     *
+     * @param string $className Controller class name
+     * @return string Baked test
+     */
     public function bakeTest($className)
     {
         if (!empty($this->params['no-test'])) {
@@ -205,11 +205,11 @@ class ControllerTask extends BakeTask
         return $this->Test->bake('Controller', $className);
     }
 
-/**
- * Get the list of components for the controller.
- *
- * @return array
- */
+    /**
+     * Get the list of components for the controller.
+     *
+     * @return array
+     */
     public function getComponents()
     {
         $components = [];
@@ -220,11 +220,11 @@ class ControllerTask extends BakeTask
         return $components;
     }
 
-/**
- * Get the list of helpers for the controller.
- *
- * @return array
- */
+    /**
+     * Get the list of helpers for the controller.
+     *
+     * @return array
+     */
     public function getHelpers()
     {
         $helpers = [];
@@ -235,22 +235,22 @@ class ControllerTask extends BakeTask
         return $helpers;
     }
 
-/**
- * Outputs and gets the list of possible controllers from database
- *
- * @return array Set of controllers
- */
+    /**
+     * Outputs and gets the list of possible controllers from database
+     *
+     * @return array Set of controllers
+     */
     public function listAll()
     {
         $this->Model->connection = $this->connection;
         return $this->Model->listAll();
     }
 
-/**
- * Gets the option parser instance and configures it.
- *
- * @return \Cake\Console\ConsoleOptionParser
- */
+    /**
+     * Gets the option parser instance and configures it.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     */
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();

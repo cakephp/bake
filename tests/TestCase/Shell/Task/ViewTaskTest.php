@@ -54,20 +54,20 @@ class ViewTaskCommentsController extends Controller
 {
     public $modelClass = 'Cake\Test\TestCase\Shell\Task\ViewTaskCommentsTable';
 
-/**
- * Testing public controller action
- *
- * @return void
- */
+    /**
+     * Testing public controller action
+     *
+     * @return void
+     */
     public function index()
     {
     }
 
-/**
- * Testing public controller action
- *
- * @return void
- */
+    /**
+     * Testing public controller action
+     *
+     * @return void
+     */
     public function add()
     {
     }
@@ -79,10 +79,10 @@ class ViewTaskCommentsController extends Controller
 class ViewTaskTest extends TestCase
 {
     /**
- * Fixtures
- *
- * @var array
- */
+     * Fixtures
+     *
+     * @var array
+     */
     public $fixtures = [
         'core.articles', 'core.posts', 'core.comments',
         'core.articles_tags',
@@ -91,13 +91,13 @@ class ViewTaskTest extends TestCase
         'core.category_threads',
     ];
 
-/**
- * setUp method
- *
- * Ensure that the default template is used
- *
- * @return void
- */
+    /**
+     * setUp method
+     *
+     * Ensure that the default template is used
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -111,11 +111,11 @@ class ViewTaskTest extends TestCase
         ]);
     }
 
-/**
- * Generate the mock objects used in tests.
- *
- * @return void
- */
+    /**
+     * Generate the mock objects used in tests.
+     *
+     * @return void
+     */
     protected function _setupTask($methods)
     {
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
@@ -128,11 +128,11 @@ class ViewTaskTest extends TestCase
         $this->Task->Model = $this->getMock('Bake\Shell\Task\ModelTask', [], [$io]);
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         parent::tearDown();
@@ -140,11 +140,11 @@ class ViewTaskTest extends TestCase
         unset($this->Task);
     }
 
-/**
- * Test the controller() method.
- *
- * @return void
- */
+    /**
+     * Test the controller() method.
+     *
+     * @return void
+     */
     public function testController()
     {
         $this->Task->controller('Comments');
@@ -155,23 +155,23 @@ class ViewTaskTest extends TestCase
         );
     }
 
-/**
- * Test the controller() method.
- *
- * @dataProvider nameVariations
- * @return void
- */
+    /**
+     * Test the controller() method.
+     *
+     * @dataProvider nameVariations
+     * @return void
+     */
     public function testControllerVariations($name)
     {
         $this->Task->controller($name);
         $this->assertEquals('ViewTaskComments', $this->Task->controllerName);
     }
 
-/**
- * Test controller method with plugins.
- *
- * @return void
- */
+    /**
+     * Test controller method with plugins.
+     *
+     * @return void
+     */
     public function testControllerPlugin()
     {
         $this->Task->params['plugin'] = 'TestPlugin';
@@ -183,11 +183,11 @@ class ViewTaskTest extends TestCase
         );
     }
 
-/**
- * Test controller method with prefixes.
- *
- * @return void
- */
+    /**
+     * Test controller method with prefixes.
+     *
+     * @return void
+     */
     public function testControllerPrefix()
     {
         $this->Task->params['prefix'] = 'Admin';
@@ -207,11 +207,11 @@ class ViewTaskTest extends TestCase
         );
     }
 
-/**
- * test controller with a non-conventional controller name
- *
- * @return void
- */
+    /**
+     * test controller with a non-conventional controller name
+     *
+     * @return void
+     */
     public function testControllerWithOverride()
     {
         $this->Task->controller('Comments', 'Posts');
@@ -222,11 +222,11 @@ class ViewTaskTest extends TestCase
         );
     }
 
-/**
- * Test the model() method.
- *
- * @return void
- */
+    /**
+     * Test the model() method.
+     *
+     * @return void
+     */
     public function testModel()
     {
         $this->Task->model('Articles');
@@ -236,11 +236,11 @@ class ViewTaskTest extends TestCase
         $this->assertEquals('NotThere', $this->Task->modelName);
     }
 
-/**
- * Test model() method with plugins.
- *
- * @return void
- */
+    /**
+     * Test model() method with plugins.
+     *
+     * @return void
+     */
     public function testModelPlugin()
     {
         $this->Task->params['plugin'] = 'TestPlugin';
@@ -251,11 +251,11 @@ class ViewTaskTest extends TestCase
         );
     }
 
-/**
- * Test getPath()
- *
- * @return void
- */
+    /**
+     * Test getPath()
+     *
+     * @return void
+     */
     public function testGetPath()
     {
         $this->Task->controllerName = 'Posts';
@@ -268,11 +268,11 @@ class ViewTaskTest extends TestCase
         $this->assertPathEquals(APP . 'Template/Admin/Posts/', $result);
     }
 
-/**
- * Test getPath with plugins.
- *
- * @return void
- */
+    /**
+     * Test getPath with plugins.
+     *
+     * @return void
+     */
     public function testGetPathPlugin()
     {
         $this->Task->controllerName = 'Posts';
@@ -291,11 +291,11 @@ class ViewTaskTest extends TestCase
         Plugin::unload('TestView');
     }
 
-/**
- * Test getContent and parsing of Templates.
- *
- * @return void
- */
+    /**
+     * Test getContent and parsing of Templates.
+     *
+     * @return void
+     */
     public function testGetContent()
     {
         $vars = [
@@ -315,11 +315,11 @@ class ViewTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
 
-/**
- * Test getContent with associations
- *
- * @return void
- */
+    /**
+     * Test getContent with associations
+     *
+     * @return void
+     */
     public function testGetContentAssociations()
     {
         $vars = [
@@ -352,11 +352,11 @@ class ViewTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
 
-/**
- * Test getContent with no pk
- *
- * @return void
- */
+    /**
+     * Test getContent with no pk
+     *
+     * @return void
+     */
     public function testGetContentWithNoPrimaryKey()
     {
         $vars = [
@@ -380,11 +380,11 @@ class ViewTaskTest extends TestCase
         $this->assertFalse($result);
     }
 
-/**
- * test getContent() using a routing prefix action.
- *
- * @return void
- */
+    /**
+     * test getContent() using a routing prefix action.
+     *
+     * @return void
+     */
     public function testGetContentWithRoutingPrefix()
     {
         $vars = [
@@ -408,11 +408,11 @@ class ViewTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '-add.ctp', $result);
     }
 
-/**
- * test Bake method
- *
- * @return void
- */
+    /**
+     * test Bake method
+     *
+     * @return void
+     */
     public function testBakeView()
     {
         $this->Task->controllerName = 'ViewTaskComments';
@@ -429,11 +429,11 @@ class ViewTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
 
-/**
- * test baking an edit file
- *
- * @return void
- */
+    /**
+     * test baking an edit file
+     *
+     * @return void
+     */
     public function testBakeEdit()
     {
         $this->Task->controllerName = 'ViewTaskComments';
@@ -448,11 +448,11 @@ class ViewTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
 
-/**
- * test baking an index
- *
- * @return void
- */
+    /**
+     * test baking an index
+     *
+     * @return void
+     */
     public function testBakeIndex()
     {
         $this->Task->controllerName = 'ViewTaskComments';
@@ -467,11 +467,11 @@ class ViewTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
 
-/**
- * test Bake with plugins
- *
- * @return void
- */
+    /**
+     * test Bake with plugins
+     *
+     * @return void
+     */
     public function testBakeIndexPlugin()
     {
         $this->Task->controllerName = 'ViewTaskComments';
@@ -490,12 +490,12 @@ class ViewTaskTest extends TestCase
         $this->Task->bake('index', true);
     }
 
-/**
- * Ensure that models associated with themselves do not have action
- * links generated.
- *
- * @return void
- */
+    /**
+     * Ensure that models associated with themselves do not have action
+     * links generated.
+     *
+     * @return void
+     */
     public function testBakeSelfAssociations()
     {
         $this->Task->controllerName = 'CategoryThreads';
@@ -511,11 +511,11 @@ class ViewTaskTest extends TestCase
         $this->Task->bake('index', true);
     }
 
-/**
- * test that baking a view with no template doesn't make a file.
- *
- * @return void
- */
+    /**
+     * test that baking a view with no template doesn't make a file.
+     *
+     * @return void
+     */
     public function testBakeWithNoTemplate()
     {
         $this->Task->controllerName = 'ViewTaskComments';
@@ -526,11 +526,11 @@ class ViewTaskTest extends TestCase
         $this->Task->bake('delete', true);
     }
 
-/**
- * test bake actions baking multiple actions.
- *
- * @return void
- */
+    /**
+     * test bake actions baking multiple actions.
+     *
+     * @return void
+     */
     public function testBakeActions()
     {
         $this->Task->controllerName = 'ViewTaskComments';
@@ -557,11 +557,11 @@ class ViewTaskTest extends TestCase
         $this->Task->bakeActions(['view', 'edit', 'index'], []);
     }
 
-/**
- * test baking a customAction (non crud)
- *
- * @return void
- */
+    /**
+     * test baking a customAction (non crud)
+     *
+     * @return void
+     */
     public function testCustomAction()
     {
         $this->Task->controllerName = 'ViewTaskComments';
@@ -579,11 +579,11 @@ class ViewTaskTest extends TestCase
         $this->Task->customAction();
     }
 
-/**
- * Test execute no args.
- *
- * @return void
- */
+    /**
+     * Test execute no args.
+     *
+     * @return void
+     */
     public function testMainNoArgs()
     {
         $this->_setupTask(['in', 'err', 'bake', 'createFile', '_stop']);
@@ -598,11 +598,11 @@ class ViewTaskTest extends TestCase
         $this->Task->main();
     }
 
-/**
- * Test all() calls execute
- *
- * @return void
- */
+    /**
+     * Test all() calls execute
+     *
+     * @return void
+     */
     public function testAllCallsMain()
     {
         $this->_setupTask(['in', 'err', 'createFile', 'main', '_stop']);
@@ -623,11 +623,11 @@ class ViewTaskTest extends TestCase
         $this->Task->all();
     }
 
-/**
- * test `cake bake view $controller view`
- *
- * @return void
- */
+    /**
+     * test `cake bake view $controller view`
+     *
+     * @return void
+     */
     public function testMainWithActionParam()
     {
         $this->_setupTask(['in', 'err', 'createFile', 'bake', '_stop']);
@@ -639,12 +639,12 @@ class ViewTaskTest extends TestCase
         $this->Task->main('ViewTaskComments', 'view');
     }
 
-/**
- * test `cake bake view $controller`
- * Ensure that views are only baked for actions that exist in the controller.
- *
- * @return void
- */
+    /**
+     * test `cake bake view $controller`
+     * Ensure that views are only baked for actions that exist in the controller.
+     *
+     * @return void
+     */
     public function testMainWithController()
     {
         $this->_setupTask(['in', 'err', 'createFile', 'bake', '_stop']);
@@ -671,11 +671,11 @@ class ViewTaskTest extends TestCase
         $this->Task->main('ViewTaskComments');
     }
 
-/**
- * test that plugin.name works.
- *
- * @return void
- */
+    /**
+     * test that plugin.name works.
+     *
+     * @return void
+     */
     public function testMainWithPluginName()
     {
         $this->_setupTask(['in', 'err', 'createFile']);
@@ -691,21 +691,21 @@ class ViewTaskTest extends TestCase
         $this->Task->main('TestView.ViewTaskComments');
     }
 
-/**
- * static dataprovider for test cases
- *
- * @return void
- */
+    /**
+     * static dataprovider for test cases
+     *
+     * @return void
+     */
     public static function nameVariations()
     {
         return [['ViewTaskComments'], ['view_task_comments']];
     }
 
-/**
- * test `cake bake view $table --controller Blog`
- *
- * @return void
- */
+    /**
+     * test `cake bake view $table --controller Blog`
+     *
+     * @return void
+     */
     public function testMainWithControllerFlag()
     {
         $this->Task->params['controller'] = 'Blog';
@@ -723,11 +723,11 @@ class ViewTaskTest extends TestCase
         $this->Task->main('Posts');
     }
 
-/**
- * test `cake bake view $controller --prefix Admin`
- *
- * @return void
- */
+    /**
+     * test `cake bake view $controller --prefix Admin`
+     *
+     * @return void
+     */
     public function testMainWithControllerAndAdminFlag()
     {
         $this->Task->params['prefix'] = 'Admin';
@@ -745,11 +745,11 @@ class ViewTaskTest extends TestCase
         $this->Task->main('Posts');
     }
 
-/**
- * test `cake bake view posts index list`
- *
- * @return void
- */
+    /**
+     * test `cake bake view posts index list`
+     *
+     * @return void
+     */
     public function testMainWithAlternateTemplates()
     {
         $this->_setupTask(['in', 'err', 'createFile', 'bake', '_stop']);

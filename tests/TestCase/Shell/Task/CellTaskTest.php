@@ -25,10 +25,10 @@ use Cake\Core\Plugin;
 class CellTaskTest extends TestCase
 {
     /**
- * setup method
- *
- * @return void
- */
+     * setup method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -49,11 +49,11 @@ class CellTaskTest extends TestCase
         $this->Task->Template->interactive = false;
     }
 
-/**
- * Test the excute method.
- *
- * @return void
- */
+    /**
+     * Test the excute method.
+     *
+     * @return void
+     */
     public function testMain()
     {
         $this->Task->Test->expects($this->once())
@@ -76,11 +76,11 @@ class CellTaskTest extends TestCase
         $this->Task->main('Example');
     }
 
-/**
- * Test main within a plugin.
- *
- * @return void
- */
+    /**
+     * Test main within a plugin.
+     *
+     * @return void
+     */
     public function testMainPlugin()
     {
         $this->_loadTestPlugin('TestBake');
@@ -102,11 +102,11 @@ class CellTaskTest extends TestCase
         $this->Task->main('TestBake.Example');
     }
 
-/**
- * Test baking within a plugin.
- *
- * @return void
- */
+    /**
+     * Test baking within a plugin.
+     *
+     * @return void
+     */
     public function testBakePlugin()
     {
         $this->_loadTestPlugin('TestBake');

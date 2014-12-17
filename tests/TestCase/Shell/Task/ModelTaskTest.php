@@ -28,13 +28,13 @@ use Cake\Utility\ClassRegistry;
 class ModelTaskTest extends TestCase
 {
     /**
- * fixtures
- *
- * Don't sort this list alphabetically - otherwise there are table constraints
- * which fail when using postgres
- *
- * @var array
- */
+     * fixtures
+     *
+     * Don't sort this list alphabetically - otherwise there are table constraints
+     * which fail when using postgres
+     *
+     * @var array
+     */
     public $fixtures = [
         'plugin.bake.bake_articles',
         'plugin.bake.bake_comments',
@@ -49,11 +49,11 @@ class ModelTaskTest extends TestCase
         'core.articles_tags'
     ];
 
-/**
- * setUp method
- *
- * @return void
- */
+    /**
+     * setUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -69,11 +69,11 @@ class ModelTaskTest extends TestCase
         TableRegistry::clear();
     }
 
-/**
- * Setup a mock that has out mocked. Normally this is not used as it makes $this->at() really tricky.
- *
- * @return void
- */
+    /**
+     * Setup a mock that has out mocked. Normally this is not used as it makes $this->at() really tricky.
+     *
+     * @return void
+     */
     protected function _useMockedOut()
     {
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
@@ -85,11 +85,11 @@ class ModelTaskTest extends TestCase
         $this->_setupOtherMocks();
     }
 
-/**
- * sets up the rest of the dependencies for Model Task
- *
- * @return void
- */
+    /**
+     * sets up the rest of the dependencies for Model Task
+     *
+     * @return void
+     */
     protected function _setupOtherMocks()
     {
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
@@ -102,11 +102,11 @@ class ModelTaskTest extends TestCase
         $this->Task->name = 'Model';
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         parent::tearDown();
@@ -114,11 +114,11 @@ class ModelTaskTest extends TestCase
         $this->fixtureManager->shutDown();
     }
 
-/**
- * Test that listAll uses the connection property
- *
- * @return void
- */
+    /**
+     * Test that listAll uses the connection property
+     *
+     * @return void
+     */
     public function testListAllConnection()
     {
         $this->_useMockedOut();
@@ -132,11 +132,11 @@ class ModelTaskTest extends TestCase
         $this->assertContains('category_threads', $result);
     }
 
-/**
- * Test getName() method.
- *
- * @return void
- */
+    /**
+     * Test getName() method.
+     *
+     * @return void
+     */
     public function testGetTable()
     {
         $result = $this->Task->getTable('BakeArticles');
@@ -147,11 +147,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals('bake_articles', $result);
     }
 
-/**
- * Test getting the a table class.
- *
- * @return void
- */
+    /**
+     * Test getting the a table class.
+     *
+     * @return void
+     */
     public function testGetTableObject()
     {
         $result = $this->Task->getTableObject('Article', 'bake_articles');
@@ -160,11 +160,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals('Article', $result->alias());
     }
 
-/**
- * Test getAssociations with off flag.
- *
- * @return void
- */
+    /**
+     * Test getAssociations with off flag.
+     *
+     * @return void
+     */
     public function testGetAssociationsNoFlag()
     {
         $this->Task->params['no-associations'] = true;
@@ -172,11 +172,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals([], $this->Task->getAssociations($articles));
     }
 
-/**
- * Test applying associations.
- *
- * @return void
- */
+    /**
+     * Test applying associations.
+     *
+     * @return void
+     */
     public function testApplyAssociations()
     {
         $articles = TableRegistry::get('BakeArticles');
@@ -211,11 +211,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $new);
     }
 
-/**
- * Test applying associations does nothing on a concrete class
- *
- * @return void
- */
+    /**
+     * Test applying associations does nothing on a concrete class
+     *
+     * @return void
+     */
     public function testApplyAssociationsConcreteClass()
     {
         Configure::write('App.namespace', 'TestApp');
@@ -248,11 +248,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($original, $new);
     }
 
-/**
- * Test getAssociations
- *
- * @return void
- */
+    /**
+     * Test getAssociations
+     *
+     * @return void
+     */
     public function testGetAssociations()
     {
         $articles = TableRegistry::get('BakeArticles');
@@ -282,11 +282,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test getAssociations in a plugin
- *
- * @return void
- */
+    /**
+     * Test getAssociations in a plugin
+     *
+     * @return void
+     */
     public function testGetAssociationsPlugin()
     {
         $articles = TableRegistry::get('BakeArticles');
@@ -321,11 +321,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * test that belongsTo generation works.
- *
- * @return void
- */
+    /**
+     * test that belongsTo generation works.
+     *
+     * @return void
+     */
     public function testBelongsToGeneration()
     {
         $model = TableRegistry::get('BakeComments');
@@ -371,12 +371,12 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test that belongsTo generation works for models with composite
- * primary keys
- *
- * @return void
- */
+    /**
+     * Test that belongsTo generation works for models with composite
+     * primary keys
+     *
+     * @return void
+     */
     public function testBelongsToGenerationCompositeKey()
     {
         $model = TableRegistry::get('ArticlesTags');
@@ -396,11 +396,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test that belongsTo generation ignores _id mid-column
- *
- * @return void
- */
+    /**
+     * Test that belongsTo generation ignores _id mid-column
+     *
+     * @return void
+     */
     public function testBelongsToGenerationIdMidColumn()
     {
         $model = TableRegistry::get('Articles');
@@ -412,11 +412,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals([], $result);
     }
 
-/**
- * test that hasOne and/or hasMany relations are generated properly.
- *
- * @return void
- */
+    /**
+     * test that hasOne and/or hasMany relations are generated properly.
+     *
+     * @return void
+     */
     public function testHasManyGeneration()
     {
         $this->Task->connection = 'test';
@@ -459,11 +459,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test that HABTM generation works
- *
- * @return void
- */
+    /**
+     * Test that HABTM generation works
+     *
+     * @return void
+     */
     public function testHasAndBelongsToManyGeneration()
     {
         $this->Task->connection = 'test';
@@ -482,11 +482,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test getting accessible fields.
- *
- * @return void
- */
+    /**
+     * Test getting accessible fields.
+     *
+     * @return void
+     */
     public function testGetFields()
     {
         $model = TableRegistry::get('BakeArticles');
@@ -500,11 +500,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test getting accessible fields includes associations.
- *
- * @return void
- */
+    /**
+     * Test getting accessible fields includes associations.
+     *
+     * @return void
+     */
     public function testGetFieldsAssociations()
     {
         $model = TableRegistry::get('BakeArticles');
@@ -518,11 +518,11 @@ class ModelTaskTest extends TestCase
         $this->assertContains('bake_author', $result);
     }
 
-/**
- * Test getting field with the no- option
- *
- * @return void
- */
+    /**
+     * Test getting field with the no- option
+     *
+     * @return void
+     */
     public function testGetFieldsDisabled()
     {
         $model = TableRegistry::get('BakeArticles');
@@ -531,11 +531,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals([], $result);
     }
 
-/**
- * Test getting field with a whitelist
- *
- * @return void
- */
+    /**
+     * Test getting field with a whitelist
+     *
+     * @return void
+     */
     public function testGetFieldsWhiteList()
     {
         $model = TableRegistry::get('BakeArticles');
@@ -550,11 +550,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test getting hidden fields.
- *
- * @return void
- */
+    /**
+     * Test getting hidden fields.
+     *
+     * @return void
+     */
     public function testGetHiddenFields()
     {
         $model = TableRegistry::get('Users');
@@ -565,11 +565,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test getting hidden field with the no- option
- *
- * @return void
- */
+    /**
+     * Test getting hidden field with the no- option
+     *
+     * @return void
+     */
     public function testGetHiddenFieldsDisabled()
     {
         $model = TableRegistry::get('Users');
@@ -578,11 +578,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals([], $result);
     }
 
-/**
- * Test getting hidden field with a whitelist
- *
- * @return void
- */
+    /**
+     * Test getting hidden field with a whitelist
+     *
+     * @return void
+     */
     public function testGetHiddenFieldsWhiteList()
     {
         $model = TableRegistry::get('Users');
@@ -597,11 +597,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test getting primary key
- *
- * @return void
- */
+    /**
+     * Test getting primary key
+     *
+     * @return void
+     */
     public function testGetPrimaryKey()
     {
         $model = TableRegistry::get('BakeArticles');
@@ -614,11 +614,11 @@ class ModelTaskTest extends TestCase
         $expected = ['id', 'account_id'];
         $this->assertEquals($expected, $result);
     }
-/**
- * test getting validation rules with the no-validation rule.
- *
- * @return void
- */
+    /**
+     * test getting validation rules with the no-validation rule.
+     *
+     * @return void
+     */
     public function testGetValidationDisabled()
     {
         $model = TableRegistry::get('BakeArticles');
@@ -627,11 +627,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals([], $result);
     }
 
-/**
- * test getting validation rules.
- *
- * @return void
- */
+    /**
+     * test getting validation rules.
+     *
+     * @return void
+     */
     public function testGetValidation()
     {
         $model = TableRegistry::get('BakeArticles');
@@ -657,11 +657,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Tests that a username column will get a validateUnique rule applied
- *
- * @return void
- */
+    /**
+     * Tests that a username column will get a validateUnique rule applied
+     *
+     * @return void
+     */
     public function testGetValidationWithUnique()
     {
         $model = TableRegistry::get('Users');
@@ -683,11 +683,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * test non interactive doActsAs
- *
- * @return void
- */
+    /**
+     * test non interactive doActsAs
+     *
+     * @return void
+     */
     public function testGetBehaviors()
     {
         $model = TableRegistry::get('NumberTrees');
@@ -712,11 +712,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * Test getDisplayField() method.
- *
- * @return void
- */
+    /**
+     * Test getDisplayField() method.
+     *
+     * @return void
+     */
     public function testGetDisplayField()
     {
         $model = TableRegistry::get('BakeArticles');
@@ -728,11 +728,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals('custom', $result);
     }
 
-/**
- * Ensure that the fixture object is correctly called.
- *
- * @return void
- */
+    /**
+     * Ensure that the fixture object is correctly called.
+     *
+     * @return void
+     */
     public function testBakeFixture()
     {
         $this->Task->plugin = 'TestBake';
@@ -746,11 +746,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($this->Task->interactive, $this->Task->Fixture->interactive);
     }
 
-/**
- * Ensure that the fixture baking can be disabled
- *
- * @return void
- */
+    /**
+     * Ensure that the fixture baking can be disabled
+     *
+     * @return void
+     */
     public function testBakeFixtureDisabled()
     {
         $this->Task->params['no-fixture'] = true;
@@ -760,11 +760,11 @@ class ModelTaskTest extends TestCase
         $this->Task->bakeFixture('BakeArticle', 'bake_articles');
     }
 
-/**
- * Ensure that the test object is correctly called.
- *
- * @return void
- */
+    /**
+     * Ensure that the test object is correctly called.
+     *
+     * @return void
+     */
     public function testBakeTest()
     {
         $this->Task->plugin = 'TestBake';
@@ -778,11 +778,11 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($this->Task->interactive, $this->Task->Test->interactive);
     }
 
-/**
- * Ensure that test baking can be disabled.
- *
- * @return void
- */
+    /**
+     * Ensure that test baking can be disabled.
+     *
+     * @return void
+     */
     public function testBakeTestDisabled()
     {
         $this->Task->params['no-test'] = true;
@@ -792,11 +792,11 @@ class ModelTaskTest extends TestCase
         $this->Task->bakeTest('BakeArticle');
     }
 
-/**
- * test baking validation
- *
- * @return void
- */
+    /**
+     * test baking validation
+     *
+     * @return void
+     */
     public function testBakeTableValidation()
     {
         $validation = [
@@ -828,11 +828,11 @@ class ModelTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test baking
- *
- * @return void
- */
+    /**
+     * test baking
+     *
+     * @return void
+     */
     public function testBakeTableConfig()
     {
         $config = [
@@ -846,11 +846,11 @@ class ModelTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test baking relations
- *
- * @return void
- */
+    /**
+     * test baking relations
+     *
+     * @return void
+     */
     public function testBakeTableRelations()
     {
         $associations = [
@@ -884,11 +884,11 @@ class ModelTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test baking an entity class
- *
- * @return void
- */
+    /**
+     * test baking an entity class
+     *
+     * @return void
+     */
     public function testBakeEntity()
     {
         $config = [
@@ -899,11 +899,11 @@ class ModelTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test baking an entity class
- *
- * @return void
- */
+    /**
+     * test baking an entity class
+     *
+     * @return void
+     */
     public function testBakeEntityFields()
     {
         $config = [
@@ -914,11 +914,11 @@ class ModelTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test baking an entity class sets hidden fields.
- *
- * @return void
- */
+    /**
+     * test baking an entity class sets hidden fields.
+     *
+     * @return void
+     */
     public function testBakeEntityHidden()
     {
         $model = TableRegistry::get('BakeUsers');
@@ -929,11 +929,11 @@ class ModelTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test bake() with a -plugin param
- *
- * @return void
- */
+    /**
+     * test bake() with a -plugin param
+     *
+     * @return void
+     */
     public function testBakeTableWithPlugin()
     {
         $this->Task->plugin = 'ModelTest';
@@ -949,11 +949,11 @@ class ModelTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test bake() with a -plugin param
- *
- * @return void
- */
+    /**
+     * test bake() with a -plugin param
+     *
+     * @return void
+     */
     public function testBakeEntityWithPlugin()
     {
         $this->Task->plugin = 'ModelTest';
@@ -970,11 +970,11 @@ class ModelTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test that execute with no args
- *
- * @return void
- */
+    /**
+     * test that execute with no args
+     *
+     * @return void
+     */
     public function testMainNoArgs()
     {
         $this->_useMockedOut();
@@ -988,11 +988,11 @@ class ModelTaskTest extends TestCase
         $this->Task->main();
     }
 
-/**
- * test that execute passes runs bake depending with named model.
- *
- * @return void
- */
+    /**
+     * test that execute passes runs bake depending with named model.
+     *
+     * @return void
+     */
     public function testMainWithNamedModel()
     {
         $this->Task->connection = 'test';
@@ -1010,11 +1010,11 @@ class ModelTaskTest extends TestCase
         $this->Task->main('BakeArticles');
     }
 
-/**
- * data provider for testMainWithNamedModelVariations
- *
- * @return void
- */
+    /**
+     * data provider for testMainWithNamedModelVariations
+     *
+     * @return void
+     */
     public static function nameVariations()
     {
         return [
@@ -1022,12 +1022,12 @@ class ModelTaskTest extends TestCase
         ];
     }
 
-/**
- * test that execute passes with different inflections of the same name.
- *
- * @dataProvider nameVariations
- * @return void
- */
+    /**
+     * test that execute passes with different inflections of the same name.
+     *
+     * @dataProvider nameVariations
+     * @return void
+     */
     public function testMainWithNamedModelVariations($name)
     {
         $this->Task->connection = 'test';
@@ -1040,11 +1040,11 @@ class ModelTaskTest extends TestCase
         $this->Task->main($name);
     }
 
-/**
- * test that execute runs all() when args[0] = all
- *
- * @return void
- */
+    /**
+     * test that execute runs all() when args[0] = all
+     *
+     * @return void
+     */
     public function testMainIntoAll()
     {
         $count = count($this->Task->listAll());
@@ -1122,11 +1122,11 @@ class ModelTaskTest extends TestCase
         $this->Task->all();
     }
 
-/**
- * test that skipTables changes how all() works.
- *
- * @return void
- */
+    /**
+     * test that skipTables changes how all() works.
+     *
+     * @return void
+     */
     public function testSkipTablesAndAll()
     {
         $count = count($this->Task->listAll('test'));

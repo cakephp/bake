@@ -10,19 +10,19 @@ use TestApp\Controller\PostsController;
 class testBakeControllerTest extends IntegrationTestCase
 {
     /**
- * Fixtures
- *
- * @var array
- */
+     * Fixtures
+     *
+     * @var array
+     */
     public $fixtures = [
         'Posts' => 'app.posts'
     ];
 
-/**
- * Test index method
- *
- * @return void
- */
+    /**
+     * Test index method
+     *
+     * @return void
+     */
     public function testIndex()
     {
         $this->markTestIncomplete('Not implemented yet.');

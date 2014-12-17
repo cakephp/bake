@@ -20,31 +20,31 @@ namespace Bake\Shell\Task;
 class ComponentTask extends SimpleBakeTask
 {
     /**
- * Task name used in path generation.
- *
- * @var string
- */
+     * Task name used in path generation.
+     *
+     * @var string
+     */
     public $pathFragment = 'Controller/Component/';
 
-/**
- * {@inheritDoc}
- */
+    /**
+     * {@inheritDoc}
+     */
     public function name()
     {
         return 'component';
     }
 
-/**
- * {@inheritDoc}
- */
+    /**
+     * {@inheritDoc}
+     */
     public function fileName($name)
     {
         return $name . 'Component.php';
     }
 
-/**
- * {@inheritDoc}
- */
+    /**
+     * {@inheritDoc}
+     */
     public function template()
     {
         return 'Controller/component';

@@ -25,10 +25,10 @@ use Cake\Core\Plugin;
 class SimpleBakeTaskTest extends TestCase
 {
     /**
- * setup method
- *
- * @return void
- */
+     * setup method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -63,11 +63,11 @@ class SimpleBakeTaskTest extends TestCase
             ->will($this->returnValue('ExampleBehavior.php'));
     }
 
-/**
- * Test the main method.
- *
- * @return void
- */
+    /**
+     * Test the main method.
+     *
+     * @return void
+     */
     public function testMain()
     {
         $this->Task->expects($this->once())
@@ -83,11 +83,11 @@ class SimpleBakeTaskTest extends TestCase
         $this->Task->main('Example');
     }
 
-/**
- * Test the main with plugin.name method.
- *
- * @return void
- */
+    /**
+     * Test the main with plugin.name method.
+     *
+     * @return void
+     */
     public function testMainWithPlugin()
     {
         Plugin::load('SimpleBakeTest', ['path' => APP . 'Plugin' . DS . 'SimpleBakeTest' . DS]);
@@ -105,11 +105,11 @@ class SimpleBakeTaskTest extends TestCase
         $this->Task->main('SimpleBakeTest.Example');
     }
 
-/**
- * Test generating code.
- *
- * @return void
- */
+    /**
+     * Test generating code.
+     *
+     * @return void
+     */
     public function testBake()
     {
         Configure::write('App.namespace', 'TestApp');
@@ -125,11 +125,11 @@ class SimpleBakeTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * Test bakeTest
- *
- * @return void
- */
+    /**
+     * Test bakeTest
+     *
+     * @return void
+     */
     public function testBakeTest()
     {
         $this->Task->plugin = 'TestBake';
@@ -141,11 +141,11 @@ class SimpleBakeTaskTest extends TestCase
         $this->assertEquals($this->Task->plugin, $this->Task->Test->plugin);
     }
 
-/**
- * Test the no-test option.
- *
- * @return void
- */
+    /**
+     * Test the no-test option.
+     *
+     * @return void
+     */
     public function testBakeTestNoTest()
     {
         $this->Task->params['no-test'] = true;
@@ -155,11 +155,11 @@ class SimpleBakeTaskTest extends TestCase
         $result = $this->Task->bakeTest('Example');
     }
 
-/**
- * Test baking within a plugin.
- *
- * @return void
- */
+    /**
+     * Test baking within a plugin.
+     *
+     * @return void
+     */
     public function testBakePlugin()
     {
         $this->_loadTestPlugin('TestBake');
@@ -178,11 +178,11 @@ class SimpleBakeTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * Provider for subclasses.
- *
- * @return array
- */
+    /**
+     * Provider for subclasses.
+     *
+     * @return array
+     */
     public function subclassProvider()
     {
         return [
@@ -193,12 +193,12 @@ class SimpleBakeTaskTest extends TestCase
         ];
     }
 
-/**
- * Test that the various implementations are sane.
- *
- * @dataProvider subclassProvider
- * @return void
- */
+    /**
+     * Test that the various implementations are sane.
+     *
+     * @dataProvider subclassProvider
+     * @return void
+     */
     public function testImplementations($class)
     {
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);

@@ -26,17 +26,17 @@ use Cake\ORM\TableRegistry;
 class FixtureTaskTest extends TestCase
 {
     /**
- * fixtures
- *
- * @var array
- */
+     * fixtures
+     *
+     * @var array
+     */
     public $fixtures = ['core.articles', 'core.comments', 'core.datatypes', 'core.binary_tests', 'core.users'];
 
-/**
- * setUp method
- *
- * @return void
- */
+    /**
+     * setUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -55,22 +55,22 @@ class FixtureTaskTest extends TestCase
         $this->Task->Template->initialize();
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         parent::tearDown();
         unset($this->Task);
     }
 
-/**
- * Test that initialize() copies the connection property over.
- *
- * @return void
- */
+    /**
+     * Test that initialize() copies the connection property over.
+     *
+     * @return void
+     */
     public function testInitializeCopyConnection()
     {
         $this->assertEquals('', $this->Task->connection);
@@ -80,21 +80,21 @@ class FixtureTaskTest extends TestCase
         $this->assertEquals('test', $this->Task->connection);
     }
 
-/**
- * test that initialize sets the path
- *
- * @return void
- */
+    /**
+     * test that initialize sets the path
+     *
+     * @return void
+     */
     public function testGetPath()
     {
         $this->assertPathEquals(APP . 'tests/Fixture/', $this->Task->getPath());
     }
 
-/**
- * test generating a fixture with database conditions.
- *
- * @return void
- */
+    /**
+     * test generating a fixture with database conditions.
+     *
+     * @return void
+     */
     public function testImportRecordsFromDatabaseWithConditionsPoo()
     {
         $this->Task->connection = 'test';
@@ -112,11 +112,11 @@ class FixtureTaskTest extends TestCase
         $this->assertContains('Third Article', $result, 'Missing import data %s');
     }
 
-/**
- * test that connection gets set to the import options when a different connection is used.
- *
- * @return void
- */
+    /**
+     * test that connection gets set to the import options when a different connection is used.
+     *
+     * @return void
+     */
     public function testImportOptionsAlternateConnection()
     {
         $this->Task->connection = 'test';
@@ -125,11 +125,11 @@ class FixtureTaskTest extends TestCase
         $this->assertContains("'connection' => 'test'", $result);
     }
 
-/**
- * Ensure that fixture data doesn't get overly escaped.
- *
- * @return void
- */
+    /**
+     * Ensure that fixture data doesn't get overly escaped.
+     *
+     * @return void
+     */
     public function testImportRecordsNoEscaping()
     {
         $articles = TableRegistry::get('Articles');
@@ -141,11 +141,11 @@ class FixtureTaskTest extends TestCase
         $this->assertContains("'body' => 'Body \"value\"'", $result, 'Data has bad escaping');
     }
 
-/**
- * Test the table option.
- *
- * @return void
- */
+    /**
+     * Test the table option.
+     *
+     * @return void
+     */
     public function testMainWithTableOption()
     {
         $this->Task->connection = 'test';
@@ -159,11 +159,11 @@ class FixtureTaskTest extends TestCase
         $this->Task->main('articles');
     }
 
-/**
- * test that execute passes runs bake depending with named model.
- *
- * @return void
- */
+    /**
+     * test that execute passes runs bake depending with named model.
+     *
+     * @return void
+     */
     public function testMainWithPluginModel()
     {
         $this->Task->connection = 'test';
@@ -178,11 +178,11 @@ class FixtureTaskTest extends TestCase
         $this->Task->main('FixtureTest.Articles');
     }
 
-/**
- * test that execute runs all() when args[0] = all
- *
- * @return void
- */
+    /**
+     * test that execute runs all() when args[0] = all
+     *
+     * @return void
+     */
     public function testMainIntoAll()
     {
         $this->Task->connection = 'test';
@@ -203,11 +203,11 @@ class FixtureTaskTest extends TestCase
         $this->Task->all();
     }
 
-/**
- * test using all() with -count and -records
- *
- * @return void
- */
+    /**
+     * test using all() with -count and -records
+     *
+     * @return void
+     */
     public function testAllWithCountAndRecordsFlags()
     {
         $this->Task->connection = 'test';
@@ -231,11 +231,11 @@ class FixtureTaskTest extends TestCase
         $this->Task->all();
     }
 
-/**
- * test using all() with -schema
- *
- * @return void
- */
+    /**
+     * test using all() with -schema
+     *
+     * @return void
+     */
     public function testAllWithSchemaImport()
     {
         $this->Task->connection = 'test';
@@ -256,11 +256,11 @@ class FixtureTaskTest extends TestCase
         $this->Task->all();
     }
 
-/**
- * test interactive mode of execute
- *
- * @return void
- */
+    /**
+     * test interactive mode of execute
+     *
+     * @return void
+     */
     public function testMainNoArgs()
     {
         $this->Task->connection = 'test';
@@ -276,11 +276,11 @@ class FixtureTaskTest extends TestCase
         $this->Task->main();
     }
 
-/**
- * Test that bake works
- *
- * @return void
- */
+    /**
+     * Test that bake works
+     *
+     * @return void
+     */
     public function testBake()
     {
         $this->Task->connection = 'test';
@@ -296,11 +296,11 @@ class FixtureTaskTest extends TestCase
         $result = $this->Task->main('Articles');
     }
 
-/**
- * test main() with importing records
- *
- * @return void
- */
+    /**
+     * test main() with importing records
+     *
+     * @return void
+     */
     public function testMainImportRecords()
     {
         $this->Task->connection = 'test';
@@ -316,11 +316,11 @@ class FixtureTaskTest extends TestCase
         $this->Task->main('Article');
     }
 
-/**
- * test main() with importing schema.
- *
- * @return void
- */
+    /**
+     * test main() with importing schema.
+     *
+     * @return void
+     */
     public function testMainImportSchema()
     {
         $this->Task->connection = 'test';
@@ -336,11 +336,11 @@ class FixtureTaskTest extends TestCase
         $this->Task->bake('Article', 'comments');
     }
 
-/**
- * test record generation with float and binary types
- *
- * @return void
- */
+    /**
+     * test record generation with float and binary types
+     *
+     * @return void
+     */
     public function testRecordGenerationForBinaryAndFloat()
     {
         $this->Task->connection = 'test';
@@ -356,11 +356,11 @@ class FixtureTaskTest extends TestCase
         $this->assertContains("'data' => 'Lorem ipsum dolor sit amet'", $result);
     }
 
-/**
- * Test that file generation includes headers and correct path for plugins.
- *
- * @return void
- */
+    /**
+     * Test that file generation includes headers and correct path for plugins.
+     *
+     * @return void
+     */
     public function testGenerateFixtureFile()
     {
         $this->Task->connection = 'test';
@@ -375,11 +375,11 @@ class FixtureTaskTest extends TestCase
         $this->assertContains('namespace App\Test\Fixture;', $result);
     }
 
-/**
- * test generating files into plugins.
- *
- * @return void
- */
+    /**
+     * test generating files into plugins.
+     *
+     * @return void
+     */
     public function testGeneratePluginFixtureFile()
     {
         $this->_loadTestPlugin('TestBake');

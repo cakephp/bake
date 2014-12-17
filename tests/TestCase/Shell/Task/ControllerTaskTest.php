@@ -41,10 +41,10 @@ class BakeArticlesTable extends Table
 class ControllerTaskTest extends TestCase
 {
     /**
- * fixtures
- *
- * @var array
- */
+     * fixtures
+     *
+     * @var array
+     */
     public $fixtures = [
         'plugin.bake.bake_articles',
         'plugin.bake.bake_articles_bake_tags',
@@ -52,11 +52,11 @@ class ControllerTaskTest extends TestCase
         'plugin.bake.bake_tags'
     ];
 
-/**
- * setUp method
- *
- * @return void
- */
+    /**
+     * setUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -86,11 +86,11 @@ class ControllerTaskTest extends TestCase
         ]);
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         unset($this->Task);
@@ -99,11 +99,11 @@ class ControllerTaskTest extends TestCase
         Plugin::unload('ControllerTest');
     }
 
-/**
- * test ListAll
- *
- * @return void
- */
+    /**
+     * test ListAll
+     *
+     * @return void
+     */
     public function testListAll()
     {
         $count = count($this->Task->listAll('test'));
@@ -116,11 +116,11 @@ class ControllerTaskTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-/**
- * test component generation
- *
- * @return void
- */
+    /**
+     * test component generation
+     *
+     * @return void
+     */
     public function testGetComponents()
     {
         $result = $this->Task->getComponents();
@@ -131,11 +131,11 @@ class ControllerTaskTest extends TestCase
         $this->assertSame(['Security', 'Csrf'], $result);
     }
 
-/**
- * test helper generation
- *
- * @return void
- */
+    /**
+     * test helper generation
+     *
+     * @return void
+     */
     public function testGetHelpers()
     {
         $result = $this->Task->getHelpers();
@@ -146,11 +146,11 @@ class ControllerTaskTest extends TestCase
         $this->assertSame(['Session', 'Number'], $result);
     }
 
-/**
- * test bake with various component name variants
- *
- * @return void
- */
+    /**
+     * test bake with various component name variants
+     *
+     * @return void
+     */
     public function testBakeComponents()
     {
         $this->Task->expects($this->any())
@@ -164,11 +164,11 @@ class ControllerTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test the bake method
- *
- * @return void
- */
+    /**
+     * test the bake method
+     *
+     * @return void
+     */
     public function testBakeNoActions()
     {
         $this->Task->expects($this->any())
@@ -183,11 +183,11 @@ class ControllerTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test bake with actions.
- *
- * @return void
- */
+    /**
+     * test bake with actions.
+     *
+     * @return void
+     */
     public function testBakeActions()
     {
         $this->Task->params['helpers'] = 'Html,Time';
@@ -204,11 +204,11 @@ class ControllerTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test bake actions prefixed.
- *
- * @return void
- */
+    /**
+     * test bake actions prefixed.
+     *
+     * @return void
+     */
     public function testBakePrefixed()
     {
         $this->Task->params['prefix'] = 'admin';
@@ -227,11 +227,11 @@ class ControllerTaskTest extends TestCase
         $this->assertTextContains('use App\Controller\AppController;', $result);
     }
 
-/**
- * test bake() with a -plugin param
- *
- * @return void
- */
+    /**
+     * test bake() with a -plugin param
+     *
+     * @return void
+     */
     public function testBakeWithPlugin()
     {
         $this->Task->plugin = 'ControllerTest';
@@ -249,23 +249,23 @@ class ControllerTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- *
- * test that bakeActions is creating the correct controller Code. (Using sessions)
- *
- * @return void
- */
+    /**
+     *
+     * test that bakeActions is creating the correct controller Code. (Using sessions)
+     *
+     * @return void
+     */
     public function testBakeActionsContent()
     {
         $result = $this->Task->bake('BakeArticles');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-/**
- * test baking a test
- *
- * @return void
- */
+    /**
+     * test baking a test
+     *
+     * @return void
+     */
     public function testBakeTest()
     {
         $this->Task->plugin = 'ControllerTest';
@@ -280,11 +280,11 @@ class ControllerTaskTest extends TestCase
         $this->assertEquals($this->Task->connection, $this->Task->Test->connection);
     }
 
-/**
- * test baking a test
- *
- * @return void
- */
+    /**
+     * test baking a test
+     *
+     * @return void
+     */
     public function testBakeTestDisabled()
     {
         $this->Task->plugin = 'ControllerTest';
@@ -296,11 +296,11 @@ class ControllerTaskTest extends TestCase
         $this->Task->bakeTest('BakeArticles');
     }
 
-/**
- * Test execute no args.
- *
- * @return void
- */
+    /**
+     * Test execute no args.
+     *
+     * @return void
+     */
     public function testMainNoArgs()
     {
         $this->Task->expects($this->never())
@@ -313,11 +313,11 @@ class ControllerTaskTest extends TestCase
         $this->Task->main();
     }
 
-/**
- * test that execute runs all when the first arg == all
- *
- * @return void
- */
+    /**
+     * test that execute runs all when the first arg == all
+     *
+     * @return void
+     */
     public function testMainIntoAll()
     {
         $count = count($this->Task->listAll());
@@ -342,11 +342,11 @@ class ControllerTaskTest extends TestCase
         $this->Task->all();
     }
 
-/**
- * data provider for testMainWithControllerNameVariations
- *
- * @return void
- */
+    /**
+     * data provider for testMainWithControllerNameVariations
+     *
+     * @return void
+     */
     public static function nameVariations()
     {
         return [
@@ -354,12 +354,12 @@ class ControllerTaskTest extends TestCase
         ];
     }
 
-/**
- * test that both plural and singular forms work for controller baking.
- *
- * @dataProvider nameVariations
- * @return void
- */
+    /**
+     * test that both plural and singular forms work for controller baking.
+     *
+     * @dataProvider nameVariations
+     * @return void
+     */
     public function testMainWithControllerNameVariations($name)
     {
         $this->Task->connection = 'test';
@@ -371,11 +371,11 @@ class ControllerTaskTest extends TestCase
         $this->Task->main($name);
     }
 
-/**
- * test main with plugin.name
- *
- * @return void
- */
+    /**
+     * test main with plugin.name
+     *
+     * @return void
+     */
     public function testMainWithPluginDot()
     {
         $this->Task->connection = 'test';

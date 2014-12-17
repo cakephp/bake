@@ -11,10 +11,10 @@ use Cake\TestSuite\TestCase;
 class testBakeModelTest extends TestCase
 {
     /**
- * setUp method
- *
- * @return void
- */
+     * setUp method
+     *
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();
@@ -22,11 +22,11 @@ class testBakeModelTest extends TestCase
         $this->Articles = TableRegistry::get('Articles', $config);
     }
 
-/**
- * tearDown method
- *
- * @return void
- */
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
     public function tearDown()
     {
         unset($this->Articles);
@@ -34,11 +34,11 @@ class testBakeModelTest extends TestCase
         parent::tearDown();
     }
 
-/**
- * Test initial setup
- *
- * @return void
- */
+    /**
+     * Test initial setup
+     *
+     * @return void
+     */
     public function testInitialization()
     {
         $this->markTestIncomplete('Not implemented yet.');

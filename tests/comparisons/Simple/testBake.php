@@ -10,9 +10,9 @@ use Cake\ORM\Table;
 class testBake extends Behavior
 {
     /**
- * Default configuration.
- *
- * @var array
- */
+     * Default configuration.
+     *
+     * @var array
+     */
     protected $_defaultConfig = [];
 }
