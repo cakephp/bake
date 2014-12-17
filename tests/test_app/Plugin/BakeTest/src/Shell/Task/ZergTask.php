@@ -19,6 +19,6 @@ use Bake\Shell\Task\BakeTask;
 /**
  * Test stub for BakeShell.
  */
-class ZergTask extends BakeTask {
-
+class ZergTask extends BakeTask
+{
 }

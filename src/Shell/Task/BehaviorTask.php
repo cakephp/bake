@@ -17,34 +17,36 @@ namespace Bake\Shell\Task;
 /**
  * Behavior code generator.
  */
-class BehaviorTask extends SimpleBakeTask {
-
-/**
+class BehaviorTask extends SimpleBakeTask
+{
+    /**
  * Task name used in path generation.
  *
  * @var string
  */
-	public $pathFragment = 'Model/Behavior/';
+    public $pathFragment = 'Model/Behavior/';
 
 /**
  * {@inheritDoc}
  */
-	public function name() {
-		return 'behavior';
-	}
+    public function name()
+    {
+        return 'behavior';
+    }
 
 /**
  * {@inheritDoc}
  */
-	public function fileName($name) {
-		return $name . 'Behavior.php';
-	}
+    public function fileName($name)
+    {
+        return $name . 'Behavior.php';
+    }
 
 /**
  * {@inheritDoc}
  */
-	public function template() {
-		return 'Model/behavior';
-	}
-
+    public function template()
+    {
+        return 'Model/behavior';
+    }
 }

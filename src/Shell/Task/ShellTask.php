@@ -17,34 +17,36 @@ namespace Bake\Shell\Task;
 /**
  * Shell code generator.
  */
-class ShellTask extends SimpleBakeTask {
-
-/**
+class ShellTask extends SimpleBakeTask
+{
+    /**
  * Task name used in path generation.
  *
  * @var string
  */
-	public $pathFragment = 'Shell/';
+    public $pathFragment = 'Shell/';
 
 /**
  * {@inheritDoc}
  */
-	public function name() {
-		return 'shell';
-	}
+    public function name()
+    {
+        return 'shell';
+    }
 
 /**
  * {@inheritDoc}
  */
-	public function fileName($name) {
-		return $name . 'Shell.php';
-	}
+    public function fileName($name)
+    {
+        return $name . 'Shell.php';
+    }
 
 /**
  * {@inheritDoc}
  */
-	public function template() {
-		return 'Shell/shell';
-	}
-
+    public function template()
+    {
+        return 'Shell/shell';
+    }
 }

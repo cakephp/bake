@@ -14,13 +14,12 @@ use App\Controller\AppController;
  * @property \App\Controller\Component\AppleComponent $Apple
  * @property \App\Controller\Component\NonExistentComponent $NonExistent
  */
-class BakeArticlesController extends AppController {
-
-/**
+class testBakeComponents extends AppController
+{
+    /**
  * Components
  *
  * @var array
  */
-	public $components = ['Csrf', 'Auth', 'Company/TestBakeThree.Something', 'TestBake.Other', 'Apple', 'NonExistent'];
-
+    public $components = ['Csrf', 'Auth', 'Company/TestBakeThree.Something', 'TestBake.Other', 'Apple', 'NonExistent'];
 }

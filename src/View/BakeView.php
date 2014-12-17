@@ -23,10 +23,10 @@ use Cake\Network\Response;
 use Cake\Utility\Inflector;
 use Cake\View\View;
 
-class BakeView extends View {
-
-	use ConventionsTrait;
-	use InstanceConfigTrait;
+class BakeView extends View
+{
+    use ConventionsTrait;
+    use InstanceConfigTrait;
 
 /**
  * Default class config
@@ -47,20 +47,20 @@ class BakeView extends View {
  *
  * @var array
  */
-	protected $_defaultConfig = [
-		'phpTagReplacements' => [
-			'<?' => "<CakePHPBakeOpenTag",
-			'?>' => "CakePHPBakeCloseTag>"
-		],
-		'replacements' => [
-			'/\n[ \t]+<%- /' => "\n<% ",
-			'/-%>[ \t]+\n/' => "%>\n",
-			'/<%=(.*)\%>\n(.)/' => "<%=$1%>\n\n$2",
-			'<%=' => '<?=',
-			'<%' => '<?php',
-			'%>' => '?>'
-		]
-	];
+    protected $_defaultConfig = [
+        'phpTagReplacements' => [
+            '<?' => "<CakePHPBakeOpenTag",
+            '?>' => "CakePHPBakeCloseTag>"
+        ],
+        'replacements' => [
+            '/\n[ \t]+<%- /' => "\n<% ",
+            '/-%>[ \t]+\n/' => "%>\n",
+            '/<%=(.*)\%>\n(.)/' => "<%=$1%>\n\n$2",
+            '<%=' => '<?=',
+            '<%' => '<?php',
+            '%>' => '?>'
+        ]
+    ];
 
 /**
  * Upon construction, append the plugin's template paths to the paths to check
@@ -71,18 +71,19 @@ class BakeView extends View {
  * @param array $viewOptions View options. See View::$_passedVars for list of
  *   options which get set as class properties.
  */
-	public function __construct(Request $request = null, Response $response = null,
-		EventManager $eventManager = null, array $viewOptions = []) {
-		parent::__construct($request, $response, $eventManager, $viewOptions);
+    public function __construct(Request $request = null, Response $response = null,
+        EventManager $eventManager = null, array $viewOptions = [])
+    {
+        parent::__construct($request, $response, $eventManager, $viewOptions);
 
-		$bakeTemplates = dirname(dirname(__FILE__)) . DS . 'Template' . DS;
-		$paths = (array)Configure::read('App.paths.templates');
+        $bakeTemplates = dirname(dirname(__FILE__)) . DS . 'Template' . DS;
+        $paths = (array)Configure::read('App.paths.templates');
 
-		if (!in_array($bakeTemplates, $paths)) {
-			$paths[] = $bakeTemplates;
-			Configure::write('App.paths.templates', $paths);
-		}
-	}
+        if (!in_array($bakeTemplates, $paths)) {
+            $paths[] = $bakeTemplates;
+            Configure::write('App.paths.templates', $paths);
+        }
+    }
 
 /**
  * Renders view for given view file and layout.
@@ -104,23 +105,24 @@ class BakeView extends View {
  * @return string|null Rendered content.
  * @throws \Cake\Core\Exception\Exception If there is an error in the view.
  */
-	public function render($view = null, $layout = null) {
-		$viewFileName = $this->_getViewFileName($view);
+    public function render($view = null, $layout = null)
+    {
+        $viewFileName = $this->_getViewFileName($view);
 
-		$this->_currentType = static::TYPE_VIEW;
-		$this->dispatchEvent('View.beforeRender', [$viewFileName]);
-		$this->Blocks->set('content', $this->_render($viewFileName));
-		$this->dispatchEvent('View.afterRender', [$viewFileName]);
+        $this->_currentType = static::TYPE_VIEW;
+        $this->dispatchEvent('View.beforeRender', [$viewFileName]);
+        $this->Blocks->set('content', $this->_render($viewFileName));
+        $this->dispatchEvent('View.afterRender', [$viewFileName]);
 
-		if ($layout === null) {
-			$layout = $this->layout;
-		}
-		if ($layout && $this->autoLayout) {
-			$this->Blocks->set('content', $this->renderLayout('', $layout));
-		}
+        if ($layout === null) {
+            $layout = $this->layout;
+        }
+        if ($layout && $this->autoLayout) {
+            $this->Blocks->set('content', $this->renderLayout('', $layout));
+        }
 
-		return $this->Blocks->get('content');
-	}
+        return $this->Blocks->get('content');
+    }
 
 /**
  * Wrapper for creating and dispatching events.
@@ -136,10 +138,11 @@ class BakeView extends View {
  *
  * @return \Cake\Event\Event
  */
-	public function dispatchEvent($name, $data = null, $subject = null) {
-		$name = str_replace('View.', 'Bake.', $name);
-		return parent::dispatchEvent($name, $data, $subject);
-	}
+    public function dispatchEvent($name, $data = null, $subject = null)
+    {
+        $name = str_replace('View.', 'Bake.', $name);
+        return parent::dispatchEvent($name, $data, $subject);
+    }
 
 /**
  * Sandbox method to evaluate a template / view script in.
@@ -149,33 +152,34 @@ class BakeView extends View {
  *    If empty the current View::$viewVars will be used.
  * @return string Rendered output
  */
-	protected function _evaluate($viewFile, $dataForView) {
-		$viewString = $this->_getViewFileContents($viewFile);
+    protected function _evaluate($viewFile, $dataForView)
+    {
+        $viewString = $this->_getViewFileContents($viewFile);
 
-		$replacements = array_merge($this->config('phpTagReplacements') + $this->config('replacements'));
+        $replacements = array_merge($this->config('phpTagReplacements') + $this->config('replacements'));
 
-		foreach ($replacements as $find => $replace) {
-			if ($this->_isRegex($find)) {
-				$viewString = preg_replace($find, $replace, $viewString);
-			} else {
-				$viewString = str_replace($find, $replace, $viewString);
-			}
-		}
+        foreach ($replacements as $find => $replace) {
+            if ($this->_isRegex($find)) {
+                $viewString = preg_replace($find, $replace, $viewString);
+            } else {
+                $viewString = str_replace($find, $replace, $viewString);
+            }
+        }
 
-		$this->__viewFile = TMP . Inflector::slug(preg_replace('@.*Template[/\\\\]@', '', $viewFile)) . '.php';
-		file_put_contents($this->__viewFile, $viewString);
+        $this->__viewFile = TMP . Inflector::slug(preg_replace('@.*Template[/\\\\]@', '', $viewFile)) . '.php';
+        file_put_contents($this->__viewFile, $viewString);
 
-		unset($viewFile, $viewString, $replacements, $find, $replace);
-		extract($dataForView);
-		ob_start();
+        unset($viewFile, $viewString, $replacements, $find, $replace);
+        extract($dataForView);
+        ob_start();
 
-		include $this->__viewFile;
+        include $this->__viewFile;
 
-		$content = ob_get_clean();
+        $content = ob_get_clean();
 
-		$unPhp = $this->config('phpTagReplacements');
-		return str_replace(array_values($unPhp), array_keys($unPhp), $content);
-	}
+        $unPhp = $this->config('phpTagReplacements');
+        return str_replace(array_values($unPhp), array_keys($unPhp), $content);
+    }
 
 /**
  * Get the contents of the template file
@@ -183,10 +187,11 @@ class BakeView extends View {
  * @param string $name A template name or a Bake template string
  * @return string Bake template to evaluate
  */
-	protected function _getViewFileContents($name) {
-		$filename = $this->_getViewFileName($name);
-		return file_get_contents($filename);
-	}
+    protected function _getViewFileContents($name)
+    {
+        $filename = $this->_getViewFileName($name);
+        return file_get_contents($filename);
+    }
 
 /**
  * Return all possible paths to find view files in order
@@ -195,13 +200,14 @@ class BakeView extends View {
  * @param bool $cached Set to false to force a refresh of view paths. Default true.
  * @return array paths
  */
-	protected function _paths($plugin = null, $cached = true) {
-		$paths = parent::_paths($plugin, false);
-		foreach ($paths as &$path) {
-			$path .= 'Bake' . DS;
-		}
-		return $paths;
-	}
+    protected function _paths($plugin = null, $cached = true)
+    {
+        $paths = parent::_paths($plugin, false);
+        foreach ($paths as &$path) {
+            $path .= 'Bake' . DS;
+        }
+        return $paths;
+    }
 
 /**
  * Check if a replacement pattern is a regex
@@ -211,11 +217,12 @@ class BakeView extends View {
  * @param string $maybeRegex a fixed string or a regex
  * @return bool
  */
-	protected function _isRegex($maybeRegex) {
-		// @codingStandardsIgnoreStart
-		$isRegex = @preg_match($maybeRegex, '');
-		// @codingStandardsIgnoreEnd
+    protected function _isRegex($maybeRegex)
+    {
+        // @codingStandardsIgnoreStart
+        $isRegex = @preg_match($maybeRegex, '');
+        // @codingStandardsIgnoreEnd
 
-		return $isRegex !== false;
-	}
+        return $isRegex !== false;
+    }
 }

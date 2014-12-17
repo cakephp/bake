@@ -8,16 +8,16 @@ use Cake\Validation\Validator;
 /**
  * BakeArticles Model
  */
-class BakeArticlesTable extends Table {
-
-/**
+class testBakeTableWithPlugin extends Table
+{
+    /**
  * Initialize method
  *
  * @param array $config The configuration for the Table.
  * @return void
  */
-	public function initialize(array $config) {
-		$this->primaryKey('id');
-	}
-
+    public function initialize(array $config)
+    {
+        $this->primaryKey('id');
+    }
 }
