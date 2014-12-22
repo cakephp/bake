@@ -40,7 +40,7 @@ class FixtureTaskTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		if ( ! defined('TESTS')) {
+		if (!defined('TESTS')) {
 			define('TESTS', APP . 'tests/');
 		}
 
