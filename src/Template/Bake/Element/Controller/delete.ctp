@@ -14,17 +14,16 @@
  */
 %>
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id <%= $singularHumanName %> id
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException
-     */
-    public function delete($id = null)
-    {
-        $<%= $singularName %> = $this-><%= $currentModelName %>->get($id);
+/**
+ * Delete method
+ *
+ * @param string|null $id <%= $singularHumanName %> id
+ * @return void
+ * @throws \Cake\Network\Exception\NotFoundException
+ */
+    public function delete($id = null) {
         $this->request->allowMethod(['post', 'delete']);
+        $<%= $singularName %> = $this-><%= $currentModelName %>->get($id);
         if ($this-><%= $currentModelName; %>->delete($<%= $singularName %>)) {
             $this->Flash->success('The <%= strtolower($singularHumanName) %> has been deleted.');
         } else {
