@@ -55,6 +55,11 @@ class TestTaskTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
+
+		if (!defined('TESTS')) {
+			define('TESTS', APP . 'tests/');
+		}
+
 		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Test' . DS;
 		$this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
