@@ -17,22 +17,8 @@ namespace Bake\Test\TestCase\Shell\Task;
 use Bake\Shell\Task\TemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Core\Plugin;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\View\Helper;
-
-/**
- * Class BakeArticle
- */
-class BakeArticlesTable extends Table
-{
-    public function initialize(array $config)
-    {
-        $this->belongsTo('BakeUsers');
-        $this->hasMany('BakeComments');
-        $this->belongsToMany('BakeTags');
-    }
-}
 
 /**
  * ControllerTaskTest class

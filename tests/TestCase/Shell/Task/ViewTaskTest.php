@@ -19,59 +19,7 @@ use Bake\Test\TestCase\TestCase;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-
-/**
- * Test View Task Comment Model
- */
-class ViewTaskCommentsTable extends Table
-{
-    public function initialize(array $config)
-    {
-        $this->table('comments');
-        $this->belongsTo('Articles', [
-            'foreignKey' => 'article_id'
-        ]);
-    }
-}
-
-/**
- * Test View Task Article Model
- */
-class ViewTaskArticlesTable extends Table
-{
-    public function intialize(array $config)
-    {
-        $this->table('articles');
-    }
-}
-
-/**
- * Test View Task Comments Controller
- */
-class ViewTaskCommentsController extends Controller
-{
-    public $modelClass = 'Cake\Test\TestCase\Shell\Task\ViewTaskCommentsTable';
-
-    /**
-     * Testing public controller action
-     *
-     * @return void
-     */
-    public function index()
-    {
-    }
-
-    /**
-     * Testing public controller action
-     *
-     * @return void
-     */
-    public function add()
-    {
-    }
-}
 
 /**
  * ViewTaskTest class
