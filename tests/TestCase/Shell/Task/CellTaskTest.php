@@ -22,108 +22,112 @@ use Cake\Core\Plugin;
 /**
  * CellTaskTest class
  */
-class CellTaskTest extends TestCase {
+class CellTaskTest extends TestCase
+{
+    /**
+     * setup method
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Cell' . DS;
+        $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-/**
- * setup method
- *
- * @return void
- */
-	public function setUp() {
-		parent::setUp();
-		$this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Cell' . DS;
-		$io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\CellTask',
+            ['in', 'err', 'createFile', '_stop'],
+            [$io]
+        );
+        $this->Task->Test = $this->getMock(
+            'Bake\Shell\Task\TestTask',
+            [],
+            [$io]
+        );
+        $this->Task->Template = new TemplateTask($io);
+        $this->Task->Template->initialize();
+        $this->Task->Template->interactive = false;
+    }
 
-		$this->Task = $this->getMock(
-			'Bake\Shell\Task\CellTask',
-			['in', 'err', 'createFile', '_stop'],
-			[$io]
-		);
-		$this->Task->Test = $this->getMock('Bake\Shell\Task\TestTask',
-			[],
-			[$io]
-		);
-		$this->Task->Template = new TemplateTask($io);
-		$this->Task->Template->initialize();
-		$this->Task->Template->interactive = false;
-	}
+    /**
+     * Test the excute method.
+     *
+     * @return void
+     */
+    public function testMain()
+    {
+        $this->Task->Test->expects($this->once())
+            ->method('bake')
+            ->with('cell', 'Example');
 
-/**
- * Test the excute method.
- *
- * @return void
- */
-	public function testMain() {
-		$this->Task->Test->expects($this->once())
-			->method('bake')
-			->with('cell', 'Example');
+        $this->Task->expects($this->at(0))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath(APP . 'Template/Cell/Example/display.ctp'),
+                ''
+            );
+        $this->Task->expects($this->at(1))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath(APP . 'View/Cell/ExampleCell.php'),
+                $this->stringContains('class ExampleCell extends Cell')
+            );
 
-		$this->Task->expects($this->at(0))
-			->method('createFile')
-			->with(
-				$this->_normalizePath(APP . 'Template/Cell/Example/display.ctp'),
-				''
-			);
-		$this->Task->expects($this->at(1))
-			->method('createFile')
-			->with(
-				$this->_normalizePath(APP . 'View/Cell/ExampleCell.php'),
-				$this->stringContains('class ExampleCell extends Cell')
-			);
+        $this->Task->main('Example');
+    }
 
-		$this->Task->main('Example');
-	}
+    /**
+     * Test main within a plugin.
+     *
+     * @return void
+     */
+    public function testMainPlugin()
+    {
+        $this->_loadTestPlugin('TestBake');
+        $path = Plugin::path('TestBake');
 
-/**
- * Test main within a plugin.
- *
- * @return void
- */
-	public function testMainPlugin() {
-		$this->_loadTestPlugin('TestBake');
-		$path = Plugin::path('TestBake');
+        $this->Task->expects($this->at(0))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath($path . 'src/Template/Cell/Example/display.ctp'),
+                ''
+            );
+        $this->Task->expects($this->at(1))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath($path . 'src/View/Cell/ExampleCell.php'),
+                $this->stringContains('class ExampleCell extends Cell')
+            );
 
-		$this->Task->expects($this->at(0))
-			->method('createFile')
-			->with(
-				$this->_normalizePath($path . 'src/Template/Cell/Example/display.ctp'),
-				''
-			);
-		$this->Task->expects($this->at(1))
-			->method('createFile')
-			->with(
-				$this->_normalizePath($path . 'src/View/Cell/ExampleCell.php'),
-				$this->stringContains('class ExampleCell extends Cell')
-			);
+        $this->Task->main('TestBake.Example');
+    }
 
-		$this->Task->main('TestBake.Example');
-	}
+    /**
+     * Test baking within a plugin.
+     *
+     * @return void
+     */
+    public function testBakePlugin()
+    {
+        $this->_loadTestPlugin('TestBake');
+        $path = Plugin::path('TestBake');
 
-/**
- * Test baking within a plugin.
- *
- * @return void
- */
-	public function testBakePlugin() {
-		$this->_loadTestPlugin('TestBake');
-		$path = Plugin::path('TestBake');
+        $this->Task->plugin = 'TestBake';
+        $this->Task->expects($this->at(0))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath($path . 'src/Template/Cell/Example/display.ctp'),
+                ''
+            );
+        $this->Task->expects($this->at(1))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath($path . 'src/View/Cell/ExampleCell.php'),
+                $this->stringContains('class ExampleCell extends Cell')
+            );
 
-		$this->Task->plugin = 'TestBake';
-		$this->Task->expects($this->at(0))
-			->method('createFile')
-			->with(
-				$this->_normalizePath($path . 'src/Template/Cell/Example/display.ctp'),
-				''
-			);
-		$this->Task->expects($this->at(1))
-			->method('createFile')
-			->with(
-				$this->_normalizePath($path . 'src/View/Cell/ExampleCell.php'),
-				$this->stringContains('class ExampleCell extends Cell')
-			);
-
-		$result = $this->Task->bake('Example');
-		$this->assertSameAsFile(__FUNCTION__ . '.php', $result);
-	}
-
+        $result = $this->Task->bake('Example');
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
 }

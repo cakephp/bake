@@ -19,147 +19,153 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Shell\BakeShellShell;
 
-class BakeShellTest extends TestCase {
+class BakeShellTest extends TestCase
+{
+    /**
+     * fixtures
+     *
+     * @var array
+     */
+    public $fixtures = ['core.comments'];
 
-/**
- * fixtures
- *
- * @var array
- */
-	public $fixtures = ['core.comments'];
+    /**
+     * setup test
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
-/**
- * setup test
- *
- * @return void
- */
-	public function setUp() {
-		parent::setUp();
-		$this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $this->Shell = $this->getMock(
+            'Bake\Shell\BakeShell',
+            ['in', 'out', 'hr', 'err', 'createFile', '_stop'],
+            [$this->io]
+        );
+        Configure::write('App.namespace', 'TestApp');
+    }
 
-		$this->Shell = $this->getMock(
-			'Bake\Shell\BakeShell',
-			['in', 'out', 'hr', 'err', 'createFile', '_stop'],
-			[$this->io]
-		);
-		Configure::write('App.namespace', 'TestApp');
-	}
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        unset($this->Shell);
+    }
 
-/**
- * tearDown method
- *
- * @return void
- */
-	public function tearDown() {
-		parent::tearDown();
-		unset($this->Shell);
-	}
+    /**
+     * test bake all
+     *
+     * @return void
+     */
+    public function testAllWithModelName()
+    {
+        $this->Shell->Model = $this->getMock('Bake\Shell\Task\ModelTask');
+        $this->Shell->Controller = $this->getMock('Bake\Shell\Task\ControllerTask');
+        $this->Shell->View = $this->getMock('Bake\Shell\Task\ModelTask');
 
-/**
- * test bake all
- *
- * @return void
- */
-	public function testAllWithModelName() {
-		$this->Shell->Model = $this->getMock('Bake\Shell\Task\ModelTask');
-		$this->Shell->Controller = $this->getMock('Bake\Shell\Task\ControllerTask');
-		$this->Shell->View = $this->getMock('Bake\Shell\Task\ModelTask');
+        $this->Shell->Model->expects($this->once())
+            ->method('bake')
+            ->with('Comments')
+            ->will($this->returnValue(true));
 
-		$this->Shell->Model->expects($this->once())
-			->method('bake')
-			->with('Comments')
-			->will($this->returnValue(true));
+        $this->Shell->Controller->expects($this->once())
+            ->method('bake')
+            ->with('Comments')
+            ->will($this->returnValue(true));
 
-		$this->Shell->Controller->expects($this->once())
-			->method('bake')
-			->with('Comments')
-			->will($this->returnValue(true));
+        $this->Shell->View->expects($this->once())
+            ->method('main')
+            ->with('Comments');
 
-		$this->Shell->View->expects($this->once())
-			->method('main')
-			->with('Comments');
+        $this->Shell->expects($this->at(0))
+            ->method('out')
+            ->with('Bake All');
 
-		$this->Shell->expects($this->at(0))
-			->method('out')
-			->with('Bake All');
+        $this->Shell->expects($this->at(2))
+            ->method('out')
+            ->with('<success>Bake All complete.</success>');
 
-		$this->Shell->expects($this->at(2))
-			->method('out')
-			->with('<success>Bake All complete.</success>');
+        $this->Shell->connection = '';
+        $this->Shell->params = [];
+        $this->Shell->all('Comments');
+    }
 
-		$this->Shell->connection = '';
-		$this->Shell->params = [];
-		$this->Shell->all('Comments');
-	}
+    /**
+     * Test the main function.
+     *
+     * @return void
+     */
+    public function testMain()
+    {
+        $this->Shell->expects($this->at(0))
+            ->method('out')
+            ->with($this->stringContains('The following commands'));
 
-/**
- * Test the main function.
- *
- * @return void
- */
-	public function testMain() {
-		$this->Shell->expects($this->at(0))
-			->method('out')
-			->with($this->stringContains('The following commands'));
+        $this->Shell->expects($this->exactly(17))
+            ->method('out');
 
-		$this->Shell->expects($this->exactly(17))
-			->method('out');
+        $this->Shell->loadTasks();
+        $this->Shell->main();
+    }
 
-		$this->Shell->loadTasks();
-		$this->Shell->main();
-	}
+    /**
+     * Test that the generated option parser reflects all tasks.
+     *
+     * @return void
+     */
+    public function testGetOptionParser()
+    {
+        $this->Shell->loadTasks();
+        $parser = $this->Shell->getOptionParser();
+        $commands = $parser->subcommands();
+        $this->assertArrayHasKey('fixture', $commands);
+        $this->assertArrayHasKey('view', $commands);
+        $this->assertArrayHasKey('controller', $commands);
+        $this->assertArrayHasKey('model', $commands);
+    }
 
-/**
- * Test that the generated option parser reflects all tasks.
- *
- * @return void
- */
-	public function testGetOptionParser() {
-		$this->Shell->loadTasks();
-		$parser = $this->Shell->getOptionParser();
-		$commands = $parser->subcommands();
-		$this->assertArrayHasKey('fixture', $commands);
-		$this->assertArrayHasKey('view', $commands);
-		$this->assertArrayHasKey('controller', $commands);
-		$this->assertArrayHasKey('model', $commands);
-	}
+    /**
+     * Test loading tasks from core directories.
+     *
+     * @return void
+     */
+    public function testLoadTasksCoreAndApp()
+    {
+        $this->Shell->loadTasks();
+        $expected = [
+            'Bake.Behavior',
+            'Bake.Cell',
+            'Bake.Component',
+            'Bake.Controller',
+            'Bake.Fixture',
+            'Bake.Helper',
+            'Bake.Model',
+            'Bake.Plugin',
+            'Bake.Project',
+            'Bake.Shell',
+            'Bake.Test',
+            'Bake.View'
+        ];
+        sort($this->Shell->tasks);
+        sort($expected);
+        $this->assertEquals($expected, $this->Shell->tasks);
+    }
 
-/**
- * Test loading tasks from core directories.
- *
- * @return void
- */
-	public function testLoadTasksCoreAndApp() {
-		$this->Shell->loadTasks();
-		$expected = [
-			'Bake.Behavior',
-			'Bake.Cell',
-			'Bake.Component',
-			'Bake.Controller',
-			'Bake.Fixture',
-			'Bake.Helper',
-			'Bake.Model',
-			'Bake.Plugin',
-			'Bake.Project',
-			'Bake.Shell',
-			'Bake.Test',
-			'Bake.View'
-		];
-		sort($this->Shell->tasks);
-		sort($expected);
-		$this->assertEquals($expected, $this->Shell->tasks);
-	}
-
-/**
- * Test loading tasks from plugins
- *
- * @return void
- */
-	public function testLoadTasksPlugin() {
-		$this->_loadTestPlugin('BakeTest');
-		$this->Shell->loadTasks();
-		$this->assertContains('BakeTest.Widget', $this->Shell->tasks);
-		$this->assertContains('BakeTest.Zerg', $this->Shell->tasks);
-	}
-
+    /**
+     * Test loading tasks from plugins
+     *
+     * @return void
+     */
+    public function testLoadTasksPlugin()
+    {
+        $this->_loadTestPlugin('BakeTest');
+        $this->Shell->loadTasks();
+        $this->assertContains('BakeTest.Widget', $this->Shell->tasks);
+        $this->assertContains('BakeTest.Zerg', $this->Shell->tasks);
+    }
 }

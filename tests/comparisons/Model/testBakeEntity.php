@@ -6,6 +6,7 @@ use Cake\ORM\Entity;
 /**
  * BakeArticle Entity.
  */
-class BakeArticle extends Entity {
+class BakeArticle extends Entity
+{
 
 }

@@ -7,36 +7,39 @@ use Cake\TestSuite\TestCase;
 /**
  * App\Model\Behavior\ExampleBehavior Test Case
  */
-class ExampleBehaviorTest extends TestCase {
+class ExampleBehaviorTest extends TestCase
+{
 
-/**
- * setUp method
- *
- * @return void
- */
-	public function setUp() {
-		parent::setUp();
-		$this->Example = new ExampleBehavior();
-	}
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->Example = new ExampleBehavior();
+    }
 
-/**
- * tearDown method
- *
- * @return void
- */
-	public function tearDown() {
-		unset($this->Example);
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        unset($this->Example);
 
-		parent::tearDown();
-	}
+        parent::tearDown();
+    }
 
-/**
- * Test initial setup
- *
- * @return void
- */
-	public function testInitialization() {
-		$this->markTestIncomplete('Not implemented yet.');
-	}
-
+    /**
+     * Test initial setup
+     *
+     * @return void
+     */
+    public function testInitialization()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 }

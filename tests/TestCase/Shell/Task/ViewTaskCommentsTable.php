@@ -1,6 +1,6 @@
 <?php
 /**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
@@ -8,17 +8,24 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @link          http://cakephp.org CakePHP Project
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace BakeTest\Shell\Task;
+namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\BakeTask;
+use Cake\ORM\Table;
 
 /**
- * Test stub for BakeShell.
+ * Test View Task Comment Model
  */
-class ZergTask extends BakeTask
+class ViewTaskCommentsTable extends Table
 {
+    public function initialize(array $config)
+    {
+        $this->table('comments');
+        $this->belongsTo('Articles', [
+            'foreignKey' => 'article_id'
+        ]);
+    }
 }

@@ -7,24 +7,25 @@ use TestApp\Controller\PostsController;
 /**
  * TestApp\Controller\PostsController Test Case
  */
-class PostsControllerTest extends IntegrationTestCase {
+class PostsControllerTest extends IntegrationTestCase
+{
 
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = [
-		'Posts' => 'app.posts'
-	];
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'Posts' => 'app.posts'
+    ];
 
-/**
- * Test index method
- *
- * @return void
- */
-	public function testIndex() {
-		$this->markTestIncomplete('Not implemented yet.');
-	}
-
+    /**
+     * Test index method
+     *
+     * @return void
+     */
+    public function testIndex()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 }

@@ -25,192 +25,199 @@ use Cake\Filesystem\File;
  * Base class for Bake Tasks.
  *
  */
-class BakeTask extends Shell {
+class BakeTask extends Shell
+{
+    use ConventionsTrait;
 
-	use ConventionsTrait;
+    /**
+     * The pathFragment appended to the plugin/app path.
+     *
+     * @var string
+     */
+    public $pathFragment;
 
-/**
- * The pathFragment appended to the plugin/app path.
- *
- * @var string
- */
-	public $pathFragment;
+    /**
+     * Name of plugin
+     *
+     * @var string
+     */
+    public $plugin = null;
 
-/**
- * Name of plugin
- *
- * @var string
- */
-	public $plugin = null;
+    /**
+     * The db connection being used for baking
+     *
+     * @var string
+     */
+    public $connection = null;
 
-/**
- * The db connection being used for baking
- *
- * @var string
- */
-	public $connection = null;
+    /**
+     * Disable caching and enable debug for baking.
+     * This forces the most current database schema to be used.
+     *
+     * @return void
+     */
+    public function startup()
+    {
+        Configure::write('debug', true);
+        Cache::disable();
+    }
 
-/**
- * Disable caching and enable debug for baking.
- * This forces the most current database schema to be used.
- *
- * @return void
- */
-	public function startup() {
-		Configure::write('debug', true);
-		Cache::disable();
-	}
+    /**
+     * Initialize hook.
+     *
+     * Populates the connection property, which is useful for tasks of tasks.
+     *
+     * @return void
+     */
+    public function initialize()
+    {
+        if (empty($this->connection) && !empty($this->params['connection'])) {
+            $this->connection = $this->params['connection'];
+        }
+    }
 
-/**
- * Initialize hook.
- *
- * Populates the connection property, which is useful for tasks of tasks.
- *
- * @return void
- */
-	public function initialize() {
-		if (empty($this->connection) && !empty($this->params['connection'])) {
-			$this->connection = $this->params['connection'];
-		}
-	}
+    /**
+     * Gets the path for output. Checks the plugin property
+     * and returns the correct path.
+     *
+     * @return string Path to output.
+     */
+    public function getPath()
+    {
+        $path = APP . $this->pathFragment;
+        if (isset($this->plugin)) {
+            $path = $this->_pluginPath($this->plugin) . 'src/' . $this->pathFragment;
+        }
+        return str_replace('/', DS, $path);
+    }
 
-/**
- * Gets the path for output. Checks the plugin property
- * and returns the correct path.
- *
- * @return string Path to output.
- */
-	public function getPath() {
-		$path = APP . $this->pathFragment;
-		if (isset($this->plugin)) {
-			$path = $this->_pluginPath($this->plugin) . 'src/' . $this->pathFragment;
-		}
-		return str_replace('/', DS, $path);
-	}
+    /**
+     * Base execute method parses some parameters and sets some properties on the bake tasks.
+     * call when overriding execute()
+     *
+     * @return void
+     */
+    public function main()
+    {
+        if (isset($this->params['plugin'])) {
+            $this->plugin = $this->params['plugin'];
+            if (strpos($this->plugin, '\\')) {
+                return $this->error('Invalid plugin namespace separator, please use / instead of \ for plugins.');
+            }
+        }
+        if (isset($this->params['connection'])) {
+            $this->connection = $this->params['connection'];
+        }
+    }
 
-/**
- * Base execute method parses some parameters and sets some properties on the bake tasks.
- * call when overriding execute()
- *
- * @return void
- */
-	public function main() {
-		if (isset($this->params['plugin'])) {
-			$this->plugin = $this->params['plugin'];
-			if (strpos($this->plugin, '\\')) {
-				return $this->error('Invalid plugin namespace separator, please use / instead of \ for plugins.');
-			}
-		}
-		if (isset($this->params['connection'])) {
-			$this->connection = $this->params['connection'];
-		}
-	}
+    /**
+     * Executes an external shell command and pipes its output to the stdout
+     *
+     * @param string $command the command to execute
+     * @return void
+     * @throws \RuntimeException if any errors occurred during the execution
+     */
+    public function callProcess($command)
+    {
+        $descriptorSpec = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w']
+        ];
+        $this->_io->verbose('Running ' . $command);
+        $process = proc_open(
+            $command,
+            $descriptorSpec,
+            $pipes
+        );
+        if (!is_resource($process)) {
+            $this->error('Could not start subprocess.');
+            return false;
+        }
+        fclose($pipes[0]);
 
-/**
- * Executes an external shell command and pipes its output to the stdout
- *
- * @param string $command the command to execute
- * @return void
- * @throws \RuntimeException if any errors occurred during the execution
- */
-	public function callProcess($command) {
-		$descriptorSpec = [
-			0 => ['pipe', 'r'],
-			1 => ['pipe', 'w'],
-			2 => ['pipe', 'w']
-		];
-		$this->_io->verbose('Running ' . $command);
-		$process = proc_open(
-			$command,
-			$descriptorSpec,
-			$pipes
-		);
-		if (!is_resource($process)) {
-			$this->error('Could not start subprocess.');
-			return false;
-		}
-		fclose($pipes[0]);
+        $output = stream_get_contents($pipes[1]);
+        fclose($pipes[1]);
 
-		$output = stream_get_contents($pipes[1]);
-		fclose($pipes[1]);
+        $error = stream_get_contents($pipes[2]);
+        fclose($pipes[2]);
+        proc_close($process);
 
-		$error = stream_get_contents($pipes[2]);
-		fclose($pipes[2]);
-		proc_close($process);
+        if ($error) {
+            throw new \RuntimeException($error);
+        }
 
-		if ($error) {
-			throw new \RuntimeException($error);
-		}
+        $this->out($output);
+    }
 
-		$this->out($output);
-	}
+    /**
+     * Handles splitting up the plugin prefix and classname.
+     *
+     * Sets the plugin parameter and plugin property.
+     *
+     * @param string $name The name to possibly split.
+     * @return string The name without the plugin prefix.
+     */
+    protected function _getName($name)
+    {
+        if (strpos($name, '.')) {
+            list($plugin, $name) = pluginSplit($name);
+            $this->plugin = $this->params['plugin'] = $plugin;
+        }
+        return $name;
+    }
 
-/**
- * Handles splitting up the plugin prefix and classname.
- *
- * Sets the plugin parameter and plugin property.
- *
- * @param string $name The name to possibly split.
- * @return string The name without the plugin prefix.
- */
-	protected function _getName($name) {
-		if (strpos($name, '.')) {
-			list($plugin, $name) = pluginSplit($name);
-			$this->plugin = $this->params['plugin'] = $plugin;
-		}
-		return $name;
-	}
+    /**
+     * Delete empty file in a given path
+     *
+     * @param string $path Path to folder which contains 'empty' file.
+     * @return void
+     */
+    protected function _deleteEmptyFile($path)
+    {
+        $File = new File($path);
+        if ($File->exists()) {
+            $File->delete();
+            $this->out(sprintf('<success>Deleted</success> `%s`', $path), 1, Shell::QUIET);
+        }
+    }
 
-/**
- * Delete empty file in a given path
- *
- * @param string $path Path to folder which contains 'empty' file.
- * @return void
- */
-	protected function _deleteEmptyFile($path) {
-		$File = new File($path);
-		if ($File->exists()) {
-			$File->delete();
-			$this->out(sprintf('<success>Deleted</success> `%s`', $path), 1, Shell::QUIET);
-		}
-	}
+    /**
+     * Get the option parser for this task.
+     *
+     * This base class method sets up some commonly used options.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     */
+    public function getOptionParser()
+    {
+        $parser = parent::getOptionParser();
 
-/**
- * Get the option parser for this task.
- *
- * This base class method sets up some commonly used options.
- *
- * @return \Cake\Console\ConsoleOptionParser
- */
-	public function getOptionParser() {
-		$parser = parent::getOptionParser();
+        $bakeThemes = [];
+        foreach (Plugin::loaded() as $plugin) {
+            $path = Plugin::classPath($plugin);
+            if (is_dir($path . 'Template' . DS . 'Bake')) {
+                $bakeThemes[] = $plugin;
+            }
+        }
 
-		$bakeThemes = [];
-		foreach (Plugin::loaded() as $plugin) {
-			$path = Plugin::classPath($plugin);
-			if (is_dir($path . 'Template' . DS . 'Bake')) {
-				$bakeThemes[] = $plugin;
-			}
-		}
+        $parser->addOption('plugin', [
+            'short' => 'p',
+            'help' => 'Plugin to bake into.'
+        ])->addOption('force', [
+            'short' => 'f',
+            'boolean' => true,
+            'help' => 'Force overwriting existing files without prompting.'
+        ])->addOption('connection', [
+            'short' => 'c',
+            'default' => 'default',
+            'help' => 'The datasource connection to get data from.'
+        ])->addOption('theme', [
+            'short' => 't',
+            'help' => 'The theme to use when baking code.',
+            'choices' => $bakeThemes
+        ]);
 
-		$parser->addOption('plugin', [
-			'short' => 'p',
-			'help' => 'Plugin to bake into.'
-		])->addOption('force', [
-			'short' => 'f',
-			'boolean' => true,
-			'help' => 'Force overwriting existing files without prompting.'
-		])->addOption('connection', [
-			'short' => 'c',
-			'default' => 'default',
-			'help' => 'The datasource connection to get data from.'
-		])->addOption('theme', [
-			'short' => 't',
-			'help' => 'The theme to use when baking code.',
-			'choices' => $bakeThemes
-		]);
-
-		return $parser;
-	}
-
+        return $parser;
+    }
 }

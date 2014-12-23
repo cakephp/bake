@@ -1,6 +1,6 @@
-<%
+<?php
 /**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
@@ -8,24 +8,36 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @link          http://cakephp.org CakePHP Project
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-%>
+namespace Bake\Test\TestCase\Shell\Task;
+
+use Cake\Controller\Controller;
+
+/**
+ * Test View Task Comments Controller
+ */
+class ViewTaskCommentsController extends Controller
+{
+    public $modelClass = 'Cake\Test\TestCase\Shell\Task\ViewTaskCommentsTable';
 
     /**
-     * Index method
+     * Testing public controller action
      *
      * @return void
      */
     public function index()
     {
-<% $belongsTo = $this->Bake->aliasExtractor($modelObj, 'BelongsTo'); %>
-<% if ($belongsTo): %>
-        $this->paginate = [
-            'contain' => [<%= $this->Bake->stringifyList($belongsTo, ['indent' => false]) %>]
-        ];
-<% endif; %>
-        $this->set('<%= $pluralName %>', $this->paginate($this-><%= $currentModelName %>));
     }
+
+    /**
+     * Testing public controller action
+     *
+     * @return void
+     */
+    public function add()
+    {
+    }
+}

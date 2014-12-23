@@ -21,14 +21,14 @@ use Cake\Console\Shell;
 /**
  * <%= $name %> shell command.
  */
-class <%= $name %>Shell extends Shell {
+class <%= $name %>Shell extends Shell
+{
 
-/**
- * main() method.
- *
- * @return bool|int Success or error code.
- */
-	public function main() {
-	}
-
+    /**
+     * main() method.
+     *
+     * @return bool|int Success or error code.
+     */
+    public function main() {
+    }
 }

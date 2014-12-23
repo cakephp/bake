@@ -19,9 +19,9 @@ use Cake\Utility\Inflector;
 $isController = strtolower($type) === 'controller';
 
 if ($isController) {
-	$uses[] = 'Cake\TestSuite\IntegrationTestCase';
+    $uses[] = 'Cake\TestSuite\IntegrationTestCase';
 } else {
-	$uses[] = 'Cake\TestSuite\TestCase';
+    $uses[] = 'Cake\TestSuite\TestCase';
 }
 sort($uses);
 %>
@@ -36,69 +36,74 @@ use <%= $dependency; %>;
  * <%= $fullClassName %> Test Case
  */
 <% if ($isController): %>
-class <%= $className %>Test extends IntegrationTestCase {
+class <%= $className %>Test extends IntegrationTestCase
+{
 <% else: %>
-class <%= $className %>Test extends TestCase {
+class <%= $className %>Test extends TestCase
+{
 <% endif; %>
-
 <% if (!empty($fixtures)): %>
-/**
- * Fixtures
- *
- * @var array
- */
-	public $fixtures = [<%= $this->Bake->stringifyList($fixtures) %>];
 
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [<%= $this->Bake->stringifyList($fixtures) %>];
 <% endif; %>
 <% if (!empty($construction)): %>
-/**
- * setUp method
- *
- * @return void
- */
-	public function setUp() {
-		parent::setUp();
-	<%- if ($preConstruct): %>
-		<%= $preConstruct %>
-	<%- endif; %>
-		$this-><%= $subject . ' = ' . $construction %>
-	<%- if ($postConstruct): %>
-		<%= $postConstruct %>
-	<%- endif; %>
-	}
 
-/**
- * tearDown method
- *
- * @return void
- */
-	public function tearDown() {
-		unset($this-><%= $subject %>);
+    /**
+     * setUp method
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+    <%- if ($preConstruct): %>
+        <%= $preConstruct %>
+    <%- endif; %>
+        $this-><%= $subject . ' = ' . $construction %>
+    <%- if ($postConstruct): %>
+        <%= $postConstruct %>
+    <%- endif; %>
+    }
 
-		parent::tearDown();
-	}
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        unset($this-><%= $subject %>);
 
+        parent::tearDown();
+    }
 <% endif; %>
 <% foreach ($methods as $method): %>
-/**
- * Test <%= $method %> method
- *
- * @return void
- */
-	public function test<%= Inflector::camelize($method) %>() {
-		$this->markTestIncomplete('Not implemented yet.');
-	}
 
+    /**
+     * Test <%= $method %> method
+     *
+     * @return void
+     */
+    public function test<%= Inflector::camelize($method) %>()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 <% endforeach; %>
 <% if (empty($methods)): %>
-/**
- * Test initial setup
- *
- * @return void
- */
-	public function testInitialization() {
-		$this->markTestIncomplete('Not implemented yet.');
-	}
 
+    /**
+     * Test initial setup
+     *
+     * @return void
+     */
+    public function testInitialization()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 <% endif; %>
 }

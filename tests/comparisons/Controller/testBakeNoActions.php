@@ -10,20 +10,20 @@ use App\Controller\AppController;
  * @property \Cake\Controller\Component\CsrfComponent $Csrf
  * @property \Cake\Controller\Component\AuthComponent $Auth
  */
-class BakeArticlesController extends AppController {
+class BakeArticlesController extends AppController
+{
 
-/**
- * Helpers
- *
- * @var array
- */
-	public $helpers = ['Html', 'Time'];
+    /**
+     * Helpers
+     *
+     * @var array
+     */
+    public $helpers = ['Html', 'Time'];
 
-/**
- * Components
- *
- * @var array
- */
-	public $components = ['Csrf', 'Auth'];
-
+    /**
+     * Components
+     *
+     * @var array
+     */
+    public $components = ['Csrf', 'Auth'];
 }

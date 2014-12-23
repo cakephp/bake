@@ -22,13 +22,13 @@ use Cake\ORM\Table;
 /**
  * <%= $name %> behavior
  */
-class <%= $name %>Behavior extends Behavior {
+class <%= $name %>Behavior extends Behavior
+{
 
-/**
- * Default configuration.
- *
- * @var array
- */
-	protected $_defaultConfig = [];
-
+    /**
+     * Default configuration.
+     *
+     * @var array
+     */
+    protected $_defaultConfig = [];
 }

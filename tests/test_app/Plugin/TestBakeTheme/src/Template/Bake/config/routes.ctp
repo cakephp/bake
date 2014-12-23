@@ -5,5 +5,5 @@
 use Cake\Routing\Router;
 
 Router::plugin('<%= $plugin %>', function ($routes) {
-	$routes->fallbacks();
+    $routes->fallbacks();
 });

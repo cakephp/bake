@@ -20,28 +20,28 @@ use Cake\TestSuite\Fixture\TestFixture;
  * BakeCommentFixture fixture for testing bake
  *
  */
-class BakeCommentsFixture extends TestFixture {
+class BakeCommentsFixture extends TestFixture
+{
+    /**
+     * fields property
+     *
+     * @var array
+     */
+    public $fields = [
+        'otherid' => ['type' => 'integer'],
+        'bake_article_id' => ['type' => 'integer', 'null' => false],
+        'bake_user_id' => ['type' => 'integer', 'null' => false],
+        'comment' => 'text',
+        'published' => ['type' => 'string', 'length' => 1, 'default' => 'N'],
+        'created' => 'datetime',
+        'updated' => 'datetime',
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['otherid']]]
+    ];
 
-/**
- * fields property
- *
- * @var array
- */
-	public $fields = [
-		'otherid' => ['type' => 'integer'],
-		'bake_article_id' => ['type' => 'integer', 'null' => false],
-		'bake_user_id' => ['type' => 'integer', 'null' => false],
-		'comment' => 'text',
-		'published' => ['type' => 'string', 'length' => 1, 'default' => 'N'],
-		'created' => 'datetime',
-		'updated' => 'datetime',
-		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['otherid']]]
-	];
-
-/**
- * records property
- *
- * @var array
- */
-	public $records = [];
+    /**
+     * records property
+     *
+     * @var array
+     */
+    public $records = [];
 }

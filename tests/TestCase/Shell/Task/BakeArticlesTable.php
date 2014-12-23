@@ -1,4 +1,4 @@
-<%
+<?php
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -12,20 +12,19 @@
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-%>
+namespace Bake\Test\TestCase\Shell\Task;
 
-    /**
-     * Index method
-     *
-     * @return void
-     */
-    public function index()
+use Cake\ORM\Table;
+
+/**
+ * Class BakeArticle
+ */
+class BakeArticlesTable extends Table
+{
+    public function initialize(array $config)
     {
-<% $belongsTo = $this->Bake->aliasExtractor($modelObj, 'BelongsTo'); %>
-<% if ($belongsTo): %>
-        $this->paginate = [
-            'contain' => [<%= $this->Bake->stringifyList($belongsTo, ['indent' => false]) %>]
-        ];
-<% endif; %>
-        $this->set('<%= $pluralName %>', $this->paginate($this-><%= $currentModelName %>));
+        $this->belongsTo('BakeUsers');
+        $this->hasMany('BakeComments');
+        $this->belongsToMany('BakeTags');
     }
+}

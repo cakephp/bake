@@ -19,6 +19,6 @@ use Bake\Shell\Task\BakeTask;
 /**
  * Test stub for BakeShell.
  */
-class WidgetTask extends BakeTask {
-
+class WidgetTask extends BakeTask
+{
 }
