@@ -592,8 +592,7 @@ class TestTaskTest extends TestCase
     public function testTestCaseFileName($type, $class, $expected)
     {
         $result = $this->Task->testCaseFileName($type, $class);
-        $expected = APP . 'tests/' . $expected;
-        $this->assertPathEquals($expected, $result);
+        $this->assertPathEquals(TESTS . $expected, $result);
     }
 
     /**
