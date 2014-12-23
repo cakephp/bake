@@ -26,6 +26,10 @@ matrix:
     - php: 5.4
       env: RUN_COVERAGE=1 RUN_TESTS=0 DB=mysql db_dsn='mysql://travis@0.0.0.0/cakephp_test'
 
+  allow_failures:
+    - php: 5.4
+      env: RUN_CS=1 RUN_TESTS=0 INSTALL_DEPS=0
+
 before_script:
   - sh -c "if [ '$INSTALL_DEPS' = '1' ]; then composer self-update; fi"
   - sh -c "if [ '$INSTALL_DEPS' = '1' ]; then composer install --no-interaction --dev; fi"
