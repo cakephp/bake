@@ -23,3 +23,7 @@ Plugin::load('Bake', [
 	'path' => dirname(dirname(__FILE__)) . DS,
 	'autoload' => true
 ]);
+
+if (!defined('TESTS')) {
+	define('TESTS', APP . 'tests/');
+}
