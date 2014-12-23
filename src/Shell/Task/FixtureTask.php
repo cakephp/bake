@@ -76,17 +76,18 @@ class FixtureTask extends BakeTask
             'short' => 's',
             'boolean' => true
         ])->addOption('records', [
-            'help' => 'Generate a fixture with records from the non-test database. Used with --count and --conditions to limit which records are added to the fixture.',
+            'help' => 'Generate a fixture with records from the non-test database.' .
+            ' Used with --count and --conditions to limit which records are added to the fixture.',
             'short' => 'r',
             'boolean' => true
         ])->addOption('import-records', [
-            'help' => __d('cake_console', 'Set to true to import records from the live table when the generated fixture is used.'),
+            'help' => 'Set to true to import records from the live table when the generated fixture is used.',
             'boolean' => true
         ])->addOption('conditions', [
             'help' => 'The SQL snippet to use when importing records.',
             'default' => '1=1',
         ])->addSubcommand('all', [
-            'help' => __d('cake_console', 'Bake all fixture files for tables in the chosen connection.')
+            'help' => 'Bake all fixture files for tables in the chosen connection.'
         ]);
 
         return $parser;

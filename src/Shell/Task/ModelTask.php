@@ -789,7 +789,8 @@ class ModelTask extends BakeTask
         ])->addOption('hidden', [
             'help' => 'A comma separated list of fields to hide.'
         ])->addOption('primary-key', [
-            'help' => 'The primary key if you would like to manually set one. Can be a comma separated list if you are using a composite primary key.'
+            'help' => 'The primary key if you would like to manually set one.' .
+                ' Can be a comma separated list if you are using a composite primary key.'
         ])->addOption('display-field', [
             'help' => 'The displayField if you would like to choose one.'
         ])->addOption('no-test', [

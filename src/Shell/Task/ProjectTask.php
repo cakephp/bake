@@ -56,7 +56,9 @@ class ProjectTask extends BakeTask
 
         $namespace = basename($project);
         if (!preg_match('/^\w[\w\d_]+$/', $namespace)) {
-            $this->err('Project Name/Namespace needs to start with a letter and can only contain letters, digits and underscore');
+            $err = 'Project Name/Namespace must start with a letter' .
+                ' and can only contain letters, digits and underscore';
+            $this->err($err);
             $this->args = [];
             return $this->main();
         }
@@ -66,7 +68,8 @@ class ProjectTask extends BakeTask
         }
 
         $response = false;
-        while (!$response && is_dir($project) === true && file_exists($project . '..' . DS . 'config' . DS . 'boostrap.php')) {
+        $bootstrapPath = '..' . DS . 'config' . DS . 'boostrap.php';
+        while (!$response && is_dir($project) === true && file_exists($project . $boostrapPath)) {
             $prompt = sprintf('<warning>A project already exists in this location:</warning> %s Overwrite?', $project);
             $response = $this->in($prompt, ['y', 'n'], 'n');
             if (strtolower($response) === 'n') {
@@ -137,7 +140,9 @@ class ProjectTask extends BakeTask
     {
         $composer = $this->findComposer();
         if (!$composer) {
-            $this->error('Cannot bake project. Could not find composer. Add composer to your PATH, or use the -composer option.');
+            $err = 'Cannot bake project. Could not find composer.' .
+               ' Add composer to your PATH, or use the -composer option.';
+            $this->error($err);
             return false;
         }
         $this->out('<info>Downloading a new cakephp app from packagist.org</info>');

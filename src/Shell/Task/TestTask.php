@@ -549,7 +549,8 @@ class TestTask extends BakeTask
         $parser->description(
             'Bake test case skeletons for classes.'
         )->addArgument('type', [
-            'help' => 'Type of class to bake, can be any of the following: controller, model, helper, component or behavior.',
+            'help' => 'Type of class to bake, can be any of the following:' .
+                ' controller, model, helper, component or behavior.',
             'choices' => [
                 'Controller', 'controller',
                 'Table', 'table',

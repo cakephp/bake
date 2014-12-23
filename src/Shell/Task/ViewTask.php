@@ -327,13 +327,16 @@ class ViewTask extends BakeTask
                 $this->out('The action name you supplied was empty. Please try again.');
             }
         }
+
+        $path = $this->getPath() . $this->controllerName . DS . Inflector::underscore($action) . ".ctp";
+
         $this->out();
         $this->hr();
         $this->out('The following view will be created:');
         $this->hr();
         $this->out(sprintf('Controller Name: %s', $this->controllerName));
         $this->out(sprintf('Action Name:     %s', $action));
-        $this->out(sprintf('Path:            %s', $this->getPath() . $this->controllerName . DS . Inflector::underscore($action) . ".ctp"));
+        $this->out(sprintf('Path:            %s', $path));
         $this->hr();
         $looksGood = $this->in('Look okay?', ['y', 'n'], 'y');
         if (strtolower($looksGood) === 'y') {
