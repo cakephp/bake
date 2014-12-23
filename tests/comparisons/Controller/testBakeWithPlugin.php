@@ -95,8 +95,8 @@ class BakeArticlesController extends AppController
      */
     public function delete($id = null)
     {
-        $bakeArticle = $this->BakeArticles->get($id);
         $this->request->allowMethod(['post', 'delete']);
+        $bakeArticle = $this->BakeArticles->get($id);
         if ($this->BakeArticles->delete($bakeArticle)) {
             $this->Flash->success('The bake article has been deleted.');
         } else {
