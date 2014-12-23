@@ -89,7 +89,7 @@ class FixtureTaskTest extends TestCase
      */
     public function testGetPath()
     {
-        $this->assertPathEquals(APP . 'tests/Fixture/', $this->Task->getPath());
+        $this->assertPathEquals(TESTS . 'Fixture/', $this->Task->getPath());
     }
 
     /**
