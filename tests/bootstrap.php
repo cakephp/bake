@@ -25,5 +25,5 @@ Plugin::load('Bake', [
 ]);
 
 if (!defined('TESTS')) {
-	define('TESTS', ROOT . DS . 'tests' . DS);
+    define('TESTS', ROOT . DS . 'tests' . DS);
 }
