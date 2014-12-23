@@ -33,7 +33,8 @@ class <%= $name %>Table extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config) {
+    public function initialize(array $config)
+    {
 <% if (!empty($table)): %>
         $this->table('<%= $table %>');
 <% endif %>
@@ -64,7 +65,8 @@ class <%= $name %>Table extends Table
      * @param \Cake\Validation\Validator $validator instance
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator) {
+    public function validationDefault(Validator $validator)
+    {
         $validator
 <% $validationMethods = []; %>
 <%
@@ -119,5 +121,4 @@ endforeach;
         return $validator;
     }
 <% endif %>
-
 }

@@ -45,5 +45,4 @@ foreach($actions as $action) {
     echo $this->element('Controller/' . $action);
 }
 %>
-
 }

@@ -42,17 +42,17 @@ class <%= $className %>Test extends IntegrationTestCase
 class <%= $className %>Test extends TestCase
 {
 <% endif; %>
-
 <% if (!empty($fixtures)): %>
+
     /**
      * Fixtures
      *
      * @var array
      */
     public $fixtures = [<%= $this->Bake->stringifyList($fixtures) %>];
-
 <% endif; %>
 <% if (!empty($construction)): %>
+
     /**
      * setUp method
      *
@@ -81,9 +81,9 @@ class <%= $className %>Test extends TestCase
 
         parent::tearDown();
     }
-
 <% endif; %>
 <% foreach ($methods as $method): %>
+
     /**
      * Test <%= $method %> method
      *
@@ -93,9 +93,9 @@ class <%= $className %>Test extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
-
 <% endforeach; %>
 <% if (empty($methods)): %>
+
     /**
      * Test initial setup
      *
@@ -105,6 +105,5 @@ class <%= $className %>Test extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
-
 <% endif; %>
 }

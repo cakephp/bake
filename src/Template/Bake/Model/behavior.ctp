@@ -31,5 +31,4 @@ class <%= $name %>Behavior extends Behavior
      * @var array
      */
     protected $_defaultConfig = [];
-
 }

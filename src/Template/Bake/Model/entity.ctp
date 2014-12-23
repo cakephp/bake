@@ -45,5 +45,7 @@ class <%= $name %> extends Entity
      */
     protected $_hidden = [<%= $this->Bake->stringifyList($hidden) %>];
 <% endif %>
+<% if (empty($fields) && empty($hidden)): %>
 
+<% endif %>
 }

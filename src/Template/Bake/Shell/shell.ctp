@@ -31,5 +31,4 @@ class <%= $name %>Shell extends Shell
      */
     public function main() {
     }
-
 }

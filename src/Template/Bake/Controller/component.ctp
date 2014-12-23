@@ -31,5 +31,4 @@ class <%= $name %>Component extends Component
      * @var array
      */
     protected $_defaultConfig = [];
-
 }

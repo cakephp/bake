@@ -40,5 +40,4 @@ class <%= $name %>Cell extends Cell
     public function display()
     {
     }
-
 }
