@@ -44,7 +44,10 @@ class BakeViewTest extends TestCase
         $response = new Response();
         $this->View = new BakeView($request, $response);
 
-        Configure::write('App.paths.templates.x', Plugin::path('Bake') . 'tests' . DS . 'test_app' . DS . 'App' . DS . 'Template' . DS);
+        Configure::write(
+            'App.paths.templates.x',
+            Plugin::path('Bake') . 'tests' . DS . 'test_app' . DS . 'App' . DS . 'Template' . DS
+        );
     }
 
     /**

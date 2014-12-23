@@ -160,7 +160,8 @@ class ControllerTaskTest extends TestCase
             ->will($this->returnValue(true));
 
         $this->Task->params['no-actions'] = true;
-        $this->Task->params['components'] = 'Csrf, Auth, Company/TestBakeThree.Something, TestBake.Other, Apple, NonExistent';
+        $this->Task->params['components'] = 'Csrf, Auth, Company/TestBakeThree.Something,' .
+           ' TestBake.Other, Apple, NonExistent';
 
         $result = $this->Task->bake('BakeArticles');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);

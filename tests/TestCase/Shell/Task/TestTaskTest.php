@@ -571,13 +571,21 @@ class TestTaskTest extends TestCase
             ['Controller', 'App\Controller\PostsController', 'TestCase/Controller/PostsControllerTest.php'],
             ['Controller', 'App\Controller\Admin\PostsController', 'TestCase/Controller/Admin/PostsControllerTest.php'],
             ['Behavior', 'App\Model\Behavior\TreeBehavior', 'TestCase/Model/Behavior/TreeBehaviorTest.php'],
-            ['Component', 'App\Controller\Component\AuthComponent', 'TestCase/Controller/Component/AuthComponentTest.php'],
+            [
+                'Component',
+                'App\Controller\Component\AuthComponent',
+                'TestCase/Controller/Component/AuthComponentTest.php'
+            ],
             ['entity', 'App\Model\Entity\Article', 'TestCase/Model/Entity/ArticleTest.php'],
             ['table', 'App\Model\Table\PostsTable', 'TestCase/Model/Table/PostsTableTest.php'],
             ['helper', 'App\View\Helper\FormHelper', 'TestCase/View/Helper/FormHelperTest.php'],
             ['controller', 'App\Controller\PostsController', 'TestCase/Controller/PostsControllerTest.php'],
             ['behavior', 'App\Model\Behavior\TreeBehavior', 'TestCase/Model/Behavior/TreeBehaviorTest.php'],
-            ['component', 'App\Controller\Component\AuthComponent', 'TestCase/Controller/Component/AuthComponentTest.php'],
+            [
+                'component',
+                'App\Controller\Component\AuthComponent',
+                'TestCase/Controller/Component/AuthComponentTest.php'
+            ],
             ['Shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
             ['shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
         ];

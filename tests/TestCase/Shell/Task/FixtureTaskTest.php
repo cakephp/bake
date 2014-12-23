@@ -328,10 +328,11 @@ class FixtureTaskTest extends TestCase
         $this->Task->connection = 'test';
         $this->Task->params = ['schema' => true, 'import-records' => true];
 
+        $importString = "public \$import = ['model' => 'Article', 'records' => true, 'connection' => 'test'];";
         $this->Task->expects($this->once())
             ->method('createFile')
             ->with($this->anything(), $this->logicalAnd(
-                $this->stringContains("public \$import = ['model' => 'Article', 'records' => true, 'connection' => 'test'];"),
+                $this->stringContains($importString),
                 $this->logicalNot($this->stringContains('public $fields')),
                 $this->logicalNot($this->stringContains('public $records'))
             ));
