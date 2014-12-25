@@ -52,8 +52,11 @@ class <%= $name %>Table extends Table
         $this->addBehavior('<%= $behavior %>'<%= $behaviorData ? ", [" . implode(', ', $behaviorData) . ']' : '' %>);
 <% endforeach %>
 <% foreach ($associations as $type => $assocs): %>
-<% foreach ($assocs as $assoc): %>
-        $this-><%= $type %>('<%= $assoc['alias'] %>', [<%= $this->Bake->stringifyList($assoc, ['indent' => 3]) %>]);
+<% foreach ($assocs as $assoc):
+	$alias = $assoc['alias'];
+	unset($assoc['alias']);
+%>
+        $this-><%= $type %>('<%= $alias %>', [<%= $this->Bake->stringifyList($assoc, ['indent' => 3]) %>]);
 <% endforeach %>
 <% endforeach %>
     }
