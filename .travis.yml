@@ -13,7 +13,6 @@ env:
     - DB=pgsql db_dsn='postgres://postgres@127.0.0.1/cakephp_test'
     - DB=sqlite db_dsn='sqlite:///:memory:'
   global:
-    - INSTALL_DEPS=1
     - RUN_TESTS=1
 
 matrix:
@@ -21,14 +20,14 @@ matrix:
 
   include:
     - php: 5.4
-      env: RUN_CS=1 RUN_TESTS=0 INSTALL_DEPS=1
+      env: RUN_CS=1 RUN_TESTS=0
 
     - php: 5.4
       env: RUN_COVERAGE=1 RUN_TESTS=0 DB=mysql db_dsn='mysql://travis@0.0.0.0/cakephp_test'
 
 before_script:
-  - sh -c "if [ '$INSTALL_DEPS' = '1' ]; then composer self-update; fi"
-  - sh -c "if [ '$INSTALL_DEPS' = '1' ]; then composer install --no-interaction --dev; fi"
+  - composer self-update
+  - composer install --no-interaction --dev
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE cakephp_test;'; fi"
   - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE DATABASE cakephp_test;' -U postgres; fi"
   - sh -c "if [ '$RUN_COVERAGE' = '1' ]; then composer require --dev satooshi/php-coveralls:dev-master; fi"
