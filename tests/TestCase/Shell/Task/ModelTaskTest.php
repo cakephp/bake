@@ -990,6 +990,36 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * Tests baking a table with rules
+     *
+     * @return void
+     */
+    public function testBakeWithRules() {
+        $model = TableRegistry::get('Users');
+        $associations = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Countries',
+                    'foreignKey' => 'country_id'
+                ],
+                [
+                    'alias' => 'Sites',
+                    'foreignKey' => 'site_id'
+                ]
+            ],
+            'hasMany' => [
+                [
+                    'alias' => 'BakeComments',
+                    'foreignKey' => 'bake_user_id',
+                ],
+            ]
+        ];
+        $rulesChecker = $this->Task->getRules($model, $associations);
+        $result = $this->Task->bakeTable($model, compact('rulesChecker'));
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
      * test that execute with no args
      *
      * @return void
