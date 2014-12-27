@@ -660,6 +660,49 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * Tests the getRules method
+     *
+     * @return void
+     */
+    public function testGetRules()
+    {
+        $model = TableRegistry::get('Users');
+        $associations = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Countries',
+                    'foreignKey' => 'country_id'
+                ],
+                [
+                    'alias' => 'Sites',
+                    'foreignKey' => 'site_id'
+                ]
+            ],
+            'hasMany' => [
+                [
+                    'alias' => 'BakeComments',
+                    'foreignKey' => 'bake_user_id',
+                ],
+            ]
+        ];
+        $result = $this->Task->getRules($model, $associations);
+        $expected = [
+            'username' => [
+                'name' => 'isUnique'
+            ],
+            'country_id' => [
+                'name' => 'existsIn',
+                'extra' => 'Countries'
+            ],
+            'site_id' => [
+                'name' => 'existsIn',
+                'extra' => 'Sites'
+            ]
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * test non interactive doActsAs
      *
      * @return void
