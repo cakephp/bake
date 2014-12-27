@@ -539,7 +539,7 @@ class ModelTask extends BakeTask
         }
         $fields = $model->schema()->columns();
         if (empty($fields)) {
-            return false;
+            return [];
         }
 
         $rules = [];
@@ -694,7 +694,7 @@ class ModelTask extends BakeTask
             'displayField' => null,
             'table' => null,
             'validation' => [],
-			'rulesChecker' => [],
+            'rulesChecker' => [],
             'behaviors' => [],
         ];
 
