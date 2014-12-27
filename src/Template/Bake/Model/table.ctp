@@ -122,6 +122,7 @@ endforeach;
         return $validator;
     }
 <% endif %>
+<% if (!empty($rulesChecker)): %>
 
     /**
      * Returns a rules checker object that will be used for validating
@@ -132,11 +133,10 @@ endforeach;
      */
     public function buildRules(RulesChecker $rules)
     {
-<% if (!empty($rulesChecker)): %>
     <%- foreach ($rulesChecker as $field => $rule): %>
         $rules->add($rules-><%= $rule['name'] %>('<%= $field %>'<%= !empty($rule['extra']) ? ", '$rule[extra]'" : '' %>));
     <%- endforeach; %>
-<% endif; %>
         return $rules;
     }
+<% endif; %>
 }
