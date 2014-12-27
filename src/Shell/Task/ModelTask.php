@@ -806,6 +806,9 @@ class ModelTask extends BakeTask
         ])->addOption('no-validation', [
             'boolean' => true,
             'help' => 'Disable generating validation rules.'
+        ])->addOption('no-rules', [
+            'boolean' => true,
+            'help' => 'Disable generating a rules checker.'
         ])->addOption('no-associations', [
             'boolean' => true,
             'help' => 'Disable generating associations.'

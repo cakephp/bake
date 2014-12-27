@@ -616,6 +616,7 @@ class ModelTaskTest extends TestCase
         $expected = ['id', 'account_id'];
         $this->assertEquals($expected, $result);
     }
+
     /**
      * test getting validation rules with the no-validation rule.
      *
@@ -657,6 +658,19 @@ class ModelTaskTest extends TestCase
             'otherid' => ['valid' => ['rule' => 'numeric', 'allowEmpty' => 'create']]
         ];
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * test getting validation rules with the no-rules param.
+     *
+     * @return void
+     */
+    public function testGetRulesDisabled()
+    {
+        $model = TableRegistry::get('Users');
+        $this->Task->params['no-rules'] = true;
+        $result = $this->Task->getRules($model, []);
+        $this->assertEquals([], $result);
     }
 
     /**
