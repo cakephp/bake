@@ -1008,7 +1008,8 @@ class ModelTaskTest extends TestCase
      *
      * @return void
      */
-    public function testBakeWithRules() {
+    public function testBakeWithRules()
+    {
         $model = TableRegistry::get('Users');
         $associations = [
             'belongsTo' => [
