@@ -20,8 +20,7 @@
         </tr>
     </thead>
     <tbody>
-    <?php foreach ($viewTaskComments as $viewTaskComment) :
-?>
+    <?php foreach ($viewTaskComments as $viewTaskComment): ?>
         <tr>
             <td><?= $this->Number->format($viewTaskComment->id) ?></td>
             <td>
@@ -38,8 +37,7 @@
             </td>
         </tr>
 
-    <?php
-endforeach; ?>
+    <?php endforeach; ?>
     </tbody>
     </table>
     <div class="paginator">
