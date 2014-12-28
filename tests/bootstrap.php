@@ -15,6 +15,7 @@
 
 // @codingStandardsIgnoreFile
 
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 
 $findRoot = function ($root) {
@@ -30,16 +31,31 @@ $findRoot = function ($root) {
 $root = $findRoot(__FILE__);
 unset($findRoot);
 chdir($root);
+
 if (file_exists($root . '/config/bootstrap.php')) {
     require $root . '/config/bootstrap.php';
-    return;
+} else {
+    require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
+
+    Plugin::load('Bake', [
+        'path' => dirname(dirname(__FILE__)) . DS,
+        'autoload' => true
+    ]);
+
 }
-require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
-Plugin::load('Bake', [
-    'path' => dirname(dirname(__FILE__)) . DS,
-    'autoload' => true
-]);
 
 if (!defined('TESTS')) {
     define('TESTS', ROOT . DS . 'tests' . DS);
 }
+
+$testAppRoot = $root . DS . 'tests' . DS . 'test_app' . DS;
+
+Configure::write('Bake', [
+    'app' => $testAppRoot . 'App' . DS,
+    'root' => rtrim($testAppRoot, DS)
+]);
+
+Configure::write('App.paths', [
+    'plugins' => [$testAppRoot . 'Plugin' . DS],
+    'templates' => [$testAppRoot . 'App' . DS . 'Template' . DS]
+]);
