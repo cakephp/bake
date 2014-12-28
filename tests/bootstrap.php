@@ -61,9 +61,6 @@ define('TESTS', ROOT . DS . 'tests' . DS);
 @mkdir(CACHE . 'views');
 @mkdir(CACHE . 'models');
 
-date_default_timezone_set('UTC');
-mb_internal_encoding('UTF-8');
-
 Configure::write('debug', true);
 Configure::write('App', [
 	'namespace' => 'App',
