@@ -156,7 +156,6 @@ class TestTask extends BakeTask
     {
         $classes = [];
         $base = APP;
-
         if ($this->plugin) {
             $base = Plugin::classPath($this->plugin);
         }
@@ -198,7 +197,6 @@ class TestTask extends BakeTask
         $uses = $this->generateUses($type, $fullClassName);
 
         $subject = $className;
-
         list($namespace, $className) = namespaceSplit($fullClassName);
 
         $baseNamespace = Configure::read('App.namespace');

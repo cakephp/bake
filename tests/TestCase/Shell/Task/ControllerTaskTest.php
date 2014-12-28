@@ -16,9 +16,7 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\TemplateTask;
 use Bake\Test\TestCase\TestCase;
-use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\View\Helper;
 

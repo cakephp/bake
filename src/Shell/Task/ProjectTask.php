@@ -14,7 +14,6 @@
  */
 namespace Bake\Shell\Task;
 
-use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 
 /**
