@@ -55,12 +55,6 @@ define('WWW_ROOT', APP . 'webroot' . DS);
 define('CONFIG', APP . 'config' . DS);
 define('TESTS', ROOT . DS . 'tests' . DS);
 
-@mkdir(LOGS);
-@mkdir(SESSIONS);
-@mkdir(CACHE);
-@mkdir(CACHE . 'views');
-@mkdir(CACHE . 'models');
-
 Configure::write('debug', true);
 Configure::write('App', [
 	'namespace' => 'App',
