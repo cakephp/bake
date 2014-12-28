@@ -49,8 +49,6 @@ define('SESSIONS', TMP . 'sessions' . DS);
 define('CAKE_CORE_INCLUDE_PATH', ROOT);
 define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
-define('CORE_TESTS', CORE_PATH . 'tests' . DS);
-define('CORE_TEST_CASES', CORE_TESTS . 'TestCase');
 
 define('APP', ROOT . 'App' . DS);
 define('WWW_ROOT', APP . 'webroot' . DS);
