@@ -57,8 +57,6 @@ class CellTaskTest extends TestCase
      */
     public function testMain()
     {
-        $app = Configure::read('Bake.app');
-
         $this->Task->Test->expects($this->once())
             ->method('bake')
             ->with('cell', 'Example');
@@ -66,13 +64,13 @@ class CellTaskTest extends TestCase
         $this->Task->expects($this->at(0))
             ->method('createFile')
             ->with(
-                $this->_normalizePath($app . 'Template/Cell/Example/display.ctp'),
+                $this->_normalizePath(APP . 'Template/Cell/Example/display.ctp'),
                 ''
             );
         $this->Task->expects($this->at(1))
             ->method('createFile')
             ->with(
-                $this->_normalizePath($app . 'View/Cell/ExampleCell.php'),
+                $this->_normalizePath(APP . 'View/Cell/ExampleCell.php'),
                 $this->stringContains('class ExampleCell extends Cell')
             );
 

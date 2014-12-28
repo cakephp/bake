@@ -71,11 +71,10 @@ class SimpleBakeTaskTest extends TestCase
      */
     public function testMain()
     {
-        $app = Configure::read('Bake.app');
         $this->Task->expects($this->once())
             ->method('createFile')
             ->with(
-                $this->_normalizePath($app . 'Model/Behavior/ExampleBehavior.php'),
+                $this->_normalizePath(APP . 'Model/Behavior/ExampleBehavior.php'),
                 $this->stringContains('class ExampleBehavior extends Behavior')
             );
         $this->Task->Test->expects($this->once())
@@ -92,9 +91,8 @@ class SimpleBakeTaskTest extends TestCase
      */
     public function testMainWithPlugin()
     {
-        $app = Configure::read('Bake.app');
-        Plugin::load('SimpleBakeTest', ['path' => $app . 'Plugin' . DS . 'SimpleBakeTest' . DS]);
-        $filename = $this->_normalizePath($app . 'Plugin/SimpleBakeTest/src/Model/Behavior/ExampleBehavior.php');
+        Plugin::load('SimpleBakeTest', ['path' => APP . 'Plugin' . DS . 'SimpleBakeTest' . DS]);
+        $filename = $this->_normalizePath(APP . 'Plugin/SimpleBakeTest/src/Model/Behavior/ExampleBehavior.php');
         $this->Task->expects($this->once())
             ->method('createFile')
             ->with(
@@ -115,13 +113,12 @@ class SimpleBakeTaskTest extends TestCase
      */
     public function testBake()
     {
-        $app = Configure::read('Bake.app');
         Configure::write('App.namespace', 'Bake\Test\App');
 
         $this->Task->expects($this->once())
             ->method('createFile')
             ->with(
-                $this->_normalizePath($app . 'Model/Behavior/ExampleBehavior.php'),
+                $this->_normalizePath(APP . 'Model/Behavior/ExampleBehavior.php'),
                 $this->stringContains('class ExampleBehavior extends Behavior')
             );
 

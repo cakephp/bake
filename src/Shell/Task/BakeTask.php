@@ -84,7 +84,7 @@ class BakeTask extends Shell
      */
     public function getPath()
     {
-        $path = Configure::read('Bake.app') . $this->pathFragment;
+        $path = APP . $this->pathFragment;
         if (isset($this->plugin)) {
             $path = $this->_pluginPath($this->plugin) . 'src/' . $this->pathFragment;
         }

@@ -155,7 +155,7 @@ class TestTask extends BakeTask
     protected function _getClassOptions($namespace)
     {
         $classes = [];
-        $base = Configure::read('Bake.app');
+        $base = APP;
 
         if ($this->plugin) {
             $base = Plugin::classPath($this->plugin);

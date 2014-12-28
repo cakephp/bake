@@ -42,9 +42,7 @@ class ProjectTask extends BakeTask
         if (isset($this->args[0])) {
             $project = $this->args[0];
         } else {
-            $app = Configure::read('Bake.app');
-
-            $appContents = array_diff(scandir($app), ['.', '..']);
+            $appContents = array_diff(scandir(APP), ['.', '..']);
             if (empty($appContents)) {
                 $suggestedPath = rtrim($app, DS);
             } else {
@@ -182,7 +180,7 @@ class ProjectTask extends BakeTask
                 'short' => 't',
                 'help' => 'Template to use when baking code.'
             ])->addOption('composer', [
-                'default' => Configure::read('Bake.root') . DS . 'composer.phar',
+                'default' => ROOT . DS . 'composer.phar',
                 'help' => 'The path to the composer executable.'
             ])->removeOption('plugin');
     }

@@ -52,7 +52,7 @@ class PluginTask extends BakeTask
     public function initialize()
     {
         $this->path = current(App::path('Plugin'));
-        $this->bootstrap = Configure::read('Bake.root') . DS . 'config' . DS . 'bootstrap.php';
+        $this->bootstrap = ROOT . DS . 'config' . DS . 'bootstrap.php';
     }
 
     /**
@@ -158,7 +158,7 @@ class PluginTask extends BakeTask
         $this->Template->set([
             'plugin' => $pluginName,
             'path' => $path,
-            'root' => Configure::read('Bake.root')
+            'root' => ROOT
         ]);
 
         $root = $path . $pluginName . DS;
@@ -258,7 +258,7 @@ class PluginTask extends BakeTask
      */
     protected function _rootComposerFilePath()
     {
-        return Configure::read('Bake.root') . DS . 'composer.json';
+        return ROOT . DS . 'composer.json';
     }
 
     /**
@@ -305,7 +305,7 @@ class PluginTask extends BakeTask
         )->addArgument('name', [
             'help' => 'CamelCased name of the plugin to create.'
         ])->addOption('composer', [
-            'default' => Configure::read('Bake.root') . DS . 'composer.phar',
+            'default' => ROOT . DS . 'composer.phar',
             'help' => 'The path to the composer executable.'
         ])->removeOption('plugin');
 
