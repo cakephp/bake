@@ -16,7 +16,9 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\TemplateTask;
 use Bake\Test\TestCase\TestCase;
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\View\Helper;
 
@@ -179,10 +181,11 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakeActions()
     {
+        $app = Configure::read('Bake.app');
         $this->Task->params['helpers'] = 'Html,Time';
         $this->Task->params['components'] = 'Csrf, Auth';
 
-        $filename = APP . 'Controller/BakeArticlesController.php';
+        $filename = $app . 'Controller/BakeArticlesController.php';
         $this->Task->expects($this->at(1))
             ->method('createFile')
             ->with(
@@ -200,9 +203,10 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakePrefixed()
     {
+        $app = Configure::read('Bake.app');
         $this->Task->params['prefix'] = 'admin';
 
-        $filename = $this->_normalizePath(APP . 'Controller/Admin/BakeArticlesController.php');
+        $filename = $this->_normalizePath($app . 'Controller/Admin/BakeArticlesController.php');
         $this->Task->expects($this->at(1))
             ->method('createFile')
             ->with($filename, $this->anything());
@@ -223,10 +227,11 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakeWithPlugin()
     {
+        $app = Configure::read('Bake.app');
         $this->Task->plugin = 'ControllerTest';
 
-        Plugin::load('ControllerTest', ['path' => APP . 'Plugin/ControllerTest/']);
-        $path = APP . 'Plugin/ControllerTest/src/Controller/BakeArticlesController.php';
+        Plugin::load('ControllerTest', ['path' => $app . 'Plugin/ControllerTest/']);
+        $path = $app . 'Plugin/ControllerTest/src/Controller/BakeArticlesController.php';
 
         $this->Task->expects($this->at(1))
             ->method('createFile')
@@ -351,9 +356,10 @@ class ControllerTaskTest extends TestCase
      */
     public function testMainWithControllerNameVariations($name)
     {
+        $app = Configure::read('Bake.app');
         $this->Task->connection = 'test';
 
-        $filename = $this->_normalizePath(APP . 'Controller/BakeArticlesController.php');
+        $filename = $this->_normalizePath($app . 'Controller/BakeArticlesController.php');
         $this->Task->expects($this->once())
             ->method('createFile')
             ->with($filename, $this->stringContains('public function index()'));
@@ -367,10 +373,11 @@ class ControllerTaskTest extends TestCase
      */
     public function testMainWithPluginDot()
     {
+        $app = Configure::read('Bake.app');
         $this->Task->connection = 'test';
 
-        Plugin::load('ControllerTest', ['path' => APP . 'Plugin/ControllerTest/']);
-        $path = APP . 'Plugin/ControllerTest/src/Controller/BakeArticlesController.php';
+        Plugin::load('ControllerTest', ['path' => $app . 'Plugin/ControllerTest/']);
+        $path = $app . 'Plugin/ControllerTest/src/Controller/BakeArticlesController.php';
 
         $this->Task->expects($this->at(1))
             ->method('createFile')

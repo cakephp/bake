@@ -51,7 +51,7 @@ class ViewTaskTest extends TestCase
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'View' . DS;
 
-        Configure::write('App.namespace', 'TestApp');
+        Configure::write('App.namespace', 'Bake\Test\App');
         $this->_setupTask(['in', 'err', 'error', 'createFile', '_stop']);
 
         TableRegistry::get('ViewTaskComments', [
@@ -99,7 +99,7 @@ class ViewTaskTest extends TestCase
         $this->Task->controller('Comments');
         $this->assertEquals('Comments', $this->Task->controllerName);
         $this->assertEquals(
-            'TestApp\Controller\CommentsController',
+            'Bake\Test\App\Controller\CommentsController',
             $this->Task->controllerClass
         );
     }
@@ -143,7 +143,7 @@ class ViewTaskTest extends TestCase
         $this->Task->controller('Posts');
         $this->assertEquals('Posts', $this->Task->controllerName);
         $this->assertEquals(
-            'TestApp\Controller\Admin\PostsController',
+            'Bake\Test\App\Controller\Admin\PostsController',
             $this->Task->controllerClass
         );
 
@@ -166,7 +166,7 @@ class ViewTaskTest extends TestCase
         $this->Task->controller('Comments', 'Posts');
         $this->assertEquals('Posts', $this->Task->controllerName);
         $this->assertEquals(
-            'TestApp\Controller\PostsController',
+            'Bake\Test\App\Controller\PostsController',
             $this->Task->controllerClass
         );
     }
@@ -448,7 +448,7 @@ class ViewTaskTest extends TestCase
     public function testBakeSelfAssociations()
     {
         $this->Task->controllerName = 'CategoryThreads';
-        $this->Task->modelName = 'TestApp\Model\Table\CategoryThreadsTable';
+        $this->Task->modelName = 'Bake\Test\App\Model\Table\CategoryThreadsTable';
 
         $this->Task->expects($this->once())
             ->method('createFile')

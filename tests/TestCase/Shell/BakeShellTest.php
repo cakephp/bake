@@ -43,7 +43,7 @@ class BakeShellTest extends TestCase
             ['in', 'out', 'hr', 'err', 'createFile', '_stop'],
             [$this->io]
         );
-        Configure::write('App.namespace', 'TestApp');
+        Configure::write('App.namespace', 'Bake\Test\App');
     }
 
     /**
