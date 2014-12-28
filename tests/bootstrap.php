@@ -64,20 +64,9 @@ define('TESTS', ROOT . DS . 'tests' . DS);
 Configure::write('debug', true);
 Configure::write('App', [
 	'namespace' => 'App',
-	'encoding' => 'UTF-8',
-	'base' => false,
-	'baseUrl' => false,
-	'dir' => APP_DIR,
-	'webroot' => 'webroot',
-	'wwwRoot' => WWW_ROOT,
-	'fullBaseUrl' => 'http://localhost',
-	'imageBaseUrl' => 'img/',
-	'jsBaseUrl' => 'js/',
-	'cssBaseUrl' => 'css/',
 	'paths' => [
-		'plugins' => [APP . 'Plugin' . DS],
-		'templates' => [APP . 'Template' . DS],
-		'locales' => [APP . 'Locale' . DS],
+        'plugins' => [ROOT . 'Plugin' . DS],
+        'templates' => [ROOT . 'App' . DS . 'Template' . DS]
 	]
 ]);
 
@@ -89,11 +78,6 @@ ConnectionManager::config('test', ['url' => getenv('db_dsn')]);
 Plugin::load('Bake', [
     'path' => dirname(dirname(__FILE__)) . DS,
     'autoload' => true
-]);
-
-Configure::write('App.paths', [
-    'plugins' => [ROOT . 'Plugin' . DS],
-    'templates' => [ROOT . 'App' . DS . 'Template' . DS]
 ]);
 
 $loader = new Cake\Core\ClassLoader;
