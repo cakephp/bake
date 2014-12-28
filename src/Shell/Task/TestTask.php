@@ -198,8 +198,14 @@ class TestTask extends BakeTask
         $uses = $this->generateUses($type, $fullClassName);
 
         $subject = $className;
+
         list($namespace, $className) = namespaceSplit($fullClassName);
-        list($baseNamespace, $subNamespace) = explode('\\', $namespace, 2);
+
+        $baseNamespace = Configure::read('App.namespace');
+        if ($this->plugin) {
+            $baseNamespace = str_replace('/', '\\', $this->plugin);
+        }
+        $subNamespace = substr($namespace, strlen($baseNamespace) + 1);
 
         $this->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, Shell::QUIET);
 
