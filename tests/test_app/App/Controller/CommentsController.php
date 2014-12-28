@@ -14,12 +14,11 @@
  */
 namespace Bake\Test\App\Controller;
 
-use Bake\Test\App\Controller\AppController;
 
 /**
  * ControllerPostsController class
  *
  */
-class CommentsController extends AppController {
-
+class CommentsController extends AppController
+{
 }

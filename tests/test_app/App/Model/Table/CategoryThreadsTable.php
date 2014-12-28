@@ -19,18 +19,18 @@ use Cake\ORM\Table;
 /**
  * CategoryThreadsTable
  */
-class CategoryThreadsTable extends Table {
-
-	public function initialize(array $config) {
-		$this->table('category_threads');
-		$this->belongsTo('ParentCategoryThreads', [
-			'className' => __CLASS__,
-			'foreignKey' => 'parent_id'
-		]);
-		$this->hasMany('ChildCategoryThreads', [
-			'className' => __CLASS__,
-			'foreignKey' => 'parent_id'
-		]);
-	}
-
+class CategoryThreadsTable extends Table
+{
+    public function initialize(array $config)
+    {
+        $this->table('category_threads');
+        $this->belongsTo('ParentCategoryThreads', [
+            'className' => __CLASS__,
+            'foreignKey' => 'parent_id'
+        ]);
+        $this->hasMany('ChildCategoryThreads', [
+            'className' => __CLASS__,
+            'foreignKey' => 'parent_id'
+        ]);
+    }
 }

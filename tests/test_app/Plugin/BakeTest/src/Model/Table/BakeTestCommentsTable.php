@@ -20,10 +20,10 @@ use Cake\ORM\Table;
  * Class BakeTestCommentsTable
  *
  */
-class BakeTestCommentsTable extends Table {
-
-	public function initialize(array $config) {
-		$this->table('test_plugin_comments');
-	}
-
+class BakeTestCommentsTable extends Table
+{
+    public function initialize(array $config)
+    {
+        $this->table('test_plugin_comments');
+    }
 }

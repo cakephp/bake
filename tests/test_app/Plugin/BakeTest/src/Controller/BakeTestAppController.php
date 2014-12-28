@@ -20,5 +20,6 @@ use Cake\Controller\Controller;
  * Class BakeTestAppController
  *
  */
-class BakeTestAppController extends Controller {
+class BakeTestAppController extends Controller
+{
 }
