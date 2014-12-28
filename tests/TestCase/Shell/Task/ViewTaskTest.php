@@ -210,11 +210,11 @@ class ViewTaskTest extends TestCase
         $this->Task->controllerName = 'Posts';
 
         $result = $this->Task->getPath();
-        $this->assertPathEquals(APP . 'Template/Posts/', $result);
+        $this->assertPathEquals(Configure::read('Bake.app') . 'Template/Posts/', $result);
 
         $this->Task->params['prefix'] = 'admin';
         $result = $this->Task->getPath();
-        $this->assertPathEquals(APP . 'Template/Admin/Posts/', $result);
+        $this->assertPathEquals(Configure::read('Bake.app') . 'Template/Admin/Posts/', $result);
     }
 
     /**
@@ -226,7 +226,7 @@ class ViewTaskTest extends TestCase
     {
         $this->Task->controllerName = 'Posts';
 
-        $pluginPath = APP . 'Plugin/TestView/';
+        $pluginPath = Configure::read('Bake.app') . 'Plugin/TestView/';
         Plugin::load('TestView', ['path' => $pluginPath]);
 
         $this->Task->params['plugin'] = $this->Task->plugin = 'TestView';
@@ -371,7 +371,7 @@ class ViewTaskTest extends TestCase
         $this->Task->expects($this->at(0))
             ->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/ViewTaskComments/view.ctp')
+                $this->_normalizePath(Configure::read('Bake.app') . 'Template/ViewTaskComments/view.ctp')
             );
 
         $result = $this->Task->bake('view', true);
@@ -391,7 +391,7 @@ class ViewTaskTest extends TestCase
 
         $this->Task->expects($this->at(0))->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/ViewTaskComments/edit.ctp')
+                $this->_normalizePath(Configure::read('Bake.app') . 'Template/ViewTaskComments/edit.ctp')
             );
         $result = $this->Task->bake('edit', true);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
@@ -410,7 +410,7 @@ class ViewTaskTest extends TestCase
 
         $this->Task->expects($this->at(0))->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/ViewTaskComments/index.ctp')
+                $this->_normalizePath(Configure::read('Bake.app') . 'Template/ViewTaskComments/index.ctp')
             );
         $result = $this->Task->bake('index', true);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
@@ -432,7 +432,7 @@ class ViewTaskTest extends TestCase
         $this->Task->expects($this->at(0))
             ->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/ViewTaskComments/index.ctp'),
+                $this->_normalizePath(Configure::read('Bake.app') . 'Template/ViewTaskComments/index.ctp'),
                 $this->stringContains('$viewTaskComment->article->id')
             );
 
@@ -453,7 +453,7 @@ class ViewTaskTest extends TestCase
         $this->Task->expects($this->once())
             ->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/CategoryThreads/index.ctp'),
+                $this->_normalizePath(Configure::read('Bake.app') . 'Template/CategoryThreads/index.ctp'),
                 $this->logicalNot($this->stringContains('ParentCategoryThread'))
             );
 
@@ -489,17 +489,17 @@ class ViewTaskTest extends TestCase
         $this->Task->expects($this->at(0))
             ->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/ViewTaskComments/view.ctp'),
+                $this->_normalizePath(Configure::read('Bake.app') . 'Template/ViewTaskComments/view.ctp'),
                 $this->stringContains('View Task Comments')
             );
         $this->Task->expects($this->at(1))->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/ViewTaskComments/edit.ctp'),
+                $this->_normalizePath(Configure::read('Bake.app') . 'Template/ViewTaskComments/edit.ctp'),
                 $this->stringContains('Edit View Task Comment')
             );
         $this->Task->expects($this->at(2))->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/ViewTaskComments/index.ctp'),
+                $this->_normalizePath(Configure::read('Bake.app') . 'Template/ViewTaskComments/index.ctp'),
                 $this->stringContains('ViewTaskComment')
             );
 
@@ -522,7 +522,7 @@ class ViewTaskTest extends TestCase
 
         $this->Task->expects($this->once())->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/ViewTaskComments/my_action.ctp')
+                $this->_normalizePath(Configure::read('Bake.app') . 'Template/ViewTaskComments/my_action.ctp')
             );
 
         $this->Task->customAction();
@@ -630,9 +630,9 @@ class ViewTaskTest extends TestCase
         $this->_setupTask(['in', 'err', 'createFile']);
 
         $this->Task->connection = 'test';
-        $filename = $this->_normalizePath(APP . 'Plugin/TestView/src/Template/ViewTaskComments/index.ctp');
+        $filename = $this->_normalizePath(Configure::read('Bake.app') . 'Plugin/TestView/src/Template/ViewTaskComments/index.ctp');
 
-        Plugin::load('TestView', ['path' => APP . 'Plugin/TestView/']);
+        Plugin::load('TestView', ['path' => Configure::read('Bake.app') . 'Plugin/TestView/']);
 
         $this->Task->expects($this->at(0))
             ->method('createFile')
@@ -666,7 +666,7 @@ class ViewTaskTest extends TestCase
         foreach ($views as $i => $view) {
             $this->Task->expects($this->at($i))->method('createFile')
                 ->with(
-                    $this->_normalizePath(APP . 'Template/Blog/' . $view)
+                    $this->_normalizePath(Configure::read('Bake.app') . 'Template/Blog/' . $view)
                 );
         }
         $this->Task->main('Posts');
@@ -688,7 +688,7 @@ class ViewTaskTest extends TestCase
         foreach ($views as $i => $view) {
             $this->Task->expects($this->at($i))->method('createFile')
                 ->with(
-                    $this->_normalizePath(APP . 'Template/Admin/Posts/' . $view)
+                    $this->_normalizePath(Configure::read('Bake.app') . 'Template/Admin/Posts/' . $view)
                 );
         }
         $this->Task->main('Posts');
