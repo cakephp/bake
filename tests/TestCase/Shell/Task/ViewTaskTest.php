@@ -630,7 +630,9 @@ class ViewTaskTest extends TestCase
         $this->_setupTask(['in', 'err', 'createFile']);
 
         $this->Task->connection = 'test';
-        $filename = $this->_normalizePath(Configure::read('Bake.app') . 'Plugin/TestView/src/Template/ViewTaskComments/index.ctp');
+        $filename = $this->_normalizePath(
+            Configure::read('Bake.app') . 'Plugin/TestView/src/Template/ViewTaskComments/index.ctp'
+        );
 
         Plugin::load('TestView', ['path' => Configure::read('Bake.app') . 'Plugin/TestView/']);
 
