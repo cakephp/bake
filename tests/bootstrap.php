@@ -15,9 +15,13 @@
 
 // @codingStandardsIgnoreFile
 
+use Cake\Cache\Cache;
 use Cake\Core\ClassLoader;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Datasource\ConnectionManager;
+use Cake\I18n\I18n;
+use Cake\Log\Log;
 
 $findRoot = function ($root) {
     do {
@@ -33,36 +37,87 @@ $root = $findRoot(__FILE__);
 unset($findRoot);
 chdir($root);
 
-if (file_exists($root . '/config/bootstrap.php')) {
-    require $root . '/config/bootstrap.php';
-} else {
-    require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
+require_once 'vendor/autoload.php';
 
-    Plugin::load('Bake', [
-        'path' => dirname(dirname(__FILE__)) . DS,
-        'autoload' => true
-    ]);
+define('DS', DIRECTORY_SEPARATOR);
+define('ROOT', $root . DS . 'tests' . DS . 'test_app' . DS);
+define('APP_DIR', 'App');
 
+define('TMP', sys_get_temp_dir() . DS);
+define('LOGS', TMP . 'logs' . DS);
+define('CACHE', TMP . 'cache' . DS);
+define('SESSIONS', TMP . 'sessions' . DS);
+
+define('CAKE_CORE_INCLUDE_PATH', ROOT);
+define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
+define('CAKE', CORE_PATH . 'src' . DS);
+define('CORE_TESTS', CORE_PATH . 'tests' . DS);
+define('CORE_TEST_CASES', CORE_TESTS . 'TestCase');
+
+define('APP', ROOT . 'App' . DS);
+define('WWW_ROOT', APP . 'webroot' . DS);
+define('CONFIG', APP . 'config' . DS);
+define('TESTS', ROOT . DS . 'tests' . DS);
+
+@mkdir(LOGS);
+@mkdir(SESSIONS);
+@mkdir(CACHE);
+@mkdir(CACHE . 'views');
+@mkdir(CACHE . 'models');
+
+date_default_timezone_set('UTC');
+mb_internal_encoding('UTF-8');
+
+Configure::write('debug', true);
+Configure::write('App', [
+	'namespace' => 'App',
+	'encoding' => 'UTF-8',
+	'base' => false,
+	'baseUrl' => false,
+	'dir' => APP_DIR,
+	'webroot' => 'webroot',
+	'wwwRoot' => WWW_ROOT,
+	'fullBaseUrl' => 'http://localhost',
+	'imageBaseUrl' => 'img/',
+	'jsBaseUrl' => 'js/',
+	'cssBaseUrl' => 'css/',
+	'paths' => [
+		'plugins' => [APP . 'Plugin' . DS],
+		'templates' => [APP . 'Template' . DS],
+		'locales' => [APP . 'Locale' . DS],
+	]
+]);
+
+Cache::config([
+	'_cake_core_' => [
+		'engine' => 'File',
+		'prefix' => 'cake_core_',
+		'serialize' => true
+	],
+	'_cake_model_' => [
+		'engine' => 'File',
+		'prefix' => 'cake_model_',
+		'serialize' => true
+	]
+]);
+
+if (!getenv('db_dsn')) {
+	putenv('db_dsn=sqlite:///:memory:');
 }
+ConnectionManager::config('test', ['url' => getenv('db_dsn')]);
 
-if (!defined('TESTS')) {
-    define('TESTS', ROOT . DS . 'tests' . DS);
-}
-
-$testAppRoot = $root . DS . 'tests' . DS . 'test_app' . DS;
-
-Configure::write('Bake', [
-    'app' => $testAppRoot . 'App' . DS,
-    'root' => rtrim($testAppRoot, DS)
+Plugin::load('Bake', [
+    'path' => dirname(dirname(__FILE__)) . DS,
+    'autoload' => true
 ]);
 
 Configure::write('App.paths', [
-    'plugins' => [$testAppRoot . 'Plugin' . DS],
-    'templates' => [$testAppRoot . 'App' . DS . 'Template' . DS]
+    'plugins' => [ROOT . 'Plugin' . DS],
+    'templates' => [ROOT . 'App' . DS . 'Template' . DS]
 ]);
 
 $loader = new Cake\Core\ClassLoader;
 $loader->register();
 
-$loader->addNamespace('Bake\Test\App', $testAppRoot . 'App');
-$loader->addNamespace('BakeTest', $testAppRoot . 'Plugin' . DS . 'BakeTest' . DS . 'src');
+$loader->addNamespace('Bake\Test\App', APP);
+$loader->addNamespace('BakeTest', ROOT . 'Plugin' . DS . 'BakeTest' . DS . 'src');
