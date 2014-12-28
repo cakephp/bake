@@ -85,5 +85,4 @@ class ProjectTaskTest extends TestCase
         $contents = $File->read();
         $this->assertRegExp('/define\(\'CAKE_CORE_INCLUDE_PATH\', .*?DS/', $contents);
     }
-
 }
