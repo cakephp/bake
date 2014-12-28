@@ -15,7 +15,6 @@
 
 // @codingStandardsIgnoreFile
 
-use Cake\Cache\Cache;
 use Cake\Core\ClassLoader;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -85,19 +84,6 @@ Configure::write('App', [
 		'plugins' => [APP . 'Plugin' . DS],
 		'templates' => [APP . 'Template' . DS],
 		'locales' => [APP . 'Locale' . DS],
-	]
-]);
-
-Cache::config([
-	'_cake_core_' => [
-		'engine' => 'File',
-		'prefix' => 'cake_core_',
-		'serialize' => true
-	],
-	'_cake_model_' => [
-		'engine' => 'File',
-		'prefix' => 'cake_model_',
-		'serialize' => true
 	]
 ]);
 
