@@ -25,13 +25,15 @@ class CategoryThreadsTable extends Table
     {
         $this->table('category_threads');
         $this->belongsTo(
-            'ParentCategoryThreads', [
+            'ParentCategoryThreads',
+            [
             'className' => __CLASS__,
             'foreignKey' => 'parent_id'
             ]
         );
         $this->hasMany(
-            'ChildCategoryThreads', [
+            'ChildCategoryThreads',
+            [
             'className' => __CLASS__,
             'foreignKey' => 'parent_id'
             ]

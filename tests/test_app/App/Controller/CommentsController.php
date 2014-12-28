@@ -14,7 +14,6 @@
  */
 namespace Bake\Test\App\Controller;
 
-
 /**
  * ControllerPostsController class
  */
