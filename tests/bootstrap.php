@@ -15,6 +15,7 @@
 
 // @codingStandardsIgnoreFile
 
+use Cake\Core\ClassLoader;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 
@@ -59,3 +60,9 @@ Configure::write('App.paths', [
     'plugins' => [$testAppRoot . 'Plugin' . DS],
     'templates' => [$testAppRoot . 'App' . DS . 'Template' . DS]
 ]);
+
+$loader = new Cake\Core\ClassLoader;
+$loader->register();
+
+$loader->addNamespace('Bake\Test\App', $testAppRoot . 'App');
+$loader->addNamespace('BakeTest', $testAppRoot . 'Plugin' . DS . 'BakeTest' . DS . 'src');
