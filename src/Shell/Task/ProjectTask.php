@@ -43,9 +43,9 @@ class ProjectTask extends BakeTask
         } else {
             $appContents = array_diff(scandir(APP), ['.', '..']);
             if (empty($appContents)) {
-                $suggestedPath = rtrim($app, DS);
+                $suggestedPath = rtrim(APP, DS);
             } else {
-                $suggestedPath = $app . 'MyApp';
+                $suggestedPath = APP . 'MyApp';
             }
         }
 
