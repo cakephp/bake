@@ -123,11 +123,11 @@ class ViewTaskTest extends TestCase
      */
     public function testControllerPlugin()
     {
-        $this->Task->params['plugin'] = 'TestPlugin';
+        $this->Task->params['plugin'] = 'BakeTest';
         $this->Task->controller('Tests');
         $this->assertEquals('Tests', $this->Task->controllerName);
         $this->assertEquals(
-            'TestPlugin\Controller\TestsController',
+            'BakeTest\Controller\TestsController',
             $this->Task->controllerClass
         );
     }
@@ -147,11 +147,11 @@ class ViewTaskTest extends TestCase
             $this->Task->controllerClass
         );
 
-        $this->Task->params['plugin'] = 'TestPlugin';
+        $this->Task->params['plugin'] = 'BakeTest';
         $this->Task->controller('Comments');
         $this->assertEquals('Comments', $this->Task->controllerName);
         $this->assertEquals(
-            'TestPlugin\Controller\Admin\CommentsController',
+            'BakeTest\Controller\Admin\CommentsController',
             $this->Task->controllerClass
         );
     }
@@ -192,10 +192,10 @@ class ViewTaskTest extends TestCase
      */
     public function testModelPlugin()
     {
-        $this->Task->params['plugin'] = 'TestPlugin';
-        $this->Task->model('TestPluginComments');
+        $this->Task->params['plugin'] = 'BakeTest';
+        $this->Task->model('BakeTestComments');
         $this->assertEquals(
-            'TestPlugin.TestPluginComments',
+            'BakeTest.BakeTestComments',
             $this->Task->modelName
         );
     }
@@ -424,9 +424,9 @@ class ViewTaskTest extends TestCase
     public function testBakeIndexPlugin()
     {
         $this->Task->controllerName = 'ViewTaskComments';
-        $this->Task->modelName = 'TestPlugin.TestPluginComments';
+        $this->Task->modelName = 'BakeTest.BakeTestComments';
         $this->Task->controllerClass = __NAMESPACE__ . '\ViewTaskCommentsController';
-        $table = TableRegistry::get('TestPlugin.TestPluginComments');
+        $table = TableRegistry::get('BakeTest.BakeTestComments');
         $table->belongsTo('Articles');
 
         $this->Task->expects($this->at(0))
