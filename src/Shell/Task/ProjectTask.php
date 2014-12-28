@@ -14,6 +14,7 @@
  */
 namespace Bake\Shell\Task;
 
+use Cake\Core\Configure;
 use Cake\Filesystem\Folder;
 
 /**
@@ -41,11 +42,13 @@ class ProjectTask extends BakeTask
         if (isset($this->args[0])) {
             $project = $this->args[0];
         } else {
-            $appContents = array_diff(scandir(APP), ['.', '..']);
+            $app = Configure::read('Bake.app');
+
+            $appContents = array_diff(scandir($app), ['.', '..']);
             if (empty($appContents)) {
-                $suggestedPath = rtrim(APP, DS);
+                $suggestedPath = rtrim($app, DS);
             } else {
-                $suggestedPath = APP . 'MyApp';
+                $suggestedPath = $app . 'MyApp';
             }
         }
 
@@ -179,7 +182,7 @@ class ProjectTask extends BakeTask
                 'short' => 't',
                 'help' => 'Template to use when baking code.'
             ])->addOption('composer', [
-                'default' => ROOT . DS . 'composer.phar',
+                'default' => Configure::read('Bake.root') . DS . 'composer.phar',
                 'help' => 'The path to the composer executable.'
             ])->removeOption('plugin');
     }

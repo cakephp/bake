@@ -126,7 +126,7 @@ class TestTask extends BakeTask
      * Output a list of possible classnames you might want to generate a test for.
      *
      * @param string $type The typename to get classes for.
-     * @return void
+     * @return array
      */
     public function outputClassChoices($type)
     {
@@ -142,6 +142,8 @@ class TestTask extends BakeTask
         }
         $this->out('');
         $this->out('Re-run your command as `cake bake ' . $type . ' <classname>`');
+
+        return $options;
     }
 
     /**
@@ -153,7 +155,8 @@ class TestTask extends BakeTask
     protected function _getClassOptions($namespace)
     {
         $classes = [];
-        $base = APP;
+        $base = Configure::read('Bake.app');
+
         if ($this->plugin) {
             $base = Plugin::classPath($this->plugin);
         }

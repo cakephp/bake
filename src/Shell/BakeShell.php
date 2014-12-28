@@ -106,7 +106,20 @@ class BakeShell extends Shell
         $tasks = [];
         $tasks = $this->_findTasks($tasks, CAKE, 'Cake');
 
-        $tasks = $this->_findTasks($tasks, APP, Configure::read('App.namespace'));
+        if (!Configure::read('Bake.app')) {
+            Configure::write('Bake.app', APP);
+        }
+
+        if (!Configure::read('Bake.root')) {
+            Configure::write('Bake.root', ROOT);
+        }
+
+        $tasks = $this->_findTasks(
+            $tasks,
+            Configure::read('Bake.app'),
+            Configure::read('App.namespace')
+        );
+
         foreach (Plugin::loaded() as $plugin) {
             $tasks = $this->_findTasks(
                 $tasks,
