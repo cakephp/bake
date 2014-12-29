@@ -62,8 +62,9 @@ class BakeArticlesController extends AppController
      */
     public function add()
     {
-        $bakeArticle = $this->BakeArticles->newEntity($this->request->data);
+        $bakeArticle = $this->BakeArticles->newEntity();
         if ($this->request->is('post')) {
+            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->data);
             if ($this->BakeArticles->save($bakeArticle)) {
                 $this->Flash->success('The bake article has been saved.');
                 return $this->redirect(['action' => 'index']);
