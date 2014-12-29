@@ -52,15 +52,15 @@ define('TESTS', ROOT . DS . 'tests' . DS);
 
 Configure::write('debug', true);
 Configure::write('App', [
-	'namespace' => 'App',
-	'paths' => [
+    'namespace' => 'App',
+    'paths' => [
         'plugins' => [ROOT . 'Plugin' . DS],
         'templates' => [ROOT . 'App' . DS . 'Template' . DS]
-	]
+    ]
 ]);
 
 if (!getenv('db_dsn')) {
-	putenv('db_dsn=sqlite:///:memory:');
+    putenv('db_dsn=sqlite:///:memory:');
 }
 ConnectionManager::config('test', ['url' => getenv('db_dsn')]);
 
