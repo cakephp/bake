@@ -41,8 +41,6 @@ define('ROOT', $root . DS . 'tests' . DS . 'test_app' . DS);
 define('APP', ROOT . 'App' . DS);
 define('TMP', sys_get_temp_dir() . DS);
 
-define('CAKE', 'not used');
-
 Configure::write('debug', true);
 Configure::write('App', [
     'namespace' => 'App',
