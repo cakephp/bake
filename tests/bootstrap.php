@@ -15,11 +15,9 @@
 
 // @codingStandardsIgnoreFile
 
-use Cake\Core\ClassLoader;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
-use Cake\I18n\I18n;
 
 $findRoot = function ($root) {
     do {
