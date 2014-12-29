@@ -42,17 +42,12 @@ define('ROOT', $root . DS . 'tests' . DS . 'test_app' . DS);
 define('APP_DIR', 'App');
 
 define('TMP', sys_get_temp_dir() . DS);
-define('LOGS', TMP . 'logs' . DS);
-define('CACHE', TMP . 'cache' . DS);
-define('SESSIONS', TMP . 'sessions' . DS);
 
 define('CAKE_CORE_INCLUDE_PATH', ROOT);
 define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
 
 define('APP', ROOT . 'App' . DS);
-define('WWW_ROOT', APP . 'webroot' . DS);
-define('CONFIG', APP . 'config' . DS);
 define('TESTS', ROOT . DS . 'tests' . DS);
 
 Configure::write('debug', true);
