@@ -1,12 +1,12 @@
 <?php
-namespace TestApp\Test\TestCase\Controller\Component;
+namespace Bake\Test\App\Test\TestCase\Controller\Component;
 
+use Bake\Test\App\Controller\Component\AppleComponent;
 use Cake\Controller\ComponentRegistry;
 use Cake\TestSuite\TestCase;
-use TestApp\Controller\Component\AppleComponent;
 
 /**
- * TestApp\Controller\Component\AppleComponent Test Case
+ * Bake\Test\App\Controller\Component\AppleComponent Test Case
  */
 class AppleComponentTest extends TestCase
 {

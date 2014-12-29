@@ -1,11 +1,11 @@
 <?php
-namespace TestApp\Test\TestCase\Controller\Admin;
+namespace Bake\Test\App\Test\TestCase\Controller\Admin;
 
+use Bake\Test\App\Controller\Admin\PostsController;
 use Cake\TestSuite\IntegrationTestCase;
-use TestApp\Controller\Admin\PostsController;
 
 /**
- * TestApp\Controller\Admin\PostsController Test Case
+ * Bake\Test\App\Controller\Admin\PostsController Test Case
  */
 class PostsControllerTest extends IntegrationTestCase
 {

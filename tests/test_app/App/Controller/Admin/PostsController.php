@@ -12,13 +12,39 @@
  * @since     0.1.0
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace BakeTest\Shell\Task;
+namespace Bake\Test\App\Controller\Admin;
 
-use Bake\Shell\Task\BakeTask;
+use Cake\Controller\Controller;
 
 /**
- * Test stub for BakeShell.
+ * Posts Controller class.
+ *
+ * For testing prefix routing.
  */
-class ZergTask extends BakeTask
+class PostsController extends Controller
 {
+    /**
+     * components
+     *
+     * @var array
+     */
+    public $components = array();
+
+    /**
+     * index action
+     *
+     * @return void
+     */
+    public function index()
+    {
+    }
+
+    /**
+     * index action
+     *
+     * @return void
+     */
+    public function add()
+    {
+    }
 }

@@ -12,13 +12,37 @@
  * @since     0.1.0
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace BakeTest\Shell\Task;
-
-use Bake\Shell\Task\BakeTask;
+namespace Bake\Test\App\Controller;
 
 /**
- * Test stub for BakeShell.
+ * PostsController class
  */
-class ZergTask extends BakeTask
+class PostsController extends AppController
 {
+    /**
+     * Components array
+     *
+     * @var array
+     */
+    public $components = array(
+        'Flash',
+        'RequestHandler',
+    );
+
+    /**
+     * Index method.
+     *
+     * @return void
+     */
+    public function index()
+    {
+        $this->Flash->error('An error message');
+        $this->response->cookie(
+            [
+            'name' => 'remember_me',
+            'value' => 1,
+            ]
+        );
+        $this->set('test', 'value');
+    }
 }

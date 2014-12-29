@@ -15,7 +15,9 @@
 
 // @codingStandardsIgnoreFile
 
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Datasource\ConnectionManager;
 
 $findRoot = function ($root) {
     do {
@@ -30,16 +32,31 @@ $findRoot = function ($root) {
 $root = $findRoot(__FILE__);
 unset($findRoot);
 chdir($root);
-if (file_exists($root . '/config/bootstrap.php')) {
-    require $root . '/config/bootstrap.php';
-    return;
-}
-require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
-Plugin::load('Bake', [
-    'path' => dirname(dirname(__FILE__)) . DS,
-    'autoload' => true
+
+require_once 'vendor/cakephp/cakephp/src/basics.php';
+require_once 'vendor/autoload.php';
+
+define('DS', DIRECTORY_SEPARATOR);
+define('ROOT', $root . DS . 'tests' . DS . 'test_app' . DS);
+define('APP', ROOT . 'App' . DS);
+define('TMP', sys_get_temp_dir() . DS);
+
+define('CAKE', 'not used');
+
+Configure::write('debug', true);
+Configure::write('App', [
+    'namespace' => 'App',
+    'paths' => [
+        'plugins' => [ROOT . 'Plugin' . DS],
+        'templates' => [ROOT . 'App' . DS . 'Template' . DS]
+    ]
 ]);
 
-if (!defined('TESTS')) {
-    define('TESTS', ROOT . DS . 'tests' . DS);
+if (!getenv('db_dsn')) {
+    putenv('db_dsn=sqlite:///:memory:');
 }
+ConnectionManager::config('test', ['url' => getenv('db_dsn')]);
+
+Plugin::load('Bake', [
+    'path' => dirname(dirname(__FILE__)) . DS,
+]);

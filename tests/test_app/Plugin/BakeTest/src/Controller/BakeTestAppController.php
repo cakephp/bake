@@ -12,13 +12,13 @@
  * @since     0.1.0
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace BakeTest\Shell\Task;
+namespace BakeTest\Controller;
 
-use Bake\Shell\Task\BakeTask;
+use Cake\Controller\Controller;
 
 /**
- * Test stub for BakeShell.
+ * Class BakeTestAppController
  */
-class ZergTask extends BakeTask
+class BakeTestAppController extends Controller
 {
 }

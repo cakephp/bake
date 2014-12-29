@@ -12,13 +12,31 @@
  * @since     0.1.0
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace BakeTest\Shell\Task;
+namespace Bake\Test\App\Model\Table;
 
-use Bake\Shell\Task\BakeTask;
+use Cake\ORM\Table;
 
 /**
- * Test stub for BakeShell.
+ * CategoryThreadsTable
  */
-class ZergTask extends BakeTask
+class CategoryThreadsTable extends Table
 {
+    public function initialize(array $config)
+    {
+        $this->table('category_threads');
+        $this->belongsTo(
+            'ParentCategoryThreads',
+            [
+            'className' => __CLASS__,
+            'foreignKey' => 'parent_id'
+            ]
+        );
+        $this->hasMany(
+            'ChildCategoryThreads',
+            [
+            'className' => __CLASS__,
+            'foreignKey' => 'parent_id'
+            ]
+        );
+    }
 }

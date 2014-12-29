@@ -113,7 +113,7 @@ class SimpleBakeTaskTest extends TestCase
      */
     public function testBake()
     {
-        Configure::write('App.namespace', 'TestApp');
+        Configure::write('App.namespace', 'Bake\Test\App');
 
         $this->Task->expects($this->once())
             ->method('createFile')

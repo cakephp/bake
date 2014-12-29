@@ -220,7 +220,7 @@ class ModelTaskTest extends TestCase
      */
     public function testApplyAssociationsConcreteClass()
     {
-        Configure::write('App.namespace', 'TestApp');
+        Configure::write('App.namespace', 'Bake\Test\App');
         $articles = TableRegistry::get('Articles');
         $assocs = [
             'belongsTo' => [

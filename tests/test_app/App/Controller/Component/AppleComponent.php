@@ -4,7 +4,6 @@
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
  * @copyright Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -12,13 +11,32 @@
  * @since     0.1.0
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace BakeTest\Shell\Task;
+namespace Bake\Test\App\Controller\Component;
 
-use Bake\Shell\Task\BakeTask;
+use Cake\Controller\Component;
+use Cake\Controller\Controller;
+use Cake\Event\Event;
 
 /**
- * Test stub for BakeShell.
+ * AppleComponent class
  */
-class ZergTask extends BakeTask
+class AppleComponent extends Component
 {
+    /**
+     * components property
+     *
+     * @var array
+     */
+    public $components = array('Orange');
+
+    /**
+     * startup method
+     *
+     * @param  Event $event
+     * @param  mixed $controller
+     * @return void
+     */
+    public function startup(Event $event)
+    {
+    }
 }

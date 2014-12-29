@@ -12,13 +12,26 @@
  * @since     0.1.0
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace BakeTest\Shell\Task;
-
-use Bake\Shell\Task\BakeTask;
+namespace BakeTest\Controller;
 
 /**
- * Test stub for BakeShell.
+ * Class TestsController
  */
-class ZergTask extends BakeTask
+class TestsController extends BakeTestAppController
 {
+    public $helpers = array('BakeTest.OtherHelper', 'Html');
+
+    public $components = array('BakeTest.Plugins');
+
+    public function index()
+    {
+        $this->set('test_value', 'It is a variable');
+    }
+
+    public function some_method()
+    {
+        $this->response->body(25);
+
+        return $this->response;
+    }
 }

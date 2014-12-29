@@ -61,7 +61,7 @@ class TemplateTaskTest extends TestCase
     {
         $this->Task->expects($this->any())->method('in')->will($this->returnValue(1));
 
-        $result = $this->Task->generate('classes/test_object', ['test' => 'foo']);
+        $result = $this->Task->generate('example', ['test' => 'foo']);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
 

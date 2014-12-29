@@ -85,19 +85,4 @@ class ProjectTaskTest extends TestCase
         $contents = $File->read();
         $this->assertRegExp('/define\(\'CAKE_CORE_INCLUDE_PATH\', .*?DS/', $contents);
     }
-
-    /**
-     * Copy the TestApp route file so it can be modified.
-     *
-     * @return void
-     */
-    protected function _cloneRoutes()
-    {
-        $File = new File(TEST_APP . 'TestApp/Config/routes.php');
-        $contents = $File->read();
-
-        mkdir(TMP . 'BakeTestApp/Config/', 0777, true);
-        $File = new File(TMP . 'BakeTestApp/Config/routes.php');
-        $File->write($contents);
-    }
 }

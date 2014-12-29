@@ -16,6 +16,9 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\TemplateTask;
 use Bake\Shell\Task\TestTask;
+use Bake\Test\App\Controller\PostsController;
+use Bake\Test\App\Model\Table\ArticlesTable;
+use Bake\Test\App\Model\Table\CategoryThreadsTable;
 use Bake\Test\TestCase\TestCase;
 use Cake\Controller\Controller;
 use Cake\Core\App;
@@ -25,9 +28,6 @@ use Cake\Network\Request;
 use Cake\Network\Response;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use TestApp\Controller\PostsController;
-use TestApp\Model\Table\ArticlesTable;
-use TestApp\Model\Table\CategoryThreadsTable;
 
 /**
  * TestTaskTest class
@@ -162,23 +162,13 @@ class TestTaskTest extends TestCase
      */
     public function testOutputClassOptionsForTable()
     {
-        $this->io->expects($this->at(0))
-            ->method('out')
-            ->with($this->stringContains('You must provide'));
-        $this->io->expects($this->at(1))
-            ->method('out')
-            ->with($this->stringContains('1. ArticlesTable'));
-        $this->io->expects($this->at(2))
-            ->method('out')
-            ->with($this->stringContains('2. ArticlesTagsTable'));
-        $this->io->expects($this->at(3))
-            ->method('out')
-            ->with($this->stringContains('3. AuthUsersTable'));
-        $this->io->expects($this->at(4))
-            ->method('out')
-            ->with($this->stringContains('4. AuthorsTable'));
+        $expected = [
+            'ArticlesTable',
+            'CategoryThreadsTable'
+        ];
 
-        $this->Task->outputClassChoices('Table');
+        $choices = $this->Task->outputClassChoices('Table');
+        $this->assertSame($expected, $choices);
     }
 
     /**
@@ -188,23 +178,17 @@ class TestTaskTest extends TestCase
      */
     public function testOutputClassOptionsForTablePlugin()
     {
-        Plugin::load('TestPlugin');
+        Plugin::load('BakeTest');
+        $this->Task->plugin = 'BakeTest';
 
-        $this->Task->plugin = 'TestPlugin';
-        $this->io->expects($this->at(0))
-            ->method('out')
-            ->with($this->stringContains('You must provide'));
-        $this->io->expects($this->at(1))
-            ->method('out')
-            ->with($this->stringContains('1. AuthorsTable'));
-        $this->io->expects($this->at(2))
-            ->method('out')
-            ->with($this->stringContains('2. CommentsTable'));
-        $this->io->expects($this->at(3))
-            ->method('out')
-            ->with($this->stringContains('3. TestPluginCommentsTable'));
+        $expected = [
+            'AuthorsTable',
+            'BakeTestCommentsTable',
+            'CommentsTable'
+        ];
 
-        $this->Task->outputClassChoices('Table');
+        $choices = $this->Task->outputClassChoices('Table');
+        $this->assertSame($expected, $choices);
     }
 
     /**
@@ -215,7 +199,7 @@ class TestTaskTest extends TestCase
      */
     public function testMethodIntrospection()
     {
-        $result = $this->Task->getTestableMethods('TestApp\Model\Table\ArticlesTable');
+        $result = $this->Task->getTestableMethods('Bake\Test\App\Model\Table\ArticlesTable');
         $expected = ['initialize', 'findpublished', 'dosomething', 'dosomethingelse'];
         $this->assertEquals($expected, array_map('strtolower', $result));
     }
@@ -375,7 +359,7 @@ class TestTaskTest extends TestCase
      */
     public function testBakeControllerTest()
     {
-        Configure::write('App.namespace', 'TestApp');
+        Configure::write('App.namespace', 'Bake\Test\App');
 
         $this->Task->expects($this->once())
             ->method('createFile')
@@ -392,7 +376,7 @@ class TestTaskTest extends TestCase
      */
     public function testBakePrefixControllerTest()
     {
-        Configure::write('App.namespace', 'TestApp');
+        Configure::write('App.namespace', 'Bake\Test\App');
 
         $this->Task->expects($this->once())
             ->method('createFile')
@@ -410,7 +394,7 @@ class TestTaskTest extends TestCase
      */
     public function testBakeComponentTest()
     {
-        Configure::write('App.namespace', 'TestApp');
+        Configure::write('App.namespace', 'Bake\Test\App');
 
         $this->Task->expects($this->once())
             ->method('createFile')
@@ -600,7 +584,7 @@ class TestTaskTest extends TestCase
     public function testTestCaseFileName($type, $class, $expected)
     {
         $result = $this->Task->testCaseFileName($type, $class);
-        $this->assertPathEquals(TESTS . $expected, $result);
+        $this->assertPathEquals(ROOT . DS . 'tests' . DS . $expected, $result);
     }
 
     /**

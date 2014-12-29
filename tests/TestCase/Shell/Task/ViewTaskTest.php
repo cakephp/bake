@@ -51,7 +51,7 @@ class ViewTaskTest extends TestCase
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'View' . DS;
 
-        Configure::write('App.namespace', 'TestApp');
+        Configure::write('App.namespace', 'Bake\Test\App');
         $this->_setupTask(['in', 'err', 'error', 'createFile', '_stop']);
 
         TableRegistry::get('ViewTaskComments', [
@@ -99,7 +99,7 @@ class ViewTaskTest extends TestCase
         $this->Task->controller('Comments');
         $this->assertEquals('Comments', $this->Task->controllerName);
         $this->assertEquals(
-            'TestApp\Controller\CommentsController',
+            'Bake\Test\App\Controller\CommentsController',
             $this->Task->controllerClass
         );
     }
@@ -123,11 +123,11 @@ class ViewTaskTest extends TestCase
      */
     public function testControllerPlugin()
     {
-        $this->Task->params['plugin'] = 'TestPlugin';
+        $this->Task->params['plugin'] = 'BakeTest';
         $this->Task->controller('Tests');
         $this->assertEquals('Tests', $this->Task->controllerName);
         $this->assertEquals(
-            'TestPlugin\Controller\TestsController',
+            'BakeTest\Controller\TestsController',
             $this->Task->controllerClass
         );
     }
@@ -143,15 +143,15 @@ class ViewTaskTest extends TestCase
         $this->Task->controller('Posts');
         $this->assertEquals('Posts', $this->Task->controllerName);
         $this->assertEquals(
-            'TestApp\Controller\Admin\PostsController',
+            'Bake\Test\App\Controller\Admin\PostsController',
             $this->Task->controllerClass
         );
 
-        $this->Task->params['plugin'] = 'TestPlugin';
+        $this->Task->params['plugin'] = 'BakeTest';
         $this->Task->controller('Comments');
         $this->assertEquals('Comments', $this->Task->controllerName);
         $this->assertEquals(
-            'TestPlugin\Controller\Admin\CommentsController',
+            'BakeTest\Controller\Admin\CommentsController',
             $this->Task->controllerClass
         );
     }
@@ -166,7 +166,7 @@ class ViewTaskTest extends TestCase
         $this->Task->controller('Comments', 'Posts');
         $this->assertEquals('Posts', $this->Task->controllerName);
         $this->assertEquals(
-            'TestApp\Controller\PostsController',
+            'Bake\Test\App\Controller\PostsController',
             $this->Task->controllerClass
         );
     }
@@ -192,10 +192,10 @@ class ViewTaskTest extends TestCase
      */
     public function testModelPlugin()
     {
-        $this->Task->params['plugin'] = 'TestPlugin';
-        $this->Task->model('TestPluginComments');
+        $this->Task->params['plugin'] = 'BakeTest';
+        $this->Task->model('BakeTestComments');
         $this->assertEquals(
-            'TestPlugin.TestPluginComments',
+            'BakeTest.BakeTestComments',
             $this->Task->modelName
         );
     }
@@ -424,9 +424,9 @@ class ViewTaskTest extends TestCase
     public function testBakeIndexPlugin()
     {
         $this->Task->controllerName = 'ViewTaskComments';
-        $this->Task->modelName = 'TestPlugin.TestPluginComments';
+        $this->Task->modelName = 'BakeTest.BakeTestComments';
         $this->Task->controllerClass = __NAMESPACE__ . '\ViewTaskCommentsController';
-        $table = TableRegistry::get('TestPlugin.TestPluginComments');
+        $table = TableRegistry::get('BakeTest.BakeTestComments');
         $table->belongsTo('Articles');
 
         $this->Task->expects($this->at(0))
@@ -448,7 +448,7 @@ class ViewTaskTest extends TestCase
     public function testBakeSelfAssociations()
     {
         $this->Task->controllerName = 'CategoryThreads';
-        $this->Task->modelName = 'TestApp\Model\Table\CategoryThreadsTable';
+        $this->Task->modelName = 'Bake\Test\App\Model\Table\CategoryThreadsTable';
 
         $this->Task->expects($this->once())
             ->method('createFile')
@@ -630,7 +630,9 @@ class ViewTaskTest extends TestCase
         $this->_setupTask(['in', 'err', 'createFile']);
 
         $this->Task->connection = 'test';
-        $filename = $this->_normalizePath(APP . 'Plugin/TestView/src/Template/ViewTaskComments/index.ctp');
+        $filename = $this->_normalizePath(
+            APP . 'Plugin/TestView/src/Template/ViewTaskComments/index.ctp'
+        );
 
         Plugin::load('TestView', ['path' => APP . 'Plugin/TestView/']);
 

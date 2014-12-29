@@ -27,7 +27,7 @@ matrix:
 
 before_script:
   - composer self-update
-  - composer install --no-interaction --dev
+  - composer install --no-interaction --prefer-dist
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE cakephp_test;'; fi"
   - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE DATABASE cakephp_test;' -U postgres; fi"
   - sh -c "if [ '$RUN_COVERAGE' = '1' ]; then composer require --dev satooshi/php-coveralls:dev-master; fi"

@@ -126,7 +126,7 @@ class TestTask extends BakeTask
      * Output a list of possible classnames you might want to generate a test for.
      *
      * @param string $type The typename to get classes for.
-     * @return void
+     * @return array
      */
     public function outputClassChoices($type)
     {
@@ -142,6 +142,8 @@ class TestTask extends BakeTask
         }
         $this->out('');
         $this->out('Re-run your command as `cake bake ' . $type . ' <classname>`');
+
+        return $options;
     }
 
     /**
@@ -196,7 +198,12 @@ class TestTask extends BakeTask
 
         $subject = $className;
         list($namespace, $className) = namespaceSplit($fullClassName);
-        list($baseNamespace, $subNamespace) = explode('\\', $namespace, 2);
+
+        $baseNamespace = Configure::read('App.namespace');
+        if ($this->plugin) {
+            $baseNamespace = str_replace('/', '\\', $this->plugin);
+        }
+        $subNamespace = substr($namespace, strlen($baseNamespace) + 1);
 
         $this->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, Shell::QUIET);
 
@@ -510,7 +517,7 @@ class TestTask extends BakeTask
     public function getPath()
     {
         $dir = 'TestCase/';
-        $path = TESTS . $dir;
+        $path = ROOT . DS . 'tests' . DS . $dir;
         if (isset($this->plugin)) {
             $path = $this->_pluginPath($this->plugin) . 'tests/' . $dir;
         }
