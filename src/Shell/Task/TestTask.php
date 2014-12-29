@@ -517,7 +517,7 @@ class TestTask extends BakeTask
     public function getPath()
     {
         $dir = 'TestCase/';
-        $path = TESTS . $dir;
+        $path = ROOT . DS . 'tests' . DS . $dir;
         if (isset($this->plugin)) {
             $path = $this->_pluginPath($this->plugin) . 'tests/' . $dir;
         }

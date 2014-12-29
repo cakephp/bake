@@ -48,7 +48,6 @@ define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
 
 define('APP', ROOT . 'App' . DS);
-define('TESTS', ROOT . DS . 'tests' . DS);
 
 Configure::write('debug', true);
 Configure::write('App', [
