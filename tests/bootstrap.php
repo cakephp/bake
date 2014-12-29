@@ -35,19 +35,13 @@ $root = $findRoot(__FILE__);
 unset($findRoot);
 chdir($root);
 
+require_once 'vendor/cakephp/cakephp/src/basics.php';
 require_once 'vendor/autoload.php';
 
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', $root . DS . 'tests' . DS . 'test_app' . DS);
-define('APP_DIR', 'App');
-
-define('TMP', sys_get_temp_dir() . DS);
-
-define('CAKE_CORE_INCLUDE_PATH', ROOT);
-define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
-define('CAKE', CORE_PATH . 'src' . DS);
-
 define('APP', ROOT . 'App' . DS);
+define('TMP', sys_get_temp_dir() . DS);
 
 Configure::write('debug', true);
 Configure::write('App', [
