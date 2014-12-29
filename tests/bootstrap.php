@@ -43,6 +43,8 @@ define('ROOT', $root . DS . 'tests' . DS . 'test_app' . DS);
 define('APP', ROOT . 'App' . DS);
 define('TMP', sys_get_temp_dir() . DS);
 
+define('CAKE', 'not used');
+
 Configure::write('debug', true);
 Configure::write('App', [
     'namespace' => 'App',
@@ -59,11 +61,4 @@ ConnectionManager::config('test', ['url' => getenv('db_dsn')]);
 
 Plugin::load('Bake', [
     'path' => dirname(dirname(__FILE__)) . DS,
-    'autoload' => true
 ]);
-
-$loader = new Cake\Core\ClassLoader;
-$loader->register();
-
-$loader->addNamespace('Bake\Test\App', APP);
-$loader->addNamespace('BakeTest', ROOT . 'Plugin' . DS . 'BakeTest' . DS . 'src');
