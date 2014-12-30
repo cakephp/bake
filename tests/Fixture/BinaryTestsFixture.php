@@ -19,23 +19,24 @@ use Cake\TestSuite\Fixture\TestFixture;
 /**
  * Fixture for testing binary columns
  */
-class BinaryTestsFixture extends TestFixture {
+class BinaryTestsFixture extends TestFixture
+{
 
-/**
- * fields property
- *
- * @var array
- */
+    /**
+     * fields property
+     *
+     * @var array
+     */
     public $fields = [
         'id' => ['type' => 'integer'],
         'data' => ['type' => 'binary', 'length' => 300],
         '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
     ];
 
-/**
- * records property
- *
- * @var array
- */
+    /**
+     * records property
+     *
+     * @var array
+     */
     public $records = [];
 }
