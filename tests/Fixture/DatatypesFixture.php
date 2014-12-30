@@ -44,5 +44,4 @@ class DatatypesFixture extends TestFixture
     public $records = [
         ['float_field' => 42.23, 'huge_int' => '1234567891234567891', 'bool' => 0],
     ];
-
 }
