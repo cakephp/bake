@@ -30,7 +30,13 @@ class FixtureTaskTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = ['core.articles', 'core.comments', 'core.datatypes', 'core.binary_tests', 'core.users'];
+    public $fixtures = [
+        'core.articles',
+        'core.comments',
+        'plugin.bake.datatypes',
+        'plugin.bake.binary_tests',
+        'core.users'
+    ];
 
     /**
      * setUp method
