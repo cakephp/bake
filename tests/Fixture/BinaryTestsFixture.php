@@ -26,16 +26,16 @@ class BinaryTestsFixture extends TestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => ['type' => 'integer'],
-		'data' => ['type' => 'binary', 'length' => 300],
-		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
-	);
+    public $fields = [
+        'id' => ['type' => 'integer'],
+        'data' => ['type' => 'binary', 'length' => 300],
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+    ];
 
 /**
  * records property
  *
  * @var array
  */
-	public $records = array();
+    public $records = [];
 }
