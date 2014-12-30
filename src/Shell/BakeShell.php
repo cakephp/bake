@@ -54,6 +54,7 @@ class BakeShell extends Shell
         Cache::disable();
 
         $task = $this->_camelize($this->command);
+
         if (isset($this->{$task}) && !in_array($task, ['Project'])) {
             if (isset($this->params['connection'])) {
                 $this->{$task}->connection = $this->params['connection'];
@@ -223,8 +224,8 @@ class BakeShell extends Shell
 
         $name = $this->_camelize($name);
 
-        $this->Model->bake($name);
-        $this->Controller->bake($name);
+        $this->Model->main($name);
+        $this->Controller->main($name);
 
         $this->View->main($name);
 
