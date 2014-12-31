@@ -32,9 +32,9 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique('username'));
-        $rules->add($rules->existsIn('country_id', 'Countries'));
-        $rules->add($rules->existsIn('site_id', 'Sites'));
+        $rules->add($rules->isUnique(['username']));
+        $rules->add($rules->existsIn(['country_id'], 'Countries'));
+        $rules->add($rules->existsIn(['site_id'], 'Sites'));
         return $rules;
     }
 }
