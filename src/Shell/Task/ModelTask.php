@@ -113,6 +113,7 @@ class ModelTask extends BakeTask
         $displayField = $this->getDisplayField($model);
         $fields = $this->getFields($model);
         $validation = $this->getValidation($model);
+        $rulesChecker = $this->getRules($model, $associations);
         $behaviors = $this->getBehaviors($model);
 
         $data = compact(
@@ -122,6 +123,7 @@ class ModelTask extends BakeTask
             'table',
             'fields',
             'validation',
+            'rulesChecker',
             'behaviors'
         );
         $this->bakeTable($model, $data);
@@ -520,14 +522,42 @@ class ModelTask extends BakeTask
             ]
         ];
 
-        if (in_array($fieldName, ['email', 'username', 'login'])) {
-            $validation['unique'] = [
-                'rule' => 'validateUnique',
-                'provider' => 'table'
-            ];
+        return $validation;
+    }
+
+    /**
+     * Generate default rules checker.
+     *
+     * @param \Cake\ORM\Table $model The model to introspect.
+     * @param array $associations The associations for the model.
+     * @return array The rules to be applied.
+     */
+    public function getRules($model, array $associations)
+    {
+        if (!empty($this->params['no-rules'])) {
+            return [];
+        }
+        $fields = $model->schema()->columns();
+        if (empty($fields)) {
+            return [];
         }
 
-        return $validation;
+        $rules = [];
+        foreach ($fields as $fieldName) {
+            if (in_array($fieldName, ['username', 'email', 'login'])) {
+                $rules[$fieldName] = ['name' => 'isUnique'];
+            }
+        }
+
+        if (empty($associations['belongsTo'])) {
+            return $rules;
+        }
+
+        foreach ($associations['belongsTo'] as $assoc) {
+            $rules[$assoc['foreignKey']] = ['name' => 'existsIn', 'extra' => $assoc['alias']];
+        }
+
+        return $rules;
     }
 
     /**
@@ -664,6 +694,7 @@ class ModelTask extends BakeTask
             'displayField' => null,
             'table' => null,
             'validation' => [],
+            'rulesChecker' => [],
             'behaviors' => [],
         ];
 
@@ -775,6 +806,9 @@ class ModelTask extends BakeTask
         ])->addOption('no-validation', [
             'boolean' => true,
             'help' => 'Disable generating validation rules.'
+        ])->addOption('no-rules', [
+            'boolean' => true,
+            'help' => 'Disable generating a rules checker.'
         ])->addOption('no-associations', [
             'boolean' => true,
             'help' => 'Disable generating associations.'

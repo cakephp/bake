@@ -616,6 +616,7 @@ class ModelTaskTest extends TestCase
         $expected = ['id', 'account_id'];
         $this->assertEquals($expected, $result);
     }
+
     /**
      * test getting validation rules with the no-validation rule.
      *
@@ -660,26 +661,56 @@ class ModelTaskTest extends TestCase
     }
 
     /**
-     * Tests that a username column will get a validateUnique rule applied
+     * test getting validation rules with the no-rules param.
      *
      * @return void
      */
-    public function testGetValidationWithUnique()
+    public function testGetRulesDisabled()
     {
         $model = TableRegistry::get('Users');
-        $result = $this->Task->getValidation($model);
-        $expected = [
-            'password' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
-            'id' => ['valid' => ['rule' => 'numeric', 'allowEmpty' => 'create']],
-            'username' => [
-                'valid' => [
-                    'rule' => false,
-                    'allowEmpty' => true
+        $this->Task->params['no-rules'] = true;
+        $result = $this->Task->getRules($model, []);
+        $this->assertEquals([], $result);
+    }
+
+    /**
+     * Tests the getRules method
+     *
+     * @return void
+     */
+    public function testGetRules()
+    {
+        $model = TableRegistry::get('Users');
+        $associations = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Countries',
+                    'foreignKey' => 'country_id'
                 ],
-                'unique' => [
-                    'rule' => 'validateUnique',
-                    'provider' => 'table'
+                [
+                    'alias' => 'Sites',
+                    'foreignKey' => 'site_id'
                 ]
+            ],
+            'hasMany' => [
+                [
+                    'alias' => 'BakeComments',
+                    'foreignKey' => 'bake_user_id',
+                ],
+            ]
+        ];
+        $result = $this->Task->getRules($model, $associations);
+        $expected = [
+            'username' => [
+                'name' => 'isUnique'
+            ],
+            'country_id' => [
+                'name' => 'existsIn',
+                'extra' => 'Countries'
+            ],
+            'site_id' => [
+                'name' => 'existsIn',
+                'extra' => 'Sites'
             ]
         ];
         $this->assertEquals($expected, $result);
@@ -969,6 +1000,37 @@ class ModelTaskTest extends TestCase
 
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->bakeEntity($model);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * Tests baking a table with rules
+     *
+     * @return void
+     */
+    public function testBakeWithRules()
+    {
+        $model = TableRegistry::get('Users');
+        $associations = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Countries',
+                    'foreignKey' => 'country_id'
+                ],
+                [
+                    'alias' => 'Sites',
+                    'foreignKey' => 'site_id'
+                ]
+            ],
+            'hasMany' => [
+                [
+                    'alias' => 'BakeComments',
+                    'foreignKey' => 'bake_user_id',
+                ],
+            ]
+        ];
+        $rulesChecker = $this->Task->getRules($model, $associations);
+        $result = $this->Task->bakeTable($model, compact('rulesChecker'));
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 

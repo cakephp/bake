@@ -18,6 +18,7 @@ use Cake\Utility\Inflector;
 namespace <%= $namespace %>\Model\Table;
 
 use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -124,4 +125,21 @@ endforeach;
         return $validator;
     }
 <% endif %>
+<% if (!empty($rulesChecker)): %>
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+    <%- foreach ($rulesChecker as $field => $rule): %>
+        $rules->add($rules-><%= $rule['name'] %>('<%= $field %>'<%= !empty($rule['extra']) ? ", '$rule[extra]'" : '' %>));
+    <%- endforeach; %>
+        return $rules;
+    }
+<% endif; %>
 }
