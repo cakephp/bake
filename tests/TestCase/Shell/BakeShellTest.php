@@ -69,12 +69,12 @@ class BakeShellTest extends TestCase
         $this->Shell->View = $this->getMock('Bake\Shell\Task\ModelTask');
 
         $this->Shell->Model->expects($this->once())
-            ->method('bake')
+            ->method('main')
             ->with('Comments')
             ->will($this->returnValue(true));
 
         $this->Shell->Controller->expects($this->once())
-            ->method('bake')
+            ->method('main')
             ->with('Comments')
             ->will($this->returnValue(true));
 
