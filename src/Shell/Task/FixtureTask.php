@@ -226,6 +226,8 @@ class FixtureTask extends BakeTask
 
         $this->out("\n" . sprintf('Baking test fixture for %s...', $model), 1, Shell::QUIET);
         $this->createFile($path . $filename, $content);
+        $emptyFile = $path . 'empty';
+        $this->_deleteEmptyFile($emptyFile);
         return $content;
     }
 
