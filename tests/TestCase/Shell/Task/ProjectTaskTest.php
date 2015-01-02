@@ -37,7 +37,7 @@ class ProjectTaskTest extends TestCase
 
         $this->Task = $this->getMock(
             'Bake\Shell\Task\ProjectTask',
-            ['in', 'err', 'createFile', '_stop'],
+            ['in', 'err', 'callProcess', 'createFile', '_stop'],
             [$io]
         );
         $this->Task->path = TMP;
@@ -75,14 +75,13 @@ class ProjectTaskTest extends TestCase
      */
     public function testExecuteWithAbsolutePath()
     {
-        $this->markTestIncomplete('Need to figure this out');
-        $this->Task->params['skel'] = CAKE . 'Console/Templates/skel';
-        $this->Task->expects($this->at(0))->method('in')->will($this->returnValue('y'));
-        $this->Task->main(TMP . 'BakeTestApp');
+        $this->Task->method('in')
+            ->will($this->returnValue('y'));
+        $this->Task->expects($this->once())
+            ->method('callProcess')
+            ->with($this->stringContains('create-project -s dev cakephp/app'));
 
-        $this->assertTrue(is_dir(TMP . 'BakeTestApp'), 'No project dir');
-        $File = new File($path . DS . 'Config/paths.php');
-        $contents = $File->read();
-        $this->assertRegExp('/define\(\'CAKE_CORE_INCLUDE_PATH\', .*?DS/', $contents);
+        $this->Task->args = [TMP . 'BakeProject'];
+        $this->Task->main();
     }
 }
