@@ -33,4 +33,5 @@ $allAssociations = array_merge(
             'contain' => [<%= $this->Bake->stringifyList($allAssociations, ['indent' => false]) %>]
         ]);
         $this->set('<%= $singularName %>', $<%= $singularName %>);
+        $this->set('_serialize', ['<%= $singularName %>']);
     }
