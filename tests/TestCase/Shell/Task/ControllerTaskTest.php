@@ -94,14 +94,11 @@ class ControllerTaskTest extends TestCase
      */
     public function testListAll()
     {
-        $count = count($this->Task->listAll('test'));
-        if ($count != count($this->fixtures)) {
-            $this->markTestSkipped('Additional tables detected.');
-        }
-
         $result = $this->Task->listAll();
-        $expected = ['bake_articles', 'bake_articles_bake_tags', 'bake_comments', 'bake_tags'];
-        $this->assertEquals($expected, $result);
+        $this->assertContains('bake_articles', $result);
+        $this->assertContains('bake_articles_bake_tags', $result);
+        $this->assertContains('bake_comments', $result);
+        $this->assertContains('bake_tags', $result);
     }
 
     /**
@@ -309,17 +306,13 @@ class ControllerTaskTest extends TestCase
      */
     public function testMainIntoAll()
     {
-        $count = count($this->Task->listAll());
-        if ($count != count($this->fixtures)) {
-            $this->markTestSkipped('Additional tables detected.');
-        }
         $this->Task->connection = 'test';
         $this->Task->params = ['helpers' => 'Time,Text'];
 
         $this->Task->Test->expects($this->atLeastOnce())
             ->method('bake');
 
-        $filename = $this->_normalizePath(ROOT . 'Controller/BakeArticlesController.php');
+        $filename = $this->_normalizePath(APP . 'Controller/BakeArticlesController.php');
         $this->Task->expects($this->at(1))
             ->method('createFile')
             ->with($filename, $this->logicalAnd(
