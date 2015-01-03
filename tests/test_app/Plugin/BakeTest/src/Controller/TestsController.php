@@ -19,9 +19,9 @@ namespace BakeTest\Controller;
  */
 class TestsController extends BakeTestAppController
 {
-    public $helpers = array('BakeTest.OtherHelper', 'Html');
+    public $helpers = ['BakeTest.OtherHelper', 'Html'];
 
-    public $components = array('BakeTest.Plugins');
+    public $components = ['BakeTest.Plugins'];
 
     public function index()
     {
