@@ -38,6 +38,7 @@ class BakeArticlesController extends AppController
             'contain' => ['BakeUsers']
         ];
         $this->set('bakeArticles', $this->paginate($this->BakeArticles));
+        $this->set('_serialize', ['bakeArticles']);
     }
 
     /**
@@ -53,6 +54,7 @@ class BakeArticlesController extends AppController
             'contain' => ['BakeUsers', 'BakeTags', 'BakeComments']
         ]);
         $this->set('bakeArticle', $bakeArticle);
+        $this->set('_serialize', ['bakeArticle']);
     }
 
     /**
@@ -75,6 +77,7 @@ class BakeArticlesController extends AppController
         $bakeUsers = $this->BakeArticles->BakeUsers->find('list', ['limit' => 200]);
         $bakeTags = $this->BakeArticles->BakeTags->find('list', ['limit' => 200]);
         $this->set(compact('bakeArticle', 'bakeUsers', 'bakeTags'));
+        $this->set('_serialize', ['bakeArticle']);
     }
 
     /**
@@ -101,6 +104,7 @@ class BakeArticlesController extends AppController
         $bakeUsers = $this->BakeArticles->BakeUsers->find('list', ['limit' => 200]);
         $bakeTags = $this->BakeArticles->BakeTags->find('list', ['limit' => 200]);
         $this->set(compact('bakeArticle', 'bakeUsers', 'bakeTags'));
+        $this->set('_serialize', ['bakeArticle']);
     }
 
     /**
