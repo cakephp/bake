@@ -51,5 +51,5 @@ $compact = ["'" . $singularName . "'"];
         endforeach;
 %>
         $this->set(compact(<%= join(', ', $compact) %>));
-        $this->set('_serialize', [<%=$singularName%>]);
+        $this->set('_serialize', ['<%=$singularName%>']);
     }
