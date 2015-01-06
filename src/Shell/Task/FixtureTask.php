@@ -20,7 +20,7 @@ use Cake\Database\Schema\Table;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use Cake\Utility\String;
+use Cake\Utility\Text;
 
 /**
  * Task class for creating and updating fixtures files.
@@ -324,7 +324,7 @@ class FixtureTask extends BakeTask
                     case 'binary':
                         $isPrimary = in_array($field, $table->primaryKey());
                         if ($isPrimary) {
-                            $insert = String::uuid();
+                            $insert = Text::uuid();
                         } else {
                             $insert = "Lorem ipsum dolor sit amet";
                             if (!empty($fieldInfo['length'])) {
