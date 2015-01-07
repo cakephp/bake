@@ -59,12 +59,11 @@ $fields = collection($fields)
             }
             if (isset($keyFields[$field])) {
                 $fieldData = $schema->column($field);
-                if (array_key_exists('null', $fieldData) && $fieldData['null'] == 1) {
+                if (!empty($fieldData['null'])) {
 %>
             echo $this->Form->input('<%= $field %>', ['options' => $<%= $keyFields[$field] %>, 'empty' => true]);
 <%
-                }
-                else {
+                } else {
 %>
             echo $this->Form->input('<%= $field %>', ['options' => $<%= $keyFields[$field] %>]);
 <%
