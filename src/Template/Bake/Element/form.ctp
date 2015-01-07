@@ -58,9 +58,16 @@ $fields = collection($fields)
                 continue;
             }
             if (isset($keyFields[$field])) {
+                $fieldData = $schema->column($field);
+                if (!empty($fieldData['null'])) {
+%>
+            echo $this->Form->input('<%= $field %>', ['options' => $<%= $keyFields[$field] %>, 'empty' => true]);
+<%
+                } else {
 %>
             echo $this->Form->input('<%= $field %>', ['options' => $<%= $keyFields[$field] %>]);
 <%
+                }
                 continue;
             }
             if (!in_array($field, ['created', 'modified', 'updated'])) {
