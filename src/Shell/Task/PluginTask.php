@@ -271,13 +271,23 @@ class PluginTask extends BakeTask
     {
         $valid = false;
         foreach ($pathOptions as $i => $path) {
-            if (!is_dir($path)) {
+            if (!is_dir($path) || $path == ROOT . DS . 'plugins' . DS) {
                 unset($pathOptions[$i]);
             }
         }
         $pathOptions = array_values($pathOptions);
-
         $max = count($pathOptions);
+
+        if ($max == 0) {
+            $this->err('No valid path found!');
+            exit;
+        }
+
+        if ($max === 1) {
+            $this->path=$pathOptions[0];
+            return;
+        }
+
         while (!$valid) {
             foreach ($pathOptions as $i => $option) {
                 $this->out($i + 1 . '. ' . $option);
