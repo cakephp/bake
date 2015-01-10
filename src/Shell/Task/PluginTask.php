@@ -215,9 +215,11 @@ class PluginTask extends BakeTask
             return false;
         }
 
+        $autoloadPath = str_replace(ROOT, '.', $this->path);
+
         $config = json_decode(file_get_contents($file), true);
-        $config['autoload']['psr-4'][$plugin . '\\'] = "./plugins/$plugin/src";
-        $config['autoload-dev']['psr-4'][$plugin . '\\Test\\'] = "./plugins/$plugin/tests";
+        $config['autoload']['psr-4'][$plugin . '\\'] = $autoloadPath . $plugin . "/src";
+        $config['autoload-dev']['psr-4'][$plugin . '\\Test\\'] = $autoloadPath . $plugin . "/tests";
 
         $this->out('<info>Modifying composer autoloader</info>');
 
@@ -235,7 +237,7 @@ class PluginTask extends BakeTask
             $cwd = getcwd();
 
             // Windows makes running multiple commands at once hard.
-            chdir(dirname($path));
+            chdir(ROOT);
             $command = 'php ' . escapeshellarg($composer) . ' dump-autoload';
             $this->callProcess($command);
 
@@ -284,7 +286,7 @@ class PluginTask extends BakeTask
         }
 
         if ($max === 1) {
-            $this->path=$pathOptions[0];
+            $this->path = $pathOptions[0];
             return;
         }
 
