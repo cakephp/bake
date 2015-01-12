@@ -273,7 +273,7 @@ class PluginTask extends BakeTask
     {
         $valid = false;
         foreach ($pathOptions as $i => $path) {
-            if (!is_dir($path) || $path == ROOT . DS . 'plugins' . DS) {
+            if (!is_dir($path)) {
                 unset($pathOptions[$i]);
             }
         }
