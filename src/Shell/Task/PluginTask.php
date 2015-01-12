@@ -237,7 +237,7 @@ class PluginTask extends BakeTask
             $cwd = getcwd();
 
             // Windows makes running multiple commands at once hard.
-            chdir(ROOT);
+            chdir(dirname($this->_rootComposerFilePath()));
             $command = 'php ' . escapeshellarg($composer) . ' dump-autoload';
             $this->callProcess($command);
 
