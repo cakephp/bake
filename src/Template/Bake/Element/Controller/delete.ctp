@@ -18,7 +18,7 @@
      * Delete method
      *
      * @param string|null $id <%= $singularHumanName %> id.
-     * @return void
+     * @return void Redirects to index.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function delete($id = null)

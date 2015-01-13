@@ -18,7 +18,7 @@ $compact = ["'" . $singularName . "'"];
     /**
      * Add method
      *
-     * @return void
+     * @return void Redirects on successful add, renders view otherwise.
      */
     public function add()
     {
