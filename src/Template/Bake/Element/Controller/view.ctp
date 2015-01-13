@@ -23,9 +23,9 @@ $allAssociations = array_merge(
     /**
      * View method
      *
-     * @param string|null $id <%= $singularHumanName %> id
+     * @param string|null $id <%= $singularHumanName %> id.
      * @return void
-     * @throws \Cake\Network\Exception\NotFoundException
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function view($id = null)
     {
