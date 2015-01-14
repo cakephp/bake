@@ -160,7 +160,6 @@ class PluginTaskTest extends TestCase
     public function testFindPathNonExistent()
     {
         $paths = App::path('Plugin');
-        $last = count($paths);
 
         array_unshift($paths, '/fake/path');
         $paths[] = '/fake/path2';
@@ -172,13 +171,29 @@ class PluginTaskTest extends TestCase
         );
         $this->Task->path = TMP . 'tests' . DS;
 
-        // Make sure the added path is filtered out.
-        $this->Task->expects($this->exactly($last))
-            ->method('out');
+        $this->Task->method('findPath')
+            ->will($this->returnValue($paths[0]));
 
-        $this->Task->expects($this->once())
-            ->method('in')
-            ->will($this->returnValue($last));
+        $this->Task->findPath($paths);
+    }
+
+    /**
+     * Test that findPath throws RunTimeException when no
+     * path exists for plugins
+     *
+     * @expectedException \RunTimeException
+     * @return void
+     */
+    public function testFindPathEmpty()
+    {
+        $paths = ['/fake/path', '/fake/path2'];
+
+        $this->Task = $this->getMock(
+            'Bake\Shell\Task\PluginTask',
+            ['in', 'out', 'err', '_stop'],
+            [$this->io]
+        );
+        $this->Task->path = TMP . 'tests' . DS;
 
         $this->Task->findPath($paths);
     }

@@ -282,7 +282,7 @@ class PluginTask extends BakeTask
 
         if ($max == 0) {
             $this->err('No valid path found!');
-            exit;
+            throw new \RuntimeException();
         }
 
         if ($max === 1) {
