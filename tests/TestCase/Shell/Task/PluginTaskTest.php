@@ -157,7 +157,7 @@ class PluginTaskTest extends TestCase
      *
      * @return void
      */
-    public function testFindPathNonExistant()
+    public function testFindPathNonExistent()
     {
         $paths = App::path('Plugin');
         $last = count($paths);
