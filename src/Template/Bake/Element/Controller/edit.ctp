@@ -21,9 +21,9 @@ $compact = ["'" . $singularName . "'"];
     /**
      * Edit method
      *
-     * @param string|null $id <%= $singularHumanName %> id
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException
+     * @param string|null $id <%= $singularHumanName %> id.
+     * @return void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
     {

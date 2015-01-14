@@ -53,7 +53,9 @@ class <%= $name %>Fixture extends TestFixture
      *
      * @var array
      */
+    // @codingStandardsIgnoreStart
     public $fields = <%= $schema %>;
+    // @codingStandardsIgnoreEnd
 <% endif; %>
 <% if ($records): %>
 
