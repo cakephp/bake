@@ -138,6 +138,10 @@ class PluginTaskTest extends TestCase
         $file = TMP . 'tests' . DS . 'main-composer.json';
         file_put_contents($file, '{}');
 
+        $savePath = $this->Task->path;
+
+        $this->Task->path = ROOT . DS . 'tests' . DS . 'BakedPlugins/';
+
         $this->Task->expects($this->any())
             ->method('_rootComposerFilePath')
             ->will($this->returnValue($file));
@@ -150,6 +154,22 @@ class PluginTaskTest extends TestCase
 
         $result = file_get_contents($file);
         $this->assertSameAsFile(__FUNCTION__ . '.json', $result);
+
+        //Clean Up Testfolder
+
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($this->Task->path, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($files as $fileinfo) {
+            $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+            $todo($fileinfo->getRealPath());
+        }
+
+        rmdir($this->Task->path);
+
+        $this->Task->path=$savePath;
     }
 
     /**

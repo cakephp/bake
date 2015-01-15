@@ -1,12 +1,12 @@
 {
     "autoload": {
         "psr-4": {
-            "ComposerExample\\": "/tmp/tests/BakedPlugins/ComposerExample/src"
+            "ComposerExample\\": "./tests/BakedPlugins/ComposerExample/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ComposerExample\\Test\\": "/tmp/tests/BakedPlugins/ComposerExample/tests"
+            "ComposerExample\\Test\\": "./tests/BakedPlugins/ComposerExample/tests"
         }
     }
 }
