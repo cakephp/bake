@@ -169,7 +169,7 @@ class PluginTaskTest extends TestCase
 
         rmdir($this->Task->path);
 
-        $this->Task->path=$savePath;
+        $this->Task->path = $savePath;
     }
 
     /**
