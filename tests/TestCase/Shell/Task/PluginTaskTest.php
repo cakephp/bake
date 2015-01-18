@@ -155,19 +155,8 @@ class PluginTaskTest extends TestCase
         $result = file_get_contents($file);
         $this->assertSameAsFile(__FUNCTION__ . '.json', $result);
 
-        //Clean Up Testfolder
-
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->Task->path, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-
-        foreach ($files as $fileinfo) {
-            $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
-            $todo($fileinfo->getRealPath());
-        }
-
-        rmdir($this->Task->path);
+        $folder = new Folder($this->Task->path);
+        $folder->delete();
 
         $this->Task->path = $savePath;
     }
