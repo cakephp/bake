@@ -254,7 +254,7 @@ class PluginTask extends BakeTask
     /**
      * The path to the main application's composer file
      *
-     * This is a test issolation wrapper
+     * This is a test isolation wrapper
      *
      * @return string the abs file path
      */
