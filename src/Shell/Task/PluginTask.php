@@ -215,9 +215,11 @@ class PluginTask extends BakeTask
             return false;
         }
 
+        $autoloadPath = str_replace(ROOT, '.', $this->path);
+
         $config = json_decode(file_get_contents($file), true);
-        $config['autoload']['psr-4'][$plugin . '\\'] = "./plugins/$plugin/src";
-        $config['autoload-dev']['psr-4'][$plugin . '\\Test\\'] = "./plugins/$plugin/tests";
+        $config['autoload']['psr-4'][$plugin . '\\'] = $autoloadPath . $plugin . "/src";
+        $config['autoload-dev']['psr-4'][$plugin . '\\Test\\'] = $autoloadPath . $plugin . "/tests";
 
         $this->out('<info>Modifying composer autoloader</info>');
 
@@ -235,7 +237,7 @@ class PluginTask extends BakeTask
             $cwd = getcwd();
 
             // Windows makes running multiple commands at once hard.
-            chdir(dirname($path));
+            chdir(dirname($this->_rootComposerFilePath()));
             $command = 'php ' . escapeshellarg($composer) . ' dump-autoload';
             $this->callProcess($command);
 
@@ -252,7 +254,7 @@ class PluginTask extends BakeTask
     /**
      * The path to the main application's composer file
      *
-     * This is a test issolation wrapper
+     * This is a test isolation wrapper
      *
      * @return string the abs file path
      */
@@ -276,8 +278,18 @@ class PluginTask extends BakeTask
             }
         }
         $pathOptions = array_values($pathOptions);
-
         $max = count($pathOptions);
+
+        if ($max == 0) {
+            $this->err('No valid plugin paths found! Please configure a plugin path that exists.');
+            throw new \RuntimeException();
+        }
+
+        if ($max === 1) {
+            $this->path = $pathOptions[0];
+            return;
+        }
+
         while (!$valid) {
             foreach ($pathOptions as $i => $option) {
                 $this->out($i + 1 . '. ' . $option);
