@@ -281,7 +281,7 @@ class PluginTask extends BakeTask
         $max = count($pathOptions);
 
         if ($max == 0) {
-            $this->err('No valid path found!');
+            $this->err('No valid plugin paths found! Please configure a plugin path that exists.');
             throw new \RuntimeException();
         }
 
