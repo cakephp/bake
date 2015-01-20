@@ -19,7 +19,6 @@
     "type": "cakephp-plugin",
     "require": {
         "php": ">=5.4",
-        "cakephp/plugin-installer": "*",
         "cakephp/cakephp": "3.0.x-dev"
     },
     "require-dev": {
