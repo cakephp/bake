@@ -187,12 +187,11 @@ class BakeView extends View
     /**
      * Get the contents of the template file
      *
-     * @param string $name A template name or a Bake template string
+     * @param string $filename A template filename
      * @return string Bake template to evaluate
      */
-    protected function _getViewFileContents($name)
+    protected function _getViewFileContents($filename)
     {
-        $filename = $this->_getViewFileName($name);
         return file_get_contents($filename);
     }
 
