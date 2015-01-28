@@ -684,11 +684,13 @@ class ModelTask extends BakeTask
         }
 
         $name = $model->alias();
+        $entity = $this->_entityName($model->alias());
         $data += [
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
             'namespace' => $ns,
             'name' => $name,
+            'entity' => $entity,
             'associations' => [],
             'primaryKey' => 'id',
             'displayField' => null,
