@@ -17,10 +17,18 @@ use Cake\Utility\Inflector;
 <?php
 namespace <%= $namespace %>\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
-use Cake\Validation\Validator;
+<%
+$uses = [
+    "use $namespace\\Model\\Entity\\$entity;",
+    'use Cake\ORM\Query;',
+    'use Cake\ORM\RulesChecker;',
+    'use Cake\ORM\Table;',
+    'use Cake\Validation\Validator;'
+];
+sort($uses);
+echo implode("\n", $uses);
+%>
+
 
 /**
  * <%= $name %> Model
