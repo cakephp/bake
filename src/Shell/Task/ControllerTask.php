@@ -103,7 +103,7 @@ class ControllerTask extends BakeTask
 
         $namespace = Configure::read('App.namespace');
         if ($this->plugin) {
-            $namespace = str_replace('/', '\\', $this->plugin);
+            $namespace = $this->_pluginNamespace($this->plugin);
         }
 
         $currentModelName = $controllerName;
