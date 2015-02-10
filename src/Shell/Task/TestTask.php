@@ -201,7 +201,7 @@ class TestTask extends BakeTask
 
         $baseNamespace = Configure::read('App.namespace');
         if ($this->plugin) {
-            $baseNamespace = $this->_pluginNamespace($this->plugin);            
+            $baseNamespace = $this->_pluginNamespace($this->plugin);
         }
         $subNamespace = substr($namespace, strlen($baseNamespace) + 1);
 
