@@ -636,16 +636,16 @@ class ModelTask extends BakeTask
         }
         $name = $this->_entityName($model->alias());
 
-        $ns = Configure::read('App.namespace');
+        $namespace = Configure::read('App.namespace');
         $pluginPath = '';
         if ($this->plugin) {
-            $ns = $this->plugin;
+            $namespace = $this->_pluginNamespace($this->plugin);
             $pluginPath = $this->plugin . '.';
         }
 
         $data += [
             'name' => $name,
-            'namespace' => $ns,
+            'namespace' => $namespace,
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
             'fields' => [],
@@ -676,11 +676,10 @@ class ModelTask extends BakeTask
             return;
         }
 
-        $ns = Configure::read('App.namespace');
+        $namespace = Configure::read('App.namespace');
         $pluginPath = '';
         if ($this->plugin) {
-            $ns = str_replace('/', '\\', $this->plugin);
-            $pluginPath = $this->plugin . '.';
+            $namespace = $this->_pluginNamespace($this->plugin);
         }
 
         $name = $model->alias();
@@ -688,7 +687,7 @@ class ModelTask extends BakeTask
         $data += [
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
-            'namespace' => $ns,
+            'namespace' => $namespace,
             'name' => $name,
             'entity' => $entity,
             'associations' => [],

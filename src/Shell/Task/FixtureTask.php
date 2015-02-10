@@ -213,7 +213,7 @@ class FixtureTask extends BakeTask
             'namespace' => Configure::read('App.namespace')
         ];
         if ($this->plugin) {
-            $defaults['namespace'] = $this->plugin;
+            $defaults['namespace'] = $this->_pluginNamespace($this->plugin);
         }
         $vars = $otherVars + $defaults;
 
