@@ -54,16 +54,7 @@ class ProjectTask extends BakeTask
             $project = $this->in($prompt, null, $suggestedPath);
         }
 
-        $namespace = basename($project);
-        if (!preg_match('/^\w[\w\d_]+$/', $namespace)) {
-            $err = 'Project Name/Namespace must start with a letter' .
-                ' and can only contain letters, digits and underscore';
-            $this->err($err);
-            $this->args = [];
-            return $this->main();
-        }
-
-        if ($project && !Folder::isAbsolute($project) && isset($_SERVER['PWD'])) {
+        if (!Folder::isAbsolute($project) && isset($_SERVER['PWD'])) {
             $project = $_SERVER['PWD'] . DS . $project;
         }
 
