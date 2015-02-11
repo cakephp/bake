@@ -44,7 +44,7 @@ class PluginTaskTest extends TestCase
 
         $this->Task = $this->getMock(
             'Bake\Shell\Task\PluginTask',
-            ['in', 'err', '_stop', 'clear', 'callProcess', '_rootComposerFilePath'],
+            ['in', 'err', '_stop', 'clear', 'callProcess', '_rootComposerFilePath', 'findComposer'],
             [$this->io]
         );
 
@@ -130,8 +130,7 @@ class PluginTaskTest extends TestCase
             ->method('askChoice')
             ->will($this->returnValue('y'));
 
-        $this->Task->Project = $this->getMock('ComposerProject', ['findComposer']);
-        $this->Task->Project->expects($this->at(0))
+        $this->Task->expects($this->any())
             ->method('findComposer')
             ->will($this->returnValue('composer.phar'));
 
