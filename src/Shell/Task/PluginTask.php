@@ -40,7 +40,6 @@ class PluginTask extends BakeTask
      * @var array
      */
     public $tasks = [
-        'Bake.Project',
         'Bake.Template'
     ];
 
@@ -227,7 +226,7 @@ class PluginTask extends BakeTask
         $out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
         $this->createFile($file, $out);
 
-        $composer = $this->Project->findComposer();
+        $composer = $this->findComposer();
 
         if (!$composer) {
             $this->error('Could not locate composer, Add composer to your PATH, or use the -composer option.');
@@ -323,5 +322,47 @@ class PluginTask extends BakeTask
         ])->removeOption('plugin');
 
         return $parser;
+    }
+
+    /**
+     * Uses either the CLI option or looks in $PATH and cwd for composer.
+     *
+     * @return string|false Either the path to composer or false if it cannot be found.
+     */
+    public function findComposer()
+    {
+        if (!empty($this->params['composer'])) {
+            $path = $this->params['composer'];
+            if (file_exists($path)) {
+                return $path;
+            }
+        }
+        $composer = false;
+        $path = env('PATH');
+        if (!empty($path)) {
+            $paths = explode(PATH_SEPARATOR, $path);
+            $composer = $this->_searchPath($paths);
+        }
+        return $composer;
+    }
+
+    /**
+     * Search the $PATH for composer.
+     *
+     * @param array $path The paths to search.
+     * @return string|bool
+     */
+    protected function _searchPath($path)
+    {
+        $composer = ['composer.phar', 'composer'];
+        foreach ($path as $dir) {
+            foreach ($composer as $cmd) {
+                if (is_file($dir . DS . $cmd)) {
+                    $this->_io->verbose('Found composer executable in ' . $dir);
+                    return $dir . DS . $cmd;
+                }
+            }
+        }
+        return false;
     }
 }
