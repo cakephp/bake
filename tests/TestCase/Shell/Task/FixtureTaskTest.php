@@ -14,7 +14,7 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\TemplateTask;
+use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
@@ -58,9 +58,9 @@ class FixtureTaskTest extends TestCase
             ['in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listAll'],
             [$io]
         );
-        $this->Task->Template = new TemplateTask($io);
-        $this->Task->Template->interactive = false;
-        $this->Task->Template->initialize();
+        $this->Task->BakeTemplate = new BakeTemplateTask($io);
+        $this->Task->BakeTemplate->interactive = false;
+        $this->Task->BakeTemplate->initialize();
     }
 
     /**

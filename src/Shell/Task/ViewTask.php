@@ -34,7 +34,7 @@ class ViewTask extends BakeTask
      */
     public $tasks = [
         'Bake.Model',
-        'Bake.Template'
+        'Bake.BakeTemplate'
     ];
 
     /**
@@ -386,10 +386,10 @@ class ViewTask extends BakeTask
             return false;
         }
 
-        $this->Template->set('action', $action);
-        $this->Template->set('plugin', $this->plugin);
-        $this->Template->set($vars);
-        return $this->Template->generate("Template/$action");
+        $this->BakeTemplate->set('action', $action);
+        $this->BakeTemplate->set('plugin', $this->plugin);
+        $this->BakeTemplate->set($vars);
+        return $this->BakeTemplate->generate("Template/$action");
     }
 
     /**

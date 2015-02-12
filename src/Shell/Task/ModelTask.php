@@ -41,7 +41,7 @@ class ModelTask extends BakeTask
     public $tasks = [
         'Bake.DbConfig',
         'Bake.Fixture',
-        'Bake.Template',
+        'Bake.BakeTemplate',
         'Bake.Test'
     ];
 
@@ -651,8 +651,8 @@ class ModelTask extends BakeTask
             'fields' => [],
         ];
 
-        $this->Template->set($data);
-        $out = $this->Template->generate('Model/entity');
+        $this->BakeTemplate->set($data);
+        $out = $this->BakeTemplate->generate('Model/entity');
 
         $path = $this->getPath();
         $filename = $path . 'Entity' . DS . $name . '.php';
@@ -699,8 +699,8 @@ class ModelTask extends BakeTask
             'behaviors' => [],
         ];
 
-        $this->Template->set($data);
-        $out = $this->Template->generate('Model/table');
+        $this->BakeTemplate->set($data);
+        $out = $this->BakeTemplate->generate('Model/table');
 
         $path = $this->getPath();
         $filename = $path . 'Table' . DS . $name . 'Table.php';

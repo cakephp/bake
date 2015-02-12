@@ -14,7 +14,7 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\TemplateTask;
+use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
@@ -56,7 +56,7 @@ class ControllerTaskTest extends TestCase
         $this->Task->name = 'Controller';
         $this->Task->connection = 'test';
 
-        $this->Task->Template = new TemplateTask($io);
+        $this->Task->BakeTemplate = new BakeTemplateTask($io);
 
         $this->Task->Model = $this->getMock(
             'Bake\Shell\Task\ModelTask',

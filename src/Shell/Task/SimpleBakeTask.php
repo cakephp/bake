@@ -28,7 +28,7 @@ abstract class SimpleBakeTask extends BakeTask
      * @var array
      */
     public $tasks = [
-        'Bake.Template',
+        'Bake.BakeTemplate',
         'Bake.Test'
     ];
 
@@ -94,9 +94,9 @@ abstract class SimpleBakeTask extends BakeTask
      */
     public function bake($name)
     {
-        $this->Template->set('name', $name);
-        $this->Template->set($this->templateData());
-        $contents = $this->Template->generate($this->template());
+        $this->BakeTemplate->set('name', $name);
+        $this->BakeTemplate->set($this->templateData());
+        $contents = $this->BakeTemplate->generate($this->template());
 
         $filename = $this->getPath() . $this->fileName($name);
         $this->createFile($filename, $contents);

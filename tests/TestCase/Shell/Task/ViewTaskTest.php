@@ -14,7 +14,7 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\TemplateTask;
+use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
@@ -75,7 +75,7 @@ class ViewTaskTest extends TestCase
             $methods,
             [$io]
         );
-        $this->Task->Template = new TemplateTask($io);
+        $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->Model = $this->getMock('Bake\Shell\Task\ModelTask', [], [$io]);
     }
 

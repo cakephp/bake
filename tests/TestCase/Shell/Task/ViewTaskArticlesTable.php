@@ -14,7 +14,7 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Cakeº\ORM\Table;
+use Cake\ORM\Table;
 
 /**
  * Test View Task Article Model

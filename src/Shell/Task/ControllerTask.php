@@ -31,7 +31,7 @@ class ControllerTask extends BakeTask
      */
     public $tasks = [
         'Bake.Model',
-        'Bake.Template',
+        'Bake.BakeTemplate',
         'Bake.Test'
     ];
 
@@ -161,9 +161,9 @@ class ControllerTask extends BakeTask
             'pluginPath' => null,
         ];
 
-        $this->Template->set($data);
+        $this->BakeTemplate->set($data);
 
-        $contents = $this->Template->generate('Controller/controller');
+        $contents = $this->BakeTemplate->generate('Controller/controller');
 
         $path = $this->getPath();
         $filename = $path . $controllerName . 'Controller.php';

@@ -26,10 +26,9 @@ use Cake\View\Exception\MissingTemplateException;
 use Cake\View\ViewVarsTrait;
 
 /**
- * Template Task can generate templated output Used in other Tasks.
- * Acts like a simplified View class.
+ * Used by other tasks to generate templated output, Acts as an interface to BakeView
  */
-class TemplateTask extends Shell
+class BakeTemplateTask extends Shell
 {
     use ConventionsTrait;
 

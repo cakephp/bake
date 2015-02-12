@@ -18,9 +18,9 @@ use Bake\Test\TestCase\TestCase;
 use Cake\Core\Plugin;
 
 /**
- * TemplateTaskTest class
+ * BakeTemplateTaskTest class
  */
-class TemplateTaskTest extends TestCase
+class BakeTemplateTaskTest extends TestCase
 {
     /**
      * setUp method
@@ -30,11 +30,11 @@ class TemplateTaskTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
+        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'BakeTemplate' . DS;
         $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
 
         $this->Task = $this->getMock(
-            'Bake\Shell\Task\TemplateTask',
+            'Bake\Shell\Task\BakeTemplateTask',
             ['in', 'err', 'createFile', '_stop', 'clear'],
             [$io]
         );
