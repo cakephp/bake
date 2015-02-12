@@ -27,7 +27,7 @@ use Cake\Utility\Inflector;
  *
  * Bake is CakePHP's code generation script, which can help you kickstart
  * application development by writing fully functional skeleton controllers,
- * models, and views. Going further, Bake can also write Unit Tests for you.
+ * models, and templates. Going further, Bake can also write Unit Tests for you.
  *
  * @link http://book.cakephp.org/3.0/en/console-and-shells/code-generation-with-bake.html
  */
@@ -217,7 +217,7 @@ class BakeShell extends Shell
             return false;
         }
 
-        foreach (['Model', 'Controller', 'View'] as $task) {
+        foreach (['Model', 'Controller', 'Template'] as $task) {
             $this->{$task}->connection = $this->connection;
         }
 
@@ -225,8 +225,7 @@ class BakeShell extends Shell
 
         $this->Model->main($name);
         $this->Controller->main($name);
-
-        $this->View->main($name);
+        $this->Template->main($name);
 
         $this->out('<success>Bake All complete.</success>', 1, Shell::QUIET);
         return true;
@@ -250,7 +249,7 @@ class BakeShell extends Shell
         }
 
         $parser->description(
-            'The Bake script generates controllers, views and models for your application.' .
+            'The Bake script generates controllers, models and template files for your application.' .
             ' If run with no command line arguments, Bake guides the user through the class creation process.' .
             ' You can customize the generation process by telling Bake where different parts of your application' .
             ' are using command line arguments.'

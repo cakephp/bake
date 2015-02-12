@@ -17,15 +17,12 @@ namespace Bake\Test\TestCase\Shell\Task;
 use Cake\ORM\Table;
 
 /**
- * Test View Task Comment Model
+ * Test Template Task Article Model
  */
-class ViewTaskCommentsTable extends Table
+class TemplateTaskArticlesTable extends Table
 {
-    public function initialize(array $config)
+    public function intialize(array $config)
     {
-        $this->table('comments');
-        $this->belongsTo('Articles', [
-            'foreignKey' => 'article_id'
-        ]);
+        $this->table('articles');
     }
 }

@@ -25,7 +25,7 @@ use Cake\Utility\Inflector;
  * Task class for creating and updating view files.
  *
  */
-class ViewTask extends BakeTask
+class TemplateTask extends BakeTask
 {
     /**
      * Tasks to be loaded by this Task
@@ -38,7 +38,7 @@ class ViewTask extends BakeTask
     ];
 
     /**
-     * path to View directory
+     * path to Template directory
      *
      * @var array
      */

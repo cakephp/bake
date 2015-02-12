@@ -1,12 +1,12 @@
 <div class="actions columns large-2 medium-3">
     <h3><?= __('Actions') ?></h3>
     <ul class="side-nav">
-        <li><?= $this->Html->link(__('New View Task Comment'), ['action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('New Template Task Comment'), ['action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Articles'), ['controller' => 'Articles', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?> </li>
     </ul>
 </div>
-<div class="viewTaskComments index large-10 medium-9 columns">
+<div class="templateTaskComments index large-10 medium-9 columns">
     <table cellpadding="0" cellspacing="0">
     <thead>
         <tr>
@@ -20,20 +20,20 @@
         </tr>
     </thead>
     <tbody>
-    <?php foreach ($viewTaskComments as $viewTaskComment): ?>
+    <?php foreach ($templateTaskComments as $templateTaskComment): ?>
         <tr>
-            <td><?= $this->Number->format($viewTaskComment->id) ?></td>
+            <td><?= $this->Number->format($templateTaskComment->id) ?></td>
             <td>
-                <?= $viewTaskComment->has('article') ? $this->Html->link($viewTaskComment->article->title, ['controller' => 'Articles', 'action' => 'view', $viewTaskComment->article->id]) : '' ?>
+                <?= $templateTaskComment->has('article') ? $this->Html->link($templateTaskComment->article->title, ['controller' => 'Articles', 'action' => 'view', $templateTaskComment->article->id]) : '' ?>
             </td>
-            <td><?= $this->Number->format($viewTaskComment->user_id) ?></td>
-            <td><?= h($viewTaskComment->published) ?></td>
-            <td><?= h($viewTaskComment->created) ?></td>
-            <td><?= h($viewTaskComment->updated) ?></td>
+            <td><?= $this->Number->format($templateTaskComment->user_id) ?></td>
+            <td><?= h($templateTaskComment->published) ?></td>
+            <td><?= h($templateTaskComment->created) ?></td>
+            <td><?= h($templateTaskComment->updated) ?></td>
             <td class="actions">
-                <?= $this->Html->link(__('View'), ['action' => 'view', $viewTaskComment->id]) ?>
-                <?= $this->Html->link(__('Edit'), ['action' => 'edit', $viewTaskComment->id]) ?>
-                <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $viewTaskComment->id], ['confirm' => __('Are you sure you want to delete # {0}?', $viewTaskComment->id)]) ?>
+                <?= $this->Html->link(__('View'), ['action' => 'view', $templateTaskComment->id]) ?>
+                <?= $this->Html->link(__('Edit'), ['action' => 'edit', $templateTaskComment->id]) ?>
+                <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $templateTaskComment->id], ['confirm' => __('Are you sure you want to delete # {0}?', $templateTaskComment->id)]) ?>
             </td>
         </tr>
 

@@ -14,15 +14,30 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Cake\ORM\Table;
+use Cake\Controller\Controller;
 
 /**
- * Test View Task Article Model
+ * Test Template Task Comments Controller
  */
-class ViewTaskArticlesTable extends Table
+class TemplateTaskCommentsController extends Controller
 {
-    public function intialize(array $config)
+    public $modelClass = 'Cake\Test\TestCase\Shell\Task\TemplateTaskCommentsTable';
+
+    /**
+     * Testing public controller action
+     *
+     * @return void
+     */
+    public function index()
     {
-        $this->table('articles');
+    }
+
+    /**
+     * Testing public controller action
+     *
+     * @return void
+     */
+    public function add()
+    {
     }
 }

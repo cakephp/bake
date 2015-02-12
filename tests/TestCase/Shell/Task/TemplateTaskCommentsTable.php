@@ -14,30 +14,18 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Cake\Controller\Controller;
+use Cake\ORM\Table;
 
 /**
- * Test View Task Comments Controller
+ * Test Template Task Comment Model
  */
-class ViewTaskCommentsController extends Controller
+class TemplateTaskCommentsTable extends Table
 {
-    public $modelClass = 'Cake\Test\TestCase\Shell\Task\ViewTaskCommentsTable';
-
-    /**
-     * Testing public controller action
-     *
-     * @return void
-     */
-    public function index()
+    public function initialize(array $config)
     {
-    }
-
-    /**
-     * Testing public controller action
-     *
-     * @return void
-     */
-    public function add()
-    {
+        $this->table('comments');
+        $this->belongsTo('Articles', [
+            'foreignKey' => 'article_id'
+        ]);
     }
 }

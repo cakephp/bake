@@ -3,19 +3,19 @@
     <ul class="side-nav">
         <li><?= $this->Form->postLink(
                 __('Delete'),
-                ['action' => 'delete', $viewTaskComment->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $viewTaskComment->id)]
+                ['action' => 'delete', $templateTaskComment->id],
+                ['confirm' => __('Are you sure you want to delete # {0}?', $templateTaskComment->id)]
             )
         ?></li>
-        <li><?= $this->Html->link(__('List View Task Comments'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('List Template Task Comments'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('List Articles'), ['controller' => 'Articles', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?> </li>
     </ul>
 </div>
-<div class="viewTaskComments form large-10 medium-9 columns">
-    <?= $this->Form->create($viewTaskComment); ?>
+<div class="templateTaskComments form large-10 medium-9 columns">
+    <?= $this->Form->create($templateTaskComment); ?>
     <fieldset>
-        <legend><?= __('Edit View Task Comment') ?></legend>
+        <legend><?= __('Edit Template Task Comment') ?></legend>
         <?php
             echo $this->Form->input('article_id', ['options' => $articles]);
             echo $this->Form->input('user_id');

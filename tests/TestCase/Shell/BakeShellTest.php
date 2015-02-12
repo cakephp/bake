@@ -66,7 +66,7 @@ class BakeShellTest extends TestCase
     {
         $this->Shell->Model = $this->getMock('Bake\Shell\Task\ModelTask');
         $this->Shell->Controller = $this->getMock('Bake\Shell\Task\ControllerTask');
-        $this->Shell->View = $this->getMock('Bake\Shell\Task\ModelTask');
+        $this->Shell->Template = $this->getMock('Bake\Shell\Task\TemplateTask');
 
         $this->Shell->Model->expects($this->once())
             ->method('main')
@@ -78,7 +78,7 @@ class BakeShellTest extends TestCase
             ->with('Comments')
             ->will($this->returnValue(true));
 
-        $this->Shell->View->expects($this->once())
+        $this->Shell->Template->expects($this->once())
             ->method('main')
             ->with('Comments');
 
@@ -124,7 +124,7 @@ class BakeShellTest extends TestCase
         $parser = $this->Shell->getOptionParser();
         $commands = $parser->subcommands();
         $this->assertArrayHasKey('fixture', $commands);
-        $this->assertArrayHasKey('view', $commands);
+        $this->assertArrayHasKey('template', $commands);
         $this->assertArrayHasKey('controller', $commands);
         $this->assertArrayHasKey('model', $commands);
     }
@@ -148,7 +148,7 @@ class BakeShellTest extends TestCase
             'Bake.Plugin',
             'Bake.Shell',
             'Bake.Test',
-            'Bake.View'
+            'Bake.Template'
         ];
         sort($this->Shell->tasks);
         sort($expected);
