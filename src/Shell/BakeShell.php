@@ -81,9 +81,14 @@ class BakeShell extends Shell
         $this->out('The following commands can be used to generate skeleton code for your application.', 2);
         $this->out('<info>Available bake commands:</info>', 2);
         $this->out('- all');
+        $names = [];
         foreach ($this->tasks as $task) {
             list(, $name) = pluginSplit($task);
-            $this->out('- ' . Inflector::underscore($name));
+            $names[] = Inflector::underscore($name);
+        }
+        sort($names);
+        foreach ($names as $name) {
+            $this->out('- ' . $name);
         }
         $this->out('');
         $this->out('By using <info>`cake bake [name]`</info> you can invoke a specific bake task.');
