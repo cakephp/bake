@@ -42,10 +42,10 @@ class TestTaskTest extends TestCase
      */
     public $fixtures = [
         'core.articles',
-        'core.authors',
-        'core.comments',
         'core.tags',
         'core.articles_tags',
+        'core.authors',
+        'core.comments',
     ];
 
     /**

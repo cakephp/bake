@@ -33,10 +33,10 @@ class TemplateTaskTest extends TestCase
      */
     public $fixtures = [
         'core.articles',
+        'core.tags',
+        'core.articles_tags',
         'core.posts',
         'core.comments',
-        'core.articles_tags',
-        'core.tags',
         'core.test_plugin_comments',
         'plugin.bake.category_threads',
     ];
