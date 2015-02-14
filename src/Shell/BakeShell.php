@@ -72,6 +72,16 @@ class BakeShell extends Shell
      */
     public function main()
     {
+        if ($this->args && $this->args[0] === 'view') {
+            $this->out('<error>The view command has been renamed.</error>');
+            $this->out('To create template files, please use the template command:', 2);
+            $args = $this->args;
+            array_shift($args);
+            $args = implode($args, ' ');
+            $this->out(sprintf('    bin/cake bake template %s', $args), 2);
+            return false;
+        }
+
         $connections = ConnectionManager::configured();
         if (empty($connections)) {
             $this->out('Your database configuration was not found.');
