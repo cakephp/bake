@@ -629,6 +629,11 @@ class TemplateTaskTest extends TestCase
      */
     public function testMainWithPluginName()
     {
+        // Populate the table registry with a "plugin" model
+        TableRegistry::get('TestTemplate.TemplateTaskComments', [
+            'className' => __NAMESPACE__ . '\TemplateTaskCommentsTable',
+        ]);
+
         $this->_setupTask(['in', 'err', 'createFile']);
 
         $this->Task->connection = 'test';
