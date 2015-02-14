@@ -14,8 +14,7 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\ProjectTask;
-use Bake\Shell\Task\TemplateTask;
+use Bake\Shell\Task\BakeTemplateTask;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -48,8 +47,8 @@ class PluginTaskTest extends TestCase
             [$this->io]
         );
 
-        $this->Task->Template = new TemplateTask($this->io);
-        $this->Task->Template->interactive = false;
+        $this->Task->BakeTemplate = new BakeTemplateTask($this->io);
+        $this->Task->BakeTemplate->interactive = false;
 
         $this->Task->path = TMP . 'tests' . DS . 'BakedPlugins' . DS;
         new Folder($this->Task->path, true);

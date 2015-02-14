@@ -17,11 +17,11 @@ namespace Bake\Test\TestCase\Shell\Task;
 use Cake\Controller\Controller;
 
 /**
- * Test View Task Comments Controller
+ * Test Template Task Comments Controller
  */
-class ViewTaskCommentsController extends Controller
+class TemplateTaskCommentsController extends Controller
 {
-    public $modelClass = 'Cake\Test\TestCase\Shell\Task\ViewTaskCommentsTable';
+    public $modelClass = 'Cake\Test\TestCase\Shell\Task\TemplateTaskCommentsTable';
 
     /**
      * Testing public controller action

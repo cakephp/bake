@@ -27,7 +27,7 @@ use Cake\Utility\Inflector;
  *
  * Bake is CakePHP's code generation script, which can help you kickstart
  * application development by writing fully functional skeleton controllers,
- * models, and views. Going further, Bake can also write Unit Tests for you.
+ * models, and templates. Going further, Bake can also write Unit Tests for you.
  *
  * @link http://book.cakephp.org/3.0/en/console-and-shells/code-generation-with-bake.html
  */
@@ -72,6 +72,16 @@ class BakeShell extends Shell
      */
     public function main()
     {
+        if ($this->args && $this->args[0] === 'view') {
+            $this->out('<error>The view command has been renamed.</error>');
+            $this->out('To create template files, please use the template command:', 2);
+            $args = $this->args;
+            array_shift($args);
+            $args = implode($args, ' ');
+            $this->out(sprintf('    bin/cake bake template %s', $args), 2);
+            return false;
+        }
+
         $connections = ConnectionManager::configured();
         if (empty($connections)) {
             $this->out('Your database configuration was not found.');
@@ -81,9 +91,14 @@ class BakeShell extends Shell
         $this->out('The following commands can be used to generate skeleton code for your application.', 2);
         $this->out('<info>Available bake commands:</info>', 2);
         $this->out('- all');
+        $names = [];
         foreach ($this->tasks as $task) {
             list(, $name) = pluginSplit($task);
-            $this->out('- ' . Inflector::underscore($name));
+            $names[] = Inflector::underscore($name);
+        }
+        sort($names);
+        foreach ($names as $name) {
+            $this->out('- ' . $name);
         }
         $this->out('');
         $this->out('By using <info>`cake bake [name]`</info> you can invoke a specific bake task.');
@@ -217,7 +232,7 @@ class BakeShell extends Shell
             return false;
         }
 
-        foreach (['Model', 'Controller', 'View'] as $task) {
+        foreach (['Model', 'Controller', 'Template'] as $task) {
             $this->{$task}->connection = $this->connection;
         }
 
@@ -225,8 +240,7 @@ class BakeShell extends Shell
 
         $this->Model->main($name);
         $this->Controller->main($name);
-
-        $this->View->main($name);
+        $this->Template->main($name);
 
         $this->out('<success>Bake All complete.</success>', 1, Shell::QUIET);
         return true;
@@ -250,7 +264,7 @@ class BakeShell extends Shell
         }
 
         $parser->description(
-            'The Bake script generates controllers, views and models for your application.' .
+            'The Bake script generates controllers, models and template files for your application.' .
             ' If run with no command line arguments, Bake guides the user through the class creation process.' .
             ' You can customize the generation process by telling Bake where different parts of your application' .
             ' are using command line arguments.'

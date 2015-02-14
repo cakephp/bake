@@ -40,7 +40,7 @@ class PluginTask extends BakeTask
      * @var array
      */
     public $tasks = [
-        'Bake.Template'
+        'Bake.BakeTemplate'
     ];
 
     /**
@@ -154,7 +154,7 @@ class PluginTask extends BakeTask
      */
     protected function _generateFiles($pluginName, $path)
     {
-        $this->Template->set([
+        $this->BakeTemplate->set([
             'plugin' => $pluginName,
             'path' => $path,
             'root' => ROOT
@@ -193,7 +193,7 @@ class PluginTask extends BakeTask
     protected function _generateFile($template, $root)
     {
         $this->out(sprintf('Generating %s file...', $template));
-        $out = $this->Template->generate('Plugin/' . $template);
+        $out = $this->BakeTemplate->generate('Plugin/' . $template);
         $this->createFile($root . $template, $out);
     }
 

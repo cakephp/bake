@@ -34,7 +34,7 @@ class FixtureTask extends BakeTask
      */
     public $tasks = [
         'Bake.Model',
-        'Bake.Template'
+        'Bake.BakeTemplate'
     ];
 
     /**
@@ -220,9 +220,9 @@ class FixtureTask extends BakeTask
         $path = $this->getPath();
         $filename = $vars['name'] . 'Fixture.php';
 
-        $this->Template->set('model', $model);
-        $this->Template->set($vars);
-        $content = $this->Template->generate('tests/fixture');
+        $this->BakeTemplate->set('model', $model);
+        $this->BakeTemplate->set($vars);
+        $content = $this->BakeTemplate->generate('tests/fixture');
 
         $this->out("\n" . sprintf('Baking test fixture for %s...', $model), 1, Shell::QUIET);
         $this->createFile($path . $filename, $content);

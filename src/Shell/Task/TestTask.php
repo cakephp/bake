@@ -39,7 +39,7 @@ class TestTask extends BakeTask
      *
      * @var array
      */
-    public $tasks = ['Bake.Template'];
+    public $tasks = ['Bake.BakeTemplate'];
 
     /**
      * class types that methods can be generated for
@@ -207,9 +207,9 @@ class TestTask extends BakeTask
 
         $this->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, Shell::QUIET);
 
-        $this->Template->set('fixtures', $this->_fixtures);
-        $this->Template->set('plugin', $this->plugin);
-        $this->Template->set(compact(
+        $this->BakeTemplate->set('fixtures', $this->_fixtures);
+        $this->BakeTemplate->set('plugin', $this->plugin);
+        $this->BakeTemplate->set(compact(
             'subject',
             'className',
             'methods',
@@ -225,7 +225,7 @@ class TestTask extends BakeTask
             'subNamespace',
             'namespace'
         ));
-        $out = $this->Template->generate('tests/test_case');
+        $out = $this->BakeTemplate->generate('tests/test_case');
 
         $filename = $this->testCaseFileName($type, $fullClassName);
         $emptyFile = $this->getPath() . $this->getSubspacePath($type) . DS . 'empty';

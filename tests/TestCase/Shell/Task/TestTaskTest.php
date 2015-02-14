@@ -14,7 +14,7 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\TemplateTask;
+use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Shell\Task\TestTask;
 use Bake\Test\App\Controller\PostsController;
 use Bake\Test\App\Model\Table\ArticlesTable;
@@ -42,10 +42,10 @@ class TestTaskTest extends TestCase
      */
     public $fixtures = [
         'core.articles',
-        'core.authors',
-        'core.comments',
         'core.tags',
         'core.articles_tags',
+        'core.authors',
+        'core.comments',
     ];
 
     /**
@@ -65,8 +65,8 @@ class TestTaskTest extends TestCase
             [$this->io]
         );
         $this->Task->name = 'Test';
-        $this->Task->Template = new TemplateTask($this->io);
-        $this->Task->Template->interactive = false;
+        $this->Task->BakeTemplate = new BakeTemplateTask($this->io);
+        $this->Task->BakeTemplate->interactive = false;
     }
 
     /**

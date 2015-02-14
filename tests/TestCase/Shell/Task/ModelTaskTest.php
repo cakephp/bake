@@ -14,7 +14,7 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\TemplateTask;
+use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -98,8 +98,8 @@ class ModelTaskTest extends TestCase
 
         $this->Task->Fixture = $this->getMock('Bake\Shell\Task\FixtureTask', [], [$io]);
         $this->Task->Test = $this->getMock('Bake\Shell\Task\FixtureTask', [], [$io]);
-        $this->Task->Template = new TemplateTask($io);
-        $this->Task->Template->interactive = false;
+        $this->Task->BakeTemplate = new BakeTemplateTask($io);
+        $this->Task->BakeTemplate->interactive = false;
 
         $this->Task->name = 'Model';
     }
