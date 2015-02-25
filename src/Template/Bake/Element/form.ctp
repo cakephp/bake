@@ -81,7 +81,6 @@ $fields = collection($fields)
             echo $this->Form->input('<%= $field %>');
 <%
                 }
-                continue;
             }
         }
         if (!empty($associations['BelongsToMany'])) {
