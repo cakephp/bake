@@ -71,9 +71,17 @@ $fields = collection($fields)
                 continue;
             }
             if (!in_array($field, ['created', 'modified', 'updated'])) {
+                $fieldData = $schema->column($field);
+                if (($fieldData['type'] === 'date') && (!empty($fieldData['null']))) {
+%>
+            echo $this->Form->input('<%= $field %>', array('empty' => true, 'default' => ''));
+<%
+                } else {
 %>
             echo $this->Form->input('<%= $field %>');
 <%
+                }
+                continue;
             }
         }
         if (!empty($associations['BelongsToMany'])) {
