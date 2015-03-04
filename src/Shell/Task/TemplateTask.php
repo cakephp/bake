@@ -272,6 +272,7 @@ class TemplateTask extends BakeTask
         $singularHumanName = $this->_singularHumanName($this->controllerName);
         $schema = $modelObj->schema();
         $fields = $schema->columns();
+        $modelClass = $this->modelName;
         $associations = $this->_associations($modelObj);
         $keyFields = [];
         if (!empty($associations['BelongsTo'])) {
