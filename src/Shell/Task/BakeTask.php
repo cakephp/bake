@@ -141,9 +141,9 @@ class BakeTask extends Shell
 
         $error = stream_get_contents($pipes[2]);
         fclose($pipes[2]);
-        proc_close($process);
+        $exit = proc_close($process);
 
-        if ($error) {
+        if ($exit != 0) {
             throw new \RuntimeException($error);
         }
 
