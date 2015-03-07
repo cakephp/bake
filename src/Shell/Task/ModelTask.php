@@ -257,7 +257,9 @@ class ModelTask extends BakeTask
 
                 if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)){
                     $found = $this->findTableReferencedBy($fieldName);
-                    if ($found) $tmpModelName = Inflector::camelize($found);
+                    if ($found){
+                        $tmpModelName = Inflector::camelize($found);
+                    }
                 }
 
                 $assoc = [
@@ -285,17 +287,19 @@ class ModelTask extends BakeTask
     public function findTableReferencedBy($keyField = null){
         $db = ConnectionManager::get($this->connection);
         $schema = $db->schemaCollection();
-        $tables = $schema->listTables();                                // get tables in db
+        $tables = $schema->listTables();
 
         foreach ($tables as $table){
-            $meta = $schema->describe($table, ['forceRefresh'=>true]);  // get table meta data
+            $meta = $schema->describe($table, ['forceRefresh'=>true]);
             $columns = $meta->columns();
-            if (!in_array($keyField, $columns)) continue;               // not in this table
-            $constraints = $meta->constraints();                        // found it; get constraints
+            if (!in_array($keyField, $columns)){
+                continue;
+            }
+            $constraints = $meta->constraints();
             foreach ($constraints as $constraint){
-                $constraint_info = $meta->constraint($constraint);      // get details of constraint
-                if(in_array($keyField, $constraint_info['columns'])) {  // match?
-                    return $constraint_info['references'][0];           // found it, get ref'd table name
+                $constraint_info = $meta->constraint($constraint);
+                if(in_array($keyField, $constraint_info['columns'])) {
+                    return $constraint_info['references'][0];
                 }
             }
         }
