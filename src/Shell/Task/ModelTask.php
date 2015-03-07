@@ -20,6 +20,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use Cake\Database\Schema;
 
 /**
  * Task class for generating model files.
@@ -253,6 +254,12 @@ class ModelTask extends BakeTask
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
+
+                if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)){
+                    $found = $this->findTableReferencedBy($fieldName);
+                    if ($found) $tmpModelName = Inflector::camelize($found);
+                }
+
                 $assoc = [
                     'alias' => $tmpModelName,
                     'foreignKey' => $fieldName
@@ -265,6 +272,34 @@ class ModelTask extends BakeTask
             $associations['belongsTo'][] = $assoc;
         }
         return $associations;
+    }
+
+    /**
+     * find the table, if any, actually referenced by the passed key field.
+     *   Search tables in db for keyField; if found search key constraints
+     *   for the table to which it refers.
+     *
+     * @param null $keyField
+     * @return null
+     */
+    public function findTableReferencedBy($keyField = null){
+        $db = ConnectionManager::get($this->connection);
+        $schema = $db->schemaCollection();
+        $tables = $schema->listTables();                                // get tables in db
+
+        foreach ($tables as $table){
+            $meta = $schema->describe($table, ['forceRefresh'=>true]);  // get table meta data
+            $columns = $meta->columns();
+            if (!in_array($keyField, $columns)) continue;               // not in this table
+            $constraints = $meta->constraints();                        // found it; get constraints
+            foreach ($constraints as $constraint){
+                $constraint_info = $meta->constraint($constraint);      // get details of constraint
+                if(in_array($keyField, $constraint_info['columns'])) {  // match?
+                    return $constraint_info['references'][0];           // found it, get ref'd table name
+                }
+            }
+        }
+        return null;
     }
 
     /**
