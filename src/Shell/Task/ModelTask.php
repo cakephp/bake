@@ -284,7 +284,7 @@ class ModelTask extends BakeTask
      * @param null $keyField
      * @return null
      */
-    public function findTableReferencedBy($keyField = null){
+    public function findTableReferencedBy($keyField = null) {
         $db = ConnectionManager::get($this->connection);
         $schema = $db->schemaCollection();
         $tables = $schema->listTables();
