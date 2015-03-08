@@ -289,7 +289,7 @@ class ModelTask extends BakeTask
         $schema = $db->schemaCollection();
         $tables = $schema->listTables();
 
-        foreach ($tables as $table){
+        foreach ($tables as $table) {
             $meta = $schema->describe($table, ['forceRefresh'=>true]);
             $columns = $meta->columns();
             if (!in_array($keyField, $columns)){
