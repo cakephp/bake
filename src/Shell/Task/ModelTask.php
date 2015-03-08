@@ -255,7 +255,7 @@ class ModelTask extends BakeTask
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
 
-                if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)){
+                if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)) {
                     $found = $this->findTableReferencedBy($fieldName);
                     if ($found) {
                         $tmpModelName = Inflector::camelize($found);
