@@ -257,7 +257,7 @@ class ModelTask extends BakeTask
 
                 if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)){
                     $found = $this->findTableReferencedBy($fieldName);
-                    if ($found){
+                    if ($found) {
                         $tmpModelName = Inflector::camelize($found);
                     }
                 }
@@ -281,10 +281,11 @@ class ModelTask extends BakeTask
      *   Search tables in db for keyField; if found search key constraints
      *   for the table to which it refers.
      *
-     * @param null $keyField
+     * @param null $keyField  field to look for
      * @return null
      */
-    public function findTableReferencedBy($keyField = null) {
+    public function findTableReferencedBy($keyField = null)
+    {
         $db = ConnectionManager::get($this->connection);
         $schema = $db->schemaCollection();
         $tables = $schema->listTables();
@@ -292,7 +293,7 @@ class ModelTask extends BakeTask
         foreach ($tables as $table) {
             $meta = $schema->describe($table, ['forceRefresh'=>true]);
             $columns = $meta->columns();
-            if (!in_array($keyField, $columns)){
+            if (!in_array($keyField, $columns)) {
                 continue;
             }
             $constraints = $meta->constraints();
