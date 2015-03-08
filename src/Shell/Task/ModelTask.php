@@ -297,9 +297,9 @@ class ModelTask extends BakeTask
             }
             $constraints = $meta->constraints();
             foreach ($constraints as $constraint){
-                $constraint_info = $meta->constraint($constraint);
-                if(in_array($keyField, $constraint_info['columns'])) {
-                    return $constraint_info['references'][0];
+                $constraintInfo = $meta->constraint($constraint);
+                if(in_array($keyField, $constraintInfo['columns'])) {
+                    return $constraintInfo['references'][0];
                 }
             }
         }
