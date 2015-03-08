@@ -16,11 +16,12 @@ namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\Configure;
+use Cake\Database\Schema;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use Cake\Database\Schema;
+
 
 /**
  * Task class for generating model files.
