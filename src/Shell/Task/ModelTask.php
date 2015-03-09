@@ -22,7 +22,6 @@ use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 
-
 /**
  * Task class for generating model files.
  */
@@ -292,7 +291,7 @@ class ModelTask extends BakeTask
         $tables = $schema->listTables();
 
         foreach ($tables as $table) {
-            $meta = $schema->describe($table, ['forceRefresh'=>true]);
+            $meta = $schema->describe($table, ['forceRefresh' => true]);
             $columns = $meta->columns();
             if (!in_array($keyField, $columns)) {
                 continue;
