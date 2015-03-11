@@ -81,7 +81,8 @@ class BakeHelper extends Helper
     }
 
     /**
-     * Extract the aliases for associations
+     * Extract the aliases for associations, filters hasMany associations already extracted as
+     * belongsToMany
      *
      * @param \Cake\ORM\Table $table object to find associations on
      * @param string $assoc association to extract
@@ -92,8 +93,12 @@ class BakeHelper extends Helper
         $extractor = function ($val) {
             return $val->target()->alias();
         };
+        $aliases = array_map($extractor, $table->associations()->type($assoc));
+        if ($assoc === 'HasMany') {
+            return $this->_filtedHasManyAssociations($table, $aliases);
+        }
 
-        return array_map($extractor, $table->associations()->type($assoc));
+        return $aliases;
     }
 
     /**
@@ -138,4 +143,21 @@ class BakeHelper extends Helper
             'fullName' => $class
         ];
     }
+
+/**
+ * Detect existing belongsToMany associations and cleanup the hasMany aliases based on existing
+ * belongsToMany associations provided
+ *
+ * @param \Cake\ORM\Table $table
+ * @param array $aliases
+ * @return array $aliases
+ */
+    protected function _filtedHasManyAssociations($table, $aliases) {
+        $extractor = function ($val) {
+            return $val->junction()->alias();
+        };
+        $belongsToManyJunctionsAliases = array_map($extractor, $table->associations()->type('BelongsToMany'));
+        return array_values(array_diff($aliases, $belongsToManyJunctionsAliases));
+    }
+
 }
