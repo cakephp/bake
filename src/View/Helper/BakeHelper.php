@@ -5,6 +5,7 @@ use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
+use Bake\Utility\Model\AssociationFilter;
 
 /**
  * Bake helper
@@ -95,7 +96,7 @@ class BakeHelper extends Helper
         };
         $aliases = array_map($extractor, $table->associations()->type($assoc));
         if ($assoc === 'HasMany') {
-            return $this->_filtedHasManyAssociations($table, $aliases);
+            return $this->_filterHasManyAssociationsAliases($table, $aliases);
         }
 
         return $aliases;
@@ -144,20 +145,14 @@ class BakeHelper extends Helper
         ];
     }
 
-/**
- * Detect existing belongsToMany associations and cleanup the hasMany aliases based on existing
- * belongsToMany associations provided
- *
- * @param \Cake\ORM\Table $table
- * @param array $aliases
- * @return array $aliases
- */
-    protected function _filtedHasManyAssociations($table, $aliases) {
-        $extractor = function ($val) {
-            return $val->junction()->alias();
-        };
-        $belongsToManyJunctionsAliases = array_map($extractor, $table->associations()->type('BelongsToMany'));
-        return array_values(array_diff($aliases, $belongsToManyJunctionsAliases));
+    /**
+     * To be mocked elsewhere...
+     * @param $table
+     * @param $aliases
+     */
+    protected function _filterHasManyAssociationsAliases($table, $aliases)
+    {
+        return AssociationFilter::filterHasManyAssociationsAliases($table, $aliases);
     }
 
 }

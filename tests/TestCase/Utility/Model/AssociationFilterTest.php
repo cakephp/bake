@@ -12,20 +12,17 @@
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\View\Helper;
+namespace Bake\Test\TestCase\Utility\Model;
 
-use Bake\View\BakeView;
-use Bake\View\Helper\BakeHelper;
-use Cake\Network\Request;
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\Stub\Response;
 use Cake\TestSuite\TestCase;
+use Bake\Utility\Model\AssociationFilter;
 
 /**
  * BakeViewTest class
  *
  */
-class BakeHelperTest extends TestCase
+class AssociationFilterTest extends TestCase
 {
 
     /**
@@ -51,11 +48,6 @@ class BakeHelperTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
-        $request = new Request();
-        $response = new Response();
-        $this->View = new BakeView($request, $response);
-        $this->BakeHelper = new BakeHelper($this->View);
     }
 
     /**
@@ -66,7 +58,6 @@ class BakeHelperTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
-        unset($this->BakeHelper);
     }
 
     /**
@@ -74,51 +65,39 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function testAliasExtractorFilteredHasMany()
+    public function testFilterHasManyAssociationsAliases()
     {
         $table = TableRegistry::get('Articles', [
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
         ]);
-        $this->BakeHelper = $this->getMockBuilder('Bake\View\Helper\BakeHelper')
-                ->disableOriginalConstructor()
-                ->setMethods(['_filterHasManyAssociationsAliases'])
-                ->getMock();
-        $this->BakeHelper->expects($this->once())
-                ->method('_filterHasManyAssociationsAliases')
-                ->with($table, ['ArticlesTags']);
-        $result = $this->BakeHelper->aliasExtractor($table, 'HasMany');
-        $this->assertEmpty($result);
-
-    }
-
-    /**
-     * test extracting belongsTo
-     *
-     * @return void
-     */
-    public function testAliasExtractorBelongsTo() {
-        $table = TableRegistry::get('Articles', [
-                    'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
-        ]);
-        $result = $this->BakeHelper->aliasExtractor($table, 'BelongsTo');
-        $expected = ['authors'];
+        $result = AssociationFilter::filterHasManyAssociationsAliases($table, ['ArticlesTags']);
+        $expected = [];
         $this->assertSame(
-                $expected, $result
-        );
+                $expected,
+                $result,
+                'hasMany should filter results based on belongsToMany existing aliases');
     }
 
     /**
-     * test extracting belongsToMany
+     * test extracting extra HasMany
      *
      * @return void
      */
-    public function testAliasExtractorBelongsToMany() {
+    public function testFilterHasManyAssociationsAliasesExtra()
+    {
         $table = TableRegistry::get('Articles', [
-                    'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
+            'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
         ]);
-        $result = $this->BakeHelper->aliasExtractor($table, 'BelongsToMany');
-        $expected = ['tags'];
-        $this->assertSame($expected, $result);
+        $table->hasMany('ExtraArticles', [
+            'className' => 'Articles'
+        ]);
+        $result = AssociationFilter::filterHasManyAssociationsAliases($table, ['ExtraArticles', 'ArticlesTags', 'AnotherHasMany']);
+        $expected = ['ExtraArticles', 'AnotherHasMany'];
+        $this->assertSame(
+                $expected,
+                $result,
+                'hasMany should filter results based on belongsToMany existing aliases');
+        $table->associations()->remove('ExtraArticles');
     }
 
 }
