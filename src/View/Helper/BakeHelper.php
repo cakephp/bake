@@ -5,6 +5,7 @@ use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
+use Bake\Utility\Model\AssociationFilter;
 
 /**
  * Bake helper
@@ -81,7 +82,8 @@ class BakeHelper extends Helper
     }
 
     /**
-     * Extract the aliases for associations
+     * Extract the aliases for associations, filters hasMany associations already extracted as
+     * belongsToMany
      *
      * @param \Cake\ORM\Table $table object to find associations on
      * @param string $assoc association to extract
@@ -92,8 +94,12 @@ class BakeHelper extends Helper
         $extractor = function ($val) {
             return $val->target()->alias();
         };
+        $aliases = array_map($extractor, $table->associations()->type($assoc));
+        if ($assoc === 'HasMany') {
+            return $this->_filterHasManyAssociationsAliases($table, $aliases);
+        }
 
-        return array_map($extractor, $table->associations()->type($assoc));
+        return $aliases;
     }
 
     /**
@@ -137,5 +143,15 @@ class BakeHelper extends Helper
             'name' => $name,
             'fullName' => $class
         ];
+    }
+
+    /**
+     * To be mocked elsewhere...
+     * @param $table
+     * @param $aliases
+     */
+    protected function _filterHasManyAssociationsAliases($table, $aliases)
+    {
+        return AssociationFilter::filterHasManyAssociationsAliases($table, $aliases);
     }
 }

@@ -20,6 +20,7 @@ use Cake\Core\Configure;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use Bake\Utility\Model\AssociationFilter;
 
 /**
  * Task class for creating and updating view files.
@@ -273,7 +274,7 @@ class TemplateTask extends BakeTask
         $schema = $modelObj->schema();
         $fields = $schema->columns();
         $modelClass = $this->modelName;
-        $associations = $this->_associations($modelObj);
+        $associations = $this->_filteredAssociations($modelObj);
         $keyFields = [];
         if (!empty($associations['BelongsTo'])) {
             foreach ($associations['BelongsTo'] as $assoc) {
@@ -422,46 +423,12 @@ class TemplateTask extends BakeTask
     }
 
     /**
-     * Returns associations for controllers models.
-     *
-     * @param Table $model The model to build associations for.
-     * @return array associations
+     * Get filtered associations
+     * To be mocked...
+     * @param Table $model
      */
-    protected function _associations(Table $model)
+    protected function _filteredAssociations(Table $model)
     {
-        $keys = ['BelongsTo', 'HasOne', 'HasMany', 'BelongsToMany'];
-        $associations = [];
-
-        foreach ($keys as $type) {
-            foreach ($model->associations()->type($type) as $assoc) {
-                $target = $assoc->target();
-                $assocName = $assoc->name();
-                $alias = $target->alias();
-                $targetClass = get_class($target);
-                list(, $className) = namespaceSplit($targetClass);
-
-                $modelClass = get_class($model);
-                if ($modelClass !== 'Cake\ORM\Table' && $targetClass === $modelClass) {
-                    continue;
-                }
-
-                $className = preg_replace('/(.*)Table$/', '\1', $className);
-                if ($className === '') {
-                    $className = $alias;
-                }
-
-                $associations[$type][$assocName] = [
-                    'property' => $assoc->property(),
-                    'variable' => Inflector::variable($assocName),
-                    'primaryKey' => (array)$target->primaryKey(),
-                    'displayField' => $target->displayField(),
-                    'foreignKey' => $assoc->foreignKey(),
-                    'alias' => $alias,
-                    'controller' => $className,
-                    'fields' => $target->schema()->columns(),
-                ];
-            }
-        }
-        return $associations;
+        return AssociationFilter::filterAssociations($model);
     }
 }
