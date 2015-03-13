@@ -96,15 +96,14 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function testAliasExtractorBelongsTo() {
+    public function testAliasExtractorBelongsTo()
+    {
         $table = TableRegistry::get('Articles', [
                     'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
         ]);
         $result = $this->BakeHelper->aliasExtractor($table, 'BelongsTo');
         $expected = ['authors'];
-        $this->assertSame(
-                $expected, $result
-        );
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -112,7 +111,8 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function testAliasExtractorBelongsToMany() {
+    public function testAliasExtractorBelongsToMany()
+    {
         $table = TableRegistry::get('Articles', [
                     'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
         ]);
@@ -120,5 +120,4 @@ class BakeHelperTest extends TestCase
         $expected = ['tags'];
         $this->assertSame($expected, $result);
     }
-
 }

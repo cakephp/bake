@@ -154,5 +154,4 @@ class BakeHelper extends Helper
     {
         return AssociationFilter::filterHasManyAssociationsAliases($table, $aliases);
     }
-
 }

@@ -14,9 +14,10 @@
  */
 namespace Bake\Test\TestCase\Utility\Model;
 
+use Bake\Utility\Model\AssociationFilter;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
-use Bake\Utility\Model\AssociationFilter;
+use Cake\Utility\Hash;
 
 /**
  * BakeViewTest class
@@ -73,9 +74,10 @@ class AssociationFilterTest extends TestCase
         $result = AssociationFilter::filterHasManyAssociationsAliases($table, ['ArticlesTags']);
         $expected = [];
         $this->assertSame(
-                $expected,
-                $result,
-                'hasMany should filter results based on belongsToMany existing aliases');
+            $expected,
+            $result,
+            'hasMany should filter results based on belongsToMany existing aliases'
+        );
     }
 
     /**
@@ -91,13 +93,39 @@ class AssociationFilterTest extends TestCase
         $table->hasMany('ExtraArticles', [
             'className' => 'Articles'
         ]);
-        $result = AssociationFilter::filterHasManyAssociationsAliases($table, ['ExtraArticles', 'ArticlesTags', 'AnotherHasMany']);
+        $result = AssociationFilter::filterHasManyAssociationsAliases($table, [
+            'ExtraArticles',
+            'ArticlesTags',
+            'AnotherHasMany'
+        ]);
         $expected = ['ExtraArticles', 'AnotherHasMany'];
         $this->assertSame(
-                $expected,
-                $result,
-                'hasMany should filter results based on belongsToMany existing aliases');
+            $expected,
+            $result,
+            'hasMany should filter results based on belongsToMany existing aliases'
+        );
         $table->associations()->remove('ExtraArticles');
     }
 
+    /**
+     * testFilterAssociations
+     *
+     * @return void
+     */
+    public function testFilterAssociations()
+    {
+        $table = TableRegistry::get('Articles', [
+            'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
+        ]);
+        $resultAssociations = AssociationFilter::filterAssociations($table);
+        $result = [];
+        foreach ($resultAssociations as $assoc) {
+            $aliases = array_keys($assoc);
+            foreach ($aliases as $alias) {
+                $result[] = $alias;
+            }
+        }
+        $expected = ['authors', 'tags'];
+        $this->assertEquals($expected, $result);
+    }
 }
