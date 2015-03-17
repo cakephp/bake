@@ -94,6 +94,10 @@ class TestTask extends BakeTask
             return $this->outputTypeChoices();
         }
 
+        if ($this->param('all')) {
+            return $this->_bakeAll($type);
+        }
+
         if (empty($name)) {
             return $this->outputClassChoices($type);
         }
@@ -144,6 +148,26 @@ class TestTask extends BakeTask
         $this->out('Re-run your command as `cake bake ' . $type . ' <classname>`');
 
         return $options;
+    }
+
+    /**
+     * @param string $type The typename to get bake all classes for.
+     * @return void
+     */
+    protected function _bakeAll($type)
+    {
+        $mappedType = $this->mapType($type);
+        $classes = $this->_getClassOptions($mappedType);
+
+        foreach ($classes as $class) {
+            if ($this->bake($type, $class)) {
+                $this->out('<success>Done - ' . $class . '</success>');
+            } else {
+                $this->out('<error>Failed - ' . $class . '</error>');
+            }
+        }
+
+        $this->out('<info>Bake finished</info>');
     }
 
     /**
@@ -572,6 +596,9 @@ class TestTask extends BakeTask
             'help' => 'An existing class to bake tests for.'
         ])->addOption('fixtures', [
             'help' => 'A comma separated list of fixture names you want to include.'
+        ])->addOption('all', [
+            'boolean' => true,
+            'help' => 'Bake all classes of the given type'
         ]);
 
         return $parser;
