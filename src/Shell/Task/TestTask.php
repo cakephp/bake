@@ -156,8 +156,8 @@ class TestTask extends BakeTask
      */
     protected function _bakeAll($type)
     {
-        $mapped_type = $this->mapType($type);
-        $classes = $this->_getClassOptions($mapped_type);
+        $mappedType = $this->mapType($type);
+        $classes = $this->_getClassOptions($mappedType);
 
         foreach ($classes as $class) {
             if ($this->bake($type, $class)) {
