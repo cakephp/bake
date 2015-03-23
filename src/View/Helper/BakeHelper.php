@@ -1,11 +1,11 @@
 <?php
 namespace Bake\View\Helper;
 
+use Bake\Utility\Model\AssociationFilter;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
-use Bake\Utility\Model\AssociationFilter;
 
 /**
  * Bake helper
@@ -20,6 +20,13 @@ class BakeHelper extends Helper
      * @var array
      */
     protected $_defaultConfig = [];
+
+    /**
+     * AssociationFilter utility
+     *
+     * @var AssociationFilter
+     */
+    protected $_associationFilter = null;
 
     /**
      * Used for generating formatted properties such as component and helper arrays
@@ -147,11 +154,15 @@ class BakeHelper extends Helper
 
     /**
      * To be mocked elsewhere...
+     *
      * @param $table
      * @param $aliases
      */
     protected function _filterHasManyAssociationsAliases($table, $aliases)
     {
-        return AssociationFilter::filterHasManyAssociationsAliases($table, $aliases);
+        if (is_null($this->_associationFilter)) {
+            $this->_associationFilter = new AssociationFilter();
+        }
+        return $this->_associationFilter->filterHasManyAssociationsAliases($table, $aliases);
     }
 }

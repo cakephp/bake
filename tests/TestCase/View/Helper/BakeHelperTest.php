@@ -88,7 +88,6 @@ class BakeHelperTest extends TestCase
                 ->with($table, ['ArticlesTags']);
         $result = $this->BakeHelper->aliasExtractor($table, 'HasMany');
         $this->assertEmpty($result);
-
     }
 
     /**

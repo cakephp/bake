@@ -14,13 +14,13 @@
  */
 namespace Bake\Shell\Task;
 
+use Bake\Utility\Model\AssociationFilter;
 use Cake\Console\Shell;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
-use Bake\Utility\Model\AssociationFilter;
 
 /**
  * Task class for creating and updating view files.
@@ -87,6 +87,13 @@ class TemplateTask extends BakeTask
      * @var array
      */
     public $noTemplateActions = ['delete'];
+
+    /**
+     * AssociationFilter utility
+     *
+     * @var AssociationFilter
+     */
+    protected $_associationFilter = null;
 
     /**
      * Override initialize
@@ -425,10 +432,14 @@ class TemplateTask extends BakeTask
     /**
      * Get filtered associations
      * To be mocked...
+     *
      * @param Table $model
      */
     protected function _filteredAssociations(Table $model)
     {
-        return AssociationFilter::filterAssociations($model);
+        if (is_null($this->_associationFilter)) {
+            $this->_associationFilter = new AssociationFilter();
+        }
+        return $this->_associationFilter->filterAssociations($model);
     }
 }
