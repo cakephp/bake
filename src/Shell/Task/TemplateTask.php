@@ -433,7 +433,8 @@ class TemplateTask extends BakeTask
      * Get filtered associations
      * To be mocked...
      *
-     * @param Table $model Table
+     * @param \Cake\ORM\Table $model Table
+     * @return array associations
      */
     protected function _filteredAssociations(Table $model)
     {

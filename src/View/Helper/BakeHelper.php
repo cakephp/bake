@@ -155,8 +155,8 @@ class BakeHelper extends Helper
     /**
      * To be mocked elsewhere...
      *
-     * @param $table Table
-     * @param $aliases array of aliases
+     * @param \Cake\ORM\Table $table Table
+     * @param array $aliases array of aliases
      */
     protected function _filterHasManyAssociationsAliases($table, $aliases)
     {
