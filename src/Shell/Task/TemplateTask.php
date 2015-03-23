@@ -433,7 +433,7 @@ class TemplateTask extends BakeTask
      * Get filtered associations
      * To be mocked...
      *
-     * @param Table $model
+     * @param Table $model Table
      */
     protected function _filteredAssociations(Table $model)
     {
