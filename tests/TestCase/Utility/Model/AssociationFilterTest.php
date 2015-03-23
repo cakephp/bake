@@ -49,6 +49,7 @@ class AssociationFilterTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+        $this->associationFilter = new AssociationFilter();
     }
 
     /**
@@ -58,6 +59,7 @@ class AssociationFilterTest extends TestCase
      */
     public function tearDown()
     {
+        unset($this->associationFilter);
         parent::tearDown();
     }
 
@@ -71,7 +73,7 @@ class AssociationFilterTest extends TestCase
         $table = TableRegistry::get('Articles', [
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
         ]);
-        $result = AssociationFilter::filterHasManyAssociationsAliases($table, ['ArticlesTags']);
+        $result = $this->associationFilter->filterHasManyAssociationsAliases($table, ['ArticlesTags']);
         $expected = [];
         $this->assertSame(
             $expected,
@@ -93,7 +95,7 @@ class AssociationFilterTest extends TestCase
         $table->hasMany('ExtraArticles', [
             'className' => 'Articles'
         ]);
-        $result = AssociationFilter::filterHasManyAssociationsAliases($table, [
+        $result = $this->associationFilter->filterHasManyAssociationsAliases($table, [
             'ExtraArticles',
             'ArticlesTags',
             'AnotherHasMany'
@@ -117,7 +119,7 @@ class AssociationFilterTest extends TestCase
         $table = TableRegistry::get('Articles', [
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
         ]);
-        $resultAssociations = AssociationFilter::filterAssociations($table);
+        $resultAssociations = $this->associationFilter->filterAssociations($table);
         $result = [];
         foreach ($resultAssociations as $assoc) {
             $aliases = array_keys($assoc);

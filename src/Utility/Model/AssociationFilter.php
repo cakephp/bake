@@ -28,22 +28,23 @@ class AssociationFilter
      * Detect existing belongsToMany associations and cleanup the hasMany aliases based on existing
      * belongsToMany associations provided
      *
-     * @param \Cake\ORM\Table $table
-     * @param array $aliases
+     * @param \Cake\ORM\Table $table Table
+     * @param array $aliases array of aliases
      * @return array $aliases
      */
-    public static function filterHasManyAssociationsAliases(Table $table, array $aliases)
+    public function filterHasManyAssociationsAliases(Table $table, array $aliases)
     {
-        $belongsToManyJunctionsAliases = self::belongsToManyJunctionAliases($table);
+        $belongsToManyJunctionsAliases = $this->belongsToManyJunctionAliases($table);
         return array_values(array_diff($aliases, $belongsToManyJunctionsAliases));
     }
 
     /**
      * Get the array of junction aliases for all the BelongsToMany associations
-     * @param Table $table
+     *
+     * @param Table $table Table
      * @return array junction aliases of all the BelongsToMany associations
      */
-    public static function belongsToManyJunctionAliases(Table $table)
+    public function belongsToManyJunctionAliases(Table $table)
     {
         $extractor = function ($val) {
             return $val->junction()->alias();
@@ -58,9 +59,9 @@ class AssociationFilter
      * @param Table $model The model to build associations for.
      * @return array associations
      */
-    public static function filterAssociations(Table $model)
+    public function filterAssociations(Table $model)
     {
-        $belongsToManyJunctionsAliases = self::belongsToManyJunctionAliases($model);
+        $belongsToManyJunctionsAliases = $this->belongsToManyJunctionAliases($model);
         $keys = ['BelongsTo', 'HasOne', 'HasMany', 'BelongsToMany'];
         $associations = [];
 
