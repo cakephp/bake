@@ -156,6 +156,28 @@ class TestTaskTest extends TestCase
     }
 
     /**
+     * test execute with type and class name defined
+     *
+     * @return void
+     */
+    public function testExecuteWithAll()
+    {
+        $this->Task->expects($this->exactly(2))->method('createFile')
+            ->withConsecutive(
+                [
+                    $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'ArticlesTableTest.php'),
+                    $this->stringContains('class ArticlesTableTest extends TestCase')
+                ],
+                [
+                    $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'CategoryThreadsTableTest.php'),
+                    $this->stringContains('class CategoryThreadsTableTest extends TestCase')
+                ]
+            );
+        $this->Task->params['all'] = true;
+        $this->Task->main('Table');
+    }
+
+    /**
      * Test generating class options for table.
      *
      * @return void
