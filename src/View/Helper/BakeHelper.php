@@ -1,6 +1,7 @@
 <?php
 namespace Bake\View\Helper;
 
+use Bake\Utility\Model\AssociationFilter;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Utility\Inflector;
@@ -19,6 +20,13 @@ class BakeHelper extends Helper
      * @var array
      */
     protected $_defaultConfig = [];
+
+    /**
+     * AssociationFilter utility
+     *
+     * @var AssociationFilter
+     */
+    protected $_associationFilter = null;
 
     /**
      * Used for generating formatted properties such as component and helper arrays
@@ -81,7 +89,8 @@ class BakeHelper extends Helper
     }
 
     /**
-     * Extract the aliases for associations
+     * Extract the aliases for associations, filters hasMany associations already extracted as
+     * belongsToMany
      *
      * @param \Cake\ORM\Table $table object to find associations on
      * @param string $assoc association to extract
@@ -92,8 +101,12 @@ class BakeHelper extends Helper
         $extractor = function ($val) {
             return $val->target()->alias();
         };
+        $aliases = array_map($extractor, $table->associations()->type($assoc));
+        if ($assoc === 'HasMany') {
+            return $this->_filterHasManyAssociationsAliases($table, $aliases);
+        }
 
-        return array_map($extractor, $table->associations()->type($assoc));
+        return $aliases;
     }
 
     /**
@@ -137,5 +150,19 @@ class BakeHelper extends Helper
             'name' => $name,
             'fullName' => $class
         ];
+    }
+
+    /**
+     * To be mocked elsewhere...
+     *
+     * @param \Cake\ORM\Table $table Table
+     * @param array $aliases array of aliases
+     */
+    protected function _filterHasManyAssociationsAliases($table, $aliases)
+    {
+        if (is_null($this->_associationFilter)) {
+            $this->_associationFilter = new AssociationFilter();
+        }
+        return $this->_associationFilter->filterHasManyAssociationsAliases($table, $aliases);
     }
 }

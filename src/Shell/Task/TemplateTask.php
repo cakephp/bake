@@ -14,6 +14,7 @@
  */
 namespace Bake\Shell\Task;
 
+use Bake\Utility\Model\AssociationFilter;
 use Cake\Console\Shell;
 use Cake\Core\App;
 use Cake\Core\Configure;
@@ -86,6 +87,13 @@ class TemplateTask extends BakeTask
      * @var array
      */
     public $noTemplateActions = ['delete'];
+
+    /**
+     * AssociationFilter utility
+     *
+     * @var AssociationFilter
+     */
+    protected $_associationFilter = null;
 
     /**
      * Override initialize
@@ -273,7 +281,7 @@ class TemplateTask extends BakeTask
         $schema = $modelObj->schema();
         $fields = $schema->columns();
         $modelClass = $this->modelName;
-        $associations = $this->_associations($modelObj);
+        $associations = $this->_filteredAssociations($modelObj);
         $keyFields = [];
         if (!empty($associations['BelongsTo'])) {
             foreach ($associations['BelongsTo'] as $assoc) {
@@ -422,46 +430,17 @@ class TemplateTask extends BakeTask
     }
 
     /**
-     * Returns associations for controllers models.
+     * Get filtered associations
+     * To be mocked...
      *
-     * @param Table $model The model to build associations for.
+     * @param \Cake\ORM\Table $model Table
      * @return array associations
      */
-    protected function _associations(Table $model)
+    protected function _filteredAssociations(Table $model)
     {
-        $keys = ['BelongsTo', 'HasOne', 'HasMany', 'BelongsToMany'];
-        $associations = [];
-
-        foreach ($keys as $type) {
-            foreach ($model->associations()->type($type) as $assoc) {
-                $target = $assoc->target();
-                $assocName = $assoc->name();
-                $alias = $target->alias();
-                $targetClass = get_class($target);
-                list(, $className) = namespaceSplit($targetClass);
-
-                $modelClass = get_class($model);
-                if ($modelClass !== 'Cake\ORM\Table' && $targetClass === $modelClass) {
-                    continue;
-                }
-
-                $className = preg_replace('/(.*)Table$/', '\1', $className);
-                if ($className === '') {
-                    $className = $alias;
-                }
-
-                $associations[$type][$assocName] = [
-                    'property' => $assoc->property(),
-                    'variable' => Inflector::variable($assocName),
-                    'primaryKey' => (array)$target->primaryKey(),
-                    'displayField' => $target->displayField(),
-                    'foreignKey' => $assoc->foreignKey(),
-                    'alias' => $alias,
-                    'controller' => $className,
-                    'fields' => $target->schema()->columns(),
-                ];
-            }
+        if (is_null($this->_associationFilter)) {
+            $this->_associationFilter = new AssociationFilter();
         }
-        return $associations;
+        return $this->_associationFilter->filterAssociations($model);
     }
 }
