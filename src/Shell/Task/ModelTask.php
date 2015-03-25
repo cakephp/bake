@@ -112,7 +112,7 @@ class ModelTask extends BakeTask
         $primaryKey = $this->getPrimaryKey($model);
         $displayField = $this->getDisplayField($model);
         $fields = $this->getFields($model);
-        $validation = $this->getValidation($model);
+        $validation = $this->getValidation($model, $associations);
         $rulesChecker = $this->getRules($model, $associations);
         $behaviors = $this->getBehaviors($model);
 
@@ -444,9 +444,10 @@ class ModelTask extends BakeTask
      * Generate default validation rules.
      *
      * @param \Cake\ORM\Table $model The model to introspect.
+     * @param array $associations The associations list.
      * @return array The validation rules.
      */
-    public function getValidation($model)
+    public function getValidation($model, $associations = [])
     {
         if (!empty($this->params['no-validation'])) {
             return [];
@@ -459,8 +460,16 @@ class ModelTask extends BakeTask
 
         $validate = [];
         $primaryKey = (array)$schema->primaryKey();
-
+        $foreignKeys = [];
+        if (isset($associations['belongsTo'])) {
+            foreach ($associations['belongsTo'] as $assoc) {
+                $foreignKeys[] = $assoc['foreignKey'];
+            }
+        }
         foreach ($fields as $fieldName) {
+            if (in_array($fieldName, $foreignKeys)) {
+                continue;
+            }
             $field = $schema->column($fieldName);
             $validation = $this->fieldValidation($fieldName, $field, $primaryKey);
             if (!empty($validation)) {
