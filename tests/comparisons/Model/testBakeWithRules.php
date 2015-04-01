@@ -38,4 +38,14 @@ class UsersTable extends Table
         $rules->add($rules->existsIn(['site_id'], 'Sites'));
         return $rules;
     }
+
+    /**
+     * Returns the database connection name to use by default.
+     *
+     * @return string
+     */
+    public static function defaultConnectionName()
+    {
+        return 'test';
+    }
 }
