@@ -26,4 +26,14 @@ class BakeArticlesTable extends Table
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
     }
+
+    /**
+     * Returns the database connection name to use by default.
+     *
+     * @return string
+     */
+    public static function defaultConnectionName()
+    {
+        return 'website';
+    }
 }

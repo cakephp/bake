@@ -896,6 +896,7 @@ class ModelTaskTest extends TestCase
             'primaryKey' => ['id'],
             'displayField' => 'title',
             'behaviors' => ['Timestamp' => ''],
+            'connection' => 'website',
         ];
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->bakeTable($model, $config);

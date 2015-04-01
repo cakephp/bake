@@ -115,6 +115,7 @@ class ModelTask extends BakeTask
         $validation = $this->getValidation($model, $associations);
         $rulesChecker = $this->getRules($model, $associations);
         $behaviors = $this->getBehaviors($model);
+        $connection = $this->connection;
 
         $data = compact(
             'associations',
@@ -124,7 +125,8 @@ class ModelTask extends BakeTask
             'fields',
             'validation',
             'rulesChecker',
-            'behaviors'
+            'behaviors',
+            'connection'
         );
         $this->bakeTable($model, $data);
         $this->bakeEntity($model, $data);
@@ -706,6 +708,7 @@ class ModelTask extends BakeTask
             'validation' => [],
             'rulesChecker' => [],
             'behaviors' => [],
+            'connection' => $this->connection,
         ];
 
         $this->BakeTemplate->set($data);

@@ -37,4 +37,14 @@ class BakeArticlesTable extends Table
             'targetForeignKey' => 'bake_tag_id'
         ]);
     }
+
+    /**
+     * Returns the database connection name to use by default.
+     *
+     * @return string
+     */
+    public static function defaultConnectionName()
+    {
+        return 'test';
+    }
 }

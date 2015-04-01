@@ -150,4 +150,16 @@ endforeach;
         return $rules;
     }
 <% endif; %>
+<% if ($connection != 'default'): %>
+
+    /**
+     * Returns the database connection name to use by default.
+     *
+     * @return string
+     */
+    public static function defaultConnectionName()
+    {
+        return '<%= $connection %>';
+    }
+<% endif; %>
 }
