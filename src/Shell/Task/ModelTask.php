@@ -256,7 +256,7 @@ class ModelTask extends BakeTask
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
                 if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)) {
-                    $found = $this->findTableReferencedBy($fieldName);
+                    $found = $this->findTableReferencedBy($schema, $fieldName);
                     if ($found) {
                         $tmpModelName = Inflector::camelize($found);
                     }
@@ -278,34 +278,28 @@ class ModelTask extends BakeTask
         }
         return $associations;
     }
+
     /**
      * find the table, if any, actually referenced by the passed key field.
      * Search tables in db for keyField; if found search key constraints
      * for the table to which it refers.
      *
-     * @param null $keyField field to look for
-     * @return null
+     * @param \Cake\Database\Schema\Table $schema The table schema to find a constraint for.
+     * @param string $keyField The field to check for a constraint.
+     * @return string|null Either the referenced table or null if the field has no constraints.
      */
-     public function findTableReferencedBy($keyField = null)
+     public function findTableReferencedBy($schema, $keyField)
      {
-         $db = ConnectionManager::get($this->connection);
-         $schema = $db->schemaCollection();
-         $tables = $schema->listTables();
-
-         foreach ($tables as $table) {
-             $meta = $schema->describe($table, ['forceRefresh' => true]);
-             $columns = $meta->columns();
-             if (!in_array($keyField, $columns)) {
-                 continue;
-             }
-             $constraints = $meta->constraints();
-             foreach ($constraints as $constraint) {
-                 $constraintInfo = $meta->constraint($constraint);
-                 if (in_array($keyField, $constraintInfo['columns'])) {
-                     if (in_array('references', array_keys($constraintInfo))) {
-                         return $constraintInfo['references'][0];
-                     }
+         if (!$schema->column($keyField)) {
+             return null;
+         }
+         foreach ($schema->constraints() as $constraint) {
+             $constraintInfo = $schema->constraint($constraint);
+             if (in_array($keyField, $constraintInfo['columns'])) {
+                 if (!isset($constraintInfo['references'])) {
+                     continue;
                  }
+                 return $constraintInfo['references'][0];
              }
          }
          return null;
