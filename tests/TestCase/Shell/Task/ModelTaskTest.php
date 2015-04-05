@@ -41,13 +41,13 @@ class ModelTaskTest extends TestCase
         'plugin.bake.bake_articles_bake_tags',
         'plugin.bake.bake_tags',
         'plugin.bake.category_threads',
-        'plugin.bake.invitations',
         'core.users',
         'core.number_trees',
         'core.counter_cache_users',
         'core.counter_cache_posts',
         'core.tags',
-        'core.articles_tags'
+        'core.articles_tags',
+        'plugin.bake.invitations',
     ];
 
     /**
