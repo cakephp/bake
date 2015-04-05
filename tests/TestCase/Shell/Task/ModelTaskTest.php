@@ -391,11 +391,13 @@ class ModelTaskTest extends TestCase
             'belongsTo' => [
                 [
                     'alias' => 'Users',
-                    'foreignKey' => 'sender_id'
+                    'foreignKey' => 'sender_id',
+                    'joinType' => 'INNER',
                 ],
                 [
                     'alias' => 'Users',
-                    'foreignKey' => 'receiver_id'
+                    'foreignKey' => 'receiver_id',
+                    'joinType' => 'INNER',
                 ],
             ]
         ];
