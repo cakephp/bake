@@ -263,7 +263,8 @@ class ModelTaskTest extends TestCase
             'belongsTo' => [
                 [
                     'alias' => 'BakeUsers',
-                    'foreignKey' => 'bake_user_id'
+                    'foreignKey' => 'bake_user_id',
+                    'joinType' => 'INNER'
                 ],
             ],
             'hasMany' => [
@@ -300,7 +301,8 @@ class ModelTaskTest extends TestCase
                 [
                     'alias' => 'BakeUsers',
                     'className' => 'TestBake.BakeUsers',
-                    'foreignKey' => 'bake_user_id'
+                    'foreignKey' => 'bake_user_id',
+                    'joinType' => 'INNER'
                 ],
             ],
             'hasMany' => [
@@ -336,11 +338,13 @@ class ModelTaskTest extends TestCase
             'belongsTo' => [
                 [
                     'alias' => 'BakeArticles',
-                    'foreignKey' => 'bake_article_id'
+                    'foreignKey' => 'bake_article_id',
+                    'joinType' => 'INNER'
                 ],
                 [
                     'alias' => 'BakeUsers',
-                    'foreignKey' => 'bake_user_id'
+                    'foreignKey' => 'bake_user_id',
+                    'joinType' => 'INNER'
                 ],
             ]
         ];
@@ -387,11 +391,13 @@ class ModelTaskTest extends TestCase
             'belongsTo' => [
                 [
                     'alias' => 'Articles',
-                    'foreignKey' => 'article_id'
+                    'foreignKey' => 'article_id',
+                    'joinType' => 'INNER'
                 ],
                 [
                     'alias' => 'Tags',
-                    'foreignKey' => 'tag_id'
+                    'foreignKey' => 'tag_id',
+                    'joinType' => 'INNER'
                 ]
             ]
         ];
