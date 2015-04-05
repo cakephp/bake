@@ -41,6 +41,7 @@ class ModelTaskTest extends TestCase
         'plugin.bake.bake_articles_bake_tags',
         'plugin.bake.bake_tags',
         'plugin.bake.category_threads',
+        'plugin.bake.invitations',
         'core.users',
         'core.number_trees',
         'core.counter_cache_users',
@@ -371,6 +372,30 @@ class ModelTaskTest extends TestCase
                     'alias' => 'ParentCategoryThreads',
                     'className' => 'Blog.CategoryThreads',
                     'foreignKey' => 'parent_id'
+                ],
+            ]
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test that belongsTo association generation uses constraints on the table
+     *
+     * @return void
+     */
+    public function testBelongsToGenerationConstraints()
+    {
+        $model = TableRegistry::get('Invitations');
+        $result = $this->Task->findBelongsTo($model, []);
+        $expected = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Users',
+                    'foreignKey' => 'sender_id'
+                ],
+                [
+                    'alias' => 'Users',
+                    'foreignKey' => 'receiver_id'
                 ],
             ]
         ];
@@ -1223,17 +1248,12 @@ class ModelTaskTest extends TestCase
      */
     public function testSkipTablesAndAll()
     {
-        $count = count($this->Task->listAll('test'));
-        if ($count != count($this->fixtures)) {
-            $this->markTestSkipped('Additional tables detected.');
-        }
-
         $this->Task->connection = 'test';
         $this->Task->skipTables = ['articles_tags', 'bake_tags', 'counter_cache_posts'];
 
-        $this->Task->Fixture->expects($this->exactly(8))
+        $this->Task->Fixture->expects($this->exactly(9))
             ->method('bake');
-        $this->Task->Test->expects($this->exactly(8))
+        $this->Task->Test->expects($this->exactly(9))
             ->method('bake');
 
         $filename = $this->_normalizePath(APP . 'Model/Entity/BakeArticle.php');
@@ -1261,11 +1281,35 @@ class ModelTaskTest extends TestCase
             ->method('createFile')
             ->with($filename);
 
-        $filename = $this->_normalizePath(APP . 'Model/Entity/NumberTree.php');
+        $filename = $this->_normalizePath(APP . 'Model/Entity/Invitation.php');
         $this->Task->expects($this->at(11))
             ->method('createFile')
             ->with($filename);
 
+        $filename = $this->_normalizePath(APP . 'Model/Entity/NumberTree.php');
+        $this->Task->expects($this->at(13))
+            ->method('createFile')
+            ->with($filename);
+
         $this->Task->all();
+    }
+
+    /**
+     * test finding referenced tables using constraints.
+     *
+     * @return void
+     */
+    public function testFindTableReferencedBy()
+    {
+        $invoices = TableRegistry::get('Invitations');
+        $schema = $invoices->schema();
+        $result = $this->Task->findTableReferencedBy($schema, 'not_there');
+        $this->assertNull($result);
+
+        $result = $this->Task->findTableReferencedBy($schema, 'sender_id');
+        $this->assertEquals('users', $result);
+
+        $result = $this->Task->findTableReferencedBy($schema, 'receiver_id');
+        $this->assertEquals('users', $result);
     }
 }
