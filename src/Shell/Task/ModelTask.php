@@ -16,6 +16,7 @@ namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\Configure;
+use Cake\Database\Schema;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -255,6 +256,14 @@ class ModelTask extends BakeTask
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
+
+                if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)) {
+                    $found = $this->findTableReferencedBy($fieldName);
+                    if ($found) {
+                        $tmpModelName = Inflector::camelize($found);
+                    }
+                }
+
                 $assoc = [
                     'alias' => $tmpModelName,
                     'foreignKey' => $fieldName
@@ -271,6 +280,39 @@ class ModelTask extends BakeTask
             $associations['belongsTo'][] = $assoc;
         }
         return $associations;
+    }
+
+    /**
+     * find the table, if any, actually referenced by the passed key field.
+     *   Search tables in db for keyField; if found search key constraints
+     *   for the table to which it refers.
+     *
+     * @param null $keyField  field to look for
+     * @return null
+     */
+    public function findTableReferencedBy($keyField = null)
+    {
+        $db = ConnectionManager::get($this->connection);
+        $schema = $db->schemaCollection();
+        $tables = $schema->listTables();
+
+        foreach ($tables as $table) {
+            $meta = $schema->describe($table, ['forceRefresh' => true]);
+            $columns = $meta->columns();
+            if (!in_array($keyField, $columns)) {
+                continue;
+            }
+            $constraints = $meta->constraints();
+            foreach ($constraints as $constraint) {
+                $constraintInfo = $meta->constraint($constraint);
+                if (in_array($keyField, $constraintInfo['columns'])) {
+                    if (in_array('references', array_keys($constraintInfo))) {
+                        return $constraintInfo['references'][0];
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
