@@ -288,22 +288,22 @@ class ModelTask extends BakeTask
      * @param string $keyField The field to check for a constraint.
      * @return string|null Either the referenced table or null if the field has no constraints.
      */
-     public function findTableReferencedBy($schema, $keyField)
-     {
-         if (!$schema->column($keyField)) {
+    public function findTableReferencedBy($schema, $keyField)
+    {
+        if (!$schema->column($keyField)) {
              return null;
-         }
-         foreach ($schema->constraints() as $constraint) {
-             $constraintInfo = $schema->constraint($constraint);
-             if (in_array($keyField, $constraintInfo['columns'])) {
-                 if (!isset($constraintInfo['references'])) {
-                     continue;
-                 }
-                 return $constraintInfo['references'][0];
-             }
-         }
-         return null;
-     }
+        }
+        foreach ($schema->constraints() as $constraint) {
+            $constraintInfo = $schema->constraint($constraint);
+            if (in_array($keyField, $constraintInfo['columns'])) {
+                if (!isset($constraintInfo['references'])) {
+                    continue;
+                }
+                return $constraintInfo['references'][0];
+            }
+        }
+        return null;
+    }
 
     /**
      * Find the hasMany relations and add them to associations list
