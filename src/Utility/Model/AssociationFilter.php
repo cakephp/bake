@@ -16,6 +16,7 @@ namespace Bake\Utility\Model;
 
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
+use Exception;
 
 /**
  * Utility class to filter Model Table associations
@@ -87,16 +88,20 @@ class AssociationFilter
                     $className = $alias;
                 }
 
-                $associations[$type][$assocName] = [
-                    'property' => $assoc->property(),
-                    'variable' => Inflector::variable($assocName),
-                    'primaryKey' => (array)$target->primaryKey(),
-                    'displayField' => $target->displayField(),
-                    'foreignKey' => $assoc->foreignKey(),
-                    'alias' => $alias,
-                    'controller' => $className,
-                    'fields' => $target->schema()->columns(),
-                ];
+                try {
+                    $associations[$type][$assocName] = [
+                        'property' => $assoc->property(),
+                        'variable' => Inflector::variable($assocName),
+                        'primaryKey' => (array)$target->primaryKey(),
+                        'displayField' => $target->displayField(),
+                        'foreignKey' => $assoc->foreignKey(),
+                        'alias' => $alias,
+                        'controller' => $className,
+                        'fields' => $target->schema()->columns(),
+                    ];
+                } catch (Exception $e) {
+                    // Do nothing it could be a bogus association name.
+                }
             }
         }
         return $associations;
