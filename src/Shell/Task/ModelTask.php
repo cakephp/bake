@@ -255,6 +255,12 @@ class ModelTask extends BakeTask
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
+                if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)) {
+                    $found = $this->findTableReferencedBy($schema, $fieldName);
+                    if ($found) {
+                        $tmpModelName = Inflector::camelize($found);
+                    }
+                }
                 $assoc = [
                     'alias' => $tmpModelName,
                     'foreignKey' => $fieldName
@@ -271,6 +277,32 @@ class ModelTask extends BakeTask
             $associations['belongsTo'][] = $assoc;
         }
         return $associations;
+    }
+
+    /**
+     * find the table, if any, actually referenced by the passed key field.
+     * Search tables in db for keyField; if found search key constraints
+     * for the table to which it refers.
+     *
+     * @param \Cake\Database\Schema\Table $schema The table schema to find a constraint for.
+     * @param string $keyField The field to check for a constraint.
+     * @return string|null Either the referenced table or null if the field has no constraints.
+     */
+    public function findTableReferencedBy($schema, $keyField)
+    {
+        if (!$schema->column($keyField)) {
+             return null;
+        }
+        foreach ($schema->constraints() as $constraint) {
+            $constraintInfo = $schema->constraint($constraint);
+            if (in_array($keyField, $constraintInfo['columns'])) {
+                if (!isset($constraintInfo['references'])) {
+                    continue;
+                }
+                return $constraintInfo['references'][0];
+            }
+        }
+        return null;
     }
 
     /**
