@@ -35,6 +35,8 @@ class AssociationFilterTest extends TestCase
      * @var array
      */
     public $fixtures = [
+        'core.authors',
+        'core.tags',
         'plugin.bake.bake_articles',
         'plugin.bake.bake_comments',
         'plugin.bake.bake_articles_bake_tags',
@@ -59,6 +61,7 @@ class AssociationFilterTest extends TestCase
      */
     public function tearDown()
     {
+        TableRegistry::clear();
         unset($this->associationFilter);
         parent::tearDown();
     }
@@ -129,5 +132,21 @@ class AssociationFilterTest extends TestCase
         }
         $expected = ['authors', 'tags'];
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * testFilterAssociations
+     *
+     * @return void
+     */
+    public function testFilterAssociationsMissingTable()
+    {
+        $table = TableRegistry::get('Articles', [
+            'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
+        ]);
+        $table->hasMany('Nopes');
+
+        $result = $this->associationFilter->filterAssociations($table);
+        $this->assertArrayNotHasKey('HasMany', $result);
     }
 }
