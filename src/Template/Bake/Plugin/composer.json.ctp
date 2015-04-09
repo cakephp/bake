@@ -19,7 +19,7 @@
     "type": "cakephp-plugin",
     "require": {
         "php": ">=5.4",
-        "cakephp/cakephp": "3.0.x-dev"
+        "cakephp/cakephp": "~3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
