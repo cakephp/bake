@@ -36,7 +36,7 @@ class BakeArticlesTable extends Table
             ->add('id', 'valid', ['rule' => 'numeric'])
             ->allowEmpty('id', 'create')
             ->requirePresence('name', 'create')
-            ->notEmpty('name')
+            ->notBlank('name')
             ->add('email', 'valid', ['rule' => 'email'])
             ->allowEmpty('email')
             ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
