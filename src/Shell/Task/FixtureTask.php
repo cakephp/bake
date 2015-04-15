@@ -265,7 +265,10 @@ class FixtureTask extends BakeTask
             $content .= "        '_constraints' => [\n" . implode("\n", $constraints) . "\n        ],\n";
         }
         if (!empty($options)) {
-            $content .= "        '_options' => [\n" . implode(', ', $options) . "\n        ],\n";
+            foreach ($options as &$option) {
+                $option = '            ' . $option;
+            }
+            $content .= "        '_options' => [\n" . implode(",\n", $options) . "\n        ],\n";
         }
         return "[\n$content    ]";
     }
