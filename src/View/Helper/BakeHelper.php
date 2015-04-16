@@ -33,7 +33,7 @@ class BakeHelper extends Helper
      *
      * @param string $name the name of the property
      * @param array $value the array of values
-     * @param array $options extra options to be passed ot the element
+     * @param array $options extra options to be passed to the element
      * @return string
      */
     public function arrayProperty($name, array $value = [], array $options = [])
