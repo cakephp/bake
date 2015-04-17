@@ -229,7 +229,7 @@ class PluginTask extends BakeTask
         $composer = $this->findComposer();
 
         if (!$composer) {
-            $this->error('Could not locate composer, Add composer to your PATH, or use the -composer option.');
+            $this->error('Could not locate composer. Add composer to your PATH, or use the --composer option.');
             return false;
         }
 
