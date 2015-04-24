@@ -423,7 +423,7 @@ class TemplateTask extends BakeTask
         ])->addOption('prefix', [
             'help' => 'The routing prefix to generate views for.',
         ])->addSubcommand('all', [
-            'help' => 'Bake all CRUD action views for all controllers. Requires models and controllers to exist.'
+            'help' => '[optional] Bake all CRUD action views for all controllers. Requires models and controllers to exist.'
         ]);
 
         return $parser;
