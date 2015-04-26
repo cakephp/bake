@@ -97,8 +97,6 @@ class PluginTask extends BakeTask
         $this->out(sprintf("<info>Plugin Directory:</info> %s", $this->path . $plugin));
         $this->hr();
 
-        $classBase = 'src';
-
         $looksGood = $this->in('Look okay?', ['y', 'n', 'q'], 'y');
 
         if (strtolower($looksGood) !== 'y') {
