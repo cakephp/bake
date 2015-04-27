@@ -3,8 +3,8 @@
 [![Build Status](https://api.travis-ci.org/cakephp/bake.png)](https://travis-ci.org/cakephp/bake)
 [![License](https://poser.pugx.org/cakephp/bake/license.svg)](https://packagist.org/packages/cakephp/bake)
 
-This is a beta version of the "bake" system for CakePHP 3.0. It is currently under
-development and should be considered experimental.
+This project provides the code generation functionality for CakePHP. Through a
+suite of CLI tools, you can quickly and easily generate code for your application.
 
 ## Installation
 
@@ -15,6 +15,10 @@ The recommended way to install composer packages is:
 ```
 composer require --dev cakephp/bake
 ```
+
+## Documentation
+
+You can find the documentation for bake [on the cookbook](http://book.cakephp.org/3.0/en/bake.html).
 
 
 ## License
