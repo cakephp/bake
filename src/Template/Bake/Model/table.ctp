@@ -84,10 +84,10 @@ class <%= $name %>Table extends Table
 <%
 $firstField = true;
 foreach ($validation as $field => $rules):
-    if ($firstField !== true) {
-        $validationMethods[] = "";
-    }
-    
+    if ($firstField !== true):
+        $validationMethods[] = "\n        \$validator";
+    endif;
+
     foreach ($rules as $ruleName => $rule):
         if ($rule['rule'] && !isset($rule['provider'])):
             $validationMethods[] = sprintf(
@@ -131,9 +131,10 @@ foreach ($validation as $field => $rules):
         endif;
     endforeach;
     $firstField = false;
+    $validationMethods[] = array_pop($validationMethods) . ";";
 endforeach;
 %>
-<%= "            " . implode("\n            ", $validationMethods) . ";" %>
+<%= "            " . implode("\n            ", $validationMethods) %>
 
 
         return $validator;
