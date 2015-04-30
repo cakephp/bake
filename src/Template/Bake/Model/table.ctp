@@ -82,7 +82,12 @@ class <%= $name %>Table extends Table
         $validator
 <% $validationMethods = []; %>
 <%
+$firstField = true;
 foreach ($validation as $field => $rules):
+    if ($firstField !== true) {
+        $validationMethods[] = "";
+    }
+    
     foreach ($rules as $ruleName => $rule):
         if ($rule['rule'] && !isset($rule['provider'])):
             $validationMethods[] = sprintf(
@@ -125,6 +130,7 @@ foreach ($validation as $field => $rules):
             endif;
         endif;
     endforeach;
+    $firstField = false;
 endforeach;
 %>
 <%= "            " . implode("\n            ", $validationMethods) . ";" %>
