@@ -220,10 +220,10 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakeWithPlugin()
     {
-        $this->Task->plugin = 'ControllerTest';
+        $this->Task->plugin = 'BakeTest';
 
-        Plugin::load('ControllerTest', ['path' => APP . 'Plugin/ControllerTest/']);
-        $path = APP . 'Plugin/ControllerTest/src/Controller/BakeArticlesController.php';
+        Plugin::load('BakeTest', ['path' => APP . 'Plugin/BakeTest/']);
+        $path = APP . 'Plugin/BakeTest/src/Controller/BakeArticlesController.php';
 
         $this->Task->expects($this->at(1))
             ->method('createFile')

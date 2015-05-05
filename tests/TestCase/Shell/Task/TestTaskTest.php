@@ -205,6 +205,7 @@ class TestTaskTest extends TestCase
 
         $expected = [
             'AuthorsTable',
+            'BakeArticlesTable',
             'BakeTestCommentsTable',
             'CommentsTable'
         ];
