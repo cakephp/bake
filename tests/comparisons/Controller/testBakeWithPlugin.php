@@ -1,12 +1,12 @@
 <?php
-namespace ControllerTest\Controller;
+namespace BakeTest\Controller;
 
-use ControllerTest\Controller\AppController;
+use BakeTest\Controller\AppController;
 
 /**
  * BakeArticles Controller
  *
- * @property \ControllerTest\Model\Table\BakeArticlesTable $BakeArticles
+ * @property \BakeTest\Model\Table\BakeArticlesTable $BakeArticles
  */
 class BakeArticlesController extends AppController
 {
