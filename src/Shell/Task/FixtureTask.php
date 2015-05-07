@@ -16,6 +16,7 @@ namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\Configure;
+use Cake\Database\Exception;
 use Cake\Database\Schema\Table;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
@@ -175,7 +176,13 @@ class FixtureTask extends BakeTask
             );
         }
         $schemaCollection = $connection->schemaCollection();
-        $data = $schemaCollection->describe($useTable);
+        try {
+            $data = $schemaCollection->describe($useTable);
+        } catch (Exception $e) {
+            $useTable = Inflector::underscore($model);
+            $table = $useTable;
+            $data = $schemaCollection->describe($useTable);
+        }
 
         if ($modelImport === null) {
             $schema = $this->_generateSchema($data);
