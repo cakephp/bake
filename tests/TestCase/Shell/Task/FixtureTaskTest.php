@@ -35,6 +35,7 @@ class FixtureTaskTest extends TestCase
         'core.comments',
         'plugin.bake.datatypes',
         'plugin.bake.binary_tests',
+        'plugin.bake.bake_car',
         'core.users'
     ];
 
@@ -165,6 +166,23 @@ class FixtureTaskTest extends TestCase
             ->with($filename, $this->stringContains("public \$table = 'comments';"));
 
         $this->Task->main('articles');
+    }
+
+    /**
+     * Test a singular table
+     *
+     * @return void
+     */
+    public function testMainWithSingularTable()
+    {
+        $this->Task->connection = 'test';
+        $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/CarFixture.php');
+
+        $this->Task->expects($this->at(0))
+            ->method('createFile')
+            ->with($filename, $this->stringContains("public \$table = 'car';"));
+
+        $this->Task->main('car');
     }
 
     /**
