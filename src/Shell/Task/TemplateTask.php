@@ -368,7 +368,7 @@ class TemplateTask extends BakeTask
             $content = $this->getContent($action);
         }
         if (empty($content)) {
-            $this->err("<warning>No generated content for '{$action}.ctp', not generating template.");
+            $this->err("<warning>No generated content for '{$action}.ctp', not generating template.</warning>");
             return false;
         }
         $this->out("\n" . sprintf('Baking `%s` view file...', $action), 1, Shell::QUIET);
