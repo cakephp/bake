@@ -16,6 +16,7 @@ namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\Configure;
+use Cake\Database\Schema\Table as SchemaTable;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -576,7 +577,7 @@ class ModelTask extends BakeTask
                 continue;
             }
 
-            if ($constraint['type'] == 'unique') {
+            if ($constraint['type'] === SchemaTable::CONSTRAINT_UNIQUE) {
                 $validation['unique'] = ['rule' => 'validateUnique', 'provider' => 'table'];
             }
         }
