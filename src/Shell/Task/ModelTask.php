@@ -509,7 +509,7 @@ class ModelTask extends BakeTask
                 continue;
             }
             $field = $schema->column($fieldName);
-            $validation = $this->fieldValidation($fieldName, $field, $primaryKey);
+            $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
             if (!empty($validation)) {
                 $validate[$fieldName] = $validation;
             }
@@ -520,12 +520,13 @@ class ModelTask extends BakeTask
     /**
      * Does individual field validation handling.
      *
+     * @param \Cake\Database\Schema\Table $schema The table schema for the current field.
      * @param string $fieldName Name of field to be validated.
      * @param array $metaData metadata for field
      * @param string $primaryKey The primary key field
      * @return array Array of validation for the field.
      */
-    public function fieldValidation($fieldName, array $metaData, $primaryKey)
+    public function fieldValidation($schema, $fieldName, array $metaData, $primaryKey)
     {
         $ignoreFields = ['created', 'modified', 'updated'];
         if (in_array($fieldName, $ignoreFields)) {
@@ -568,6 +569,17 @@ class ModelTask extends BakeTask
                 'allowEmpty' => $allowEmpty,
             ]
         ];
+
+        foreach ($schema->constraints() as $constraint) {
+            $constraint = $schema->constraint($constraint);
+            if (!in_array($fieldName, $constraint['columns']) || count($constraint['columns']) > 1) {
+                continue;
+            }
+
+            if ($constraint['type'] == 'unique') {
+                $validation['unique'] = ['rule' => 'validateUnique', 'provider' => 'table'];
+            }
+        }
 
         return $validation;
     }
