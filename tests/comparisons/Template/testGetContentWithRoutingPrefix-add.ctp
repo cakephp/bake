@@ -5,7 +5,7 @@
     </ul>
 </div>
 <div class="testTemplateModels form large-10 medium-9 columns">
-    <?= $this->Form->create($testTemplateModel); ?>
+    <?= $this->Form->create($testTemplateModel) ?>
     <fieldset>
         <legend><?= __('Add Test Template Model') ?></legend>
         <?php
