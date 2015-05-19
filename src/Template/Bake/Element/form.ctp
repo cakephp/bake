@@ -48,7 +48,7 @@ $fields = collection($fields)
     </ul>
 </div>
 <div class="<%= $pluralVar %> form large-10 medium-9 columns">
-    <?= $this->Form->create($<%= $singularVar %>); ?>
+    <?= $this->Form->create($<%= $singularVar %>) ?>
     <fieldset>
         <legend><?= __('<%= Inflector::humanize($action) %> <%= $singularHumanName %>') ?></legend>
         <?php
