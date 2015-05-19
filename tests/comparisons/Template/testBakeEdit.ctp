@@ -8,12 +8,12 @@
             )
         ?></li>
         <li><?= $this->Html->link(__('List Template Task Comments'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Articles'), ['controller' => 'Articles', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('List Articles'), ['controller' => 'Articles', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?></li>
     </ul>
 </div>
 <div class="templateTaskComments form large-10 medium-9 columns">
-    <?= $this->Form->create($templateTaskComment); ?>
+    <?= $this->Form->create($templateTaskComment) ?>
     <fieldset>
         <legend><?= __('Edit Template Task Comment') ?></legend>
         <?php
