@@ -22,6 +22,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
+use DateTime;
 
 /**
  * Task class for creating and updating fixtures files.
@@ -386,6 +387,9 @@ class FixtureTask extends BakeTask
         foreach ($records as $record) {
             $values = [];
             foreach ($record as $field => $value) {
+                if ($value instanceof DateTime) {
+                    $value = $value->format('Y-m-d H:i:s');
+                }
                 $val = var_export($value, true);
                 if ($val === 'NULL') {
                     $val = 'null';
@@ -420,15 +424,11 @@ class FixtureTask extends BakeTask
                 'connection' => ConnectionManager::get($this->connection)
             ]);
         }
-        $records = $model->find('all', [
-            'conditions' => $conditions,
-            'limit' => $recordCount
-        ]);
+        $records = $model->find('all')
+            ->where($conditions)
+            ->limit($recordCount)
+            ->hydrate(false);
 
-        $out = [];
-        foreach ($records as $record) {
-            $out[] = $record->toArray();
-        }
-        return $out;
+        return $records;
     }
 }

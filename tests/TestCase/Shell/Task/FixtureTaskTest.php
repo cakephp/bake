@@ -62,6 +62,8 @@ class FixtureTaskTest extends TestCase
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->interactive = false;
         $this->Task->BakeTemplate->initialize();
+
+        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
     }
 
     /**
@@ -100,25 +102,17 @@ class FixtureTaskTest extends TestCase
     }
 
     /**
-     * test generating a fixture with database conditions.
+     * test generating a fixture with database rows.
      *
      * @return void
      */
-    public function testImportRecordsFromDatabaseWithConditionsPoo()
+    public function testImportRecordsFromDatabase()
     {
         $this->Task->connection = 'test';
         $this->Task->params = ['schema' => true, 'records' => true];
 
-        $result = $this->Task->bake('Articles');
-
-        $this->assertContains('namespace App\Test\Fixture;', $result);
-        $this->assertContains('use Cake\TestSuite\Fixture\TestFixture;', $result);
-        $this->assertContains('class ArticlesFixture extends TestFixture', $result);
-        $this->assertContains('public $records', $result);
-        $this->assertContains('public $import', $result);
-        $this->assertContains("'title' => 'First Article'", $result, 'Missing import data %s');
-        $this->assertContains('Second Article', $result, 'Missing import data %s');
-        $this->assertContains('Third Article', $result, 'Missing import data %s');
+        $result = $this->Task->bake('Users');
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
