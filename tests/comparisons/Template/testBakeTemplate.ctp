@@ -34,8 +34,7 @@
     <div class="row texts">
         <div class="columns large-9">
             <h6 class="subheader"><?= __('Comment') ?></h6>
-            <?= $this->Text->autoParagraph(h($templateTaskComment->comment)); ?>
-
+            <?= $this->Text->autoParagraph(h($templateTaskComment->comment)) ?>
         </div>
     </div>
 </div>
