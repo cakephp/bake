@@ -122,8 +122,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
     <div class="row texts">
         <div class="columns large-9">
             <h6 class="subheader"><?= __('<%= Inflector::humanize($field) %>') ?></h6>
-            <?= $this->Text->autoParagraph(h($<%= $singularVar %>-><%= $field %>)); ?>
-
+            <?= $this->Text->autoParagraph(h($<%= $singularVar %>-><%= $field %>)) ?>
         </div>
     </div>
 <% endforeach; %>
