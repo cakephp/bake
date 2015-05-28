@@ -24,7 +24,7 @@ class ShellHelperTask extends SimpleBakeTask
      *
      * @var string
      */
-    public $pathFragment = 'Shell/Helper';
+    public $pathFragment = 'Shell/Helper/';
 
     /**
      * {@inheritDoc}
