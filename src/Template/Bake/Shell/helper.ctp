@@ -31,6 +31,7 @@ class <%= $name %>Helper extends Helper
      *
      * @return void
      */
-    public function output($args) {
+    public function output($args)
+    {
     }
 }
