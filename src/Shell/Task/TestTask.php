@@ -55,6 +55,7 @@ class TestTask extends BakeTask
         'Helper' => 'View\Helper',
         'Shell' => 'Shell',
         'Cell' => 'View\Cell',
+        'Form' => 'Form'
     ];
 
     /**
@@ -71,6 +72,7 @@ class TestTask extends BakeTask
         'helper' => 'Helper',
         'shell' => 'Shell',
         'cell' => 'Cell',
+        'form' => 'Form'
     ];
 
     /**
@@ -486,7 +488,7 @@ class TestTask extends BakeTask
             $pre = "\$config = TableRegistry::exists('{$className}') ? [] : ['className' => '{$fullClassName}'];";
             $construct = "TableRegistry::get('{$className}', \$config);";
         }
-        if ($type === 'behavior' || $type === 'entity') {
+        if ($type === 'behavior' || $type === 'entity' || $type === 'form') {
             $construct = "new {$className}();";
         }
         if ($type === 'helper') {
@@ -591,6 +593,7 @@ class TestTask extends BakeTask
                 'Behavior', 'behavior',
                 'Shell', 'shell',
                 'Cell', 'cell',
+                'Form', 'form'
             ]
         ])->addArgument('name', [
             'help' => 'An existing class to bake tests for.'
