@@ -192,6 +192,7 @@ class SimpleBakeTaskTest extends TestCase
             ['Bake\Shell\Task\HelperTask'],
             ['Bake\Shell\Task\ShellTask'],
             ['Bake\Shell\Task\ShellHelperTask'],
+            ['Bake\Shell\Task\FormTask']
         ];
     }
 
