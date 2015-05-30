@@ -20,27 +20,29 @@ $fields = collection($fields)
     })
     ->take(7);
 %>
-<div class="actions columns large-2 medium-3">
-    <h3><?= __('Actions') ?></h3>
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?></li>
-<%
-    $done = [];
-    foreach ($associations as $type => $data):
-        foreach ($data as $alias => $details):
-            if ($details['controller'] != $this->name && !in_array($details['controller'], $done)):
-%>
-        <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New <%= $this->_singularHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) ?></li>
-<%
-                $done[] = $details['controller'];
-            endif;
-        endforeach;
-    endforeach;
-%>
-    </ul>
-</div>
-<div class="<%= $pluralVar %> index large-10 medium-9 columns">
+
+    <nav class="large-3 medium-4 columns" id="actions-sidebar">
+        <ul class="side-nav">
+           <li class="heading"><?= __('Actions') ?></li>
+                   <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?></li>
+           <%
+               $done = [];
+               foreach ($associations as $type => $data):
+                   foreach ($data as $alias => $details):
+                       if ($details['controller'] != $this->name && !in_array($details['controller'], $done)):
+           %>
+                   <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) ?></li>
+                   <li><?= $this->Html->link(__('New <%= $this->_singularHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) ?></li>
+           <%
+                           $done[] = $details['controller'];
+                       endif;
+                   endforeach;
+               endforeach;
+           %>
+         </ul>
+      </nav>
+<div class="<%= $pluralVar %> index large-9 medium-8 columns" id="content">
+   <h3><?= __('<%= $pluralHumanName %>') ?></h3>
     <table cellpadding="0" cellspacing="0">
     <thead>
         <tr>
