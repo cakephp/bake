@@ -506,6 +506,14 @@ class TestTaskTest extends TestCase
             ''
         ];
         $this->assertEquals($expected, $result);
+
+        $result = $this->Task->generateConstructor('form', 'TestBake\Form\ExampleForm');
+        $expected = [
+            '',
+            "new ExampleForm();",
+            ''
+        ];
+        $this->assertEquals($expected, $result);
     }
 
     /**
