@@ -37,8 +37,8 @@ $fields = collection($fields)
             foreach ($data as $alias => $details) {
                 if ($details['controller'] != $this->name && !in_array($details['controller'], $done)) {
 %>
-        <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) %> </li>
-        <li><?= $this->Html->link(__('New <%= $this->_singularHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) %> </li>
+        <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) %></li>
+        <li><?= $this->Html->link(__('New <%= $this->_singularHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) %></li>
 <%
                     $done[] = $details['controller'];
                 }
@@ -48,7 +48,7 @@ $fields = collection($fields)
     </ul>
 </div>
 <div class="<%= $pluralVar %> form large-10 medium-9 columns">
-    <?= $this->Form->create($<%= $singularVar %>); ?>
+    <?= $this->Form->create($<%= $singularVar %>) ?>
     <fieldset>
         <legend><?= __('<%= Inflector::humanize($action) %> <%= $singularHumanName %>') ?></legend>
         <?php

@@ -34,13 +34,27 @@ class BakeArticlesTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('id', 'create')
+            ->allowEmpty('id', 'create');
+            
+        $validator
             ->requirePresence('name', 'create')
-            ->notEmpty('name')
+            ->notEmpty('name');
+            
+        $validator
             ->add('email', 'valid', ['rule' => 'email'])
             ->allowEmpty('email')
             ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         return $validator;
+    }
+
+    /**
+     * Returns the database connection name to use by default.
+     *
+     * @return string
+     */
+    public static function defaultConnectionName()
+    {
+        return 'test';
     }
 }

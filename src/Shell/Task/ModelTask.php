@@ -112,9 +112,10 @@ class ModelTask extends BakeTask
         $primaryKey = $this->getPrimaryKey($model);
         $displayField = $this->getDisplayField($model);
         $fields = $this->getFields($model);
-        $validation = $this->getValidation($model);
+        $validation = $this->getValidation($model, $associations);
         $rulesChecker = $this->getRules($model, $associations);
         $behaviors = $this->getBehaviors($model);
+        $connection = $this->connection;
 
         $data = compact(
             'associations',
@@ -124,7 +125,8 @@ class ModelTask extends BakeTask
             'fields',
             'validation',
             'rulesChecker',
-            'behaviors'
+            'behaviors',
+            'connection'
         );
         $this->bakeTable($model, $data);
         $this->bakeEntity($model, $data);
@@ -253,10 +255,20 @@ class ModelTask extends BakeTask
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
+                if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)) {
+                    $found = $this->findTableReferencedBy($schema, $fieldName);
+                    if ($found) {
+                        $tmpModelName = Inflector::camelize($found);
+                    }
+                }
                 $assoc = [
                     'alias' => $tmpModelName,
                     'foreignKey' => $fieldName
                 ];
+                if ($schema->column($fieldName)['null'] === false) {
+                    $assoc['joinType'] = 'INNER';
+                }
+
             }
 
             if ($this->plugin && empty($assoc['className'])) {
@@ -265,6 +277,32 @@ class ModelTask extends BakeTask
             $associations['belongsTo'][] = $assoc;
         }
         return $associations;
+    }
+
+    /**
+     * find the table, if any, actually referenced by the passed key field.
+     * Search tables in db for keyField; if found search key constraints
+     * for the table to which it refers.
+     *
+     * @param \Cake\Database\Schema\Table $schema The table schema to find a constraint for.
+     * @param string $keyField The field to check for a constraint.
+     * @return string|null Either the referenced table or null if the field has no constraints.
+     */
+    public function findTableReferencedBy($schema, $keyField)
+    {
+        if (!$schema->column($keyField)) {
+             return null;
+        }
+        foreach ($schema->constraints() as $constraint) {
+            $constraintInfo = $schema->constraint($constraint);
+            if (in_array($keyField, $constraintInfo['columns'])) {
+                if (!isset($constraintInfo['references'])) {
+                    continue;
+                }
+                return $constraintInfo['references'][0];
+            }
+        }
+        return null;
     }
 
     /**
@@ -444,9 +482,10 @@ class ModelTask extends BakeTask
      * Generate default validation rules.
      *
      * @param \Cake\ORM\Table $model The model to introspect.
+     * @param array $associations The associations list.
      * @return array The validation rules.
      */
-    public function getValidation($model)
+    public function getValidation($model, $associations = [])
     {
         if (!empty($this->params['no-validation'])) {
             return [];
@@ -459,8 +498,16 @@ class ModelTask extends BakeTask
 
         $validate = [];
         $primaryKey = (array)$schema->primaryKey();
-
+        $foreignKeys = [];
+        if (isset($associations['belongsTo'])) {
+            foreach ($associations['belongsTo'] as $assoc) {
+                $foreignKeys[] = $assoc['foreignKey'];
+            }
+        }
         foreach ($fields as $fieldName) {
+            if (in_array($fieldName, $foreignKeys)) {
+                continue;
+            }
             $field = $schema->column($fieldName);
             $validation = $this->fieldValidation($fieldName, $field, $primaryKey);
             if (!empty($validation)) {
@@ -697,6 +744,7 @@ class ModelTask extends BakeTask
             'validation' => [],
             'rulesChecker' => [],
             'behaviors' => [],
+            'connection' => $this->connection,
         ];
 
         $this->BakeTemplate->set($data);

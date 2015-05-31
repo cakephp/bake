@@ -29,7 +29,7 @@ class CategoryThreadsFixture extends TestFixture
      */
     public $fields = [
         'id' => ['type' => 'integer'],
-        'parent_id' => ['type' => 'integer', 'null' => false],
+        'parent_id' => ['type' => 'integer'],
         'name' => ['type' => 'string', 'null' => false],
         'created' => 'datetime',
         'updated' => 'datetime',

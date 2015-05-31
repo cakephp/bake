@@ -368,6 +368,7 @@ class TemplateTask extends BakeTask
             $content = $this->getContent($action);
         }
         if (empty($content)) {
+            $this->err("<warning>No generated content for '{$action}.ctp', not generating template.</warning>");
             return false;
         }
         $this->out("\n" . sprintf('Baking `%s` view file...', $action), 1, Shell::QUIET);
@@ -423,7 +424,7 @@ class TemplateTask extends BakeTask
         ])->addOption('prefix', [
             'help' => 'The routing prefix to generate views for.',
         ])->addSubcommand('all', [
-            'help' => 'Bake all CRUD action views for all controllers. Requires models and controllers to exist.'
+            'help' => '[optional] Bake all CRUD action views for all controllers. Requires models and controllers to exist.'
         ]);
 
         return $parser;
@@ -433,7 +434,8 @@ class TemplateTask extends BakeTask
      * Get filtered associations
      * To be mocked...
      *
-     * @param Table $model
+     * @param \Cake\ORM\Table $model Table
+     * @return array associations
      */
     protected function _filteredAssociations(Table $model)
     {

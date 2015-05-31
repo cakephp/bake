@@ -1,12 +1,12 @@
 <?php
-namespace ControllerTest\Controller;
+namespace BakeTest\Controller;
 
-use ControllerTest\Controller\AppController;
+use BakeTest\Controller\AppController;
 
 /**
  * BakeArticles Controller
  *
- * @property \ControllerTest\Model\Table\BakeArticlesTable $BakeArticles
+ * @property \BakeTest\Model\Table\BakeArticlesTable $BakeArticles
  */
 class BakeArticlesController extends AppController
 {
@@ -52,10 +52,10 @@ class BakeArticlesController extends AppController
         if ($this->request->is('post')) {
             $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->data);
             if ($this->BakeArticles->save($bakeArticle)) {
-                $this->Flash->success('The bake article has been saved.');
+                $this->Flash->success(__('The bake article has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error('The bake article could not be saved. Please, try again.');
+                $this->Flash->error(__('The bake article could not be saved. Please, try again.'));
             }
         }
         $bakeUsers = $this->BakeArticles->BakeUsers->find('list', ['limit' => 200]);
@@ -79,10 +79,10 @@ class BakeArticlesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->data);
             if ($this->BakeArticles->save($bakeArticle)) {
-                $this->Flash->success('The bake article has been saved.');
+                $this->Flash->success(__('The bake article has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error('The bake article could not be saved. Please, try again.');
+                $this->Flash->error(__('The bake article could not be saved. Please, try again.'));
             }
         }
         $bakeUsers = $this->BakeArticles->BakeUsers->find('list', ['limit' => 200]);
@@ -103,9 +103,9 @@ class BakeArticlesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $bakeArticle = $this->BakeArticles->get($id);
         if ($this->BakeArticles->delete($bakeArticle)) {
-            $this->Flash->success('The bake article has been deleted.');
+            $this->Flash->success(__('The bake article has been deleted.'));
         } else {
-            $this->Flash->error('The bake article could not be deleted. Please, try again.');
+            $this->Flash->error(__('The bake article could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
     }

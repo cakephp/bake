@@ -97,8 +97,6 @@ class PluginTask extends BakeTask
         $this->out(sprintf("<info>Plugin Directory:</info> %s", $this->path . $plugin));
         $this->hr();
 
-        $classBase = 'src';
-
         $looksGood = $this->in('Look okay?', ['y', 'n', 'q'], 'y');
 
         if (strtolower($looksGood) !== 'y') {
@@ -229,7 +227,7 @@ class PluginTask extends BakeTask
         $composer = $this->findComposer();
 
         if (!$composer) {
-            $this->error('Could not locate composer, Add composer to your PATH, or use the -composer option.');
+            $this->error('Could not locate composer. Add composer to your PATH, or use the --composer option.');
             return false;
         }
 

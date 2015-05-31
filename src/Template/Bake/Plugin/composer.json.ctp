@@ -18,8 +18,8 @@
     "description": "<%= $plugin %> plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
-        "php": ">=5.4",
-        "cakephp/cakephp": "3.0.x-dev"
+        "php": ">=5.4.16",
+        "cakephp/cakephp": "~3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "*"

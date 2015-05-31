@@ -46,7 +46,8 @@ class ModelTaskTest extends TestCase
         'core.counter_cache_users',
         'core.counter_cache_posts',
         'core.tags',
-        'core.articles_tags'
+        'core.articles_tags',
+        'plugin.bake.invitations',
     ];
 
     /**
@@ -263,7 +264,8 @@ class ModelTaskTest extends TestCase
             'belongsTo' => [
                 [
                     'alias' => 'BakeUsers',
-                    'foreignKey' => 'bake_user_id'
+                    'foreignKey' => 'bake_user_id',
+                    'joinType' => 'INNER'
                 ],
             ],
             'hasMany' => [
@@ -300,7 +302,8 @@ class ModelTaskTest extends TestCase
                 [
                     'alias' => 'BakeUsers',
                     'className' => 'TestBake.BakeUsers',
-                    'foreignKey' => 'bake_user_id'
+                    'foreignKey' => 'bake_user_id',
+                    'joinType' => 'INNER'
                 ],
             ],
             'hasMany' => [
@@ -336,11 +339,13 @@ class ModelTaskTest extends TestCase
             'belongsTo' => [
                 [
                     'alias' => 'BakeArticles',
-                    'foreignKey' => 'bake_article_id'
+                    'foreignKey' => 'bake_article_id',
+                    'joinType' => 'INNER'
                 ],
                 [
                     'alias' => 'BakeUsers',
-                    'foreignKey' => 'bake_user_id'
+                    'foreignKey' => 'bake_user_id',
+                    'joinType' => 'INNER'
                 ],
             ]
         ];
@@ -374,6 +379,32 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * Test that belongsTo association generation uses constraints on the table
+     *
+     * @return void
+     */
+    public function testBelongsToGenerationConstraints()
+    {
+        $model = TableRegistry::get('Invitations');
+        $result = $this->Task->findBelongsTo($model, []);
+        $expected = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Users',
+                    'foreignKey' => 'sender_id',
+                    'joinType' => 'INNER',
+                ],
+                [
+                    'alias' => 'Users',
+                    'foreignKey' => 'receiver_id',
+                    'joinType' => 'INNER',
+                ],
+            ]
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Test that belongsTo generation works for models with composite
      * primary keys
      *
@@ -387,11 +418,13 @@ class ModelTaskTest extends TestCase
             'belongsTo' => [
                 [
                     'alias' => 'Articles',
-                    'foreignKey' => 'article_id'
+                    'foreignKey' => 'article_id',
+                    'joinType' => 'INNER'
                 ],
                 [
                     'alias' => 'Tags',
-                    'foreignKey' => 'tag_id'
+                    'foreignKey' => 'tag_id',
+                    'joinType' => 'INNER'
                 ]
             ]
         ];
@@ -661,6 +694,29 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * test getting validation rules and exempting foreign keys
+     *
+     * @return void
+     */
+    public function testGetValidationExcludeForeignKeys()
+    {
+        $model = TableRegistry::get('BakeArticles');
+        $associations = [
+            'belongsTo' => [
+                'BakeUsers' => ['foreignKey' => 'bake_user_id'],
+            ]
+        ];
+        $result = $this->Task->getValidation($model, $associations);
+        $expected = [
+            'title' => ['valid' => ['rule' => false, 'allowEmpty' => false]],
+            'body' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
+            'published' => ['valid' => ['rule' => 'boolean', 'allowEmpty' => true]],
+            'id' => ['valid' => ['rule' => 'numeric', 'allowEmpty' => 'create']]
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * test getting validation rules with the no-rules param.
      *
      * @return void
@@ -873,6 +929,7 @@ class ModelTaskTest extends TestCase
             'primaryKey' => ['id'],
             'displayField' => 'title',
             'behaviors' => ['Timestamp' => ''],
+            'connection' => 'website',
         ];
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->bakeTable($model, $config);
@@ -1193,17 +1250,12 @@ class ModelTaskTest extends TestCase
      */
     public function testSkipTablesAndAll()
     {
-        $count = count($this->Task->listAll('test'));
-        if ($count != count($this->fixtures)) {
-            $this->markTestSkipped('Additional tables detected.');
-        }
-
         $this->Task->connection = 'test';
         $this->Task->skipTables = ['articles_tags', 'bake_tags', 'counter_cache_posts'];
 
-        $this->Task->Fixture->expects($this->exactly(8))
+        $this->Task->Fixture->expects($this->exactly(9))
             ->method('bake');
-        $this->Task->Test->expects($this->exactly(8))
+        $this->Task->Test->expects($this->exactly(9))
             ->method('bake');
 
         $filename = $this->_normalizePath(APP . 'Model/Entity/BakeArticle.php');
@@ -1231,11 +1283,35 @@ class ModelTaskTest extends TestCase
             ->method('createFile')
             ->with($filename);
 
-        $filename = $this->_normalizePath(APP . 'Model/Entity/NumberTree.php');
+        $filename = $this->_normalizePath(APP . 'Model/Entity/Invitation.php');
         $this->Task->expects($this->at(11))
             ->method('createFile')
             ->with($filename);
 
+        $filename = $this->_normalizePath(APP . 'Model/Entity/NumberTree.php');
+        $this->Task->expects($this->at(13))
+            ->method('createFile')
+            ->with($filename);
+
         $this->Task->all();
+    }
+
+    /**
+     * test finding referenced tables using constraints.
+     *
+     * @return void
+     */
+    public function testFindTableReferencedBy()
+    {
+        $invoices = TableRegistry::get('Invitations');
+        $schema = $invoices->schema();
+        $result = $this->Task->findTableReferencedBy($schema, 'not_there');
+        $this->assertNull($result);
+
+        $result = $this->Task->findTableReferencedBy($schema, 'sender_id');
+        $this->assertEquals('users', $result);
+
+        $result = $this->Task->findTableReferencedBy($schema, 'receiver_id');
+        $this->assertEquals('users', $result);
     }
 }
