@@ -225,6 +225,7 @@ class BakeShell extends Shell
         if (empty($name)) {
             $this->Model->connection = $this->connection;
             $this->out('Possible model names based on your database:');
+            $this->out('- everything');
             foreach ($this->Model->listAll() as $table) {
                 $this->out('- ' . $table);
             }
@@ -232,15 +233,28 @@ class BakeShell extends Shell
             return false;
         }
 
-        foreach (['Model', 'Controller', 'Template'] as $task) {
-            $this->{$task}->connection = $this->connection;
+        $allTables = collection([$name]);
+        $filteredTables = $allTables;
+
+        if ($name === 'everything') {
+            $this->Model->connection = $this->connection;
+            $allTables = collection($this->Model->listAll());
+            $filteredTables = $allTables->reject(function ($tableName) {
+                return $tableName === 'phinxlog' || $tableName === 'users_phinxlog';
+            });
         }
 
-        $name = $this->_camelize($name);
+        $filteredTables->each(function ($tableName) {
+            foreach (['Model', 'Controller', 'Template'] as $task) {
+                $this->{$task}->connection = $this->connection;
+            }
 
-        $this->Model->main($name);
-        $this->Controller->main($name);
-        $this->Template->main($name);
+            $tableName = $this->_camelize($tableName);
+
+            $this->Model->main($tableName);
+            $this->Controller->main($tableName);
+            $this->Template->main($tableName);
+        });
 
         $this->out('<success>Bake All complete.</success>', 1, Shell::QUIET);
         return true;
