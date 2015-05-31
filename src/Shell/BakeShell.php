@@ -222,10 +222,9 @@ class BakeShell extends Shell
             $this->connection = $this->params['connection'];
         }
 
-        if (empty($name)) {
+        if (empty($name) && !$this->params['everything']) {
             $this->Model->connection = $this->connection;
             $this->out('Possible model names based on your database:');
-            $this->out('- everything');
             foreach ($this->Model->listAll() as $table) {
                 $this->out('- ' . $table);
             }
@@ -236,7 +235,7 @@ class BakeShell extends Shell
         $allTables = collection([$name]);
         $filteredTables = $allTables;
 
-        if ($name === 'everything') {
+        if ($this->params['everything']) {
             $this->Model->connection = $this->connection;
             $allTables = collection($this->Model->listAll());
             $filteredTables = $allTables->reject(function ($tableName) {
@@ -284,8 +283,10 @@ class BakeShell extends Shell
             ' are using command line arguments.'
         )->addSubcommand('all', [
             'help' => 'Bake a complete MVC skeleton.',
-        ])->addSubcommand('all everything', [
-            'help' => 'Bake a complete MVC skeleton, using all the available tables.',
+        ])->addOption('everything', [
+            'help' => 'Bake a complete MVC skeleton, using all the available tables. ' .
+            'Usage: "bake all --everything true"',
+            'default' => false,
         ])->addOption('connection', [
             'help' => 'Database connection to use in conjunction with `bake all`.',
             'short' => 'c',
