@@ -284,6 +284,8 @@ class BakeShell extends Shell
             ' are using command line arguments.'
         )->addSubcommand('all', [
             'help' => 'Bake a complete MVC skeleton.',
+        ])->addSubcommand('all everything', [
+            'help' => 'Bake a complete MVC skeleton, using all the available tables.',
         ])->addOption('connection', [
             'help' => 'Database connection to use in conjunction with `bake all`.',
             'short' => 'c',
