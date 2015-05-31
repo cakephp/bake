@@ -235,7 +235,7 @@ class BakeShell extends Shell
         $allTables = collection([$name]);
         $filteredTables = $allTables;
 
-        if ($this->params['everything']) {
+        if ($this->param('everything')) {
             $this->Model->connection = $this->connection;
             $allTables = collection($this->Model->listAll());
             $filteredTables = $allTables->reject(function ($tableName) {
