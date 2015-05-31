@@ -222,7 +222,7 @@ class BakeShell extends Shell
             $this->connection = $this->params['connection'];
         }
 
-        if (empty($name) && !$this->params['everything']) {
+        if (empty($name) && !$this->param('everything')) {
             $this->Model->connection = $this->connection;
             $this->out('Possible model names based on your database:');
             foreach ($this->Model->listAll() as $table) {
@@ -239,7 +239,8 @@ class BakeShell extends Shell
             $this->Model->connection = $this->connection;
             $allTables = collection($this->Model->listAll());
             $filteredTables = $allTables->reject(function ($tableName) {
-                return $tableName === 'phinxlog' || $tableName === 'users_phinxlog';
+                $ignoredTables = ['i18n', 'cake_sessions', 'phinxlog', 'users_phinxlog'];
+                return in_array($tableName, $ignoredTables);
             });
         }
 
@@ -285,8 +286,9 @@ class BakeShell extends Shell
             'help' => 'Bake a complete MVC skeleton.',
         ])->addOption('everything', [
             'help' => 'Bake a complete MVC skeleton, using all the available tables. ' .
-            'Usage: "bake all --everything true"',
+            'Usage: "bake all --everything"',
             'default' => false,
+            'boolean' => true,
         ])->addOption('connection', [
             'help' => 'Database connection to use in conjunction with `bake all`.',
             'short' => 'c',
