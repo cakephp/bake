@@ -32,6 +32,14 @@ echo implode("\n", $uses);
 
 /**
  * <%= $name %> Model
+<% if ($associations): %>
+ *
+<% foreach ($associations as $type => $assocs): %>
+<% foreach ($assocs as $assoc): %>
+ * @property \Cake\ORM\Association\<%= Inflector::camelize($type) %> $<%= $assoc['alias'] %>
+<% endforeach %>
+<% endforeach; %>
+<% endif; %>
  */
 class <%= $name %>Table extends Table
 {
