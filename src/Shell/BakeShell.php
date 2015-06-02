@@ -274,6 +274,10 @@ class BakeShell extends Shell
             'help' => 'Database connection to use in conjunction with `bake all`.',
             'short' => 'c',
             'default' => 'default'
+        ])->addOption('force', [
+            'short' => 'f',
+            'boolean' => true,
+            'help' => 'Force overwriting existing files without prompting.'
         ])->addOption('plugin', [
             'short' => 'p',
             'help' => 'Plugin to bake into.'
