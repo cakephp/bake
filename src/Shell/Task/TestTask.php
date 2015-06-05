@@ -603,6 +603,7 @@ class TestTask extends BakeTask
                 'Component', 'component',
                 'Behavior', 'behavior',
                 'Shell', 'shell',
+                'shell_helper',
                 'Cell', 'cell',
                 'Form', 'form'
             ]
