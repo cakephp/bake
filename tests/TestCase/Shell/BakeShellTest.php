@@ -128,6 +128,7 @@ class BakeShellTest extends TestCase
             '- model',
             '- plugin',
             '- shell',
+            '- shell_helper',
             '- template',
             '- test',
             '',
