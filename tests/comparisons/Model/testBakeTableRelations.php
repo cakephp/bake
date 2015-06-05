@@ -9,6 +9,11 @@ use Cake\Validation\Validator;
 
 /**
  * BakeArticles Model
+ *
+ * @property \Cake\ORM\Association\BelongsTo $SomethingElse
+ * @property \Cake\ORM\Association\BelongsTo $BakeUser
+ * @property \Cake\ORM\Association\HasMany $BakeComment
+ * @property \Cake\ORM\Association\BelongsToMany $BakeTag
  */
 class BakeArticlesTable extends Table
 {
