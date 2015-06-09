@@ -20,7 +20,6 @@ $fields = collection($fields)
     })
     ->take(7);
 %>
-
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
@@ -53,7 +52,7 @@ $fields = collection($fields)
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($<%= $pluralVar %> as $<%= $singularVar %>): ?>
+            <?php foreach ($<%= $pluralVar %> as $<%= $singularVar %>): ?>
             <tr>
 <%        foreach ($fields as $field) {
             $isKey = false;
@@ -89,7 +88,7 @@ $fields = collection($fields)
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', <%= $pk %>], ['confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]) ?>
                 </td>
             </tr>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
         </tbody>
     </table>
     <div class="paginator">

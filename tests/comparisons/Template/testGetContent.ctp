@@ -1,24 +1,26 @@
-<div class="actions columns large-2 medium-3">
-    <h3><?= __('Actions') ?></h3>
+<nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
+        <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Edit Test Template Model'), ['action' => 'edit', $testTemplateModel->id]) ?> </li>
         <li><?= $this->Form->postLink(__('Delete Test Template Model'), ['action' => 'delete', $testTemplateModel->id], ['confirm' => __('Are you sure you want to delete # {0}?', $testTemplateModel->id)]) ?> </li>
         <li><?= $this->Html->link(__('List Test Template Models'), ['action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Test Template Model'), ['action' => 'add']) ?> </li>
     </ul>
-</div>
-<div class="testTemplateModels view large-10 medium-9 columns">
-    <h2><?= h($testTemplateModel->name) ?></h2>
-    <div class="row">
-        <div class="large-5 columns strings">
-            <h6 class="subheader"><?= __('Name') ?></h6>
-            <p><?= h($testTemplateModel->name) ?></p>
-            <h6 class="subheader"><?= __('Body') ?></h6>
-            <p><?= h($testTemplateModel->body) ?></p>
-        </div>
-        <div class="large-2 columns numbers end">
-            <h6 class="subheader"><?= __('Id') ?></h6>
-            <p><?= $this->Number->format($testTemplateModel->id) ?></p>
-        </div>
-    </div>
+</nav>
+<div class="testTemplateModels view large-9 medium-8 columns" id="content">
+    <h3><?= h($testTemplateModel->name) ?></h3>
+    <table class="vertical-table">
+        <tr>
+            <th><?= __('Name') ?></th>
+            <td><?= h($testTemplateModel->name) ?></td>
+        </tr>
+        <tr>
+            <th><?= __('Body') ?></th>
+            <td><?= h($testTemplateModel->body) ?></td>
+        </tr>
+        <tr>
+            <th><?= __('Id') ?></th>
+            <td><?= $this->Number->format($testTemplateModel->id) ?></td>
+        </tr>
+    </table>
 </div>

@@ -95,14 +95,12 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <% endforeach; %>
 <% endif; %>
 <% if ($groupedFields['number']) : %>
-
 <% foreach ($groupedFields['number'] as $field) : %>
         <tr>
             <th><?= __('<%= Inflector::humanize($field) %>') ?></th>
             <td><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></td>
         </tr>
 <% endforeach; %>
-        
 <% endif; %>
 <% if ($groupedFields['date']) : %>
 <% foreach ($groupedFields['date'] as $field) : %>
