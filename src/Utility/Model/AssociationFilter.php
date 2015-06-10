@@ -78,9 +78,10 @@ class AssociationFilter
                 $targetClass = get_class($target);
                 list(, $className) = namespaceSplit($targetClass);
 
+                $navLink = true;
                 $modelClass = get_class($model);
                 if ($modelClass !== 'Cake\ORM\Table' && $targetClass === $modelClass) {
-                    continue;
+                    $navLink = false;
                 }
 
                 $className = preg_replace('/(.*)Table$/', '\1', $className);
@@ -98,6 +99,7 @@ class AssociationFilter
                         'alias' => $alias,
                         'controller' => $className,
                         'fields' => $target->schema()->columns(),
+                        'navLink' => $navLink,
                     ];
                 } catch (Exception $e) {
                     // Do nothing it could be a bogus association name.

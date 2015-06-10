@@ -41,6 +41,7 @@ class AssociationFilterTest extends TestCase
         'plugin.bake.bake_comments',
         'plugin.bake.bake_articles_bake_tags',
         'plugin.bake.bake_tags',
+        'plugin.bake.category_threads',
     ];
 
     /**
@@ -132,6 +133,23 @@ class AssociationFilterTest extends TestCase
         }
         $expected = ['authors', 'tags'];
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * test filtering self associations
+     *
+     * @return void
+     */
+    public function testFilterAssociationsSelf()
+    {
+        $table = TableRegistry::get('CategoryThreads', [
+            'className' => '\Bake\Test\App\Model\Table\CategoryThreadsTable'
+        ]);
+        $result = $this->associationFilter->filterAssociations($table);
+        $this->assertArrayHasKey('HasMany', $result);
+        $this->assertArrayHasKey('BelongsTo', $result);
+        $this->assertFalse($result['BelongsTo']['ParentCategoryThreads']['navLink']);
+        $this->assertFalse($result['HasMany']['ChildCategoryThreads']['navLink']);
     }
 
     /**
