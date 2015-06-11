@@ -40,7 +40,7 @@ $fields = collection($fields)
 %>
     </ul>
 </nav>
-<div class="<%= $pluralVar %> index large-9 medium-8 columns" id="content">
+<div class="<%= $pluralVar %> index large-9 medium-8 columns content">
     <h3><?= __('<%= $pluralHumanName %>') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
