@@ -4,7 +4,7 @@
         <li><?= $this->Html->link(__('List Test Template Models'), ['action' => 'index']) ?></li>
     </ul>
 </nav>
-<div class="testTemplateModels form large-9 medium-8 columns" id="content">
+<div class="testTemplateModels form large-9 medium-8 columns content">
     <?= $this->Form->create($testTemplateModel) ?>
     <fieldset>
         <legend><?= __('Add Test Template Model') ?></legend>

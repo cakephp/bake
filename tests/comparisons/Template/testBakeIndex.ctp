@@ -6,7 +6,7 @@
         <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="templateTaskComments index large-9 medium-8 columns" id="content">
+<div class="templateTaskComments index large-9 medium-8 columns content">
     <h3><?= __('Template Task Comments') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>

@@ -9,7 +9,7 @@
         <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
-<div class="templateTaskComments view large-9 medium-8 columns" id="content">
+<div class="templateTaskComments view large-9 medium-8 columns content">
     <h3><?= h($templateTaskComment->id) ?></h3>
     <table class="vertical-table">
         <tr>

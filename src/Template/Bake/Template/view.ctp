@@ -74,7 +74,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 %>
     </ul>
 </nav>
-<div class="<%= $pluralVar %> view large-9 medium-8 columns" id="content">
+<div class="<%= $pluralVar %> view large-9 medium-8 columns content">
     <h3><?= h($<%= $singularVar %>-><%= $displayField %>) ?></h3>
     <table class="vertical-table">
 <% if ($groupedFields['string']) : %>

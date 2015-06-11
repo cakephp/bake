@@ -7,7 +7,7 @@
         <li><?= $this->Html->link(__('New Test Template Model'), ['action' => 'add']) ?> </li>
     </ul>
 </nav>
-<div class="testTemplateModels view large-9 medium-8 columns" id="content">
+<div class="testTemplateModels view large-9 medium-8 columns content">
     <h3><?= h($testTemplateModel->name) ?></h3>
     <table class="vertical-table">
         <tr>
