@@ -12,7 +12,7 @@
         <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="templateTaskComments form large-9 medium-8 columns" id="content">
+<div class="templateTaskComments form large-9 medium-8 columns content">
     <?= $this->Form->create($templateTaskComment) ?>
     <fieldset>
         <legend><?= __('Edit Template Task Comment') ?></legend>
