@@ -306,6 +306,10 @@ class ControllerTaskTest extends TestCase
      */
     public function testMainIntoAll()
     {
+        if ($this->Task->listAll()[0] != 'bake_articles') {
+            $this->markTestSkipped('Additional tables detected.');
+        }
+
         $this->Task->connection = 'test';
         $this->Task->params = ['helpers' => 'Time,Text'];
 

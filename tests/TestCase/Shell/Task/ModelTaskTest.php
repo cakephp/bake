@@ -1250,6 +1250,10 @@ class ModelTaskTest extends TestCase
      */
     public function testSkipTablesAndAll()
     {
+        if ($this->Task->listAll()[1] != 'bake_articles') {
+            $this->markTestSkipped('Additional tables detected.');
+        }
+
         $this->Task->connection = 'test';
         $this->Task->skipTables = ['articles_tags', 'bake_tags', 'counter_cache_posts'];
 
