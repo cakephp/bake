@@ -447,7 +447,7 @@ class TemplateTaskTest extends TestCase
      *
      * @return void
      */
-    public function testBakeSelfAssociations()
+    public function testBakeSelfAssociationsNoNavLinks()
     {
         $this->Task->controllerName = 'CategoryThreads';
         $this->Task->modelName = 'Bake\Test\App\Model\Table\CategoryThreadsTable';
@@ -456,10 +456,39 @@ class TemplateTaskTest extends TestCase
             ->method('createFile')
             ->with(
                 $this->_normalizePath(APP . 'Template/CategoryThreads/index.ctp'),
-                $this->logicalNot($this->stringContains('ParentCategoryThread'))
+                $this->logicalNot(
+                    $this->logicalAnd(
+                        $this->stringContains('New Parent Category Thread'),
+                        $this->stringContains('List Parent Category Threads')
+                    )
+                )
             );
 
         $this->Task->bake('index', true);
+    }
+
+    /**
+     * Ensure that models associated with themselves do not have action
+     * links generated.
+     *
+     * @return void
+     */
+    public function testBakeSelfAssociationsRelatedAssociations()
+    {
+        $this->Task->controllerName = 'CategoryThreads';
+        $this->Task->modelName = 'Bake\Test\App\Model\Table\CategoryThreadsTable';
+
+        $this->Task->expects($this->once())
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath(APP . 'Template/CategoryThreads/view.ctp'),
+                $this->logicalAnd(
+                    $this->stringContains('Related Category Threads'),
+                    $this->stringContains('Parent Category Thread')
+                )
+            );
+
+        $this->Task->bake('view', true);
     }
 
     /**

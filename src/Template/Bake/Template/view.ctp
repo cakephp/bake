@@ -132,7 +132,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 $relations = $associations['HasMany'] + $associations['BelongsToMany'];
 foreach ($relations as $alias => $details):
     $otherSingularVar = Inflector::variable($alias);
-    $otherPluralHumanName = Inflector::humanize($details['controller']);
+    $otherPluralHumanName = Inflector::humanize(Inflector::underscore($details['controller']));
     %>
 <div class="related row">
     <div class="column large-12">
