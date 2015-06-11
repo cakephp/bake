@@ -36,8 +36,20 @@ class InvitationsFixture extends TestFixture
         'updated' => 'datetime',
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id']],
-            'sender_idx' => ['type' => 'foreign', 'columns' => ['sender_id'], 'references' => ['users', 'id']],
-            'receiver_idx' => ['type' => 'foreign', 'columns' => ['receiver_id'], 'references' => ['users', 'id']],
+            'sender_idx' => [
+                'type' => 'foreign',
+                'columns' => ['sender_id'],
+                'references' => ['users', 'id'],
+                'update' => 'noAction',
+                'delete' => 'noAction',
+            ],
+            'receiver_idx' => [
+                'type' => 'foreign',
+                'columns' => ['receiver_id'],
+                'references' => ['users', 'id'],
+                'update' => 'noAction',
+                'delete' => 'noAction',
+            ],
         ]
     ];
 
