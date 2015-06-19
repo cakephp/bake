@@ -151,7 +151,7 @@ class FixtureTask extends BakeTask
 
         if (!$useTable) {
             $useTable = Inflector::tableize($model);
-        } elseif ($useTable != Inflector::tableize($model)) {
+        } elseif ($useTable !== Inflector::tableize($model)) {
             $table = $useTable;
         }
 

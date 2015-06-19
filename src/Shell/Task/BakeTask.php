@@ -143,7 +143,7 @@ class BakeTask extends Shell
         fclose($pipes[2]);
         $exit = proc_close($process);
 
-        if ($exit != 0) {
+        if ($exit !== 0) {
             throw new \RuntimeException($error);
         }
 

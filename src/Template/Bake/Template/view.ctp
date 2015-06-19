@@ -62,7 +62,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
     $done = [];
     foreach ($associations as $type => $data) {
         foreach ($data as $alias => $details) {
-            if ($details['controller'] != $this->name && !in_array($details['controller'], $done)) {
+            if ($details['controller'] !== $this->name && !in_array($details['controller'], $done)) {
 %>
         <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New <%= Inflector::humanize(Inflector::singularize(Inflector::underscore($alias))) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) ?> </li>

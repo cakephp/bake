@@ -165,7 +165,7 @@ endforeach;
         return $rules;
     }
 <% endif; %>
-<% if ($connection != 'default'): %>
+<% if ($connection !== 'default'): %>
 
     /**
      * Returns the database connection name to use by default.
