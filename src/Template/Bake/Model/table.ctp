@@ -52,6 +52,8 @@ class <%= $name %>Table extends Table
      */
     public function initialize(array $config)
     {
+        parent::initialize($config);
+
 <% if (!empty($table)): %>
         $this->table('<%= $table %>');
 <% endif %>
