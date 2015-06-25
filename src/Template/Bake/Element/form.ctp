@@ -74,7 +74,7 @@ $fields = collection($fields)
                 $fieldData = $schema->column($field);
                 if (($fieldData['type'] === 'date') && (!empty($fieldData['null']))) {
 %>
-            echo $this->Form->input('<%= $field %>', array('empty' => true, 'default' => ''));
+            echo $this->Form->input('<%= $field %>', ['empty' => true, 'default' => '']);
 <%
                 } else {
 %>
