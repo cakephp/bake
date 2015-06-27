@@ -15,9 +15,11 @@
 namespace Bake\Test\TestCase\Shell;
 
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Shell\BakeShellShell;
+use Cake\TestSuite\Stub\ConsoleOutput;
 
 class BakeShellTest extends TestCase
 {
@@ -36,11 +38,13 @@ class BakeShellTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+
+        $this->out = new ConsoleOutput();
+        $this->io = new ConsoleIo($this->out);
 
         $this->Shell = $this->getMock(
             'Bake\Shell\BakeShell',
-            ['in', 'out', 'hr', 'err', 'createFile', '_stop'],
+            ['in', 'createFile', '_stop'],
             [$this->io]
         );
         Configure::write('App.namespace', 'Bake\Test\App');
@@ -82,17 +86,18 @@ class BakeShellTest extends TestCase
             ->method('main')
             ->with('Comments');
 
-        $this->Shell->expects($this->at(0))
-            ->method('out')
-            ->with('Bake All');
-
-        $this->Shell->expects($this->at(2))
-            ->method('out')
-            ->with('<success>Bake All complete.</success>');
-
         $this->Shell->connection = '';
         $this->Shell->params = [];
         $this->Shell->all('Comments');
+
+        $output = $this->out->messages();
+
+        $expected = [
+            'Bake All',
+            '---------------------------------------------------------------',
+            '<success>Bake All complete.</success>'
+        ];
+        $this->assertSame($expected, $output);
     }
 
     /**
@@ -102,15 +107,35 @@ class BakeShellTest extends TestCase
      */
     public function testMain()
     {
-        $this->Shell->expects($this->at(0))
-            ->method('out')
-            ->with($this->stringContains('The following commands'));
-
-        $this->Shell->expects($this->exactly(17))
-            ->method('out');
-
         $this->Shell->loadTasks();
         $this->Shell->main();
+
+        $output = $this->out->messages();
+
+        $expected = [
+            'The following commands can be used to generate skeleton code for your application.',
+            '',
+            '<info>Available bake commands:</info>',
+            '',
+            '- all',
+            '- behavior',
+            '- cell',
+            '- component',
+            '- controller',
+            '- fixture',
+            '- form',
+            '- helper',
+            '- mailer',
+            '- model',
+            '- plugin',
+            '- shell',
+            '- shell_helper',
+            '- template',
+            '- test',
+            '',
+            'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.',
+        ];
+        $this->assertSame($expected, $output);
     }
 
     /**
@@ -143,11 +168,13 @@ class BakeShellTest extends TestCase
             'Bake.Component',
             'Bake.Controller',
             'Bake.Fixture',
+            'Bake.Form',
             'Bake.Helper',
             'Bake.Mailer',
             'Bake.Model',
             'Bake.Plugin',
             'Bake.Shell',
+            'Bake.ShellHelper',
             'Bake.Test',
             'Bake.Template'
         ];

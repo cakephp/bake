@@ -35,6 +35,7 @@ class FixtureTaskTest extends TestCase
         'core.comments',
         'plugin.bake.datatypes',
         'plugin.bake.binary_tests',
+        'plugin.bake.bake_car',
         'core.users'
     ];
 
@@ -61,6 +62,8 @@ class FixtureTaskTest extends TestCase
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->interactive = false;
         $this->Task->BakeTemplate->initialize();
+
+        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
     }
 
     /**
@@ -99,25 +102,17 @@ class FixtureTaskTest extends TestCase
     }
 
     /**
-     * test generating a fixture with database conditions.
+     * test generating a fixture with database rows.
      *
      * @return void
      */
-    public function testImportRecordsFromDatabaseWithConditionsPoo()
+    public function testImportRecordsFromDatabase()
     {
         $this->Task->connection = 'test';
         $this->Task->params = ['schema' => true, 'records' => true];
 
-        $result = $this->Task->bake('Articles');
-
-        $this->assertContains('namespace App\Test\Fixture;', $result);
-        $this->assertContains('use Cake\TestSuite\Fixture\TestFixture;', $result);
-        $this->assertContains('class ArticlesFixture extends TestFixture', $result);
-        $this->assertContains('public $records', $result);
-        $this->assertContains('public $import', $result);
-        $this->assertContains("'title' => 'First Article'", $result, 'Missing import data %s');
-        $this->assertContains('Second Article', $result, 'Missing import data %s');
-        $this->assertContains('Third Article', $result, 'Missing import data %s');
+        $result = $this->Task->bake('Users');
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
@@ -165,6 +160,23 @@ class FixtureTaskTest extends TestCase
             ->with($filename, $this->stringContains("public \$table = 'comments';"));
 
         $this->Task->main('articles');
+    }
+
+    /**
+     * Test a singular table
+     *
+     * @return void
+     */
+    public function testMainWithSingularTable()
+    {
+        $this->Task->connection = 'test';
+        $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/CarFixture.php');
+
+        $this->Task->expects($this->at(0))
+            ->method('createFile')
+            ->with($filename, $this->stringContains("public \$table = 'car';"));
+
+        $this->Task->main('car');
     }
 
     /**

@@ -54,7 +54,9 @@ class TestTask extends BakeTask
         'Behavior' => 'Model\Behavior',
         'Helper' => 'View\Helper',
         'Shell' => 'Shell',
+        'Shell_helper' => 'Shell\Helper',
         'Cell' => 'View\Cell',
+        'Form' => 'Form'
     ];
 
     /**
@@ -70,7 +72,9 @@ class TestTask extends BakeTask
         'behavior' => 'Behavior',
         'helper' => 'Helper',
         'shell' => 'Shell',
+        'shell_helper' => 'Helper',
         'cell' => 'Cell',
+        'form' => 'Form'
     ];
 
     /**
@@ -486,7 +490,7 @@ class TestTask extends BakeTask
             $pre = "\$config = TableRegistry::exists('{$className}') ? [] : ['className' => '{$fullClassName}'];";
             $construct = "TableRegistry::get('{$className}', \$config);";
         }
-        if ($type === 'behavior' || $type === 'entity') {
+        if ($type === 'behavior' || $type === 'entity' || $type === 'form') {
             $construct = "new {$className}();";
         }
         if ($type === 'helper') {
@@ -505,6 +509,11 @@ class TestTask extends BakeTask
             $pre = "\$this->request = \$this->getMock('Cake\Network\Request');\n";
             $pre .= "        \$this->response = \$this->getMock('Cake\Network\Response');";
             $construct = "new {$className}(\$this->request, \$this->response);";
+        }
+        if ($type === 'shell_helper') {
+            $pre = "\$this->stub = new ConsoleOutput();\n";
+            $pre .= "        \$this->io = new ConsoleIo(\$this->stub);";
+            $construct = "new {$className}(\$this->io);";
         }
         return [$pre, $construct, $post];
     }
@@ -528,6 +537,10 @@ class TestTask extends BakeTask
         }
         if ($type === 'helper') {
             $uses[] = 'Cake\View\View';
+        }
+        if ($type === 'shell_helper') {
+            $uses[] = 'Cake\TestSuite\Stub\ConsoleOutput';
+            $uses[] = 'Cake\Console\ConsoleIo';
         }
         $uses[] = $fullClassName;
         return $uses;
@@ -590,7 +603,9 @@ class TestTask extends BakeTask
                 'Component', 'component',
                 'Behavior', 'behavior',
                 'Shell', 'shell',
+                'shell_helper',
                 'Cell', 'cell',
+                'Form', 'form'
             ]
         ])->addArgument('name', [
             'help' => 'An existing class to bake tests for.'

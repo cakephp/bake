@@ -205,6 +205,7 @@ class TestTaskTest extends TestCase
 
         $expected = [
             'AuthorsTable',
+            'BakeArticlesTable',
             'BakeTestCommentsTable',
             'CommentsTable'
         ];
@@ -497,6 +498,22 @@ class TestTaskTest extends TestCase
         $result = $this->Task->generateConstructor('entity', 'TestBake\Model\Entity\Article');
         $expected = ["", "new Article();", ''];
         $this->assertEquals($expected, $result);
+
+        $result = $this->Task->generateConstructor('shell_helper', 'TestBake\Shell\Helper\ExampleHelper');
+        $expected = [
+            "\$this->stub = new ConsoleOutput();\n        \$this->io = new ConsoleIo(\$this->stub);",
+            "new ExampleHelper(\$this->io);",
+            ''
+        ];
+        $this->assertEquals($expected, $result);
+
+        $result = $this->Task->generateConstructor('form', 'TestBake\Form\ExampleForm');
+        $expected = [
+            '',
+            "new ExampleForm();",
+            ''
+        ];
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -530,6 +547,14 @@ class TestTaskTest extends TestCase
         $expected = [
             'Cake\Controller\ComponentRegistry',
             'App\Controller\Component\AuthComponent',
+        ];
+        $this->assertEquals($expected, $result);
+
+        $result = $this->Task->generateUses('shell_helper', 'App\Shell\Helper\ExampleHelper');
+        $expected = [
+            'Cake\TestSuite\Stub\ConsoleOutput',
+            'Cake\Console\ConsoleIo',
+            'App\Shell\Helper\ExampleHelper',
         ];
         $this->assertEquals($expected, $result);
     }

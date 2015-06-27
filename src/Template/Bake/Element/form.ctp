@@ -19,9 +19,9 @@ $fields = collection($fields)
         return $schema->columnType($field) !== 'binary';
     });
 %>
-<div class="actions columns large-2 medium-3">
-    <h3><?= __('Actions') ?></h3>
+<nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
+        <li class="heading"><?= __('Actions') ?></li>
 <% if (strpos($action, 'add') === false): %>
         <li><?= $this->Form->postLink(
                 __('Delete'),
@@ -37,8 +37,8 @@ $fields = collection($fields)
             foreach ($data as $alias => $details) {
                 if ($details['controller'] != $this->name && !in_array($details['controller'], $done)) {
 %>
-        <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) %> </li>
-        <li><?= $this->Html->link(__('New <%= $this->_singularHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) %> </li>
+        <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) %></li>
+        <li><?= $this->Html->link(__('New <%= $this->_singularHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) %></li>
 <%
                     $done[] = $details['controller'];
                 }
@@ -46,9 +46,9 @@ $fields = collection($fields)
         }
 %>
     </ul>
-</div>
-<div class="<%= $pluralVar %> form large-10 medium-9 columns">
-    <?= $this->Form->create($<%= $singularVar %>); ?>
+</nav>
+<div class="<%= $pluralVar %> form large-9 medium-8 columns content">
+    <?= $this->Form->create($<%= $singularVar %>) ?>
     <fieldset>
         <legend><?= __('<%= Inflector::humanize($action) %> <%= $singularHumanName %>') ?></legend>
         <?php

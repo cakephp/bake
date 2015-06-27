@@ -19,7 +19,7 @@
     },
     "require": {
         "php": ">=5.4",
-        "cakephp/cakephp": "~3.0"
+        "cakephp/cakephp": "dev-master"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "dev-master",
