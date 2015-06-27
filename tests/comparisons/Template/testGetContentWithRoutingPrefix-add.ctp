@@ -1,10 +1,10 @@
-<div class="actions columns large-2 medium-3">
-    <h3><?= __('Actions') ?></h3>
+<nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
+        <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('List Test Template Models'), ['action' => 'index']) ?></li>
     </ul>
-</div>
-<div class="testTemplateModels form large-10 medium-9 columns">
+</nav>
+<div class="testTemplateModels form large-9 medium-8 columns content">
     <?= $this->Form->create($testTemplateModel) ?>
     <fieldset>
         <legend><?= __('Add Test Template Model') ?></legend>

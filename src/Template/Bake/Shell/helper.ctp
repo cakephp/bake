@@ -9,13 +9,29 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @since         0.1.0
+ * @since         1.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 %>
 <?php
-use Cake\Routing\Router;
+namespace <%= $namespace %>\Shell\Helper;
 
-Router::plugin('<%= $plugin %>', function ($routes) {
-    $routes->fallbacks('DashedRoute');
-});
+use Cake\Console\Helper;
+
+/**
+ * <%= $name %> shell helper.
+ */
+class <%= $name %>Helper extends Helper
+{
+
+    /**
+     * Output method.
+     *
+     * Generate the output for this shell helper.
+     *
+     * @return void
+     */
+    public function output($args)
+    {
+    }
+}

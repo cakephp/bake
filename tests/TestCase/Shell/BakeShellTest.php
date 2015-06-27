@@ -125,9 +125,11 @@ class BakeShellTest extends TestCase
             '- fixture',
             '- form',
             '- helper',
+            '- mailer',
             '- model',
             '- plugin',
             '- shell',
+            '- shell_helper',
             '- template',
             '- test',
             '',
@@ -168,9 +170,11 @@ class BakeShellTest extends TestCase
             'Bake.Fixture',
             'Bake.Form',
             'Bake.Helper',
+            'Bake.Mailer',
             'Bake.Model',
             'Bake.Plugin',
             'Bake.Shell',
+            'Bake.ShellHelper',
             'Bake.Test',
             'Bake.Template'
         ];

@@ -14,8 +14,20 @@
  */
 %>
 <?php
-use Cake\Routing\Router;
+namespace <%= $namespace %>\Mailer;
 
-Router::plugin('<%= $plugin %>', function ($routes) {
-    $routes->fallbacks('DashedRoute');
-});
+use Cake\Mailer\Mailer;
+
+/**
+ * <%= $name %> mailer.
+ */
+class <%= $name %>Mailer extends Mailer
+{
+
+    /**
+     * Mailer's name.
+     *
+     * @var string
+     */
+    static public $name = '<%= $name %>';
+}

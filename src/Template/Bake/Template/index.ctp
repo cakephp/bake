@@ -20,9 +20,9 @@ $fields = collection($fields)
     })
     ->take(7);
 %>
-<div class="actions columns large-2 medium-3">
-    <h3><?= __('Actions') ?></h3>
+<nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
+        <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?></li>
 <%
     $done = [];
@@ -39,20 +39,21 @@ $fields = collection($fields)
     endforeach;
 %>
     </ul>
-</div>
-<div class="<%= $pluralVar %> index large-10 medium-9 columns">
+</nav>
+<div class="<%= $pluralVar %> index large-9 medium-8 columns content">
+    <h3><?= __('<%= $pluralHumanName %>') ?></h3>
     <table cellpadding="0" cellspacing="0">
-    <thead>
-        <tr>
-    <% foreach ($fields as $field): %>
-        <th><?= $this->Paginator->sort('<%= $field %>') ?></th>
-    <% endforeach; %>
-        <th class="actions"><?= __('Actions') ?></th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($<%= $pluralVar %> as $<%= $singularVar %>): ?>
-        <tr>
+        <thead>
+            <tr>
+<% foreach ($fields as $field): %>
+                <th><?= $this->Paginator->sort('<%= $field %>') ?></th>
+<% endforeach; %>
+                <th class="actions"><?= __('Actions') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($<%= $pluralVar %> as $<%= $singularVar %>): ?>
+            <tr>
 <%        foreach ($fields as $field) {
             $isKey = false;
             if (!empty($associations['BelongsTo'])) {
@@ -60,9 +61,7 @@ $fields = collection($fields)
                     if ($field === $details['foreignKey']) {
                         $isKey = true;
 %>
-            <td>
-                <?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', $<%= $singularVar %>-><%= $details['property'] %>-><%= $details['primaryKey'][0] %>]) : '' ?>
-            </td>
+                <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', $<%= $singularVar %>-><%= $details['property'] %>-><%= $details['primaryKey'][0] %>]) : '' ?></td>
 <%
                         break;
                     }
@@ -71,11 +70,11 @@ $fields = collection($fields)
             if ($isKey !== true) {
                 if (!in_array($schema->columnType($field), ['integer', 'biginteger', 'decimal', 'float'])) {
 %>
-            <td><?= h($<%= $singularVar %>-><%= $field %>) ?></td>
+                <td><?= h($<%= $singularVar %>-><%= $field %>) ?></td>
 <%
                 } else {
 %>
-            <td><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></td>
+                <td><?= $this->Number->format($<%= $singularVar %>-><%= $field %>) ?></td>
 <%
                 }
             }
@@ -83,15 +82,14 @@ $fields = collection($fields)
 
         $pk = '$' . $singularVar . '->' . $primaryKey[0];
 %>
-            <td class="actions">
-                <?= $this->Html->link(__('View'), ['action' => 'view', <%= $pk %>]) ?>
-                <?= $this->Html->link(__('Edit'), ['action' => 'edit', <%= $pk %>]) ?>
-                <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', <%= $pk %>], ['confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]) ?>
-            </td>
-        </tr>
-
-    <?php endforeach; ?>
-    </tbody>
+                <td class="actions">
+                    <?= $this->Html->link(__('View'), ['action' => 'view', <%= $pk %>]) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', <%= $pk %>]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', <%= $pk %>], ['confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]) ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
     </table>
     <div class="paginator">
         <ul class="pagination">
