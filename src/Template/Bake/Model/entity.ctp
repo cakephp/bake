@@ -23,7 +23,7 @@ use Cake\ORM\Entity;
  */
 class <%= $name %> extends Entity
 {
-<% if (!empty($fields)): %>
+<% if (!empty($primaryKey)): %>
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -31,8 +31,9 @@ class <%= $name %> extends Entity
      * @var array
      */
     protected $_accessible = [
-<% foreach ($fields as $field): %>
-        '<%= $field %>' => true,
+        '*' => true,
+<% foreach ($primaryKey as $field): %>
+        '<%= $field %>' => false,
 <% endforeach; %>
     ];
 <% endif %>
@@ -45,7 +46,7 @@ class <%= $name %> extends Entity
      */
     protected $_hidden = [<%= $this->Bake->stringifyList($hidden) %>];
 <% endif %>
-<% if (empty($fields) && empty($hidden)): %>
+<% if (empty($primaryKey) && empty($hidden)): %>
 
 <% endif %>
 }
