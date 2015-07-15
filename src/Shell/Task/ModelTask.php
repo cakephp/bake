@@ -708,7 +708,7 @@ class ModelTask extends BakeTask
             'namespace' => $namespace,
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
-            'fields' => [],
+            'primaryKey' => [],
         ];
 
         $this->BakeTemplate->set($data);

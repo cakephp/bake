@@ -981,9 +981,7 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntity()
     {
-        $config = [
-            'fields' => []
-        ];
+        $config = [];
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->bakeEntity($model, $config);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -997,7 +995,7 @@ class ModelTaskTest extends TestCase
     public function testBakeEntityFields()
     {
         $config = [
-            'fields' => ['title', 'body', 'published']
+            'primaryKey' => ['id']
         ];
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->bakeEntity($model, $config);

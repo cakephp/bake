@@ -15,8 +15,7 @@ class BakeArticle extends Entity
      * @var array
      */
     protected $_accessible = [
-        'title' => true,
-        'body' => true,
-        'published' => true,
+        '*' => true,
+        'id' => false,
     ];
 }
