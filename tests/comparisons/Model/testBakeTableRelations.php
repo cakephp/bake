@@ -27,7 +27,7 @@ class BakeArticlesTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
-        
+
         $this->primaryKey('id');
         $this->belongsTo('SomethingElse', [
             'foreignKey' => 'something_else_id'
