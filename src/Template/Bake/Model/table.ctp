@@ -52,6 +52,8 @@ class <%= $name %>Table extends Table
      */
     public function initialize(array $config)
     {
+        parent::initialize($config);
+
 <% if (!empty($table)): %>
         $this->table('<%= $table %>');
 <% endif %>
@@ -87,15 +89,9 @@ class <%= $name %>Table extends Table
      */
     public function validationDefault(Validator $validator)
     {
-        $validator
-<% $validationMethods = []; %>
 <%
-$firstField = true;
 foreach ($validation as $field => $rules):
-    if ($firstField !== true):
-        $validationMethods[] = "\n        \$validator";
-    endif;
-
+    $validationMethods = [];
     foreach ($rules as $ruleName => $rule):
         if ($rule['rule'] && !isset($rule['provider'])):
             $validationMethods[] = sprintf(
@@ -138,13 +134,20 @@ foreach ($validation as $field => $rules):
             endif;
         endif;
     endforeach;
-    $firstField = false;
-    $validationMethods[] = array_pop($validationMethods) . ";";
+
+    if (!empty($validationMethods)):
+        $lastIndex = count($validationMethods) - 1;
+        $validationMethods[$lastIndex] .= ';';
+        %>
+        $validator
+        <%- foreach ($validationMethods as $validationMethod): %>
+            <%= $validationMethod %>
+        <%- endforeach; %>
+
+<%
+    endif;
 endforeach;
 %>
-<%= "            " . implode("\n            ", $validationMethods) %>
-
-
         return $validator;
     }
 <% endif %>

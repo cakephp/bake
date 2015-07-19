@@ -21,6 +21,8 @@ class BakeArticlesTable extends Table
      */
     public function initialize(array $config)
     {
+        parent::initialize($config);
+
         $this->primaryKey('id');
     }
 
@@ -35,11 +37,11 @@ class BakeArticlesTable extends Table
         $validator
             ->add('id', 'valid', ['rule' => 'numeric'])
             ->allowEmpty('id', 'create');
-            
+
         $validator
             ->requirePresence('name', 'create')
             ->notEmpty('name');
-            
+
         $validator
             ->add('email', 'valid', ['rule' => 'email'])
             ->allowEmpty('email')
