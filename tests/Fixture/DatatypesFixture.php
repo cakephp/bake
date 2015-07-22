@@ -33,6 +33,7 @@ class DatatypesFixture extends TestFixture
         'float_field' => ['type' => 'float', 'length' => '5,2', 'null' => false, 'default' => null],
         'huge_int' => ['type' => 'biginteger'],
         'bool' => ['type' => 'boolean', 'null' => false, 'default' => false],
+        'uuid' => ['type' => 'uuid'],
         '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
     ];
 

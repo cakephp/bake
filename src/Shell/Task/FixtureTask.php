@@ -367,6 +367,9 @@ class FixtureTask extends BakeTask
                         $insert .= " feugiat in taciti enim proin nibh, tempor dignissim, rhoncus";
                         $insert .= " duis vestibulum nunc mattis convallis.";
                         break;
+                    case 'uuid':
+                        $insert = Text::uuid();
+                        break;
                 }
                 $record[$field] = $insert;
             }
