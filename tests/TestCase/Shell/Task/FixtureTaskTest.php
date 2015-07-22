@@ -372,6 +372,8 @@ class FixtureTaskTest extends TestCase
         $this->assertContains("_constraints", $result);
         $this->assertContains("'primary' => ['type' => 'primary'", $result);
         $this->assertContains("'columns' => ['id']", $result);
+        $this->assertContains("'uuid' => ['type' => 'uuid'", $result);
+        $this->assertRegExp("/(\s+)('uuid' => ')([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})(')/", $result);
 
         $result = $this->Task->bake('Article', 'binary_tests');
         $this->assertContains("'data' => 'Lorem ipsum dolor sit amet'", $result);
