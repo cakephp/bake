@@ -152,10 +152,21 @@ class PluginTask extends BakeTask
      */
     protected function _generateFiles($pluginName, $path)
     {
+        $namespace = str_replace('/', '\\', $pluginName);
+
+        $name = $pluginName;
+        $vendor = 'your-name-here';
+        if (strpos($pluginName, '/') !== false) {
+            list($vendor, $name) = explode('/', $pluginName);
+        }
+        $package = $vendor . '/' . $name;
+
         $this->BakeTemplate->set([
+            'package' => $package,
+            'namespace' => $namespace,
             'plugin' => $pluginName,
             'path' => $path,
-            'root' => ROOT
+            'root' => ROOT,
         ]);
 
         $root = $path . $pluginName . DS;

@@ -87,6 +87,20 @@ class PluginTaskTest extends TestCase
     }
 
     /**
+     * test bake with vendor plugin
+     *
+     * @return void
+     */
+    public function testBakeVendorName()
+    {
+        $this->Task->expects($this->at(0))->method('in')
+            ->will($this->returnValue('y'));
+
+        $this->Task->bake('Company/Example');
+        $this->assertPluginContents('Company/Example');
+    }
+
+    /**
      * Test the main method
      *
      * @return void
@@ -215,6 +229,7 @@ class PluginTaskTest extends TestCase
      */
     public function assertPluginContents($pluginName)
     {
+        $pluginName = str_replace('/', DS, $pluginName);
         $comparisonRoot = $this->_compareBasePath . $pluginName . DS;
         $comparisonDir = new Folder($comparisonRoot);
         $comparisonFiles = $comparisonDir->findRecursive();
