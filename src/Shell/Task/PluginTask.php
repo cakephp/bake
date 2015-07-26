@@ -225,10 +225,11 @@ class PluginTask extends BakeTask
 
         $autoloadPath = str_replace(ROOT, '.', $this->path);
         $autoloadPath = str_replace('\\', '/', $autoloadPath);
+        $namespace = str_replace('/', '\\', $plugin);
 
         $config = json_decode(file_get_contents($file), true);
-        $config['autoload']['psr-4'][$plugin . '\\'] = $autoloadPath . $plugin . "/src";
-        $config['autoload-dev']['psr-4'][$plugin . '\\Test\\'] = $autoloadPath . $plugin . "/tests";
+        $config['autoload']['psr-4'][$namespace . '\\'] = $autoloadPath . $plugin . "/src";
+        $config['autoload-dev']['psr-4'][$namespace . '\\Test\\'] = $autoloadPath . $plugin . "/tests";
 
         $this->out('<info>Modifying composer autoloader</info>');
 
