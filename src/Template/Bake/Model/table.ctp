@@ -67,9 +67,11 @@ class <%= $name %>Table extends Table
         $this->primaryKey('<%= current((array)$primaryKey) %>');
 <% endif %>
 <% endif %>
+
 <% foreach ($behaviors as $behavior => $behaviorData): %>
         $this->addBehavior('<%= $behavior %>'<%= $behaviorData ? ", [" . implode(', ', $behaviorData) . ']' : '' %>);
 <% endforeach %>
+
 <% foreach ($associations as $type => $assocs): %>
 <% foreach ($assocs as $assoc):
 	$alias = $assoc['alias'];
