@@ -16,6 +16,7 @@ namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\Configure;
+use Cake\Database\Schema\Table as SchemaTable;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -332,12 +333,12 @@ class ModelTask extends BakeTask
 
             foreach ($otherSchema->columns() as $fieldName) {
                 $assoc = false;
-                if (!in_array($fieldName, $primaryKey) && $fieldName == $foreignKey) {
+                if (!in_array($fieldName, $primaryKey) && $fieldName === $foreignKey) {
                     $assoc = [
                         'alias' => $otherModel->alias(),
                         'foreignKey' => $fieldName
                     ];
-                } elseif ($otherTable == $tableName && $fieldName === 'parent_id') {
+                } elseif ($otherTable === $tableName && $fieldName === 'parent_id') {
                     $className = ($this->plugin) ? $this->plugin . '.' . $model->alias() : $model->alias();
                     $assoc = [
                         'alias' => 'Child' . $model->alias(),
@@ -509,7 +510,7 @@ class ModelTask extends BakeTask
                 continue;
             }
             $field = $schema->column($fieldName);
-            $validation = $this->fieldValidation($fieldName, $field, $primaryKey);
+            $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
             if (!empty($validation)) {
                 $validate[$fieldName] = $validation;
             }
@@ -520,12 +521,13 @@ class ModelTask extends BakeTask
     /**
      * Does individual field validation handling.
      *
+     * @param \Cake\Database\Schema\Table $schema The table schema for the current field.
      * @param string $fieldName Name of field to be validated.
      * @param array $metaData metadata for field
      * @param string $primaryKey The primary key field
      * @return array Array of validation for the field.
      */
-    public function fieldValidation($fieldName, array $metaData, $primaryKey)
+    public function fieldValidation($schema, $fieldName, array $metaData, $primaryKey)
     {
         $ignoreFields = ['created', 'modified', 'updated'];
         if (in_array($fieldName, $ignoreFields)) {
@@ -568,6 +570,17 @@ class ModelTask extends BakeTask
                 'allowEmpty' => $allowEmpty,
             ]
         ];
+
+        foreach ($schema->constraints() as $constraint) {
+            $constraint = $schema->constraint($constraint);
+            if (!in_array($fieldName, $constraint['columns']) || count($constraint['columns']) > 1) {
+                continue;
+            }
+
+            if ($constraint['type'] === SchemaTable::CONSTRAINT_UNIQUE) {
+                $validation['unique'] = ['rule' => 'validateUnique', 'provider' => 'table'];
+            }
+        }
 
         return $validation;
     }
@@ -695,7 +708,7 @@ class ModelTask extends BakeTask
             'namespace' => $namespace,
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
-            'fields' => [],
+            'primaryKey' => [],
         ];
 
         $this->BakeTemplate->set($data);

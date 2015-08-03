@@ -1,6 +1,6 @@
 <?php
 /**
- * CakePHP(tm) Tests <http://book.cakephp.org/3.0/en/development/testing.html>
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
@@ -8,7 +8,7 @@
  * Redistributions of files must retain the above copyright notice
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/3.0/en/development/testing.html CakePHP(tm) Tests
+ * @link          http://cakephp.org CakePHP(tm) Project
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
@@ -41,6 +41,7 @@ class AssociationFilterTest extends TestCase
         'plugin.bake.bake_comments',
         'plugin.bake.bake_articles_bake_tags',
         'plugin.bake.bake_tags',
+        'plugin.bake.category_threads',
     ];
 
     /**
@@ -132,6 +133,23 @@ class AssociationFilterTest extends TestCase
         }
         $expected = ['authors', 'tags'];
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * test filtering self associations
+     *
+     * @return void
+     */
+    public function testFilterAssociationsSelf()
+    {
+        $table = TableRegistry::get('CategoryThreads', [
+            'className' => '\Bake\Test\App\Model\Table\CategoryThreadsTable'
+        ]);
+        $result = $this->associationFilter->filterAssociations($table);
+        $this->assertArrayHasKey('HasMany', $result);
+        $this->assertArrayHasKey('BelongsTo', $result);
+        $this->assertFalse($result['BelongsTo']['ParentCategoryThreads']['navLink']);
+        $this->assertFalse($result['HasMany']['ChildCategoryThreads']['navLink']);
     }
 
     /**

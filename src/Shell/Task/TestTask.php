@@ -367,7 +367,7 @@ class TestTask extends BakeTask
         $class = new ReflectionClass($className);
         $out = [];
         foreach ($class->getMethods() as $method) {
-            if ($method->getDeclaringClass()->getName() != $className) {
+            if ($method->getDeclaringClass()->getName() !== $className) {
                 continue;
             }
             if (!$method->isPublic()) {

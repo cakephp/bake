@@ -981,9 +981,7 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntity()
     {
-        $config = [
-            'fields' => []
-        ];
+        $config = [];
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->bakeEntity($model, $config);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -997,7 +995,7 @@ class ModelTaskTest extends TestCase
     public function testBakeEntityFields()
     {
         $config = [
-            'fields' => ['title', 'body', 'published']
+            'primaryKey' => ['id']
         ];
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->bakeEntity($model, $config);
@@ -1250,6 +1248,10 @@ class ModelTaskTest extends TestCase
      */
     public function testSkipTablesAndAll()
     {
+        if ($this->Task->listAll()[1] != 'bake_articles') {
+            $this->markTestSkipped('Additional tables detected.');
+        }
+
         $this->Task->connection = 'test';
         $this->Task->skipTables = ['articles_tags', 'bake_tags', 'counter_cache_posts'];
 

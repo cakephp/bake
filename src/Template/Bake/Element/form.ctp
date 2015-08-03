@@ -35,7 +35,7 @@ $fields = collection($fields)
         $done = [];
         foreach ($associations as $type => $data) {
             foreach ($data as $alias => $details) {
-                if ($details['controller'] != $this->name && !in_array($details['controller'], $done)) {
+                if ($details['controller'] !== $this->name && !in_array($details['controller'], $done)) {
 %>
         <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) %></li>
         <li><?= $this->Html->link(__('New <%= $this->_singularHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) %></li>
@@ -74,7 +74,7 @@ $fields = collection($fields)
                 $fieldData = $schema->column($field);
                 if (($fieldData['type'] === 'date') && (!empty($fieldData['null']))) {
 %>
-            echo $this->Form->input('<%= $field %>', array('empty' => true, 'default' => ''));
+            echo $this->Form->input('<%= $field %>', ['empty' => true, 'default' => '']);
 <%
                 } else {
 %>

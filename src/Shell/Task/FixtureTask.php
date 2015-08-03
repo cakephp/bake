@@ -151,7 +151,7 @@ class FixtureTask extends BakeTask
 
         if (!$useTable) {
             $useTable = Inflector::tableize($model);
-        } elseif ($useTable != Inflector::tableize($model)) {
+        } elseif ($useTable !== Inflector::tableize($model)) {
             $table = $useTable;
         }
 
@@ -366,6 +366,9 @@ class FixtureTask extends BakeTask
                         $insert .= " vestibulum massa neque ut et, id hendrerit sit,";
                         $insert .= " feugiat in taciti enim proin nibh, tempor dignissim, rhoncus";
                         $insert .= " duis vestibulum nunc mattis convallis.";
+                        break;
+                    case 'uuid':
+                        $insert = Text::uuid();
                         break;
                 }
                 $record[$field] = $insert;
