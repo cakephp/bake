@@ -607,7 +607,8 @@ class TestTask extends BakeTask
                 'Shell', 'shell',
                 'shell_helper',
                 'Cell', 'cell',
-                'Form', 'form'
+                'Form', 'form',
+                'Mailer', 'mailer',
             ]
         ])->addArgument('name', [
             'help' => 'An existing class to bake tests for.'
