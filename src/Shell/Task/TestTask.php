@@ -56,7 +56,8 @@ class TestTask extends BakeTask
         'Shell' => 'Shell',
         'Shell_helper' => 'Shell\Helper',
         'Cell' => 'View\Cell',
-        'Form' => 'Form'
+        'Form' => 'Form',
+        'Mailer' => 'Mailer',
     ];
 
     /**
@@ -74,7 +75,8 @@ class TestTask extends BakeTask
         'shell' => 'Shell',
         'shell_helper' => 'Helper',
         'cell' => 'Cell',
-        'form' => 'Form'
+        'form' => 'Form',
+        'mailer' => 'Mailer',
     ];
 
     /**
