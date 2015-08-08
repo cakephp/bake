@@ -26,6 +26,7 @@ class BakeArticlesTable extends Table
         $this->table('articles');
         $this->displayField('title');
         $this->primaryKey('id');
+
         $this->addBehavior('Timestamp');
     }
 
