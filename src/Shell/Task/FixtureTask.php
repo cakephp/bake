@@ -72,7 +72,7 @@ class FixtureTask extends BakeTask
         ])->addOption('count', [
             'help' => 'When using generated data, the number of records to include in the fixture(s).',
             'short' => 'n',
-            'default' => 10
+            'default' => 1
         ])->addOption('schema', [
             'help' => 'Create a fixture that imports schema, instead of dumping a schema snapshot into the fixture.',
             'short' => 's',
