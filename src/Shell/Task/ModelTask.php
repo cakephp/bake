@@ -51,7 +51,7 @@ class ModelTask extends BakeTask
      *
      * @var array
      */
-    public $skipTables = ['i18n'];
+    public $skipTables = ['i18n', 'phinxlog'];
 
     /**
      * Holds tables found on connection.
@@ -292,7 +292,7 @@ class ModelTask extends BakeTask
     public function findTableReferencedBy($schema, $keyField)
     {
         if (!$schema->column($keyField)) {
-             return null;
+            return null;
         }
         foreach ($schema->constraints() as $constraint) {
             $constraintInfo = $schema->constraint($constraint);
