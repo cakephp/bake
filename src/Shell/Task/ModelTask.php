@@ -143,7 +143,6 @@ class ModelTask extends BakeTask
     public function all()
     {
         $tables = $this->listUnskipped();
-        $tables = $this->listUnskipped();
         foreach ($tables as $table) {
             TableRegistry::clear();
             $this->main($table);
