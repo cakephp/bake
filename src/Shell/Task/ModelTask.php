@@ -142,7 +142,8 @@ class ModelTask extends BakeTask
      */
     public function all()
     {
-        $tables = $this->listAllBakable();
+        $tables = $this->listUnskipped();
+        $tables = $this->listUnskipped();
         foreach ($tables as $table) {
             TableRegistry::clear();
             $this->main($table);
@@ -797,11 +798,12 @@ class ModelTask extends BakeTask
     }
 
     /**
-     * Outputs the a list of bakable models or controllers from database
+     * Outputs the a list of unskipped models or controllers from database
      *
      * @return array
      */
-    public function listAllBakable() {
+    public function listUnskipped()
+    {
         $this->listAll();
         return array_diff($this->_tables, $this->skipTables);
     }
