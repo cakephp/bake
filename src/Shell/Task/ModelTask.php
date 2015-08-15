@@ -142,11 +142,8 @@ class ModelTask extends BakeTask
      */
     public function all()
     {
-        $this->listAll($this->connection, false);
-        foreach ($this->_tables as $table) {
-            if (in_array($table, $this->skipTables)) {
-                continue;
-            }
+        $tables = $this->listAllBakable();
+        foreach ($tables as $table) {
             TableRegistry::clear();
             $this->main($table);
         }
@@ -797,6 +794,16 @@ class ModelTask extends BakeTask
             $this->_modelNames[] = $this->_camelize($table);
         }
         return $this->_tables;
+    }
+
+    /**
+     * Outputs the a list of bakable models or controllers from database
+     *
+     * @return array
+     */
+    public function listAllBakable() {
+        $this->listAll();
+        return array_diff($this->_tables, $this->skipTables);
     }
 
     /**
