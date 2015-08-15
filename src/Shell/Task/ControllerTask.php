@@ -72,7 +72,8 @@ class ControllerTask extends BakeTask
      */
     public function all()
     {
-        foreach ($this->listAll() as $table) {
+        $tables = $this->listAll();
+        foreach ($tables as $table) {
             TableRegistry::clear();
             $this->main($table);
         }
@@ -243,7 +244,7 @@ class ControllerTask extends BakeTask
     public function listAll()
     {
         $this->Model->connection = $this->connection;
-        return $this->Model->listAll();
+        return $this->Model->listUnskipped();
     }
 
     /**

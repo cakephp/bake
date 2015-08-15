@@ -4,6 +4,7 @@ php:
   - 5.4
   - 5.5
   - 5.6
+  - 7.0
 
 sudo: false
 
@@ -19,7 +20,7 @@ matrix:
   fast_finish: true
 
   include:
-    - php: 5.4
+    - php: 7.0
       env: RUN_CS=1 RUN_TESTS=0
 
     - php: 5.4

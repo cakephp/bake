@@ -102,6 +102,21 @@ class ControllerTaskTest extends TestCase
     }
 
     /**
+     * test ListAll
+     *
+     * @return void
+     */
+    public function testListAllWithSkippedTable()
+    {
+        $this->Task->Model->skipTables = ['bake_articles', 'bake_comments'];
+        $result = $this->Task->listAll();
+        $this->assertNotContains('bake_articles', $result);
+        $this->assertNotContains('bake_comments', $result);
+        $this->assertContains('bake_articles_bake_tags', $result);
+        $this->assertContains('bake_tags', $result);
+    }
+
+    /**
      * test component generation
      *
      * @return void

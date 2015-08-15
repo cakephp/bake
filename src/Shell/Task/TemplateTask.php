@@ -246,7 +246,7 @@ class TemplateTask extends BakeTask
     public function all()
     {
         $this->Model->connection = $this->connection;
-        $tables = $this->Model->listAll();
+        $tables = $this->Model->listUnskipped();
 
         foreach ($tables as $table) {
             $this->main($table);
