@@ -131,7 +131,7 @@ class ModelTask extends BakeTask
         );
         $this->bakeTable($model, $data);
         $this->bakeEntity($model, $data);
-        $this->bakeFixture($model->alias(), $table);
+        $this->bakeFixture($model->alias(), $model->table());
         $this->bakeTest($model->alias());
     }
 
