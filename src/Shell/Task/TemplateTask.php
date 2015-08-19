@@ -294,7 +294,7 @@ class TemplateTask extends BakeTask
         $pluralHumanName = $this->_pluralHumanName($this->controllerName);
 
         return compact(
-        	'modelObject',
+            'modelObject',
             'modelClass',
             'schema',
             'primaryKey',
