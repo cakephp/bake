@@ -257,6 +257,7 @@ class TemplateTask extends BakeTask
      * Loads Controller and sets variables for the template
      * Available template variables:
      *
+     * - 'modelObject'
      * - 'modelClass'
      * - 'primaryKey'
      * - 'displayField'
@@ -272,16 +273,16 @@ class TemplateTask extends BakeTask
      */
     protected function _loadController()
     {
-        $modelObj = TableRegistry::get($this->modelName);
+        $modelObject = TableRegistry::get($this->modelName);
 
-        $primaryKey = (array)$modelObj->primaryKey();
-        $displayField = $modelObj->displayField();
+        $primaryKey = (array)$modelObject->primaryKey();
+        $displayField = $modelObject->displayField();
         $singularVar = $this->_singularName($this->controllerName);
         $singularHumanName = $this->_singularHumanName($this->controllerName);
-        $schema = $modelObj->schema();
+        $schema = $modelObject->schema();
         $fields = $schema->columns();
         $modelClass = $this->modelName;
-        $associations = $this->_filteredAssociations($modelObj);
+        $associations = $this->_filteredAssociations($modelObject);
         $keyFields = [];
         if (!empty($associations['BelongsTo'])) {
             foreach ($associations['BelongsTo'] as $assoc) {
@@ -293,6 +294,7 @@ class TemplateTask extends BakeTask
         $pluralHumanName = $this->_pluralHumanName($this->controllerName);
 
         return compact(
+        	'modelObject',
             'modelClass',
             'schema',
             'primaryKey',
