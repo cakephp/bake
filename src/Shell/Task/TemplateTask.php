@@ -120,7 +120,7 @@ class TemplateTask extends BakeTask
         if (empty($name)) {
             $this->out('Possible tables to bake views for based on your current database:');
             $this->Model->connection = $this->connection;
-            foreach ($this->Model->listAll() as $table) {
+            foreach ($this->Model->listUnskipped() as $table) {
                 $this->out('- ' . $this->_camelize($table));
             }
             return true;
