@@ -63,6 +63,14 @@ class BakeView extends View
     ];
 
     /**
+     * Path where bake's intermediary files are written.
+     * Defaults to `TMP . 'bake' . DS`.
+     *
+     * @var string
+     */
+    protected $_tmpLocation;
+
+    /**
      * Upon construction, append the plugin's template paths to the paths to check
      *
      * @param \Cake\Network\Request|null $request Request instance.
@@ -85,6 +93,11 @@ class BakeView extends View
         if (!in_array($bakeTemplates, $paths)) {
             $paths[] = $bakeTemplates;
             Configure::write('App.paths.templates', $paths);
+        }
+
+        $this->_tmpLocation = TMP . 'bake' . DS;
+        if (!file_exists($this->_tmpLocation)) {
+            mkdir($this->_tmpLocation);
         }
     }
 
@@ -169,7 +182,7 @@ class BakeView extends View
             }
         }
 
-        $this->__viewFile = TMP . Inflector::slug(preg_replace('@.*Template[/\\\\]@', '', $viewFile)) . '.php';
+        $this->__viewFile = $this->_tmpLocation . Inflector::slug(preg_replace('@.*Template[/\\\\]@', '', $viewFile)) . '.php';
         file_put_contents($this->__viewFile, $viewString);
 
         unset($viewFile, $viewString, $replacements, $find, $replace);
