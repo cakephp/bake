@@ -51,7 +51,7 @@ class ModelTask extends BakeTask
      *
      * @var array
      */
-    public $skipTables = ['i18n', 'phinxlog'];
+    public $skipTables = ['i18n', 'cake_sessions', 'phinxlog', 'users_phinxlog'];
 
     /**
      * Holds tables found on connection.
@@ -87,7 +87,7 @@ class ModelTask extends BakeTask
 
         if (empty($name)) {
             $this->out('Choose a model to bake from the following:');
-            foreach ($this->listAll() as $table) {
+            foreach ($this->listUnskipped() as $table) {
                 $this->out('- ' . $this->_camelize($table));
             }
             return true;
