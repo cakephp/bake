@@ -56,7 +56,7 @@ class FixtureTaskTest extends TestCase
         );
         $this->Task->Model = $this->getMock(
             'Bake\Shell\Task\ModelTask',
-            ['in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listAll'],
+            ['in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listUnskipped'],
             [$io]
         );
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
@@ -207,7 +207,7 @@ class FixtureTaskTest extends TestCase
     {
         $this->Task->connection = 'test';
         $this->Task->Model->expects($this->any())
-            ->method('listAll')
+            ->method('listUnskipped')
             ->will($this->returnValue(['articles', 'comments']));
 
         $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/ArticlesFixture.php');
@@ -233,7 +233,7 @@ class FixtureTaskTest extends TestCase
         $this->Task->connection = 'test';
         $this->Task->params = ['count' => 10, 'records' => true];
 
-        $this->Task->Model->expects($this->any())->method('listAll')
+        $this->Task->Model->expects($this->any())->method('listUnskipped')
             ->will($this->returnValue(['Articles', 'comments']));
 
         $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/ArticlesFixture.php');
@@ -261,7 +261,7 @@ class FixtureTaskTest extends TestCase
         $this->Task->connection = 'test';
         $this->Task->params = ['schema' => true];
 
-        $this->Task->Model->expects($this->any())->method('listAll')
+        $this->Task->Model->expects($this->any())->method('listUnskipped')
             ->will($this->returnValue(['Articles', 'comments']));
 
         $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/ArticlesFixture.php');
@@ -286,7 +286,7 @@ class FixtureTaskTest extends TestCase
         $this->Task->connection = 'test';
 
         $this->Task->Model->expects($this->any())
-            ->method('listAll')
+            ->method('listUnskipped')
             ->will($this->returnValue(['articles', 'comments']));
 
         $filename = $this->_normalizePath(ROOT . '/tests/Fixture/ArticlesFixture.php');

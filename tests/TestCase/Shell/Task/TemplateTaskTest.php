@@ -569,7 +569,7 @@ class TemplateTaskTest extends TestCase
         $this->_setupTask(['in', 'err', 'bake', 'createFile', '_stop']);
 
         $this->Task->Model->expects($this->once())
-            ->method('listAll')
+            ->method('listUnskipped')
             ->will($this->returnValue(['comments', 'articles']));
 
         $this->Task->expects($this->never())

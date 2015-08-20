@@ -109,7 +109,7 @@ class FixtureTask extends BakeTask
 
         if (empty($name)) {
             $this->out('Choose a fixture to bake from the following:');
-            foreach ($this->Model->listAll() as $table) {
+            foreach ($this->Model->listUnskipped() as $table) {
                 $this->out('- ' . $this->_camelize($table));
             }
             return true;
@@ -130,7 +130,7 @@ class FixtureTask extends BakeTask
      */
     public function all()
     {
-        $tables = $this->Model->listAll($this->connection, false);
+        $tables = $this->Model->listUnskipped($this->connection, false);
 
         foreach ($tables as $table) {
             $this->main($table);
