@@ -87,7 +87,7 @@ class BakeShellTest extends TestCase
             ->with('Comments');
 
         $this->Shell->connection = '';
-        $this->Shell->params = [];
+        $this->Shell->params = ['prefix' => 'account'];
         $this->Shell->all('Comments');
 
         $output = $this->out->messages();
