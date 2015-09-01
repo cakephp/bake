@@ -12,7 +12,7 @@
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\App\Controller;
 
 use Cake\Controller\Controller;
 
@@ -38,6 +38,15 @@ class TemplateTaskCommentsController extends Controller
      * @return void
      */
     public function add()
+    {
+    }
+
+    /**
+     * Testing public controller action with multiple words
+     *
+     * @return void
+     */
+    public function addComment()
     {
     }
 }
