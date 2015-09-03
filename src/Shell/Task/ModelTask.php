@@ -112,7 +112,7 @@ class ModelTask extends BakeTask
 
         $primaryKey = $this->getPrimaryKey($model);
         $displayField = $this->getDisplayField($model);
-        $fields = $this->getFields($model);
+        $fields = $this->getFields();
         $validation = $this->getValidation($model, $associations);
         $rulesChecker = $this->getRules($model, $associations);
         $behaviors = $this->getBehaviors($model);
@@ -425,32 +425,23 @@ class ModelTask extends BakeTask
     }
 
     /**
-     * Get the fields from a model.
+     * Evaluates the fields and no-fields options, and
+     * returns if, and which fields should be made accessible.
      *
-     * Uses the fields and no-fields options.
-     *
-     * @param \Cake\ORM\Table $model The model to introspect.
-     * @return array The columns to make accessible
+     * @return array|bool|null Either an array of fields, `false` in
+     * case the no-fields option is used, or `null` if none of the
+     * field options is used.
      */
-    public function getFields($model)
+    public function getFields()
     {
         if (!empty($this->params['no-fields'])) {
-            return [];
+            return false;
         }
         if (!empty($this->params['fields'])) {
             $fields = explode(',', $this->params['fields']);
             return array_values(array_filter(array_map('trim', $fields)));
         }
-        $schema = $model->schema();
-        $columns = $schema->columns();
-        $primary = $this->getPrimaryKey($model);
-        $exclude = array_merge($primary, ['created', 'modified', 'updated']);
-
-        $associations = $model->associations();
-        foreach ($associations->keys() as $assocName) {
-            $columns[] = $associations->get($assocName)->property();
-        }
-        return array_values(array_diff($columns, $exclude));
+        return null;
     }
 
     /**

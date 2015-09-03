@@ -526,35 +526,11 @@ class ModelTaskTest extends TestCase
     {
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->getFields($model);
-        $expected = [
-            'bake_user_id',
-            'title',
-            'body',
-            'published',
-        ];
-        $this->assertEquals($expected, $result);
+        $this->assertNull($result);
     }
 
     /**
-     * Test getting accessible fields includes associations.
-     *
-     * @return void
-     */
-    public function testGetFieldsAssociations()
-    {
-        $model = TableRegistry::get('BakeArticles');
-        $model->belongsToMany('BakeTags');
-        $model->belongsTo('BakeAuthors');
-        $model->hasMany('BakeComments');
-
-        $result = $this->Task->getFields($model);
-        $this->assertContains('bake_tags', $result);
-        $this->assertContains('bake_comments', $result);
-        $this->assertContains('bake_author', $result);
-    }
-
-    /**
-     * Test getting field with the no- option
+     * Test getting accessible fields with the no- option
      *
      * @return void
      */
@@ -563,11 +539,11 @@ class ModelTaskTest extends TestCase
         $model = TableRegistry::get('BakeArticles');
         $this->Task->params['no-fields'] = true;
         $result = $this->Task->getFields($model);
-        $this->assertEquals([], $result);
+        $this->assertFalse($result);
     }
 
     /**
-     * Test getting field with a whitelist
+     * Test getting accessible fields with a whitelist
      *
      * @return void
      */
@@ -992,10 +968,43 @@ class ModelTaskTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityFields()
+    public function testBakeEntityFieldsDefaults()
     {
         $config = [
-            'primaryKey' => ['id']
+            'primaryKey' => ['id'],
+            'fields' => null
+        ];
+        $model = TableRegistry::get('BakeArticles');
+        $result = $this->Task->bakeEntity($model, $config);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an entity class with no accessible fields.
+     *
+     * @return void
+     */
+    public function testBakeEntityNoFields()
+    {
+        $config = [
+            'fields' => false
+        ];
+        $model = TableRegistry::get('BakeArticles');
+        $result = $this->Task->bakeEntity($model, $config);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an entity class with a whitelist of accessible fields.
+     *
+     * @return void
+     */
+    public function testBakeEntityFieldsWhiteList()
+    {
+        $config = [
+            'fields' => [
+                'id', 'title', 'body', 'created'
+            ]
         ];
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->bakeEntity($model, $config);
