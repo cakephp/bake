@@ -34,6 +34,9 @@ use Cake\ORM\Entity;
 
 /**
  * <%= $name %> Entity.
+<% foreach ($fields as $field): %>
+ * @property $<%= $field %>
+<% endforeach; %>
  */
 class <%= $name %> extends Entity
 {
