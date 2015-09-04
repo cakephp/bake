@@ -13,6 +13,77 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
+use Cake\ORM\Association;
+
+$properties = [];
+if (!empty($propertySchema)) {
+    foreach ($propertySchema as $property => $info) {
+        switch ($info['kind']) {
+            case 'column':
+                $type = null;
+                switch ($info['type']) {
+                    case 'string':
+                    case 'text':
+                    case 'uuid':
+                        $type = 'string';
+                        break;
+
+                    case 'integer':
+                    case 'biginteger':
+                        $type = 'int';
+                        break;
+
+                    case 'float':
+                    case 'decimal':
+                        $type = 'float';
+                        break;
+
+                    case 'boolean':
+                        $type = 'bool';
+                        break;
+
+                    case 'binary':
+                        $type = 'string|resource';
+                        break;
+
+                    case 'date':
+                    case 'datetime':
+                    case 'time':
+                    case 'timestamp':
+                        $type = 'string|int|\DateTime|\Cake\I18n\Time';
+                        break;
+                }
+
+                $properties[$property] = $type;
+                break;
+
+            case 'association':
+                $type = $info['type'];
+                if (
+                    $info['association']->type() === Association::MANY_TO_MANY ||
+                    $info['association']->type() === Association::ONE_TO_MANY)
+                {
+                    $properties[$property] = $type . '[]';
+                } elseif ($info['association']->type() === Association::MANY_TO_ONE) {
+                    $property = $info['association']->property();
+                    $index = array_search($info['association']->foreignKey(), array_keys($properties));
+                    if ($index !== false) {
+                        $properties = array_merge(
+                            array_slice($properties, 0, $index + 1),
+                            [$property => $type],
+                            array_slice($properties, $index + 1, null)
+                        );
+                    } else {
+                        $properties[$property] = $type;
+                    }
+                } else {
+                    $properties[$property] = $type;
+                }
+                break;
+        }
+    }
+}
+
 $accessible = [];
 if (!isset($fields) || $fields !== false) {
     if (!empty($fields)) {
@@ -34,6 +105,16 @@ use Cake\ORM\Entity;
 
 /**
  * <%= $name %> Entity.
+<% if ($properties): %>
+ *
+<% foreach ($properties as $property => $type): %>
+<% if ($type): %>
+ * @property <%= $type %> $<%= $property %>
+<% else: %>
+ * @property $<%= $property %>
+<% endif; %>
+<% endforeach; %>
+<% endif; %>
  */
 class <%= $name %> extends Entity
 {
