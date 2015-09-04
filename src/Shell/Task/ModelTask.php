@@ -448,7 +448,7 @@ class ModelTask extends BakeTask
      * - `association`: Holds an instance of the corresponding association
      * class.
      *
-     * @param \Cake\ORM\Table $model
+     * @param \Cake\ORM\Table $model The model to introspect.
      * @return array The property schema
      */
     public function getEntityPropertySchema(Table $model)

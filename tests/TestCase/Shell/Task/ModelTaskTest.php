@@ -527,6 +527,8 @@ class ModelTaskTest extends TestCase
         $model = TableRegistry::get('BakeArticles');
         $model->belongsTo('BakeUsers');
         $model->hasMany('BakeTest.Authors');
+        $model->schema()->columnType('created', 'timestamp');
+        $model->schema()->columnType('updated', 'timestamp');
 
         $result = $this->Task->getEntityPropertySchema($model);
         $expected = [
@@ -544,7 +546,7 @@ class ModelTaskTest extends TestCase
             ],
             'created' => [
                 'kind' => 'column',
-                'type' => 'datetime'
+                'type' => 'timestamp'
             ],
             'bake_user_id' => [
                 'kind' => 'column',
@@ -556,7 +558,7 @@ class ModelTaskTest extends TestCase
             ],
             'updated' => [
                 'kind' => 'column',
-                'type' => 'datetime'
+                'type' => 'timestamp'
             ],
             'bake_user' => [
                 'kind' => 'association',
