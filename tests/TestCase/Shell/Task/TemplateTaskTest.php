@@ -627,26 +627,22 @@ class TemplateTaskTest extends TestCase
      */
     public function testMainWithController()
     {
-        $this->_setupTask(['in', 'err', 'createFile', 'bake', '_stop']);
+        $this->_setupTask(['in', 'err', 'createFile', 'getContent', '_stop']);
 
-        $this->Task->expects($this->exactly(4))
-            ->method('bake');
+        $this->Task->expects($this->exactly(3))
+            ->method('getContent');
 
         $this->Task->expects($this->at(0))
-            ->method('bake')
-            ->with('index', $this->anything());
+            ->method('getContent')
+            ->with('index');
 
         $this->Task->expects($this->at(1))
-            ->method('bake')
-            ->with('view', $this->anything());
-
-        $this->Task->expects($this->at(2))
-            ->method('bake')
+            ->method('getContent')
             ->with('add', $this->anything());
 
-        $this->Task->expects($this->at(3))
-            ->method('bake')
-            ->with('edit', $this->anything());
+        $this->Task->expects($this->at(2))
+            ->method('getContent')
+            ->with('add_comment', $this->anything());
 
         $this->Task->main('TemplateTaskComments');
     }

@@ -78,7 +78,7 @@ class BakeShell extends Shell
             $args = $this->args;
             array_shift($args);
             $args = implode($args, ' ');
-            $this->out(sprintf('    bin/cake bake template %s', $args), 2);
+            $this->out(sprintf('    <info>`bin/cake bake template %s`</info>', $args), 2);
             return false;
         }
 
@@ -296,6 +296,8 @@ class BakeShell extends Shell
         ])->addOption('plugin', [
             'short' => 'p',
             'help' => 'Plugin to bake into.'
+        ])->addOption('prefix', [
+            'help' => 'Prefix to bake controllers and templates into.'
         ])->addOption('theme', [
             'short' => 't',
             'help' => 'The theme to use when baking code.',

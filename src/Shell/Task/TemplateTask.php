@@ -223,8 +223,14 @@ class TemplateTask extends BakeTask
         $methods = [];
         if (class_exists($this->controllerClass)) {
             $methods = array_diff(
-                array_map('strtolower', get_class_methods($this->controllerClass)),
-                array_map('strtolower', get_class_methods($base . '\Controller\AppController'))
+                array_map(
+                    'Cake\Utility\Inflector::underscore',
+                    get_class_methods($this->controllerClass)
+                ),
+                array_map(
+                    'Cake\Utility\Inflector::underscore',
+                    get_class_methods($base . '\Controller\AppController')
+                )
             );
         }
         if (empty($methods)) {

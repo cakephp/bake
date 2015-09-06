@@ -133,7 +133,7 @@ foreach ($relations as $alias => $details):
     $otherSingularVar = Inflector::variable($alias);
     $otherPluralHumanName = Inflector::humanize(Inflector::underscore($details['controller']));
     %>
-    <div class="related row">
+    <div class="related">
         <h4><?= __('Related <%= $otherPluralHumanName %>') ?></h4>
         <?php if (!empty($<%= $singularVar %>-><%= $details['property'] %>)): ?>
         <table cellpadding="0" cellspacing="0">
