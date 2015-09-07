@@ -56,7 +56,10 @@ class BakeTemplateTask extends Shell
         $theme = isset($this->params['theme']) ? $this->params['theme'] : '';
 
         $viewOptions = [
-            'helpers' => ['Bake.Bake'],
+            'helpers' => [
+                'Bake.Bake',
+                'Bake.DocBlock'
+            ],
             'theme' => $theme
         ];
         $view = new BakeView(new Request(), new Response(), null, $viewOptions);
