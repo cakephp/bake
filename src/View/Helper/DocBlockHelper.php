@@ -110,7 +110,7 @@ class DocBlockHelper extends Helper
             case 'datetime':
             case 'time':
             case 'timestamp':
-                return 'string|int|\DateTime|\Cake\I18n\Time';
+                return '\Cake\I18n\Time';
         }
 
         return null;
