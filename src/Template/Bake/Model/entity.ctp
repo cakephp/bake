@@ -13,8 +13,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-use Cake\ORM\Association;
-
 $propertyHintMap = null;
 if (!empty($propertySchema)) {
     $propertyHintMap = $this->DocBlock->buildEntityPropertyHintTypeMap($propertySchema);

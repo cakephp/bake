@@ -12,8 +12,8 @@ use Cake\ORM\Entity;
  * @property string $title
  * @property string $body
  * @property bool $published
- * @property string|int|\DateTime|\Cake\I18n\Time $created
- * @property string|int|\DateTime|\Cake\I18n\Time $updated
+ * @property \Cake\I18n\Time $created
+ * @property \Cake\I18n\Time $updated
  * @property $unknown_type
  * @property \BakeTest\Model\Entity\Author[] $authors
  */
