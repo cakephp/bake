@@ -518,6 +518,63 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * Test getting the entity property schema.
+     *
+     * @return void
+     */
+    public function testGetEntityPropertySchema()
+    {
+        $model = TableRegistry::get('BakeArticles');
+        $model->belongsTo('BakeUsers');
+        $model->hasMany('BakeTest.Authors');
+        $model->schema()->columnType('created', 'timestamp');
+        $model->schema()->columnType('updated', 'timestamp');
+
+        $result = $this->Task->getEntityPropertySchema($model);
+        $expected = [
+            'id' => [
+                'kind' => 'column',
+                'type' => 'integer'
+            ],
+            'title' => [
+                'kind' => 'column',
+                'type' => 'string'
+            ],
+            'body' => [
+                'kind' => 'column',
+                'type' => 'text'
+            ],
+            'created' => [
+                'kind' => 'column',
+                'type' => 'timestamp'
+            ],
+            'bake_user_id' => [
+                'kind' => 'column',
+                'type' => 'integer'
+            ],
+            'published' => [
+                'kind' => 'column',
+                'type' => 'boolean'
+            ],
+            'updated' => [
+                'kind' => 'column',
+                'type' => 'timestamp'
+            ],
+            'bake_user' => [
+                'kind' => 'association',
+                'association' => $model->association('BakeUsers'),
+                'type' => '\App\Model\Entity\BakeUser'
+            ],
+            'authors' => [
+                'kind' => 'association',
+                'association' => $model->association('Authors'),
+                'type' => '\BakeTest\Model\Entity\Author'
+            ]
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Test getting accessible fields.
      *
      * @return void
@@ -959,6 +1016,29 @@ class ModelTaskTest extends TestCase
     {
         $config = [];
         $model = TableRegistry::get('BakeArticles');
+        $result = $this->Task->bakeEntity($model, $config);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an entity with DocBlock property type hints.
+     *
+     * @return void
+     */
+    public function testBakeEntityWithPropertyTypeHints()
+    {
+        $model = TableRegistry::get('BakeArticles');
+        $model->belongsTo('BakeUsers');
+        $model->hasMany('BakeTest.Authors');
+        $model->schema()->addColumn('unknown_type', [
+            'type' => 'unknownType'
+        ]);
+
+        $config = [
+            'fields' => false,
+            'propertySchema' => $this->Task->getEntityPropertySchema($model)
+        ];
+
         $result = $this->Task->bakeEntity($model, $config);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
