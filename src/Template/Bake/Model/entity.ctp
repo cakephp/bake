@@ -13,6 +13,11 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
+$propertyHintMap = null;
+if (!empty($propertySchema)) {
+    $propertyHintMap = $this->DocBlock->buildEntityPropertyHintTypeMap($propertySchema);
+}
+
 $accessible = [];
 if (!isset($fields) || $fields !== false) {
     if (!empty($fields)) {
@@ -34,6 +39,16 @@ use Cake\ORM\Entity;
 
 /**
  * <%= $name %> Entity.
+<% if ($propertyHintMap): %>
+ *
+<% foreach ($propertyHintMap as $property => $type): %>
+<% if ($type): %>
+ * @property <%= $type %> $<%= $property %>
+<% else: %>
+ * @property $<%= $property %>
+<% endif; %>
+<% endforeach; %>
+<% endif; %>
  */
 class <%= $name %> extends Entity
 {
