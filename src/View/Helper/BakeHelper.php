@@ -62,7 +62,8 @@ class BakeHelper extends Helper
     public function stringifyList(array $list, array $options = [])
     {
         $options += [
-            'indent' => 2
+            'indent' => 2,
+            'tab' => '    ',
         ];
 
         if (!$list) {
@@ -80,9 +81,9 @@ class BakeHelper extends Helper
         $join = ', ';
         if ($options['indent']) {
             $join = ',';
-            $start = "\n" . str_repeat("    ", $options['indent']);
+            $start = "\n" . str_repeat($options['tab'], $options['indent']);
             $join .= $start;
-            $end = "\n" . str_repeat("    ", $options['indent'] - 1);
+            $end = "\n" . str_repeat($options['tab'], $options['indent'] - 1);
         }
 
         return $start . implode($join, $list) . $end;
