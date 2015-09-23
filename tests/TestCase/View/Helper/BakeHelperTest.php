@@ -119,4 +119,93 @@ class BakeHelperTest extends TestCase
         $expected = ['tags'];
         $this->assertSame($expected, $result);
     }
+    
+    /**
+     * test stringifyList defaults
+     *
+     * @return void
+     */
+    public function testStringifyListDefaults()
+    {
+        $list = ['one' => 'foo', 'two' => 'bar', 'three'];
+        $result = $this->BakeHelper->stringifyList($list);
+        $spaces = '    ';
+        $expected = "\n".
+            $spaces.$spaces."'one' => 'foo',\n".
+            $spaces.$spaces."'two' => 'bar'\n".
+            $spaces.$spaces."'three'\n".
+            $spaces;
+        $this->assertSame($expected, $result);
+    }
+    
+    /**
+     * test stringifyList indent is false
+     *
+     * @return void
+     */
+    public function testStringifyListIndentIsFalse()
+    {
+        $list = ['one' => 'foo', 'two' => 'bar', 'three'];
+        $result = $this->BakeHelper->stringifyList($list,['indent' => false]);
+        $expected = "'one' => 'foo', 'two' => 'bar', 'three'";
+        $this->assertSame($expected, $result);
+    }
+    
+    /**
+     * test stringifyList deeper indent
+     *
+     * @return void
+     */
+    public function testStringifyListDeeperIndent()
+    {
+        $list = ['one' => 'foo', 'two' => 'bar', 'three'];
+        $result = $this->BakeHelper->stringifyList($list, ['indent' => 3]);
+        $spaces = '    ';
+        $expected = "\n".
+            $spaces.$spaces.$spaces."'one' => 'foo',\n".
+            $spaces.$spaces.$spaces."'two' => 'bar',\n".
+            $spaces.$spaces.$spaces."'three'\n".
+            $spaces.$spaces;
+        $this->assertSame($expected, $result);
+    }
+    
+    /**
+     * test stringifyList other tab
+     *
+     * @return void
+     */
+    public function testStringifyListOtherTab()
+    {
+        $list = ['one' => 'foo', 'two' => 'bar', 'three'];
+        $result = $this->BakeHelper->stringifyList($list, ['indent' => 3, 'tab' => "\t"]);
+        $spaces = "\t";
+        $expected = "\n".
+            $spaces.$spaces.$spaces."'one' => 'foo',\n".
+            $spaces.$spaces.$spaces."'two' => 'bar',\n".
+            $spaces.$spaces.$spaces."'three'\n".
+            $spaces.$spaces;
+        $this->assertSame($expected, $result);
+    }
+    
+    /**
+     * test stringifyList with comma at end
+     *
+     * @return void
+     */
+    public function testStringifyListWithCommaAtEnd()
+    {
+        $list = ['one' => 'foo', 'two' => 'bar', 'three'];
+        $result = $this->BakeHelper->stringifyList($list, [
+            'indent' => 3,
+            'tab' => "\t",
+            'comma_at_end' => true,
+        ]);
+        $spaces = "\t";
+        $expected = "\n".
+            $spaces.$spaces.$spaces."'one' => 'foo',\n".
+            $spaces.$spaces.$spaces."'two' => 'bar',\n".
+            $spaces.$spaces.$spaces."'three',\n".
+            $spaces.$spaces;
+        $this->assertSame($expected, $result);
+    }
 }
