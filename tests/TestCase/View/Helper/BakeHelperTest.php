@@ -121,6 +121,18 @@ class BakeHelperTest extends TestCase
     }
     
     /**
+     * test stringifyList empty
+     *
+     * @return void
+     */
+    public function testStringifyListEmpty()
+    {
+        $result = $this->BakeHelper->stringifyList([]);
+        $expected = '';
+        $this->assertSame($expected, $result);
+    }
+    
+    /**
      * test stringifyList defaults
      *
      * @return void
