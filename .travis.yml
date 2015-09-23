@@ -26,6 +26,9 @@ matrix:
     - php: 5.4
       env: RUN_COVERAGE=1 RUN_TESTS=0 DB=mysql db_dsn='mysql://travis@0.0.0.0/cakephp_test'
 
+  allow_failures:
+      - env: DB=pgsql db_dsn='postgres://postgres@127.0.0.1/cakephp_test'
+
 before_script:
   - composer self-update
   - composer install --no-interaction --prefer-dist
