@@ -142,10 +142,10 @@ class BakeHelperTest extends TestCase
         $list = ['one' => 'foo', 'two' => 'bar', 'three'];
         $result = $this->BakeHelper->stringifyList($list);
         $spaces = '    ';
-        $expected = "\n".
-            $spaces.$spaces."'one' => 'foo',\n".
-            $spaces.$spaces."'two' => 'bar'\n".
-            $spaces.$spaces."'three'\n".
+        $expected = "\n" .
+            $spaces . $spaces . "'one' => 'foo',\n" .
+            $spaces . $spaces . "'two' => 'bar'\n" .
+            $spaces . $spaces . "'three'\n" .
             $spaces;
         $this->assertSame($expected, $result);
     }
@@ -173,11 +173,11 @@ class BakeHelperTest extends TestCase
         $list = ['one' => 'foo', 'two' => 'bar', 'three'];
         $result = $this->BakeHelper->stringifyList($list, ['indent' => 3]);
         $spaces = '    ';
-        $expected = "\n".
-            $spaces.$spaces.$spaces."'one' => 'foo',\n".
-            $spaces.$spaces.$spaces."'two' => 'bar',\n".
-            $spaces.$spaces.$spaces."'three'\n".
-            $spaces.$spaces;
+        $expected = "\n" .
+            $spaces . $spaces . $spaces . "'one' => 'foo',\n" .
+            $spaces . $spaces . $spaces . "'two' => 'bar',\n" .
+            $spaces . $spaces . $spaces . "'three'\n" .
+            $spaces . $spaces;
         $this->assertSame($expected, $result);
     }
     
@@ -191,16 +191,16 @@ class BakeHelperTest extends TestCase
         $list = ['one' => 'foo', 'two' => 'bar', 'three'];
         $result = $this->BakeHelper->stringifyList($list, ['indent' => 3, 'tab' => "\t"]);
         $spaces = "\t";
-        $expected = "\n".
-            $spaces.$spaces.$spaces."'one' => 'foo',\n".
-            $spaces.$spaces.$spaces."'two' => 'bar',\n".
-            $spaces.$spaces.$spaces."'three'\n".
-            $spaces.$spaces;
+        $expected = "\n" .
+            $spaces . $spaces . $spaces . "'one' => 'foo',\n" .
+            $spaces . $spaces . $spaces . "'two' => 'bar',\n" .
+            $spaces . $spaces . $spaces . "'three'\n" .
+            $spaces . $spaces;
         $this->assertSame($expected, $result);
     }
     
     /**
-     * test stringifyList with comma at end
+     * test stringifyList with commaAtEnd
      *
      * @return void
      */
@@ -210,14 +210,14 @@ class BakeHelperTest extends TestCase
         $result = $this->BakeHelper->stringifyList($list, [
             'indent' => 3,
             'tab' => "\t",
-            'comma_at_end' => true,
+            'commaAtEnd' => true,
         ]);
         $spaces = "\t";
-        $expected = "\n".
-            $spaces.$spaces.$spaces."'one' => 'foo',\n".
-            $spaces.$spaces.$spaces."'two' => 'bar',\n".
-            $spaces.$spaces.$spaces."'three',\n".
-            $spaces.$spaces;
+        $expected = "\n" .
+            $spaces . $spaces . $spaces . "'one' => 'foo',\n" .
+            $spaces . $spaces . $spaces . "'two' => 'bar',\n" .
+            $spaces . $spaces . $spaces . "'three',\n" .
+            $spaces . $spaces;
         $this->assertSame($expected, $result);
     }
 }
