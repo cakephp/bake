@@ -144,7 +144,7 @@ class BakeHelperTest extends TestCase
         $spaces = '    ';
         $expected = "\n" .
             $spaces . $spaces . "'one' => 'foo',\n" .
-            $spaces . $spaces . "'two' => 'bar'\n" .
+            $spaces . $spaces . "'two' => 'bar',\n" .
             $spaces . $spaces . "'three'\n" .
             $spaces;
         $this->assertSame($expected, $result);
