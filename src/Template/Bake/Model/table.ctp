@@ -36,7 +36,7 @@ echo implode("\n", $uses);
  *
 <% foreach ($associations as $type => $assocs): %>
 <% foreach ($assocs as $assoc): %>
- * @property \Cake\ORM\Association\<%= Inflector::camelize($type) %> $<%= $assoc['alias'] %>
+ * @property \Cake\ORM\Table $<%= $assoc['alias'] %>
 <% endforeach %>
 <% endforeach; %>
 <% endif; %>
