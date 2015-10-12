@@ -158,7 +158,7 @@ class BakeHelperTest extends TestCase
     public function testStringifyListIndentIsFalse()
     {
         $list = ['one' => 'foo', 'two' => 'bar', 'three'];
-        $result = $this->BakeHelper->stringifyList($list,['indent' => false]);
+        $result = $this->BakeHelper->stringifyList($list, ['indent' => false]);
         $expected = "'one' => 'foo', 'two' => 'bar', 'three'";
         $this->assertSame($expected, $result);
     }
