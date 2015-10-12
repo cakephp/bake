@@ -64,7 +64,7 @@ class BakeHelper extends Helper
         $options += [
             'indent' => 2,
             'tab' => '    ',
-            'commaAtEnd' => false,
+            'trailingComma' => false,
         ];
 
         if (!$list) {
@@ -87,7 +87,7 @@ class BakeHelper extends Helper
             $end = "\n" . str_repeat($options['tab'], $options['indent'] - 1);
         }
         
-        if ($options['commaAtEnd']) {
+        if ($options['trailingComma']) {
             $end = "," . $end;
         }
 

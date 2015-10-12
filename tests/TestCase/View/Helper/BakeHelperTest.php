@@ -200,7 +200,7 @@ class BakeHelperTest extends TestCase
     }
     
     /**
-     * test stringifyList with commaAtEnd
+     * test stringifyList with trailingComma
      *
      * @return void
      */
@@ -210,7 +210,7 @@ class BakeHelperTest extends TestCase
         $result = $this->BakeHelper->stringifyList($list, [
             'indent' => 3,
             'tab' => "\t",
-            'commaAtEnd' => true,
+            'trailingComma' => true,
         ]);
         $spaces = "\t";
         $expected = "\n" .
