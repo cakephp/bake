@@ -106,7 +106,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <% foreach ($groupedFields['date'] as $field) : %>
         <tr>
             <th><%= "<%= __('" . Inflector::humanize($field) . "') %>" %></th>
-            <td><?= h($<%= $singularVar %>-><%= $field %>) ?></tr>
+            <td><?= h($<%= $singularVar %>-><%= $field %>) ?></td>
         </tr>
 <% endforeach; %>
 <% endif; %>
