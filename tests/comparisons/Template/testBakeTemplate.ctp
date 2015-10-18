@@ -30,11 +30,11 @@
         </tr>
         <tr>
             <th><?= __('Created') ?></th>
-            <td><?= h($templateTaskComment->created) ?></tr>
+            <td><?= h($templateTaskComment->created) ?></td>
         </tr>
         <tr>
             <th><?= __('Updated') ?></th>
-            <td><?= h($templateTaskComment->updated) ?></tr>
+            <td><?= h($templateTaskComment->updated) ?></td>
         </tr>
     </table>
     <div class="row">
