@@ -111,7 +111,7 @@ class BakeArticlesController extends AppController
      * Delete method
      *
      * @param string|null $id Bake Article id.
-     * @return void Redirects to index.
+     * @return \Cake\Network\Response|null Redirects to index.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function delete($id = null)
