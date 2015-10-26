@@ -207,6 +207,10 @@ class TestTask extends BakeTask
      */
     public function bake($type, $className)
     {
+        if (!isset($this->classSuffixes[strtolower($type)]) || !isset($this->classTypes[ucfirst($type)])) {
+            return false;
+        }
+
         $fullClassName = $this->getRealClassName($type, $className);
 
         if (!empty($this->params['fixtures'])) {
