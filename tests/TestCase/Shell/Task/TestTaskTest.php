@@ -473,6 +473,17 @@ class TestTaskTest extends TestCase
     }
 
     /**
+     * Test baking an unknown class type.
+     *
+     * @return void
+     */
+    public function testBakeUnknownClass()
+    {
+        $result = $this->Task->bake('Foo', 'Example');
+        $this->assertFalse($result);
+    }
+
+    /**
      * test Constructor generation ensure that constructClasses is called for controllers
      *
      * @return void

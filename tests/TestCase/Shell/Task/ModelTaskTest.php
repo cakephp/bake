@@ -27,6 +27,14 @@ use Cake\Utility\ClassRegistry;
  */
 class ModelTaskTest extends TestCase
 {
+
+    /**
+     * Fixtures should be dropped after each tests
+     *
+     * @var bool
+     */
+    public $dropTables = true;
+
     /**
      * fixtures
      *
@@ -114,7 +122,6 @@ class ModelTaskTest extends TestCase
     {
         parent::tearDown();
         unset($this->Task);
-        $this->fixtureManager->shutDown();
     }
 
     /**
