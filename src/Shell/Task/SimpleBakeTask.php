@@ -109,7 +109,7 @@ abstract class SimpleBakeTask extends BakeTask
      * Generate a test case.
      *
      * @param string $className The class to bake a test for.
-     * @return string
+     * @return string|bool
      */
     public function bakeTest($className)
     {
