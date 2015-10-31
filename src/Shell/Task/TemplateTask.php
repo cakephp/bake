@@ -91,7 +91,7 @@ class TemplateTask extends BakeTask
     /**
      * Maximal Index Columns
      *
-     * @var integer
+     * @var int
      */
     public $maxIndexColumns = 7;
 
@@ -148,7 +148,7 @@ class TemplateTask extends BakeTask
             $action = $this->template;
         }
         if (!empty($this->params['index-columns'])) {
-            $this->maxIndexColumns = (int) $this->params['index-columns'];
+            $this->maxIndexColumns = (int)$this->params['index-columns'];
         }
         if ($action) {
             return $this->bake($action, true);
