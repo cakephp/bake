@@ -89,6 +89,13 @@ class TemplateTask extends BakeTask
     public $noTemplateActions = ['delete'];
 
     /**
+     * Maximal Index Columns
+     *
+     * @var integer
+     */
+    public $maxIndexColumns = 7;
+
+    /**
      * AssociationFilter utility
      *
      * @var AssociationFilter
@@ -139,6 +146,9 @@ class TemplateTask extends BakeTask
         }
         if (!$action) {
             $action = $this->template;
+        }
+        if (!empty($this->params['index-columns'])) {
+            $this->maxIndexColumns = (int) $this->params['index-columns'];
         }
         if ($action) {
             return $this->bake($action, true);
@@ -402,9 +412,14 @@ class TemplateTask extends BakeTask
             return false;
         }
 
+        if ($action === "index") {
+            $this->BakeTemplate->set('indexColumns', $this->maxIndexColumns);
+        }
+
         $this->BakeTemplate->set('action', $action);
         $this->BakeTemplate->set('plugin', $this->plugin);
         $this->BakeTemplate->set($vars);
+
         return $this->BakeTemplate->generate("Template/$action");
     }
 
@@ -429,6 +444,8 @@ class TemplateTask extends BakeTask
             'help' => 'The controller name if you have a controller that does not follow conventions.'
         ])->addOption('prefix', [
             'help' => 'The routing prefix to generate views for.',
+        ])->addOption('index-columns', [
+            'help' => 'Limit for the number of index columns (Default: 7)'
         ])->addSubcommand('all', [
             'help' => '[optional] Bake all CRUD action views for all controllers. Requires models and controllers to exist.'
         ]);
