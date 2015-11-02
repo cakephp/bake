@@ -211,7 +211,7 @@ class BakeShell extends Shell
      * Quickly bake the MVC
      *
      * @param string|null $name Name.
-     * @return void
+     * @return bool
      */
     public function all($name = null)
     {
