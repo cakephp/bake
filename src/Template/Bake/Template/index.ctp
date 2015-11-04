@@ -19,6 +19,12 @@ $fields = collection($fields)
         return !in_array($schema->columnType($field), ['binary', 'text']);
     })
     ->take(7);
+
+if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
+    $fields = $fields->reject(function ($field) {
+        return $field === 'lft' || $field === 'rght';
+    });
+}
 %>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
