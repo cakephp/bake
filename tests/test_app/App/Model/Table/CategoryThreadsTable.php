@@ -38,5 +38,6 @@ class CategoryThreadsTable extends Table
             'foreignKey' => 'parent_id'
             ]
         );
+        $this->addBehavior('Tree');
     }
 }

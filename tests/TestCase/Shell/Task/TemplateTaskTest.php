@@ -442,6 +442,43 @@ class TemplateTaskTest extends TestCase
     }
 
     /**
+     * Ensure that models in a tree don't include form fields for lft/rght
+     *
+     * @return void
+     */
+    public function testBakeTreeNoLftOrRght()
+    {
+        $this->Task->controllerName = 'CategoryThreads';
+        $this->Task->modelName = 'Bake\Test\App\Model\Table\CategoryThreadsTable';
+
+        $this->Task->expects($this->at(0))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath(APP . 'Template/CategoryThreads/add.ctp'),
+                $this->logicalNot(
+                    $this->logicalAnd(
+                        $this->stringContains('rght'),
+                        $this->stringContains('lft')
+                    )
+                )
+            );
+        $this->Task->expects($this->at(1))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath(APP . 'Template/CategoryThreads/index.ctp'),
+                $this->logicalNot(
+                    $this->logicalAnd(
+                        $this->stringContains('rght'),
+                        $this->stringContains('lft')
+                    )
+                )
+            );
+
+        $this->Task->bake('add', true);
+        $this->Task->bake('index', true);
+    }
+
+    /**
      * Ensure that models associated with themselves do not have action
      * links generated.
      *
@@ -459,7 +496,9 @@ class TemplateTaskTest extends TestCase
                 $this->logicalNot(
                     $this->logicalAnd(
                         $this->stringContains('New Parent Category Thread'),
-                        $this->stringContains('List Parent Category Threads')
+                        $this->stringContains('List Parent Category Threads'),
+                        $this->stringContains('rght'),
+                        $this->stringContains('lft')
                     )
                 )
             );
