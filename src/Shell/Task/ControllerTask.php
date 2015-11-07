@@ -97,9 +97,9 @@ class ControllerTask extends BakeTask
         $helpers = $this->getHelpers();
         $components = $this->getComponents();
 
-        $prefix = '';
-        if (isset($this->params['prefix'])) {
-            $prefix = '\\' . $this->_camelize($this->params['prefix']);
+        $prefix = $this->_getPrefix();
+        if ($prefix) {
+            $prefix = '\\' . str_replace('/', '\\', $prefix);
         }
 
         $namespace = Configure::read('App.namespace');
@@ -173,21 +173,6 @@ class ControllerTask extends BakeTask
     }
 
     /**
-     * Gets the path for output. Checks the plugin property
-     * and returns the correct path.
-     *
-     * @return string Path to output.
-     */
-    public function getPath()
-    {
-        $path = parent::getPath();
-        if (!empty($this->params['prefix'])) {
-            $path .= $this->_camelize($this->params['prefix']) . DS;
-        }
-        return $path;
-    }
-
-    /**
      * Assembles and writes a unit test file
      *
      * @param string $className Controller class name
@@ -200,8 +185,9 @@ class ControllerTask extends BakeTask
         }
         $this->Test->plugin = $this->plugin;
         $this->Test->connection = $this->connection;
-        if (!empty($this->params['prefix'])) {
-            $className = $this->_camelize($this->params['prefix']) . '\\' . $className;
+        $prefix = $this->_getPrefix();
+        if ($prefix) {
+            $className = str_replace('/', '\\', $prefix) . '\\' . $className;
         }
         return $this->Test->bake('Controller', $className);
     }

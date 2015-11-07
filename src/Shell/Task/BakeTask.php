@@ -77,6 +77,23 @@ class BakeTask extends Shell
     }
 
     /**
+     * Get the prefix name.
+     *
+     * Handles camelcasing each namespace in the prefix path.
+     *
+     * @return string The inflected prefix path.
+     */
+    protected function _getPrefix()
+    {
+        $prefix = $this->param('prefix');
+        if (!$prefix) {
+            return '';
+        }
+        $parts = explode('/', $prefix);
+        return implode('/', array_map([$this, '_camelize'], $parts));
+    }
+
+    /**
      * Gets the path for output. Checks the plugin property
      * and returns the correct path.
      *
@@ -87,6 +104,10 @@ class BakeTask extends Shell
         $path = APP . $this->pathFragment;
         if (isset($this->plugin)) {
             $path = $this->_pluginPath($this->plugin) . 'src/' . $this->pathFragment;
+        }
+        $prefix = $this->_getPrefix();
+        if ($prefix) {
+            $path .= $prefix . DS;
         }
         return str_replace('/', DS, $path);
     }

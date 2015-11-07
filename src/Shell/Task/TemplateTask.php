@@ -106,23 +106,6 @@ class TemplateTask extends BakeTask
     }
 
     /**
-     * Get the prefix name.
-     *
-     * Handles camelcasing each namespace in the prefix path.
-     *
-     * @return string The inflected prefix path.
-     */
-    protected function _getPrefix()
-    {
-        $prefix = $this->param('prefix');
-        if (!$prefix) {
-            return '';
-        }
-        $parts = explode('/', $prefix);
-        return implode('/', array_map([$this, '_camelize'], $parts));
-    }
-
-    /**
      * Execution method always used for tasks
      *
      * @param string|null $name The name of the controller to bake views for.
@@ -204,10 +187,10 @@ class TemplateTask extends BakeTask
         $this->controllerName = $controller;
 
         $plugin = $this->param('plugin');
-        $prefix = $this->_getPrefix('prefix');
         if ($plugin) {
             $plugin .= '.';
         }
+        $prefix = $this->_getPrefix();
         if ($prefix) {
             $prefix .= '/';
         }
@@ -222,10 +205,6 @@ class TemplateTask extends BakeTask
     public function getPath()
     {
         $path = parent::getPath();
-        $prefix = $this->_getPrefix();
-        if ($prefix) {
-            $path .= $prefix . DS;
-        }
         $path .= $this->controllerName . DS;
         return $path;
     }
