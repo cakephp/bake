@@ -186,12 +186,13 @@ class TemplateTask extends BakeTask
         }
         $this->controllerName = $controller;
 
-        $plugin = $prefix = null;
-        if (!empty($this->params['plugin'])) {
-            $plugin = $this->params['plugin'] . '.';
+        $plugin = $this->param('plugin');
+        if ($plugin) {
+            $plugin .= '.';
         }
-        if (!empty($this->params['prefix'])) {
-            $prefix = $this->params['prefix'] . '/';
+        $prefix = $this->_getPrefix();
+        if ($prefix) {
+            $prefix .= '/';
         }
         $this->controllerClass = App::className($plugin . $prefix . $controller, 'Controller', 'Controller');
     }
@@ -204,9 +205,6 @@ class TemplateTask extends BakeTask
     public function getPath()
     {
         $path = parent::getPath();
-        if (!empty($this->params['prefix'])) {
-            $path .= $this->_camelize($this->params['prefix']) . DS;
-        }
         $path .= $this->controllerName . DS;
         return $path;
     }

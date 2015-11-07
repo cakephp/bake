@@ -229,6 +229,29 @@ class ControllerTaskTest extends TestCase
     }
 
     /**
+     * test bake actions with nested prefixes.
+     *
+     * @return void
+     */
+    public function testBakePrefixNested()
+    {
+        $this->Task->params['prefix'] = 'admin/management';
+
+        $filename = $this->_normalizePath(APP . 'Controller/Admin/Management/BakeArticlesController.php');
+        $this->Task->expects($this->at(1))
+            ->method('createFile')
+            ->with($filename, $this->anything());
+
+        $this->Task->Test->expects($this->at(0))
+            ->method('bake')
+            ->with('Controller', 'Admin\Management\BakeArticles');
+        $result = $this->Task->bake('BakeArticles');
+
+        $this->assertTextContains('namespace App\Controller\Admin\Management;', $result);
+        $this->assertTextContains('use App\Controller\AppController;', $result);
+    }
+
+    /**
      * test bake() with a -plugin param
      *
      * @return void
