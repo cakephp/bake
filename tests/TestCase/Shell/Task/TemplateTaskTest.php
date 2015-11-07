@@ -159,6 +159,22 @@ class TemplateTaskTest extends TestCase
     }
 
     /**
+     * Test controller method with nested prefixes.
+     *
+     * @return void
+     */
+    public function testControllerPrefixNested()
+    {
+        $this->Task->params['prefix'] = 'Admin/Management';
+        $this->Task->controller('Posts');
+        $this->assertEquals('Posts', $this->Task->controllerName);
+        $this->assertEquals(
+            'Bake\Test\App\Controller\Admin\Management\PostsController',
+            $this->Task->controllerClass
+        );
+    }
+
+    /**
      * test controller with a non-conventional controller name
      *
      * @return void
@@ -217,6 +233,14 @@ class TemplateTaskTest extends TestCase
         $this->Task->params['prefix'] = 'admin';
         $result = $this->Task->getPath();
         $this->assertPathEquals(APP . 'Template/Admin/Posts/', $result);
+
+        $this->Task->params['prefix'] = 'admin/management';
+        $result = $this->Task->getPath();
+        $this->assertPathEquals(APP . 'Template/Admin/Management/Posts/', $result);
+
+        $this->Task->params['prefix'] = 'Admin/management';
+        $result = $this->Task->getPath();
+        $this->assertPathEquals(APP . 'Template/Admin/Management/Posts/', $result);
     }
 
     /**
