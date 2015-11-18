@@ -84,12 +84,12 @@ $primaryKeys = join($primaryKeys, ', ');
 <% if ($groupedFields['string']) : %>
 <% foreach ($groupedFields['string'] as $field) : %>
 <% if (isset($associationFields[$field])) :
-    $details = $associationFields[$field];
-    $assocPrimaryKeys = [];
-    foreach ($details['primaryKey'] as $assocPrimaryKeyComponent) {
-        $assocPrimaryKeys[] = '$' . $singularVar . '->' . $details['property'] . '->' . $assocPrimaryKeyComponent;
-    }
-    $assocPrimaryKeys = join($assocPrimaryKeys, ', ');
+        $details = $associationFields[$field];
+        $assocPrimaryKeys = [];
+        foreach ($details['primaryKey'] as $assocPrimaryKeyComponent) {
+            $assocPrimaryKeys[] = '$' . $singularVar . '->' . $details['property'] . '->' . $assocPrimaryKeyComponent;
+        }
+        $assocPrimaryKeys = join($assocPrimaryKeys, ', ');
 %>
         <tr>
             <th><?= __('<%= Inflector::humanize($details['property']) %>') ?></th>
