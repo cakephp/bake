@@ -23,7 +23,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 
 /**
- * Task class for creating and updating view files.
+ * Task class for creating and updating view template files.
  *
  */
 class TemplateTask extends BakeTask
@@ -377,7 +377,7 @@ class TemplateTask extends BakeTask
             $this->err("<warning>No generated content for '{$action}.ctp', not generating template.</warning>");
             return false;
         }
-        $this->out("\n" . sprintf('Baking `%s` view file...', $action), 1, Shell::QUIET);
+        $this->out("\n" . sprintf('Baking `%s` view template file...', $action), 1, Shell::QUIET);
         $path = $this->getPath();
         $filename = $path . Inflector::underscore($action) . '.ctp';
         $this->createFile($filename, $content);
