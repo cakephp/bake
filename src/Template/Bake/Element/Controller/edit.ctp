@@ -21,13 +21,29 @@ $compact = ["'" . $singularName . "'"];
     /**
      * Edit method
      *
-     * @param string|null $id <%= $singularHumanName %> id.
+<%
+$primaryKeys = (array)$modelObj->primaryKey();
+foreach ($primaryKeys as $primaryKeyComponent) { %>
+     * @param string|null <%= $primaryKeyComponent %> <%= $singularHumanName %> primaryKey.
+<% } %>
      * @return void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
+<%
+$actionArguments = [];
+foreach ($primaryKeys as $primaryKeyComponent) {
+    $actionArguments[] = '$' . $primaryKeyComponent . ' = null';
+}
+%>
+    public function edit(<%= join($actionArguments, ', ') %>)
     {
-        $<%= $singularName %> = $this-><%= $currentModelName %>->get($id, [
+        <%
+        $params = [];
+        foreach ($primaryKeys as $primaryKeyComponent) {
+            $params[] = '$' . $primaryKeyComponent;
+        }
+        %>
+        $<%= $singularName %> = $this-><%= $currentModelName %>->get([<%= join($params, ', ') %>], [
             'contain' => [<%= $this->Bake->stringifyList($belongsToMany, ['indent' => false]) %>]
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
