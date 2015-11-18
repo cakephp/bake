@@ -85,13 +85,16 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
                 }
             }
         }
-
-        $pk = '$' . $singularVar . '->' . $primaryKey[0];
+        $primaryKeys = [];
+        foreach ($primaryKey as $primaryKeyComponent) {
+            $primaryKeys[] = '$' . $singularVar . '->' . $primaryKeyComponent;
+        }
+        $primaryKeys = join($primaryKeys, ', ');
 %>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', <%= $pk %>]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', <%= $pk %>]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', <%= $pk %>], ['confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]) ?>
+                    <?= $this->Html->link(__('View'), ['action' => 'view', <%= $primaryKeys %>]) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', <%= $primaryKeys %>]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', <%= $primaryKeys %>], ['confirm' => __('Are you sure you want to delete # {0}?', join([<%= $primaryKeys %>], ' / '))]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
