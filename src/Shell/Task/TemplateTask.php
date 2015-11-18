@@ -108,7 +108,7 @@ class TemplateTask extends BakeTask
     /**
      * Execution method always used for tasks
      *
-     * @param string|null $name The name of the controller to bake views for.
+     * @param string|null $name The name of the controller to bake view templates for.
      * @param string|null $template The template to bake with.
      * @param string|null $action The action to bake with.
      * @return mixed
@@ -118,7 +118,7 @@ class TemplateTask extends BakeTask
         parent::main();
 
         if (empty($name)) {
-            $this->out('Possible tables to bake views for based on your current database:');
+            $this->out('Possible tables to bake view templates for based on your current database:');
             $this->Model->connection = $this->connection;
             foreach ($this->Model->listUnskipped() as $table) {
                 $this->out('- ' . $this->_camelize($table));
@@ -198,7 +198,7 @@ class TemplateTask extends BakeTask
     }
 
     /**
-     * Get the path base for views.
+     * Get the path base for view templates.
      *
      * @return string
      */
@@ -210,7 +210,7 @@ class TemplateTask extends BakeTask
     }
 
     /**
-     * Get a list of actions that can / should have views baked for them.
+     * Get a list of actions that can / should have view templates baked for them.
      *
      * @return array Array of action names that should be baked
      */
@@ -243,7 +243,7 @@ class TemplateTask extends BakeTask
     }
 
     /**
-     * Bake All views for All controllers.
+     * Bake All view templates for all controller actions.
      *
      * @return void
      */
