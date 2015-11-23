@@ -37,7 +37,7 @@ foreach ($primaryKeys as $primaryKeyComponent) {
 %>
     public function edit(<%= join($actionArguments, ', ') %>)
     {
-        <%
+        <%- 
         $params = [];
         foreach ($primaryKeys as $primaryKeyComponent) {
             $params[] = '$' . $primaryKeyComponent;
