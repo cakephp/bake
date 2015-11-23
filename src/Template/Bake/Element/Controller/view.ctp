@@ -40,7 +40,7 @@ foreach ($primaryKeys as $primaryKeyComponent) {
 %>
     public function view(<%= join($actionArguments, ', ') %>)
     {
-        <%
+        <%- 
         $params = [];
         foreach ($primaryKeys as $primaryKeyComponent) {
             $params[] = '$' . $primaryKeyComponent;
