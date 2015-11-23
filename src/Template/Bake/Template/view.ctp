@@ -146,7 +146,7 @@ foreach ($relations as $alias => $details):
         $relationsPrimaryKeys[] = '$' . $otherSingularVar . '->' . $relationsPrimaryKeyComponent;
     }
     $relationsPrimaryKeys = join($relationsPrimaryKeys, ', ');
-    %>
+%>
     <div class="related">
         <h4><?= __('Related <%= $otherPluralHumanName %>') ?></h4>
         <?php if (!empty($<%= $singularVar %>-><%= $details['property'] %>)): ?>
