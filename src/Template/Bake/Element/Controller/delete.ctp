@@ -34,7 +34,7 @@ foreach ($primaryKeys as $primaryKeyComponent) {
     public function delete(<%= join($actionArguments, ', ') %>)
     {
         $this->request->allowMethod(['post', 'delete']);
-        <%
+        <%- 
         $params = [];
         foreach ($primaryKeys as $primaryKeyComponent) {
             $params[] = '$' . $primaryKeyComponent;
