@@ -19,6 +19,7 @@
      *
      * @return void
      */
-    public function logout() {
+    public function logout()
+    {
         return $this->redirect($this->Auth->logout());
     }
