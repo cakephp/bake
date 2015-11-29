@@ -20,6 +20,7 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
+use Cake\Utility\Inflector;
 
 /**
  * The Plugin Task handles creating an empty plugin, ready to be used
@@ -165,6 +166,7 @@ class PluginTask extends BakeTask
             'package' => $package,
             'namespace' => $namespace,
             'plugin' => $pluginName,
+            'routePath' => Inflector::dasherize($pluginName),
             'path' => $path,
             'root' => ROOT,
         ]);
