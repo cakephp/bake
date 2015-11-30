@@ -17,6 +17,7 @@ namespace Bake\Test\TestCase\View;
 use Bake\View\BakeView;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Event\Event;
 use Cake\Network\Request;
 use Cake\Network\Response;
 use Cake\TestSuite\StringCompareTrait;
@@ -132,5 +133,30 @@ class BakeViewTest extends TestCase
     {
         $result = $this->View->render('leading_whitespace');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * Verify that the proper events are dispatched on template render
+     *
+     * @return void
+     */
+    public function testCustomRenderEvents()
+    {
+        $this->View->set('test', 'success');
+        $result = $this->View->render('Custom' . DS . 'file');
+        $this->assertSame(
+            'success',
+            $result
+        );
+
+        $this->View->set('test', 'success');
+        $this->View->eventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
+            $event->subject->set('test', 'pass');
+        });
+        $result = $this->View->render('Custom' . DS . 'file');
+        $this->assertSame(
+            'pass',
+            $result
+        );
     }
 }
