@@ -85,14 +85,6 @@ class ModelTask extends BakeTask
         parent::main();
         $name = $this->_getName($name);
 
-        if (!empty($this->connection)) {
-            $connection = ConnectionManager::get($this->connection);
-            $config = $connection->config();
-            if (isset($config['prefix'])) {
-                $this->tablePrefix = $config['prefix'];
-            }
-        }
-
         if (empty($name)) {
             $this->out('Choose a model to bake from the following:');
             foreach ($this->listUnskipped() as $table) {
