@@ -85,6 +85,14 @@ class ModelTask extends BakeTask
         parent::main();
         $name = $this->_getName($name);
 
+        if (!empty($this->connection)) {
+            $connection = ConnectionManager::get($this->connection);
+            $config = $connection->config();
+            if (isset($config['prefix'])) {
+                $this->tablePrefix = $config['prefix'];
+            }
+        }
+
         if (empty($name)) {
             $this->out('Choose a model to bake from the following:');
             foreach ($this->listUnskipped() as $table) {
@@ -181,7 +189,7 @@ class ModelTask extends BakeTask
 
         return TableRegistry::get($className, [
             'name' => $className,
-            'table' => $table,
+            'table' => $this->tablePrefix . $table,
             'connection' => ConnectionManager::get($this->connection)
         ]);
     }
@@ -317,7 +325,10 @@ class ModelTask extends BakeTask
                 if (!isset($constraintInfo['references'])) {
                     continue;
                 }
-
+                $length = strlen($this->tablePrefix);
+                if ($length > 0 && substr($constraintInfo['references'][0], 0, $length) === $this->tablePrefix) {
+                    return substr($constraintInfo['references'][0], $length);
+                }
                 return $constraintInfo['references'][0];
             }
         }
