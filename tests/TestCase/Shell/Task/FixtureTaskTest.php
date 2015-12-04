@@ -266,11 +266,11 @@ class FixtureTaskTest extends TestCase
 
         $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/ArticlesFixture.php');
         $this->Task->expects($this->at(0))->method('createFile')
-            ->with($filename, $this->stringContains("public \$import = ['model' => 'Articles'"));
+            ->with($filename, $this->stringContains("public \$import = ['table' => 'articles'"));
 
         $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/CommentsFixture.php');
         $this->Task->expects($this->at(1))->method('createFile')
-            ->with($filename, $this->stringContains("public \$import = ['model' => 'Comments'"));
+            ->with($filename, $this->stringContains("public \$import = ['table' => 'comments'"));
         $this->Task->expects($this->exactly(2))->method('createFile');
 
         $this->Task->all();
@@ -317,26 +317,6 @@ class FixtureTaskTest extends TestCase
     }
 
     /**
-     * test main() with importing records
-     *
-     * @return void
-     */
-    public function testMainImportRecords()
-    {
-        $this->Task->connection = 'test';
-        $this->Task->params = ['import-records' => true];
-
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with($this->anything(), $this->logicalAnd(
-                $this->stringContains("public \$import = ['records' => true, 'connection' => 'test'];"),
-                $this->logicalNot($this->stringContains('public $records'))
-            ));
-
-        $this->Task->main('Article');
-    }
-
-    /**
      * test main() with importing schema.
      *
      * @return void
@@ -344,15 +324,15 @@ class FixtureTaskTest extends TestCase
     public function testMainImportSchema()
     {
         $this->Task->connection = 'test';
-        $this->Task->params = ['schema' => true, 'import-records' => true];
+        $this->Task->params = ['schema' => true];
 
-        $importString = "public \$import = ['model' => 'Article', 'records' => true, 'connection' => 'test'];";
+        $importString = "public \$import = ['table' => 'comments', 'connection' => 'test'];";
         $this->Task->expects($this->once())
             ->method('createFile')
             ->with($this->anything(), $this->logicalAnd(
                 $this->stringContains($importString),
                 $this->logicalNot($this->stringContains('public $fields')),
-                $this->logicalNot($this->stringContains('public $records'))
+                $this->stringContains('public $records')
             ));
         $this->Task->bake('Article', 'comments');
     }

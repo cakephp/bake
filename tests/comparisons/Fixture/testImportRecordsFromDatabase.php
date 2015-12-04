@@ -15,7 +15,7 @@ class UsersFixture extends TestFixture
      *
      * @var array
      */
-    public $import = ['model' => 'Users', 'connection' => 'test'];
+    public $import = ['table' => 'users', 'connection' => 'test'];
 
     /**
      * Records
