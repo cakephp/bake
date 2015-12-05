@@ -124,7 +124,11 @@ class BakeView extends View
     public function render($view = null, $layout = null)
     {
         $viewFileName = $this->_getViewFileName($view);
-        $templateEventName = str_replace(['.ctp', DS], ['', '.'], explode('Template/Bake/', $viewFileName)[1]);
+        $templateEventName = str_replace(
+            ['.ctp', DS],
+            ['', '.'],
+            explode('Template' . DS . 'Bake' . DS, $viewFileName)[1]
+        );
 
         $this->_currentType = static::TYPE_VIEW;
         $this->dispatchEvent('View.beforeRender', [$viewFileName]);
