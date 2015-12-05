@@ -82,9 +82,6 @@ class FixtureTask extends BakeTask
             ' Used with --count and --conditions to limit which records are added to the fixture.',
             'short' => 'r',
             'boolean' => true
-        ])->addOption('import-records', [
-            'help' => 'Set to true to import records from the live table when the generated fixture is used.',
-            'boolean' => true
         ])->addOption('conditions', [
             'help' => 'The SQL snippet to use when importing records.',
             'default' => '1=1',
@@ -158,10 +155,7 @@ class FixtureTask extends BakeTask
         $importBits = [];
         if (!empty($this->params['schema'])) {
             $modelImport = true;
-            $importBits[] = "'model' => '{$model}'";
-        }
-        if (!empty($this->params['import-records'])) {
-            $importBits[] = "'records' => true";
+            $importBits[] = "'table' => '{$useTable}'";
         }
         if (!empty($importBits) && $this->connection !== 'default') {
             $importBits[] = "'connection' => '{$this->connection}'";
@@ -189,14 +183,14 @@ class FixtureTask extends BakeTask
             $schema = $this->_generateSchema($data);
         }
 
-        if (empty($this->params['records']) && empty($this->params['import-records'])) {
+        if (empty($this->params['records'])) {
             $recordCount = 1;
             if (isset($this->params['count'])) {
                 $recordCount = $this->params['count'];
             }
             $records = $this->_makeRecordString($this->_generateRecords($data, $recordCount));
         }
-        if (!empty($this->params['records']) && empty($this->params['import-records'])) {
+        if (!empty($this->params['records'])) {
             $records = $this->_makeRecordString($this->_getRecordsFromTable($model, $useTable));
         }
         return $this->generateFixtureFile($model, compact('records', 'table', 'schema', 'import'));
