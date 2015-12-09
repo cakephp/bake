@@ -813,6 +813,35 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * Tests the getRules with unique keys.
+     *
+     * Multi-column constraints are ignored as they would
+     * require a break in compatibility.
+     *
+     * @return void
+     */
+    public function testGetRulesUniqueKeys()
+    {
+        $model = TableRegistry::get('BakeArticles');
+        $model->schema()->addConstraint('unique_title', [
+            'type' => 'unique',
+            'columns' => ['title']
+        ]);
+        $model->schema()->addConstraint('ignored_constraint', [
+            'type' => 'unique',
+            'columns' => ['title', 'bake_user_id']
+        ]);
+
+        $result = $this->Task->getRules($model, []);
+        $expected = [
+            'title' => [
+                'name' => 'isUnique'
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * test non interactive doActsAs
      *
      * @return void
