@@ -90,8 +90,12 @@ class ControllerTask extends BakeTask
         $this->out("\n" . sprintf('Baking controller class for %s...', $controllerName), 1, Shell::QUIET);
 
         $actions = [];
-        if (empty($this->params['no-actions'])) {
+        if (!$this->param('no-actions') && !$this->param('actions')) {
             $actions = ['index', 'view', 'add', 'edit', 'delete'];
+        }
+        if ($this->param('actions')) {
+            $actions = array_map('trim', explode(',', $this->param('actions')));
+            $actions = array_filter($actions);
         }
 
         $helpers = $this->getHelpers();
@@ -251,6 +255,9 @@ class ControllerTask extends BakeTask
             'help' => 'The comma separated list of helpers to use.'
         ])->addOption('prefix', [
             'help' => 'The namespace/routing prefix to use.'
+        ])->addOption('actions', [
+            'help' => 'The comma separated list of actions to generate. ' .
+                      'You can include custom methods provided by your template set here.'
         ])->addOption('no-test', [
             'boolean' => true,
             'help' => 'Do not generate a test skeleton.'

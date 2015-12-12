@@ -170,6 +170,25 @@ class ControllerTaskTest extends TestCase
      *
      * @return void
      */
+    public function testBakeActionsOption()
+    {
+        $this->Task->expects($this->any())
+            ->method('createFile')
+            ->will($this->returnValue(true));
+
+        $this->Task->params['actions'] = 'index,  view,';
+        $this->Task->params['helpers'] = 'Html,Time';
+        $this->Task->params['components'] = 'Csrf, Auth';
+
+        $result = $this->Task->bake('BakeArticles');
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test the bake method
+     *
+     * @return void
+     */
     public function testBakeNoActions()
     {
         $this->Task->expects($this->any())
