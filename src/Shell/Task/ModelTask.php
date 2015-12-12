@@ -650,7 +650,8 @@ class ModelTask extends BakeTask
         if (!empty($this->params['no-rules'])) {
             return [];
         }
-        $fields = $model->schema()->columns();
+        $schema = $model->schema();
+        $fields = $schema->columns();
         if (empty($fields)) {
             return [];
         }
@@ -660,6 +661,16 @@ class ModelTask extends BakeTask
             if (in_array($fieldName, ['username', 'email', 'login'])) {
                 $rules[$fieldName] = ['name' => 'isUnique'];
             }
+        }
+        foreach ($schema->constraints() as $name) {
+            $constraint = $schema->constraint($name);
+            if ($constraint['type'] !== SchemaTable::CONSTRAINT_UNIQUE) {
+                continue;
+            }
+            if (count($constraint['columns']) > 1) {
+                continue;
+            }
+            $rules[$constraint['columns'][0]] = ['name' => 'isUnique'];
         }
 
         if (empty($associations['belongsTo'])) {
