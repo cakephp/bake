@@ -40,7 +40,7 @@ class BakeArticlesTable extends Table
 
         $validator
             ->requirePresence('name', 'create')
-            ->notEmpty('name');
+            ->notBlank('name');
 
         $validator
             ->add('email', 'valid', ['rule' => 'email'])
