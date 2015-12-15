@@ -47,7 +47,7 @@ class FixtureTask extends BakeTask
     public function getPath()
     {
         $dir = 'Fixture/';
-        $path = ROOT . DS . 'tests' . DS . $dir;
+        $path = defined('TESTS') ? TESTS . $dir : ROOT . DS . 'tests' . DS . $dir;
         if (isset($this->plugin)) {
             $path = $this->_pluginPath($this->plugin) . 'tests/' . $dir;
         }
