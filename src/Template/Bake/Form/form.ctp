@@ -26,7 +26,7 @@ use Cake\Validation\Validator;
 class <%= $name %>Form extends Form
 {
     /**
-     * Builds the schema for the modeless form
+     * Builds the schema for the modelless form
      *
      * @param Schema $schema From schema
      * @return $this
