@@ -987,7 +987,7 @@ class ModelTaskTest extends TestCase
     }
 
     /**
-     * test baking
+     * test baking with table config and ensure that prefixes are ignored.
      *
      * @return void
      */
@@ -1000,6 +1000,12 @@ class ModelTaskTest extends TestCase
             'behaviors' => ['Timestamp' => ''],
             'connection' => 'website',
         ];
+
+        $this->Task->params['prefix'] = 'Admin';
+        $this->Task->expects($this->once())
+            ->method('createFile')
+            ->with($this->stringContains('App/Model/Table/BakeArticlesTable.php'));
+
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->bakeTable($model, $config);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
