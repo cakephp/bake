@@ -43,8 +43,9 @@ before_script:
 script:
   - sh -c "if [ '$RUN_TESTS' = '1' ]; then phpunit --stderr; fi"
   - sh -c "if [ '$RUN_CS' = '1' ]; then ./vendor/bin/phpcs -n -p --extensions=php --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests; fi"
-  - sh -c "if [ '$RUN_COVERAGE' = '1' ]; then phpunit --stderr --coverage-clover build/logs/clover.xml; fi"
-  - sh -c "if [ '$RUN_COVERAGE' = '1' ]; then php vendor/bin/coveralls -c .coveralls.yml -v; fi"
+
+  - sh -c "if [ '$COVERALLS' = '1' ]; then phpunit --coverage-clover build/logs/clover.xml; fi"
+  - sh -c "if [ '$COVERALLS' = '1' ]; then vendor/bin/coveralls -c .coveralls.yml -v; fi"
 
 notifications:
   email: false
