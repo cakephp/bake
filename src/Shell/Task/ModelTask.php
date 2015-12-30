@@ -319,15 +319,18 @@ class ModelTask extends BakeTask
         $tableName = $schema->name();
         $foreignKey = $this->_modelKey($tableName);
 
-        foreach ($this->listAll() as $otherTable) {
-            $otherModel = $this->getTableObject($this->_camelize($otherTable), $otherTable);
+        $tables = $this->listAll();
+        foreach ($tables as $otherTableName) {
+            $otherModel = $this->getTableObject($this->_camelize($otherTableName), $otherTableName);
             $otherSchema = $otherModel->schema();
 
-            // Exclude habtm join tables.
-            $pattern = '/_' . preg_quote($tableName, '/') . '|' . preg_quote($tableName, '/') . '_/';
-            $possibleJoinTable = preg_match($pattern, $otherTable);
-            if ($possibleJoinTable) {
-                continue;
+            $pregTableName = preg_quote($tableName, '/');
+            $pregPattern = "/^{$pregTableName}_|_{$pregTableName}$/";
+            if (preg_match($pregPattern, $otherTableName) === 1) {
+                $possibleHABTMTargetTable = preg_replace($pregPattern, '', $otherTableName);
+                if (in_array($possibleHABTMTargetTable, $tables)) {
+                    continue;
+                }
             }
 
             foreach ($otherSchema->columns() as $fieldName) {
@@ -337,7 +340,7 @@ class ModelTask extends BakeTask
                         'alias' => $otherModel->alias(),
                         'foreignKey' => $fieldName
                     ];
-                } elseif ($otherTable === $tableName && $fieldName === 'parent_id') {
+                } elseif ($otherTableName === $tableName && $fieldName === 'parent_id') {
                     $className = ($this->plugin) ? $this->plugin . '.' . $model->alias() : $model->alias();
                     $assoc = [
                         'alias' => 'Child' . $model->alias(),
@@ -370,15 +373,15 @@ class ModelTask extends BakeTask
         $foreignKey = $this->_modelKey($tableName);
 
         $tables = $this->listAll();
-        foreach ($tables as $otherTable) {
+        foreach ($tables as $otherTableName) {
             $assocTable = null;
-            $offset = strpos($otherTable, $tableName . '_');
-            $otherOffset = strpos($otherTable, '_' . $tableName);
+            $offset = strpos($otherTableName, $tableName . '_');
+            $otherOffset = strpos($otherTableName, '_' . $tableName);
 
             if ($offset !== false) {
-                $assocTable = substr($otherTable, strlen($tableName . '_'));
+                $assocTable = substr($otherTableName, strlen($tableName . '_'));
             } elseif ($otherOffset !== false) {
-                $assocTable = substr($otherTable, 0, $otherOffset);
+                $assocTable = substr($otherTableName, 0, $otherOffset);
             }
             if ($assocTable && in_array($assocTable, $tables)) {
                 $habtmName = $this->_camelize($assocTable);
@@ -386,7 +389,7 @@ class ModelTask extends BakeTask
                     'alias' => $habtmName,
                     'foreignKey' => $foreignKey,
                     'targetForeignKey' => $this->_modelKey($habtmName),
-                    'joinTable' => $otherTable
+                    'joinTable' => $otherTableName
                 ];
                 if ($assoc && $this->plugin) {
                     $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
