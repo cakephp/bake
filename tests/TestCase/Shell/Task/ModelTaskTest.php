@@ -1441,4 +1441,65 @@ class ModelTaskTest extends TestCase
         $result = $this->Task->findTableReferencedBy($schema, 'receiver_id');
         $this->assertEquals('users', $result);
     }
+
+    /**
+     * test checking if associations where built correctly for categories.
+     *
+     * @return void
+     */
+    public function testBakeAssociationDetectionCategoriesTable()
+    {
+        $model = TableRegistry::get('Categories');
+        $result = $this->Task->bakeTable($model);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test checking if associations where built correctly for categories_products.
+     *
+     * @return void
+     */
+    public function testBakeAssociationDetectionCategoriesProductsTable()
+    {
+        $model = TableRegistry::get('CategoriesProducts');
+        $result = $this->Task->bakeTable($model);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test checking if associations where built correctly for old_products.
+     *
+     * @return void
+     */
+    public function testBakeAssociationDetectionOldProductsTable()
+    {
+        $model = TableRegistry::get('OldProducts');
+        $result = $this->Task->bakeTable($model);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test checking if associations where built correctly for product_versions.
+     *
+     * @return void
+     */
+    public function testBakeAssociationDetectionProductVersionsTable()
+    {
+        $model = TableRegistry::get('ProductVersions');
+        $result = $this->Task->bakeTable($model);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test checking if associations where built correctly for products.
+     *
+     * @return void
+     */
+    public function testBakeAssociationDetectionProductsTable()
+    {
+        $model = TableRegistry::get('Products');
+        $result = $this->Task->bakeTable($model);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
 }
