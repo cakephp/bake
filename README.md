@@ -23,7 +23,7 @@ You can find the documentation for bake [on the cookbook](http://book.cakephp.or
 
 ## License
 
-Copyright (c) 2015 Cake Software Foundation, Inc.
+Copyright (c) 2016 Cake Software Foundation, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
