@@ -30,7 +30,7 @@ class BakeArticlesController extends AppController
      *
      * @param string|null $id Bake Article id.
      * @return void
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
@@ -96,7 +96,7 @@ class BakeArticlesController extends AppController
      *
      * @param string|null $id Bake Article id.
      * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
