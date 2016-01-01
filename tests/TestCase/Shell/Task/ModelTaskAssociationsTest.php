@@ -124,8 +124,8 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionCategoriesTable()
     {
-        $model = TableRegistry::get('Categories');
-        $result = $this->Task->bakeTable($model, $this->Task->getTableObjectSetup('Categories')['data']);
+        $tableObjectSetup = $this->Task->getTableObjectSetup('Categories');
+        $result = $this->Task->bakeTable($tableObjectSetup['tableObject'], $tableObjectSetup['data']);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
     
@@ -136,8 +136,8 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionCategoriesProductsTable()
     {
-        $model = TableRegistry::get('CategoriesProducts');
-        $result = $this->Task->bakeTable($model, $this->Task->getTableObjectSetup('CategoriesProducts')['data']);
+        $tableObjectSetup = $this->Task->getTableObjectSetup('CategoriesProducts');
+        $result = $this->Task->bakeTable($tableObjectSetup['tableObject'], $tableObjectSetup['data']);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
     
@@ -148,8 +148,8 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionOldProductsTable()
     {
-        $model = TableRegistry::get('OldProducts');
-        $result = $this->Task->bakeTable($model, $this->Task->getTableObjectSetup('OldProducts')['data']);
+        $tableObjectSetup = $this->Task->getTableObjectSetup('OldProducts');
+        $result = $this->Task->bakeTable($tableObjectSetup['tableObject'], $tableObjectSetup['data']);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
     
@@ -160,8 +160,8 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionProductVersionsTable()
     {
-        $model = TableRegistry::get('ProductVersions');
-        $result = $this->Task->bakeTable($model, $this->Task->getTableObjectSetup('ProductVersions')['data']);
+        $tableObjectSetup = $this->Task->getTableObjectSetup('ProductVersions');
+        $result = $this->Task->bakeTable($tableObjectSetup['tableObject'], $tableObjectSetup['data']);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
     
@@ -172,8 +172,8 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionProductsTable()
     {
-        $model = TableRegistry::get('Products');
-        $result = $this->Task->bakeTable($model, $this->Task->getTableObjectSetup('Products')['data']);
+        $tableObjectSetup = $this->Task->getTableObjectSetup('Products');
+        $result = $this->Task->bakeTable($tableObjectSetup['tableObject'], $tableObjectSetup['data']);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 }
