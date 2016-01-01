@@ -1441,5 +1441,4 @@ class ModelTaskTest extends TestCase
         $result = $this->Task->findTableReferencedBy($schema, 'receiver_id');
         $this->assertEquals('users', $result);
     }
-
 }

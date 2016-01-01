@@ -176,5 +176,4 @@ class ModelTaskAssociationsTest extends TestCase
         $result = $this->Task->bakeTable($model, $this->Task->getTableObjectSetup('Products')['data']);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
-
 }
