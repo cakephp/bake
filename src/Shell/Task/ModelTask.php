@@ -104,37 +104,51 @@ class ModelTask extends BakeTask
      */
     public function bake($name)
     {
+        extract($this->getTableObjectSetup($name)); // $tableObject, $data
+        $this->bakeTable($tableObject, $data);
+        $this->bakeEntity($tableObject, $data);
+        $this->bakeFixture($tableObject->alias(), $tableObject->table());
+        $this->bakeTest($tableObject->alias());
+    }
+
+    /**
+     * Get table object setup for bake
+     *
+     * @param string $name The model name to generate.
+     * @return array
+     */
+    public function getTableObjectSetup($name)
+    {
         $table = $this->getTable($name);
-        $model = $this->getTableObject($name, $table);
+        $tableObject = $this->getTableObject($name, $table);
 
-        $associations = $this->getAssociations($model);
-        $this->applyAssociations($model, $associations);
+        $associations = $this->getAssociations($tableObject);
+        $this->applyAssociations($tableObject, $associations);
 
-        $primaryKey = $this->getPrimaryKey($model);
-        $displayField = $this->getDisplayField($model);
-        $propertySchema = $this->getEntityPropertySchema($model);
+        $primaryKey = $this->getPrimaryKey($tableObject);
+        $displayField = $this->getDisplayField($tableObject);
+        $propertySchema = $this->getEntityPropertySchema($tableObject);
         $fields = $this->getFields();
-        $validation = $this->getValidation($model, $associations);
-        $rulesChecker = $this->getRules($model, $associations);
-        $behaviors = $this->getBehaviors($model);
+        $validation = $this->getValidation($tableObject, $associations);
+        $rulesChecker = $this->getRules($tableObject, $associations);
+        $behaviors = $this->getBehaviors($tableObject);
         $connection = $this->connection;
 
-        $data = compact(
-            'associations',
-            'primaryKey',
-            'displayField',
-            'table',
-            'propertySchema',
-            'fields',
-            'validation',
-            'rulesChecker',
-            'behaviors',
-            'connection'
-        );
-        $this->bakeTable($model, $data);
-        $this->bakeEntity($model, $data);
-        $this->bakeFixture($model->alias(), $model->table());
-        $this->bakeTest($model->alias());
+        return [
+            'tableObject' => $tableObject,
+            'data' => compact(
+                'associations',
+                'primaryKey',
+                'displayField',
+                'table',
+                'propertySchema',
+                'fields',
+                'validation',
+                'rulesChecker',
+                'behaviors',
+                'connection'
+            ),
+        ];
     }
 
     /**
