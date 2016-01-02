@@ -109,6 +109,20 @@ class ModelTaskAssociationsTest extends TestCase
         parent::tearDown();
         unset($this->Task);
     }
+    
+    /**
+     * Compare bake table result with static comparison file
+     *
+     * @return void
+     */
+    protected function _compareBakeTableResult($name, $comparisonFile)
+    {
+        $table = $this->Task->getTable($name);
+        $tableObject = $this->Task->getTableObject($name, $table);
+        $data = $this->Task->getTableContext($tableObject, $table, $name);
+        $result = $this->Task->bakeTable($tableObject, $data);
+        $this->assertSameAsFile($comparisonFile . '.php', $result);
+    }
 
     /**
      * test checking if associations where built correctly for categories.
@@ -117,12 +131,7 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionCategoriesTable()
     {
-        $name = 'Categories';
-        $table = $this->Task->getTable($name);
-        $tableObject = $this->Task->getTableObject($name, $table);
-        $data = $this->Task->getTableContext($name);
-        $result = $this->Task->bakeTable($tableObject, $data);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+        $this->_compareBakeTableResult('Categories', __FUNCTION__);
     }
     
     /**
@@ -132,12 +141,7 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionCategoriesProductsTable()
     {
-        $name = 'CategoriesProducts';
-        $table = $this->Task->getTable($name);
-        $tableObject = $this->Task->getTableObject($name, $table);
-        $data = $this->Task->getTableContext($name);
-        $result = $this->Task->bakeTable($tableObject, $data);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+        $this->_compareBakeTableResult('CategoriesProducts', __FUNCTION__);
     }
     
     /**
@@ -147,12 +151,7 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionOldProductsTable()
     {
-        $name = 'OldProducts';
-        $table = $this->Task->getTable($name);
-        $tableObject = $this->Task->getTableObject($name, $table);
-        $data = $this->Task->getTableContext($name);
-        $result = $this->Task->bakeTable($tableObject, $data);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+        $this->_compareBakeTableResult('OldProducts', __FUNCTION__);
     }
     
     /**
@@ -162,12 +161,7 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionProductVersionsTable()
     {
-        $name = 'ProductVersions';
-        $table = $this->Task->getTable($name);
-        $tableObject = $this->Task->getTableObject($name, $table);
-        $data = $this->Task->getTableContext($name);
-        $result = $this->Task->bakeTable($tableObject, $data);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+        $this->_compareBakeTableResult('ProductVersions', __FUNCTION__);
     }
     
     /**
@@ -177,11 +171,6 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionProductsTable()
     {
-        $name = 'Products';
-        $table = $this->Task->getTable($name);
-        $tableObject = $this->Task->getTableObject($name, $table);
-        $data = $this->Task->getTableContext($name);
-        $result = $this->Task->bakeTable($tableObject, $data);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+        $this->_compareBakeTableResult('Products', __FUNCTION__);
     }
 }

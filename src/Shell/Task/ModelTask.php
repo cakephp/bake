@@ -106,7 +106,7 @@ class ModelTask extends BakeTask
     {
         $table = $this->getTable($name);
         $tableObject = $this->getTableObject($name, $table);
-        $data = $this->getTableContext($name);
+        $data = $this->getTableContext($tableObject, $table, $name);
         $this->bakeTable($tableObject, $data);
         $this->bakeEntity($tableObject, $data);
         $this->bakeFixture($tableObject->alias(), $tableObject->table());
@@ -119,11 +119,8 @@ class ModelTask extends BakeTask
      * @param string $name The model name to generate.
      * @return array
      */
-    public function getTableContext($name)
+    public function getTableContext($tableObject, $table, $name)
     {
-        $table = $this->getTable($name);
-        $tableObject = $this->getTableObject($name, $table);
-
         $associations = $this->getAssociations($tableObject);
         $this->applyAssociations($tableObject, $associations);
 
@@ -148,46 +145,6 @@ class ModelTask extends BakeTask
             'behaviors',
             'connection'
         );
-    }
-
-    /**
-     * Get table object setup for bake
-     *
-     * @param string $name The model name to generate.
-     * @return array
-     */
-    public function getTableObjectSetup($name)
-    {
-        $table = $this->getTable($name);
-        $tableObject = $this->getTableObject($name, $table);
-
-        $associations = $this->getAssociations($tableObject);
-        $this->applyAssociations($tableObject, $associations);
-
-        $primaryKey = $this->getPrimaryKey($tableObject);
-        $displayField = $this->getDisplayField($tableObject);
-        $propertySchema = $this->getEntityPropertySchema($tableObject);
-        $fields = $this->getFields();
-        $validation = $this->getValidation($tableObject, $associations);
-        $rulesChecker = $this->getRules($tableObject, $associations);
-        $behaviors = $this->getBehaviors($tableObject);
-        $connection = $this->connection;
-
-        return [
-            'tableObject' => $tableObject,
-            'data' => compact(
-                'associations',
-                'primaryKey',
-                'displayField',
-                'table',
-                'propertySchema',
-                'fields',
-                'validation',
-                'rulesChecker',
-                'behaviors',
-                'connection'
-            ),
-        ];
     }
 
     /**
