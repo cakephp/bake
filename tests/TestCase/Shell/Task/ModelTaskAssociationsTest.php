@@ -109,7 +109,7 @@ class ModelTaskAssociationsTest extends TestCase
         parent::tearDown();
         unset($this->Task);
     }
-    
+
     /**
      * Compare bake table result with static comparison file
      *
@@ -133,7 +133,7 @@ class ModelTaskAssociationsTest extends TestCase
     {
         $this->_compareBakeTableResult('Categories', __FUNCTION__);
     }
-    
+
     /**
      * test checking if associations where built correctly for categories_products.
      *
@@ -143,7 +143,7 @@ class ModelTaskAssociationsTest extends TestCase
     {
         $this->_compareBakeTableResult('CategoriesProducts', __FUNCTION__);
     }
-    
+
     /**
      * test checking if associations where built correctly for old_products.
      *
@@ -153,7 +153,7 @@ class ModelTaskAssociationsTest extends TestCase
     {
         $this->_compareBakeTableResult('OldProducts', __FUNCTION__);
     }
-    
+
     /**
      * test checking if associations where built correctly for product_versions.
      *
@@ -163,7 +163,7 @@ class ModelTaskAssociationsTest extends TestCase
     {
         $this->_compareBakeTableResult('ProductVersions', __FUNCTION__);
     }
-    
+
     /**
      * test checking if associations where built correctly for products.
      *
