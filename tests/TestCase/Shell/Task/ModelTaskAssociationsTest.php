@@ -29,13 +29,6 @@ class ModelTaskAssociationsTest extends TestCase
 {
 
     /**
-     * Fixtures should be dropped after each tests
-     *
-     * @var bool
-     */
-    public $dropTables = true;
-
-    /**
      * fixtures
      *
      * Don't sort this list alphabetically - otherwise there are table constraints
@@ -124,8 +117,11 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionCategoriesTable()
     {
-        $tableObjectSetup = $this->Task->getTableObjectSetup('Categories');
-        $result = $this->Task->bakeTable($tableObjectSetup['tableObject'], $tableObjectSetup['data']);
+        $name = 'Categories';
+        $table = $this->Task->getTable($name);
+        $tableObject = $this->Task->getTableObject($name, $table);
+        $data = $this->Task->getTableContext($name);
+        $result = $this->Task->bakeTable($tableObject, $data);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
     
@@ -136,8 +132,11 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionCategoriesProductsTable()
     {
-        $tableObjectSetup = $this->Task->getTableObjectSetup('CategoriesProducts');
-        $result = $this->Task->bakeTable($tableObjectSetup['tableObject'], $tableObjectSetup['data']);
+        $name = 'CategoriesProducts';
+        $table = $this->Task->getTable($name);
+        $tableObject = $this->Task->getTableObject($name, $table);
+        $data = $this->Task->getTableContext($name);
+        $result = $this->Task->bakeTable($tableObject, $data);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
     
@@ -148,8 +147,11 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionOldProductsTable()
     {
-        $tableObjectSetup = $this->Task->getTableObjectSetup('OldProducts');
-        $result = $this->Task->bakeTable($tableObjectSetup['tableObject'], $tableObjectSetup['data']);
+        $name = 'OldProducts';
+        $table = $this->Task->getTable($name);
+        $tableObject = $this->Task->getTableObject($name, $table);
+        $data = $this->Task->getTableContext($name);
+        $result = $this->Task->bakeTable($tableObject, $data);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
     
@@ -160,8 +162,11 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionProductVersionsTable()
     {
-        $tableObjectSetup = $this->Task->getTableObjectSetup('ProductVersions');
-        $result = $this->Task->bakeTable($tableObjectSetup['tableObject'], $tableObjectSetup['data']);
+        $name = 'ProductVersions';
+        $table = $this->Task->getTable($name);
+        $tableObject = $this->Task->getTableObject($name, $table);
+        $data = $this->Task->getTableContext($name);
+        $result = $this->Task->bakeTable($tableObject, $data);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
     
@@ -172,8 +177,11 @@ class ModelTaskAssociationsTest extends TestCase
      */
     public function testBakeAssociationDetectionProductsTable()
     {
-        $tableObjectSetup = $this->Task->getTableObjectSetup('Products');
-        $result = $this->Task->bakeTable($tableObjectSetup['tableObject'], $tableObjectSetup['data']);
+        $name = 'Products';
+        $table = $this->Task->getTable($name);
+        $tableObject = $this->Task->getTableObject($name, $table);
+        $data = $this->Task->getTableContext($name);
+        $result = $this->Task->bakeTable($tableObject, $data);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 }
