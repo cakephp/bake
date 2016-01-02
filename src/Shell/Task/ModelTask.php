@@ -112,9 +112,9 @@ class ModelTask extends BakeTask
         $this->bakeFixture($tableObject->alias(), $tableObject->table());
         $this->bakeTest($tableObject->alias());
     }
-    
+
     /**
-     * Get table object context for bake
+     * Get table context for baking a given table.
      *
      * @param string $name The model name to generate.
      * @return array
