@@ -713,22 +713,22 @@ class ModelTaskTest extends TestCase
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->getValidation($model);
         $expected = [
-            'bake_user_id' => ['valid' => ['rule' => 'numeric', 'allowEmpty' => false]],
+            'bake_user_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => false]],
             'title' => ['valid' => ['rule' => false, 'allowEmpty' => false]],
             'body' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
             'published' => ['valid' => ['rule' => 'boolean', 'allowEmpty' => true]],
-            'id' => ['valid' => ['rule' => 'numeric', 'allowEmpty' => 'create']]
+            'id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
         ];
         $this->assertEquals($expected, $result);
 
         $model = TableRegistry::get('BakeComments');
         $result = $this->Task->getValidation($model);
         $expected = [
-            'bake_article_id' => ['valid' => ['rule' => 'numeric', 'allowEmpty' => false]],
-            'bake_user_id' => ['valid' => ['rule' => 'numeric', 'allowEmpty' => false]],
+            'bake_article_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => false]],
+            'bake_user_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => false]],
             'comment' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
             'published' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
-            'otherid' => ['valid' => ['rule' => 'numeric', 'allowEmpty' => 'create']]
+            'otherid' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
         ];
         $this->assertEquals($expected, $result);
     }
@@ -751,7 +751,7 @@ class ModelTaskTest extends TestCase
             'title' => ['valid' => ['rule' => false, 'allowEmpty' => false]],
             'body' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
             'published' => ['valid' => ['rule' => 'boolean', 'allowEmpty' => true]],
-            'id' => ['valid' => ['rule' => 'numeric', 'allowEmpty' => 'create']]
+            'id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
         ];
         $this->assertEquals($expected, $result);
     }
