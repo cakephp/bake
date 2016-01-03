@@ -29,7 +29,6 @@ class OldProductsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-
     }
 
     /**

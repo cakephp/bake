@@ -23,9 +23,9 @@ use Cake\ORM\TableRegistry;
 use Cake\Utility\ClassRegistry;
 
 /**
- * ModelTaskAssociationsTest class
+ * ModelTaskAssociationDetectionTest class
  */
-class ModelTaskAssociationsTest extends TestCase
+class ModelTaskAssociationDetectionTest extends TestCase
 {
 
     /**
