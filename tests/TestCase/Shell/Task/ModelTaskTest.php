@@ -44,17 +44,17 @@ class ModelTaskTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.bake.bake_articles',
-        'plugin.bake.bake_comments',
-        'plugin.bake.bake_articles_bake_tags',
-        'plugin.bake.bake_tags',
-        'plugin.bake.category_threads',
         'core.users',
         'core.number_trees',
         'core.counter_cache_users',
         'core.counter_cache_posts',
         'core.tags',
         'core.articles_tags',
+        'plugin.bake.bake_articles',
+        'plugin.bake.bake_comments',
+        'plugin.bake.bake_articles_bake_tags',
+        'plugin.bake.bake_tags',
+        'plugin.bake.category_threads',
         'plugin.bake.invitations',
     ];
 
