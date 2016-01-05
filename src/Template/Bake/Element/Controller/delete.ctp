@@ -17,15 +17,31 @@
     /**
      * Delete method
      *
-     * @param string|null $id <%= $singularHumanName %> id.
+<%
+$primaryKeys = (array)$modelObj->primaryKey();
+foreach ($primaryKeys as $primaryKeyComponent) { %>
+     * @param string|null <%= $primaryKeyComponent %> <%= $singularHumanName %> primaryKey.
+<% } %>
      * @return \Cake\Network\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+<%
+$actionArguments = [];
+foreach ($primaryKeys as $primaryKeyComponent) {
+    $actionArguments[] = '$' . $primaryKeyComponent . ' = null';
+}
+%>
+    public function delete(<%= join($actionArguments, ', ') %>)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $<%= $singularName %> = $this-><%= $currentModelName %>->get($id);
-        if ($this-><%= $currentModelName; %>->delete($<%= $singularName %>)) {
+        <%- 
+        $params = [];
+        foreach ($primaryKeys as $primaryKeyComponent) {
+            $params[] = '$' . $primaryKeyComponent;
+        }
+        %>
+        $<%= $singularName %> = $this-><%= $currentModelName %>->get([<%= join($params, ', ') %>]);
+        if ($this-><%= $currentModelName %>->delete($<%= $singularName %>)) {
             $this->Flash->success(__('The <%= strtolower($singularHumanName) %> has been deleted.'));
         } else {
             $this->Flash->error(__('The <%= strtolower($singularHumanName) %> could not be deleted. Please, try again.'));

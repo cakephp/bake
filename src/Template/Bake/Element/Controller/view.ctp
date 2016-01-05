@@ -18,18 +18,35 @@ $allAssociations = array_merge(
     $this->Bake->aliasExtractor($modelObj, 'HasOne'),
     $this->Bake->aliasExtractor($modelObj, 'HasMany')
 );
+
 %>
 
     /**
      * View method
      *
-     * @param string|null $id <%= $singularHumanName %> id.
+<%
+$primaryKeys = (array)$modelObj->primaryKey();
+foreach ($primaryKeys as $primaryKeyComponent) { %>
+     * @param string|null <%= $primaryKeyComponent %> <%= $singularHumanName %> primaryKey.
+<% } %>
      * @return void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+<%
+$actionArguments = [];
+foreach ($primaryKeys as $primaryKeyComponent) {
+    $actionArguments[] = '$' . $primaryKeyComponent . ' = null';
+}
+%>
+    public function view(<%= join($actionArguments, ', ') %>)
     {
-        $<%= $singularName%> = $this-><%= $currentModelName %>->get($id, [
+        <%- 
+        $params = [];
+        foreach ($primaryKeys as $primaryKeyComponent) {
+            $params[] = '$' . $primaryKeyComponent;
+        }
+        %>
+        $<%= $singularName%> = $this-><%= $currentModelName %>->get([<%= join($params, ', ') %>], [
             'contain' => [<%= $this->Bake->stringifyList($allAssociations, ['indent' => false]) %>]
         ]);
         $this->set('<%= $singularName %>', $<%= $singularName %>);
