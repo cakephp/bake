@@ -888,6 +888,16 @@ class ModelTask extends BakeTask
     }
 
     /**
+     * Models never have routing prefixes applied.
+     *
+     * @return string
+     */
+    protected function _getPrefix()
+    {
+        return '';
+    }
+
+    /**
      * Get an Array of all the tables in the supplied connection
      * will halt the script if no tables are found.
      *
