@@ -348,6 +348,8 @@ class FixtureTaskTest extends TestCase
 
         $result = $this->Task->bake('Article', 'datatypes');
         $this->assertContains("'float_field' => 1", $result);
+        $this->assertContains("'decimal_field' => 1.5", $result);
+        $this->assertContains("'huge_int' => 1", $result);
         $this->assertContains("'bool' => 1", $result);
         $this->assertContains("_constraints", $result);
         $this->assertContains("'primary' => ['type' => 'primary'", $result);
