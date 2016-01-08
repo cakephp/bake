@@ -321,6 +321,10 @@ class FixtureTask extends BakeTask
                 $fieldInfo = $table->column($field);
                 $insert = '';
                 switch ($fieldInfo['type']) {
+                    case 'decimal':
+                        $insert = $i + 1.5;
+                        break;
+                    case 'biginteger':
                     case 'integer':
                     case 'float':
                         $insert = $i + 1;
