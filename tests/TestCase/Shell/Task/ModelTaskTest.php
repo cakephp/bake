@@ -1149,6 +1149,21 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * test baking an entity with non whitelisted hidden fields.
+     *
+     * @return void
+     */
+    public function testBakeEntityCustomHidden()
+    {
+        $model = TableRegistry::get('BakeUsers');
+        $config = [
+            'hidden' => ['foo', 'bar'],
+        ];
+        $result = $this->Task->bakeEntity($model, $config);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
      * test bake() with a -plugin param
      *
      * @return void

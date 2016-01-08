@@ -132,6 +132,7 @@ class ModelTask extends BakeTask
         $rulesChecker = $this->getRules($tableObject, $associations);
         $behaviors = $this->getBehaviors($tableObject);
         $connection = $this->connection;
+        $hidden = $this->getHiddenFields($tableObject);
 
         return compact(
             'associations',
@@ -143,7 +144,8 @@ class ModelTask extends BakeTask
             'validation',
             'rulesChecker',
             'behaviors',
-            'connection'
+            'connection',
+            'hidden'
         );
     }
 
@@ -785,7 +787,7 @@ class ModelTask extends BakeTask
             'namespace' => $namespace,
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
-            'primaryKey' => [],
+            'primaryKey' => []
         ];
 
         $this->BakeTemplate->set($data);
