@@ -338,7 +338,6 @@ class TestTask extends BakeTask
      */
     public function getSubspacePath($type)
     {
-        $suffix = $this->classSuffixes[strtolower($type)];
         $subspace = $this->mapType($type);
         return str_replace('\\', DS, $subspace);
     }
