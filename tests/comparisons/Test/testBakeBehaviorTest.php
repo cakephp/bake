@@ -15,7 +15,7 @@ class ExampleBehaviorTest extends TestCase
      *
      * @var \App\Model\Behavior\ExampleBehavior
      */
-    public $Example = null;
+    public $Example;
 
     /**
      * setUp method

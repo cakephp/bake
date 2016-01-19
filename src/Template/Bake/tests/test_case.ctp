@@ -50,7 +50,7 @@ class <%= $className %>Test extends TestCase
      *
      * @var <%= $propertyInfo['type'] %>
      */
-    public $<%= $propertyInfo['name'] %> = <%= $propertyInfo['value'] %>;
+    public $<%= $propertyInfo['name'] %><% if (isset($propertyInfo['value'])): %> = <%= $propertyInfo['value'] %><% endif; %>;
 <% endforeach; %>
 <% endif; %>
 <% if (!empty($fixtures)): %>

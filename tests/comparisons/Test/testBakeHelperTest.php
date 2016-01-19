@@ -16,7 +16,7 @@ class ExampleHelperTest extends TestCase
      *
      * @var \App\View\Helper\ExampleHelper
      */
-    public $Example = null;
+    public $Example;
 
     /**
      * setUp method

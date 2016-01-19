@@ -16,7 +16,7 @@ class AppleComponentTest extends TestCase
      *
      * @var \Bake\Test\App\Controller\Component\AppleComponent
      */
-    public $Apple = null;
+    public $Apple;
 
     /**
      * setUp method

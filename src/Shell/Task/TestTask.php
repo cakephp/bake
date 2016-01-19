@@ -535,7 +535,7 @@ class TestTask extends BakeTask
      * - `description` (the property description)
      * - `type` (the property docblock type)
      * - `name` (the property name)
-     * - `value` (the properties initial value)
+     * - `value` (optional - the properties initial value)
      *
      * @param string $type The Type of object you are generating tests for eg. controller
      * @param string $subject The name of the test subject.
@@ -552,14 +552,12 @@ class TestTask extends BakeTask
                 $properties[] = [
                     'description' => 'Request mock',
                     'type' => '\Cake\Network\Request|\PHPUnit_Framework_MockObject_MockObject',
-                    'name' => 'request',
-                    'value' => 'null'
+                    'name' => 'request'
                 ];
                 $properties[] = [
                     'description' => 'Response mock',
                     'type' => '\Cake\Network\Response|\PHPUnit_Framework_MockObject_MockObject',
-                    'name' => 'response',
-                    'value' => 'null'
+                    'name' => 'response'
                 ];
                 break;
 
@@ -567,8 +565,7 @@ class TestTask extends BakeTask
                 $properties[] = [
                     'description' => 'ConsoleIo mock',
                     'type' => '\Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject',
-                    'name' => 'io',
-                    'value' => 'null'
+                    'name' => 'io'
                 ];
                 break;
 
@@ -576,14 +573,12 @@ class TestTask extends BakeTask
                 $properties[] = [
                     'description' => 'ConsoleOutput stub',
                     'type' => '\Cake\TestSuite\Stub\ConsoleOutput',
-                    'name' => 'stub',
-                    'value' => 'null'
+                    'name' => 'stub'
                 ];
                 $properties[] = [
                     'description' => 'ConsoleIo mock',
                     'type' => '\Cake\Console\ConsoleIo',
-                    'name' => 'io',
-                    'value' => 'null'
+                    'name' => 'io'
                 ];
                 break;
         }
@@ -592,8 +587,7 @@ class TestTask extends BakeTask
             $properties[] = [
                 'description' => 'Test subject',
                 'type' => '\\' . $fullClassName,
-                'name' => $subject,
-                'value' => 'null'
+                'name' => $subject
             ];
         }
 

@@ -15,21 +15,21 @@ class ArticlesCellTest extends TestCase
      *
      * @var \Cake\Network\Request|\PHPUnit_Framework_MockObject_MockObject
      */
-    public $request = null;
+    public $request;
 
     /**
      * Response mock
      *
      * @var \Cake\Network\Response|\PHPUnit_Framework_MockObject_MockObject
      */
-    public $response = null;
+    public $response;
 
     /**
      * Test subject
      *
      * @var \App\View\Cell\ArticlesCell
      */
-    public $Articles = null;
+    public $Articles;
 
     /**
      * setUp method

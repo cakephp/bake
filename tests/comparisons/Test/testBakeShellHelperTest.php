@@ -17,21 +17,21 @@ class ExampleHelperTest extends TestCase
      *
      * @var \Cake\TestSuite\Stub\ConsoleOutput
      */
-    public $stub = null;
+    public $stub;
 
     /**
      * ConsoleIo mock
      *
      * @var \Cake\Console\ConsoleIo
      */
-    public $io = null;
+    public $io;
 
     /**
      * Test subject
      *
      * @var \App\Shell\Helper\ExampleHelper
      */
-    public $Example = null;
+    public $Example;
 
     /**
      * setUp method

@@ -16,7 +16,7 @@ class ArticlesTableTest extends TestCase
      *
      * @var \App\Model\Table\ArticlesTable
      */
-    public $Articles = null;
+    public $Articles;
 
     /**
      * Fixtures
