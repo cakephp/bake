@@ -11,6 +11,20 @@ class ArticlesShellTest extends TestCase
 {
 
     /**
+     * ConsoleIo mock
+     *
+     * @var \Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public $io = null;
+
+    /**
+     * Test subject
+     *
+     * @var \App\Shell\ArticlesShell
+     */
+    public $Articles = null;
+
+    /**
      * setUp method
      *
      * @return void

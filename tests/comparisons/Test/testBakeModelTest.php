@@ -12,6 +12,13 @@ class ArticlesTableTest extends TestCase
 {
 
     /**
+     * Test subject
+     *
+     * @var \App\Model\Table\ArticlesTable
+     */
+    public $Articles = null;
+
+    /**
      * setUp method
      *
      * @return void

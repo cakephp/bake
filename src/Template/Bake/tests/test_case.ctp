@@ -42,6 +42,17 @@ class <%= $className %>Test extends IntegrationTestCase
 class <%= $className %>Test extends TestCase
 {
 <% endif; %>
+<% if (!empty($properties)): %>
+<% foreach ($properties as $propertyInfo): %>
+
+    /**
+     * <%= $propertyInfo['description'] %>
+     *
+     * @var <%= $propertyInfo['type'] %>
+     */
+    public $<%= $propertyInfo['name'] %> = <%= $propertyInfo['value'] %>;
+<% endforeach; %>
+<% endif; %>
 <% if (!empty($fixtures)): %>
 
     /**

@@ -239,6 +239,8 @@ class TestTask extends BakeTask
         }
         $subNamespace = substr($namespace, strlen($baseNamespace) + 1);
 
+        $properties = $this->generateProperties($type, $subject, $fullClassName);
+
         $this->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, Shell::QUIET);
 
         $this->BakeTemplate->set('fixtures', $this->_fixtures);
@@ -246,11 +248,12 @@ class TestTask extends BakeTask
         $this->BakeTemplate->set(compact(
             'subject',
             'className',
+            'properties',
             'methods',
             'type',
             'fullClassName',
             'mock',
-            'realType',
+            'type',
             'preConstruct',
             'postConstruct',
             'construction',
@@ -522,6 +525,79 @@ class TestTask extends BakeTask
             $construct = "new {$className}(\$this->io);";
         }
         return [$pre, $construct, $post];
+    }
+
+    /**
+     * Generate property info for the type and class name
+     *
+     * The generated property info consists of a set of arrays that hold the following keys:
+     *
+     * - `description` (the property description)
+     * - `type` (the property docblock type)
+     * - `name` (the property name)
+     * - `value` (the properties initial value)
+     *
+     * @param string $type The Type of object you are generating tests for eg. controller
+     * @param string $subject The name of the test subject.
+     * @param string $fullClassName The Classname of the class the test is being generated for.
+     * @return array An array containing property info
+     */
+    public function generateProperties($type, $subject, $fullClassName)
+    {
+        $type = strtolower($type);
+
+        $properties = [];
+        switch (strtolower($type)) {
+            case 'cell':
+                $properties[] = [
+                    'description' => 'Request mock',
+                    'type' => '\Cake\Network\Request|\PHPUnit_Framework_MockObject_MockObject',
+                    'name' => 'request',
+                    'value' => 'null'
+                ];
+                $properties[] = [
+                    'description' => 'Response mock',
+                    'type' => '\Cake\Network\Response|\PHPUnit_Framework_MockObject_MockObject',
+                    'name' => 'response',
+                    'value' => 'null'
+                ];
+                break;
+
+            case 'shell':
+                $properties[] = [
+                    'description' => 'ConsoleIo mock',
+                    'type' => '\Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject',
+                    'name' => 'io',
+                    'value' => 'null'
+                ];
+                break;
+
+            case 'shell_helper':
+                $properties[] = [
+                    'description' => 'ConsoleOutput stub',
+                    'type' => '\Cake\TestSuite\Stub\ConsoleOutput',
+                    'name' => 'stub',
+                    'value' => 'null'
+                ];
+                $properties[] = [
+                    'description' => 'ConsoleIo mock',
+                    'type' => '\Cake\Console\ConsoleIo',
+                    'name' => 'io',
+                    'value' => 'null'
+                ];
+                break;
+        }
+
+        if ($type !== 'controller') {
+            $properties[] = [
+                'description' => 'Test subject',
+                'type' => '\\' . $fullClassName,
+                'name' => $subject,
+                'value' => 'null'
+            ];
+        }
+
+        return $properties;
     }
 
     /**
