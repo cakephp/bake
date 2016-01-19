@@ -11,6 +11,27 @@ class ArticlesCellTest extends TestCase
 {
 
     /**
+     * Request mock
+     *
+     * @var \Cake\Network\Request|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public $request;
+
+    /**
+     * Response mock
+     *
+     * @var \Cake\Network\Response|\PHPUnit_Framework_MockObject_MockObject
+     */
+    public $response;
+
+    /**
+     * Test subject
+     *
+     * @var \App\View\Cell\ArticlesCell
+     */
+    public $Articles;
+
+    /**
      * setUp method
      *
      * @return void

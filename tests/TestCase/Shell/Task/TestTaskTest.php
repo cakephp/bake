@@ -473,6 +473,21 @@ class TestTaskTest extends TestCase
     }
 
     /**
+     * Test baking a test for a shell helper.
+     *
+     * @return void
+     */
+    public function testBakeShellHelperTest()
+    {
+        $this->Task->expects($this->once())
+            ->method('createFile')
+            ->will($this->returnValue(true));
+
+        $result = $this->Task->bake('Shell_helper', 'Example');
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
      * Test baking an unknown class type.
      *
      * @return void

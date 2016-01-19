@@ -12,6 +12,13 @@ class AppleComponentTest extends TestCase
 {
 
     /**
+     * Test subject
+     *
+     * @var \Bake\Test\App\Controller\Component\AppleComponent
+     */
+    public $Apple;
+
+    /**
      * setUp method
      *
      * @return void

@@ -1,20 +1,35 @@
 <?php
-namespace App\Test\TestCase\View\Helper;
+namespace App\Test\TestCase\Shell\Helper;
 
-use App\View\Helper\ExampleHelper;
+use App\Shell\Helper\ExampleHelper;
+use Cake\Console\ConsoleIo;
+use Cake\TestSuite\Stub\ConsoleOutput;
 use Cake\TestSuite\TestCase;
-use Cake\View\View;
 
 /**
- * App\View\Helper\ExampleHelper Test Case
+ * App\Shell\Helper\ExampleHelper Test Case
  */
 class ExampleHelperTest extends TestCase
 {
 
     /**
+     * ConsoleOutput stub
+     *
+     * @var \Cake\TestSuite\Stub\ConsoleOutput
+     */
+    public $stub;
+
+    /**
+     * ConsoleIo mock
+     *
+     * @var \Cake\Console\ConsoleIo
+     */
+    public $io;
+
+    /**
      * Test subject
      *
-     * @var \App\View\Helper\ExampleHelper
+     * @var \App\Shell\Helper\ExampleHelper
      */
     public $Example;
 
@@ -26,8 +41,9 @@ class ExampleHelperTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $view = new View();
-        $this->Example = new ExampleHelper($view);
+        $this->stub = new ConsoleOutput();
+        $this->io = new ConsoleIo($this->stub);
+        $this->Example = new ExampleHelper($this->io);
     }
 
     /**

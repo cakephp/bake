@@ -11,6 +11,13 @@ class ExampleBehaviorTest extends TestCase
 {
 
     /**
+     * Test subject
+     *
+     * @var \App\Model\Behavior\ExampleBehavior
+     */
+    public $Example;
+
+    /**
      * setUp method
      *
      * @return void
