@@ -16,13 +16,14 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
-use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 
 /**
  * TemplateTaskTest class
+ * 
+ * @property \Bake\Shell\Task\TemplateTask Task represented by a PHPUnit_Framework_MockObject_MockObject
  */
 class TemplateTaskTest extends TestCase
 {
@@ -63,7 +64,8 @@ class TemplateTaskTest extends TestCase
 
     /**
      * Generate the mock objects used in tests.
-     *
+     * 
+     * @param $methods
      * @return void
      */
     protected function _setupTask($methods)
@@ -108,7 +110,8 @@ class TemplateTaskTest extends TestCase
 
     /**
      * Test the controller() method.
-     *
+     * 
+     * @param $name
      * @dataProvider nameVariations
      * @return void
      */
