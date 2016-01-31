@@ -21,6 +21,10 @@ use Cake\ORM\Table;
  */
 class BakeArticlesTable extends Table
 {
+    /**
+     * @param array $config
+     * @return void
+     */
     public function initialize(array $config)
     {
         $this->belongsTo('BakeUsers');
