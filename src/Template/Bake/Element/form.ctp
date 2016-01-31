@@ -78,7 +78,7 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
             }
             if (!in_array($field, ['created', 'modified', 'updated'])) {
                 $fieldData = $schema->column($field);
-                if (($fieldData['type'] === 'date') && (!empty($fieldData['null']))) {
+                if (in_array($fieldData['type'], ['date', 'datetime', 'time']) && (!empty($fieldData['null']))) {
 %>
             echo $this->Form->input('<%= $field %>', ['empty' => true]);
 <%
