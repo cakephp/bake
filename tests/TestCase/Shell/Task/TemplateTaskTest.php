@@ -394,7 +394,7 @@ class TemplateTaskTest extends TestCase
      *
      * @return void
      */
-    public function testBakeTemplate()
+    public function testBakeView()
     {
         $this->Task->modelName = __NAMESPACE__ . '\\TemplateTask\\AuthorsTable';
         $this->Task->controllerName = 'Authors';
