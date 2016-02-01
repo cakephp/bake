@@ -30,14 +30,16 @@ class BakeArticlesController extends AppController
     /**
      * Index method
      *
-     * @return void
+     * @return \Cake\Network\Response|null
      */
     public function index()
     {
         $this->paginate = [
             'contain' => ['BakeUsers']
         ];
-        $this->set('bakeArticles', $this->paginate($this->BakeArticles));
+        $bakeArticles = $this->paginate($this->BakeArticles);
+
+        $this->set(compact('bakeArticles'));
         $this->set('_serialize', ['bakeArticles']);
     }
 
@@ -45,7 +47,7 @@ class BakeArticlesController extends AppController
      * View method
      *
      * @param string|null $id Bake Article id.
-     * @return void
+     * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
@@ -53,6 +55,7 @@ class BakeArticlesController extends AppController
         $bakeArticle = $this->BakeArticles->get($id, [
             'contain' => ['BakeUsers', 'BakeTags', 'BakeComments']
         ]);
+
         $this->set('bakeArticle', $bakeArticle);
         $this->set('_serialize', ['bakeArticle']);
     }

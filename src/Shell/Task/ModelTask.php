@@ -766,12 +766,12 @@ class ModelTask extends BakeTask
      *
      * @param \Cake\ORM\Table $model Model name or object
      * @param array $data An array to use to generate the Table
-     * @return string
+     * @return string|null
      */
     public function bakeEntity($model, array $data = [])
     {
         if (!empty($this->params['no-entity'])) {
-            return;
+            return null;
         }
         $name = $this->_entityName($model->alias());
 
@@ -807,12 +807,12 @@ class ModelTask extends BakeTask
      *
      * @param \Cake\ORM\Table $model Model name or object
      * @param array $data An array to use to generate the Table
-     * @return string
+     * @return string|null
      */
     public function bakeTable($model, array $data = [])
     {
         if (!empty($this->params['no-table'])) {
-            return;
+            return null;
         }
 
         $namespace = Configure::read('App.namespace');
@@ -1024,12 +1024,12 @@ class ModelTask extends BakeTask
      * Assembles and writes a unit test file
      *
      * @param string $className Model class name
-     * @return string
+     * @return string|null
      */
     public function bakeTest($className)
     {
         if (!empty($this->params['no-test'])) {
-            return;
+            return null;
         }
         $this->Test->plugin = $this->plugin;
         $this->Test->connection = $this->connection;
