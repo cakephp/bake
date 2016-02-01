@@ -44,11 +44,11 @@ class ProductVersionsTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->add('id', 'valid', ['rule' => 'numeric'])
+            ->integer('id')
             ->allowEmpty('id', 'create');
 
         $validator
-            ->add('version', 'valid', ['rule' => 'datetime'])
+            ->dateTime('version')
             ->requirePresence('version', 'create')
             ->notEmpty('version');
 
