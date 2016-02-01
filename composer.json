@@ -18,7 +18,7 @@
         "source": "https://github.com/cakephp/bake"
     },
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.5",
         "cakephp/cakephp": ">=3.2.0"
     },
     "require-dev": {
