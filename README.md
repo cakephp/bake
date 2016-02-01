@@ -23,4 +23,4 @@ You can find the documentation for bake [on the cookbook](http://book.cakephp.or
 
 ## License
 
-MIT, see [LICENSE.txt].
+MIT, see [LICENSE.txt](LICENSE.txt).
