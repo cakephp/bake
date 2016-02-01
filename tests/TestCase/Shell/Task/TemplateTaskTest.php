@@ -22,7 +22,7 @@ use Cake\ORM\TableRegistry;
 
 /**
  * TemplateTaskTest class
- * 
+ *
  * @property \Bake\Shell\Task\TemplateTask Task represented by a PHPUnit_Framework_MockObject_MockObject
  */
 class TemplateTaskTest extends TestCase
@@ -39,6 +39,9 @@ class TemplateTaskTest extends TestCase
         'core.posts',
         'core.comments',
         'core.test_plugin_comments',
+        'plugin.bake.bake_template_authors',
+        'plugin.bake.bake_template_roles',
+        'plugin.bake.bake_template_profiles',
         'plugin.bake.category_threads',
     ];
 
@@ -64,7 +67,7 @@ class TemplateTaskTest extends TestCase
 
     /**
      * Generate the mock objects used in tests.
-     * 
+     *
      * @param $methods
      * @return void
      */
@@ -110,7 +113,7 @@ class TemplateTaskTest extends TestCase
 
     /**
      * Test the controller() method.
-     * 
+     *
      * @param $name
      * @dataProvider nameVariations
      * @return void
@@ -393,15 +396,14 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeTemplate()
     {
-        $this->Task->controllerName = 'TemplateTaskComments';
-        $this->Task->modelName = 'TemplateTaskComments';
-        $this->Task->controllerClass = __NAMESPACE__ . '\TemplateTaskCommentsController';
+        $this->Task->modelName = __NAMESPACE__ . '\\TemplateTask\\AuthorsTable';
+        $this->Task->controllerName = 'Authors';
+        $this->Task->controllerClass = __NAMESPACE__ . '\\TemplateTask\\AuthorsController';
 
-        $this->Task->expects($this->at(0))
+        $this->Task
+            ->expects($this->at(0))
             ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/TemplateTaskComments/view.ctp')
-            );
+            ->with($this->_normalizePath(APP . 'Template/Authors/view.ctp'));
 
         $result = $this->Task->bake('view', true);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
@@ -414,13 +416,13 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeEdit()
     {
-        $this->Task->controllerName = 'TemplateTaskComments';
-        $this->Task->modelName = 'TemplateTaskComments';
-        $this->Task->controllerClass = __NAMESPACE__ . '\TemplateTaskCommentsController';
+        $this->Task->modelName = __NAMESPACE__ . '\\TemplateTask\\AuthorsTable';
+        $this->Task->controllerName = 'Authors';
+        $this->Task->controllerClass = __NAMESPACE__ . '\\TemplateTask\\AuthorsController';
 
         $this->Task->expects($this->at(0))->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/TemplateTaskComments/edit.ctp')
+                $this->_normalizePath(APP . 'Template/Authors/edit.ctp')
             );
         $result = $this->Task->bake('edit', true);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
