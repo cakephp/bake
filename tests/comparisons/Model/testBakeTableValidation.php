@@ -35,7 +35,7 @@ class BakeArticlesTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->add('id', 'valid', ['rule' => 'numeric'])
+            ->numeric('id')
             ->allowEmpty('id', 'create');
 
         $validator
@@ -43,7 +43,7 @@ class BakeArticlesTable extends Table
             ->notEmpty('name');
 
         $validator
-            ->add('email', 'valid', ['rule' => 'email'])
+            ->email('email')
             ->allowEmpty('email')
             ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 

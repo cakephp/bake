@@ -608,7 +608,7 @@ class ModelTask extends BakeTask
         } elseif ($metaData['type'] === 'uuid') {
             $rule = 'uuid';
         } elseif ($metaData['type'] === 'integer') {
-            $rule = 'numeric';
+            $rule = 'integer';
         } elseif ($metaData['type'] === 'float') {
             $rule = 'numeric';
         } elseif ($metaData['type'] === 'decimal') {

@@ -1,12 +1,16 @@
 language: php
 
 php:
-  - 5.4
   - 5.5
   - 5.6
   - 7.0
 
 sudo: false
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
 
 env:
   matrix:
@@ -23,15 +27,17 @@ matrix:
     - php: 7.0
       env: RUN_CS=1 RUN_TESTS=0
 
-    - php: 5.6
+    - php: 7.0
       env: RUN_COVERAGE=1 RUN_TESTS=0 DB=mysql db_dsn='mysql://travis@0.0.0.0/cakephp_test'
 
   allow_failures:
       - env: DB=pgsql db_dsn='postgres://postgres@127.0.0.1/cakephp_test'
 
 before_script:
+  - phpenv config-rm xdebug.ini
   - composer self-update
-  - composer install --no-interaction --prefer-dist
+  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
+  - composer install --prefer-dist --no-interaction
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE cakephp_test;'; fi"
   - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE DATABASE cakephp_test;' -U postgres; fi"
   - sh -c "if [ '$RUN_COVERAGE' = '1' ]; then composer require --dev satooshi/php-coveralls:dev-master; fi"
@@ -41,11 +47,11 @@ before_script:
   - set +H
 
 script:
-  - sh -c "if [ '$RUN_TESTS' = '1' ]; then phpunit --stderr; fi"
+  - sh -c "if [ '$RUN_TESTS' = '1' ]; then phpunit; fi"
   - sh -c "if [ '$RUN_CS' = '1' ]; then ./vendor/bin/phpcs -n -p --extensions=php --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests; fi"
 
-  - sh -c "if [ '$COVERALLS' = '1' ]; then phpunit --coverage-clover build/logs/clover.xml; fi"
-  - sh -c "if [ '$COVERALLS' = '1' ]; then vendor/bin/coveralls -c .coveralls.yml -v; fi"
+  - sh -c "if [ '$RUN_COVERAGE' = '1' ]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover build/logs/clover.xml || true; fi"
+  - sh -c "if [ '$RUN_COVERAGE' = '1' ]; then php vendor/bin/coveralls -c .coveralls.yml -v; fi"
 
 notifications:
   email: false
