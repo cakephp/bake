@@ -1,7 +1,8 @@
 # Bake plugin for CakePHP
 
-[![Build Status](https://api.travis-ci.org/cakephp/bake.png)](https://travis-ci.org/cakephp/bake)
-[![License](https://poser.pugx.org/cakephp/bake/license.svg)](https://packagist.org/packages/cakephp/bake)
+[![Build Status](https://img.shields.io/travis/cakephp/bake/master.svg?style=flat-square)](https://travis-ci.org/cakephp/bake)
+[![Coverage Status](https://img.shields.io/codecov/c/github/cakephp/bake.svg?style=flat-square)](https://codecov.io/github/cakephp/bake)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
 
 This project provides the code generation functionality for CakePHP. Through a
 suite of CLI tools, you can quickly and easily generate code for your application.
