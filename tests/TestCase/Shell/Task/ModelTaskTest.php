@@ -20,7 +20,6 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Model\Model;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\ClassRegistry;
 
 /**
  * ModelTaskTest class
