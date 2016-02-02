@@ -11,20 +11,19 @@
  * @link          http://cakephp.org CakePHP Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 namespace Bake\Test\TestCase\Shell\Task\TemplateTask;
 
 use Cake\ORM\Table;
 
 /**
  * Class AuthorsTable
- * @package Bake\Test\TestCase\Shell\Task\TemplateTask
  */
 class AuthorsTable extends Table
 {
-    
+
     /**
      * @param array $config
+     * @return void
      */
     public function initialize(array $config)
     {

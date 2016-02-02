@@ -11,14 +11,12 @@
  * @link          http://cakephp.org CakePHP Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 namespace Bake\Test\TestCase\Shell\Task\TemplateTask;
 
 use Cake\Controller\Controller;
 
 /**
  * Class TemplateTaskAuthorsController
- * @package Bake\Test\TestCase\Shell\Task\TemplateTask
  */
 class AuthorsController extends Controller
 {
@@ -38,15 +36,6 @@ class AuthorsController extends Controller
      * @return void
      */
     public function add()
-    {
-    }
-
-    /**
-     * Testing public controller action with multiple words
-     *
-     * @return void
-     */
-    public function addComment()
     {
     }
 }
