@@ -22,8 +22,6 @@ use Cake\ORM\TableRegistry;
 
 /**
  * TemplateTaskTest class
- *
- * @property \Bake\Shell\Task\TemplateTask Task represented by a PHPUnit_Framework_MockObject_MockObject
  */
 class TemplateTaskTest extends TestCase
 {

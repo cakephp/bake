@@ -620,7 +620,7 @@ class ModelTask extends BakeTask
         } elseif ($metaData['type'] === 'time') {
             $rule = 'time';
         } elseif ($metaData['type'] === 'datetime') {
-            $rule = 'datetime';
+            $rule = 'dateTime';
         } elseif ($metaData['type'] === 'inet') {
             $rule = 'ip';
         }
