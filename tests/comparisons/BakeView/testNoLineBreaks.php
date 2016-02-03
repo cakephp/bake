@@ -7,10 +7,11 @@
     number
     number
 
-But this should make a difference:
-    1    2    3This will not be on a new line
+This is all going to be squashed on one line:
+ 1 2 3. This bit of text too
 
+This will not be on one line though
     number
     number
     number
-This will though, as "number" ends with a newline
+And neither this text because "number" ends with a newline
