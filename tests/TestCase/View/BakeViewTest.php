@@ -136,6 +136,17 @@ class BakeViewTest extends TestCase
     }
 
     /**
+     * Verify that template tags don't inject newlines
+     *
+     * @return void
+     */
+    public function testNoLineBreaks()
+    {
+        $result = $this->View->render('no_line_breaks');
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
      * Verify that the proper events are dispatched on template render
      *
      * @return void
