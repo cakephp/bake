@@ -50,7 +50,6 @@ class ProductVersionsFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => 1,
             'product_id' => 1,
             'version' => '2015-12-30 18:11:37'
         ],

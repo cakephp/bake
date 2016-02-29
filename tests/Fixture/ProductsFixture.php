@@ -51,7 +51,6 @@ class ProductsFixture extends TestFixture
      */
     public $records = [
         [
-            'id' => 1,
             'created' => '2015-12-30 18:11:37',
             'modified' => '2015-12-30 18:11:37',
             'name' => 'Lorem ipsum dolor sit amet'
