@@ -455,7 +455,7 @@ class TemplateTaskTest extends TestCase
         $this->Task->controllerName = 'TemplateTaskComments';
         $this->Task->modelName = 'TemplateTaskComments';
         $this->Task->controllerClass = __NAMESPACE__ . '\TemplateTaskCommentsController';
-        $this->Task->maxIndexColumns = 3;
+        $this->Task->params['indexColumns'] = 3;
         $this->Task->expects($this->at(0))->method('createFile')
             ->with(
                 $this->_normalizePath(APP . 'Template/TemplateTaskComments/index.ctp')
