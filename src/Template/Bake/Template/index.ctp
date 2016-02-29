@@ -28,6 +28,7 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
 if (!empty($indexColumns)) {
     $fields = $fields->take($indexColumns);
 }
+
 %>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
