@@ -402,9 +402,14 @@ class TemplateTask extends BakeTask
             return false;
         }
 
+        if ($action === "index" && !empty($this->params['index-columns'])) {
+            $this->BakeTemplate->set('indexColumns', $this->params['index-columns']);
+        }
+
         $this->BakeTemplate->set('action', $action);
         $this->BakeTemplate->set('plugin', $this->plugin);
         $this->BakeTemplate->set($vars);
+
         return $this->BakeTemplate->generate("Template/$action");
     }
 
@@ -429,6 +434,9 @@ class TemplateTask extends BakeTask
             'help' => 'The controller name if you have a controller that does not follow conventions.'
         ])->addOption('prefix', [
             'help' => 'The routing prefix to generate views for.',
+        ])->addOption('index-columns', [
+            'help' => 'Limit for the number of index columns',
+            'default' => 0
         ])->addSubcommand('all', [
             'help' => '[optional] Bake all CRUD action views for all controllers. Requires models and controllers to exist.'
         ]);

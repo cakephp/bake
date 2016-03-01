@@ -446,6 +446,25 @@ class TemplateTaskTest extends TestCase
     }
 
     /**
+     * test bake template with index limit overwrite
+     *
+     * @return void
+     */
+    public function testBakeIndexWithIndexLimit()
+    {
+        $this->Task->controllerName = 'TemplateTaskComments';
+        $this->Task->modelName = 'TemplateTaskComments';
+        $this->Task->controllerClass = __NAMESPACE__ . '\TemplateTaskCommentsController';
+        $this->Task->params['index-columns'] = 3;
+        $this->Task->expects($this->at(0))->method('createFile')
+            ->with(
+                $this->_normalizePath(APP . 'Template/TemplateTaskComments/index.ctp')
+            );
+        $result = $this->Task->bake('index', true);
+        $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
+    }
+
+    /**
      * test Bake with plugins
      *
      * @return void
