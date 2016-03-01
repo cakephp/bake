@@ -402,8 +402,8 @@ class TemplateTask extends BakeTask
             return false;
         }
 
-        if ($action === "index" && !empty($this->params['indexColumns'])) {
-            $this->BakeTemplate->set('indexColumns', $this->params['indexColumns']);
+        if ($action === "index" && !empty($this->params['index-columns'])) {
+            $this->BakeTemplate->set('indexColumns', $this->params['index-columns']);
         }
 
         $this->BakeTemplate->set('action', $action);
