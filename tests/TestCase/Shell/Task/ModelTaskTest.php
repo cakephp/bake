@@ -1003,7 +1003,7 @@ class ModelTaskTest extends TestCase
         $this->Task->params['prefix'] = 'Admin';
         $this->Task->expects($this->once())
             ->method('createFile')
-            ->with($this->stringContains('App/Model/Table/BakeArticlesTable.php'));
+            ->with($this->stringContains('App' . DS . 'Model' . DS . 'Table' . DS . 'BakeArticlesTable.php'));
 
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->bakeTable($model, $config);
