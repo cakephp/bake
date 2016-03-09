@@ -298,6 +298,8 @@ class TestTaskTest extends TestCase
             ['component', 'AuthComponent', 'App\Controller\Component\AuthComponent'],
             ['Shell', 'Example', 'App\Shell\ExampleShell'],
             ['shell', 'Example', 'App\Shell\ExampleShell'],
+            ['Task', 'Example', 'App\Shell\Task\ExampleTask'],
+            ['task', 'Example', 'App\Shell\Task\ExampleTask'],
             ['Cell', 'Example', 'App\View\Cell\ExampleCell'],
             ['cell', 'Example', 'App\View\Cell\ExampleCell'],
         ];
@@ -458,7 +460,7 @@ class TestTaskTest extends TestCase
     }
 
     /**
-     * Test baking a test for a concrete model.
+     * Test baking a test for a shell.
      *
      * @return void
      */
@@ -469,6 +471,21 @@ class TestTaskTest extends TestCase
             ->will($this->returnValue(true));
 
         $result = $this->Task->bake('Shell', 'Articles');
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * Test baking a test for a shell task.
+     *
+     * @return void
+     */
+    public function testBakeShellTaskTest()
+    {
+        $this->Task->expects($this->once())
+            ->method('createFile')
+            ->will($this->returnValue(true));
+
+        $result = $this->Task->bake('Task', 'Articles');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
