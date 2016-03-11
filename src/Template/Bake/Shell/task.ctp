@@ -18,7 +18,7 @@ namespace <%= $namespace %>\Shell\Task;
 use Cake\Console\Shell;
 
 /**
- * <%= $name %> shell command.
+ * <%= $name %> shell task.
  */
 class <%= $name %>Task extends Shell
 {

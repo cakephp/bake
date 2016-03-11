@@ -20,7 +20,7 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin;
 
 /**
- * CellTaskTest class
+ * TaskTaskTest class
  */
 class TaskTaskTest extends TestCase
 {
@@ -51,7 +51,7 @@ class TaskTaskTest extends TestCase
     }
 
     /**
-     * Test the excute method.
+     * Test the main method.
      *
      * @return void
      */
