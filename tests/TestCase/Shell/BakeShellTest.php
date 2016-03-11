@@ -130,6 +130,7 @@ class BakeShellTest extends TestCase
             '- plugin',
             '- shell',
             '- shell_helper',
+            '- task',
             '- template',
             '- test',
             '',
@@ -175,6 +176,7 @@ class BakeShellTest extends TestCase
             'Bake.Plugin',
             'Bake.Shell',
             'Bake.ShellHelper',
+            'Bake.Task',
             'Bake.Test',
             'Bake.Template'
         ];

@@ -54,6 +54,7 @@ class TestTask extends BakeTask
         'Behavior' => 'Model\Behavior',
         'Helper' => 'View\Helper',
         'Shell' => 'Shell',
+        'Task' => 'Shell\Task',
         'Shell_helper' => 'Shell\Helper',
         'Cell' => 'View\Cell',
         'Form' => 'Form',
@@ -73,6 +74,7 @@ class TestTask extends BakeTask
         'behavior' => 'Behavior',
         'helper' => 'Helper',
         'shell' => 'Shell',
+        'task' => 'Task',
         'shell_helper' => 'Helper',
         'cell' => 'Cell',
         'form' => 'Form',
@@ -513,6 +515,10 @@ class TestTask extends BakeTask
             $pre = "\$this->io = \$this->getMock('Cake\Console\ConsoleIo');";
             $construct = "new {$className}(\$this->io);";
         }
+        if ($type === 'task') {
+            $pre = "\$this->io = \$this->getMock('Cake\Console\ConsoleIo');\n";
+            $construct = "\$this->getMock('{$fullClassName}', [], [\$this->io]);";
+        }
         if ($type === 'cell') {
             $pre = "\$this->request = \$this->getMock('Cake\Network\Request');\n";
             $pre .= "        \$this->response = \$this->getMock('Cake\Network\Response');";
@@ -561,6 +567,7 @@ class TestTask extends BakeTask
                 break;
 
             case 'shell':
+            case 'task':
                 $properties[] = [
                     'description' => 'ConsoleIo mock',
                     'type' => '\Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject',
