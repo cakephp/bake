@@ -215,13 +215,15 @@ class TestTask extends BakeTask
 
         $fullClassName = $this->getRealClassName($type, $className);
 
-        if (!empty($this->params['fixtures'])) {
-            $fixtures = array_map('trim', explode(',', $this->params['fixtures']));
-            $this->_fixtures = array_filter($fixtures);
-        } elseif ($this->typeCanDetectFixtures($type) && class_exists($fullClassName)) {
-            $this->out('Bake is detecting possible fixtures...');
-            $testSubject = $this->buildTestSubject($type, $fullClassName);
-            $this->generateFixtureList($testSubject);
+        if (empty($this->params['no-fixtures'])) {
+            if (!empty($this->params['fixtures'])) {
+                $fixtures = array_map('trim', explode(',', $this->params['fixtures']));
+                $this->_fixtures = array_filter($fixtures);
+            } elseif ($this->typeCanDetectFixtures($type) && class_exists($fullClassName)) {
+                $this->out('Bake is detecting possible fixtures...');
+                $testSubject = $this->buildTestSubject($type, $fullClassName);
+                $this->generateFixtureList($testSubject);
+            }
         }
 
         $methods = [];
