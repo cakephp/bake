@@ -4,7 +4,7 @@ namespace TestBake\Shell\Task;
 use Cake\Console\Shell;
 
 /**
- * Example shell command.
+ * Example shell task.
  */
 class ExampleTask extends Shell
 {
