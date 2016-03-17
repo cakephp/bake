@@ -353,13 +353,13 @@ class TestTaskTest extends TestCase
      *
      * @return void
      */
-    public function testBakeNoFixturesParam()
+    public function testBakeNoFixtureParam()
     {
         $this->Task->expects($this->once())
             ->method('createFile')
             ->will($this->returnValue(true));
 
-        $this->Task->params['no-fixtures'] = true;
+        $this->Task->params['no-fixture'] = true;
         $result = $this->Task->bake('Table', 'Articles');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }

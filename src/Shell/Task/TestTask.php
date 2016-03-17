@@ -215,7 +215,7 @@ class TestTask extends BakeTask
 
         $fullClassName = $this->getRealClassName($type, $className);
 
-        if (empty($this->params['no-fixtures'])) {
+        if (empty($this->params['no-fixture'])) {
             if (!empty($this->params['fixtures'])) {
                 $fixtures = array_map('trim', explode(',', $this->params['fixtures']));
                 $this->_fixtures = array_filter($fixtures);
@@ -696,10 +696,10 @@ class TestTask extends BakeTask
             'help' => 'An existing class to bake tests for.'
         ])->addOption('fixtures', [
             'help' => 'A comma separated list of fixture names you want to include.'
-        ])->addOption('no-fixtures', [
+        ])->addOption('no-fixture', [
             'boolean' => true,
             'default' => false,
-            'help' => 'Select if you want to bake without fixtures.'
+            'help' => 'Select if you want to bake without fixture.'
         ])->addOption('all', [
             'boolean' => true,
             'help' => 'Bake all classes of the given type'
