@@ -346,8 +346,9 @@ class TestTaskTest extends TestCase
         $result = $this->Task->bake('Table', 'Articles');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
-	
-	/**
+
+
+    /**
      * Test baking a test for a concrete model with no-fixtures arg
      *
      * @return void
