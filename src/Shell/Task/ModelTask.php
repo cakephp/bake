@@ -280,7 +280,6 @@ class ModelTask extends BakeTask
                 if ($schema->column($fieldName)['null'] === false) {
                     $assoc['joinType'] = 'INNER';
                 }
-
             }
 
             if ($this->plugin && empty($assoc['className'])) {
