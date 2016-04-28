@@ -85,15 +85,15 @@ $primaryKeyArgumentList = join($primaryKeyArguments, ', ');
 <% foreach ($groupedFields['string'] as $field) : %>
 <% if (isset($associationFields[$field])) :
     $details = $associationFields[$field];
-    $assocPrimaryKeys = [];
+    $assocPrimaryKeyArguments = [];
     foreach ($details['primaryKey'] as $assocPrimaryKeyComponent) {
-        $assocPrimaryKeys[] = '$' . $singularVar . '->' . $details['property'] . '->' . $assocPrimaryKeyComponent;
+        $assocPrimaryKeyArguments[] = '$' . $singularVar . '->' . $details['property'] . '->' . $assocPrimaryKeyComponent;
     }
-    $assocPrimaryKeys = join($assocPrimaryKeys, ', ');
+    $assocPrimaryKeyArgumentList = join($assocPrimaryKeyArguments, ', ');
 %>
         <tr>
             <th><?= __('<%= Inflector::humanize($details['property']) %>') ?></th>
-            <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $assocPrimaryKeys %>]) : '' ?></td>
+            <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $assocPrimaryKeyArgumentList %>]) : '' ?></td>
         </tr>
 <% else : %>
         <tr>
@@ -102,6 +102,14 @@ $primaryKeyArgumentList = join($primaryKeyArguments, ', ');
         </tr>
 <% endif; %>
 <% endforeach; %>
+<% endif; %>
+<% if ($associations['HasOne']) : %>
+    <%- foreach ($associations['HasOne'] as $alias => $details) : %>
+        <tr>
+            <th><?= __('<%= Inflector::humanize(Inflector::singularize(Inflector::underscore($alias))) %>') ?></th>
+            <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $assocPrimaryKeyArgumentList %>]) : '' ?></td>
+        </tr>
+    <%- endforeach; %>
 <% endif; %>
 <% if ($groupedFields['number']) : %>
 <% foreach ($groupedFields['number'] as $field) : %>
