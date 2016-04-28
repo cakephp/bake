@@ -72,7 +72,11 @@ class BakeHelper extends Helper
         }
 
         foreach ($list as $k => &$v) {
-            $v = "'$v'";
+            if (is_array($v)) {
+                $v = "['" . join($v, "', '") . "']";
+            } else {
+                $v = "'" . $v . "'";
+            }
             if (!is_numeric($k)) {
                 $v = "'$k' => $v";
             }

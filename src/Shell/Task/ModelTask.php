@@ -273,10 +273,17 @@ class ModelTask extends BakeTask
                         $tmpModelName = Inflector::camelize($found);
                     }
                 }
+                $foreignKeys = (array) TableRegistry::get($tmpModelName)->primaryKey();
+                foreach ($foreignKeys as $k => $v) {
+                    if ($v === 'id') {
+                        $foreignKeys[$k] = $fieldName;
+                    }
+                }
                 $assoc = [
                     'alias' => $tmpModelName,
-                    'foreignKey' => $fieldName
+                    'foreignKey' => $foreignKeys,
                 ];
+                // debug $assoc;
                 if ($schema->column($fieldName)['null'] === false) {
                     $assoc['joinType'] = 'INNER';
                 }
@@ -694,7 +701,11 @@ class ModelTask extends BakeTask
         }
 
         foreach ($associations['belongsTo'] as $assoc) {
-            $rules[$assoc['foreignKey']] = ['name' => 'existsIn', 'extra' => $assoc['alias']];
+            if (is_array($assoc['foreignKey'])) {
+                $rules[join($assoc['foreignKey'], ';')] = ['name' => 'existsIn', 'extra' => $assoc['alias']];
+            } else {
+                $rules[$assoc['foreignKey']] = ['name' => 'existsIn', 'extra' => $assoc['alias']];
+            }
         }
 
         return $rules;

@@ -290,7 +290,10 @@ class TemplateTask extends BakeTask
         $keyFields = [];
         if (!empty($associations['BelongsTo'])) {
             foreach ($associations['BelongsTo'] as $assoc) {
-                $keyFields[$assoc['foreignKey']] = $assoc['variable'];
+                $foreignKeys = (array) $assoc['foreignKey'];
+                foreach ($foreignKeys as $foreignKey) {
+                    $keyFields[$foreignKey] = $assoc['variable'];
+                }
             }
         }
 
