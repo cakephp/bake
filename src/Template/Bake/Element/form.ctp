@@ -28,11 +28,18 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-<% if (strpos($action, 'add') === false): %>
+<%
+if (strpos($action, 'add') === false) :
+$primaryKeyArguments = [];
+foreach ($primaryKey as $primaryKeyComponent) {
+    $primaryKeyArguments[] = '$' . $singularVar . '->' . $primaryKeyComponent;
+}
+$primaryKeyArguments = join($primaryKeyArguments, ', ');
+%>
         <li><?= $this->Form->postLink(
                 __('Delete'),
-                ['action' => 'delete', $<%= $singularVar %>-><%= $primaryKey[0] %>],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $<%= $singularVar %>-><%= $primaryKey[0] %>)]
+                ['action' => 'delete', <%= $primaryKeyArguments %>],
+                ['confirm' => __('Are you sure you want to delete # {0}?', join([<%= $primaryKeyArguments %>], ' / '))]
             )
         ?></li>
 <% endif; %>

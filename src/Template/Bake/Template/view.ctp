@@ -49,23 +49,27 @@ $groupedFields = collection($fields)
     ->toArray();
 
 $groupedFields += ['number' => [], 'string' => [], 'boolean' => [], 'date' => [], 'text' => []];
-$pk = "\$$singularVar->{$primaryKey[0]}";
+$primaryKeyArguments = [];
+foreach ($primaryKey as $primaryKeyComponent) {
+    $primaryKeyArguments[] = '$' . $singularVar . '->' . $primaryKeyComponent;
+}
+$primaryKeyArgumentList = join($primaryKeyArguments, ', ');
 %>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit <%= $singularHumanName %>'), ['action' => 'edit', <%= $pk %>]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete <%= $singularHumanName %>'), ['action' => 'delete', <%= $pk %>], ['confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]) ?> </li>
-        <li><?= $this->Html->link(__('List <%= $pluralHumanName %>'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Edit <%= $singularHumanName %>'), ['action' => 'edit', <%= $primaryKeyArgumentList %>]) ?></li>
+        <li><?= $this->Form->postLink(__('Delete <%= $singularHumanName %>'), ['action' => 'delete', <%= $primaryKeyArgumentList %>], ['confirm' => __('Are you sure you want to delete # {0}?', join([<%= $primaryKeyArgumentList %>], ' / '))]) ?></li>
+        <li><?= $this->Html->link(__('List <%= $pluralHumanName %>'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?></li>
 <%
     $done = [];
     foreach ($associations as $type => $data) {
         foreach ($data as $alias => $details) {
             if ($details['controller'] !== $this->name && !in_array($details['controller'], $done)) {
 %>
-        <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New <%= Inflector::humanize(Inflector::singularize(Inflector::underscore($alias))) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New <%= Inflector::humanize(Inflector::singularize(Inflector::underscore($alias))) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) ?></li>
 <%
                 $done[] = $details['controller'];
             }
@@ -80,11 +84,16 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <% if ($groupedFields['string']) : %>
 <% foreach ($groupedFields['string'] as $field) : %>
 <% if (isset($associationFields[$field])) :
-            $details = $associationFields[$field];
+    $details = $associationFields[$field];
+    $assocPrimaryKeys = [];
+    foreach ($details['primaryKey'] as $assocPrimaryKeyComponent) {
+        $assocPrimaryKeys[] = '$' . $singularVar . '->' . $details['property'] . '->' . $assocPrimaryKeyComponent;
+    }
+    $assocPrimaryKeys = join($assocPrimaryKeys, ', ');
 %>
         <tr>
             <th><?= __('<%= Inflector::humanize($details['property']) %>') ?></th>
-            <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', $<%= $singularVar %>-><%= $details['property'] %>-><%= $details['primaryKey'][0] %>]) : '' ?></td>
+            <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $assocPrimaryKeys %>]) : '' ?></td>
         </tr>
 <% else : %>
         <tr>
@@ -93,14 +102,6 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
         </tr>
 <% endif; %>
 <% endforeach; %>
-<% endif; %>
-<% if ($associations['HasOne']) : %>
-    <%- foreach ($associations['HasOne'] as $alias => $details) : %>
-        <tr>
-            <th><?= __('<%= Inflector::humanize(Inflector::singularize(Inflector::underscore($alias))) %>') ?></th>
-            <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', $<%= $singularVar %>-><%= $details['property'] %>-><%= $details['primaryKey'][0] %>]) : '' ?></td>
-        </tr>
-    <%- endforeach; %>
 <% endif; %>
 <% if ($groupedFields['number']) : %>
 <% foreach ($groupedFields['number'] as $field) : %>
@@ -140,7 +141,12 @@ $relations = $associations['HasMany'] + $associations['BelongsToMany'];
 foreach ($relations as $alias => $details):
     $otherSingularVar = Inflector::variable($alias);
     $otherPluralHumanName = Inflector::humanize(Inflector::underscore($details['controller']));
-    %>
+    $relationsPrimaryKeyArguments = [];
+    foreach ($details['primaryKey'] as $relationsPrimaryKeyComponent) {
+        $relationsPrimaryKeyArguments[] = '$' . $otherSingularVar . '->' . $relationsPrimaryKeyComponent;
+    }
+    $relationsPrimaryKeyArgumentList = join($relationsPrimaryKeyArguments, ', ');
+%>
     <div class="related">
         <h4><?= __('Related <%= $otherPluralHumanName %>') ?></h4>
         <?php if (!empty($<%= $singularVar %>-><%= $details['property'] %>)): ?>
@@ -156,11 +162,10 @@ foreach ($relations as $alias => $details):
             <%- foreach ($details['fields'] as $field): %>
                 <td><?= h($<%= $otherSingularVar %>-><%= $field %>) ?></td>
             <%- endforeach; %>
-            <%- $otherPk = "\${$otherSingularVar}->{$details['primaryKey'][0]}"; %>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $otherPk %>]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => '<%= $details['controller'] %>', 'action' => 'edit', <%= $otherPk %>]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => '<%= $details['controller'] %>', 'action' => 'delete', <%= $otherPk %>], ['confirm' => __('Are you sure you want to delete # {0}?', <%= $otherPk %>)]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $relationsPrimaryKeyArgumentList %>]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => '<%= $details['controller'] %>', 'action' => 'edit', <%= $relationsPrimaryKeyArgumentList %>]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => '<%= $details['controller'] %>', 'action' => 'delete', <%= $relationsPrimaryKeyArgumentList %>], ['confirm' => __('Are you sure you want to delete # {0}?', join([<%= $relationsPrimaryKeyArgumentList %>], ' / '))]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
