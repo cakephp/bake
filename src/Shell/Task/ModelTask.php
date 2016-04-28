@@ -283,7 +283,6 @@ class ModelTask extends BakeTask
                     'alias' => $tmpModelName,
                     'foreignKey' => $foreignKeys,
                 ];
-                // debug $assoc;
                 if ($schema->column($fieldName)['null'] === false) {
                     $assoc['joinType'] = 'INNER';
                 }
@@ -701,11 +700,7 @@ class ModelTask extends BakeTask
         }
 
         foreach ($associations['belongsTo'] as $assoc) {
-            if (is_array($assoc['foreignKey'])) {
-                $rules[join($assoc['foreignKey'], ';')] = ['name' => 'existsIn', 'extra' => $assoc['alias']];
-            } else {
-                $rules[$assoc['foreignKey']] = ['name' => 'existsIn', 'extra' => $assoc['alias']];
-            }
+            $rules[join($assoc['foreignKey'], ';')] = ['name' => 'existsIn', 'extra' => $assoc['alias']];
         }
 
         return $rules;
