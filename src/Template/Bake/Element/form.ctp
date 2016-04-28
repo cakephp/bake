@@ -34,12 +34,18 @@ $primaryKeyArguments = [];
 foreach ($primaryKey as $primaryKeyComponent) {
     $primaryKeyArguments[] = '$' . $singularVar . '->' . $primaryKeyComponent;
 }
-$primaryKeyArguments = join($primaryKeyArguments, ', ');
+$primaryKeyArgumentList = join($primaryKeyArguments, ', ');
 %>
+        <?php $deleteMessagePrimaryKeys = function() use (<%= '$' . $singularVar %>) {
+<% foreach ($primaryKey as $primaryKeyComponent) { %>
+            $parts['<%= $primaryKeyComponent %>'] = '<%= Inflector::humanize($primaryKeyComponent) %>' . ': ' . h(<%= '$' . $singularVar . '->' . $primaryKeyComponent %>);
+<% } %>
+            return join($parts, ' / ');
+        } ?>
         <li><?= $this->Form->postLink(
                 __('Delete'),
-                ['action' => 'delete', <%= $primaryKeyArguments %>],
-                ['confirm' => __('Are you sure you want to delete # {0}?', join([<%= $primaryKeyArguments %>], ' / '))]
+                ['action' => 'delete', <%= $primaryKeyArgumentList %>],
+                ['confirm' => __('Are you sure you want to delete record having {0}?', $deleteMessagePrimaryKeys())]
             )
         ?></li>
 <% endif; %>

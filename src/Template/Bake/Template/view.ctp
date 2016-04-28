@@ -59,7 +59,13 @@ $primaryKeyArgumentList = join($primaryKeyArguments, ', ');
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Edit <%= $singularHumanName %>'), ['action' => 'edit', <%= $primaryKeyArgumentList %>]) ?></li>
-        <li><?= $this->Form->postLink(__('Delete <%= $singularHumanName %>'), ['action' => 'delete', <%= $primaryKeyArgumentList %>], ['confirm' => __('Are you sure you want to delete # {0}?', join([<%= $primaryKeyArgumentList %>], ' / '))]) ?></li>
+        <?php $deleteMessagePrimaryKeys = function() use (<%= '$' . $singularVar %>) {
+<% foreach ($primaryKey as $primaryKeyComponent) { %>
+            $parts['<%= $primaryKeyComponent %>'] = '<%= Inflector::humanize($primaryKeyComponent) %>' . ': ' . h(<%= '$' . $singularVar . '->' . $primaryKeyComponent %>);
+<% } %>
+            return join($parts, ' / ');
+        } ?>        
+        <li><?= $this->Form->postLink(__('Delete <%= $singularHumanName %>'), ['action' => 'delete', <%= $primaryKeyArgumentList %>], ['confirm' => __('Are you sure you want to delete the record having {0}?', $deleteMessagePrimaryKeys())]) ?></li>
         <li><?= $this->Html->link(__('List <%= $pluralHumanName %>'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?></li>
 <%
@@ -173,8 +179,13 @@ foreach ($relations as $alias => $details):
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $relationsPrimaryKeyArgumentList %>]) ?>
                     <?= $this->Html->link(__('Edit'), ['controller' => '<%= $details['controller'] %>', 'action' => 'edit', <%= $relationsPrimaryKeyArgumentList %>]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => '<%= $details['controller'] %>', 'action' => 'delete', <%= $relationsPrimaryKeyArgumentList %>], ['confirm' => __('Are you sure you want to delete # {0}?', join([<%= $relationsPrimaryKeyArgumentList %>], ' / '))]) ?>
-                </td>
+                    <?php $deleteMessagePrimaryKeys = function() use (<%= '$' . $otherSingularVar %>) {
+            <%- foreach ($details['primaryKey'] as $relationsPrimaryKeyComponent) { %>
+                        $parts['<%= $relationsPrimaryKeyComponent %>'] = '<%= Inflector::humanize($relationsPrimaryKeyComponent) %>' . ': ' . h(<%= '$' . $otherSingularVar . '->' . $relationsPrimaryKeyComponent %>);
+            <%- } %>
+                        return join($parts, ' / ');
+                    } ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => '<%= $details['controller'] %>', 'action' => 'delete', <%= $relationsPrimaryKeyArgumentList %>], ['confirm' => __('Are you sure you want to delete the record having {0}?', $deleteMessagePrimaryKeys())]) ?>
             </tr>
             <?php endforeach; ?>
         </table>

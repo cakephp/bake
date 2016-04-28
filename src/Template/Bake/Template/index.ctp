@@ -97,7 +97,13 @@ if (!empty($indexColumns)) {
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', <%= $primaryKeyArgumentList %>]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', <%= $primaryKeyArgumentList %>]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', <%= $primaryKeyArgumentList %>], ['confirm' => __('Are you sure you want to delete # {0}?', join([<%= $primaryKeyArgumentList %>], ' / '))]) ?>
+                    <?php $deleteMessagePrimaryKeys = function() use (<%= '$' . $singularVar %>) {
+<%      foreach ($primaryKey as $primaryKeyComponent) { %>
+                        $parts['<%= $primaryKeyComponent %>'] = '<%= Inflector::humanize($primaryKeyComponent) %>' . ': ' . h(<%= '$' . $singularVar . '->' . $primaryKeyComponent %>);
+<%      } %>
+                        return join($parts, ' / ');
+                    } ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', <%= $primaryKeyArgumentList %>], ['confirm' => __('Are you sure you want to delete record having {0}?', $deleteMessagePrimaryKeys())]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
