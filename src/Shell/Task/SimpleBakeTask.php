@@ -72,7 +72,7 @@ abstract class SimpleBakeTask extends BakeTask
      * Execute method
      *
      * @param string|null $name The name of the object to bake.
-     * @return void
+     * @return void|string
      */
     public function main($name = null)
     {
@@ -109,7 +109,7 @@ abstract class SimpleBakeTask extends BakeTask
      * Generate a test case.
      *
      * @param string $className The class to bake a test for.
-     * @return string|bool
+     * @return string|void
      */
     public function bakeTest($className)
     {

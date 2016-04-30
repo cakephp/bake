@@ -78,7 +78,7 @@ class ModelTask extends BakeTask
      * Execution method always used for tasks
      *
      * @param string|null $name The name of the table to bake.
-     * @return void
+     * @return void|bool
      */
     public function main($name = null)
     {
@@ -106,7 +106,7 @@ class ModelTask extends BakeTask
     {
         $table = $this->getTable($name);
         $tableObject = $this->getTableObject($name, $table);
-        $data = $this->getTableContext($tableObject, $table, $name);
+        $data = $this->getTableContext($tableObject, $table);
         $this->bakeTable($tableObject, $data);
         $this->bakeEntity($tableObject, $data);
         $this->bakeFixture($tableObject->alias(), $tableObject->table());
@@ -116,10 +116,11 @@ class ModelTask extends BakeTask
     /**
      * Get table context for baking a given table.
      *
-     * @param string $name The model name to generate.
+     * @param object $tableObject The table object to utilize.
+     * @param string $table The table name to generate.
      * @return array
      */
-    public function getTableContext($tableObject, $table, $name)
+    public function getTableContext($tableObject, $table)
     {
         $associations = $this->getAssociations($tableObject);
         $this->applyAssociations($tableObject, $associations);
@@ -266,7 +267,7 @@ class ModelTask extends BakeTask
                         $tmpModelName = Inflector::camelize($found);
                     }
                 }
-                $foreignKeys = (array) TableRegistry::get($tmpModelName)->primaryKey();
+                $foreignKeys = (array)TableRegistry::get($tmpModelName)->primaryKey();
                 foreach ($foreignKeys as $k => $v) {
                     if ($v === 'id') {
                         $foreignKeys[$k] = $fieldName;
@@ -325,7 +326,7 @@ class ModelTask extends BakeTask
     public function findHasMany($model, array $associations)
     {
         $schema = $model->schema();
-        $primaryKey = (array) $schema->primaryKey();
+        $primaryKey = (array)$schema->primaryKey();
         $tableName = $schema->name();
         $foreignKey = $this->_modelKey($tableName);
 
@@ -361,8 +362,8 @@ class ModelTask extends BakeTask
             }
 
             $assoc = false;
-            if ($tableName !== $otherTableName && array_diff(
-                array_values($targetForeignKey), array_values($possibleForeignKeys)) === []
+            if ($tableName !== $otherTableName
+                && array_diff(array_values($targetForeignKey), array_values($possibleForeignKeys)) === []
             ) {
                 $assoc = [
                     'alias' => $otherModel->alias(),
@@ -384,8 +385,8 @@ class ModelTask extends BakeTask
                 $hasOne = false;
                 foreach ($otherSchema->constraints() as $constraint) {
                     $constraint = $otherSchema->constraint($constraint);
-                    if ($constraint['type'] === 'unique' && array_diff(
-                        array_values($assoc['foreignKey']), array_values($constraint['columns'])) === []
+                    if ($constraint['type'] === 'unique'
+                        && array_diff(array_values($assoc['foreignKey']), array_values($constraint['columns'])) === []
                     ) {
                         $associations['hasOne'][] = $assoc;
                         $hasOne = true;
@@ -411,8 +412,8 @@ class ModelTask extends BakeTask
     {
         $schema = $model->schema();
         $tableName = $schema->name();
-        $primaryKey = (array) $schema->primaryKey();
-        $foreignKey = (array) $this->_modelKey($tableName);
+        $primaryKey = (array)$schema->primaryKey();
+        $foreignKey = (array)$this->_modelKey($tableName);
 
         $tables = $this->listAll();
         foreach ($tables as $otherTableName) {
@@ -450,11 +451,11 @@ class ModelTask extends BakeTask
                 $reverseForeignKey = false;
                 $reverseForeignKeyIntersection = false;
                 $otherForeignKeysDiff = array_diff($otherForeignKeys, $thisForeignKey);
-                foreach($otherForeignKeysDiff as $reverseForeignKey) {
+                foreach ($otherForeignKeysDiff as $reverseForeignKey) {
                     $reverseSideTableName = Inflector::pluralize(substr($reverseForeignKey, 0, -3));
                     $reverseSideTableObject = TableRegistry::get($reverseSideTableName);
 
-                    $reverseForeignKey = (array) $reverseSideTableObject->primaryKey();
+                    $reverseForeignKey = (array)$reverseSideTableObject->primaryKey();
                     foreach ($reverseForeignKey as $i => $fieldName) {
                         if ($fieldName === 'id') {
                             $reverseForeignKey[$i] = Inflector::singularize($reverseSideTableObject->table()) . '_id';
@@ -521,7 +522,7 @@ class ModelTask extends BakeTask
             $fields = explode(',', $this->params['primary-key']);
             return array_values(array_filter(array_map('trim', $fields)));
         }
-        return (array) $model->primaryKey();
+        return (array)$model->primaryKey();
     }
 
     /**
@@ -649,7 +650,7 @@ class ModelTask extends BakeTask
         }
 
         $validate = [];
-        $primaryKey = (array) $schema->primaryKey();
+        $primaryKey = (array)$schema->primaryKey();
         $foreignKeys = [];
         if (isset($associations['belongsTo'])) {
             foreach ($associations['belongsTo'] as $assoc) {

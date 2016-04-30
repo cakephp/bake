@@ -46,7 +46,7 @@ class ControllerTask extends BakeTask
      * Execution method always used for tasks
      *
      * @param string|null $name The name of the controller to bake.
-     * @return void
+     * @return void|bool
      */
     public function main($name = null)
     {
@@ -180,7 +180,7 @@ class ControllerTask extends BakeTask
      * Assembles and writes a unit test file
      *
      * @param string $className Controller class name
-     * @return string Baked test
+     * @return string|void
      */
     public function bakeTest($className)
     {

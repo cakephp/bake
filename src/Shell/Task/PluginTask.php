@@ -59,7 +59,7 @@ class PluginTask extends BakeTask
      * Execution method always used for tasks
      *
      * @param string|null $name The name of the plugin to bake.
-     * @return void
+     * @return void|bool
      */
     public function main($name = null)
     {
@@ -86,7 +86,7 @@ class PluginTask extends BakeTask
      * Also update the autoloader and the root composer.json file if it can be found
      *
      * @param string $plugin Name of the plugin in CamelCased format
-     * @return bool
+     * @return bool|void
      */
     public function bake($plugin)
     {

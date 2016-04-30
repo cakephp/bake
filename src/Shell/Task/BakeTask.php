@@ -116,7 +116,7 @@ class BakeTask extends Shell
      * Base execute method parses some parameters and sets some properties on the bake tasks.
      * call when overriding execute()
      *
-     * @return void
+     * @return void|string
      */
     public function main()
     {
@@ -135,7 +135,7 @@ class BakeTask extends Shell
      * Executes an external shell command and pipes its output to the stdout
      *
      * @param string $command the command to execute
-     * @return void
+     * @return void|bool|string
      * @throws \RuntimeException if any errors occurred during the execution
      */
     public function callProcess($command)
