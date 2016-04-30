@@ -20,6 +20,7 @@ use Cake\Database\Schema\Table as SchemaTable;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 /**
@@ -206,15 +207,6 @@ class ModelTask extends BakeTask
 
         $primary = $table->primaryKey();
         $associations = $this->findBelongsTo($table, $associations);
-
-        // debug(remove);
-        // if (is_array($primary) && count($primary) > 1) {
-        //     $this->err(
-        //         '<warning>Bake cannot generate associations for composite primary keys at this time</warning>.'
-        //     );
-        //     return $associations;
-        // }
-
         $associations = $this->findHasMany($table, $associations);
         $associations = $this->findBelongsToMany($table, $associations);
         return $associations;
@@ -358,8 +350,6 @@ class ModelTask extends BakeTask
                     $targetForeignKey[$i] = Inflector::singularize($model->table()) . '_id';
                 }
             }
-            // sort($targetForeignKey);
-            // $targetForeignKey = array_values($targetForeignKey);
 
             $possibleForeignKeys = $otherSchema->columns();
             foreach ($possibleForeignKeys as $i => $fieldName) {
@@ -370,12 +360,9 @@ class ModelTask extends BakeTask
                     unset($possibleForeignKeys[$i]);
                 }
             }
-            // sort($possibleForeignKeys);
-            // $possibleForeignKeys = array_values($possibleForeignKeys);
 
             $assoc = false;
-            // if ($targetForeignKey === $possibleForeignKeys) {
-            if (\Cake\Utility\Hash::diff(
+            if (Hash::diff(
                 array_values($targetForeignKey), array_values($possibleForeignKeys)) === []
             ) {
                 $assoc = [
@@ -398,11 +385,11 @@ class ModelTask extends BakeTask
                 $hasOne = false;
                 foreach ($otherSchema->constraints() as $constraint) {
                     $constraint = $otherSchema->constraint($constraint);
-                    // if ($constraint['type'] === 'unique' && $assoc['foreignKey'] === $constraint['columns']) {
-                    if ($constraint['type'] === 'unique' && \Cake\Utility\Hash::diff(
+                    if ($constraint['type'] === 'unique' && Hash::diff(
                         array_values($assoc['foreignKey']), array_values($constraint['columns'])) === []
                     ) {
                         $associations['hasOne'][] = $assoc;
+                        $hasOne = true;
                         break;
                     }
                 }
