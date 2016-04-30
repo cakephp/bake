@@ -261,7 +261,7 @@ class ModelTask extends BakeTask
                     $tmpModelName = Inflector::camelize($found);
                 }
             }
-            if (!in_array($tmpModelName, $tables)) {
+            if (!in_array(Inflector::tableize($tmpModelName), $tables)) {
                 continue;
             }
             $foreignKeys = (array)TableRegistry::get($tmpModelName)->primaryKey();
@@ -442,7 +442,7 @@ class ModelTask extends BakeTask
             }
             if ($assocTable && in_array($assocTable, $tables)) {
                 if (!in_array($otherTableName, $tables)) {
-                    break;
+                    continue;
                 }
                 $assocTableObject = TableRegistry::get($otherTableName);
 
@@ -454,10 +454,9 @@ class ModelTask extends BakeTask
                 }
                 $otherForeignKeys = $assocTableObject->schema()->columns();
                 foreach ($otherForeignKeys as $i => $fieldName) {
-                    if ($fieldName === 'parent_id') {
-                        continue;
-                    }
-                    if (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
+                    if ($fieldName !== 'parent_id' && (
+                        strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName))
+                    ) {
                         unset($otherForeignKeys[$i]);
                     }
                 }
@@ -470,6 +469,10 @@ class ModelTask extends BakeTask
                 $otherForeignKeysDiff = array_diff($otherForeignKeys, $thisForeignKey);
                 foreach ($otherForeignKeysDiff as $reverseForeignKey) {
                     $reverseSideTableName = Inflector::pluralize(substr($reverseForeignKey, 0, -3));
+
+                    if (!in_array($reverseSideTableName, $tables)) {
+                        continue;
+                    }
                     $reverseSideTableObject = TableRegistry::get($reverseSideTableName);
 
                     $reverseForeignKey = (array)$reverseSideTableObject->primaryKey();
@@ -490,22 +493,21 @@ class ModelTask extends BakeTask
                     $reverseForeignKey = array_values($reverseForeignKey);
                     $reverseOtherForeignKeys = array_values($reverseOtherForeignKeys);
                     $reverseForeignKeyIntersection = array_intersect($reverseForeignKey, $reverseOtherForeignKeys);
-                }
-
-                if ($thisForeignKey === $thisForeignKeyIntersection
-                    && $reverseForeignKey === $reverseForeignKeyIntersection
-                    && !empty($reverseForeignKey)) {
-                    $habtmName = $this->_camelize($assocTable);
-                    $assoc = [
-                        'alias' => $habtmName,
-                        'foreignKey' => $thisForeignKeyIntersection,
-                        'targetForeignKey' => $reverseForeignKeyIntersection,
-                        'joinTable' => $otherTableName,
-                    ];
-                    if ($assoc && $this->plugin) {
-                        $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
+                    if ($thisForeignKey === $thisForeignKeyIntersection
+                        && $reverseForeignKey === $reverseForeignKeyIntersection
+                        && !empty($reverseForeignKey)) {
+                        $habtmName = $this->_camelize($assocTable);
+                        $assoc = [
+                            'alias' => $habtmName,
+                            'foreignKey' => $thisForeignKeyIntersection,
+                            'targetForeignKey' => $reverseForeignKeyIntersection,
+                            'joinTable' => $otherTableName,
+                        ];
+                        if ($assoc && $this->plugin) {
+                            $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
+                        }
+                        $associations['belongsToMany'][] = $assoc;
                     }
-                    $associations['belongsToMany'][] = $assoc;
                 }
             }
         }
