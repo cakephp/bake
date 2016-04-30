@@ -199,8 +199,9 @@ class ModelTask extends BakeTask
 
         $associations = [
             'belongsTo' => [],
+            'belongsToMany' => [],
+            'hasOne' => [],
             'hasMany' => [],
-            'belongsToMany' => []
         ];
 
         $primary = $table->primaryKey();
@@ -350,22 +351,15 @@ class ModelTask extends BakeTask
                     continue;
                 }
             }
-            
-            $fks = (array) $otherModel->primaryKey();
-            // foreach ($foreignKeys as $k => $v) {
-            //     if ($v === 'id') {
-            //         $foreignKeys[$k] = $fieldName;
-            //     }
-            // }
-            // debug([$otherTableName, $fks]);
+
             $targetForeignKey = $primaryKey;
             foreach ($targetForeignKey as $i => $fieldname) {
                 if ($fieldname === 'id') {
                     $targetForeignKey[$i] = Inflector::singularize($model->table()) . '_id';
                 }
             }
-            sort($targetForeignKey);
-            $targetForeignKey = array_values($targetForeignKey);
+            // sort($targetForeignKey);
+            // $targetForeignKey = array_values($targetForeignKey);
 
             $possibleForeignKeys = $otherSchema->columns();
             foreach ($possibleForeignKeys as $i => $fieldName) {
@@ -376,11 +370,14 @@ class ModelTask extends BakeTask
                     unset($possibleForeignKeys[$i]);
                 }
             }
-            sort($possibleForeignKeys);
-            $possibleForeignKeys = array_values($possibleForeignKeys);
+            // sort($possibleForeignKeys);
+            // $possibleForeignKeys = array_values($possibleForeignKeys);
 
             $assoc = false;
-            if ($targetForeignKey === $possibleForeignKeys) {
+            // if ($targetForeignKey === $possibleForeignKeys) {
+            if (\Cake\Utility\Hash::diff(
+                array_values($targetForeignKey), array_values($possibleForeignKeys)) === []
+            ) {
                 $assoc = [
                     'alias' => $otherModel->alias(),
                     'foreignKey' => $possibleForeignKeys,
@@ -398,9 +395,21 @@ class ModelTask extends BakeTask
                 $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
             }
             if ($assoc) {
-                $associations['hasMany'][] = $assoc;
+                $hasOne = false;
+                foreach ($otherSchema->constraints() as $constraint) {
+                    $constraint = $otherSchema->constraint($constraint);
+                    // if ($constraint['type'] === 'unique' && $assoc['foreignKey'] === $constraint['columns']) {
+                    if ($constraint['type'] === 'unique' && \Cake\Utility\Hash::diff(
+                        array_values($assoc['foreignKey']), array_values($constraint['columns'])) === []
+                    ) {    
+                        $associations['hasOne'][] = $assoc;
+                        break;
+                    }
+                }
+                if (!$hasOne) {
+                    $associations['hasMany'][] = $assoc;
+                }
             }
-            // debug(get_class_methods($model->schema()->constraints()));
 
             /*
             foreach ($possibleForeignKeys as $fieldName) {
@@ -941,8 +950,8 @@ class ModelTask extends BakeTask
         // Remove tables where you never want any assocations detected by conventions
         $tables = array_flip($this->_tables);
         unset($tables['phinxlog']);
-        if (!empty($this->params['ignore-tables'])) {
-            $tables = explode(',', $this->params['ignore-tables']);
+        if (!empty($this->params['ignore-table'])) {
+            $tables = explode(',', $this->params['ignore-table']);
             $tables = array_values(array_filter(array_map('trim', $tables)));
             foreach ($tables as $table) {
                 unset($this->_tables[$table]);
@@ -1064,8 +1073,8 @@ class ModelTask extends BakeTask
         ])->addOption('display-field', [
             'help' => 'The displayField if you would like to choose one.' .
                 ' Can be a comma separated list.'
-        ])->addOption('ignore-tables', [
-            'help' => 'Ignore tables where you never want any assocations detected by conventions.' .
+        ])->addOption('ignore-table', [
+            'help' => 'Ignore any table where you never want assocations detected by conventions.' .
                 ' Can be a comma separated list.'
         ])->addOption('no-test', [
             'boolean' => true,
