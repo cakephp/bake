@@ -969,7 +969,7 @@ class ModelTask extends BakeTask
             $tables = explode(',', $this->params['ignore-table']);
             $tables = array_values(array_filter(array_map('trim', $tables)));
             foreach ($tables as $table) {
-                unset($this->_tables[$table]);
+                unset($tables[$table]);
             }
         }
         $this->_tables = array_flip($tables);
