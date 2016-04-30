@@ -252,34 +252,36 @@ class ModelTask extends BakeTask
                 continue;
             }
 
+            $tmpModelName = $this->_modelNameFromKey($fieldName);
+            if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)) {
+                $found = $this->findTableReferencedBy($schema, $fieldName);
+                if ($found) {
+                    $tmpModelName = Inflector::camelize($found);
+                }
+            }
+            $foreignKeys = (array)TableRegistry::get($tmpModelName)->primaryKey();
+            foreach ($foreignKeys as $k => $v) {
+                if ($v === 'id') {
+                    $foreignKeys[$k] = $fieldName;
+                }
+            }
+
             if ($fieldName === 'parent_id') {
                 $className = ($this->plugin) ? $this->plugin . '.' . $model->alias() : $model->alias();
                 $assoc = [
                     'alias' => 'Parent' . $model->alias(),
                     'className' => $className,
-                    'foreignKey' => $fieldName
+                    'foreignKey' => $foreignKeys,
                 ];
             } else {
-                $tmpModelName = $this->_modelNameFromKey($fieldName);
-                if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)) {
-                    $found = $this->findTableReferencedBy($schema, $fieldName);
-                    if ($found) {
-                        $tmpModelName = Inflector::camelize($found);
-                    }
-                }
-                $foreignKeys = (array)TableRegistry::get($tmpModelName)->primaryKey();
-                foreach ($foreignKeys as $k => $v) {
-                    if ($v === 'id') {
-                        $foreignKeys[$k] = $fieldName;
-                    }
-                }
                 $assoc = [
                     'alias' => $tmpModelName,
                     'foreignKey' => $foreignKeys,
                 ];
-                if ($schema->column($fieldName)['null'] === false) {
-                    $assoc['joinType'] = 'INNER';
-                }
+            }
+
+            if ($schema->column($fieldName)['null'] === false) {
+                $assoc['joinType'] = 'INNER';
             }
 
             if ($this->plugin && empty($assoc['className'])) {
@@ -344,39 +346,53 @@ class ModelTask extends BakeTask
                 }
             }
 
-            $targetForeignKey = $primaryKey;
-            foreach ($targetForeignKey as $i => $fieldName) {
+            $otherForeignKeys = $otherSchema->columns();
+            foreach ($otherForeignKeys as $i => $fieldName) {
                 if ($fieldName === 'id') {
-                    $targetForeignKey[$i] = Inflector::singularize($model->table()) . '_id';
+                    if ($tableName === $otherTableName && in_array('parent_id', $otherSchema->columns())
+                    ) {
+                    } else {
+                        unset($otherForeignKeys[$i]);
+                    }
+                } elseif (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
+                    unset($otherForeignKeys[$i]);
                 }
-            }
-
-            $possibleForeignKeys = $otherSchema->columns();
-            foreach ($possibleForeignKeys as $i => $fieldName) {
                 if ($fieldName === 'parent_id') {
-                    continue;
-                }
-                if (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
-                    unset($possibleForeignKeys[$i]);
+                    unset($otherForeignKeys[$i]);
                 }
             }
 
-            $assoc = false;
-            if ($tableName !== $otherTableName
-                && array_diff(array_values($targetForeignKey), array_values($possibleForeignKeys)) === []
-            ) {
-                $assoc = [
-                    'alias' => $otherModel->alias(),
-                    'foreignKey' => $possibleForeignKeys,
-                ];
+            $thisForeignKey = $primaryKey;
+            foreach ($thisForeignKey as $i => $fieldName) {
+                if ($fieldName === 'id') {
+                    if ($tableName === $otherTableName) {
+                    }
+                    else {
+                        $thisForeignKey[$i] = Inflector::singularize($model->table()) . '_id';
+                    }
+                }
             }
-            if ($otherTableName === $tableName && $fieldName === 'parent_id') {
-                $className = ($this->plugin) ? $this->plugin . '.' . $model->alias() : $model->alias();
-                $assoc = [
-                    'alias' => 'Child' . $model->alias(),
-                    'className' => $className,
-                    'foreignKey' => 'parent_id',
-                ];
+            
+            $assoc = false;
+            if ($tableName === $otherTableName) {
+                debug($otherForeignKeys);
+                debug($thisForeignKey);
+                debug(array_diff(array_values($thisForeignKey), array_values($otherForeignKeys)) === []);
+            }
+            if (array_diff(array_values($thisForeignKey), array_values($otherForeignKeys)) === []) {
+                if ($tableName === $otherTableName && in_array('parent_id', $thisForeignKey)) {
+                    $className = ($this->plugin) ? $this->plugin . '.' . $model->alias() : $model->alias();
+                    $assoc = [
+                        'alias' => 'Child' . $model->alias(),
+                        'className' => $className,
+                        'foreignKey' => $otherForeignKeys,
+                    ];
+                } else {
+                    $assoc = [
+                        'alias' => $otherModel->alias(),
+                        'foreignKey' => $otherForeignKeys,
+                    ];
+                }
             }
             if ($assoc && $this->plugin && empty($assoc['className'])) {
                 $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
@@ -476,7 +492,7 @@ class ModelTask extends BakeTask
                 }
 
                 if ($thisForeignKey === $thisForeignKeyIntersection
-                    && $reverseForeignKey == $reverseForeignKeyIntersection
+                    && $reverseForeignKey === $reverseForeignKeyIntersection
                     && !empty($reverseForeignKey)) {
                     $habtmName = $this->_camelize($assocTable);
                     $assoc = [
@@ -779,7 +795,8 @@ class ModelTask extends BakeTask
         }
 
         foreach ($associations['belongsTo'] as $assoc) {
-            $rules[join($assoc['foreignKey'], ';')] = ['name' => 'existsIn', 'extra' => $assoc['alias']];
+            $foreignKeys = join($assoc['foreignKey'], ';');
+            $rules[$foreignKeys] = ['name' => 'existsIn', 'extra' => $assoc['alias']];
         }
 
         return $rules;
