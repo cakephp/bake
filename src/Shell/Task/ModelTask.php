@@ -206,12 +206,13 @@ class ModelTask extends BakeTask
         $primary = $table->primaryKey();
         $associations = $this->findBelongsTo($table, $associations);
 
-        if (is_array($primary) && count($primary) > 1) {
-            $this->err(
-                '<warning>Bake cannot generate associations for composite primary keys at this time</warning>.'
-            );
-            return $associations;
-        }
+        // debug(remove);
+        // if (is_array($primary) && count($primary) > 1) {
+        //     $this->err(
+        //         '<warning>Bake cannot generate associations for composite primary keys at this time</warning>.'
+        //     );
+        //     return $associations;
+        // }
 
         $associations = $this->findHasMany($table, $associations);
         $associations = $this->findBelongsToMany($table, $associations);
@@ -332,7 +333,7 @@ class ModelTask extends BakeTask
     public function findHasMany($model, array $associations)
     {
         $schema = $model->schema();
-        $primaryKey = (array)$schema->primaryKey();
+        $primaryKey = (array) $schema->primaryKey();
         $tableName = $schema->name();
         $foreignKey = $this->_modelKey($tableName);
 
@@ -349,8 +350,60 @@ class ModelTask extends BakeTask
                     continue;
                 }
             }
+            
+            $fks = (array) $otherModel->primaryKey();
+            // foreach ($foreignKeys as $k => $v) {
+            //     if ($v === 'id') {
+            //         $foreignKeys[$k] = $fieldName;
+            //     }
+            // }
+            // debug([$otherTableName, $fks]);
+            $targetForeignKey = $primaryKey;
+            foreach ($targetForeignKey as $i => $fieldname) {
+                if ($fieldname === 'id') {
+                    $targetForeignKey[$i] = Inflector::singularize($model->table()) . '_id';
+                }
+            }
+            sort($targetForeignKey);
+            $targetForeignKey = array_values($targetForeignKey);
 
-            foreach ($otherSchema->columns() as $fieldName) {
+            $possibleForeignKeys = $otherSchema->columns();
+            foreach ($possibleForeignKeys as $i => $fieldName) {
+                if ($fieldname === 'parent_id') {
+                    continue;
+                }
+                if (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
+                    unset($possibleForeignKeys[$i]);
+                }
+            }
+            sort($possibleForeignKeys);
+            $possibleForeignKeys = array_values($possibleForeignKeys);
+
+            $assoc = false;
+            if ($targetForeignKey === $possibleForeignKeys) {
+                $assoc = [
+                    'alias' => $otherModel->alias(),
+                    'foreignKey' => $possibleForeignKeys,
+                ];
+            }
+            if ($otherTableName === $tableName && $fieldName === 'parent_id') {
+                $className = ($this->plugin) ? $this->plugin . '.' . $model->alias() : $model->alias();
+                $assoc = [
+                    'alias' => 'Child' . $model->alias(),
+                    'className' => $className,
+                    'foreignKey' => 'parent_id',
+                ];
+            }
+            if ($assoc && $this->plugin && empty($assoc['className'])) {
+                $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
+            }
+            if ($assoc) {
+                $associations['hasMany'][] = $assoc;
+            }
+            // debug(get_class_methods($model->schema()->constraints()));
+
+            /*
+            foreach ($possibleForeignKeys as $fieldName) {
                 $assoc = false;
                 if (!in_array($fieldName, $primaryKey) && $fieldName === $foreignKey) {
                     $assoc = [
@@ -372,6 +425,7 @@ class ModelTask extends BakeTask
                     $associations['hasMany'][] = $assoc;
                 }
             }
+            */
         }
         return $associations;
     }
@@ -426,7 +480,8 @@ class ModelTask extends BakeTask
     public function getDisplayField($model)
     {
         if (!empty($this->params['display-field'])) {
-            return $this->params['display-field'];
+            $fields = explode(',', $this->params['display-field']);
+            return array_values(array_filter(array_map('trim', $fields)));
         }
         return $model->displayField();
     }
@@ -882,6 +937,18 @@ class ModelTask extends BakeTask
         foreach ($this->_tables as $table) {
             $this->_modelNames[] = $this->_camelize($table);
         }
+
+        // Remove tables where you never want any assocations detected by conventions
+        $tables = array_flip($this->_tables);
+        unset($tables['phinxlog']);
+        if (!empty($this->params['ignore-tables'])) {
+            $tables = explode(',', $this->params['ignore-tables']);
+            $tables = array_values(array_filter(array_map('trim', $tables)));
+            foreach ($tables as $table) {
+                unset($this->_tables[$table]);
+            }
+        }
+        $this->_tables = array_flip($tables);
         return $this->_tables;
     }
 
@@ -995,7 +1062,11 @@ class ModelTask extends BakeTask
             'help' => 'The primary key if you would like to manually set one.' .
                 ' Can be a comma separated list if you are using a composite primary key.'
         ])->addOption('display-field', [
-            'help' => 'The displayField if you would like to choose one.'
+            'help' => 'The displayField if you would like to choose one.' .
+                ' Can be a comma separated list.'
+        ])->addOption('ignore-tables', [
+            'help' => 'Ignore tables where you never want any assocations detected by conventions.' .
+                ' Can be a comma separated list.'
         ])->addOption('no-test', [
             'boolean' => true,
             'help' => 'Do not generate a test case skeleton.'
