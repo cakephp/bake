@@ -247,6 +247,8 @@ class ModelTask extends BakeTask
     public function findBelongsTo($model, array $associations)
     {
         $schema = $model->schema();
+        $tables = $this->listAll();
+
         foreach ($schema->columns() as $fieldName) {
             if (!preg_match('/^.*_id$/', $fieldName)) {
                 continue;
@@ -258,6 +260,9 @@ class ModelTask extends BakeTask
                 if ($found) {
                     $tmpModelName = Inflector::camelize($found);
                 }
+            }
+            if (!in_array($tmpModelName, $tables)) {
+                continue;
             }
             $foreignKeys = (array)TableRegistry::get($tmpModelName)->primaryKey();
             foreach ($foreignKeys as $k => $v) {
