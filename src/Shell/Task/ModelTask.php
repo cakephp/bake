@@ -370,13 +370,8 @@ class ModelTask extends BakeTask
                     }
                 }
             }
-            
+
             $assoc = false;
-            if ($tableName === $otherTableName) {
-                debug($otherForeignKeys);
-                debug($thisForeignKey);
-                debug(array_diff(array_values($thisForeignKey), array_values($otherForeignKeys)) === []);
-            }
             if (array_diff(array_values($thisForeignKey), array_values($otherForeignKeys)) === []) {
                 if ($tableName === $otherTableName && in_array('parent_id', $thisForeignKey)) {
                     $className = ($this->plugin) ? $this->plugin . '.' . $model->alias() : $model->alias();
