@@ -361,7 +361,7 @@ class ModelTask extends BakeTask
             }
 
             $assoc = false;
-            if (array_diff(
+            if ($tableName !== $otherTableName && array_diff(
                 array_values($targetForeignKey), array_values($possibleForeignKeys)) === []
             ) {
                 $assoc = [
