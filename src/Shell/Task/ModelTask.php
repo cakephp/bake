@@ -20,7 +20,6 @@ use Cake\Database\Schema\Table as SchemaTable;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 
 /**
@@ -362,7 +361,7 @@ class ModelTask extends BakeTask
             }
 
             $assoc = false;
-            if (Hash::diff(
+            if (array_diff(
                 array_values($targetForeignKey), array_values($possibleForeignKeys)) === []
             ) {
                 $assoc = [
@@ -385,7 +384,7 @@ class ModelTask extends BakeTask
                 $hasOne = false;
                 foreach ($otherSchema->constraints() as $constraint) {
                     $constraint = $otherSchema->constraint($constraint);
-                    if ($constraint['type'] === 'unique' && Hash::diff(
+                    if ($constraint['type'] === 'unique' && array_diff(
                         array_values($assoc['foreignKey']), array_values($constraint['columns'])) === []
                     ) {
                         $associations['hasOne'][] = $assoc;
