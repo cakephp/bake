@@ -397,31 +397,6 @@ class ModelTask extends BakeTask
                     $associations['hasMany'][] = $assoc;
                 }
             }
-
-            /*
-            foreach ($possibleForeignKeys as $fieldName) {
-                $assoc = false;
-                if (!in_array($fieldName, $primaryKey) && $fieldName === $foreignKey) {
-                    $assoc = [
-                        'alias' => $otherModel->alias(),
-                        'foreignKey' => $fieldName
-                    ];
-                } elseif ($otherTableName === $tableName && $fieldName === 'parent_id') {
-                    $className = ($this->plugin) ? $this->plugin . '.' . $model->alias() : $model->alias();
-                    $assoc = [
-                        'alias' => 'Child' . $model->alias(),
-                        'className' => $className,
-                        'foreignKey' => $fieldName
-                    ];
-                }
-                if ($assoc && $this->plugin && empty($assoc['className'])) {
-                    $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
-                }
-                if ($assoc) {
-                    $associations['hasMany'][] = $assoc;
-                }
-            }
-            */
         }
         return $associations;
     }
