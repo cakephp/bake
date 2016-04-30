@@ -428,8 +428,8 @@ class ModelTask extends BakeTask
         $tableName = $schema->name();
         $primaryKey = (array)$schema->primaryKey();
         $foreignKey = (array)$this->_modelKey($tableName);
-
         $tables = $this->listAll();
+
         foreach ($tables as $otherTableName) {
             $assocTable = null;
             $offset = strpos($otherTableName, $tableName . '_');
@@ -441,6 +441,9 @@ class ModelTask extends BakeTask
                 $assocTable = substr($otherTableName, 0, $otherOffset);
             }
             if ($assocTable && in_array($assocTable, $tables)) {
+                if (!in_array($tables, $otherTableName)) {
+                    break;
+                }
                 $assocTableObject = TableRegistry::get($otherTableName);
 
                 $thisForeignKey = $primaryKey;
