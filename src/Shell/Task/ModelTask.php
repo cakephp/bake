@@ -441,7 +441,7 @@ class ModelTask extends BakeTask
                 $assocTable = substr($otherTableName, 0, $otherOffset);
             }
             if ($assocTable && in_array($assocTable, $tables)) {
-                if (!in_array($tables, $otherTableName)) {
+                if (!in_array($otherTableName, $tables)) {
                     break;
                 }
                 $assocTableObject = TableRegistry::get($otherTableName);
