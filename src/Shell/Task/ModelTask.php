@@ -521,7 +521,7 @@ class ModelTask extends BakeTask
             $fields = explode(',', $this->params['primary-key']);
             return array_values(array_filter(array_map('trim', $fields)));
         }
-        return (array)$model->primaryKey();
+        return (array) $model->primaryKey();
     }
 
     /**
@@ -649,7 +649,7 @@ class ModelTask extends BakeTask
         }
 
         $validate = [];
-        $primaryKey = (array)$schema->primaryKey();
+        $primaryKey = (array) $schema->primaryKey();
         $foreignKeys = [];
         if (isset($associations['belongsTo'])) {
             foreach ($associations['belongsTo'] as $assoc) {
