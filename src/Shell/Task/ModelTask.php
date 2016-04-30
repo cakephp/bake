@@ -401,7 +401,7 @@ class ModelTask extends BakeTask
                     // if ($constraint['type'] === 'unique' && $assoc['foreignKey'] === $constraint['columns']) {
                     if ($constraint['type'] === 'unique' && \Cake\Utility\Hash::diff(
                         array_values($assoc['foreignKey']), array_values($constraint['columns'])) === []
-                    ) {    
+                    ) {
                         $associations['hasOne'][] = $assoc;
                         break;
                     }
