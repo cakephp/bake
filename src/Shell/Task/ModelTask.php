@@ -412,7 +412,8 @@ class ModelTask extends BakeTask
     {
         $schema = $model->schema();
         $tableName = $schema->name();
-        $foreignKey = $this->_modelKey($tableName);
+        $primaryKey = (array) $schema->primaryKey();
+        $foreignKey = (array) $this->_modelKey($tableName);
 
         $tables = $this->listAll();
         foreach ($tables as $otherTableName) {
@@ -426,17 +427,76 @@ class ModelTask extends BakeTask
                 $assocTable = substr($otherTableName, 0, $otherOffset);
             }
             if ($assocTable && in_array($assocTable, $tables)) {
-                $habtmName = $this->_camelize($assocTable);
-                $assoc = [
-                    'alias' => $habtmName,
-                    'foreignKey' => $foreignKey,
-                    'targetForeignKey' => $this->_modelKey($habtmName),
-                    'joinTable' => $otherTableName
-                ];
-                if ($assoc && $this->plugin) {
-                    $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
+                $assocTableObject = TableRegistry::get($otherTableName);
+
+                $thisForeignKey = $primaryKey;
+                foreach ($thisForeignKey as $i => $fieldname) {
+                    if ($fieldname === 'id') {
+                        $thisForeignKey[$i] = Inflector::singularize($model->table()) . '_id';
+                    }
                 }
-                $associations['belongsToMany'][] = $assoc;
+                $otherForeignKeys = $assocTableObject->schema()->columns();
+                foreach ($otherForeignKeys as $i => $fieldName) {
+                    if ($fieldname === 'parent_id') {
+                        continue;
+                    }
+                    if (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
+                        unset($otherForeignKeys[$i]);
+                    }
+                }
+
+                $tmpThisForeignKey = array_values($thisForeignKey);
+                sort($tmpThisForeignKey);
+                $tmpOtherForeignKeys = array_values($otherForeignKeys);
+                sort($tmpOtherForeignKeys);
+                $thisForeignKeyIntersection = array_intersect($tmpThisForeignKey, $tmpOtherForeignKeys);
+
+                $tmpOtherForeignKey = false;
+                $reverseForeignKeyIntersection = false;
+                $otherForeignKeysDiff = array_diff($tmpOtherForeignKeys, $tmpThisForeignKey);
+                foreach($otherForeignKeysDiff as $reverseForeignKey) {
+                    $reverseSideTableName = Inflector::pluralize(substr($reverseForeignKey, 0, -3));
+                    $reverseSideTableObject = TableRegistry::get($reverseSideTableName);
+
+                    $reverseForeignKey = (array) $reverseSideTableObject->primaryKey();
+                    foreach ($reverseForeignKey as $i => $fieldname) {
+                        if ($fieldname === 'id') {
+                            $reverseForeignKey[$i] = Inflector::singularize($reverseSideTableObject->table()) . '_id';
+                        }
+                    }
+
+                    $reverseOtherForeignKeys = $assocTableObject->schema()->columns();
+                    foreach ($reverseOtherForeignKeys as $i => $fieldName) {
+                        if ($fieldname === 'parent_id') {
+                            continue;
+                        }
+                        if (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
+                            unset($reverseOtherForeignKeys[$i]);
+                        }
+                    }
+
+                    $tmpOtherForeignKey = array_values($reverseForeignKey);
+                    sort($tmpOtherForeignKey);
+                    $tmpOtherForeignKeys = array_values($reverseOtherForeignKeys);
+                    sort($tmpOtherForeignKeys);
+                    $reverseForeignKeyIntersection = array_intersect($tmpOtherForeignKey, $tmpOtherForeignKeys);
+                }
+
+                if ($tmpThisForeignKey === $thisForeignKeyIntersection
+                    && $tmpOtherForeignKey == $reverseForeignKeyIntersection
+                    && !empty($tmpOtherForeignKey)) {
+                    $habtmName = $this->_camelize($assocTable);
+                    $assoc = [
+                        'alias' => $habtmName,
+                        'foreignKey' => $thisForeignKeyIntersection,
+                        'targetForeignKey' => $reverseForeignKeyIntersection,
+                        'joinTable' => $otherTableName,
+                    ];
+                    if ($assoc && $this->plugin) {
+                        $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
+                    }
+                    $associations['belongsToMany'][] = $assoc;
+                }
             }
         }
         return $associations;
