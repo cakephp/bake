@@ -444,16 +444,13 @@ class ModelTask extends BakeTask
                         unset($otherForeignKeys[$i]);
                     }
                 }
+                $thisForeignKey = array_values($thisForeignKey);
+                $otherForeignKeys = array_values($otherForeignKeys);
+                $thisForeignKeyIntersection = array_intersect($thisForeignKey, $otherForeignKeys);
 
-                $tmpThisForeignKey = array_values($thisForeignKey);
-                sort($tmpThisForeignKey);
-                $tmpOtherForeignKeys = array_values($otherForeignKeys);
-                sort($tmpOtherForeignKeys);
-                $thisForeignKeyIntersection = array_intersect($tmpThisForeignKey, $tmpOtherForeignKeys);
-
-                $tmpOtherForeignKey = false;
+                $reverseForeignKey = false;
                 $reverseForeignKeyIntersection = false;
-                $otherForeignKeysDiff = array_diff($tmpOtherForeignKeys, $tmpThisForeignKey);
+                $otherForeignKeysDiff = array_diff($otherForeignKeys, $thisForeignKey);
                 foreach($otherForeignKeysDiff as $reverseForeignKey) {
                     $reverseSideTableName = Inflector::pluralize(substr($reverseForeignKey, 0, -3));
                     $reverseSideTableObject = TableRegistry::get($reverseSideTableName);
@@ -464,7 +461,6 @@ class ModelTask extends BakeTask
                             $reverseForeignKey[$i] = Inflector::singularize($reverseSideTableObject->table()) . '_id';
                         }
                     }
-
                     $reverseOtherForeignKeys = $assocTableObject->schema()->columns();
                     foreach ($reverseOtherForeignKeys as $i => $fieldName) {
                         if ($fieldname === 'parent_id') {
@@ -474,17 +470,14 @@ class ModelTask extends BakeTask
                             unset($reverseOtherForeignKeys[$i]);
                         }
                     }
-
-                    $tmpOtherForeignKey = array_values($reverseForeignKey);
-                    sort($tmpOtherForeignKey);
-                    $tmpOtherForeignKeys = array_values($reverseOtherForeignKeys);
-                    sort($tmpOtherForeignKeys);
-                    $reverseForeignKeyIntersection = array_intersect($tmpOtherForeignKey, $tmpOtherForeignKeys);
+                    $reverseForeignKey = array_values($reverseForeignKey);
+                    $reverseOtherForeignKeys = array_values($reverseOtherForeignKeys);
+                    $reverseForeignKeyIntersection = array_intersect($reverseForeignKey, $reverseOtherForeignKeys);
                 }
 
-                if ($tmpThisForeignKey === $thisForeignKeyIntersection
-                    && $tmpOtherForeignKey == $reverseForeignKeyIntersection
-                    && !empty($tmpOtherForeignKey)) {
+                if ($thisForeignKey === $thisForeignKeyIntersection
+                    && $reverseForeignKey == $reverseForeignKeyIntersection
+                    && !empty($reverseForeignKey)) {
                     $habtmName = $this->_camelize($assocTable);
                     $assoc = [
                         'alias' => $habtmName,
