@@ -349,15 +349,10 @@ class ModelTask extends BakeTask
             $otherForeignKeys = $otherSchema->columns();
             foreach ($otherForeignKeys as $i => $fieldName) {
                 if ($fieldName === 'id') {
-                    if ($tableName === $otherTableName && in_array('parent_id', $otherSchema->columns())
-                    ) {
-                    } else {
-                        unset($otherForeignKeys[$i]);
-                    }
-                } elseif (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
                     unset($otherForeignKeys[$i]);
-                }
-                if ($fieldName === 'parent_id') {
+                } elseif ($fieldName === 'parent_id' && $tableName !== $otherTableName) {
+                    unset($otherForeignKeys[$i]);
+                } elseif (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
                     unset($otherForeignKeys[$i]);
                 }
             }
@@ -365,7 +360,10 @@ class ModelTask extends BakeTask
             $thisForeignKey = $primaryKey;
             foreach ($thisForeignKey as $i => $fieldName) {
                 if ($fieldName === 'id') {
-                    if ($tableName === $otherTableName) {
+                    if (in_array('parent_id', $schema->columns())
+                        && $tableName === $otherTableName)
+                    {
+                        $thisForeignKey[$i] = 'parent_id';
                     }
                     else {
                         $thisForeignKey[$i] = Inflector::singularize($model->table()) . '_id';
