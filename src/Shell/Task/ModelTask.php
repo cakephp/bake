@@ -345,15 +345,15 @@ class ModelTask extends BakeTask
             }
 
             $targetForeignKey = $primaryKey;
-            foreach ($targetForeignKey as $i => $fieldname) {
-                if ($fieldname === 'id') {
+            foreach ($targetForeignKey as $i => $fieldName) {
+                if ($fieldName === 'id') {
                     $targetForeignKey[$i] = Inflector::singularize($model->table()) . '_id';
                 }
             }
 
             $possibleForeignKeys = $otherSchema->columns();
             foreach ($possibleForeignKeys as $i => $fieldName) {
-                if ($fieldname === 'parent_id') {
+                if ($fieldName === 'parent_id') {
                     continue;
                 }
                 if (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
@@ -430,14 +430,14 @@ class ModelTask extends BakeTask
                 $assocTableObject = TableRegistry::get($otherTableName);
 
                 $thisForeignKey = $primaryKey;
-                foreach ($thisForeignKey as $i => $fieldname) {
-                    if ($fieldname === 'id') {
+                foreach ($thisForeignKey as $i => $fieldName) {
+                    if ($fieldName === 'id') {
                         $thisForeignKey[$i] = Inflector::singularize($model->table()) . '_id';
                     }
                 }
                 $otherForeignKeys = $assocTableObject->schema()->columns();
                 foreach ($otherForeignKeys as $i => $fieldName) {
-                    if ($fieldname === 'parent_id') {
+                    if ($fieldName === 'parent_id') {
                         continue;
                     }
                     if (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
@@ -456,14 +456,14 @@ class ModelTask extends BakeTask
                     $reverseSideTableObject = TableRegistry::get($reverseSideTableName);
 
                     $reverseForeignKey = (array) $reverseSideTableObject->primaryKey();
-                    foreach ($reverseForeignKey as $i => $fieldname) {
-                        if ($fieldname === 'id') {
+                    foreach ($reverseForeignKey as $i => $fieldName) {
+                        if ($fieldName === 'id') {
                             $reverseForeignKey[$i] = Inflector::singularize($reverseSideTableObject->table()) . '_id';
                         }
                     }
                     $reverseOtherForeignKeys = $assocTableObject->schema()->columns();
                     foreach ($reverseOtherForeignKeys as $i => $fieldName) {
-                        if ($fieldname === 'parent_id') {
+                        if ($fieldName === 'parent_id') {
                             continue;
                         }
                         if (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
