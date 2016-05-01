@@ -44,6 +44,16 @@ class BakeHelperTest extends TestCase
     ];
 
     /**
+     * @var BakeView
+     */
+    protected $View;
+
+    /**
+     * @var BakeHelper
+     */
+    protected $BakeHelper;
+
+    /**
      * setUp method
      *
      * @return void
@@ -119,7 +129,7 @@ class BakeHelperTest extends TestCase
         $expected = ['tags'];
         $this->assertSame($expected, $result);
     }
-    
+
     /**
      * test stringifyList empty
      *
@@ -131,7 +141,7 @@ class BakeHelperTest extends TestCase
         $expected = '';
         $this->assertSame($expected, $result);
     }
-    
+
     /**
      * test stringifyList defaults
      *
@@ -149,7 +159,7 @@ class BakeHelperTest extends TestCase
             $spaces;
         $this->assertSame($expected, $result);
     }
-    
+
     /**
      * test stringifyList indent is false
      *
@@ -162,7 +172,7 @@ class BakeHelperTest extends TestCase
         $expected = "'one' => 'foo', 'two' => 'bar', 'three'";
         $this->assertSame($expected, $result);
     }
-    
+
     /**
      * test stringifyList deeper indent
      *
@@ -180,7 +190,7 @@ class BakeHelperTest extends TestCase
             $spaces . $spaces;
         $this->assertSame($expected, $result);
     }
-    
+
     /**
      * test stringifyList other tab
      *
@@ -198,7 +208,7 @@ class BakeHelperTest extends TestCase
             $spaces . $spaces;
         $this->assertSame($expected, $result);
     }
-    
+
     /**
      * test stringifyList with trailingComma
      *

@@ -1,6 +1,7 @@
 <?php
 namespace ModelTest\Model\Table;
 
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -10,6 +11,12 @@ use ModelTest\Model\Entity\BakeArticle;
 /**
  * BakeArticles Model
  *
+ * @method get($primaryKey, $options = []) : BakeArticle
+ * @method newEntity($data = null, array $options = []) : BakeArticle
+ * @method newEntities(array $data, array $options = []) : BakeArticle[]
+ * @method save(EntityInterface $entity, $options = []) : BakeArticle
+ * @method patchEntity(EntityInterface $entity, array $data, array $options = []) : BakeArticle
+ * @method patchEntities($entities, array $data, array $options = []) : BakeArticle[]
  */
 class BakeArticlesTable extends Table
 {

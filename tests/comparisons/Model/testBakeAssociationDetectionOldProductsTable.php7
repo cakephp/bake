@@ -1,17 +1,26 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\BakeArticle;
+use App\Model\Entity\OldProduct;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * BakeArticles Model
+ * OldProducts Model
  *
+ * @method get($primaryKey, $options = []) : OldProduct
+ * @method newEntity($data = null, array $options = []) : OldProduct
+ * @method newEntities(array $data, array $options = []) : OldProduct[]
+ * @method save(EntityInterface $entity, $options = []) : OldProduct
+ * @method patchEntity(EntityInterface $entity, array $data, array $options = []) : OldProduct
+ * @method patchEntities($entities, array $data, array $options = []) : OldProduct[]
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class BakeArticlesTable extends Table
+class OldProductsTable extends Table
 {
 
     /**
@@ -24,7 +33,11 @@ class BakeArticlesTable extends Table
     {
         parent::initialize($config);
 
+        $this->table('old_products');
+        $this->displayField('name');
         $this->primaryKey('id');
+
+        $this->addBehavior('Timestamp');
     }
 
     /**
@@ -36,28 +49,13 @@ class BakeArticlesTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->numeric('id')
+            ->integer('id')
             ->allowEmpty('id', 'create');
 
         $validator
             ->requirePresence('name', 'create')
             ->notEmpty('name');
 
-        $validator
-            ->email('email')
-            ->allowEmpty('email')
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
-
         return $validator;
-    }
-
-    /**
-     * Returns the database connection name to use by default.
-     *
-     * @return string
-     */
-    public static function defaultConnectionName()
-    {
-        return 'test';
     }
 }

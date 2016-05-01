@@ -13,6 +13,29 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 use Cake\Utility\Inflector;
+
+$annotations = [];
+foreach ($associations as $type => $assocs)
+{
+    foreach ($assocs as $assoc)
+    {
+        $typeStr = Inflector::camelize($type);
+        $annotations[] = "@property \Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
+    }
+}
+if(PHP_MAJOR_VERSION >= 7)
+{
+    $annotations[] = "@method get(\$primaryKey, \$options = []) : {$entity}";
+    $annotations[] = "@method newEntity(\$data = null, array \$options = []) : {$entity}";
+    $annotations[] = "@method newEntities(array \$data, array \$options = []) : {$entity}[]";
+    $annotations[] = "@method save(EntityInterface \$entity, \$options = []) : {$entity}";
+    $annotations[] = "@method patchEntity(EntityInterface \$entity, array \$data, array \$options = []) : {$entity}";
+    $annotations[] = "@method patchEntities(\$entities, array \$data, array \$options = []) : {$entity}[]";
+    foreach ($behaviors as $behavior => $behaviorData)
+    {
+        $annotations[] = "@mixin \Cake\ORM\Behavior\\{$behavior}Behavior";
+    }
+}
 %>
 <?php
 namespace <%= $namespace %>\Model\Table;
@@ -25,22 +48,16 @@ $uses = [
     'use Cake\ORM\Table;',
     'use Cake\Validation\Validator;'
 ];
+if(PHP_MAJOR_VERSION >= 7)
+{
+    $uses[] = 'use Cake\Datasource\EntityInterface;';
+}
 sort($uses);
 echo implode("\n", $uses);
 %>
 
 
-/**
- * <%= $name %> Model
-<% if ($associations): %>
- *
-<% foreach ($associations as $type => $assocs): %>
-<% foreach ($assocs as $assoc): %>
- * @property \Cake\ORM\Association\<%= Inflector::camelize($type) %> $<%= $assoc['alias'] %>
-<% endforeach %>
-<% endforeach; %>
-<% endif; %>
- */
+<%= $this->DocBlock->classDescription($name, 'Model', $annotations) %>
 class <%= $name %>Table extends Table
 {
 

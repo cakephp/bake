@@ -2,6 +2,7 @@
 namespace App\Model\Table;
 
 use App\Model\Entity\User;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -10,6 +11,12 @@ use Cake\Validation\Validator;
 /**
  * Users Model
  *
+ * @method get($primaryKey, $options = []) : User
+ * @method newEntity($data = null, array $options = []) : User
+ * @method newEntities(array $data, array $options = []) : User[]
+ * @method save(EntityInterface $entity, $options = []) : User
+ * @method patchEntity(EntityInterface $entity, array $data, array $options = []) : User
+ * @method patchEntities($entities, array $data, array $options = []) : User[]
  */
 class UsersTable extends Table
 {

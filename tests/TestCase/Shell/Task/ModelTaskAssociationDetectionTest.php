@@ -18,9 +18,7 @@ use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Model\Model;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\ClassRegistry;
 
 /**
  * ModelTaskAssociationDetectionTest class
@@ -43,6 +41,11 @@ class ModelTaskAssociationDetectionTest extends TestCase
         'plugin.bake.products',
         'plugin.bake.product_versions',
     ];
+
+    /**
+     * @var \Bake\Shell\Task\ModelTask|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $Task;
 
     /**
      * setUp method

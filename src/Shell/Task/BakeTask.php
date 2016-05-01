@@ -123,7 +123,8 @@ class BakeTask extends Shell
         if (isset($this->params['plugin'])) {
             $this->plugin = $this->params['plugin'];
             if (strpos($this->plugin, '\\')) {
-                return $this->error('Invalid plugin namespace separator, please use / instead of \ for plugins.');
+                $this->abort('Invalid plugin namespace separator, please use / instead of \ for plugins.');
+                return;
             }
         }
         if (isset($this->params['connection'])) {
@@ -152,8 +153,8 @@ class BakeTask extends Shell
             $pipes
         );
         if (!is_resource($process)) {
-            $this->error('Could not start subprocess.');
-            return false;
+            $this->abort('Could not start subprocess.');
+            return;
         }
         fclose($pipes[0]);
 

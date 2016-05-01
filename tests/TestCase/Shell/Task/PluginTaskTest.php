@@ -18,7 +18,6 @@ use Bake\Shell\Task\BakeTemplateTask;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
@@ -29,6 +28,16 @@ use Cake\TestSuite\TestCase;
 class PluginTaskTest extends TestCase
 {
     use StringCompareTrait;
+
+    /**
+     * @var \Bake\Shell\Task\PluginTask|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $Task;
+
+    /**
+     * @var \Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $io;
 
     /**
      * setUp method

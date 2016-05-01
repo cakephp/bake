@@ -130,7 +130,7 @@ class BakeView extends View
             explode('Template' . DS . 'Bake' . DS, $viewFileName)[1]
         );
 
-        $this->_currentType = static::TYPE_VIEW;
+        $this->_currentType = static::TYPE_TEMPLATE;
         $this->dispatchEvent('View.beforeRender', [$viewFileName]);
         $this->dispatchEvent('View.beforeRender.' . $templateEventName, [$viewFileName]);
         $this->Blocks->set('content', $this->_render($viewFileName));

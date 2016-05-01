@@ -32,6 +32,11 @@ class BakeViewTest extends TestCase
     use StringCompareTrait;
 
     /**
+     * @var BakeView
+     */
+    protected $View;
+
+    /**
      * setUp method
      *
      * @return void

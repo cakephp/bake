@@ -15,12 +15,11 @@
 namespace Bake\Test\TestCase;
 
 use Cake\Core\Plugin;
-use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase as ParentTestCase;
 
 abstract class TestCase extends ParentTestCase
 {
-    use StringCompareTrait;
+    use Php7CompareTrait;
 
     /**
      * Load a plugin from the tests folder, and add to the autoloader

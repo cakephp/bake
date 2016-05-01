@@ -90,7 +90,7 @@ class ModelTask extends BakeTask
             foreach ($this->listUnskipped() as $table) {
                 $this->out('- ' . $this->_camelize($table));
             }
-            return true;
+            return;
         }
 
         $this->bake($this->_camelize($name));
@@ -173,7 +173,7 @@ class ModelTask extends BakeTask
     public function getTableObject($className, $table)
     {
         if (TableRegistry::exists($className)) {
-            return TableRegistry::get($className);
+                return TableRegistry::get($className);
         }
         return TableRegistry::get($className, [
             'name' => $className,
