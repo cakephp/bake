@@ -351,15 +351,8 @@ class ModelTask extends BakeTask
                 }
             }
 
-            $otherForeignKeys = $otherSchema->columns();
-            foreach ($otherForeignKeys as $i => $fieldName) {
-                if ($fieldName === 'id') {
-                    unset($otherForeignKeys[$i]);
-                } elseif ($fieldName === 'parent_id' && $tableName !== $otherTableName) {
-                    unset($otherForeignKeys[$i]);
-                } elseif (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
-                    unset($otherForeignKeys[$i]);
-                }
+            if ($tableName === $otherTableName && !in_array('parent_id', $otherSchema->columns())) {
+                continue;
             }
 
             $thisForeignKey = $primaryKey;
@@ -369,21 +362,33 @@ class ModelTask extends BakeTask
                         && $tableName === $otherTableName)
                     {
                         $thisForeignKey[$i] = 'parent_id';
-                    }
-                    else {
+                    } else {
                         $thisForeignKey[$i] = Inflector::singularize($model->table()) . '_id';
                     }
                 }
             }
 
-            $assoc = false;
-            if (array_diff(array_values($thisForeignKey), array_values($otherForeignKeys)) === []) {
+            $otherForeignKeys = $otherSchema->columns();
+            foreach ($otherForeignKeys as $i => $fieldName) {
+                if ($fieldName === 'parent_id' && $tableName !== $otherTableName) {
+                    unset($otherForeignKeys[$i]);
+                } elseif ($fieldName === 'id') {
+                    unset($otherForeignKeys[$i]);
+                } elseif (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
+                    unset($otherForeignKeys[$i]);
+                } elseif (!in_array($fieldName, $thisForeignKey)) {
+                    unset($otherForeignKeys[$i]);
+                }
+            }
+
+            if (\Cake\Utility\Hash::diff(array_values($otherForeignKeys), array_values($thisForeignKey)) === []) {
+                $assoc = false;
                 if ($tableName === $otherTableName && in_array('parent_id', $thisForeignKey)) {
                     $className = ($this->plugin) ? $this->plugin . '.' . $model->alias() : $model->alias();
                     $assoc = [
                         'alias' => 'Child' . $model->alias(),
                         'className' => $className,
-                        'foreignKey' => $otherForeignKeys,
+                        'foreignKey' => $thisForeignKey,
                     ];
                 } else {
                     $assoc = [
@@ -391,24 +396,24 @@ class ModelTask extends BakeTask
                         'foreignKey' => $otherForeignKeys,
                     ];
                 }
-            }
-            if ($assoc && $this->plugin && empty($assoc['className'])) {
-                $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
-            }
-            if ($assoc) {
-                $hasOne = false;
-                foreach ($otherSchema->constraints() as $constraint) {
-                    $constraint = $otherSchema->constraint($constraint);
-                    if ($constraint['type'] === 'unique'
-                        && array_diff(array_values($assoc['foreignKey']), array_values($constraint['columns'])) === []
-                    ) {
-                        $associations['hasOne'][] = $assoc;
-                        $hasOne = true;
-                        break;
-                    }
+                if ($assoc && $this->plugin && empty($assoc['className'])) {
+                    $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
                 }
-                if (!$hasOne) {
-                    $associations['hasMany'][] = $assoc;
+                if ($assoc) {
+                    $hasOne = false;
+                    foreach ($otherSchema->constraints() as $constraint) {
+                        $constraint = $otherSchema->constraint($constraint);
+                        if ($constraint['type'] === 'unique' &&
+                            \Cake\Utility\Hash::diff(array_values($assoc['foreignKey']), array_values($constraint['columns'])) === []
+                        ) {
+                            $associations['hasOne'][] = $assoc;
+                            $hasOne = true;
+                            break;
+                        }
+                    }
+                    if (!$hasOne) {
+                        $associations['hasMany'][] = $assoc;
+                    }
                 }
             }
         }
