@@ -457,6 +457,7 @@ class ModelTask extends BakeTask
                         $thisForeignKey[$i] = Inflector::singularize($model->table()) . '_id';
                     }
                 }
+
                 $otherForeignKeys = $assocTableObject->schema()->columns();
                 foreach ($otherForeignKeys as $i => $fieldName) {
                     if ($fieldName !== 'parent_id' && (
@@ -465,6 +466,7 @@ class ModelTask extends BakeTask
                         unset($otherForeignKeys[$i]);
                     }
                 }
+
                 $thisForeignKey = array_values($thisForeignKey);
                 $otherForeignKeys = array_values($otherForeignKeys);
                 $thisForeignKeyIntersection = array_intersect($thisForeignKey, $otherForeignKeys);
@@ -473,8 +475,13 @@ class ModelTask extends BakeTask
                 $reverseForeignKeyIntersection = false;
                 $otherForeignKeysDiff = array_diff($otherForeignKeys, $thisForeignKey);
                 foreach ($otherForeignKeysDiff as $reverseForeignKey) {
-                    $reverseSideTableName = Inflector::pluralize(substr($reverseForeignKey, 0, -3));
 
+                    $reverseSideTableName = Inflector::pluralize(substr($reverseForeignKey, 0, -3));
+                    $pregTableName = preg_quote($reverseSideTableName, '/');
+                    $pregPattern = "/^{$pregTableName}_|_{$pregTableName}$/";
+                    if ((preg_match($pregPattern, $otherTableName) === 1) === false) {
+                        continue;
+                    }
                     if (!in_array($reverseSideTableName, $tables)) {
                         continue;
                     }
@@ -483,21 +490,24 @@ class ModelTask extends BakeTask
                     $reverseForeignKey = (array)$reverseSideTableObject->primaryKey();
                     foreach ($reverseForeignKey as $i => $fieldName) {
                         if ($fieldName === 'id') {
-                            $reverseForeignKey[$i] = Inflector::singularize($reverseSideTableObject->table()) . '_id';
+                            $reverseForeignKey[$i] = Inflector::singularize(
+                                $reverseSideTableObject->table()) . '_id';
                         }
                     }
+
                     $reverseOtherForeignKeys = $assocTableObject->schema()->columns();
                     foreach ($reverseOtherForeignKeys as $i => $fieldName) {
-                        if ($fieldName === 'parent_id') {
-                            continue;
-                        }
-                        if (strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName)) {
+                        if ($fieldName !== 'parent_id' && (
+                            strlen($fieldName) <= 3 || !preg_match('/^.*_id$/', $fieldName))
+                        ) {
                             unset($reverseOtherForeignKeys[$i]);
                         }
                     }
+
                     $reverseForeignKey = array_values($reverseForeignKey);
                     $reverseOtherForeignKeys = array_values($reverseOtherForeignKeys);
-                    $reverseForeignKeyIntersection = array_intersect($reverseForeignKey, $reverseOtherForeignKeys);
+                    $reverseForeignKeyIntersection = array_intersect(
+                        $reverseForeignKey, $reverseOtherForeignKeys);
                     if ($thisForeignKey === $thisForeignKeyIntersection
                         && $reverseForeignKey === $reverseForeignKeyIntersection
                         && !empty($reverseForeignKey)) {
