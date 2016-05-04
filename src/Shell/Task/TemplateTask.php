@@ -277,7 +277,9 @@ class TemplateTask extends BakeTask
      */
     protected function _loadController()
     {
-        $modelObject = TableRegistry::get($this->modelName);
+        $modelObject = TableRegistry::get($this->modelName, [
+            'connectionName' => $this->connection
+        ]);
 
         $primaryKey = (array)$modelObject->primaryKey();
         $displayField = $modelObject->displayField();

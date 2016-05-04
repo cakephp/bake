@@ -117,7 +117,9 @@ class ControllerTask extends BakeTask
             $plugin .= '.';
         }
 
-        $modelObj = TableRegistry::get($plugin . $currentModelName);
+        $modelObj = TableRegistry::get($plugin . $currentModelName, [
+            'connectionName' => $this->connection
+        ]);
 
         $pluralName = $this->_variableName($currentModelName);
         $singularName = $this->_singularName($currentModelName);
