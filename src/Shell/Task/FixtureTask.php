@@ -97,7 +97,7 @@ class FixtureTask extends BakeTask
      * Handles dispatching to interactive, named, or all processes.
      *
      * @param string|null $name The name of the fixture to bake.
-     * @return void|bool
+     * @return void
      */
     public function main($name = null)
     {

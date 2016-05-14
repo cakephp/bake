@@ -54,7 +54,7 @@ class CellTask extends SimpleBakeTask
      * Bake the Cell class and template file.
      *
      * @param string $name The name of the cell to make.
-     * @return parent
+     * @return void
      */
     public function bake($name)
     {

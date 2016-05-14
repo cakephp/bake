@@ -93,7 +93,7 @@ class TestTask extends BakeTask
      *
      * @param string|null $type Class type.
      * @param string|null $name Name.
-     * @return void|string
+     * @return void
      */
     public function main($type = null, $name = null)
     {
@@ -306,7 +306,13 @@ class TestTask extends BakeTask
             if ($this->plugin) {
                 $name = $this->plugin . '.' . $name;
             }
-            $instance = TableRegistry::get($name);
+            if (TableRegistry::exists($name)) {
+                $instance = TableRegistry::get($name);
+            } else {
+                $instance = TableRegistry::get($name, [
+                    'connectionName' => $this->connection
+                ]);
+            }
         } elseif (strtolower($type) === 'controller') {
             $instance = new $class(new Request(), new Response());
         } else {

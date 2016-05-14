@@ -46,7 +46,7 @@ class ControllerTask extends BakeTask
      * Execution method always used for tasks
      *
      * @param string|null $name The name of the controller to bake.
-     * @return void|bool
+     * @return void
      */
     public function main($name = null)
     {
@@ -117,7 +117,13 @@ class ControllerTask extends BakeTask
             $plugin .= '.';
         }
 
-        $modelObj = TableRegistry::get($plugin . $currentModelName);
+        if (TableRegistry::exists($plugin . $currentModelName)) {
+            $modelObj = TableRegistry::get($plugin . $currentModelName);
+        } else {
+            $modelObj = TableRegistry::get($plugin . $currentModelName, [
+                'connectionName' => $this->connection
+            ]);
+        }
 
         $pluralName = $this->_variableName($currentModelName);
         $singularName = $this->_singularName($currentModelName);
@@ -180,7 +186,7 @@ class ControllerTask extends BakeTask
      * Assembles and writes a unit test file
      *
      * @param string $className Controller class name
-     * @return string|void
+     * @return string Baked test
      */
     public function bakeTest($className)
     {
