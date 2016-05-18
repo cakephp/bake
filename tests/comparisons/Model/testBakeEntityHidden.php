@@ -10,7 +10,7 @@ class BakeUser extends Entity
 {
 
     /**
-     * Fields that are excluded from JSON an array versions of the entity.
+     * Fields that are excluded from JSON versions of the entity.
      *
      * @var array
      */
