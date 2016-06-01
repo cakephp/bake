@@ -164,7 +164,7 @@ endforeach;
     public function buildRules(RulesChecker $rules)
     {
     <%- foreach ($rulesChecker as $field => $rule): %>
-        $rules->add($rules-><%= $rule['name'] %>(['<%= $field %>']<%= !empty($rule['extra']) ? ", '$rule[extra]'" : '' %>));
+        $rules->add($rules-><%= $rule['name'] %>(['<%= str_replace(";", "', '", $field) %>']<%= !empty($rule['extra']) ? ", '$rule[extra]'" : '' %>));
     <%- endforeach; %>
         return $rules;
     }
