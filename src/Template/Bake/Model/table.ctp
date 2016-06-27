@@ -21,12 +21,13 @@ foreach ($associations as $type => $assocs) {
         $annotations[] = "@property \Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
     }
 }
-$annotations[] = "@method {$entity} get(\$primaryKey, \$options = [])";
-$annotations[] = "@method {$entity} newEntity(\$data = null, array \$options = [])";
-$annotations[] = "@method {$entity}[] newEntities(array \$data, array \$options = [])";
-$annotations[] = "@method {$entity} save(EntityInterface \$entity, \$options = [])";
-$annotations[] = "@method {$entity} patchEntity(EntityInterface \$entity, array \$data, array \$options = [])";
-$annotations[] = "@method {$entity}[] patchEntities(\$entities, array \$data, array \$options = [])";
+$annotations[] = "@method {$namespace}\\Model\\Entity\\{$entity} get(\$primaryKey, \$options = [])";
+$annotations[] = "@method {$namespace}\\Model\\Entity\\{$entity} newEntity(\$data = null, array \$options = [])";
+$annotations[] = "@method {$namespace}\\Model\\Entity\\{$entity}[] newEntities(array \$data, array \$options = [])";
+$annotations[] = "@method {$namespace}\\Model\\Entity\\{$entity}|bool save(Cake\\Datasource\\EntityInterface \$entity, \$options = [])";
+$annotations[] = "@method {$namespace}\\Model\\Entity\\{$entity} patchEntity(Cake\\Datasource\\EntityInterface \$entity, array \$data, array \$options = [])";
+$annotations[] = "@method {$namespace}\\Model\\Entity\\{$entity}[] patchEntities(\$entities, array \$data, array \$options = [])";
+$annotations[] = "@method {$namespace}\\Model\\Entity\\{$entity} findOrCreate(\$search, callable \$callback = null)";
 foreach ($behaviors as $behavior => $behaviorData) {
     $annotations[] = "@mixin \Cake\ORM\Behavior\\{$behavior}Behavior";
 }
@@ -36,12 +37,10 @@ namespace <%= $namespace %>\Model\Table;
 
 <%
 $uses = [
-    "use {$namespace}\\Model\\Entity\\{$entity};",
     'use Cake\ORM\Query;',
     'use Cake\ORM\RulesChecker;',
     'use Cake\ORM\Table;',
-    'use Cake\Validation\Validator;',
-    'use Cake\Datasource\EntityInterface;'
+    'use Cake\Validation\Validator;'
 ];
 sort($uses);
 echo implode("\n", $uses);

@@ -16,11 +16,11 @@ use Cake\Validation\Validator;
  * @method Category get($primaryKey, $options = [])
  * @method Category newEntity($data = null, array $options = [])
  * @method Category[] newEntities(array $data, array $options = [])
- * @method Category save(EntityInterface $entity, $options = [])
+ * @method Category|bool save(EntityInterface $entity, $options = [])
  * @method Category patchEntity(EntityInterface $entity, array $data, array $options = [])
  * @method Category[] patchEntities($entities, array $data, array $options = [])
  * @method Category findOrCreate($search, callable $callback = null)
- * 
+ *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class CategoriesTable extends Table

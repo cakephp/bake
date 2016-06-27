@@ -17,7 +17,7 @@ use Cake\Validation\Validator;
  * @method Product get($primaryKey, $options = [])
  * @method Product newEntity($data = null, array $options = [])
  * @method Product[] newEntities(array $data, array $options = [])
- * @method Product save(EntityInterface $entity, $options = [])
+ * @method Product|bool save(EntityInterface $entity, $options = [])
  * @method Product patchEntity(EntityInterface $entity, array $data, array $options = [])
  * @method Product[] patchEntities($entities, array $data, array $options = [])
  * @method Product findOrCreate($search, callable $callback = null)
