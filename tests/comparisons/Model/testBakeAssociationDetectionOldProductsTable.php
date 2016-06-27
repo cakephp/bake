@@ -1,8 +1,6 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\OldProduct;
-use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -11,13 +9,13 @@ use Cake\Validation\Validator;
 /**
  * OldProducts Model
  *
- * @method OldProduct get($primaryKey, $options = [])
- * @method OldProduct newEntity($data = null, array $options = [])
- * @method OldProduct[] newEntities(array $data, array $options = [])
- * @method OldProduct| save(EntityInterface $entity, $options = [])
- * @method OldProduct patchEntity(EntityInterface $entity, array $data, array $options = [])
- * @method OldProduct[] patchEntities($entities, array $data, array $options = [])
- * @method OldProduct findOrCreate($search, callable $callback = null)
+ * @method \App\Model\Entity\OldProduct get($primaryKey, $options = [])
+ * @method \App\Model\Entity\OldProduct newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\OldProduct[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\OldProduct|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\OldProduct patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\OldProduct[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\OldProduct findOrCreate($search, callable $callback = null)
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */

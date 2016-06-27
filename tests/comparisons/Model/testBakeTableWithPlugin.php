@@ -1,23 +1,21 @@
 <?php
 namespace ModelTest\Model\Table;
 
-use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use ModelTest\Model\Entity\BakeArticle;
 
 /**
  * BakeArticles Model
  *
- * @method BakeArticle get($primaryKey, $options = [])
- * @method BakeArticle newEntity($data = null, array $options = [])
- * @method BakeArticle[] newEntities(array $data, array $options = [])
- * @method BakeArticle save(EntityInterface $entity, $options = [])
- * @method BakeArticle patchEntity(EntityInterface $entity, array $data, array $options = [])
- * @method BakeArticle[] patchEntities($entities, array $data, array $options = [])
- * @method BakeArticle findOrCreate($search, callable $callback = null)
+ * @method \ModelTest\Model\Entity\BakeArticle get($primaryKey, $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle newEntity($data = null, array $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle[] newEntities(array $data, array $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle[] patchEntities($entities, array $data, array $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle findOrCreate($search, callable $callback = null)
  */
 class BakeArticlesTable extends Table
 {

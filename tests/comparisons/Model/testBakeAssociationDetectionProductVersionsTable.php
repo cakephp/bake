@@ -1,8 +1,6 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\ProductVersion;
-use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -13,13 +11,13 @@ use Cake\Validation\Validator;
  *
  * @property \Cake\ORM\Association\BelongsTo $Products
  *
- * @method ProductVersion get($primaryKey, $options = [])
- * @method ProductVersion newEntity($data = null, array $options = [])
- * @method ProductVersion[] newEntities(array $data, array $options = [])
- * @method ProductVersion|bool save(EntityInterface $entity, $options = [])
- * @method ProductVersion patchEntity(EntityInterface $entity, array $data, array $options = [])
- * @method ProductVersion[] patchEntities($entities, array $data, array $options = [])
- * @method ProductVersion findOrCreate($search, callable $callback = null)
+ * @method \App\Model\Entity\ProductVersion get($primaryKey, $options = [])
+ * @method \App\Model\Entity\ProductVersion newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\ProductVersion[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\ProductVersion|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\ProductVersion patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\ProductVersion[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\ProductVersion findOrCreate($search, callable $callback = null)
  */
 class ProductVersionsTable extends Table
 {
