@@ -173,7 +173,7 @@ class ModelTask extends BakeTask
     public function getTableObject($className, $table)
     {
         if (TableRegistry::exists($className)) {
-                return TableRegistry::get($className);
+            return TableRegistry::get($className);
         }
         return TableRegistry::get($className, [
             'name' => $className,

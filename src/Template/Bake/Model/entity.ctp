@@ -55,7 +55,7 @@ class <%= $name %> extends Entity
      *
      * @var array
      */
-    protected $_accessible = [<%= $this->Bake->stringifyList($accessible,['quotes'=>false]) %>];
+    protected $_accessible = [<%= $this->Bake->stringifyList($accessible, ['quotes' => false]) %>];
 <% endif %>
 <% if (!empty($hidden)): %>
 

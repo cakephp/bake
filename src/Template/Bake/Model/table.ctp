@@ -15,26 +15,20 @@
 use Cake\Utility\Inflector;
 
 $annotations = [];
-foreach ($associations as $type => $assocs)
-{
-    foreach ($assocs as $assoc)
-    {
+foreach ($associations as $type => $assocs) {
+    foreach ($assocs as $assoc) {
         $typeStr = Inflector::camelize($type);
         $annotations[] = "@property \Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
     }
 }
-if(PHP_MAJOR_VERSION >= 7)
-{
-    $annotations[] = "@method get(\$primaryKey, \$options = []) : {$entity}";
-    $annotations[] = "@method newEntity(\$data = null, array \$options = []) : {$entity}";
-    $annotations[] = "@method newEntities(array \$data, array \$options = []) : {$entity}[]";
-    $annotations[] = "@method save(EntityInterface \$entity, \$options = []) : {$entity}";
-    $annotations[] = "@method patchEntity(EntityInterface \$entity, array \$data, array \$options = []) : {$entity}";
-    $annotations[] = "@method patchEntities(\$entities, array \$data, array \$options = []) : {$entity}[]";
-    foreach ($behaviors as $behavior => $behaviorData)
-    {
-        $annotations[] = "@mixin \Cake\ORM\Behavior\\{$behavior}Behavior";
-    }
+$annotations[] = "@method {$entity} get(\$primaryKey, \$options = [])";
+$annotations[] = "@method {$entity} newEntity(\$data = null, array \$options = [])";
+$annotations[] = "@method {$entity}[] newEntities(array \$data, array \$options = [])";
+$annotations[] = "@method {$entity} save(EntityInterface \$entity, \$options = [])";
+$annotations[] = "@method {$entity} patchEntity(EntityInterface \$entity, array \$data, array \$options = [])";
+$annotations[] = "@method {$entity}[] patchEntities(\$entities, array \$data, array \$options = [])";
+foreach ($behaviors as $behavior => $behaviorData) {
+    $annotations[] = "@mixin \Cake\ORM\Behavior\\{$behavior}Behavior";
 }
 %>
 <?php
@@ -42,16 +36,13 @@ namespace <%= $namespace %>\Model\Table;
 
 <%
 $uses = [
-    "use $namespace\\Model\\Entity\\$entity;",
+    "use {$namespace}\\Model\\Entity\\{$entity};",
     'use Cake\ORM\Query;',
     'use Cake\ORM\RulesChecker;',
     'use Cake\ORM\Table;',
-    'use Cake\Validation\Validator;'
+    'use Cake\Validation\Validator;',
+    'use Cake\Datasource\EntityInterface;'
 ];
-if(PHP_MAJOR_VERSION >= 7)
-{
-    $uses[] = 'use Cake\Datasource\EntityInterface;';
-}
 sort($uses);
 echo implode("\n", $uses);
 %>

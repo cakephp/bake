@@ -3,7 +3,6 @@ namespace Bake\View\Helper;
 
 use Cake\Collection\Collection;
 use Cake\ORM\Association;
-use Cake\Utility\Hash;
 use Cake\View\Helper;
 
 /**
@@ -44,7 +43,7 @@ class DocBlockHelper extends Helper
         $lines = array_merge(["/**"], (new Collection($lines))->map(function ($line) {
             return rtrim(" * {$line}");
         })->toArray(), [" */"]);
-        return implode(PHP_EOL, $lines);
+        return implode("\n", $lines);
     }
 
     /**
