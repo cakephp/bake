@@ -50,6 +50,7 @@ class <%= $name %>Form extends Form
     /**
      * Defines what to execute once the From is being processed
      *
+     * @param array $data Form data.
      * @return bool
      */
     protected function _execute(array $data)
