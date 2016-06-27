@@ -2,6 +2,7 @@
 namespace App\Model\Table;
 
 use App\Model\Entity\Product;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -12,6 +13,16 @@ use Cake\Validation\Validator;
  *
  * @property \Cake\ORM\Association\HasMany $ProductVersions
  * @property \Cake\ORM\Association\BelongsToMany $Categories
+ *
+ * @method Product get($primaryKey, $options = [])
+ * @method Product newEntity($data = null, array $options = [])
+ * @method Product[] newEntities(array $data, array $options = [])
+ * @method Product save(EntityInterface $entity, $options = [])
+ * @method Product patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method Product[] patchEntities($entities, array $data, array $options = [])
+ * @method Product findOrCreate($search, callable $callback = null)
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class ProductsTable extends Table
 {

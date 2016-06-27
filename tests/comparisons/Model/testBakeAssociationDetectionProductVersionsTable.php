@@ -2,6 +2,7 @@
 namespace App\Model\Table;
 
 use App\Model\Entity\ProductVersion;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -11,6 +12,14 @@ use Cake\Validation\Validator;
  * ProductVersions Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Products
+ *
+ * @method ProductVersion get($primaryKey, $options = [])
+ * @method ProductVersion newEntity($data = null, array $options = [])
+ * @method ProductVersion[] newEntities(array $data, array $options = [])
+ * @method ProductVersion save(EntityInterface $entity, $options = [])
+ * @method ProductVersion patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method ProductVersion[] patchEntities($entities, array $data, array $options = [])
+ * @method ProductVersion findOrCreate($search, callable $callback = null)
  */
 class ProductVersionsTable extends Table
 {

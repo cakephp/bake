@@ -2,6 +2,7 @@
 namespace App\Model\Table;
 
 use App\Model\Entity\Category;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -11,6 +12,16 @@ use Cake\Validation\Validator;
  * Categories Model
  *
  * @property \Cake\ORM\Association\BelongsToMany $Products
+ *
+ * @method Category get($primaryKey, $options = [])
+ * @method Category newEntity($data = null, array $options = [])
+ * @method Category[] newEntities(array $data, array $options = [])
+ * @method Category save(EntityInterface $entity, $options = [])
+ * @method Category patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method Category[] patchEntities($entities, array $data, array $options = [])
+ * @method Category findOrCreate($search, callable $callback = null)
+ * 
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class CategoriesTable extends Table
 {
