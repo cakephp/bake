@@ -22,7 +22,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
-use DateTime;
+use DateTimeInterface;
 
 /**
  * Task class for creating and updating fixtures files.
@@ -388,7 +388,7 @@ class FixtureTask extends BakeTask
         foreach ($records as $record) {
             $values = [];
             foreach ($record as $field => $value) {
-                if ($value instanceof DateTime) {
+                if ($value instanceof DateTimeInterface) {
                     $value = $value->format('Y-m-d H:i:s');
                 }
                 $val = var_export($value, true);
