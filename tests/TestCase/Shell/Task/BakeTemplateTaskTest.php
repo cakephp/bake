@@ -23,6 +23,11 @@ use Cake\Core\Plugin;
 class BakeTemplateTaskTest extends TestCase
 {
     /**
+     * @var \Bake\Shell\Task\BakeTemplateTask|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $Task;
+
+    /**
      * setUp method
      *
      * @return void

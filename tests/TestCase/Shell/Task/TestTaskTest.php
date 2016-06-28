@@ -15,18 +15,14 @@
 namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
-use Bake\Shell\Task\TestTask;
 use Bake\Test\App\Controller\PostsController;
 use Bake\Test\App\Model\Table\ArticlesTable;
 use Bake\Test\App\Model\Table\CategoryThreadsTable;
 use Bake\Test\TestCase\TestCase;
-use Cake\Controller\Controller;
-use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Network\Request;
 use Cake\Network\Response;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -47,6 +43,16 @@ class TestTaskTest extends TestCase
         'core.authors',
         'core.comments',
     ];
+
+    /**
+     * @var \Bake\Shell\Task\TestTask|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $Task;
+
+    /**
+     * @var \Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $io;
 
     /**
      * setUp method

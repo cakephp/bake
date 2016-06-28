@@ -1,7 +1,6 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\BakeArticle;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -14,6 +13,14 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\BelongsTo $BakeUser
  * @property \Cake\ORM\Association\HasMany $BakeComment
  * @property \Cake\ORM\Association\BelongsToMany $BakeTag
+ *
+ * @method \App\Model\Entity\BakeArticle get($primaryKey, $options = [])
+ * @method \App\Model\Entity\BakeArticle newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\BakeArticle[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\BakeArticle|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\BakeArticle patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\BakeArticle[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\BakeArticle findOrCreate($search, callable $callback = null)
  */
 class BakeArticlesTable extends Table
 {

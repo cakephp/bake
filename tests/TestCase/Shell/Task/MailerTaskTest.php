@@ -25,6 +25,11 @@ use Cake\Core\Plugin;
 class MailerTaskTest extends TestCase
 {
     /**
+     * @var \Bake\Shell\Task\MailerTask|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $Task;
+
+    /**
      * setup method
      *
      * @return void

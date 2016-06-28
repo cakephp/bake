@@ -17,7 +17,6 @@ namespace Bake\Test\TestCase\Utility\Model;
 use Bake\Utility\Model\AssociationFilter;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
-use Cake\Utility\Hash;
 
 /**
  * BakeViewTest class
@@ -43,6 +42,11 @@ class AssociationFilterTest extends TestCase
         'plugin.bake.bake_tags',
         'plugin.bake.category_threads',
     ];
+
+    /**
+     * @var AssociationFilter
+     */
+    protected $associationFilter;
 
     /**
      * setUp method

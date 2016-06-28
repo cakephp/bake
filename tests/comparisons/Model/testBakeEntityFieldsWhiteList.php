@@ -4,7 +4,8 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * BakeArticle Entity.
+ * BakeArticle Entity
+ *
  */
 class BakeArticle extends Entity
 {
@@ -22,6 +23,6 @@ class BakeArticle extends Entity
         'id' => true,
         'title' => true,
         'body' => true,
-        'created' => true,
+        'created' => true
     ];
 }

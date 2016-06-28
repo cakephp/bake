@@ -90,7 +90,7 @@ class ModelTask extends BakeTask
             foreach ($this->listUnskipped() as $table) {
                 $this->out('- ' . $this->_camelize($table));
             }
-            return true;
+            return;
         }
 
         $this->bake($this->_camelize($name));

@@ -18,7 +18,6 @@ use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Model\Model;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -56,6 +55,11 @@ class ModelTaskTest extends TestCase
         'plugin.bake.category_threads',
         'plugin.bake.invitations',
     ];
+
+    /**
+     * @var \Bake\Shell\Task\ModelTask|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $Task;
 
     /**
      * setUp method

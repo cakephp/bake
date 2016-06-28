@@ -5,10 +5,17 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use ModelTest\Model\Entity\BakeArticle;
 
 /**
  * BakeArticles Model
+ *
+ * @method \ModelTest\Model\Entity\BakeArticle get($primaryKey, $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle newEntity($data = null, array $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle[] newEntities(array $data, array $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle[] patchEntities($entities, array $data, array $options = [])
+ * @method \ModelTest\Model\Entity\BakeArticle findOrCreate($search, callable $callback = null)
  */
 class BakeArticlesTable extends Table
 {

@@ -25,6 +25,11 @@ use Cake\Core\Plugin;
 class TaskTaskTest extends TestCase
 {
     /**
+     * @var \Bake\Shell\Task\TaskTask|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $Task;
+
+    /**
      * setup method
      *
      * @return void

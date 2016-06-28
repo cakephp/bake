@@ -39,6 +39,11 @@ class ControllerTaskTest extends TestCase
     ];
 
     /**
+     * @var \Bake\Shell\Task\ModelTask|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $Task;
+
+    /**
      * setUp method
      *
      * @return void

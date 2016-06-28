@@ -13,9 +13,13 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-$propertyHintMap = null;
-if (!empty($propertySchema)) {
-    $propertyHintMap = $this->DocBlock->buildEntityPropertyHintTypeMap($propertySchema);
+$propertyHintMap = $this->DocBlock->buildEntityPropertyHintTypeMap(isset($propertySchema) ? $propertySchema : []);
+$associationHintMap = $this->DocBlock->buildEntityAssociationHintTypeMap(isset($propertySchema) ? $propertySchema : []);
+
+$annotations = $this->DocBlock->propertyHints($propertyHintMap);
+if(!empty($associationHintMap)) {
+    $annotations[] = "";
+    $annotations = array_merge($annotations, $this->DocBlock->propertyHints($associationHintMap));
 }
 
 $accessible = [];
@@ -37,19 +41,7 @@ namespace <%= $namespace %>\Model\Entity;
 
 use Cake\ORM\Entity;
 
-/**
- * <%= $name %> Entity.
-<% if ($propertyHintMap): %>
- *
-<% foreach ($propertyHintMap as $property => $type): %>
-<% if ($type): %>
- * @property <%= $type %> $<%= $property %>
-<% else: %>
- * @property $<%= $property %>
-<% endif; %>
-<% endforeach; %>
-<% endif; %>
- */
+<%= $this->DocBlock->classDescription($name, 'Entity', $annotations) %>
 class <%= $name %> extends Entity
 {
 <% if (!empty($accessible)): %>
@@ -63,11 +55,7 @@ class <%= $name %> extends Entity
      *
      * @var array
      */
-    protected $_accessible = [
-<% foreach ($accessible as $field => $value): %>
-        '<%= $field %>' => <%= $value %>,
-<% endforeach; %>
-    ];
+    protected $_accessible = [<%= $this->Bake->stringifyList($accessible, ['quotes' => false]) %>];
 <% endif %>
 <% if (!empty($hidden)): %>
 

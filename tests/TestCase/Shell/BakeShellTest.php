@@ -17,8 +17,6 @@ namespace Bake\Test\TestCase\Shell;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Shell\BakeShellShell;
 use Cake\TestSuite\Stub\ConsoleOutput;
 
 class BakeShellTest extends TestCase
@@ -29,6 +27,21 @@ class BakeShellTest extends TestCase
      * @var array
      */
     public $fixtures = ['core.comments'];
+
+    /**
+     * @var ConsoleOutput
+     */
+    protected $out;
+
+    /**
+     * @var ConsoleIo
+     */
+    protected $io;
+
+    /**
+     * @var \Bake\Shell\BakeShell|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $Shell;
 
     /**
      * setup test

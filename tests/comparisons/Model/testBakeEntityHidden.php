@@ -4,7 +4,8 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * BakeUser Entity.
+ * BakeUser Entity
+ *
  */
 class BakeUser extends Entity
 {
