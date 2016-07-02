@@ -49,23 +49,33 @@ $groupedFields = collection($fields)
     ->toArray();
 
 $groupedFields += ['number' => [], 'string' => [], 'boolean' => [], 'date' => [], 'text' => []];
-$pk = "\$$singularVar->{$primaryKey[0]}";
+$primaryKeyArguments = [];
+foreach ($primaryKey as $primaryKeyComponent) {
+    $primaryKeyArguments[] = '$' . $singularVar . '->' . $primaryKeyComponent;
+}
+$primaryKeyArgumentList = join($primaryKeyArguments, ', ');
 %>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit <%= $singularHumanName %>'), ['action' => 'edit', <%= $pk %>]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete <%= $singularHumanName %>'), ['action' => 'delete', <%= $pk %>], ['confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]) ?> </li>
-        <li><?= $this->Html->link(__('List <%= $pluralHumanName %>'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Edit <%= $singularHumanName %>'), ['action' => 'edit', <%= $primaryKeyArgumentList %>]) ?></li>
+        <?php $deleteMessagePrimaryKeys = function() use (<%= '$' . $singularVar %>) {
+<% foreach ($primaryKey as $primaryKeyComponent) { %>
+            $parts['<%= $primaryKeyComponent %>'] = '<%= Inflector::humanize($primaryKeyComponent) %>' . ': ' . h(<%= '$' . $singularVar . '->' . $primaryKeyComponent %>);
+<% } %>
+            return join($parts, ' / ');
+        } ?>        
+        <li><?= $this->Form->postLink(__('Delete <%= $singularHumanName %>'), ['action' => 'delete', <%= $primaryKeyArgumentList %>], ['confirm' => __('Are you sure you want to delete the record having {0}?', $deleteMessagePrimaryKeys())]) ?></li>
+        <li><?= $this->Html->link(__('List <%= $pluralHumanName %>'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New <%= $singularHumanName %>'), ['action' => 'add']) ?></li>
 <%
     $done = [];
     foreach ($associations as $type => $data) {
         foreach ($data as $alias => $details) {
             if ($details['controller'] !== $this->name && !in_array($details['controller'], $done)) {
 %>
-        <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New <%= Inflector::humanize(Inflector::singularize(Inflector::underscore($alias))) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('List <%= $this->_pluralHumanName($alias) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New <%= Inflector::humanize(Inflector::singularize(Inflector::underscore($alias))) %>'), ['controller' => '<%= $details['controller'] %>', 'action' => 'add']) ?></li>
 <%
                 $done[] = $details['controller'];
             }
@@ -80,11 +90,16 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
 <% if ($groupedFields['string']) : %>
 <% foreach ($groupedFields['string'] as $field) : %>
 <% if (isset($associationFields[$field])) :
-            $details = $associationFields[$field];
+    $details = $associationFields[$field];
+    $assocPrimaryKeyArguments = [];
+    foreach ($details['primaryKey'] as $assocPrimaryKeyComponent) {
+        $assocPrimaryKeyArguments[] = '$' . $singularVar . '->' . $details['property'] . '->' . $assocPrimaryKeyComponent;
+    }
+    $assocPrimaryKeyArgumentList = join($assocPrimaryKeyArguments, ', ');
 %>
         <tr>
             <th><?= __('<%= Inflector::humanize($details['property']) %>') ?></th>
-            <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', $<%= $singularVar %>-><%= $details['property'] %>-><%= $details['primaryKey'][0] %>]) : '' ?></td>
+            <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $assocPrimaryKeyArgumentList %>]) : '' ?></td>
         </tr>
 <% else : %>
         <tr>
@@ -98,7 +113,7 @@ $pk = "\$$singularVar->{$primaryKey[0]}";
     <%- foreach ($associations['HasOne'] as $alias => $details) : %>
         <tr>
             <th><?= __('<%= Inflector::humanize(Inflector::singularize(Inflector::underscore($alias))) %>') ?></th>
-            <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', $<%= $singularVar %>-><%= $details['property'] %>-><%= $details['primaryKey'][0] %>]) : '' ?></td>
+            <td><?= $<%= $singularVar %>->has('<%= $details['property'] %>') ? $this->Html->link($<%= $singularVar %>-><%= $details['property'] %>-><%= $details['displayField'] %>, ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $assocPrimaryKeyArgumentList %>]) : '' ?></td>
         </tr>
     <%- endforeach; %>
 <% endif; %>
@@ -140,7 +155,12 @@ $relations = $associations['HasMany'] + $associations['BelongsToMany'];
 foreach ($relations as $alias => $details):
     $otherSingularVar = Inflector::variable($alias);
     $otherPluralHumanName = Inflector::humanize(Inflector::underscore($details['controller']));
-    %>
+    $relationsPrimaryKeyArguments = [];
+    foreach ($details['primaryKey'] as $relationsPrimaryKeyComponent) {
+        $relationsPrimaryKeyArguments[] = '$' . $otherSingularVar . '->' . $relationsPrimaryKeyComponent;
+    }
+    $relationsPrimaryKeyArgumentList = join($relationsPrimaryKeyArguments, ', ');
+%>
     <div class="related">
         <h4><?= __('Related <%= $otherPluralHumanName %>') ?></h4>
         <?php if (!empty($<%= $singularVar %>-><%= $details['property'] %>)): ?>
@@ -156,12 +176,16 @@ foreach ($relations as $alias => $details):
             <%- foreach ($details['fields'] as $field): %>
                 <td><?= h($<%= $otherSingularVar %>-><%= $field %>) ?></td>
             <%- endforeach; %>
-            <%- $otherPk = "\${$otherSingularVar}->{$details['primaryKey'][0]}"; %>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $otherPk %>]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => '<%= $details['controller'] %>', 'action' => 'edit', <%= $otherPk %>]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => '<%= $details['controller'] %>', 'action' => 'delete', <%= $otherPk %>], ['confirm' => __('Are you sure you want to delete # {0}?', <%= $otherPk %>)]) ?>
-                </td>
+                    <?= $this->Html->link(__('View'), ['controller' => '<%= $details['controller'] %>', 'action' => 'view', <%= $relationsPrimaryKeyArgumentList %>]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => '<%= $details['controller'] %>', 'action' => 'edit', <%= $relationsPrimaryKeyArgumentList %>]) ?>
+                    <?php $deleteMessagePrimaryKeys = function() use (<%= '$' . $otherSingularVar %>) {
+            <%- foreach ($details['primaryKey'] as $relationsPrimaryKeyComponent) { %>
+                        $parts['<%= $relationsPrimaryKeyComponent %>'] = '<%= Inflector::humanize($relationsPrimaryKeyComponent) %>' . ': ' . h(<%= '$' . $otherSingularVar . '->' . $relationsPrimaryKeyComponent %>);
+            <%- } %>
+                        return join($parts, ' / ');
+                    } ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => '<%= $details['controller'] %>', 'action' => 'delete', <%= $relationsPrimaryKeyArgumentList %>], ['confirm' => __('Are you sure you want to delete the record having {0}?', $deleteMessagePrimaryKeys())]) ?>
             </tr>
             <?php endforeach; ?>
         </table>

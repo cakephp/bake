@@ -28,11 +28,24 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-<% if (strpos($action, 'add') === false): %>
+<%
+if (strpos($action, 'add') === false) :
+$primaryKeyArguments = [];
+foreach ($primaryKey as $primaryKeyComponent) {
+    $primaryKeyArguments[] = '$' . $singularVar . '->' . $primaryKeyComponent;
+}
+$primaryKeyArgumentList = join($primaryKeyArguments, ', ');
+%>
+        <?php $deleteMessagePrimaryKeys = function() use (<%= '$' . $singularVar %>) {
+<% foreach ($primaryKey as $primaryKeyComponent) { %>
+            $parts['<%= $primaryKeyComponent %>'] = '<%= Inflector::humanize($primaryKeyComponent) %>' . ': ' . h(<%= '$' . $singularVar . '->' . $primaryKeyComponent %>);
+<% } %>
+            return join($parts, ' / ');
+        } ?>
         <li><?= $this->Form->postLink(
                 __('Delete'),
-                ['action' => 'delete', $<%= $singularVar %>-><%= $primaryKey[0] %>],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $<%= $singularVar %>-><%= $primaryKey[0] %>)]
+                ['action' => 'delete', <%= $primaryKeyArgumentList %>],
+                ['confirm' => __('Are you sure you want to delete record having {0}?', $deleteMessagePrimaryKeys())]
             )
         ?></li>
 <% endif; %>

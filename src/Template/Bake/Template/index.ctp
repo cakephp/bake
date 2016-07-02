@@ -28,7 +28,6 @@ if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
 if (!empty($indexColumns)) {
     $fields = $fields->take($indexColumns);
 }
-
 %>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
@@ -89,13 +88,22 @@ if (!empty($indexColumns)) {
                 }
             }
         }
-
-        $pk = '$' . $singularVar . '->' . $primaryKey[0];
+        $primaryKeyArguments = [];
+        foreach ($primaryKey as $primaryKeyComponent) {
+            $primaryKeyArguments[] = '$' . $singularVar . '->' . $primaryKeyComponent;
+        }
+        $primaryKeyArgumentList = join($primaryKeyArguments, ', ');
 %>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', <%= $pk %>]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', <%= $pk %>]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', <%= $pk %>], ['confirm' => __('Are you sure you want to delete # {0}?', <%= $pk %>)]) ?>
+                    <?= $this->Html->link(__('View'), ['action' => 'view', <%= $primaryKeyArgumentList %>]) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', <%= $primaryKeyArgumentList %>]) ?>
+                    <?php $deleteMessagePrimaryKeys = function() use (<%= '$' . $singularVar %>) {
+<%      foreach ($primaryKey as $primaryKeyComponent) { %>
+                        $parts['<%= $primaryKeyComponent %>'] = '<%= Inflector::humanize($primaryKeyComponent) %>' . ': ' . h(<%= '$' . $singularVar . '->' . $primaryKeyComponent %>);
+<%      } %>
+                        return join($parts, ' / ');
+                    } ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', <%= $primaryKeyArgumentList %>], ['confirm' => __('Are you sure you want to delete record having {0}?', $deleteMessagePrimaryKeys())]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

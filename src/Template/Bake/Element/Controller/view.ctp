@@ -12,6 +12,9 @@
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
+use Cake\Utility\Inflector;
+
 $allAssociations = array_merge(
     $this->Bake->aliasExtractor($modelObj, 'BelongsTo'),
     $this->Bake->aliasExtractor($modelObj, 'BelongsToMany'),
@@ -23,13 +26,29 @@ $allAssociations = array_merge(
     /**
      * View method
      *
-     * @param string|null $id <%= $singularHumanName %> id.
+<%
+$primaryKeys = (array)$modelObj->primaryKey();
+foreach ($primaryKeys as $primaryKeyComponent) { %>
+     * @param string|null <%= Inflector::variable($primaryKeyComponent) %> <%= $singularHumanName %> primaryKey.
+<% } %>
      * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+<%
+$actionArguments = [];
+foreach ($primaryKeys as $primaryKeyComponent) {
+    $actionArguments[] = '$' . Inflector::variable($primaryKeyComponent) . ' = null';
+}
+%>
+    public function view(<%= join($actionArguments, ', ') %>)
     {
-        $<%= $singularName%> = $this-><%= $currentModelName %>->get($id, [
+        <%- 
+        $primaryKeyArguments = [];
+        foreach ($primaryKeys as $primaryKeyComponent) {
+            $primaryKeyArguments[] = '$' . Inflector::variable($primaryKeyComponent);
+        }
+        %>
+        $<%= $singularName%> = $this-><%= $currentModelName %>->get([<%= join($primaryKeyArguments, ', ') %>], [
             'contain' => [<%= $this->Bake->stringifyList($allAssociations, ['indent' => false]) %>]
         ]);
 
