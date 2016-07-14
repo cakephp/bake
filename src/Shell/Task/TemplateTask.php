@@ -340,7 +340,7 @@ class TemplateTask extends BakeTask
     /**
      * handle creation of baking a custom action view file
      *
-     * @return void
+     * @return void|null
      */
     public function customAction()
     {

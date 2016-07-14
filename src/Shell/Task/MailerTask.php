@@ -56,7 +56,7 @@ class MailerTask extends SimpleBakeTask
      * Bake the Mailer class and html/text layout files.
      *
      * @param string $name The name of the mailer to make.
-     * @return void
+     * @return string
      */
     public function bake($name)
     {

@@ -93,7 +93,7 @@ class TestTask extends BakeTask
      *
      * @param string|null $type Class type.
      * @param string|null $name Name.
-     * @return void
+     * @return void|array
      */
     public function main($type = null, $name = null)
     {
