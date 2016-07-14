@@ -164,6 +164,7 @@ class BakeView extends View
     public function dispatchEvent($name, $data = null, $subject = null)
     {
         $name = preg_replace('/^View\./', 'Bake.', $name);
+
         return parent::dispatchEvent($name, $data, $subject);
     }
 
@@ -201,6 +202,7 @@ class BakeView extends View
         $content = ob_get_clean();
 
         $unPhp = $this->config('phpTagReplacements');
+
         return str_replace(array_values($unPhp), array_keys($unPhp), $content);
     }
 
@@ -228,6 +230,7 @@ class BakeView extends View
         foreach ($paths as &$path) {
             $path .= 'Bake' . DS;
         }
+
         return $paths;
     }
 

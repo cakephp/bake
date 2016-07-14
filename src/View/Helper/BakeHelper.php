@@ -49,6 +49,7 @@ class BakeHelper extends Helper
             'name' => $name,
             'value' => $value
         ];
+
         return $this->_View->element('array_property', $options);
     }
 
@@ -173,6 +174,7 @@ class BakeHelper extends Helper
         if (is_null($this->_associationFilter)) {
             $this->_associationFilter = new AssociationFilter();
         }
+
         return $this->_associationFilter->filterHasManyAssociationsAliases($table, $aliases);
     }
 }

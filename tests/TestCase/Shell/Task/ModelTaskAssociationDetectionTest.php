@@ -56,13 +56,15 @@ class ModelTaskAssociationDetectionTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
-        $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->Task = $this->getMock(
-            'Bake\Shell\Task\ModelTask',
-            ['in', 'err', 'createFile', '_stop', '_checkUnitTest'],
-            [$io]
-        );
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
+            ->setMethods(['in', 'err', 'createFile', '_stop', '_checkUnitTest'])
+            ->setConstructorArgs([$io])
+            ->getMock();
+
         $this->Task->connection = 'default';
         $this->_setupOtherMocks();
         TableRegistry::clear();
@@ -75,13 +77,15 @@ class ModelTaskAssociationDetectionTest extends TestCase
      */
     protected function _useMockedOut()
     {
-        $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->Task = $this->getMock(
-            'Bake\Shell\Task\ModelTask',
-            ['in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest'],
-            [$io]
-        );
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
+            ->setMethods(['in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest'])
+            ->setConstructorArgs([$io])
+            ->getMock();
+
         $this->_setupOtherMocks();
     }
 
@@ -92,10 +96,16 @@ class ModelTaskAssociationDetectionTest extends TestCase
      */
     protected function _setupOtherMocks()
     {
-        $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->Task->Fixture = $this->getMock('Bake\Shell\Task\FixtureTask', [], [$io]);
-        $this->Task->Test = $this->getMock('Bake\Shell\Task\FixtureTask', [], [$io]);
+        $this->Task->Fixture = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
+            ->setConstructorArgs([$io])
+            ->getMock();
+        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
+            ->setConstructorArgs([$io])
+            ->getMock();
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->interactive = false;
 

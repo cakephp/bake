@@ -48,13 +48,14 @@ class PluginTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Plugin' . DS;
-        $this->io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->Task = $this->getMock(
-            'Bake\Shell\Task\PluginTask',
-            ['in', 'err', '_stop', 'clear', 'callProcess', '_rootComposerFilePath', 'findComposer'],
-            [$this->io]
-        );
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\PluginTask')
+            ->setMethods(['in', 'err', '_stop', 'clear', 'callProcess', '_rootComposerFilePath', 'findComposer'])
+            ->setConstructorArgs([$this->io])
+            ->getMock();
 
         $this->Task->BakeTemplate = new BakeTemplateTask($this->io);
         $this->Task->BakeTemplate->interactive = false;
@@ -194,11 +195,11 @@ class PluginTaskTest extends TestCase
         array_unshift($paths, '/fake/path');
         $paths[] = '/fake/path2';
 
-        $this->Task = $this->getMock(
-            'Bake\Shell\Task\PluginTask',
-            ['in', 'out', 'err', '_stop'],
-            [$this->io]
-        );
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\PluginTask')
+            ->setMethods(['in', 'out', 'err', '_stop'])
+            ->setConstructorArgs([$this->io])
+            ->getMock();
+
         $this->Task->path = TMP . 'tests' . DS;
 
         $this->Task->method('findPath')

@@ -52,18 +52,18 @@ class FixtureTaskTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->Task = $this->getMock(
-            'Bake\Shell\Task\FixtureTask',
-            ['in', 'err', 'createFile', '_stop', 'clear'],
-            [$io]
-        );
-        $this->Task->Model = $this->getMock(
-            'Bake\Shell\Task\ModelTask',
-            ['in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listUnskipped'],
-            [$io]
-        );
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
+            ->setMethods(['in', 'err', 'createFile', '_stop', 'clear'])
+            ->setConstructorArgs([$io])
+            ->getMock();
+        $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
+            ->setMethods(['in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listUnskipped'])
+            ->setConstructorArgs([$io])
+            ->getMock();
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->interactive = false;
         $this->Task->BakeTemplate->initialize();

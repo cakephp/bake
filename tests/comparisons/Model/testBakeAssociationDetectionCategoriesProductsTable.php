@@ -58,6 +58,7 @@ class CategoriesProductsTable extends Table
     {
         $rules->add($rules->existsIn(['category_id'], 'Categories'));
         $rules->add($rules->existsIn(['product_id'], 'Products'));
+
         return $rules;
     }
 }

@@ -93,7 +93,7 @@ class TestTask extends BakeTask
      *
      * @param string|null $type Class type.
      * @param string|null $name Name.
-     * @return void
+     * @return void|array
      */
     public function main($type = null, $name = null)
     {
@@ -197,6 +197,7 @@ class TestTask extends BakeTask
         foreach ($files as $file) {
             $classes[] = str_replace('.php', '', $file);
         }
+
         return $classes;
     }
 
@@ -274,6 +275,7 @@ class TestTask extends BakeTask
         if ($this->createFile($filename, $out)) {
             return $out;
         }
+
         return false;
     }
 
@@ -287,6 +289,7 @@ class TestTask extends BakeTask
     public function typeCanDetectFixtures($type)
     {
         $type = strtolower($type);
+
         return in_array($type, ['controller', 'table']);
     }
 
@@ -318,6 +321,7 @@ class TestTask extends BakeTask
         } else {
             $instance = new $class();
         }
+
         return $instance;
     }
 
@@ -340,6 +344,7 @@ class TestTask extends BakeTask
         if ($suffix && strpos($class, $suffix) === false) {
             $class .= $suffix;
         }
+
         return $namespace . '\\' . $subSpace . '\\' . $class;
     }
 
@@ -352,6 +357,7 @@ class TestTask extends BakeTask
     public function getSubspacePath($type)
     {
         $subspace = $this->mapType($type);
+
         return str_replace('\\', DS, $subspace);
     }
 
@@ -368,6 +374,7 @@ class TestTask extends BakeTask
         if (empty($this->classTypes[$type])) {
             throw new Exception('Invalid object type.');
         }
+
         return $this->classTypes[$type];
     }
 
@@ -391,6 +398,7 @@ class TestTask extends BakeTask
             }
             $out[] = $method->getName();
         }
+
         return $out;
     }
 
@@ -409,6 +417,7 @@ class TestTask extends BakeTask
         } elseif ($subject instanceof Controller) {
             $this->_processController($subject);
         }
+
         return array_values($this->_fixtures);
     }
 
@@ -488,6 +497,7 @@ class TestTask extends BakeTask
     public function hasMockClass($type)
     {
         $type = strtolower($type);
+
         return $type === 'controller';
     }
 
@@ -520,16 +530,18 @@ class TestTask extends BakeTask
             $construct = "new {$className}(\$registry);";
         }
         if ($type === 'shell') {
-            $pre = "\$this->io = \$this->getMock('Cake\Console\ConsoleIo');";
+            $pre = "\$this->io = \$this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();";
             $construct = "new {$className}(\$this->io);";
         }
         if ($type === 'task') {
-            $pre = "\$this->io = \$this->getMock('Cake\Console\ConsoleIo');\n";
-            $construct = "\$this->getMock('{$fullClassName}', [], [\$this->io]);";
+            $pre = "\$this->io = \$this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();\n";
+            $construct = "\$this->getMockBuilder('{$fullClassName}')\n";
+            $construct .= "            ->setConstructorArgs([\$this->io])\n";
+            $construct .= "            ->getMock();";
         }
         if ($type === 'cell') {
-            $pre = "\$this->request = \$this->getMock('Cake\Network\Request');\n";
-            $pre .= "        \$this->response = \$this->getMock('Cake\Network\Response');";
+            $pre = "\$this->request = \$this->getMockBuilder('Cake\Network\Request')->getMock();\n";
+            $pre .= "        \$this->response = \$this->getMockBuilder('Cake\Network\Response')->getMock();";
             $construct = "new {$className}(\$this->request, \$this->response);";
         }
         if ($type === 'shell_helper') {
@@ -537,6 +549,7 @@ class TestTask extends BakeTask
             $pre .= "        \$this->io = new ConsoleIo(\$this->stub);";
             $construct = "new {$className}(\$this->io);";
         }
+
         return [$pre, $construct, $post];
     }
 
@@ -633,6 +646,7 @@ class TestTask extends BakeTask
             $uses[] = 'Cake\Console\ConsoleIo';
         }
         $uses[] = $fullClassName;
+
         return $uses;
     }
 
@@ -648,6 +662,7 @@ class TestTask extends BakeTask
         if (isset($this->plugin)) {
             $path = $this->_pluginPath($this->plugin) . 'tests/' . $dir;
         }
+
         return $path;
     }
 
@@ -668,6 +683,7 @@ class TestTask extends BakeTask
         }
         $classTail = substr($className, strlen($namespace) + 1);
         $path = $path . $classTail . 'Test.php';
+
         return str_replace(['/', '\\'], DS, $path);
     }
 
