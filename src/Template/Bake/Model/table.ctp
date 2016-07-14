@@ -173,6 +173,7 @@ endforeach;
     <%- foreach ($rulesChecker as $field => $rule): %>
         $rules->add($rules-><%= $rule['name'] %>(['<%= $field %>']<%= !empty($rule['extra']) ? ", '$rule[extra]'" : '' %>));
     <%- endforeach; %>
+
         return $rules;
     }
 <% endif; %>
