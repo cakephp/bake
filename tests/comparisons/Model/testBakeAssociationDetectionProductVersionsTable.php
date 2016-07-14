@@ -72,6 +72,7 @@ class ProductVersionsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['product_id'], 'Products'));
+
         return $rules;
     }
 }

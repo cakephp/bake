@@ -72,6 +72,7 @@ class BakeArticlesController extends AppController
             $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->data);
             if ($this->BakeArticles->save($bakeArticle)) {
                 $this->Flash->success(__('The bake article has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The bake article could not be saved. Please, try again.'));
@@ -99,6 +100,7 @@ class BakeArticlesController extends AppController
             $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->data);
             if ($this->BakeArticles->save($bakeArticle)) {
                 $this->Flash->success(__('The bake article has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The bake article could not be saved. Please, try again.'));
@@ -126,6 +128,7 @@ class BakeArticlesController extends AppController
         } else {
             $this->Flash->error(__('The bake article could not be deleted. Please, try again.'));
         }
+
         return $this->redirect(['action' => 'index']);
     }
 }

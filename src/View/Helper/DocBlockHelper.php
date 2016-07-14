@@ -43,6 +43,7 @@ class DocBlockHelper extends Helper
         $lines = array_merge(["/**"], (new Collection($lines))->map(function ($line) {
             return rtrim(" * {$line}");
         })->toArray(), [" */"]);
+
         return implode("\n", $lines);
     }
 
@@ -60,6 +61,7 @@ class DocBlockHelper extends Helper
         ) {
             return $type . '[]';
         }
+
         return $type;
     }
 
@@ -92,6 +94,7 @@ class DocBlockHelper extends Helper
                 $properties[$property] = $this->columnTypeToHintType($info['type']);
             }
         }
+
         return $properties;
     }
 
@@ -133,6 +136,7 @@ class DocBlockHelper extends Helper
                 }
             }
         }
+
         return $properties;
     }
 
@@ -193,6 +197,7 @@ class DocBlockHelper extends Helper
             $type = $type ? $type . ' ' : '';
             $lines[] = "@property {$type}\${$property}";
         }
+
         return $lines;
     }
 
@@ -218,6 +223,7 @@ class DocBlockHelper extends Helper
         } else {
             $target += (array)$value;
         }
+
         return $target;
     }
 }

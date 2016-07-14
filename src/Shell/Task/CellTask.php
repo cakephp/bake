@@ -59,6 +59,7 @@ class CellTask extends SimpleBakeTask
     public function bake($name)
     {
         $this->bakeTemplate($name);
+
         return parent::bake($name);
     }
 

@@ -79,6 +79,7 @@ class BakeShell extends Shell
             array_shift($args);
             $args = implode($args, ' ');
             $this->out(sprintf('    <info>`bin/cake bake template %s`</info>', $args), 2);
+
             return false;
         }
 
@@ -86,6 +87,7 @@ class BakeShell extends Shell
         if (empty($connections)) {
             $this->out('Your database configuration was not found.');
             $this->out('Add your database connection information to config/app.php.');
+
             return false;
         }
         $this->out('The following commands can be used to generate skeleton code for your application.', 2);
@@ -102,6 +104,7 @@ class BakeShell extends Shell
         }
         $this->out('');
         $this->out('By using <info>`cake bake [name]`</info> you can invoke a specific bake task.');
+
         return false;
     }
 
@@ -158,6 +161,7 @@ class BakeShell extends Shell
             $fullName = ($prefix ? $prefix . '.' : '') . $name;
             $tasks[$name] = $fullName;
         }
+
         return $tasks;
     }
 
@@ -179,6 +183,7 @@ class BakeShell extends Shell
             $name = $item->getBasename('.php');
             $candidates[] = $namespace . '\Shell\Task\\' . $name;
         }
+
         return $candidates;
     }
 
@@ -204,6 +209,7 @@ class BakeShell extends Shell
             }
             $classes[] = $className;
         }
+
         return $classes;
     }
 
@@ -229,6 +235,7 @@ class BakeShell extends Shell
                 $this->out('- ' . $table);
             }
             $this->out('Run <info>`cake bake all [name]`</info> to generate skeleton files.');
+
             return false;
         }
 
@@ -253,6 +260,7 @@ class BakeShell extends Shell
         });
 
         $this->out('<success>Bake All complete.</success>', 1, Shell::QUIET);
+
         return true;
     }
 

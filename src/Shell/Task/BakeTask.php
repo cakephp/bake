@@ -90,6 +90,7 @@ class BakeTask extends Shell
             return '';
         }
         $parts = explode('/', $prefix);
+
         return implode('/', array_map([$this, '_camelize'], $parts));
     }
 
@@ -109,6 +110,7 @@ class BakeTask extends Shell
         if ($prefix) {
             $path .= $prefix . DS;
         }
+
         return str_replace('/', DS, $path);
     }
 
@@ -124,6 +126,7 @@ class BakeTask extends Shell
             $this->plugin = $this->params['plugin'];
             if (strpos($this->plugin, '\\')) {
                 $this->abort('Invalid plugin namespace separator, please use / instead of \ for plugins.');
+
                 return;
             }
         }
@@ -154,6 +157,7 @@ class BakeTask extends Shell
         );
         if (!is_resource($process)) {
             $this->abort('Could not start subprocess.');
+
             return;
         }
         fclose($pipes[0]);
@@ -186,6 +190,7 @@ class BakeTask extends Shell
             list($plugin, $name) = pluginSplit($name);
             $this->plugin = $this->params['plugin'] = $plugin;
         }
+
         return $name;
     }
 

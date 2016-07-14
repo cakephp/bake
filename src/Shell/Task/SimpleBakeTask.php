@@ -65,6 +65,7 @@ abstract class SimpleBakeTask extends BakeTask
         if ($this->plugin) {
             $namespace = $this->_pluginNamespace($this->plugin);
         }
+
         return ['namespace' => $namespace];
     }
 
@@ -102,6 +103,7 @@ abstract class SimpleBakeTask extends BakeTask
         $this->createFile($filename, $contents);
         $emptyFile = $this->getPath() . 'empty';
         $this->_deleteEmptyFile($emptyFile);
+
         return $contents;
     }
 
@@ -117,6 +119,7 @@ abstract class SimpleBakeTask extends BakeTask
             return;
         }
         $this->Test->plugin = $this->plugin;
+
         return $this->Test->bake($this->name(), $className);
     }
 

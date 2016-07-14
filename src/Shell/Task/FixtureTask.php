@@ -51,6 +51,7 @@ class FixtureTask extends BakeTask
         if (isset($this->plugin)) {
             $path = $this->_pluginPath($this->plugin) . 'tests/' . $dir;
         }
+
         return str_replace('/', DS, $path);
     }
 
@@ -109,6 +110,7 @@ class FixtureTask extends BakeTask
             foreach ($this->Model->listUnskipped() as $table) {
                 $this->out('- ' . $this->_camelize($table));
             }
+
             return true;
         }
 
@@ -193,6 +195,7 @@ class FixtureTask extends BakeTask
         if (!empty($this->params['records'])) {
             $records = $this->_makeRecordString($this->_getRecordsFromTable($model, $useTable));
         }
+
         return $this->generateFixtureFile($model, compact('records', 'table', 'schema', 'import'));
     }
 
@@ -230,6 +233,7 @@ class FixtureTask extends BakeTask
         $this->createFile($path . $filename, $content);
         $emptyFile = $path . 'empty';
         $this->_deleteEmptyFile($emptyFile);
+
         return $content;
     }
 
@@ -272,6 +276,7 @@ class FixtureTask extends BakeTask
             }
             $content .= "        '_options' => [\n" . implode(",\n", $options) . "\n        ],\n";
         }
+
         return "[\n$content    ]";
     }
 
@@ -302,6 +307,7 @@ class FixtureTask extends BakeTask
                 }
             }
         }
+
         return $vals;
     }
 
@@ -373,6 +379,7 @@ class FixtureTask extends BakeTask
             }
             $records[] = $record;
         }
+
         return $records;
     }
 
@@ -402,6 +409,7 @@ class FixtureTask extends BakeTask
             $out .= "\n        ],\n";
         }
         $out .= "    ]";
+
         return $out;
     }
 

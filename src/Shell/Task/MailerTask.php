@@ -61,6 +61,7 @@ class MailerTask extends SimpleBakeTask
     public function bake($name)
     {
         $this->bakeLayouts($name);
+
         return parent::bake($name);
     }
 
