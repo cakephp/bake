@@ -52,27 +52,27 @@ class ControllerTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
-        $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
-        $this->Task = $this->getMock(
-            'Bake\Shell\Task\ControllerTask',
-            ['in', 'out', 'err', 'hr', 'createFile', '_stop'],
-            [$io]
-        );
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\ControllerTask')
+            ->setMethods(['in', 'out', 'err', 'hr', 'createFile', '_stop'])
+            ->setConstructorArgs([$io])
+            ->getMock();
+
         $this->Task->name = 'Controller';
         $this->Task->connection = 'test';
 
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
 
-        $this->Task->Model = $this->getMock(
-            'Bake\Shell\Task\ModelTask',
-            ['in', 'out', 'err', 'createFile', '_stop'],
-            [$io]
-        );
-        $this->Task->Test = $this->getMock(
-            'Bake\Shell\Task\TestTask',
-            [],
-            [$io]
-        );
+        $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
+            ->setMethods(['in', 'out', 'err', 'createFile', '_stop'])
+            ->setConstructorArgs([$io])
+            ->getMock();
+
+        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
+            ->setConstructorArgs([$io])
+            ->getMock();
 
         TableRegistry::get('BakeArticles', [
             'className' => __NAMESPACE__ . '\BakeArticlesTable'

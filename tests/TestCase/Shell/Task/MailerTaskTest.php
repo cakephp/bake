@@ -38,18 +38,20 @@ class MailerTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Mailer' . DS;
-        $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->Task = $this->getMock(
-            'Bake\Shell\Task\MailerTask',
-            ['in', 'err', 'createFile', '_stop'],
-            [$io]
-        );
-        $this->Task->Test = $this->getMock(
-            'Bake\Shell\Task\TestTask',
-            [],
-            [$io]
-        );
+
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\MailerTask')
+            ->setMethods(['in', 'err', 'createFile', '_stop'])
+            ->setConstructorArgs([$io])
+            ->getMock();
+
+        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
+            ->setConstructorArgs([$io])
+            ->getMock();
+
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->initialize();
         $this->Task->BakeTemplate->interactive = false;

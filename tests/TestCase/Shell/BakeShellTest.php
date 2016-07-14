@@ -55,11 +55,11 @@ class BakeShellTest extends TestCase
         $this->out = new ConsoleOutput();
         $this->io = new ConsoleIo($this->out);
 
-        $this->Shell = $this->getMock(
-            'Bake\Shell\BakeShell',
-            ['in', 'createFile', '_stop'],
-            [$this->io]
-        );
+        $this->Shell = $this->getMockBuilder('Bake\Shell\BakeShell')
+            ->setMethods(['in', 'createFile', '_stop'])
+            ->setConstructorArgs([$this->io])
+            ->getMock();
+
         Configure::write('App.namespace', 'Bake\Test\App');
     }
 
@@ -81,9 +81,9 @@ class BakeShellTest extends TestCase
      */
     public function testAllWithModelName()
     {
-        $this->Shell->Model = $this->getMock('Bake\Shell\Task\ModelTask');
-        $this->Shell->Controller = $this->getMock('Bake\Shell\Task\ControllerTask');
-        $this->Shell->Template = $this->getMock('Bake\Shell\Task\TemplateTask');
+        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')->getMock();
+        $this->Shell->Controller = $this->getMockBuilder('Bake\Shell\Task\ControllerTask')->getMock();
+        $this->Shell->Template = $this->getMockBuilder('Bake\Shell\Task\TemplateTask')->getMock();
 
         $this->Shell->Model->expects($this->once())
             ->method('main')

@@ -38,18 +38,19 @@ class SimpleBakeTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Simple' . DS;
-        $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->Task = $this->getMock(
-            'Bake\Shell\Task\SimpleBakeTask',
-            ['in', 'err', 'createFile', '_stop', 'name', 'template', 'fileName'],
-            [$io]
-        );
-        $this->Task->Test = $this->getMock(
-            'Bake\Shell\Task\TestTask',
-            [],
-            [$io]
-        );
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\SimpleBakeTask')
+            ->setMethods(['in', 'err', 'createFile', '_stop', 'name', 'template', 'fileName'])
+            ->setConstructorArgs([$io])
+            ->getMock();
+
+        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
+            ->setConstructorArgs([$io])
+            ->getMock();
+
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->initialize();
         $this->Task->BakeTemplate->interactive = false;
@@ -210,7 +211,9 @@ class SimpleBakeTaskTest extends TestCase
      */
     public function testImplementations($class)
     {
-        $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
         $task = new $class($io);
         $this->assertInternalType('string', $task->name());
         $this->assertInternalType('string', $task->fileName('Example'));

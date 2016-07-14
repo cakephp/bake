@@ -71,15 +71,19 @@ class TemplateTaskTest extends TestCase
      */
     protected function _setupTask($methods)
     {
-        $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->Task = $this->getMock(
-            'Bake\Shell\Task\TemplateTask',
-            $methods,
-            [$io]
-        );
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\TemplateTask')
+            ->setMethods($methods)
+            ->setConstructorArgs([$io])
+            ->getMock();
+
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
-        $this->Task->Model = $this->getMock('Bake\Shell\Task\ModelTask', [], [$io]);
+        $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
+            ->setConstructorArgs([$io])
+            ->getMock();
     }
 
     /**

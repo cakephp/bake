@@ -36,13 +36,15 @@ class BakeTemplateTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'BakeTemplate' . DS;
-        $io = $this->getMock('Cake\Console\ConsoleIo', [], [], '', false);
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->Task = $this->getMock(
-            'Bake\Shell\Task\BakeTemplateTask',
-            ['in', 'err', 'createFile', '_stop', 'clear'],
-            [$io]
-        );
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\BakeTemplateTask')
+            ->setMethods(['in', 'err', 'createFile', '_stop', 'clear'])
+            ->setConstructorArgs([$io])
+            ->getMock();
+        ;
     }
 
     /**

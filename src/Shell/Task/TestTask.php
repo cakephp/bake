@@ -530,16 +530,18 @@ class TestTask extends BakeTask
             $construct = "new {$className}(\$registry);";
         }
         if ($type === 'shell') {
-            $pre = "\$this->io = \$this->getMock('Cake\Console\ConsoleIo');";
+            $pre = "\$this->io = \$this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();";
             $construct = "new {$className}(\$this->io);";
         }
         if ($type === 'task') {
-            $pre = "\$this->io = \$this->getMock('Cake\Console\ConsoleIo');\n";
-            $construct = "\$this->getMock('{$fullClassName}', [], [\$this->io]);";
+            $pre = "\$this->io = \$this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();\n";
+            $construct = "\$this->getMockBuilder('{$fullClassName}')\n";
+            $construct .= "            ->setConstructorArgs([\$this->io])\n";
+            $construct .= "            ->getMock();";
         }
         if ($type === 'cell') {
-            $pre = "\$this->request = \$this->getMock('Cake\Network\Request');\n";
-            $pre .= "        \$this->response = \$this->getMock('Cake\Network\Response');";
+            $pre = "\$this->request = \$this->getMockBuilder('Cake\Network\Request')->getMock();\n";
+            $pre .= "        \$this->response = \$this->getMockBuilder('Cake\Network\Response')->getMock();";
             $construct = "new {$className}(\$this->request, \$this->response);";
         }
         if ($type === 'shell_helper') {
