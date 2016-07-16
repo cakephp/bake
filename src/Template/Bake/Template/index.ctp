@@ -56,9 +56,9 @@ if (!empty($indexColumns)) {
         <thead>
             <tr>
 <% foreach ($fields as $field): %>
-                <th><?= $this->Paginator->sort('<%= $field %>') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('<%= $field %>') ?></th>
 <% endforeach; %>
-                <th class="actions"><?= __('Actions') ?></th>
+                <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
