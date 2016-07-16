@@ -13,15 +13,15 @@
     <h3><?= h($templateTaskComment->name) ?></h3>
     <table class="vertical-table">
         <tr>
-            <th><?= __('Name') ?></th>
+            <th scope="row"><?= __('Name') ?></th>
             <td><?= h($templateTaskComment->name) ?></td>
         </tr>
         <tr>
-            <th><?= __('Body') ?></th>
+            <th scope="row"><?= __('Body') ?></th>
             <td><?= h($templateTaskComment->body) ?></td>
         </tr>
         <tr>
-            <th><?= __('Id') ?></th>
+            <th scope="row"><?= __('Id') ?></th>
             <td><?= $this->Number->format($templateTaskComment->id) ?></td>
         </tr>
     </table>
