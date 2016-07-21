@@ -33,6 +33,7 @@
     "autoload-dev": {
         "psr-4": {
             "BakeTest\\": "tests/test_app/Plugin/BakeTest/src",
+            "Pastry\\PastryTest\\": "tests/test_app/Plugin/PastryTest/src",
             "Bake\\Test\\": "tests",
             "Bake\\Test\\App\\": "tests/test_app/App",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
