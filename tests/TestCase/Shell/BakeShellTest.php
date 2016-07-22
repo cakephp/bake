@@ -17,6 +17,7 @@ namespace Bake\Test\TestCase\Shell;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\TestSuite\Stub\ConsoleOutput;
 
 class BakeShellTest extends TestCase
@@ -209,5 +210,24 @@ class BakeShellTest extends TestCase
         $this->Shell->loadTasks();
         $this->assertContains('BakeTest.Widget', $this->Shell->tasks);
         $this->assertContains('BakeTest.Zerg', $this->Shell->tasks);
+    }
+    /**
+     * Test loading tasks from vendored plugins
+     *
+     * @return void
+     */
+    public function testLoadTasksVendoredPlugin()
+    {
+        Plugin::load('Pastry/PastryTest', [
+            'path' => Configure::read('App.paths.plugins')[0] . 'PastryTest' . DS,
+            'autoload' => true
+        ]);
+
+        $this->Shell->loadTasks();
+        $this->assertContains('Pastry/PastryTest.ApplePie', $this->Shell->tasks);
+
+        $this->Shell->main();
+        $output = $this->out->messages();
+        $this->assertContains("apple_pie", implode(' ', $output));
     }
 }

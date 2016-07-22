@@ -129,7 +129,7 @@ class BakeShell extends Shell
             $tasks = $this->_findTasks(
                 $tasks,
                 Plugin::classPath($plugin),
-                $plugin,
+                str_replace('/', '\\', $plugin),
                 $plugin
             );
         }
