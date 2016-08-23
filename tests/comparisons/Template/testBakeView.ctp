@@ -17,39 +17,39 @@
     <h3><?= h($author->name) ?></h3>
     <table class="vertical-table">
         <tr>
-            <th><?= __('Role') ?></th>
+            <th scope="row"><?= __('Role') ?></th>
             <td><?= $author->has('role') ? $this->Html->link($author->role->name, ['controller' => 'Roles', 'action' => 'view', $author->role->id]) : '' ?></td>
         </tr>
         <tr>
-            <th><?= __('Name') ?></th>
+            <th scope="row"><?= __('Name') ?></th>
             <td><?= h($author->name) ?></td>
         </tr>
         <tr>
-            <th><?= __('Profile') ?></th>
+            <th scope="row"><?= __('Profile') ?></th>
             <td><?= $author->has('profile') ? $this->Html->link($author->profile->id, ['controller' => 'Profiles', 'action' => 'view', $author->profile->id]) : '' ?></td>
         </tr>
         <tr>
-            <th><?= __('Id') ?></th>
+            <th scope="row"><?= __('Id') ?></th>
             <td><?= $this->Number->format($author->id) ?></td>
         </tr>
         <tr>
-            <th><?= __('Member Number') ?></th>
+            <th scope="row"><?= __('Member Number') ?></th>
             <td><?= $this->Number->format($author->member_number) ?></td>
         </tr>
         <tr>
-            <th><?= __('Account Balance') ?></th>
+            <th scope="row"><?= __('Account Balance') ?></th>
             <td><?= $this->Number->format($author->account_balance) ?></td>
         </tr>
         <tr>
-            <th><?= __('Created') ?></th>
+            <th scope="row"><?= __('Created') ?></th>
             <td><?= h($author->created) ?></td>
         </tr>
         <tr>
-            <th><?= __('Modified') ?></th>
+            <th scope="row"><?= __('Modified') ?></th>
             <td><?= h($author->modified) ?></td>
         </tr>
         <tr>
-            <th><?= __('Member') ?></th>
+            <th scope="row"><?= __('Member') ?></th>
             <td><?= $author->member ? __('Yes') : __('No'); ?></td>
         </tr>
     </table>
@@ -62,12 +62,12 @@
         <?php if (!empty($author->articles)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th><?= __('Id') ?></th>
-                <th><?= __('Author Id') ?></th>
-                <th><?= __('Title') ?></th>
-                <th><?= __('Body') ?></th>
-                <th><?= __('Published') ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
+                <th scope="col"><?= __('Id') ?></th>
+                <th scope="col"><?= __('Author Id') ?></th>
+                <th scope="col"><?= __('Title') ?></th>
+                <th scope="col"><?= __('Body') ?></th>
+                <th scope="col"><?= __('Published') ?></th>
+                <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($author->articles as $articles): ?>
             <tr>
