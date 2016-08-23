@@ -19,7 +19,7 @@ $namespace = str_replace('\\', '\\\\', $namespace);
     "description": "<%= $plugin %> plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=5.5.9",
         "cakephp/cakephp": "3.3.*"
     },
     "require-dev": {
