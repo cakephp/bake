@@ -21,6 +21,6 @@ Router::plugin(
     '<%= $plugin %>',
     ['path' => '/<%= $routePath %>'],
     function (RouteBuilder $routes) {
-        $routes->fallbacks('DashedRoute');
+        $routes->fallbacks(DashedRoute::class);
     }
 );
