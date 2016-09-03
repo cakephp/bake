@@ -438,6 +438,25 @@ class TestTaskTest extends TestCase
     }
 
     /**
+     * test baking controller test files with prefix CLI option
+     *
+     * @return void
+     */
+    public function testBakePrefixControllerTestWithCliOption()
+    {
+        Configure::write('App.namespace', 'Bake\Test\App');
+
+        $this->Task->params['prefix'] = 'Admin';
+        $this->Task->expects($this->once())
+            ->method('createFile')
+            ->with($this->stringContains('Controller' . DS . 'Admin' . DS . 'PostsControllerTest.php'))
+            ->will($this->returnValue(true));
+
+        $result = $this->Task->bake('controller', 'Posts');
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
      * test baking component test files,
      *
      * @return void
