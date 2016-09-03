@@ -260,7 +260,7 @@ class ModelTask extends BakeTask
     {
         $schema = $model->schema();
         foreach ($schema->columns() as $fieldName) {
-            if (!preg_match('/^.*_id$/', $fieldName)) {
+            if (!preg_match('/^.+_id$/', $fieldName)) {
                 continue;
             }
 

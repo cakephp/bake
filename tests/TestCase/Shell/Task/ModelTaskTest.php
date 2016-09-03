@@ -347,6 +347,27 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * Test that association generation ignores `_id` fields
+     *
+     * @return void
+     */
+    public function testGetAssociationsIgnoreUnderscoreId()
+    {
+        $model = TableRegistry::get('BakeComments');
+        $model->schema([
+            'id' => ['type' => 'integer'],
+            '_id' => ['type' => 'integer'],
+        ]);
+        $result = $this->Task->getAssociations($model);
+        $expected = [
+            'hasMany' => [],
+            'belongsTo' => [],
+            'belongsToMany' => [],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * test that belongsTo generation works.
      *
      * @return void
