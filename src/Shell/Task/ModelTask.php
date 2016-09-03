@@ -260,7 +260,7 @@ class ModelTask extends BakeTask
     {
         $schema = $model->schema();
         foreach ($schema->columns() as $fieldName) {
-            if (!preg_match('/^.*_id$/', $fieldName)) {
+            if (!preg_match('/^.+_id$/', $fieldName)) {
                 continue;
             }
 
@@ -615,7 +615,7 @@ class ModelTask extends BakeTask
      */
     public function fieldValidation($schema, $fieldName, array $metaData, $primaryKey)
     {
-        $ignoreFields = ['created', 'modified', 'updated'];
+        $ignoreFields = ['lft', 'rght', 'created', 'modified', 'updated'];
         if (in_array($fieldName, $ignoreFields)) {
             return false;
         }

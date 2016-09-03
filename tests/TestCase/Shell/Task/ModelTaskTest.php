@@ -347,6 +347,27 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * Test that association generation ignores `_id` fields
+     *
+     * @return void
+     */
+    public function testGetAssociationsIgnoreUnderscoreId()
+    {
+        $model = TableRegistry::get('BakeComments');
+        $model->schema([
+            'id' => ['type' => 'integer'],
+            '_id' => ['type' => 'integer'],
+        ]);
+        $result = $this->Task->getAssociations($model);
+        $expected = [
+            'hasMany' => [],
+            'belongsTo' => [],
+            'belongsToMany' => [],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * test that belongsTo generation works.
      *
      * @return void
@@ -742,6 +763,24 @@ class ModelTaskTest extends TestCase
             'comment' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
             'published' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
             'otherid' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * test getting validation rules for tree-ish models
+     *
+     * @return void
+     */
+    public function testGetValidationTree()
+    {
+        $model = TableRegistry::get('NumberTrees');
+        $result = $this->Task->getValidation($model);
+        $expected = [
+            'id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']],
+            'name' => ['valid' => ['rule' => false, 'allowEmpty' => false]],
+            'parent_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => true]],
+            'depth' => ['valid' => ['rule' => 'integer', 'allowEmpty' => true]],
         ];
         $this->assertEquals($expected, $result);
     }
