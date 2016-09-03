@@ -20,7 +20,7 @@ $namespace = str_replace('\\', '\\\\', $namespace);
     "type": "cakephp-plugin",
     "require": {
         "php": ">=5.5.9",
-        "cakephp/cakephp": "3.3.*"
+        "cakephp/cakephp": ">=3.3.2 <4.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
