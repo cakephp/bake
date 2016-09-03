@@ -25,11 +25,10 @@
 		</listener>
 	</listeners>
 
-	<!-- Prevent coverage reports from looking in tests and vendors -->
+	<!-- Configure coverage reports -->
 	<filter>
 		<whitelist>
 			<directory suffix=".php">./src/</directory>
-			<directory suffix=".ctp">./src/</directory>
 		</whitelist>
 	</filter>
 
