@@ -768,6 +768,24 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * test getting validation rules for tree-ish models
+     *
+     * @return void
+     */
+    public function testGetValidationTree()
+    {
+        $model = TableRegistry::get('NumberTrees');
+        $result = $this->Task->getValidation($model);
+        $expected = [
+            'id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']],
+            'name' => ['valid' => ['rule' => false, 'allowEmpty' => false]],
+            'parent_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => true]],
+            'depth' => ['valid' => ['rule' => 'integer', 'allowEmpty' => true]],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * test getting validation rules and exempting foreign keys
      *
      * @return void
