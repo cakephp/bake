@@ -89,6 +89,7 @@ class <%= $className %>Test extends TestCase
     public function tearDown()
     {
         unset($this-><%= $subject %>);
+        TableRegistry::clear();
 
         parent::tearDown();
     }
