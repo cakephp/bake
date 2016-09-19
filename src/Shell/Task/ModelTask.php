@@ -1047,11 +1047,11 @@ class ModelTask extends BakeTask
         if (!empty($this->params['no-fixture'])) {
             return;
         }
-        
+
         if (!empty($this->params['model-prefix'])) {
             $className = $this->_camelize($this->params['model-prefix']) . $className;
         }
-        
+
         $this->Fixture->connection = $this->connection;
         $this->Fixture->plugin = $this->plugin;
         $this->Fixture->bake($className, $useTable);
@@ -1068,11 +1068,11 @@ class ModelTask extends BakeTask
         if (!empty($this->params['no-test'])) {
             return null;
         }
-        
+
         if (!empty($this->params['model-prefix'])) {
             $className = $this->_camelize($this->params['model-prefix']) . $className;
         }
-        
+
         $this->Test->plugin = $this->plugin;
         $this->Test->connection = $this->connection;
 
