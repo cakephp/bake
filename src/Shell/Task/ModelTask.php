@@ -1049,7 +1049,7 @@ class ModelTask extends BakeTask
         }
         
         if (!empty($this->params['model-prefix'])) {
-	        $className = $this->_camelize($this->params['model-prefix']) . $className;
+            $className = $this->_camelize($this->params['model-prefix']) . $className;
         }
         
         $this->Fixture->connection = $this->connection;
@@ -1070,7 +1070,7 @@ class ModelTask extends BakeTask
         }
         
         if (!empty($this->params['model-prefix'])) {
-	        $className = $this->_camelize($this->params['model-prefix']) . $className;
+            $className = $this->_camelize($this->params['model-prefix']) . $className;
         }
         
         $this->Test->plugin = $this->plugin;
