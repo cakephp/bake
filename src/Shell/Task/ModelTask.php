@@ -795,7 +795,7 @@ class ModelTask extends BakeTask
         if (!empty($this->params['no-entity'])) {
             return null;
         }
-        $name = $this->_entityName($model->alias());
+        $name = $this->_entityName((!empty($this->params['model-prefix'])?$this->_camelize($this->params['model-prefix']):'') . $model->alias());
 
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
@@ -844,8 +844,8 @@ class ModelTask extends BakeTask
             $namespace = $this->_pluginNamespace($this->plugin);
         }
 
-        $name = $model->alias();
-        $entity = $this->_entityName($model->alias());
+        $name = (!empty($this->params['model-prefix'])?$this->_camelize($this->params['model-prefix']):'') . $model->alias();
+        $entity = $this->_entityName((!empty($this->params['model-prefix'])?$this->_camelize($this->params['model-prefix']):'') . $model->alias());
         $data += [
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
@@ -989,6 +989,8 @@ class ModelTask extends BakeTask
             'help' => 'Bake all model files with associations and validation.'
         ])->addOption('table', [
             'help' => 'The table name to use if you have non-conventional table names.'
+        ])->addOption('model-prefix', [
+            'help' => 'Prefix for the name of the table and entity.'
         ])->addOption('no-entity', [
             'boolean' => true,
             'help' => 'Disable generating an entity class.'
@@ -1045,6 +1047,11 @@ class ModelTask extends BakeTask
         if (!empty($this->params['no-fixture'])) {
             return;
         }
+        
+        if (!empty($this->params['model-prefix'])) {
+	        $className = $this->_camelize($this->params['model-prefix']) . $className;
+        }
+        
         $this->Fixture->connection = $this->connection;
         $this->Fixture->plugin = $this->plugin;
         $this->Fixture->bake($className, $useTable);
@@ -1061,6 +1068,11 @@ class ModelTask extends BakeTask
         if (!empty($this->params['no-test'])) {
             return null;
         }
+        
+        if (!empty($this->params['model-prefix'])) {
+	        $className = $this->_camelize($this->params['model-prefix']) . $className;
+        }
+        
         $this->Test->plugin = $this->plugin;
         $this->Test->connection = $this->connection;
 
