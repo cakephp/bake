@@ -175,6 +175,8 @@ class ModelTask extends BakeTask
      */
     public function getTableObject($className, $table)
     {
+        $className = $this->getModelPrefix() . $className;
+
         if (TableRegistry::exists($className)) {
             return TableRegistry::get($className);
         }
@@ -259,6 +261,7 @@ class ModelTask extends BakeTask
     public function findBelongsTo($model, array $associations)
     {
         $schema = $model->schema();
+
         foreach ($schema->columns() as $fieldName) {
             if (!preg_match('/^.+_id$/', $fieldName)) {
                 continue;
@@ -273,11 +276,14 @@ class ModelTask extends BakeTask
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
+
                 if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)) {
                     $found = $this->findTableReferencedBy($schema, $fieldName);
                     if ($found) {
                         $tmpModelName = Inflector::camelize($found);
                     }
+                } else {
+                    $tmpModelName = $this->getModelPrefix() . $tmpModelName;
                 }
                 $assoc = [
                     'alias' => $tmpModelName,
@@ -795,7 +801,7 @@ class ModelTask extends BakeTask
         if (!empty($this->params['no-entity'])) {
             return null;
         }
-        $name = $this->_entityName((!empty($this->params['model-prefix'])?$this->_camelize($this->params['model-prefix']):'') . $model->alias());
+        $name = $this->_entityName($model->alias());
 
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
@@ -844,8 +850,9 @@ class ModelTask extends BakeTask
             $namespace = $this->_pluginNamespace($this->plugin);
         }
 
-        $name = (!empty($this->params['model-prefix'])?$this->_camelize($this->params['model-prefix']):'') . $model->alias();
-        $entity = $this->_entityName((!empty($this->params['model-prefix'])?$this->_camelize($this->params['model-prefix']):'') . $model->alias());
+        $name = $model->alias();
+
+        $entity = $this->_entityName($model->alias());
         $data += [
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
@@ -973,6 +980,16 @@ class ModelTask extends BakeTask
     }
 
     /**
+     * Get the prefix for model if exist.
+     *
+     * @return string
+     */
+    public function getModelPrefix()
+    {
+        return !empty($this->params['model-prefix']) ? $this->_camelize($this->params['model-prefix']) : '';
+    }
+
+    /**
      * Gets the option parser instance and configures it.
      *
      * @return \Cake\Console\ConsoleOptionParser
@@ -1048,10 +1065,6 @@ class ModelTask extends BakeTask
             return;
         }
 
-        if (!empty($this->params['model-prefix'])) {
-            $className = $this->_camelize($this->params['model-prefix']) . $className;
-        }
-
         $this->Fixture->connection = $this->connection;
         $this->Fixture->plugin = $this->plugin;
         $this->Fixture->bake($className, $useTable);
@@ -1067,10 +1080,6 @@ class ModelTask extends BakeTask
     {
         if (!empty($this->params['no-test'])) {
             return null;
-        }
-
-        if (!empty($this->params['model-prefix'])) {
-            $className = $this->_camelize($this->params['model-prefix']) . $className;
         }
 
         $this->Test->plugin = $this->plugin;
