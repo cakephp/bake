@@ -28,8 +28,8 @@ class <%= $name %>Form extends Form
     /**
      * Builds the schema for the modelless form
      *
-     * @param Schema $schema From schema
-     * @return $this
+     * @param \Cake\Form\Schema $schema From schema
+     * @return \Cake\Form\Schema
      */
     protected function _buildSchema(Schema $schema)
     {
@@ -39,8 +39,8 @@ class <%= $name %>Form extends Form
     /**
      * Form validation builder
      *
-     * @param Validator $validator to use against the form
-     * @return Validator
+     * @param \Cake\Validation\Validator $validator to use against the form
+     * @return \Cake\Validation\Validator
      */
     protected function _buildValidator(Validator $validator)
     {
