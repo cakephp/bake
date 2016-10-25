@@ -1264,8 +1264,7 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeTableWithModelPrefix()
     {
-
-        $this->Task->params['model-prefix'] = 'kaas';
+        $this->Task->params['model-prefix'] = 'test';
 
         $filename = $this->_normalizePath(APP . 'Model/Table/TestBakeArticlesTable.php');
         $this->Task->expects($this->once())->method('createFile')
