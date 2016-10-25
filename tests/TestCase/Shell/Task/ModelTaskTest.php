@@ -1257,7 +1257,7 @@ class ModelTaskTest extends TestCase
     }
 
 
-     /**
+    /**
      * test bake() with a -model-prefix param
      *
      * @return void
