@@ -984,7 +984,7 @@ class ModelTask extends BakeTask
      *
      * @return string
      */
-    public function getModelPrefix()
+    protected function getModelPrefix()
     {
         return !empty($this->params['model-prefix']) ? $this->_camelize($this->params['model-prefix']) : '';
     }
