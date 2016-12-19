@@ -438,7 +438,7 @@ class TemplateTask extends BakeTask
         $parser->description(
             'Bake views for a controller, using built-in or custom templates. '
         )->addArgument('controller', [
-            'help' => 'Name of the controller views to bake. Can be Plugin.name as a shortcut for plugin baking.'
+            'help' => 'Name of the controller views to bake. You can use Plugin.name as a shortcut for plugin baking.'
         ])->addArgument('action', [
             'help' => "Will bake a single action's file. core templates are (index, add, edit, view)"
         ])->addArgument('alias', [

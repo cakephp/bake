@@ -261,7 +261,8 @@ class ControllerTask extends BakeTask
         $parser->description(
             'Bake a controller skeleton.'
         )->addArgument('name', [
-            'help' => 'Name of the controller to bake. Can use Plugin.name to bake controllers into plugins.'
+            'help' => 'Name of the controller to bake (without the `Controller` suffix). ' .
+                'You can use Plugin.name to bake controllers into plugins.'
         ])->addOption('components', [
             'help' => 'The comma separated list of components to use.'
         ])->addOption('helpers', [
