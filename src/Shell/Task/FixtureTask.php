@@ -67,7 +67,8 @@ class FixtureTask extends BakeTask
         $parser = $parser->description(
             'Generate fixtures for use with the test suite. You can use `bake fixture all` to bake all fixtures.'
         )->addArgument('name', [
-            'help' => 'Name of the fixture to bake. Can use Plugin.name to bake plugin fixtures.'
+            'help' => 'Name of the fixture to bake (without the `Fixture` suffix). ' .
+                'You can use Plugin.name to bake plugin fixtures.'
         ])->addOption('table', [
             'help' => 'The table name if it does not follow conventions.',
         ])->addOption('count', [

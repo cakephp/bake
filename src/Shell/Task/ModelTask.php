@@ -984,7 +984,8 @@ class ModelTask extends BakeTask
         $parser->description(
             'Bake table and entity classes.'
         )->addArgument('name', [
-            'help' => 'Name of the model to bake. Can use Plugin.name to bake plugin models.'
+            'help' => 'Name of the model to bake (without the Table suffix). ' .
+                'You can use Plugin.name to bake plugin models.'
         ])->addSubcommand('all', [
             'help' => 'Bake all model files with associations and validation.'
         ])->addOption('table', [

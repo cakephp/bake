@@ -196,7 +196,7 @@ class PluginTaskTest extends TestCase
         $paths[] = '/fake/path2';
 
         $this->Task = $this->getMockBuilder('Bake\Shell\Task\PluginTask')
-            ->setMethods(['in', 'out', 'err', '_stop'])
+            ->setMethods(['in', 'out', 'err', 'findPath', '_stop'])
             ->setConstructorArgs([$this->io])
             ->getMock();
 
@@ -219,11 +219,10 @@ class PluginTaskTest extends TestCase
     {
         $paths = ['/fake/path', '/fake/path2'];
 
-        $this->Task = $this->getMock(
-            'Bake\Shell\Task\PluginTask',
-            ['in', 'out', 'err', '_stop'],
-            [$this->io]
-        );
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\PluginTask')
+            ->setMethods(['in', 'out', 'err', '_stop'])
+            ->setConstructorArgs([$this->io])
+            ->getMock();
         $this->Task->path = TMP . 'tests' . DS;
 
         $this->Task->findPath($paths);
