@@ -274,13 +274,27 @@ class TestTaskTest extends TestCase
      *
      * @return void
      */
-    public function testFixtureArrayGenerationFromController()
+    public function testFixtureGenerationFromController()
     {
         $subject = new PostsController(new Request(), new Response());
         $result = $this->Task->generateFixtureList($subject);
         $expected = [
             'app.posts',
         ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test generation of fixtures skips invalid modelClass
+     *
+     * @return void
+     */
+    public function testFixtureGenerationFromControllerInvalid()
+    {
+        $subject = new PostsController(new Request(), new Response());
+        $subject->modelClass = 'View';
+        $result = $this->Task->generateFixtureList($subject);
+        $expected = [];
         $this->assertEquals($expected, $result);
     }
 
