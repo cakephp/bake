@@ -428,11 +428,14 @@ class TestTask extends BakeTask
      * Process a model recursively and pull out all the
      * model names converting them to fixture names.
      *
-     * @param Model $subject A Model class to scan for associations and pull fixtures off of.
+     * @param \Cake\ORM\Table $subject A Model class to scan for associations and pull fixtures off of.
      * @return void
      */
     protected function _processModel($subject)
     {
+        if (!$subject instanceof Table) {
+            return;
+        }
         $this->_addFixture($subject->alias());
         foreach ($subject->associations()->keys() as $alias) {
             $assoc = $subject->association($alias);
