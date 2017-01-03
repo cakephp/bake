@@ -15,7 +15,7 @@ use Cake\Validation\Validator;
  * @method \ModelTest\Model\Entity\BakeArticle|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \ModelTest\Model\Entity\BakeArticle patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \ModelTest\Model\Entity\BakeArticle[] patchEntities($entities, array $data, array $options = [])
- * @method \ModelTest\Model\Entity\BakeArticle findOrCreate($search, callable $callback = null)
+ * @method \ModelTest\Model\Entity\BakeArticle findOrCreate($search, callable $callback = null, $options = [])
  */
 class BakeArticlesTable extends Table
 {

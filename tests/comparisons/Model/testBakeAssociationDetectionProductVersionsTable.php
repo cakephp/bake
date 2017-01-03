@@ -17,7 +17,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\ProductVersion|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\ProductVersion patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\ProductVersion[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\ProductVersion findOrCreate($search, callable $callback = null)
+ * @method \App\Model\Entity\ProductVersion findOrCreate($search, callable $callback = null, $options = [])
  */
 class ProductVersionsTable extends Table
 {
