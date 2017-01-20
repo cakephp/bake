@@ -18,7 +18,7 @@ $compact = ["'" . $singularName . "'"];
     /**
      * Add method
      *
-     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
+     * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add()
     {
@@ -29,9 +29,8 @@ $compact = ["'" . $singularName . "'"];
                 $this->Flash->success(__('The <%= strtolower($singularHumanName) %> has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The <%= strtolower($singularHumanName) %> could not be saved. Please, try again.'));
             }
+            $this->Flash->error(__('The <%= strtolower($singularHumanName) %> could not be saved. Please, try again.'));
         }
 <%
         $associations = array_merge(

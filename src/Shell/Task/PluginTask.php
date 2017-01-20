@@ -88,7 +88,7 @@ class PluginTask extends BakeTask
      * Also update the autoloader and the root composer.json file if it can be found
      *
      * @param string $plugin Name of the plugin in CamelCased format
-     * @return bool|void
+     * @return bool|null
      */
     public function bake($plugin)
     {
@@ -103,7 +103,7 @@ class PluginTask extends BakeTask
         $looksGood = $this->in('Look okay?', ['y', 'n', 'q'], 'y');
 
         if (strtolower($looksGood) !== 'y') {
-            return;
+            return null;
         }
 
         $this->_generateFiles($plugin, $this->path);

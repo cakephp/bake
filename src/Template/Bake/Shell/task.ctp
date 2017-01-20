@@ -26,7 +26,7 @@ class <%= $name %>Task extends Shell
     /**
      * main() method.
      *
-     * @return bool|int Success or error code.
+     * @return bool|int|null Success or error code.
      */
     public function main()
     {

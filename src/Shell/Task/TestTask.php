@@ -93,17 +93,21 @@ class TestTask extends BakeTask
      *
      * @param string|null $type Class type.
      * @param string|null $name Name.
-     * @return void|array
+     * @return array|null
      */
     public function main($type = null, $name = null)
     {
         parent::main();
         if (empty($type) && empty($name)) {
-            return $this->outputTypeChoices();
+            $this->outputTypeChoices();
+
+            return null;
         }
 
         if ($this->param('all')) {
-            return $this->_bakeAll($type);
+            $this->_bakeAll($type);
+
+            return null;
         }
 
         if (empty($name)) {
