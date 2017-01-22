@@ -340,7 +340,7 @@ class TemplateTask extends BakeTask
     /**
      * handle creation of baking a custom action view file
      *
-     * @return void|null
+     * @return void
      */
     public function customAction()
     {
@@ -365,8 +365,9 @@ class TemplateTask extends BakeTask
         $looksGood = $this->in('Look okay?', ['y', 'n'], 'y');
         if (strtolower($looksGood) === 'y') {
             $this->bake($action, ' ');
+            $this->_stop();
 
-            return $this->_stop();
+            return;
         }
         $this->out('Bake Aborted.');
     }
@@ -376,7 +377,7 @@ class TemplateTask extends BakeTask
      *
      * @param string $action Action to bake.
      * @param string $content Content to write.
-     * @return string Generated file content.
+     * @return string|false Generated file content.
      */
     public function bake($action, $content = '')
     {
@@ -401,7 +402,7 @@ class TemplateTask extends BakeTask
      *
      * @param string $action name to generate content to
      * @param array|null $vars passed for use in templates
-     * @return string content from template
+     * @return string|false Content from template
      */
     public function getContent($action, $vars = null)
     {

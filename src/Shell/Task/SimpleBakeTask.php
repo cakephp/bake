@@ -73,7 +73,7 @@ abstract class SimpleBakeTask extends BakeTask
      * Execute method
      *
      * @param string|null $name The name of the object to bake.
-     * @return void|int
+     * @return int|null
      */
     public function main($name = null)
     {
@@ -111,12 +111,12 @@ abstract class SimpleBakeTask extends BakeTask
      * Generate a test case.
      *
      * @param string $className The class to bake a test for.
-     * @return void|string|bool
+     * @return string|bool|null
      */
     public function bakeTest($className)
     {
         if (!empty($this->params['no-test'])) {
-            return;
+            return null;
         }
         $this->Test->plugin = $this->plugin;
 
