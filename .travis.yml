@@ -35,6 +35,7 @@ before_install:
 
   - phpenv rehash
   - set +H
+  - composer update
 
 script:
   - if [[ $RUN_TESTS = 1 && $TRAVIS_PHP_VERSION != 7.* ]]; then vendor/bin/phpunit; fi
