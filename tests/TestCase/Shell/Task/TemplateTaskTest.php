@@ -293,6 +293,7 @@ class TemplateTaskTest extends TestCase
             'fields' => ['id', 'name', 'body'],
             'associations' => [],
             'keyFields' => [],
+            'namespace' => Configure::read('App.namespace'),
         ];
         $result = $this->Task->getContent('view', $vars);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
@@ -330,6 +331,7 @@ class TemplateTaskTest extends TestCase
                 ]
             ],
             'keyFields' => [],
+            'namespace' => Configure::read('App.namespace'),
         ];
         $result = $this->Task->getContent('view', $vars);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
@@ -354,6 +356,7 @@ class TemplateTaskTest extends TestCase
             'fields' => ['id', 'name', 'body'],
             'associations' => [],
             'keyFields' => [],
+            'namespace' => Configure::read('App.namespace'),
         ];
         $this->Task->expects($this->once())
             ->method('error')
@@ -381,7 +384,8 @@ class TemplateTaskTest extends TestCase
             'pluralHumanName' => 'Test Template Models',
             'fields' => ['id', 'name', 'body'],
             'keyFields' => [],
-            'associations' => []
+            'associations' => [],
+            'namespace' => Configure::read('App.namespace'),
         ];
         $this->Task->params['prefix'] = 'Admin';
         $result = $this->Task->getContent('view', $vars);

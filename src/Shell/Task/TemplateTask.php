@@ -306,6 +306,8 @@ class TemplateTask extends BakeTask
         $pluralVar = Inflector::variable($this->controllerName);
         $pluralHumanName = $this->_pluralHumanName($this->controllerName);
 
+        $namespace = Configure::read('App.namespace');
+
         return compact(
             'modelObject',
             'modelClass',
@@ -318,7 +320,8 @@ class TemplateTask extends BakeTask
             'pluralHumanName',
             'fields',
             'associations',
-            'keyFields'
+            'keyFields',
+            'namespace'
         );
     }
 
