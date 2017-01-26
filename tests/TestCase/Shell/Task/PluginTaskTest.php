@@ -97,6 +97,24 @@ class PluginTaskTest extends TestCase
     }
 
     /**
+     * test bake() with a custom app namespace.
+     *
+     * @return void
+     */
+    public function testBakeCustomAppNamespace()
+    {
+        Configure::write('App.namespace', 'MyApp');
+        $this->Task->expects($this->at(0))->method('in')
+            ->will($this->returnValue('y'));
+
+        $this->Task->bake('Simple');
+        $bakedRoot = $this->Task->path . 'Simple' . DS;
+        $appController = $bakedRoot . 'src/Controller/AppController.php';
+        $contents = file_get_contents($appController);
+        $this->assertContains('use MyApp\Controller\AppController', $contents);
+    }
+
+    /**
      * test bake with vendor plugin
      *
      * @return void
