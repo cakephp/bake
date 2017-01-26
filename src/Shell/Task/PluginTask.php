@@ -159,6 +159,7 @@ class PluginTask extends BakeTask
     protected function _generateFiles($pluginName, $path)
     {
         $namespace = str_replace('/', '\\', $pluginName);
+        $baseNamespace = Configure::read('App.namespace');
 
         $name = $pluginName;
         $vendor = 'your-name-here';
@@ -170,6 +171,7 @@ class PluginTask extends BakeTask
         $this->BakeTemplate->set([
             'package' => $package,
             'namespace' => $namespace,
+            'baseNamespace' => $baseNamespace,
             'plugin' => $pluginName,
             'routePath' => Inflector::dasherize($pluginName),
             'path' => $path,
