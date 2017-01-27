@@ -1256,6 +1256,26 @@ class ModelTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
+
+    /**
+     * test bake() with a -model-prefix param
+     *
+     * @return void
+     */
+    public function testBakeTableWithModelPrefix()
+    {
+        $this->Task->params['model-prefix'] = 'test';
+
+        $filename = $this->_normalizePath(APP . 'Model/Table/TestBakeArticlesTable.php');
+        $this->Task->expects($this->once())->method('createFile')
+            ->with($filename, $this->stringContains('class TestBakeArticlesTable extends'));
+
+
+        $model = TableRegistry::get('BakeArticles');
+        $result = $this->Task->bakeTable($model);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
     /**
      * Tests baking a table with rules
      *

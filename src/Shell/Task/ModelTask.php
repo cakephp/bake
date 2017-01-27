@@ -175,6 +175,8 @@ class ModelTask extends BakeTask
      */
     public function getTableObject($className, $table)
     {
+        $className = $this->getModelPrefix() . $className;
+
         if (TableRegistry::exists($className)) {
             return TableRegistry::get($className);
         }
@@ -259,6 +261,7 @@ class ModelTask extends BakeTask
     public function findBelongsTo($model, array $associations)
     {
         $schema = $model->schema();
+
         foreach ($schema->columns() as $fieldName) {
             if (!preg_match('/^.+_id$/', $fieldName)) {
                 continue;
@@ -273,11 +276,14 @@ class ModelTask extends BakeTask
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
+
                 if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)) {
                     $found = $this->findTableReferencedBy($schema, $fieldName);
                     if ($found) {
                         $tmpModelName = Inflector::camelize($found);
                     }
+                } else {
+                    $tmpModelName = $this->getModelPrefix() . $tmpModelName;
                 }
                 $assoc = [
                     'alias' => $tmpModelName,
@@ -845,6 +851,7 @@ class ModelTask extends BakeTask
         }
 
         $name = $model->alias();
+
         $entity = $this->_entityName($model->alias());
         $data += [
             'plugin' => $this->plugin,
@@ -973,6 +980,16 @@ class ModelTask extends BakeTask
     }
 
     /**
+     * Get the prefix for model if exist.
+     *
+     * @return string
+     */
+    protected function getModelPrefix()
+    {
+        return !empty($this->params['model-prefix']) ? $this->_camelize($this->params['model-prefix']) : '';
+    }
+
+    /**
      * Gets the option parser instance and configures it.
      *
      * @return \Cake\Console\ConsoleOptionParser
@@ -990,6 +1007,8 @@ class ModelTask extends BakeTask
             'help' => 'Bake all model files with associations and validation.'
         ])->addOption('table', [
             'help' => 'The table name to use if you have non-conventional table names.'
+        ])->addOption('model-prefix', [
+            'help' => 'Prefix for the name of the table and entity.'
         ])->addOption('no-entity', [
             'boolean' => true,
             'help' => 'Disable generating an entity class.'
@@ -1046,6 +1065,7 @@ class ModelTask extends BakeTask
         if (!empty($this->params['no-fixture'])) {
             return;
         }
+
         $this->Fixture->connection = $this->connection;
         $this->Fixture->plugin = $this->plugin;
         $this->Fixture->bake($className, $useTable);
@@ -1062,6 +1082,7 @@ class ModelTask extends BakeTask
         if (!empty($this->params['no-test'])) {
             return null;
         }
+
         $this->Test->plugin = $this->plugin;
         $this->Test->connection = $this->connection;
 
