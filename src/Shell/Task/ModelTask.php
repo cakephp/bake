@@ -175,6 +175,11 @@ class ModelTask extends BakeTask
      */
     public function getTableObject($className, $table)
     {
+        $plugin = $this->param('plugin');
+        if (!empty($plugin)) {
+            $className = $plugin . '.' . $className;
+        }
+
         if (TableRegistry::exists($className)) {
             return TableRegistry::get($className);
         }
