@@ -319,7 +319,7 @@ class ModelTask extends BakeTask
                 }
                 $length = mb_strlen($this->tablePrefix);
                 if ($length > 0 && substr($constraintInfo['references'][0], 0, $length) === $this->tablePrefix) {
-                    return substr($constraintInfo['references'][0], $length);
+                    return mb_substr($constraintInfo['references'][0], $length);
                 }
                 return $constraintInfo['references'][0];
             }

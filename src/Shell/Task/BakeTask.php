@@ -32,7 +32,7 @@ class BakeTask extends Shell
     /**
      * Table prefix
      *
-     * @var string
+     * @var string|null
      */
     public $tablePrefix = null;
 
