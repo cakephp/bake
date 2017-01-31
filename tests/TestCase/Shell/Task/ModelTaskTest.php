@@ -181,6 +181,10 @@ class ModelTaskTest extends TestCase
         $this->assertInstanceOf('Cake\ORM\Table', $result);
         $this->assertEquals('bake_articles', $result->table());
         $this->assertEquals('Article', $result->alias());
+
+        $this->Task->params['plugin'] = 'BakeTest';
+        $result = $this->Task->getTableObject('Authors', 'bake_articles');
+        $this->assertInstanceOf('BakeTest\Model\Table\AuthorsTable', $result);
     }
 
     /**
