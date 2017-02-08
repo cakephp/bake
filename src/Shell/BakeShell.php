@@ -29,7 +29,7 @@ use Cake\Utility\Inflector;
  * application development by writing fully functional skeleton controllers,
  * models, and templates. Going further, Bake can also write Unit Tests for you.
  *
- * @link http://book.cakephp.org/3.0/en/console-and-shells/code-generation-with-bake.html
+ * @link https://book.cakephp.org/3.0/en/bake/usage.html
  */
 class BakeShell extends Shell
 {
