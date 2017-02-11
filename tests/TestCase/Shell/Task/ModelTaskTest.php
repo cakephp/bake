@@ -772,6 +772,27 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * Test getting validation rules for unique date time columns
+     *
+     * @return void
+     */
+    public function testGetValidationUniqueDateField()
+    {
+        $model = TableRegistry::get('BakeComments');
+        $schema = $model->schema();
+        $schema
+            ->addColumn('release_date', ['type' => 'datetime'])
+            ->addConstraint('unique_date', [
+                'columns' => ['release_date'],
+                'type' => 'unique'
+            ]);
+        $result = $this->Task->getValidation($model);
+        $this->assertArrayHasKey('release_date', $result);
+        $expected = ['valid' => ['rule' => 'dateTime', 'allowEmpty' => false]];
+        $this->assertEquals($expected, $result['release_date']);
+    }
+
+    /**
      * test getting validation rules for tree-ish models
      *
      * @return void
