@@ -670,7 +670,8 @@ class ModelTask extends BakeTask
                 continue;
             }
 
-            if ($constraint['type'] === SchemaTable::CONSTRAINT_UNIQUE) {
+            $notDatetime = !in_array($metaData['type'], ['datetime', 'timestamp', 'date', 'time']);
+            if ($constraint['type'] === SchemaTable::CONSTRAINT_UNIQUE && $notDatetime) {
                 $validation['unique'] = ['rule' => 'validateUnique', 'provider' => 'table'];
             }
         }
