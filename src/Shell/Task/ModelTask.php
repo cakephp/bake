@@ -186,7 +186,7 @@ class ModelTask extends BakeTask
 
         return TableRegistry::get($className, [
             'name' => $className,
-            'table' => $table,
+            'table' => $this->tablePrefix . $table,
             'connection' => ConnectionManager::get($this->connection)
         ]);
     }
@@ -322,7 +322,10 @@ class ModelTask extends BakeTask
                 if (!isset($constraintInfo['references'])) {
                     continue;
                 }
-
+                $length = strlen($this->tablePrefix);
+                if ($length > 0 && substr($constraintInfo['references'][0], 0, $length) === $this->tablePrefix) {
+                    return substr($constraintInfo['references'][0], $length);
+                }
                 return $constraintInfo['references'][0];
             }
         }
