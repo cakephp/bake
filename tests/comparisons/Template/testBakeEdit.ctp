@@ -26,12 +26,12 @@
     <fieldset>
         <legend><?= __('Edit Author') ?></legend>
         <?php
-            echo $this->Form->input('role_id', ['options' => $roles]);
-            echo $this->Form->input('name');
-            echo $this->Form->input('description');
-            echo $this->Form->input('member');
-            echo $this->Form->input('member_number');
-            echo $this->Form->input('account_balance');
+            echo $this->Form->control('role_id', ['options' => $roles]);
+            echo $this->Form->control('name');
+            echo $this->Form->control('description');
+            echo $this->Form->control('member');
+            echo $this->Form->control('member_number');
+            echo $this->Form->control('account_balance');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
