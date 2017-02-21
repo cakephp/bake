@@ -32,9 +32,9 @@ class ProductVersionsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('product_versions');
-        $this->displayField('id');
-        $this->primaryKey('id');
+        $this->setTable('product_versions');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
         $this->belongsTo('Products', [
             'foreignKey' => 'product_id',

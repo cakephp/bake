@@ -32,9 +32,9 @@ class BakeArticlesTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('articles');
-        $this->displayField('title');
-        $this->primaryKey('id');
+        $this->setTable('articles');
+        $this->setDisplayField('title');
+        $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
     }
