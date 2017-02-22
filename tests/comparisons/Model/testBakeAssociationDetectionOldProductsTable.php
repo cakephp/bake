@@ -32,9 +32,9 @@ class OldProductsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('old_products');
-        $this->displayField('name');
-        $this->primaryKey('id');
+        $this->setTable('old_products');
+        $this->setDisplayField('name');
+        $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
     }

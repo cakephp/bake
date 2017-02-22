@@ -53,7 +53,7 @@ class BakeArticlesController extends AppController
     {
         $bakeArticle = $this->BakeArticles->newEntity();
         if ($this->request->is('post')) {
-            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->data);
+            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
             if ($this->BakeArticles->save($bakeArticle)) {
                 $this->Flash->success(__('The bake article has been saved.'));
 
@@ -80,7 +80,7 @@ class BakeArticlesController extends AppController
             'contain' => ['BakeTags']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->data);
+            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
             if ($this->BakeArticles->save($bakeArticle)) {
                 $this->Flash->success(__('The bake article has been saved.'));
 

@@ -35,9 +35,9 @@ class ProductsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('products');
-        $this->displayField('name');
-        $this->primaryKey('id');
+        $this->setTable('products');
+        $this->setDisplayField('name');
+        $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 
