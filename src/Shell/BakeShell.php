@@ -281,7 +281,7 @@ class BakeShell extends Shell
             }
         }
 
-        $parser->description(
+        $parser->setDescription(
             'The Bake script generates controllers, models and template files for your application.' .
             ' If run with no command line arguments, Bake guides the user through the class creation process.' .
             ' You can customize the generation process by telling Bake where different parts of your application' .
@@ -315,7 +315,7 @@ class BakeShell extends Shell
         foreach ($this->_taskMap as $task => $config) {
             $taskParser = $this->{$task}->getOptionParser();
             $parser->addSubcommand(Inflector::underscore($task), [
-                'help' => $taskParser->description(),
+                'help' => $taskParser->getDescription(),
                 'parser' => $taskParser
             ]);
         }

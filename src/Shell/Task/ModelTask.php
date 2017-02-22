@@ -987,7 +987,7 @@ class ModelTask extends BakeTask
     {
         $parser = parent::getOptionParser();
 
-        $parser->description(
+        $parser->setDescription(
             'Bake table and entity classes.'
         )->addArgument('name', [
             'help' => 'Name of the model to bake (without the Table suffix). ' .
@@ -1032,7 +1032,7 @@ class ModelTask extends BakeTask
         ])->addOption('no-fixture', [
             'boolean' => true,
             'help' => 'Do not generate a test fixture skeleton.'
-        ])->epilog(
+        ])->setEpilog(
             'Omitting all arguments and options will list the table names you can generate models for'
         );
 
