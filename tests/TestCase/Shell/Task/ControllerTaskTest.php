@@ -181,7 +181,7 @@ class ControllerTaskTest extends TestCase
             ->method('createFile')
             ->will($this->returnValue(true));
 
-        $this->Task->params['actions'] = 'index,  view,';
+        $this->Task->params['actions'] = 'login,  logout,';
         $this->Task->params['helpers'] = 'Html,Time';
         $this->Task->params['components'] = 'Csrf, Auth';
 

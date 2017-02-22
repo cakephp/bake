@@ -64,7 +64,7 @@ class FixtureTask extends BakeTask
     {
         $parser = parent::getOptionParser();
 
-        $parser = $parser->description(
+        $parser = $parser->setDescription(
             'Generate fixtures for use with the test suite. You can use `bake fixture all` to bake all fixtures.'
         )->addArgument('name', [
             'help' => 'Name of the fixture to bake (without the `Fixture` suffix). ' .

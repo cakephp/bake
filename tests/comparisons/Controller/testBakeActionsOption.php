@@ -28,35 +28,30 @@ class BakeArticlesController extends AppController
     public $components = ['Csrf', 'Auth'];
 
     /**
-     * Index method
+     * Login method
      *
      * @return \Cake\Network\Response|null
      */
-    public function index()
+    public function login()
     {
-        $this->paginate = [
-            'contain' => ['BakeUsers']
-        ];
-        $bakeArticles = $this->paginate($this->BakeArticles);
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
 
-        $this->set(compact('bakeArticles'));
-        $this->set('_serialize', ['bakeArticles']);
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            $this->Flash->error(__('Invalid credentials, try again'));
+        }
     }
 
     /**
-     * View method
+     * Logout method
      *
-     * @param string|null $id Bake Article id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return \Cake\Network\Response
      */
-    public function view($id = null)
+    public function logout()
     {
-        $bakeArticle = $this->BakeArticles->get($id, [
-            'contain' => ['BakeUsers', 'BakeTags', 'BakeComments']
-        ]);
-
-        $this->set('bakeArticle', $bakeArticle);
-        $this->set('_serialize', ['bakeArticle']);
+        return $this->redirect($this->Auth->logout());
     }
 }
