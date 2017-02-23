@@ -30,6 +30,13 @@ class BakeTask extends Shell
     use ConventionsTrait;
 
     /**
+     * Table prefix
+     *
+     * @var string|null
+     */
+    public $tablePrefix = null;
+
+    /**
      * The pathFragment appended to the plugin/app path.
      *
      * @var string
