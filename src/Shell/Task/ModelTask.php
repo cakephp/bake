@@ -316,19 +316,24 @@ class ModelTask extends BakeTask
         if (!$schema->column($keyField)) {
             return null;
         }
+
         foreach ($schema->constraints() as $constraint) {
             $constraintInfo = $schema->constraint($constraint);
-            if (in_array($keyField, $constraintInfo['columns'])) {
-                if (!isset($constraintInfo['references'])) {
-                    continue;
-                }
-                $length = mb_strlen($this->tablePrefix);
-                if ($length > 0 && mb_substr($constraintInfo['references'][0], 0, $length) === $this->tablePrefix) {
-                    return mb_substr($constraintInfo['references'][0], $length);
-                }
-                return $constraintInfo['references'][0];
+            if (!in_array($keyField, $constraintInfo['columns'])) {
+                continue;
             }
+
+            if (!isset($constraintInfo['references'])) {
+                continue;
+            }
+            $length = mb_strlen($this->tablePrefix);
+            if ($length > 0 && mb_substr($constraintInfo['references'][0], 0, $length) === $this->tablePrefix) {
+                return mb_substr($constraintInfo['references'][0], $length);
+            }
+
+            return $constraintInfo['references'][0];
         }
+
         return null;
     }
 
