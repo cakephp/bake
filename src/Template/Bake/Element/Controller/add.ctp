@@ -39,7 +39,7 @@ $compact = ["'" . $singularName . "'"];
         );
         foreach ($associations as $assoc):
             $association = $modelObj->association($assoc);
-            $otherName = $association->target()->alias();
+            $otherName = $association->getTarget()->getAlias();
             $otherPlural = $this->_variableName($otherName);
 %>
         $<%= $otherPlural %> = $this-><%= $currentModelName %>-><%= $otherName %>->find('list', ['limit' => 200]);

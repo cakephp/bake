@@ -19,7 +19,7 @@ $fields = collection($fields)
         return $schema->columnType($field) !== 'binary';
     });
 
-if (isset($modelObject) && $modelObject->behaviors()->has('Tree')) {
+if (isset($modelObject) && $modelObject->hasBehavior('Tree')) {
     $fields = $fields->reject(function ($field) {
         return $field === 'lft' || $field === 'rght';
     });
