@@ -437,7 +437,7 @@ class FixtureTask extends BakeTask
         $records = $model->find('all')
             ->where($conditions)
             ->limit($recordCount)
-            ->hydrate(false);
+            ->enableHydration(false);
 
         return $records;
     }

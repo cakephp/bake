@@ -288,11 +288,11 @@ class TemplateTask extends BakeTask
             ]);
         }
 
-        $primaryKey = (array)$modelObject->primaryKey();
-        $displayField = $modelObject->displayField();
+        $primaryKey = (array)$modelObject->getPrimaryKey();
+        $displayField = $modelObject->getDisplayField();
         $singularVar = $this->_singularName($this->controllerName);
         $singularHumanName = $this->_singularHumanName($this->controllerName);
-        $schema = $modelObject->schema();
+        $schema = $modelObject->getSchema();
         $fields = $schema->columns();
         $modelClass = $this->modelName;
         $associations = $this->_filteredAssociations($modelObject);

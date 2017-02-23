@@ -49,7 +49,7 @@ class AssociationFilter
     public function belongsToManyJunctionAliases(Table $table)
     {
         $extractor = function ($val) {
-            return $val->junction()->alias();
+            return $val->junction()->getAlias();
         };
 
         return array_map($extractor, $table->associations()->type('BelongsToMany'));
@@ -70,9 +70,9 @@ class AssociationFilter
 
         foreach ($keys as $type) {
             foreach ($model->associations()->type($type) as $assoc) {
-                $target = $assoc->target();
-                $assocName = $assoc->name();
-                $alias = $target->alias();
+                $target = $assoc->getTarget();
+                $assocName = $assoc->getName();
+                $alias = $target->getAlias();
                 //filter existing HasMany
                 if ($type === 'HasMany' && in_array($alias, $belongsToManyJunctionsAliases)) {
                     continue;
@@ -82,7 +82,7 @@ class AssociationFilter
 
                 $navLink = true;
                 $modelClass = get_class($model);
-                if ($modelClass !== 'Cake\ORM\Table' && $targetClass === $modelClass) {
+                if ($modelClass !== Table::class && $targetClass === $modelClass) {
                     $navLink = false;
                 }
 
@@ -93,14 +93,14 @@ class AssociationFilter
 
                 try {
                     $associations[$type][$assocName] = [
-                        'property' => $assoc->property(),
+                        'property' => $assoc->getProperty(),
                         'variable' => Inflector::variable($assocName),
-                        'primaryKey' => (array)$target->primaryKey(),
-                        'displayField' => $target->displayField(),
-                        'foreignKey' => $assoc->foreignKey(),
+                        'primaryKey' => (array)$target->getPrimaryKey(),
+                        'displayField' => $target->getDisplayField(),
+                        'foreignKey' => $assoc->getForeignKey(),
                         'alias' => $alias,
                         'controller' => $className,
-                        'fields' => $target->schema()->columns(),
+                        'fields' => $target->getSchema()->columns(),
                         'navLink' => $navLink,
                     ];
                 } catch (Exception $e) {
