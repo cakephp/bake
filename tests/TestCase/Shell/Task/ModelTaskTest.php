@@ -188,6 +188,26 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * Test getting the a table class with a table prefix.
+     *
+     * @return void
+     */
+    public function testGetTableObjectPrefix()
+    {
+        $this->Task->tablePrefix = 'my_prefix_';
+
+        $result = $this->Task->getTableObject('Article', 'bake_articles');
+        $this->assertEquals('my_prefix_bake_articles', $result->table());
+        $this->assertInstanceOf('Cake\ORM\Table', $result);
+        $this->assertEquals('Article', $result->alias());
+
+        $this->Task->params['plugin'] = 'BakeTest';
+        $result = $this->Task->getTableObject('Authors', 'bake_articles');
+        $this->assertEquals('my_prefix_bake_articles', $result->table());
+        $this->assertInstanceOf('BakeTest\Model\Table\AuthorsTable', $result);
+    }
+
+    /**
      * Test getAssociations with off flag.
      *
      * @return void

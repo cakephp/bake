@@ -59,6 +59,9 @@ class BakeShell extends Shell
             if (isset($this->params['connection'])) {
                 $this->{$task}->connection = $this->params['connection'];
             }
+            if (isset($this->params['tablePrefix'])) {
+                $this->{$task}->tablePrefix = $this->params['tablePrefix'];
+            }
         }
         if (isset($this->params['connection'])) {
             $this->connection = $this->params['connection'];
@@ -306,6 +309,9 @@ class BakeShell extends Shell
             'help' => 'Plugin to bake into.'
         ])->addOption('prefix', [
             'help' => 'Prefix to bake controllers and templates into.'
+        ])->addOption('tablePrefix', [
+            'help' => 'Table prefix to be used in models.',
+            'default' => null
         ])->addOption('theme', [
             'short' => 't',
             'help' => 'The theme to use when baking code.',
