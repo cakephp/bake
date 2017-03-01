@@ -369,7 +369,6 @@ class TestTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-
     /**
      * Test baking a test for a concrete model with no-fixtures arg
      *
