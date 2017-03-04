@@ -953,13 +953,13 @@ class ModelTask extends BakeTask
             $this->err(
                 'Connections need to implement schemaCollection() to be used with bake.'
             );
-            $this->_stop();
+            return $this->_stop();
         }
         $schema = $db->schemaCollection();
         $tables = $schema->listTables();
         if (empty($tables)) {
             $this->err('Your database does not have any tables.');
-            $this->_stop();
+            return $this->_stop();
         }
         sort($tables);
 
