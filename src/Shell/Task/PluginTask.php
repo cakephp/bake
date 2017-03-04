@@ -242,7 +242,7 @@ class PluginTask extends BakeTask
 
         $this->out('<info>Modifying composer autoloader</info>');
 
-        $out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
+        $out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
         $this->createFile($file, $out);
 
         $composer = $this->findComposer();
