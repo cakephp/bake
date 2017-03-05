@@ -235,7 +235,7 @@ class TestTask extends BakeTask
         if (class_exists($fullClassName)) {
             $methods = $this->getTestableMethods($fullClassName);
         }
-        $mock = $this->hasMockClass($type, $fullClassName);
+        $mock = $this->hasMockClass($type);
         list($preConstruct, $construction, $postConstruct) = $this->generateConstructor($type, $fullClassName);
         $uses = $this->generateUses($type, $fullClassName);
 
