@@ -23,7 +23,11 @@ class DocBlockHelper extends Helper
      */
     public function classDescription($className, $classType, array $annotations)
     {
-        $lines = ["{$className} {$classType}", ""];
+        $lines = [];
+        if ($className && $classType) {
+            $lines[] = "{$className} {$classType}";
+            $lines[] = "";
+        }
 
         $previous = false;
         foreach ($annotations as $ann) {
