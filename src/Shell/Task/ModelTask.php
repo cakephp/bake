@@ -15,6 +15,7 @@
 namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
+use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Database\Schema\Table as SchemaTable;
 use Cake\Datasource\ConnectionManager;
@@ -296,6 +297,8 @@ class ModelTask extends BakeTask
             if ($this->plugin && empty($assoc['className'])) {
                 $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
             }
+            $tableName = !empty($assoc['className']) ? $assoc['className'] : $assoc['alias'];
+            $assoc['namespace'] = App::className($tableName, 'Model/Table', 'Table');
             $associations['belongsTo'][] = $assoc;
         }
 
@@ -384,6 +387,8 @@ class ModelTask extends BakeTask
                     $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
                 }
                 if ($assoc) {
+                    $tableName = !empty($assoc['className']) ? $assoc['className'] : $assoc['alias'];
+                    $assoc['namespace'] = App::className($tableName, 'Model/Table', 'Table');
                     $associations['hasMany'][] = $assoc;
                 }
             }
@@ -427,6 +432,8 @@ class ModelTask extends BakeTask
                 if ($assoc && $this->plugin) {
                     $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
                 }
+                $tableName = !empty($assoc['className']) ? $assoc['className'] : $assoc['alias'];
+                $assoc['namespace'] = App::className($tableName, 'Model/Table', 'Table');
                 $associations['belongsToMany'][] = $assoc;
             }
         }

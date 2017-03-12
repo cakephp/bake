@@ -16,9 +16,10 @@ use Cake\Utility\Inflector;
 
 $annotations = [];
 foreach ($associations as $type => $assocs) {
-    foreach ($assocs as $assoc) {
+    foreach ($assocs as $key => $assoc) {
         $typeStr = Inflector::camelize($type);
-        $annotations[] = "@property \Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
+        $annotations[] = "@property \\{$assoc['namespace']}|\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
+        unset($associations[$type][$key]['namespace']);
     }
 }
 $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} get(\$primaryKey, \$options = [])";
