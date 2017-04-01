@@ -131,7 +131,7 @@ class ModelTask extends BakeTask
         $displayField = $this->getDisplayField($tableObject);
         $propertySchema = $this->getEntityPropertySchema($tableObject);
         $fields = $this->getFields();
-        $validation = $this->getValidation($tableObject, $associations);
+        $validation = $this->getValidation($tableObject);
         $rulesChecker = $this->getRules($tableObject, $associations);
         $behaviors = $this->getBehaviors($tableObject);
         $connection = $this->connection;
@@ -596,16 +596,8 @@ class ModelTask extends BakeTask
 
         $validate = [];
         $primaryKey = (array)$schema->primaryKey();
-        $foreignKeys = [];
-        if (isset($associations['belongsTo'])) {
-            foreach ($associations['belongsTo'] as $assoc) {
-                $foreignKeys[] = $assoc['foreignKey'];
-            }
-        }
+
         foreach ($fields as $fieldName) {
-            if (in_array($fieldName, $foreignKeys)) {
-                continue;
-            }
             $field = $schema->column($fieldName);
             $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
             if (!empty($validation)) {

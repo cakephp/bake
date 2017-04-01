@@ -831,29 +831,6 @@ class ModelTaskTest extends TestCase
     }
 
     /**
-     * test getting validation rules and exempting foreign keys
-     *
-     * @return void
-     */
-    public function testGetValidationExcludeForeignKeys()
-    {
-        $model = TableRegistry::get('BakeArticles');
-        $associations = [
-            'belongsTo' => [
-                'BakeUsers' => ['foreignKey' => 'bake_user_id'],
-            ]
-        ];
-        $result = $this->Task->getValidation($model, $associations);
-        $expected = [
-            'title' => ['valid' => ['rule' => false, 'allowEmpty' => false]],
-            'body' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
-            'published' => ['valid' => ['rule' => 'boolean', 'allowEmpty' => true]],
-            'id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
-        ];
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
      * test getting validation rules with the no-rules param.
      *
      * @return void

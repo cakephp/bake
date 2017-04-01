@@ -48,6 +48,25 @@ class CategoriesProductsTable extends Table
     }
 
     /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->integer('category_id')
+            ->allowEmpty('category_id', 'create');
+
+        $validator
+            ->integer('product_id')
+            ->allowEmpty('product_id', 'create');
+
+        return $validator;
+    }
+
+    /**
      * Returns a rules checker object that will be used for validating
      * application integrity.
      *

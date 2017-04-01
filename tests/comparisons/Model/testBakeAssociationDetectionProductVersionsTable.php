@@ -55,6 +55,11 @@ class ProductVersionsTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
+            ->integer('product_id')
+            ->requirePresence('product_id', 'create')
+            ->notEmpty('product_id');
+
+        $validator
             ->dateTime('version')
             ->requirePresence('version', 'create')
             ->notEmpty('version');
