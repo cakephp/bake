@@ -20,7 +20,7 @@ class ArticlesCellTest extends TestCase
     /**
      * Response mock
      *
-     * @var \Cake\Network\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Cake\Http\Response|\PHPUnit_Framework_MockObject_MockObject
      */
     public $response;
 

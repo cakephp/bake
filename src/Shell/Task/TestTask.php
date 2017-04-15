@@ -592,7 +592,7 @@ class TestTask extends BakeTask
                 ];
                 $properties[] = [
                     'description' => 'Response mock',
-                    'type' => '\Cake\Network\Response|\PHPUnit_Framework_MockObject_MockObject',
+                    'type' => '\Cake\Http\Response|\PHPUnit_Framework_MockObject_MockObject',
                     'name' => 'response'
                 ];
                 break;
