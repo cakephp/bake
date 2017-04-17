@@ -47,7 +47,7 @@ class BakeArticlesTable extends Table
 
         $validator
             ->requirePresence('name', 'create')
-            ->notEmpty('name');
+            ->notBlank('name');
 
         $validator
             ->email('email')
