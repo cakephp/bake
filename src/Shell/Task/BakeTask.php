@@ -14,6 +14,7 @@
  */
 namespace Bake\Shell\Task;
 
+use Bake\Shell\RedirectClipboardTrait;
 use Cake\Cache\Cache;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
@@ -28,6 +29,7 @@ use Cake\Filesystem\File;
 class BakeTask extends Shell
 {
     use ConventionsTrait;
+    use RedirectClipboardTrait;
 
     /**
      * Table prefix
@@ -250,6 +252,10 @@ class BakeTask extends Shell
             'short' => 't',
             'help' => 'The theme to use when baking code.',
             'choices' => $bakeThemes
+        ])->addOption('clipboard', [
+            'short' => 'c',
+            'boolean' => true,
+            'help' => 'Write bake output to clipboard.'
         ]);
 
         return $parser;
