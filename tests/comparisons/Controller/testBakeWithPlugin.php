@@ -7,6 +7,8 @@ use BakeTest\Controller\AppController;
  * BakeArticles Controller
  *
  * @property \BakeTest\Model\Table\BakeArticlesTable $BakeArticles
+ *
+ * @method \BakeTest\Model\Entity\BakeArticle[] paginate($object = null, array $settings = [])
  */
 class BakeArticlesController extends AppController
 {

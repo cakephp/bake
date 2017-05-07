@@ -35,6 +35,10 @@ foreach ($components as $component):
 %>
  * @property <%= $classInfo['fqn'] %> $<%= $classInfo['name'] %>
 <% endforeach; %>
+<% if (in_array('index', $actions)): %>
+ *
+ * @method \<%= $namespace %>\Model\Entity\<%= $entityClassName %>[] paginate($object = null, array $settings = [])
+<% endif; %>
  */
 class <%= $name %>Controller extends AppController
 {

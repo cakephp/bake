@@ -130,12 +130,14 @@ class ControllerTask extends BakeTask
         $singularName = $this->_singularName($currentModelName);
         $singularHumanName = $this->_singularHumanName($controllerName);
         $pluralHumanName = $this->_variableName($controllerName);
+        $entityClassName = $this->_entityName($modelObj->getAlias());
 
         $data = compact(
             'actions',
             'admin',
             'components',
             'currentModelName',
+            'entityClassName',
             'helpers',
             'modelObj',
             'namespace',
