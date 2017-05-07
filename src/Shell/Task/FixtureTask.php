@@ -334,6 +334,8 @@ class FixtureTask extends BakeTask
                     case 'biginteger':
                     case 'integer':
                     case 'float':
+                    case 'smallinteger':
+                    case 'tinyinteger':
                         $insert = $i + 1;
                         break;
                     case 'string':

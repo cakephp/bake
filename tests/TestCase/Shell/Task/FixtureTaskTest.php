@@ -355,6 +355,8 @@ class FixtureTaskTest extends TestCase
         $this->assertContains("'float_field' => 1", $result);
         $this->assertContains("'decimal_field' => 1.5", $result);
         $this->assertContains("'huge_int' => 1", $result);
+        $this->assertContains("'small_int' => 1", $result);
+        $this->assertContains("'tiny_int' => 1", $result);
         $this->assertContains("'bool' => 1", $result);
         $this->assertContains("_constraints", $result);
         $this->assertContains("'primary' => ['type' => 'primary'", $result);

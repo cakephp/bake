@@ -85,7 +85,7 @@ if (!empty($indexColumns)) {
                 }
             }
             if ($isKey !== true) {
-                if (!in_array($schema->columnType($field), ['integer', 'biginteger', 'decimal', 'float'])) {
+                if (!in_array($schema->columnType($field), ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'])) {
 %>
                 <td><?= h($<%= $singularVar %>-><%= $field %>) ?></td>
 <%
