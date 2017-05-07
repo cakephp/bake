@@ -250,17 +250,13 @@ class BakeShell extends Shell
             $filteredTables = collection($this->Model->listUnskipped());
         }
 
-        $filteredTables->each(function ($tableName) {
-            foreach (['Model', 'Controller', 'Template'] as $task) {
+        foreach (['Model', 'Controller', 'Template'] as $task) {
+            $filteredTables->each(function ($tableName) use ($task) {
+                $tableName = $this->_camelize($tableName);
                 $this->{$task}->connection = $this->connection;
-            }
-
-            $tableName = $this->_camelize($tableName);
-
-            $this->Model->main($tableName);
-            $this->Controller->main($tableName);
-            $this->Template->main($tableName);
-        });
+                $this->{$task}->main($tableName);
+            });
+        }
 
         $this->out('<success>Bake All complete.</success>', 1, Shell::QUIET);
 
