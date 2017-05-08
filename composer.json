@@ -23,7 +23,7 @@
         "cakephp/plugin-installer": "*"
     },
     "require-dev": {
-        "cakephp/cakephp-codesniffer": "^2.1",
+        "cakephp/cakephp-codesniffer": "^3.0",
         "phpunit/phpunit": "~5.7 | ~6.0"
     },
     "autoload": {
