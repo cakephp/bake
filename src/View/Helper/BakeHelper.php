@@ -292,8 +292,19 @@ class BakeHelper extends Helper
         $validationMethods = [];
 
         foreach ($rules as $ruleName => $rule) {
-            if ($rule['rule'] && !isset($rule['provider'])) {
+            if ($rule['rule'] && !isset($rule['provider']) && !isset($rule['args'])) {
                 $validationMethods[] = sprintf("->%s('%s')", $rule['rule'], $field);
+            } elseif ($rule['rule'] && !isset($rule['provider'])) {
+                $formatTemplate = "->%s('%s')";
+                if (!empty($rule['args'])) {
+                    $formatTemplate = "->%s('%s', %s)";
+                }
+                $validationMethods[] = sprintf(
+                    $formatTemplate,
+                    $rule['rule'],
+                    $field,
+                    implode(', ', $this->escapeArguments($rule['args']))
+                );
             } elseif ($rule['rule'] && isset($rule['provider'])) {
                 $validationMethods[] = sprintf(
                     "->add('%s', '%s', ['rule' => '%s', 'provider' => '%s'])",
@@ -357,6 +368,24 @@ class BakeHelper extends Helper
         }
 
         return $accessible;
+    }
+
+    /**
+     * Wrap string arguments with quotes
+     *
+     * @param array $args array of arguments
+     * @return array
+     */
+    public function escapeArguments($args)
+    {
+        return array_map(function ($v) {
+            if (is_string($v)) {
+                $v = strtr($v, ["'" => "\'"]);
+                $v = "'$v'";
+            }
+
+            return $v;
+        }, $args);
     }
 
     /**

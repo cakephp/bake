@@ -43,7 +43,6 @@ class ModelTaskTest extends TestCase
      */
     public $fixtures = [
         'core.users',
-        'core.number_trees',
         'core.counter_cache_users',
         'core.counter_cache_posts',
         'core.tags',
@@ -54,6 +53,7 @@ class ModelTaskTest extends TestCase
         'plugin.bake.bake_tags',
         'plugin.bake.category_threads',
         'plugin.bake.invitations',
+        'plugin.bake.number_trees',
     ];
 
     /**
@@ -782,22 +782,58 @@ class ModelTaskTest extends TestCase
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->getValidation($model);
         $expected = [
-            'bake_user_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => false]],
-            'title' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => false]],
-            'body' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => true]],
-            'published' => ['valid' => ['rule' => 'boolean', 'allowEmpty' => true]],
-            'id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
+            'bake_user_id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []]
+            ],
+            'title' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+            ],
+            'body' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'published' => [
+                'boolean' => ['rule' => 'boolean', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ['create']]
+            ]
         ];
         $this->assertEquals($expected, $result);
 
         $model = TableRegistry::get('BakeComments');
         $result = $this->Task->getValidation($model);
         $expected = [
-            'bake_article_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => false]],
-            'bake_user_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => false]],
-            'comment' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => true]],
-            'published' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => true]],
-            'otherid' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
+            'bake_article_id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []]
+            ],
+            'bake_user_id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []]
+            ],
+            'comment' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'published' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'maxLength' => ['rule' => 'maxLength', 'args' => [1]],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'otherid' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ['create']]
+            ]
         ];
         $this->assertEquals($expected, $result);
     }
@@ -819,7 +855,11 @@ class ModelTaskTest extends TestCase
             ]);
         $result = $this->Task->getValidation($model);
         $this->assertArrayHasKey('release_date', $result);
-        $expected = ['valid' => ['rule' => 'dateTime', 'allowEmpty' => false]];
+        $expected = [
+            'dateTime' => ['rule' => 'dateTime', 'args' => []],
+            'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+            'notEmpty' => ['rule' => 'notEmpty', 'args' => []]
+        ];
         $this->assertEquals($expected, $result['release_date']);
     }
 
@@ -833,10 +873,24 @@ class ModelTaskTest extends TestCase
         $model = TableRegistry::get('NumberTrees');
         $result = $this->Task->getValidation($model);
         $expected = [
-            'id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']],
-            'name' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => false]],
-            'parent_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => true]],
-            'depth' => ['valid' => ['rule' => 'integer', 'allowEmpty' => true]],
+            'id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ['create']]
+            ],
+            'name' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+            ],
+            'parent_id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'depth' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -856,10 +910,24 @@ class ModelTaskTest extends TestCase
         ];
         $result = $this->Task->getValidation($model, $associations);
         $expected = [
-            'title' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => false]],
-            'body' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => true]],
-            'published' => ['valid' => ['rule' => 'boolean', 'allowEmpty' => true]],
-            'id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
+            'title' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+            ],
+            'body' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'published' => [
+                'boolean' => ['rule' => 'boolean', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ['create']]
+            ]
         ];
         $this->assertEquals($expected, $result);
     }
@@ -1076,6 +1144,13 @@ class ModelTaskTest extends TestCase
                 'valid' => [
                     'allowEmpty' => false,
                     'rule' => 'scalar',
+                ],
+                'maxLength' => [
+                    'rule' => 'maxLength',
+                    'args' => [
+                        100,
+                        'Name must be shorter than 100 characters.'
+                    ]
                 ]
             ],
             'email' => [

@@ -230,4 +230,25 @@ class BakeHelperTest extends TestCase
             $spaces . $spaces;
         $this->assertSame($expected, $result);
     }
+
+    /**
+     * test escapeArgument with integers and strings
+     *
+     * @return void
+     */
+    public function testEscapeArguments()
+    {
+        $arguments = [
+            100,
+            "foo 'bar'",
+            'foo "bar"',
+        ];
+        $result = $this->BakeHelper->escapeArguments($arguments);
+        $expected = [
+            100,
+            "'foo \'bar\''",
+            "'foo \"bar\"'",
+        ];
+        $this->assertSame($expected, $result);
+    }
 }

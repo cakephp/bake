@@ -701,46 +701,52 @@ class ModelTask extends BakeTask
             return false;
         }
 
-        $rule = false;
+        $rules = [];
         if ($fieldName === 'email') {
-            $rule = 'email';
+            $rules['email'] = [];
         } elseif ($metaData['type'] === 'uuid') {
-            $rule = 'uuid';
+            $rules['uuid'] = [];
         } elseif ($metaData['type'] === 'integer') {
-            $rule = 'integer';
+            $rules['integer'] = [];
         } elseif ($metaData['type'] === 'float') {
-            $rule = 'numeric';
+            $rules['numeric'] = [];
         } elseif ($metaData['type'] === 'decimal') {
-            $rule = 'decimal';
+            $rules['decimal'] = [];
         } elseif ($metaData['type'] === 'boolean') {
-            $rule = 'boolean';
+            $rules['boolean'] = [];
         } elseif ($metaData['type'] === 'date') {
-            $rule = 'date';
+            $rules['date'] = [];
         } elseif ($metaData['type'] === 'time') {
-            $rule = 'time';
+            $rules['time'] = [];
         } elseif ($metaData['type'] === 'datetime') {
-            $rule = 'dateTime';
+            $rules['dateTime'] = [];
         } elseif ($metaData['type'] === 'timestamp') {
-            $rule = 'dateTime';
+            $rules['dateTime'] = [];
         } elseif ($metaData['type'] === 'inet') {
-            $rule = 'ip';
+            $rules['ip'] = [];
         } elseif ($metaData['type'] === 'string' || $metaData['type'] === 'text') {
-            $rule = 'scalar';
+            $rules['scalar'] = [];
+            if ($metaData['length'] > 0) {
+                $rules['maxLength'] = [$metaData['length']];
+            }
         }
 
-        $allowEmpty = false;
         if (in_array($fieldName, $primaryKey)) {
-            $allowEmpty = 'create';
+            $rules['allowEmpty'] = ['create'];
         } elseif ($metaData['null'] === true) {
-            $allowEmpty = true;
+            $rules['allowEmpty'] = [];
+        } else {
+            $rules['requirePresence'] = ['create'];
+            $rules['notEmpty'] = [];
         }
 
-        $validation = [
-            'valid' => [
+        $validation = [];
+        foreach ($rules as $rule => $args) {
+            $validation[$rule] = [
                 'rule' => $rule,
-                'allowEmpty' => $allowEmpty,
-            ]
-        ];
+                'args' => $args
+            ];
+        }
 
         foreach ($schema->constraints() as $constraint) {
             $constraint = $schema->getConstraint($constraint);
