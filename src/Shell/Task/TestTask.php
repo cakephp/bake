@@ -524,9 +524,9 @@ class TestTask extends BakeTask
         $type = strtolower($type);
         $pre = $construct = $post = '';
         if ($type === 'table') {
-            $className = str_replace('Table', '', $className);
-            $pre = "\$config = TableRegistry::exists('{$className}') ? [] : ['className' => '{$fullClassName}'];";
-            $construct = "TableRegistry::get('{$className}', \$config);";
+            $tableName = str_replace('Table', '', $className);
+            $pre = "\$config = TableRegistry::exists('{$tableName}') ? [] : ['className' => {$className}::class];";
+            $construct = "TableRegistry::get('{$tableName}', \$config);";
         }
         if ($type === 'behavior' || $type === 'entity' || $type === 'form') {
             $construct = "new {$className}();";

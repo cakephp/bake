@@ -585,7 +585,7 @@ class TestTaskTest extends TestCase
 
         $result = $this->Task->generateConstructor('table', 'App\Model\\Table\PostsTable');
         $expected = [
-            "\$config = TableRegistry::exists('Posts') ? [] : ['className' => 'App\Model\\Table\PostsTable'];",
+            "\$config = TableRegistry::exists('Posts') ? [] : ['className' => PostsTable::class];",
             "TableRegistry::get('Posts', \$config);",
             ''
         ];
