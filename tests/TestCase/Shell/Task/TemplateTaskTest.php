@@ -283,6 +283,7 @@ class TemplateTaskTest extends TestCase
     {
         $vars = [
             'modelClass' => 'TestTemplateModel',
+            'entityClass' => 'TestTemplateModel',
             'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
@@ -308,6 +309,7 @@ class TemplateTaskTest extends TestCase
     {
         $vars = [
             'modelClass' => 'TemplateTaskComments',
+            'entityClass' => 'TemplateTaskComment',
             'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
@@ -346,6 +348,7 @@ class TemplateTaskTest extends TestCase
     {
         $vars = [
             'modelClass' => 'TestTemplateModel',
+            'entityClass' => 'TestTemplateModel',
             'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
             'primaryKey' => [],
             'displayField' => 'name',
@@ -375,6 +378,7 @@ class TemplateTaskTest extends TestCase
     {
         $vars = [
             'modelClass' => 'TestTemplateModel',
+            'entityClass' => 'TestTemplateModel',
             'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',

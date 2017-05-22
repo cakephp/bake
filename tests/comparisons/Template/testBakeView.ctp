@@ -1,6 +1,7 @@
 <?php
 /**
   * @var \Bake\Test\App\View\AppView $this
+  * @var \Bake\Test\App\Model\Entity\AuthorsTable $author
   */
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">

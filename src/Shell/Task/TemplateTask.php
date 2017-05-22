@@ -266,6 +266,7 @@ class TemplateTask extends BakeTask
      *
      * - 'modelObject'
      * - 'modelClass'
+     * - 'entityClass'
      * - 'primaryKey'
      * - 'displayField'
      * - 'singularVar'
@@ -295,6 +296,7 @@ class TemplateTask extends BakeTask
         $schema = $modelObject->getSchema();
         $fields = $schema->columns();
         $modelClass = $this->modelName;
+        list(, $entityClass) = namespaceSplit($this->_entityName($this->modelName));
         $associations = $this->_filteredAssociations($modelObject);
         $keyFields = [];
         if (!empty($associations['BelongsTo'])) {
@@ -311,6 +313,7 @@ class TemplateTask extends BakeTask
         return compact(
             'modelObject',
             'modelClass',
+            'entityClass',
             'schema',
             'primaryKey',
             'displayField',
