@@ -281,9 +281,10 @@ class TemplateTaskTest extends TestCase
      */
     public function testGetContent()
     {
+        $namespace = Configure::read('App.namespace');
         $vars = [
             'modelClass' => 'TestTemplateModel',
-            'entityClass' => 'TestTemplateModel',
+            'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
             'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
@@ -294,7 +295,7 @@ class TemplateTaskTest extends TestCase
             'fields' => ['id', 'name', 'body'],
             'associations' => [],
             'keyFields' => [],
-            'namespace' => Configure::read('App.namespace'),
+            'namespace' => $namespace,
         ];
         $result = $this->Task->getContent('view', $vars);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
@@ -307,9 +308,10 @@ class TemplateTaskTest extends TestCase
      */
     public function testGetContentAssociations()
     {
+        $namespace = Configure::read('App.namespace');
         $vars = [
             'modelClass' => 'TemplateTaskComments',
-            'entityClass' => 'TemplateTaskComment',
+            'entityClass' => $namespace . '\Model\Entity\TemplateTaskComment',
             'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
@@ -333,7 +335,7 @@ class TemplateTaskTest extends TestCase
                 ]
             ],
             'keyFields' => [],
-            'namespace' => Configure::read('App.namespace'),
+            'namespace' => $namespace,
         ];
         $result = $this->Task->getContent('view', $vars);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
@@ -346,9 +348,10 @@ class TemplateTaskTest extends TestCase
      */
     public function testGetContentWithNoPrimaryKey()
     {
+        $namespace = Configure::read('App.namespace');
         $vars = [
             'modelClass' => 'TestTemplateModel',
-            'entityClass' => 'TestTemplateModel',
+            'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
             'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
             'primaryKey' => [],
             'displayField' => 'name',
@@ -359,7 +362,7 @@ class TemplateTaskTest extends TestCase
             'fields' => ['id', 'name', 'body'],
             'associations' => [],
             'keyFields' => [],
-            'namespace' => Configure::read('App.namespace'),
+            'namespace' => $namespace,
         ];
         $this->Task->expects($this->once())
             ->method('error')
@@ -376,9 +379,10 @@ class TemplateTaskTest extends TestCase
      */
     public function testGetContentWithRoutingPrefix()
     {
+        $namespace = Configure::read('App.namespace');
         $vars = [
             'modelClass' => 'TestTemplateModel',
-            'entityClass' => 'TestTemplateModel',
+            'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
             'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
@@ -389,7 +393,7 @@ class TemplateTaskTest extends TestCase
             'fields' => ['id', 'name', 'body'],
             'keyFields' => [],
             'associations' => [],
-            'namespace' => Configure::read('App.namespace'),
+            'namespace' => $namespace,
         ];
         $this->Task->params['prefix'] = 'Admin';
         $result = $this->Task->getContent('view', $vars);
