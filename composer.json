@@ -19,8 +19,8 @@
     },
     "require": {
         "php": ">=5.6.0",
-        "cakephp/cakephp": ">=3.4.0 <4.0.0",
-        "cakephp/plugin-installer": "*"
+        "cakephp/cakephp": "3.next-dev as 3.5.0",
+        "cakephp/plugin-installer": "~1.0"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^3.0",
