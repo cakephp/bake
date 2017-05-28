@@ -166,6 +166,8 @@ class DocBlockHelper extends Helper
 
             case 'integer':
             case 'biginteger':
+            case 'smallinteger':
+            case 'tinyinteger':
                 return 'int';
 
             case 'float':
