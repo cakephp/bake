@@ -278,13 +278,15 @@ class ModelTask extends BakeTask
     {
         $info = [];
 
+        $appNamespace = Configure::read('App.namespace');
+
         foreach ($table->associations() as $association) {
             /* @var $association \Cake\ORM\Association */
 
-            $namespace = Configure::read('App.namespace');
-
             $tableClass = get_class($association->getTarget());
             if ($tableClass === 'Cake\ORM\Table') {
+                $namespace = $appNamespace;
+
                 $className = $association->className();
                 if ($className !== null) {
                     list($plugin, $className) = pluginSplit($className);
