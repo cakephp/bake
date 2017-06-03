@@ -132,7 +132,7 @@ abstract class SimpleBakeTask extends BakeTask
     {
         $parser = parent::getOptionParser();
         $name = $this->name();
-        $parser->description(
+        $parser->setDescription(
             sprintf('Bake a %s class file.', $name)
         )->addArgument('name', [
             'help' => sprintf(

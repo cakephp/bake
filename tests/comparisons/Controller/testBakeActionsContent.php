@@ -7,6 +7,8 @@ use App\Controller\AppController;
  * BakeArticles Controller
  *
  * @property \App\Model\Table\BakeArticlesTable $BakeArticles
+ *
+ * @method \App\Model\Entity\BakeArticle[] paginate($object = null, array $settings = [])
  */
 class BakeArticlesController extends AppController
 {
@@ -14,7 +16,7 @@ class BakeArticlesController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Network\Response|null
+     * @return \Cake\Http\Response|null
      */
     public function index()
     {
@@ -31,7 +33,7 @@ class BakeArticlesController extends AppController
      * View method
      *
      * @param string|null $id Bake Article id.
-     * @return \Cake\Network\Response|null
+     * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
@@ -47,13 +49,13 @@ class BakeArticlesController extends AppController
     /**
      * Add method
      *
-     * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
+     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add()
     {
         $bakeArticle = $this->BakeArticles->newEntity();
         if ($this->request->is('post')) {
-            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->data);
+            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
             if ($this->BakeArticles->save($bakeArticle)) {
                 $this->Flash->success(__('The bake article has been saved.'));
 
@@ -71,7 +73,7 @@ class BakeArticlesController extends AppController
      * Edit method
      *
      * @param string|null $id Bake Article id.
-     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
+     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
@@ -80,7 +82,7 @@ class BakeArticlesController extends AppController
             'contain' => ['BakeTags']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->data);
+            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
             if ($this->BakeArticles->save($bakeArticle)) {
                 $this->Flash->success(__('The bake article has been saved.'));
 
@@ -98,7 +100,7 @@ class BakeArticlesController extends AppController
      * Delete method
      *
      * @param string|null $id Bake Article id.
-     * @return \Cake\Network\Response|null Redirects to index.
+     * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)

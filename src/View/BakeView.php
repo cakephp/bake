@@ -20,7 +20,7 @@ use Cake\Core\InstanceConfigTrait;
 use Cake\Event\EventManager;
 use Cake\Network\Request;
 use Cake\Network\Response;
-use Cake\Utility\Inflector;
+use Cake\Utility\Text;
 use Cake\View\View;
 
 class BakeView extends View
@@ -184,7 +184,7 @@ class BakeView extends View
     {
         $viewString = $this->_getViewFileContents($viewFile);
 
-        $replacements = array_merge($this->config('phpTagReplacements') + $this->config('replacements'));
+        $replacements = array_merge($this->getConfig('phpTagReplacements') + $this->getConfig('replacements'));
 
         foreach ($replacements as $find => $replace) {
             if ($this->_isRegex($find)) {
@@ -194,7 +194,7 @@ class BakeView extends View
             }
         }
 
-        $this->__viewFile = $this->_tmpLocation . Inflector::slug(preg_replace('@.*Template[/\\\\]@', '', $viewFile)) . '.php';
+        $this->__viewFile = $this->_tmpLocation . Text::slug(preg_replace('@.*Template[/\\\\]@', '', $viewFile)) . '.php';
         file_put_contents($this->__viewFile, $viewString);
 
         unset($viewFile, $viewString, $replacements, $find, $replace);
@@ -205,7 +205,7 @@ class BakeView extends View
 
         $content = ob_get_clean();
 
-        $unPhp = $this->config('phpTagReplacements');
+        $unPhp = $this->getConfig('phpTagReplacements');
 
         return str_replace(array_values($unPhp), array_keys($unPhp), $content);
     }

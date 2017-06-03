@@ -42,7 +42,6 @@ class MailerTaskTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-
         $this->Task = $this->getMockBuilder('Bake\Shell\Task\MailerTask')
             ->setMethods(['in', 'err', 'createFile', '_stop'])
             ->setConstructorArgs([$io])

@@ -20,3 +20,19 @@ composer require --dev cakephp/bake
 ## Documentation
 
 You can find the documentation for bake [on the cookbook](http://book.cakephp.org/3.0/en/bake.html).
+
+## Testing
+
+After installing dependencies with composer you can run tests with `phpunit`:
+
+```bash
+vendor/bin/phpunit
+```
+
+If your changes require changing the templates that bake uses, you can save time updating tests, by
+enabling bake's 'overwrite fixture feature'. This will let you re-generate the expected output files
+without having to manually edit each one:
+
+```bash
+UPDATE_TEST_COMPARISON_FILES=1 vendor/bin/phpunit
+```

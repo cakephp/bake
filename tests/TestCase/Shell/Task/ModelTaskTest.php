@@ -188,6 +188,26 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * Test getting the a table class with a table prefix.
+     *
+     * @return void
+     */
+    public function testGetTableObjectPrefix()
+    {
+        $this->Task->tablePrefix = 'my_prefix_';
+
+        $result = $this->Task->getTableObject('Article', 'bake_articles');
+        $this->assertEquals('my_prefix_bake_articles', $result->table());
+        $this->assertInstanceOf('Cake\ORM\Table', $result);
+        $this->assertEquals('Article', $result->alias());
+
+        $this->Task->params['plugin'] = 'BakeTest';
+        $result = $this->Task->getTableObject('Authors', 'bake_articles');
+        $this->assertEquals('my_prefix_bake_articles', $result->table());
+        $this->assertInstanceOf('BakeTest\Model\Table\AuthorsTable', $result);
+    }
+
+    /**
      * Test getAssociations with off flag.
      *
      * @return void
@@ -769,6 +789,27 @@ class ModelTaskTest extends TestCase
             'otherid' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
         ];
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test getting validation rules for unique date time columns
+     *
+     * @return void
+     */
+    public function testGetValidationUniqueDateField()
+    {
+        $model = TableRegistry::get('BakeComments');
+        $schema = $model->schema();
+        $schema
+            ->addColumn('release_date', ['type' => 'datetime'])
+            ->addConstraint('unique_date', [
+                'columns' => ['release_date'],
+                'type' => 'unique'
+            ]);
+        $result = $this->Task->getValidation($model);
+        $this->assertArrayHasKey('release_date', $result);
+        $expected = ['valid' => ['rule' => 'dateTime', 'allowEmpty' => false]];
+        $this->assertEquals($expected, $result['release_date']);
     }
 
     /**

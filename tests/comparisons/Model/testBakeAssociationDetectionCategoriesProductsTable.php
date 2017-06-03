@@ -33,9 +33,9 @@ class CategoriesProductsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('categories_products');
-        $this->displayField('category_id');
-        $this->primaryKey(['category_id', 'product_id']);
+        $this->setTable('categories_products');
+        $this->setDisplayField('category_id');
+        $this->setPrimaryKey(['category_id', 'product_id']);
 
         $this->belongsTo('Categories', [
             'foreignKey' => 'category_id',

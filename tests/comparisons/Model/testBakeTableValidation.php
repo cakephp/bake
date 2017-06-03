@@ -30,7 +30,7 @@ class BakeArticlesTable extends Table
     {
         parent::initialize($config);
 
-        $this->primaryKey('id');
+        $this->setPrimaryKey('id');
     }
 
     /**

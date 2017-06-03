@@ -235,7 +235,7 @@ class TestTask extends BakeTask
         if (class_exists($fullClassName)) {
             $methods = $this->getTestableMethods($fullClassName);
         }
-        $mock = $this->hasMockClass($type, $fullClassName);
+        $mock = $this->hasMockClass($type);
         list($preConstruct, $construction, $postConstruct) = $this->generateConstructor($type, $fullClassName);
         $uses = $this->generateUses($type, $fullClassName);
 
@@ -440,11 +440,11 @@ class TestTask extends BakeTask
         if (!$subject instanceof Table) {
             return;
         }
-        $this->_addFixture($subject->alias());
+        $this->_addFixture($subject->getAlias());
         foreach ($subject->associations()->keys() as $alias) {
             $assoc = $subject->association($alias);
-            $target = $assoc->target();
-            $name = $target->alias();
+            $target = $assoc->getTarget();
+            $name = $target->getAlias();
             $subjectClass = get_class($subject);
 
             if ($subjectClass !== 'Cake\ORM\Table' && $subjectClass === get_class($target)) {
@@ -456,7 +456,7 @@ class TestTask extends BakeTask
             }
             if ($assoc->type() === Association::MANY_TO_MANY) {
                 $junction = $assoc->junction();
-                if (!isset($this->_fixtures[$junction->alias()])) {
+                if (!isset($this->_fixtures[$junction->getAlias()])) {
                     $this->_processModel($junction);
                 }
             }
@@ -524,9 +524,9 @@ class TestTask extends BakeTask
         $type = strtolower($type);
         $pre = $construct = $post = '';
         if ($type === 'table') {
-            $className = str_replace('Table', '', $className);
-            $pre = "\$config = TableRegistry::exists('{$className}') ? [] : ['className' => '{$fullClassName}'];";
-            $construct = "TableRegistry::get('{$className}', \$config);";
+            $tableName = str_replace('Table', '', $className);
+            $pre = "\$config = TableRegistry::exists('{$tableName}') ? [] : ['className' => {$className}::class];";
+            $construct = "TableRegistry::get('{$tableName}', \$config);";
         }
         if ($type === 'behavior' || $type === 'entity' || $type === 'form') {
             $construct = "new {$className}();";
@@ -592,7 +592,7 @@ class TestTask extends BakeTask
                 ];
                 $properties[] = [
                     'description' => 'Response mock',
-                    'type' => '\Cake\Network\Response|\PHPUnit_Framework_MockObject_MockObject',
+                    'type' => '\Cake\Http\Response|\PHPUnit_Framework_MockObject_MockObject',
                     'name' => 'response'
                 ];
                 break;
@@ -707,7 +707,7 @@ class TestTask extends BakeTask
     {
         $parser = parent::getOptionParser();
 
-        $parser->description(
+        $parser->setDescription(
             'Bake test case skeletons for classes.'
         )->addArgument('type', [
             'help' => 'Type of class to bake, can be any of the following:' .

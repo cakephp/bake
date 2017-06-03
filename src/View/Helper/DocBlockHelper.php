@@ -2,6 +2,7 @@
 namespace Bake\View\Helper;
 
 use Cake\Collection\Collection;
+use Cake\Database\Type;
 use Cake\ORM\Association;
 use Cake\View\Helper;
 
@@ -23,7 +24,11 @@ class DocBlockHelper extends Helper
      */
     public function classDescription($className, $classType, array $annotations)
     {
-        $lines = ["{$className} {$classType}", ""];
+        $lines = [];
+        if ($className && $classType) {
+            $lines[] = "{$className} {$classType}";
+            $lines[] = "";
+        }
 
         $previous = false;
         foreach ($annotations as $ann) {
@@ -177,6 +182,11 @@ class DocBlockHelper extends Helper
             case 'datetime':
             case 'time':
             case 'timestamp':
+                $dbType = Type::build($type);
+                if (method_exists($dbType, 'getDateTimeClassName')) {
+                    return '\\' . Type::build($type)->getDateTimeClassName();
+                }
+
                 return '\Cake\I18n\Time';
         }
 
