@@ -18,7 +18,8 @@ $annotations = [];
 foreach ($associations as $type => $assocs) {
     foreach ($assocs as $assoc) {
         $typeStr = Inflector::camelize($type);
-        $annotations[] = "@property \Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
+        $tableFqn = $associationInfo[$assoc['alias']]['targetFqn'];
+        $annotations[] = "@property {$tableFqn}|\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
     }
 }
 $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} get(\$primaryKey, \$options = [])";
