@@ -6,7 +6,6 @@ use App\Controller\AppController;
 /**
  * BakeArticles Controller
  *
- * @property \App\Model\Table\BakeArticlesTable $BakeArticles
  *
  * @method \App\Model\Entity\BakeArticle[] paginate($object = null, array $settings = [])
  */
