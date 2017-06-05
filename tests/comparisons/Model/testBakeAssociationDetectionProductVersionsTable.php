@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 /**
  * ProductVersions Model
  *
- * @property \Cake\ORM\Association\BelongsTo $Products
+ * @property \App\Model\Table\ProductsTable|\Cake\ORM\Association\BelongsTo $Products
  *
  * @method \App\Model\Entity\ProductVersion get($primaryKey, $options = [])
  * @method \App\Model\Entity\ProductVersion newEntity($data = null, array $options = [])

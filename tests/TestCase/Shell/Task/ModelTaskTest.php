@@ -1141,8 +1141,14 @@ class ModelTaskTest extends TestCase
                 ],
             ]
         ];
+        $associationInfo = [
+            'SomethingElse' => ['targetFqn' => '\App\Model\Table\SomethingElseTable'],
+            'BakeUser' => ['targetFqn' => '\App\Model\Table\BakeUserTable'],
+            'BakeComment' => ['targetFqn' => '\App\Model\Table\BakeCommentTable'],
+            'BakeTag' => ['targetFqn' => '\App\Model\Table\BakeTagTable'],
+        ];
         $model = TableRegistry::get('BakeArticles');
-        $result = $this->Task->bakeTable($model, compact('associations'));
+        $result = $this->Task->bakeTable($model, compact('associations', 'associationInfo'));
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1558,5 +1564,119 @@ class ModelTaskTest extends TestCase
 
         $result = $this->Task->findTableReferencedBy($schema, 'receiver_id');
         $this->assertEquals('users', $result);
+    }
+
+    /**
+     * Tests collecting association info with default association configuration.
+     *
+     * @return void
+     */
+    public function testGetAssociationInfo()
+    {
+        $model = TableRegistry::get('BakeArticles');
+        $model->belongsTo('BakeUsers');
+        $model->hasMany('BakeTest.Authors');
+        $model->hasMany('BakeTest.Publishers');
+
+        $result = $this->Task->getAssociationInfo($model);
+
+        $expected = [
+            'BakeUsers' => [
+                'targetFqn' => '\App\Model\Table\BakeUsersTable'
+            ],
+            'Authors' => [
+                'targetFqn' => '\BakeTest\Model\Table\AuthorsTable'
+            ],
+            'Publishers' => [
+                'targetFqn' => '\BakeTest\Model\Table\PublishersTable'
+            ]
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Tests collecting association info with short classnames configured.
+     *
+     * @return void
+     */
+    public function testGetAssociationInfoShortClassName()
+    {
+        $model = TableRegistry::get('Authors');
+        $model->belongsTo('BakeUsersAlias', [
+            'className' => 'BakeTest.BakeUsers'
+        ]);
+        $model->hasMany('ArticlesAlias', [
+            'className' => 'Articles'
+        ]);
+        $model->hasMany('BakeTestArticlesAlias', [
+            'className' => 'BakeTest.BakeTestArticles'
+        ]);
+        $model->hasMany('PublishersAlias', [
+            'className' => 'BakeTest.Publishers'
+        ]);
+
+        $result = $this->Task->getAssociationInfo($model);
+
+        $expected = [
+            'BakeUsersAlias' => [
+                'targetFqn' => '\BakeTest\Model\Table\BakeUsersTable'
+            ],
+            'ArticlesAlias' => [
+                'targetFqn' => '\App\Model\Table\ArticlesTable'
+            ],
+            'BakeTestArticlesAlias' => [
+                'targetFqn' => '\BakeTest\Model\Table\BakeTestArticlesTable'
+            ],
+            'PublishersAlias' => [
+                'targetFqn' => '\BakeTest\Model\Table\PublishersTable'
+            ]
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Tests collecting association info with short classnames and a non-default namespace configured.
+     *
+     * @return void
+     */
+    public function testGetAssociationInfoShortClassNameNonDefaultAppNamespace()
+    {
+        Configure::write('App.namespace', 'Bake\Test\App');
+
+        $model = TableRegistry::get('Authors');
+        $model->hasMany('ArticlesAlias', [
+            'className' => 'Articles'
+        ]);
+
+        $result = $this->Task->getAssociationInfo($model);
+
+        $expected = [
+            'ArticlesAlias' => [
+                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable'
+            ]
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Tests collecting association info with fully qualified classnames configured.
+     *
+     * @return void
+     */
+    public function testGetAssociationInfoFqnClassName()
+    {
+        $model = TableRegistry::get('Authors');
+        $model->hasMany('ArticlesAlias', [
+            'className' => 'Bake\Test\App\Model\Table\ArticlesTable'
+        ]);
+
+        $result = $this->Task->getAssociationInfo($model);
+
+        $expected = [
+            'ArticlesAlias' => [
+                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable'
+            ]
+        ];
+        $this->assertEquals($expected, $result);
     }
 }
