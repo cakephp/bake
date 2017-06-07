@@ -126,6 +126,7 @@ class ModelTask extends BakeTask
     {
         $associations = $this->getAssociations($tableObject);
         $this->applyAssociations($tableObject, $associations);
+        $associationInfo = $this->getAssociationInfo($tableObject);
 
         $primaryKey = $this->getPrimaryKey($tableObject);
         $displayField = $this->getDisplayField($tableObject);
@@ -139,6 +140,7 @@ class ModelTask extends BakeTask
 
         return compact(
             'associations',
+            'associationInfo',
             'primaryKey',
             'displayField',
             'table',
@@ -252,6 +254,59 @@ class ModelTask extends BakeTask
                 $model->{$type}($alias, $assoc);
             }
         }
+    }
+
+    /**
+     * Collects meta information for associations.
+     *
+     * The information returned is in the format of map, where the key is the
+     * association alias:
+     *
+     * ```
+     * [
+     *     'associationAlias' => [
+     *         'targetFqn' => '...'
+     *     ],
+     *     // ...
+     * ]
+     * ```
+     *
+     * @param \Cake\ORM\Table $table The table from which to collect association information.
+     * @return array A map of association information.
+     */
+    public function getAssociationInfo(Table $table)
+    {
+        $info = [];
+
+        $appNamespace = Configure::read('App.namespace');
+
+        foreach ($table->associations() as $association) {
+            /* @var $association \Cake\ORM\Association */
+
+            $tableClass = get_class($association->getTarget());
+            if ($tableClass === 'Cake\ORM\Table') {
+                $namespace = $appNamespace;
+
+                $className = $association->className();
+                if ($className !== null) {
+                    list($plugin, $className) = pluginSplit($className);
+                    if ($plugin !== null) {
+                        $namespace = $plugin;
+                    }
+                } else {
+                    $className = $association->getTarget()->getAlias();
+                }
+
+                $namespace = str_replace('/', '\\', trim($namespace, '\\'));
+                $tableClass = $namespace . '\Model\Table\\' . $className . 'Table';
+            }
+
+            $info[$association->getName()] = [
+                'targetFqn' => '\\' . $tableClass
+            ];
+        }
+
+        return $info;
     }
 
     /**

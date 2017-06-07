@@ -6,7 +6,6 @@ use App\Controller\AppController;
 /**
  * BakeArticles Controller
  *
- * @property \App\Model\Table\BakeArticlesTable $BakeArticles
  * @property \Cake\Controller\Component\CsrfComponent $Csrf
  * @property \Cake\Controller\Component\AuthComponent $Auth
  * @property \Company\TestBakeThree\Controller\Component\SomethingComponent $Something
