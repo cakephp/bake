@@ -1,0 +1,121 @@
+<?php
+/**
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @since         0.1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+namespace Bake\Test\TestCase\Shell\Task;
+
+use Bake\Shell\Task\BakeTemplateTask;
+use Bake\Test\TestCase\TestCase;
+use Cake\Core\Configure;
+use Cake\Core\Plugin;
+
+/**
+ * MiddlewareTaskTest class
+ */
+class MiddlewareTaskTest extends TestCase
+{
+    /**
+     * @var \Bake\Shell\Task\TestTask|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $Task;
+
+    /**
+     * setup method
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Middleware' . DS;
+        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->Task = $this->getMockBuilder('Bake\Shell\Task\MiddlewareTask')
+            ->setMethods(['in', 'err', 'createFile', '_stop'])
+            ->setConstructorArgs([$io])
+            ->getMock();
+
+        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
+            ->setConstructorArgs([$io])
+            ->getMock();
+
+        $this->Task->BakeTemplate = new BakeTemplateTask($io);
+        $this->Task->BakeTemplate->initialize();
+        $this->Task->BakeTemplate->interactive = false;
+    }
+
+    /**
+     * Test the excute method.
+     *
+     * @return void
+     */
+    public function testMain()
+    {
+        $this->Task->Test->expects($this->once())
+            ->method('bake')
+            ->with('middleware', 'Example');
+
+        $this->Task->expects($this->at(0))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath(APP . 'Middleware/ExampleMiddleware.php'),
+                $this->stringContains('class ExampleMiddleware')
+            );
+
+        $this->Task->main('Example');
+    }
+
+    /**
+     * Test main within a plugin.
+     *
+     * @return void
+     */
+    public function testMainPlugin()
+    {
+        $this->_loadTestPlugin('TestBake');
+        $path = Plugin::path('TestBake');
+
+        $this->Task->expects($this->at(0))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath($path . 'src/Middleware/ExampleMiddleware.php'),
+                $this->stringContains('class ExampleMiddleware')
+            );
+
+        $this->Task->main('TestBake.Example');
+    }
+
+    /**
+     * Test baking within a plugin.
+     *
+     * @return void
+     */
+    public function testBakePlugin()
+    {
+        $this->_loadTestPlugin('TestBake');
+        $path = Plugin::path('TestBake');
+
+        $this->Task->plugin = 'TestBake';
+        $this->Task->expects($this->at(0))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath($path . 'src/Middleware/ExampleMiddleware.php'),
+                $this->stringContains('class ExampleMiddleware')
+            );
+
+        $result = $this->Task->bake('Example');
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+}
