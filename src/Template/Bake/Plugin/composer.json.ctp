@@ -18,6 +18,7 @@ $namespace = str_replace('\\', '\\\\', $namespace);
     "name": "<%= $package %>",
     "description": "<%= $plugin %> plugin for CakePHP",
     "type": "cakephp-plugin",
+    "license": "MIT",
     "require": {
         "cakephp/cakephp": "^3.4"
     },
