@@ -1,6 +1,6 @@
 {
     "name": "cakephp/bake",
-    "description": "Bake plugin for CakePHP 3.0",
+    "description": "Bake plugin for CakePHP 3",
     "type": "cakephp-plugin",
     "keywords": ["cakephp", "bake"],
     "homepage": "https://github.com/cakephp/bake",

@@ -2,6 +2,7 @@
     "name": "your-name-here/SimpleExample",
     "description": "SimpleExample plugin for CakePHP",
     "type": "cakephp-plugin",
+    "license": "MIT",
     "require": {
         "cakephp/cakephp": "^3.4"
     },
