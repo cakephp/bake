@@ -18,6 +18,7 @@ use Bake\Utility\Model\AssociationFilter;
 use Cake\Console\Shell;
 use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -289,6 +290,8 @@ class TemplateTask extends BakeTask
             ]);
         }
 
+        $namespace = Configure::read('App.namespace');
+
         $primaryKey = (array)$modelObject->getPrimaryKey();
         $displayField = $modelObject->getDisplayField();
         $singularVar = $this->_singularName($this->controllerName);
@@ -296,7 +299,12 @@ class TemplateTask extends BakeTask
         $schema = $modelObject->getSchema();
         $fields = $schema->columns();
         $modelClass = $this->modelName;
+
         list(, $entityClass) = namespaceSplit($this->_entityName($this->modelName));
+        $entityClass = sprintf('%s\Model\Entity\%s', $namespace, $entityClass);
+        if (!class_exists($entityClass)) {
+            $entityClass = EntityInterface::class;
+        }
         $associations = $this->_filteredAssociations($modelObject);
         $keyFields = [];
         if (!empty($associations['BelongsTo'])) {
@@ -307,8 +315,6 @@ class TemplateTask extends BakeTask
 
         $pluralVar = Inflector::variable($this->controllerName);
         $pluralHumanName = $this->_pluralHumanName($this->controllerName);
-
-        $namespace = Configure::read('App.namespace');
 
         return compact(
             'modelObject',

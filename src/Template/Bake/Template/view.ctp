@@ -16,7 +16,7 @@
 <?php
 /**
   * @var \<%= $namespace %>\View\AppView $this
-  * @var \<%= $namespace %>\Model\Entity\<%= $entityClass %> $<%= $singularVar %>
+  * @var \<%= $entityClass %> $<%= $singularVar %>
   */
 ?>
 <%
