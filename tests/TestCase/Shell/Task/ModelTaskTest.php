@@ -772,8 +772,8 @@ class ModelTaskTest extends TestCase
         $result = $this->Task->getValidation($model);
         $expected = [
             'bake_user_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => false]],
-            'title' => ['valid' => ['rule' => false, 'allowEmpty' => false]],
-            'body' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
+            'title' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => false]],
+            'body' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => true]],
             'published' => ['valid' => ['rule' => 'boolean', 'allowEmpty' => true]],
             'id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
         ];
@@ -784,8 +784,8 @@ class ModelTaskTest extends TestCase
         $expected = [
             'bake_article_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => false]],
             'bake_user_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => false]],
-            'comment' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
-            'published' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
+            'comment' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => true]],
+            'published' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => true]],
             'otherid' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
         ];
         $this->assertEquals($expected, $result);
@@ -823,7 +823,7 @@ class ModelTaskTest extends TestCase
         $result = $this->Task->getValidation($model);
         $expected = [
             'id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']],
-            'name' => ['valid' => ['rule' => false, 'allowEmpty' => false]],
+            'name' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => false]],
             'parent_id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => true]],
             'depth' => ['valid' => ['rule' => 'integer', 'allowEmpty' => true]],
         ];
@@ -845,8 +845,8 @@ class ModelTaskTest extends TestCase
         ];
         $result = $this->Task->getValidation($model, $associations);
         $expected = [
-            'title' => ['valid' => ['rule' => false, 'allowEmpty' => false]],
-            'body' => ['valid' => ['rule' => false, 'allowEmpty' => true]],
+            'title' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => false]],
+            'body' => ['valid' => ['rule' => 'scalar', 'allowEmpty' => true]],
             'published' => ['valid' => ['rule' => 'boolean', 'allowEmpty' => true]],
             'id' => ['valid' => ['rule' => 'integer', 'allowEmpty' => 'create']]
         ];
@@ -1064,7 +1064,7 @@ class ModelTaskTest extends TestCase
             'name' => [
                 'valid' => [
                     'allowEmpty' => false,
-                    'rule' => false,
+                    'rule' => 'scalar',
                 ]
             ],
             'email' => [
