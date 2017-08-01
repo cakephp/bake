@@ -143,6 +143,20 @@ class PluginTaskTest extends TestCase
     }
 
     /**
+     * test main with vendor plugin and incorrect casing
+     *
+     * @return void
+     */
+    public function testMainVendorNameCasingFix()
+    {
+        $this->Task->expects($this->at(0))->method('in')
+            ->will($this->returnValue('y'));
+
+        $this->Task->main('company/example');
+        $this->assertPluginContents('Company/Example');
+    }
+
+    /**
      * With no args, main should do nothing
      *
      * @return void
