@@ -90,6 +90,7 @@ class ControllerTaskTest extends TestCase
         TableRegistry::clear();
         parent::tearDown();
         Plugin::unload('ControllerTest');
+        Plugin::unload('Company/Pastry');
     }
 
     /**
@@ -439,5 +440,28 @@ class ControllerTaskTest extends TestCase
             )->will($this->returnValue(true));
 
         $this->Task->main('ControllerTest.BakeArticles');
+    }
+
+    /**
+     * test main with plugin.name
+     *
+     * @return void
+     */
+    public function testMainWithPluginOption()
+    {
+        $this->Task->connection = 'test';
+        $this->Task->params['plugin'] = 'company/pastry';
+
+        Plugin::load('Company/Pastry', ['path' => APP . 'Plugin/Company/Pastry/']);
+        $path = APP . 'Plugin/Company/Pastry/src/Controller/BakeArticlesController.php';
+
+        $this->Task->expects($this->at(1))
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath($path),
+                $this->stringContains('BakeArticlesController extends AppController')
+            )->will($this->returnValue(true));
+
+        $this->Task->main('bake_articles');
     }
 }

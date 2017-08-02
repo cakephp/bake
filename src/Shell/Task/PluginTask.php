@@ -68,7 +68,9 @@ class PluginTask extends BakeTask
 
             return false;
         }
-        $plugin = $this->_camelize($name);
+        $parts = explode('/', $name);
+        $plugin = implode('/', array_map([$this, '_camelize'], $parts));
+
         $pluginPath = $this->_pluginPath($plugin);
         if (is_dir($pluginPath)) {
             $this->out(sprintf('Plugin: %s already exists, no action taken', $plugin));
