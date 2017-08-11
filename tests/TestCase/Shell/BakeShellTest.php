@@ -136,6 +136,7 @@ class BakeShellTest extends TestCase
             '- cell',
             '- component',
             '- controller',
+            '- custom_controller',
             '- fixture',
             '- form',
             '- helper',
@@ -182,7 +183,6 @@ class BakeShellTest extends TestCase
             'Bake.Behavior',
             'Bake.Cell',
             'Bake.Component',
-            'Bake.Controller',
             'Bake.Fixture',
             'Bake.Form',
             'Bake.Helper',
@@ -194,7 +194,9 @@ class BakeShellTest extends TestCase
             'Bake.ShellHelper',
             'Bake.Task',
             'Bake.Test',
-            'Bake.Template'
+            'Bake.Template',
+            'Controller',
+            'CustomController'
         ];
         sort($this->Shell->tasks);
         sort($expected);

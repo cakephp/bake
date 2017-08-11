@@ -57,3 +57,5 @@ ConnectionManager::config('test', ['url' => getenv('db_dsn')]);
 Plugin::load('Bake', [
     'path' => dirname(dirname(__FILE__)) . DS,
 ]);
+
+class_alias('PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase');
