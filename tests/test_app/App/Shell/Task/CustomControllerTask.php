@@ -4,7 +4,7 @@ namespace Bake\Test\App\Shell\Task;
 use Bake\Shell\Task\SimpleBakeTask;
 
 /**
- Test for task core
+ * Test for task core
  */
 class CustomControllerTask extends SimpleBakeTask
 {
