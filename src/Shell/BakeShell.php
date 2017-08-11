@@ -118,8 +118,8 @@ class BakeShell extends Shell
      * Cake\Shell\Task\BakeTask:
      *
      * - Cake/Shell/Task/
-     * - App/Shell/Task/
      * - Shell/Task for each loaded plugin
+     * - App/Shell/Task/
      *
      * @return void
      */
@@ -127,7 +127,6 @@ class BakeShell extends Shell
     {
         $tasks = [];
 
-        $tasks = $this->_findTasks($tasks, APP, Configure::read('App.namespace'));
         foreach (Plugin::loaded() as $plugin) {
             $tasks = $this->_findTasks(
                 $tasks,
@@ -136,6 +135,7 @@ class BakeShell extends Shell
                 $plugin
             );
         }
+        $tasks = $this->_findTasks($tasks, APP, Configure::read('App.namespace'));
 
         $this->tasks = array_values($tasks);
         parent::loadTasks();
