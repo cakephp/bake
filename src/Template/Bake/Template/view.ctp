@@ -46,7 +46,7 @@ $groupedFields = collection($fields)
         if (isset($associationFields[$field])) {
             return 'string';
         }
-        if (in_array($type, ['integer', 'float', 'decimal', 'biginteger'])) {
+        if (in_array($type, ['decimal', 'biginteger', 'integer', 'float', 'smallinteger', 'tinyinteger'])) {
             return 'number';
         }
         if (in_array($type, ['date', 'time', 'datetime', 'timestamp'])) {

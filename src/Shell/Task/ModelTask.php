@@ -16,7 +16,7 @@ namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
 use Cake\Core\Configure;
-use Cake\Database\Schema\Table as SchemaTable;
+use Cake\Database\Schema\TableSchema;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -343,7 +343,7 @@ class ModelTask extends BakeTask
                     'alias' => $tmpModelName,
                     'foreignKey' => $fieldName
                 ];
-                if ($schema->column($fieldName)['null'] === false) {
+                if ($schema->getColumn($fieldName)['null'] === false) {
                     $assoc['joinType'] = 'INNER';
                 }
             }
@@ -362,18 +362,18 @@ class ModelTask extends BakeTask
      * Search tables in db for keyField; if found search key constraints
      * for the table to which it refers.
      *
-     * @param \Cake\Database\Schema\Table $schema The table schema to find a constraint for.
+     * @param \Cake\Database\Schema\TableSchema $schema The table schema to find a constraint for.
      * @param string $keyField The field to check for a constraint.
      * @return string|null Either the referenced table or null if the field has no constraints.
      */
     public function findTableReferencedBy($schema, $keyField)
     {
-        if (!$schema->column($keyField)) {
+        if (!$schema->getColumn($keyField)) {
             return null;
         }
 
         foreach ($schema->constraints() as $constraint) {
-            $constraintInfo = $schema->constraint($constraint);
+            $constraintInfo = $schema->getConstraint($constraint);
             if (!in_array($keyField, $constraintInfo['columns'])) {
                 continue;
             }
@@ -554,7 +554,7 @@ class ModelTask extends BakeTask
         foreach ($schema->columns() as $column) {
             $properties[$column] = [
                 'kind' => 'column',
-                'type' => $schema->columnType($column)
+                'type' => $schema->getColumnType($column)
             ];
         }
 
@@ -661,7 +661,7 @@ class ModelTask extends BakeTask
             if (in_array($fieldName, $foreignKeys)) {
                 continue;
             }
-            $field = $schema->column($fieldName);
+            $field = $schema->getColumn($fieldName);
             $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
             if (!empty($validation)) {
                 $validate[$fieldName] = $validation;
@@ -674,7 +674,7 @@ class ModelTask extends BakeTask
     /**
      * Does individual field validation handling.
      *
-     * @param \Cake\Database\Schema\Table $schema The table schema for the current field.
+     * @param \Cake\Database\Schema\TableSchema $schema The table schema for the current field.
      * @param string $fieldName Name of field to be validated.
      * @param array $metaData metadata for field
      * @param string $primaryKey The primary key field
@@ -710,6 +710,8 @@ class ModelTask extends BakeTask
             $rule = 'dateTime';
         } elseif ($metaData['type'] === 'inet') {
             $rule = 'ip';
+        } elseif ($metaData['type'] === 'string' || $metaData['type'] === 'text') {
+            $rule = 'scalar';
         }
 
         $allowEmpty = false;
@@ -727,13 +729,13 @@ class ModelTask extends BakeTask
         ];
 
         foreach ($schema->constraints() as $constraint) {
-            $constraint = $schema->constraint($constraint);
+            $constraint = $schema->getConstraint($constraint);
             if (!in_array($fieldName, $constraint['columns']) || count($constraint['columns']) > 1) {
                 continue;
             }
 
             $notDatetime = !in_array($metaData['type'], ['datetime', 'timestamp', 'date', 'time']);
-            if ($constraint['type'] === SchemaTable::CONSTRAINT_UNIQUE && $notDatetime) {
+            if ($constraint['type'] === TableSchema::CONSTRAINT_UNIQUE && $notDatetime) {
                 $validation['unique'] = ['rule' => 'validateUnique', 'provider' => 'table'];
             }
         }
@@ -766,8 +768,8 @@ class ModelTask extends BakeTask
             }
         }
         foreach ($schema->constraints() as $name) {
-            $constraint = $schema->constraint($name);
-            if ($constraint['type'] !== SchemaTable::CONSTRAINT_UNIQUE) {
+            $constraint = $schema->getConstraint($name);
+            if ($constraint['type'] !== TableSchema::CONSTRAINT_UNIQUE) {
                 continue;
             }
             if (count($constraint['columns']) > 1) {
@@ -805,8 +807,8 @@ class ModelTask extends BakeTask
             $behaviors['Timestamp'] = [];
         }
 
-        if (in_array('lft', $fields) && $schema->columnType('lft') === 'integer' &&
-            in_array('rght', $fields) && $schema->columnType('rght') === 'integer' &&
+        if (in_array('lft', $fields) && $schema->getColumnType('lft') === 'integer' &&
+            in_array('rght', $fields) && $schema->getColumnType('rght') === 'integer' &&
             in_array('parent_id', $fields)
         ) {
             $behaviors['Tree'] = [];
