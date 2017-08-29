@@ -32,11 +32,11 @@ class DocBlockHelper extends Helper
 
         $previous = false;
         foreach ($annotations as $ann) {
-            if (strlen($ann) > 1 && $ann[0] == '@' && strpos($ann, ' ') > 0) {
+            if (strlen($ann) > 1 && $ann[0] === '@' && strpos($ann, ' ') > 0) {
                 $type = substr($ann, 0, strpos($ann, ' '));
                 if ($this->_annotationSpacing &&
                     $previous !== false &&
-                    $previous != $type
+                    $previous !== $type
                 ) {
                     $lines[] = '';
                 }
@@ -95,7 +95,7 @@ class DocBlockHelper extends Helper
     {
         $properties = [];
         foreach ($propertySchema as $property => $info) {
-            if ($info['kind'] == 'column') {
+            if ($info['kind'] === 'column') {
                 $properties[$property] = $this->columnTypeToHintType($info['type']);
             }
         }
@@ -128,7 +128,7 @@ class DocBlockHelper extends Helper
     {
         $properties = [];
         foreach ($propertySchema as $property => $info) {
-            if ($info['kind'] == 'association') {
+            if ($info['kind'] === 'association') {
                 $type = $this->associatedEntityTypeToHintType($info['type'], $info['association']);
                 if ($info['association']->type() === Association::MANY_TO_ONE) {
                     $properties = $this->_insertAfter(
