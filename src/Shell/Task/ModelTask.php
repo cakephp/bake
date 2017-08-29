@@ -305,6 +305,7 @@ class ModelTask extends BakeTask
                 'targetFqn' => '\\' . $tableClass
             ];
         }
+
         return $info;
     }
 
