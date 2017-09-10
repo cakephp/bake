@@ -1189,7 +1189,6 @@ class ModelTaskTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-
     /**
      * test baking an entity with DocBlock property type hints.
      *
