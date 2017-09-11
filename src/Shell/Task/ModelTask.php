@@ -131,7 +131,7 @@ class ModelTask extends BakeTask
         $primaryKey = $this->getPrimaryKey($tableObject);
         $displayField = $this->getDisplayField($tableObject);
         $propertySchema = $this->getEntityPropertySchema($tableObject);
-        $fields = $this->getFields();
+        $fields = $this->getFields($tableObject);
         $validation = $this->getValidation($tableObject, $associations);
         $rulesChecker = $this->getRules($tableObject, $associations);
         $behaviors = $this->getBehaviors($tableObject);
@@ -588,11 +588,16 @@ class ModelTask extends BakeTask
      * Evaluates the fields and no-fields options, and
      * returns if, and which fields should be made accessible.
      *
+     * If no fields are specified and the `no-fields` parameter is
+     * not set, then all non-primary key fields + association
+     * fields will be set as accessible.
+     *
+     * @param Cake\ORM\Table $table The table instance to get fields for.
      * @return array|bool|null Either an array of fields, `false` in
-     * case the no-fields option is used, or `null` if none of the
-     * field options is used.
+     *   case the no-fields option is used, or `null` if none of the
+     *   field options is used.
      */
-    public function getFields()
+    public function getFields($table)
     {
         if (!empty($this->params['no-fields'])) {
             return false;
@@ -602,8 +607,14 @@ class ModelTask extends BakeTask
 
             return array_values(array_filter(array_map('trim', $fields)));
         }
+        $schema = $table->getSchema();
+        $fields = $schema->columns();
+        foreach ($table->associations() as $assoc) {
+            $fields[] = $assoc->getProperty();
+        }
+        $primaryKey = $schema->primaryKey();
 
-        return null;
+        return array_values(array_diff($fields, $primaryKey));
     }
 
     /**

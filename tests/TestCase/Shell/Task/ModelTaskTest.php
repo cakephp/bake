@@ -647,8 +647,19 @@ class ModelTaskTest extends TestCase
     public function testGetFields()
     {
         $model = TableRegistry::get('BakeArticles');
+        $model->belongsTo('BakeUser');
+
         $result = $this->Task->getFields($model);
-        $this->assertNull($result);
+        $expected = [
+            'bake_user_id',
+            'title',
+            'body',
+            'published',
+            'created',
+            'updated',
+            'bake_user',
+        ];
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -1162,6 +1173,19 @@ class ModelTaskTest extends TestCase
         $config = [];
         $model = TableRegistry::get('BakeArticles');
         $result = $this->Task->bakeEntity($model, $config);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an entity class
+     *
+     * @return void
+     */
+    public function testBakeEntityFullContext()
+    {
+        $model = TableRegistry::get('BakeArticles');
+        $context = $this->Task->getTableContext($model, 'bake_articles', 'BakeArticles');
+        $result = $this->Task->bakeEntity($model, $context);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
