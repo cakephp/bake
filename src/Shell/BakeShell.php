@@ -71,7 +71,7 @@ class BakeShell extends Shell
     /**
      * Override main() to handle action
      *
-     * @return mixed
+     * @return bool
      */
     public function main()
     {
