@@ -15,8 +15,8 @@
 %>
 <?php
 /**
-  * @var \<%= $namespace %>\View\AppView $this
-  */
+ * @var \<%= $namespace %>\View\AppView $this
+ */
 ?>
 <div class="<%= $pluralVar %> form">
 <?= $this->Flash->render('auth') ?>
