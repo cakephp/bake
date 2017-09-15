@@ -1,8 +1,8 @@
 <?php
 /**
-  * @var \Bake\Test\App\View\AppView $this
-  * @var \Bake\Test\App\Model\Entity\TestTemplateModel $testTemplateModel
-  */
+ * @var \Bake\Test\App\View\AppView $this
+ * @var \Bake\Test\App\Model\Entity\TestTemplateModel $testTemplateModel
+ */
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">

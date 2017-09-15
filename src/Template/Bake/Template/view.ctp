@@ -15,9 +15,9 @@
 %>
 <?php
 /**
-  * @var \<%= $namespace %>\View\AppView $this
-  * @var \<%= $entityClass %> $<%= $singularVar %>
-  */
+ * @var \<%= $namespace %>\View\AppView $this
+ * @var \<%= $entityClass %> $<%= $singularVar %>
+ */
 ?>
 <%
 use Cake\Utility\Inflector;

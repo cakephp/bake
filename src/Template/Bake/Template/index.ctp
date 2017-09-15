@@ -15,9 +15,9 @@
 %>
 <?php
 /**
-  * @var \<%= $namespace %>\View\AppView $this
-  * @var \<%= $entityClass %>[]|\Cake\Collection\CollectionInterface $<%= $pluralVar %>
-  */
+ * @var \<%= $namespace %>\View\AppView $this
+ * @var \<%= $entityClass %>[]|\Cake\Collection\CollectionInterface $<%= $pluralVar %>
+ */
 ?>
 <%
 use Cake\Utility\Inflector;

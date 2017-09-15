@@ -15,7 +15,7 @@
 %>
 <?php
 /**
-  * @var \<%= $namespace %>\View\AppView $this
-  */
+ * @var \<%= $namespace %>\View\AppView $this
+ */
 ?>
 <%= $this->element('form');
