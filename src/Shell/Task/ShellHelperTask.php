@@ -16,6 +16,9 @@ namespace Bake\Shell\Task;
 
 /**
  * ShellHelper code generator.
+ *
+ * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
+ * @property \Bake\Shell\Task\TestTask $Test
  */
 class ShellHelperTask extends SimpleBakeTask
 {

@@ -31,6 +31,7 @@ use ReflectionClass;
 /**
  * Task class for creating and updating test files.
  *
+ * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
  */
 class TestTask extends BakeTask
 {

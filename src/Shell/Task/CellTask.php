@@ -16,6 +16,9 @@ namespace Bake\Shell\Task;
 
 /**
  * Task for creating cells.
+ *
+ * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
+ * @property \Bake\Shell\Task\TestTask $Test
  */
 class CellTask extends SimpleBakeTask
 {
