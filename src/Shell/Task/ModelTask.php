@@ -40,7 +40,6 @@ class ModelTask extends BakeTask
      * @var array
      */
     public $tasks = [
-        'Bake.DbConfig',
         'Bake.Fixture',
         'Bake.BakeTemplate',
         'Bake.Test'
