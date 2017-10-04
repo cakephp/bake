@@ -16,6 +16,9 @@ namespace Bake\Shell\Task;
 
 /**
  * Behavior code generator.
+ *
+ * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
+ * @property \Bake\Shell\Task\TestTask $Test
  */
 class BehaviorTask extends SimpleBakeTask
 {

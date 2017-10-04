@@ -18,6 +18,9 @@ use Cake\Utility\Inflector;
 
 /**
  * Mailer code generator.
+ *
+ * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
+ * @property \Bake\Shell\Task\TestTask $Test
  */
 class MailerTask extends SimpleBakeTask
 {

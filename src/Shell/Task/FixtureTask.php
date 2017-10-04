@@ -26,6 +26,9 @@ use DateTimeInterface;
 
 /**
  * Task class for creating and updating fixtures files.
+ *
+ * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
+ * @property \Bake\Shell\Task\ModelTask $Model
  */
 class FixtureTask extends BakeTask
 {

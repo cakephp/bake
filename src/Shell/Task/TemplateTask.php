@@ -26,6 +26,8 @@ use Cake\Utility\Inflector;
 /**
  * Task class for creating and updating view template files.
  *
+ * @property \Bake\Shell\Task\ModelTask $Model
+ * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
  */
 class TemplateTask extends BakeTask
 {

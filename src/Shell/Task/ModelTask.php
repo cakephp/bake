@@ -24,6 +24,10 @@ use Cake\Utility\Inflector;
 
 /**
  * Task class for generating model files.
+ *
+ * @property \Bake\Shell\Task\FixtureTask $Fixture
+ * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
+ * @property \Bake\Shell\Task\TestTask $Test
  */
 class ModelTask extends BakeTask
 {
