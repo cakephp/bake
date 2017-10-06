@@ -16,6 +16,7 @@
 <?php
 /**
  * @var \<%= $namespace %>\View\AppView $this
+ * @var \<%= $entityClass %> $<%= $singularVar %>
  */
 ?>
 <%= $this->element('form');
