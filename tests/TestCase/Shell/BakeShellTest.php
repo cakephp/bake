@@ -169,6 +169,13 @@ class BakeShellTest extends TestCase
         $this->assertArrayHasKey('template', $commands);
         $this->assertArrayHasKey('controller', $commands);
         $this->assertArrayHasKey('model', $commands);
+
+        $this->assertNull($parser->options()['theme']->defaultValue());
+
+        Configure::write('Bake.theme', 'Mytheme');
+        $parser = $this->Shell->getOptionParser();
+        $this->assertSame('Mytheme', $parser->options()['theme']->defaultValue());
+        Configure::delete('Bake.theme');
     }
 
     /**
