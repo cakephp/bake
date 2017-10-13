@@ -14,11 +14,11 @@
  */
 namespace Bake\Shell\Task;
 
+use Bake\Shell\CommonOptionsTrait;
 use Cake\Cache\Cache;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
-use Cake\Core\Plugin;
 use Cake\Filesystem\File;
 
 /**
@@ -27,6 +27,7 @@ use Cake\Filesystem\File;
  */
 class BakeTask extends Shell
 {
+    use CommonOptionsTrait;
     use ConventionsTrait;
 
     /**
@@ -226,34 +227,6 @@ class BakeTask extends Shell
      */
     public function getOptionParser()
     {
-        $parser = parent::getOptionParser();
-
-        $bakeThemes = [];
-        foreach (Plugin::loaded() as $plugin) {
-            $path = Plugin::classPath($plugin);
-            if (is_dir($path . 'Template' . DS . 'Bake')) {
-                $bakeThemes[] = $plugin;
-            }
-        }
-
-        $parser->addOption('plugin', [
-            'short' => 'p',
-            'help' => 'Plugin to bake into.'
-        ])->addOption('force', [
-            'short' => 'f',
-            'boolean' => true,
-            'help' => 'Force overwriting existing files without prompting.'
-        ])->addOption('connection', [
-            'short' => 'c',
-            'default' => 'default',
-            'help' => 'The datasource connection to get data from.'
-        ])->addOption('theme', [
-            'short' => 't',
-            'help' => 'The theme to use when baking code.',
-            'default' => Configure::read('Bake.theme'),
-            'choices' => $bakeThemes
-        ]);
-
-        return $parser;
+        return $this->_setCommonOptions(parent::getOptionParser());
     }
 }
