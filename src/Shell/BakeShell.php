@@ -33,6 +33,7 @@ use Cake\Utility\Inflector;
  */
 class BakeShell extends Shell
 {
+    use CommonOptionsTrait;
     use ConventionsTrait;
 
     /**
@@ -292,28 +293,14 @@ class BakeShell extends Shell
             'Usage: "bake all --everything"',
             'default' => false,
             'boolean' => true,
-        ])->addOption('connection', [
-            'help' => 'Database connection to use in conjunction with `bake all`.',
-            'short' => 'c',
-            'default' => 'default'
-        ])->addOption('force', [
-            'short' => 'f',
-            'boolean' => true,
-            'help' => 'Force overwriting existing files without prompting.'
-        ])->addOption('plugin', [
-            'short' => 'p',
-            'help' => 'Plugin to bake into.'
         ])->addOption('prefix', [
             'help' => 'Prefix to bake controllers and templates into.'
         ])->addOption('tablePrefix', [
             'help' => 'Table prefix to be used in models.',
             'default' => null
-        ])->addOption('theme', [
-            'short' => 't',
-            'help' => 'The theme to use when baking code.',
-            'default' => Configure::read('Bake.theme'),
-            'choices' => $bakeThemes
         ]);
+
+        $parser = $this->_setCommonOptions($parser);
 
         foreach ($this->_taskMap as $task => $config) {
             $taskParser = $this->{$task}->getOptionParser();
