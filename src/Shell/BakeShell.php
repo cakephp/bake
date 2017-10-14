@@ -273,14 +273,6 @@ class BakeShell extends Shell
     {
         $parser = parent::getOptionParser();
 
-        $bakeThemes = [];
-        foreach (Plugin::loaded() as $plugin) {
-            $path = Plugin::classPath($plugin);
-            if (is_dir($path . 'Template' . DS . 'Bake')) {
-                $bakeThemes[] = $plugin;
-            }
-        }
-
         $parser->setDescription(
             'The Bake script generates controllers, models and template files for your application.' .
             ' If run with no command line arguments, Bake guides the user through the class creation process.' .
