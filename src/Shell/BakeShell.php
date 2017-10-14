@@ -14,6 +14,7 @@
  */
 namespace Bake\Shell;
 
+use Bake\Utility\CommonOptionsTrait;
 use Cake\Cache\Cache;
 use Cake\Console\Shell;
 use Cake\Core\Configure;

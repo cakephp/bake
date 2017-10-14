@@ -12,7 +12,7 @@
  * @since         1.4.3
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Shell;
+namespace Bake\Utility;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
