@@ -24,7 +24,8 @@
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^3.0",
-        "phpunit/phpunit": "~5.7 | ~6.0"
+        "phpunit/phpunit": "~5.7 | ~6.0",
+        "wyrihaximus/twig-view": "4.x-dev as 4.1"
     },
     "autoload": {
         "psr-4": {
@@ -39,6 +40,5 @@
             "Bake\\Test\\App\\": "tests/test_app/App",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
-    },
-    "minimum-stability": "beta"
+    }
 }

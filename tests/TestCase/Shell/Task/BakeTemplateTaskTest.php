@@ -15,6 +15,7 @@
 namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Test\TestCase\TestCase;
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 
 /**
@@ -45,6 +46,8 @@ class BakeTemplateTaskTest extends TestCase
             ->setConstructorArgs([$io])
             ->getMock();
         ;
+
+        $this->Task->params['view-class'] = Configure::read('Bake.viewClass');
     }
 
     /**

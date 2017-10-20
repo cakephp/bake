@@ -52,6 +52,11 @@ trait CommonOptionsTrait
             'help' => 'The theme to use when baking code.',
             'default' => Configure::read('Bake.theme'),
             'choices' => $bakeThemes
+        ])->addOption('view-class', [
+            'short' => 'v',
+            'help' => 'The view class to use baking code.',
+            'default' => Configure::read('Bake.viewClass') ?: 'Bake.Bake',
+            'choices' => ['Bake.Bake', 'Bake.BakeTwig'],
         ]);
 
         return $parser;
