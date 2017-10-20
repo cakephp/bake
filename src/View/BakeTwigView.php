@@ -14,7 +14,6 @@
  */
 namespace Bake\View;
 
-use Bake\View\Listener\TwigLoaderListener;
 use Cake\Core\Configure;
 use WyriHaximus\TwigView\Event\ConstructEvent;
 use WyriHaximus\TwigView\Lib\Twig\Extension\Inflector;
@@ -22,6 +21,11 @@ use WyriHaximus\TwigView\View\TwigView;
 
 class BakeTwigView extends TwigView
 {
+    /**
+     * Initialize view
+     *
+     * @return void
+     */
     public function initialize()
     {
         $bakeTemplates = dirname(dirname(__FILE__)) . DS . 'Template' . DS;
