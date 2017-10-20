@@ -35,7 +35,7 @@ class {{ name }}Fixture extends TestFixture
      *
      * @var string
      */
-    public $table = '{{ table }}';
+    public $table = '{{ table|raw }}';
 {% endif %}
 {% if import %}
 
@@ -44,7 +44,7 @@ class {{ name }}Fixture extends TestFixture
      *
      * @var array
      */
-    public $import = {{ import }};
+    public $import = {{ import|raw }};
 {% endif %}
 {% if schema %}
 
@@ -54,7 +54,7 @@ class {{ name }}Fixture extends TestFixture
      * @var array
      */
     // @codingStandardsIgnoreStart
-    public $fields = {{ schema }};
+    public $fields = {{ schema|raw }};
     // @codingStandardsIgnoreEnd
 {% endif %}
 {% if records %}
@@ -64,6 +64,6 @@ class {{ name }}Fixture extends TestFixture
      *
      * @var array
      */
-    public $records = {{ records }};
+    public $records = {{ records|raw }};
 {% endif %}
 }
