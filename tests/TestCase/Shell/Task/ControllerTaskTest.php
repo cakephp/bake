@@ -16,6 +16,7 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 use Cake\View\Helper;
@@ -64,6 +65,7 @@ class ControllerTaskTest extends TestCase
         $this->Task->connection = 'test';
 
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
+        $this->Task->BakeTemplate->params['view-class'] = Configure::read('Bake.viewClass');
 
         $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
             ->setMethods(['in', 'out', 'err', 'createFile', '_stop'])
