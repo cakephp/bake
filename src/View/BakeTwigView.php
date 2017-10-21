@@ -16,6 +16,7 @@ namespace Bake\View;
 
 use Cake\Core\Configure;
 use WyriHaximus\TwigView\Event\ConstructEvent;
+use WyriHaximus\TwigView\Event\ExtensionsListener;
 use WyriHaximus\TwigView\Lib\Twig\Extension\Inflector;
 use WyriHaximus\TwigView\View\TwigView;
 
@@ -39,9 +40,7 @@ class BakeTwigView extends TwigView
         $this->loadHelper('Bake.Bake');
         $this->loadHelper('Bake.DocBlock');
 
-        $this->getEventManager()->on(ConstructEvent::EVENT, function ($event) {
-            $event->getTwig()->addExtension(new Inflector);
-        });
+        $this->getEventManager()->on(new ExtensionsListener());
 
         parent::initialize();
     }
