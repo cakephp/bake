@@ -59,6 +59,7 @@ class PluginTaskTest extends TestCase
 
         $this->Task->BakeTemplate = new BakeTemplateTask($this->io);
         $this->Task->BakeTemplate->interactive = false;
+        $this->Task->BakeTemplate->params['view-class'] = Configure::read('Bake.viewClass');
 
         $this->Task->path = TMP . 'tests' . DS . 'BakedPlugins' . DS;
         new Folder($this->Task->path, true);

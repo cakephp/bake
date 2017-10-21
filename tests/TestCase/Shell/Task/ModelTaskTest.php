@@ -80,6 +80,7 @@ class ModelTaskTest extends TestCase
             ->getMock();
 
         $this->Task->connection = 'test';
+        $this->Task->BakeTemplate->params['view-class'] = Configure::read('Bake.viewClass');
         $this->_setupOtherMocks();
         TableRegistry::clear();
     }

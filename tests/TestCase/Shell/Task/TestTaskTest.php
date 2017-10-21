@@ -75,6 +75,7 @@ class TestTaskTest extends TestCase
         $this->Task->name = 'Test';
         $this->Task->BakeTemplate = new BakeTemplateTask($this->io);
         $this->Task->BakeTemplate->interactive = false;
+        $this->Task->BakeTemplate->params['view-class'] = Configure::read('Bake.viewClass');
     }
 
     /**

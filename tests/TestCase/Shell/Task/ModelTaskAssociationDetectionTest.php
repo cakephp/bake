@@ -66,6 +66,7 @@ class ModelTaskAssociationDetectionTest extends TestCase
             ->getMock();
 
         $this->Task->connection = 'default';
+        $this->Task->BakeTemplate->params['view-class'] = Configure::read('Bake.viewClass');
         $this->_setupOtherMocks();
         TableRegistry::clear();
     }
