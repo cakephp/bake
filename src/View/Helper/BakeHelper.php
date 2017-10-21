@@ -163,6 +163,38 @@ class BakeHelper extends Helper
     }
 
     /**
+     * Return list of fields to generate controls for.
+     *
+     * @param array $fields Fields list.
+     * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
+     * @return \Cake\Collection\CollectionInterface
+     */
+    public function filterFields($fields, $schema, $takeFields = [], $filterTypes = ['binary'])
+    {
+        $fields = collection($fields)
+            ->filter(function ($field) use ($schema) {
+                return !in_array($schema->columnType($field), ['binary', 'text']);
+            });
+
+        if (isset($modelObject) && $modelObject->hasBehavior('Tree')) {
+            $fields = $fields->reject(function ($field) {
+                return $field === 'lft' || $field === 'rght';
+            });
+        }
+
+        if (!empty($takeFields)) {
+            $fields = $fields->take($takeFields);
+        }
+
+        return $fields;
+    }
+
+    public function fieldData($field, $schema)
+    {
+        return $schema->column($field);
+    }
+
+    /**
      * To be mocked elsewhere...
      *
      * @param \Cake\ORM\Table $table Table
