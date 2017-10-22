@@ -253,6 +253,26 @@ class BakeHelper extends Helper
         return $validationMethods;
     }
 
+    public function getFieldAccessibility($fields = null, $primaryKey = null)
+    {
+        $accessible = [];
+
+        if (!isset($fields) || $fields !== false) {
+            if (!empty($fields)) {
+                foreach ($fields as $field) {
+                    $accessible[$field] = 'true';
+                }
+            } elseif (!empty($primaryKey)) {
+                $accessible['*'] = 'true';
+                foreach ($primaryKey as $field) {
+                    $accessible[$field] = 'false';
+                }
+            }
+        }
+
+        return $accessible;
+    }
+
     /**
      * To be mocked elsewhere...
      *

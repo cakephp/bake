@@ -22,20 +22,7 @@
 {% set annotations = annotations|merge(DocBlock.propertyHints(associationHintMap)) %}
 {% endif %}
 
-{%- set accessible = [] %}
-
-{% if fields is not defined or fields is not same as(false) %}
-{% for field in fields %}
-{% set accessible = accessible|merge({field: 'true'}) %}
-{% endfor %}
-{% endif %}
-
-{%- if fields and primaryKey %}
-{% set accessible = accessible|merge({'*': 'true'}) %}
-{% for field in primaryKey %}
-{% set accessible = accessible|merge({field: 'false'}) %}
-{% endfor %}
-{% endif %}
+{%- set accessible = Bake.getFieldAccessibility(fields, primaryKey) %}
 <?php
 namespace {{ namespace }}\Model\Entity;
 

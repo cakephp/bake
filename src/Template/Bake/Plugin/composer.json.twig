@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "{{ namespace }}\\": "src"
+            "{{ namespace|raw }}\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "{{ namespace }}\\Test\\": "tests",
+            "{{ namespace|raw }}\\Test\\": "tests",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
     }
