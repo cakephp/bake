@@ -208,6 +208,13 @@ class BakeHelper extends Helper
         return $association->getTarget()->getAlias();
     }
 
+    /**
+     * Get validation methods data.
+     *
+     * @param string $field Field name.
+     * @param array $rules Validation rules list.
+     * @return array
+     */
     public function getValidationMethods($field, $rules)
     {
         $validationMethods = [];
@@ -253,6 +260,13 @@ class BakeHelper extends Helper
         return $validationMethods;
     }
 
+    /**
+     * Get field accessibility data.
+     *
+     * @param mixed $fields Fields list.
+     * @param mixed $primaryKey Primary key.
+     * @return array
+     */
     public function getFieldAccessibility($fields = null, $primaryKey = null)
     {
         $accessible = [];
