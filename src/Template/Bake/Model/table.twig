@@ -58,10 +58,11 @@ class {{ name }}Table extends Table
 {% endif %}
 {% for type, assocs in associations %}
 {% for assoc in assocs %}
-{% set alias = assoc.alias %}
-{# https://www.drupal.org/node/1696912 #}
-{#{% set assoc = assoc|unset('alias') %}#}
-        $this->{{ type }}('{{ alias }}', [{{ Bake.stringifyList(assoc, {'indent': 3})|raw }}]);
+{% set assocData = [] %}
+{% for key, val in assoc if key is not same as('alias') %}
+{% set assocData = assocData|merge({(key): val}) %}
+{% endfor %}
+        $this->{{ type }}('{{ assoc.alias }}', [{{ Bake.stringifyList(assocData, {'indent': 3})|raw }}]);
 {% endfor %}
 {% endfor %}
     }

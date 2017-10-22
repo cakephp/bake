@@ -13,7 +13,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-{% set namespace = namespace|replace('\\', '\\\\') %}
+{% set namespace = namespace|replace({'\\': '\\\\'}) %}
 {
     "name": "{{ package }}",
     "description": "{{ plugin }} plugin for CakePHP",
@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "{{ namespace|raw }}\\": "src"
+            "{{ namespace }}\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "{{ namespace|raw }}\\Test\\": "tests",
+            "{{ namespace }}\\Test\\": "tests",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
     }
