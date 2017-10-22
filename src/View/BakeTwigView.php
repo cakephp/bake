@@ -15,10 +15,6 @@
 namespace Bake\View;
 
 use Cake\Core\Configure;
-use WyriHaximus\TwigView\Event\ConstructEvent;
-use WyriHaximus\TwigView\Event\ExtensionsListener;
-use WyriHaximus\TwigView\Event\TokenParsersListener;
-use WyriHaximus\TwigView\Lib\Twig\Extension\Inflector;
 use WyriHaximus\TwigView\View\TwigView;
 
 class BakeTwigView extends TwigView
@@ -40,9 +36,6 @@ class BakeTwigView extends TwigView
 
         $this->loadHelper('Bake.Bake');
         $this->loadHelper('Bake.DocBlock');
-
-        $this->getEventManager()->on(new ExtensionsListener());
-        $this->getEventManager()->on(new TokenParsersListener());
 
         parent::initialize();
     }

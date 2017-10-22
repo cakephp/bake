@@ -57,10 +57,6 @@ if (!getenv('db_dsn')) {
 }
 ConnectionManager::config('test', ['url' => getenv('db_dsn')]);
 
-Plugin::load('WyriHaximus/TwigView', [
-    'bootstrap' => true,
-]);
-
 Plugin::load('Bake', [
     'path' => dirname(dirname(__FILE__)) . DS,
 ]);
