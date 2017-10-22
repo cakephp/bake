@@ -57,7 +57,7 @@ class {{ className }}Test extends TestCase
      *
      * @var array
      */
-    public $fixtures = [{{ Bake.stringifyList(fixtures)|raw }}];
+    public $fixtures = [{{ Bake.stringifyList(fixtures|values)|raw }}];
 {% endif %}
 {% if construction %}
 
