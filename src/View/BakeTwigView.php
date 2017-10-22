@@ -89,6 +89,12 @@ class BakeTwigView extends TwigView
         return $this->Blocks->get('content');
     }
 
+    /**
+     * Inflect string to variable name form.
+     *
+     * @param string $string Input string
+     * @return string
+     */
     public function variableName($string)
     {
         return $this->_variableName($string);
