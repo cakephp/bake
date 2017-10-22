@@ -65,7 +65,7 @@ class BakeTwigView extends TwigView
     {
         $viewFileName = $this->_getViewFileName($view);
         $templateEventName = str_replace(
-            ['.ctp', DS],
+            [$this->_ext, DS],
             ['', '.'],
             explode('Template' . DS . 'Bake' . DS, $viewFileName)[1]
         );
