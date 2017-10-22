@@ -15,10 +15,13 @@
 namespace Bake\View;
 
 use Cake\Core\Configure;
+use Cake\Core\ConventionsTrait;
 use WyriHaximus\TwigView\View\TwigView;
 
 class BakeTwigView extends TwigView
 {
+    use ConventionsTrait;
+
     /**
      * Initialize view
      *
@@ -84,6 +87,11 @@ class BakeTwigView extends TwigView
         }
 
         return $this->Blocks->get('content');
+    }
+
+    public function variableName($string)
+    {
+        return $this->_variableName($string);
     }
 
     /**

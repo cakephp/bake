@@ -195,6 +195,20 @@ class BakeHelper extends Helper
     }
 
     /**
+     * Get alias of associated table.
+     *
+     * @param \Cake\ORM\Table $modelObj Model object.
+     * @param string $assoc Association name.
+     * @return string
+     */
+    public function getAssociatedTableAlias($modelObj, $assoc)
+    {
+        $association = $modelObj->association($assoc);
+
+        return $association->getTarget()->getAlias();
+    }
+
+    /**
      * To be mocked elsewhere...
      *
      * @param \Cake\ORM\Table $table Table
