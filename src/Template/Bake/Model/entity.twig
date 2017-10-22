@@ -17,23 +17,23 @@
 {% set associationHintMap = DocBlock.buildEntityAssociationHintTypeMap(propertySchema ?: []) %}
 {% set annotations = DocBlock.propertyHints(propertyHintMap) %}
 
-{% if associationHintMap %}
-{% annotations|push('') %}
+{%- if associationHintMap %}
+{% set annotations = annotations|merge(['']) %}
 {% set annotations = annotations|merge(DocBlock.propertyHints(associationHintMap)) %}
 {% endif %}
 
-{% set accessible = [] %}
+{%- set accessible = [] %}
 
-{% if fields %}
+{% if fields is not defined or fields is not same as(false) %}
 {% for field in fields %}
-{% set accessible.field = 'true' %}
+{% set accessible = accessible|merge({field: 'true'}) %}
 {% endfor %}
 {% endif %}
 
-{% if fields and primaryKey %}
-{% set accessible['*'] = 'true' %}
+{%- if fields and primaryKey %}
+{% set accessible = accessible|merge({'*': 'true'}) %}
 {% for field in primaryKey %}
-{% set accessible.field = 'false' %}
+{% set accessible = accessible|merge({field: 'false'}) %}
 {% endfor %}
 {% endif %}
 <?php
@@ -41,7 +41,7 @@ namespace {{ namespace }}\Model\Entity;
 
 use Cake\ORM\Entity;
 
-{{ DocBlock.classDescription(name, 'Entity', $annotations)|raw }}
+{{ DocBlock.classDescription(name, 'Entity', annotations)|raw }}
 class {{ name }} extends Entity
 {
 {% if accessible %}
@@ -55,7 +55,7 @@ class {{ name }} extends Entity
      *
      * @var array
      */
-    protected $_accessible = [{{ Bake.stringifyList(accessible, ['quotes' => false])|raw }}];
+    protected $_accessible = [{{ Bake.stringifyList(accessible, {'quotes': false})|raw }}];
 {% endif %}
 {% if hidden %}
 
@@ -64,7 +64,7 @@ class {{ name }} extends Entity
      *
      * @var array
      */
-    protected $_hidden = [{{ Bake.stringifyList(hidden) }}];
+    protected $_hidden = [{{ Bake.stringifyList(hidden)|raw }}];
 {% endif %}
 {% if not accessible and not hidden %}
 

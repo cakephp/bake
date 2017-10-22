@@ -208,6 +208,51 @@ class BakeHelper extends Helper
         return $association->getTarget()->getAlias();
     }
 
+    public function getValidationMethods($field, $rules)
+    {
+        $validationMethods = [];
+
+        foreach ($rules as $ruleName => $rule) {
+            if ($rule['rule'] && !isset($rule['provider'])) {
+                $validationMethods[] = sprintf("->%s('%s')", $rule['rule'], $field);
+            } elseif ($rule['rule'] && isset($rule['provider'])) {
+                $validationMethods[] = sprintf(
+                    "->add('%s', '%s', ['rule' => '%s', 'provider' => '%s'])",
+                    $field,
+                    $ruleName,
+                    $rule['rule'],
+                    $rule['provider']
+                );
+            }
+
+            if (isset($rule['allowEmpty'])) {
+                if (is_string($rule['allowEmpty'])) {
+                    $validationMethods[] = sprintf(
+                        "->allowEmpty('%s', '%s')",
+                        $field,
+                        $rule['allowEmpty']
+                    );
+                } elseif ($rule['allowEmpty']) {
+                    $validationMethods[] = sprintf(
+                        "->allowEmpty('%s')",
+                        $field
+                    );
+                } else {
+                    $validationMethods[] = sprintf(
+                        "->requirePresence('%s', 'create')",
+                        $field
+                    );
+                    $validationMethods[] = sprintf(
+                        "->notEmpty('%s')",
+                        $field
+                    );
+                }
+            }
+        }
+
+        return $validationMethods;
+    }
+
     /**
      * To be mocked elsewhere...
      *
