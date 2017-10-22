@@ -36,7 +36,7 @@
 {% set associations = associations|merge(Bake.aliasExtractor(modelObj, 'BelongsToMany')) %}
 {% for assoc in associations %}
 {% set otherName = Bake.getAssociatedTableAlias(modelObj, assoc) %}
-{% set otherPlural = _view.variableName(otherName) %}
+{% set otherPlural = otherName|variable %}
         ${{ otherPlural }} = $this->{{ currentModelName }}->{{ otherName }}->find('list', ['limit' => 200]);
 {% set compact = compact|merge(["'" ~ otherPlural ~ "'"]) %}
 {% endfor %}
