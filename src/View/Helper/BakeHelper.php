@@ -167,6 +167,8 @@ class BakeHelper extends Helper
      *
      * @param array $fields Fields list.
      * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
+     * @param array $takeFields Take fields.
+     * @param array $filterTypes Filter field types.
      * @return \Cake\Collection\CollectionInterface
      */
     public function filterFields($fields, $schema, $takeFields = [], $filterTypes = ['binary'])
