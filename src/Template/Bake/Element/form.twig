@@ -45,14 +45,14 @@
         <?php
 {% for field in fields if field in primaryKey %}
 {% if keyFields.field %}
-{% set fieldData = Bake.fieldData(field, schema) %}
+{% set fieldData = Bake.columnData(field, schema) %}
 {% if fieldData.null %}
             echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields.field }}, 'empty' => true]);
 {% else %}
             echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields.field }}]);
 {% endif %}
 {% elseif field in ['created', 'modified', 'updated'] %}
-{% set fieldData = Bake.fieldData(field, schema) %}
+{% set fieldData = Bake.columnData(field, schema) %}
 {% if fieldData.type|in_array(['date', 'datetime', 'time']) and fieldData.null %}
             echo $this->Form->control('{{ field }}', ['empty' => true]);
 {% else %}

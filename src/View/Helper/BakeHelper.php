@@ -189,7 +189,14 @@ class BakeHelper extends Helper
         return $fields;
     }
 
-    public function fieldData($field, $schema)
+    /**
+     * Get column data from schema.
+     *
+     * @param string $field Field name.
+     * @param Cake\Database\Schema\TableSchemaAwareInterface $schema Schema.
+     * @return array
+     */
+    public function columnData($field, $schema)
     {
         return $schema->column($field);
     }
