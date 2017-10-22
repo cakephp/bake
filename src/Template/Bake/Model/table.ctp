@@ -69,7 +69,7 @@ class <%= $name %>Table extends Table
         $this->setDisplayField('<%= $displayField %>');
 <% endif %>
 <% if (!empty($primaryKey)): %>
-<% if (count($primaryKey) > 1): %>
+<% if (is_array($primaryKey) && count($primaryKey) > 1): %>
         $this->setPrimaryKey([<%= $this->Bake->stringifyList((array)$primaryKey, ['indent' => false]) %>]);
 <% else: %>
         $this->setPrimaryKey('<%= current((array)$primaryKey) %>');

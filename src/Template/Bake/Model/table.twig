@@ -41,7 +41,7 @@ class {{ name }}Table extends Table
         $this->setDisplayField('{{ displayField }}');
 {% endif %}
 {% if primaryKey %}
-{% if primaryKey|count > 1 %}
+{% if primaryKey is iterable and primaryKey|count > 1 %}
         $this->setPrimaryKey([{{ Bake.stringifyList(primaryKey, {'indent': false})|raw }}]);
 {% else %}
         $this->setPrimaryKey('{{ primaryKey|as_array|first }}');
