@@ -149,10 +149,15 @@ class BakeShellTest extends TestCase
             '- task',
             '- template',
             '- test',
-            '- twig_template',
-            '',
-            'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.',
         ];
+
+        if (Plugin::loaded('WyriHaximus/TwigView')) {
+            $expected[] = '- twig_template';
+        }
+
+        $expected[] = '';
+        $expected[] = 'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.';
+
         $this->assertSame($expected, $output);
     }
 
@@ -205,8 +210,10 @@ class BakeShellTest extends TestCase
             'Bake.Template',
             'Controller',
             'CustomController',
-            'WyriHaximus/TwigView.TwigTemplate',
         ];
+        if (Plugin::loaded('WyriHaximus/TwigView')) {
+            $expected[] = 'WyriHaximus/TwigView.TwigTemplate';
+        }
         sort($this->Shell->tasks);
         sort($expected);
         $this->assertEquals($expected, $this->Shell->tasks);
