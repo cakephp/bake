@@ -35,9 +35,6 @@ class BakeTwigView extends TwigView
             Configure::write('App.paths.templates', $paths);
         }
 
-        $this->loadHelper('Bake.Bake');
-        $this->loadHelper('Bake.DocBlock');
-
         parent::initialize();
     }
 
