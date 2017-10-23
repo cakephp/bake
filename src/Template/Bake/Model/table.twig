@@ -104,7 +104,7 @@ class {{ name }}Table extends Table
     public function buildRules(RulesChecker $rules)
     {
 {% for field, rule in rulesChecker %}
-        $rules->add($rules->{{ rule.name }}(['{{ field }}']{{ (rule.extra ? (", '" ~ rule.extra ~ "'") : '')|raw }}));
+        $rules->add($rules->{{ rule.name }}(['{{ field }}']{{ (rule.extra ? (", '#{rule.extra}'") : '')|raw }}));
 {% endfor %}
 
         return $rules;

@@ -13,7 +13,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-{% set compact = [("'" ~ singularName ~ "'")] %}
+{% set compact = ["'#{singularName}'"] %}
 
     /**
      * Add method
@@ -38,7 +38,7 @@
 {% set otherName = Bake.getAssociatedTableAlias(modelObj, assoc) %}
 {% set otherPlural = otherName|variable %}
         ${{ otherPlural }} = $this->{{ currentModelName }}->{{ otherName }}->find('list', ['limit' => 200]);
-{% set compact = compact|merge(["'" ~ otherPlural ~ "'"]) %}
+{% set compact = compact|merge(["'#{otherPlural}'"]) %}
 {% endfor %}
         $this->set(compact({{ compact|join(', ')|raw }}));
         $this->set('_serialize', ['{{ singularName }}']);
