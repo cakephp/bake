@@ -13,25 +13,25 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-{% set fields = Bake.filterFields(fields, schema) %}
+{% set fields = Bake.filterFields(fields, schema, modelObject) %}
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-{% if action|strpos('add') is false) }}
+{% if action matches '/^((?!add).)*$/' %}
         <li><?= $this->Form->postLink(
                 __('Delete'),
-                ['action' => 'delete', ${{ singularVar }}->{{ primaryKey.0 }}],
-                ['confirm' => __('Are you sure you want to delete # {0}?', ${{ singularVar }}->{{ primaryKey.0 }})]
+                ['action' => 'delete', ${{ singularVar }}->{{ primaryKey[0] }}],
+                ['confirm' => __('Are you sure you want to delete # {0}?', ${{ singularVar }}->{{ primaryKey[0] }})]
             )
         ?></li>
-{{ endif }}
+{% endif %}
         <li><?= $this->Html->link(__('List {{ pluralHumanName }}'), ['action' => 'index']) ?></li>
 {% set done = [] %}
 {% for type, data in associations %}
 {% for alias, details in data %}
 {% if details.controller is not same as(_view.name) and details.controller not in done %}
-        <li><?= $this->Html->link(__('List {{ _view._pluralHumanName(alias) }}'), ['controller' => '{{ details.controller }}', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New {{ _view._singularHumanName(alias) }}'), ['controller' => '{{ details.controller }}', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('List {{ alias|underscore|humanize }}'), ['controller' => '{{ details.controller }}', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New {{ alias|singularize|underscore|humanize }}'), ['controller' => '{{ details.controller }}', 'action' => 'add']) ?></li>
 {% set done = done|merge([details.controller]) %}
 {% endif %}
 {% endfor %}
@@ -43,17 +43,17 @@
     <fieldset>
         <legend><?= __('{{ action|humanize }} {{ singularHumanName }}') ?></legend>
         <?php
-{% for field in fields if field in primaryKey %}
-{% if keyFields.field %}
+{% for field in fields if field not in primaryKey %}
+{% if keyFields[field] %}
 {% set fieldData = Bake.columnData(field, schema) %}
 {% if fieldData.null %}
-            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields.field }}, 'empty' => true]);
+            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'empty' => true]);
 {% else %}
-            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields.field }}]);
+            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]);
 {% endif %}
-{% elseif field in ['created', 'modified', 'updated'] %}
+{% elseif field not in ['created', 'modified', 'updated'] %}
 {% set fieldData = Bake.columnData(field, schema) %}
-{% if fieldData.type|in_array(['date', 'datetime', 'time']) and fieldData.null %}
+{% if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
             echo $this->Form->control('{{ field }}', ['empty' => true]);
 {% else %}
             echo $this->Form->control('{{ field }}');

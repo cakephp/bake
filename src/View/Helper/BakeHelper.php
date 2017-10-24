@@ -167,15 +167,16 @@ class BakeHelper extends Helper
      *
      * @param array $fields Fields list.
      * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
+     * @param \Cake\Datasource\RepositoryInterface|null $modelObject Model object.
      * @param array $takeFields Take fields.
      * @param array $filterTypes Filter field types.
      * @return \Cake\Collection\CollectionInterface
      */
-    public function filterFields($fields, $schema, $takeFields = [], $filterTypes = ['binary'])
+    public function filterFields($fields, $schema, $modelObject = null, $takeFields = [], $filterTypes = ['binary'])
     {
         $fields = collection($fields)
-            ->filter(function ($field) use ($schema) {
-                return !in_array($schema->columnType($field), ['binary', 'text']);
+            ->filter(function ($field) use ($schema, $filterTypes) {
+                return !in_array($schema->columnType($field), $filterTypes);
             });
 
         if (isset($modelObject) && $modelObject->hasBehavior('Tree')) {
@@ -188,7 +189,69 @@ class BakeHelper extends Helper
             $fields = $fields->take($takeFields);
         }
 
-        return $fields;
+        return $fields->toArray();
+    }
+
+    /**
+     * Get fields data for view template.
+     *
+     * @param array $fields Fields list.
+     * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
+     * @param array $associations Associations data.
+     * @return array
+     */
+    public function getViewFieldsData($fields, $schema, $associations)
+    {
+        $immediateAssociations = $associations['BelongsTo'];
+        $associationFields = collection($fields)
+            ->map(function ($field) use ($immediateAssociations) {
+                foreach ($immediateAssociations as $alias => $details) {
+                    if ($field === $details['foreignKey']) {
+                        return [$field => $details];
+                    }
+                }
+            })
+            ->filter()
+            ->reduce(function ($fields, $value) {
+                return $fields + $value;
+            }, []);
+
+        $groupedFields = collection($fields)
+            ->filter(function ($field) use ($schema) {
+                return $schema->columnType($field) !== 'binary';
+            })
+            ->groupBy(function ($field) use ($schema, $associationFields) {
+                $type = $schema->columnType($field);
+                if (isset($associationFields[$field])) {
+                    return 'string';
+                }
+                if (in_array($type, [
+                    'decimal',
+                    'biginteger',
+                    'integer',
+                    'float',
+                    'smallinteger',
+                    'tinyinteger',
+                ])) {
+                    return 'number';
+                }
+                if (in_array($type, ['date', 'time', 'datetime', 'timestamp'])) {
+                    return 'date';
+                }
+
+                return in_array($type, ['text', 'boolean']) ? $type : 'string';
+            })
+            ->toArray();
+
+        $groupedFields += [
+            'number' => [],
+            'string' => [],
+            'boolean' => [],
+            'date' => [],
+            'text' => [],
+        ];
+
+        return compact('associationFields', 'groupedFields');
     }
 
     /**
