@@ -32,7 +32,7 @@
 {% if details.controller != _view.name && done not in details.controller %}
         <li><?= $this->Html->link(__('List {{ _view._pluralHumanName(alias) }}'), ['controller' => '{{ details.controller }}', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New {{ _view._singularHumanName(alias) }}'), ['controller' => '{{ details.controller }}', 'action' => 'add']) ?></li>
-{% done|push(details.controller) %}
+{% set done = done|merge([details.controller]) %}
 {% endif %}
 {% endfor %}
 {% endfor %}
