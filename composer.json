@@ -19,13 +19,13 @@
     },
     "require": {
         "php": ">=5.6.0",
-        "cakephp/cakephp": ">=3.5.0,<4.0.0",
-        "cakephp/plugin-installer": "~1.0"
+        "cakephp/cakephp": "^3.5",
+        "cakephp/plugin-installer": "^1.0"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^3.0",
-        "phpunit/phpunit": "~5.7 | ~6.0",
-        "wyrihaximus/twig-view": "4.x-dev as 4.1"
+        "phpunit/phpunit": "^5.7 | ^6.0",
+        "wyrihaximus/twig-view": "^4.1"
     },
     "autoload": {
         "psr-4": {
