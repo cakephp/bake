@@ -26,15 +26,17 @@
         ?></li>
 {% endif %}
         <li><?= $this->Html->link(__('List {{ pluralHumanName }}'), ['action' => 'index']) ?></li>
-{% set done = [] %}
+        {{- "\n" }}
+{%- set done = [] %}
 {% for type, data in associations %}
-{% for alias, details in data %}
-{% if details.controller is not same as(_view.name) and details.controller not in done %}
+    {%- for alias, details in data %}
+        {%- if details.controller is not same as(_view.name) and details.controller not in done %}
         <li><?= $this->Html->link(__('List {{ alias|underscore|humanize }}'), ['controller' => '{{ details.controller }}', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New {{ alias|singularize|underscore|humanize }}'), ['controller' => '{{ details.controller }}', 'action' => 'add']) ?></li>
-{% set done = done|merge([details.controller]) %}
-{% endif %}
-{% endfor %}
+        {{- "\n" }}
+        {%- set done = done|merge([details.controller]) %}
+        {%- endif %}
+    {%- endfor %}
 {% endfor %}
     </ul>
 </nav>
@@ -44,26 +46,32 @@
         <legend><?= __('{{ action|humanize }} {{ singularHumanName }}') ?></legend>
         <?php
 {% for field in fields if field not in primaryKey %}
-{% if keyFields[field] %}
-{% set fieldData = Bake.columnData(field, schema) %}
-{% if fieldData.null %}
+    {%- if keyFields[field] %}
+        {%- set fieldData = Bake.columnData(field, schema) %}
+        {%- if fieldData.null %}
             echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'empty' => true]);
-{% else %}
+            {{- "\n" }}
+        {%- else %}
             echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]);
-{% endif %}
-{% elseif field not in ['created', 'modified', 'updated'] %}
-{% set fieldData = Bake.columnData(field, schema) %}
-{% if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
+            {{- "\n" }}
+        {%- endif %}
+    {%- elseif field not in ['created', 'modified', 'updated'] %}
+        {%- set fieldData = Bake.columnData(field, schema) %}
+        {%- if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
             echo $this->Form->control('{{ field }}', ['empty' => true]);
-{% else %}
+            {{- "\n" }}
+        {%- else %}
             echo $this->Form->control('{{ field }}');
-{% endif %}
-{% endif %}
-{% endfor %}
-{% if associations.BelongsToMany %}
-{% for assocName, assocData in associations.BelongsToMany %}
+    {{- "\n" }}
+        {%- endif %}
+    {%- endif %}
+{%- endfor %}
+
+{%- if associations.BelongsToMany %}
+    {%- for assocName, assocData in associations.BelongsToMany %}
             echo $this->Form->control('{{ assocData.property }}._ids', ['options' => ${{ assocData.variable }}]);
-{% endfor %}
+    {{- "\n" }}
+    {%- endfor %}
 {% endif %}
         ?>
     </fieldset>

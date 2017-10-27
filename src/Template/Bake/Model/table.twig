@@ -37,36 +37,47 @@ class {{ name }}Table extends Table
 {% if table %}
         $this->setTable('{{ table }}');
 {% endif %}
-{% if displayField %}
+
+{%- if displayField %}
         $this->setDisplayField('{{ displayField }}');
 {% endif %}
-{% if primaryKey %}
-{% if primaryKey is iterable and primaryKey|count > 1 %}
+
+{%- if primaryKey %}
+    {%- if primaryKey is iterable and primaryKey|count > 1 %}
         $this->setPrimaryKey([{{ Bake.stringifyList(primaryKey, {'indent': false})|raw }}]);
-{% else %}
+        {{- "\n" }}
+    {%- else %}
         $this->setPrimaryKey('{{ primaryKey|as_array|first }}');
+        {{- "\n" }}
+    {%- endif %}
 {% endif %}
-{% endif %}
-{% if behaviors %}
+
+{%- if behaviors %}
 
 {% endif %}
-{% for behavior, behaviorData in behaviors %}
+
+{%- for behavior, behaviorData in behaviors %}
         $this->addBehavior('{{ behavior }}'{{ (behaviorData ? (", [" ~ behaviorData|join(', ') ~ ']') : '')|raw }});
 {% endfor %}
-{% if associations.belongsTo or associations.hasMany or associations.belongsToMany %}
+
+{%- if associations.belongsTo or associations.hasMany or associations.belongsToMany %}
 
 {% endif %}
-{% for type, assocs in associations %}
-{% for assoc in assocs %}
-{% set assocData = [] %}
-{% for key, val in assoc if key is not same as('alias') %}
-{% set assocData = assocData|merge({(key): val}) %}
-{% endfor %}
+
+{%- for type, assocs in associations %}
+    {%- for assoc in assocs %}
+        {%- set assocData = [] %}
+        {%- for key, val in assoc if key is not same as('alias') %}
+            {%- set assocData = assocData|merge({(key): val}) %}
+        {%- endfor %}
         $this->{{ type }}('{{ assoc.alias }}', [{{ Bake.stringifyList(assocData, {'indent': 3})|raw }}]);
-{% endfor %}
+        {{- "\n" }}
+    {%- endfor %}
 {% endfor %}
     }
-{% if validation %}
+{{- "\n" }}
+
+{%- if validation %}
 
     /**
      * Default validation rules.
@@ -92,7 +103,8 @@ class {{ name }}Table extends Table
         return $validator;
     }
 {% endif %}
-{% if rulesChecker %}
+
+{%- if rulesChecker %}
 
     /**
      * Returns a rules checker object that will be used for validating
@@ -110,7 +122,8 @@ class {{ name }}Table extends Table
         return $rules;
     }
 {% endif %}
-{% if connection is not same as('default') %}
+
+{%- if connection is not same as('default') %}
 
     /**
      * Returns the database connection name to use by default.

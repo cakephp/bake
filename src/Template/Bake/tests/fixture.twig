@@ -37,7 +37,8 @@ class {{ name }}Fixture extends TestFixture
      */
     public $table = '{{ table|raw }}';
 {% endif %}
-{% if import %}
+
+{%- if import %}
 
     /**
      * Import
@@ -46,7 +47,8 @@ class {{ name }}Fixture extends TestFixture
      */
     public $import = {{ import|raw }};
 {% endif %}
-{% if schema %}
+
+{%- if schema %}
 
     /**
      * Fields
@@ -57,7 +59,8 @@ class {{ name }}Fixture extends TestFixture
     public $fields = {{ schema|raw }};
     // @codingStandardsIgnoreEnd
 {% endif %}
-{% if records %}
+
+{%- if records %}
 
     /**
      * Records

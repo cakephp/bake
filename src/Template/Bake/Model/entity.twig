@@ -18,8 +18,8 @@
 {% set annotations = DocBlock.propertyHints(propertyHintMap) %}
 
 {%- if associationHintMap %}
-{% set annotations = annotations|merge(['']) %}
-{% set annotations = annotations|merge(DocBlock.propertyHints(associationHintMap)) %}
+    {%- set annotations = annotations|merge(['']) %}
+    {%- set annotations = annotations|merge(DocBlock.propertyHints(associationHintMap)) %}
 {% endif %}
 
 {%- set accessible = Bake.getFieldAccessibility(fields, primaryKey) %}
@@ -44,7 +44,8 @@ class {{ name }} extends Entity
      */
     protected $_accessible = [{{ Bake.stringifyList(accessible, {'quotes': false})|raw }}];
 {% endif %}
-{% if hidden %}
+
+{%- if hidden %}
 
     /**
      * Fields that are excluded from JSON versions of the entity.
@@ -53,7 +54,8 @@ class {{ name }} extends Entity
      */
     protected $_hidden = [{{ Bake.stringifyList(hidden)|raw }}];
 {% endif %}
-{% if not accessible and not hidden %}
+
+{%- if not accessible and not hidden %}
 
 {% endif %}
 }

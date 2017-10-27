@@ -34,11 +34,13 @@
         }
 {% set associations = Bake.aliasExtractor(modelObj, 'BelongsTo') %}
 {% set associations = associations|merge(Bake.aliasExtractor(modelObj, 'BelongsToMany')) %}
-{% for assoc in associations %}
-{% set otherName = Bake.getAssociatedTableAlias(modelObj, assoc) %}
-{% set otherPlural = otherName|variable %}
+
+{%- for assoc in associations %}
+    {%- set otherName = Bake.getAssociatedTableAlias(modelObj, assoc) %}
+    {%- set otherPlural = otherName|variable %}
         ${{ otherPlural }} = $this->{{ currentModelName }}->{{ otherName }}->find('list', ['limit' => 200]);
-{% set compact = compact|merge(["'#{otherPlural}'"]) %}
+        {{- "\n" }}
+    {%- set compact = compact|merge(["'#{otherPlural}'"]) %}
 {% endfor %}
         $this->set(compact({{ compact|join(', ')|raw }}));
         $this->set('_serialize', ['{{ singularName }}']);

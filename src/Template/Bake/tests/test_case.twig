@@ -17,11 +17,12 @@
 #}
 {% set isController = type|lower == 'controller' %}
 {% if isController %}
-{% set uses = uses|merge(['Cake\\TestSuite\\IntegrationTestCase']) %}
+    {%- set uses = uses|merge(['Cake\\TestSuite\\IntegrationTestCase']) %}
 {% else %}
-{% set uses = uses|merge(['Cake\\TestSuite\\TestCase']) %}
+    {%- set uses = uses|merge(['Cake\\TestSuite\\TestCase']) %}
 {% endif %}
-{% set uses = uses|sort %}
+
+{%- set uses = uses|sort %}
 <?php
 namespace {{ baseNamespace }}\Test\TestCase\{{ subNamespace }};
 
@@ -39,7 +40,8 @@ class {{ className }}Test extends IntegrationTestCase
 class {{ className }}Test extends TestCase
 {
 {% endif %}
-{% if properties %}
+
+{%- if properties %}
 {% for propertyInfo in properties %}
 
     /**
@@ -50,7 +52,8 @@ class {{ className }}Test extends TestCase
     public ${{ propertyInfo.name }}{% if propertyInfo.value %} = {{ propertyInfo.value }}{% endif %};
 {% endfor %}
 {% endif %}
-{% if fixtures %}
+
+{%- if fixtures %}
 
     /**
      * Fixtures
@@ -59,7 +62,8 @@ class {{ className }}Test extends TestCase
      */
     public $fixtures = [{{ Bake.stringifyList(fixtures|values)|raw }}];
 {% endif %}
-{% if construction %}
+
+{%- if construction %}
 
     /**
      * setUp method
@@ -90,7 +94,8 @@ class {{ className }}Test extends TestCase
         parent::tearDown();
     }
 {% endif %}
-{% for method in methods %}
+
+{%- for method in methods %}
 
     /**
      * Test {{ method }} method
@@ -102,7 +107,8 @@ class {{ className }}Test extends TestCase
         $this->markTestIncomplete('Not implemented yet.');
     }
 {% endfor %}
-{% if not methods %}
+
+{%- if not methods %}
 
     /**
      * Test initial setup

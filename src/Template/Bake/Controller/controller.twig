@@ -28,11 +28,13 @@ use {{ namespace }}\Controller\AppController;
 {% if defaultModel %}
  * @property \{{ defaultModel }} ${{ name }}
 {% endif %}
-{% for component in components %}
+
+{%- for component in components %}
 {% set classInfo = Bake.classInfo(component, 'Controller/Component', 'Component') %}
  * @property {{ classInfo.fqn }} ${{ classInfo.name }}
 {% endfor %}
-{% if 'index' in actions %}
+
+{%- if 'index' in actions %}
  *
  * @method \{{ namespace }}\Model\Entity\{{ entityClassName }}[] paginate($object = null, array $settings = [])
 {% endif %}
@@ -41,13 +43,15 @@ class {{ name }}Controller extends AppController
 {
 {% set helpers = Bake.arrayProperty('helpers', helpers, {'indent': false})|raw %}
 {% if helpers|trim %}
-{{ helpers|raw }}
+    {{- helpers|raw }}
 {% endif %}
-{% set components = Bake.arrayProperty('components', components, {'indent': false})|raw %}
+
+{%- set components = Bake.arrayProperty('components', components, {'indent': false})|raw %}
 {% if components|trim %}
-{{ components|raw }}
+    {{- components|raw }}
 {% endif %}
-{% for action in actions %}
-{% element 'Controller/' ~ action %}
+
+{%- for action in actions %}
+    {%- element 'Controller/' ~ action %}
 {% endfor %}
 }
