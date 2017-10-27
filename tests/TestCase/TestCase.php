@@ -27,11 +27,9 @@ abstract class TestCase extends ParentTestCase
     {
         parent::setUp();
 
-        if (Configure::read('Bake.viewClass') === 'Bake.BakeTwig') {
-            Plugin::load('WyriHaximus/TwigView', [
-                'bootstrap' => true,
-            ]);
-        }
+        Plugin::load('WyriHaximus/TwigView', [
+            'bootstrap' => true,
+        ]);
     }
 
     /**
