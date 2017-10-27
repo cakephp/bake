@@ -16,10 +16,8 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
-use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
-use Cake\View\Helper;
 
 /**
  * ControllerTaskTest class
