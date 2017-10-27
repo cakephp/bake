@@ -14,8 +14,8 @@
  */
 namespace Bake\Shell\Task;
 
+use Bake\View\BakeView;
 use Cake\Console\Shell;
-use Cake\Core\App;
 use Cake\Core\ConventionsTrait;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
@@ -62,10 +62,7 @@ class BakeTemplateTask extends Shell
             'theme' => $theme
         ];
 
-        $viewClass = isset($this->params['view-class']) ? $this->params['view-class'] : 'Bake.Bake';
-        $viewClass = App::className($viewClass, 'View', 'View');
-
-        $view = new $viewClass(new Request(), new Response(), null, $viewOptions);
+        $view = new BakeView(new Request(), new Response(), null, $viewOptions);
         $event = new Event('Bake.initialize', $view);
         EventManager::instance()->dispatch($event);
         $this->View = $event->subject;

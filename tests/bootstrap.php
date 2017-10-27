@@ -50,7 +50,6 @@ Configure::write('App', [
     ],
     'encoding' => 'UTF-8'
 ]);
-Configure::write('Bake.viewClass', getenv('bake_class') ?: 'Bake.Bake');
 
 if (!getenv('db_dsn')) {
     putenv('db_dsn=sqlite:///:memory:');

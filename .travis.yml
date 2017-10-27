@@ -16,7 +16,6 @@ env:
     - DB=mysql db_dsn='mysql://root@127.0.0.1/cakephp_test'
     - DB=pgsql db_dsn='postgres://postgres@127.0.0.1/cakephp_test'
     - DB=sqlite db_dsn='sqlite:///:memory:'
-    - bake_class='Bake.BakeTwig'
   global:
     - RUN_TESTS=1
 

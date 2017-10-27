@@ -46,8 +46,6 @@ class BakeTemplateTaskTest extends TestCase
             ->setConstructorArgs([$io])
             ->getMock();
         ;
-
-        $this->Task->params['view-class'] = Configure::read('Bake.viewClass');
     }
 
     /**

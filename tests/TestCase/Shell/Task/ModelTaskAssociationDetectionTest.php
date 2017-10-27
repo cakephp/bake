@@ -108,7 +108,6 @@ class ModelTaskAssociationDetectionTest extends TestCase
             ->getMock();
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->interactive = false;
-        $this->Task->BakeTemplate->params['view-class'] = Configure::read('Bake.viewClass');
 
         $this->Task->name = 'Model';
     }

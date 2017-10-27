@@ -68,7 +68,6 @@ class FixtureTaskTest extends TestCase
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->interactive = false;
         $this->Task->BakeTemplate->initialize();
-        $this->Task->BakeTemplate->params['view-class'] = Configure::read('Bake.viewClass');
 
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
     }

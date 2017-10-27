@@ -81,7 +81,6 @@ class TemplateTaskTest extends TestCase
             ->getMock();
 
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
-        $this->Task->BakeTemplate->params['view-class'] = Configure::read('Bake.viewClass');
         $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
             ->setConstructorArgs([$io])
             ->getMock();

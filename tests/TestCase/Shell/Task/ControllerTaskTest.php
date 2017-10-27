@@ -65,7 +65,6 @@ class ControllerTaskTest extends TestCase
         $this->Task->connection = 'test';
 
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
-        $this->Task->BakeTemplate->params['view-class'] = Configure::read('Bake.viewClass');
 
         $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
             ->setMethods(['in', 'out', 'err', 'createFile', '_stop'])
