@@ -107,11 +107,10 @@ class BakeArticlesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $bakeArticle = $this->BakeArticles->get($id);
-        if ($this->BakeArticles->delete($bakeArticle)) {
-            $this->Flash->success(__('The bake article has been deleted.'));
-        } else {
+        if (!$this->BakeArticles->delete($bakeArticle)) {
             $this->Flash->error(__('The bake article could not be deleted. Please, try again.'));
         }
+        $this->Flash->success(__('The bake article has been deleted.'));
 
         return $this->redirect(['action' => 'index']);
     }
