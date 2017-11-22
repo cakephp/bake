@@ -14,6 +14,7 @@
  */
 namespace Bake\Test\TestCase;
 
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase as ParentTestCase;
@@ -21,6 +22,15 @@ use Cake\TestSuite\TestCase as ParentTestCase;
 abstract class TestCase extends ParentTestCase
 {
     use StringCompareTrait;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        Plugin::load('WyriHaximus/TwigView', [
+            'bootstrap' => true,
+        ]);
+    }
 
     /**
      * Load a plugin from the tests folder, and add to the autoloader

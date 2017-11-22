@@ -61,6 +61,7 @@ class BakeTemplateTask extends Shell
             ],
             'theme' => $theme
         ];
+
         $view = new BakeView(new Request(), new Response(), null, $viewOptions);
         $event = new Event('Bake.initialize', $view);
         EventManager::instance()->dispatch($event);

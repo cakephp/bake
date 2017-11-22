@@ -193,12 +193,13 @@ class PluginTask extends BakeTask
         do {
             $templatesPath = array_shift($paths) . 'Bake/Plugin';
             $templatesDir = new Folder($templatesPath);
-            $templates = $templatesDir->findRecursive('.*\.ctp');
+            $templates = $templatesDir->findRecursive('.*\.(twig|ctp)');
         } while (!$templates);
 
         sort($templates);
         foreach ($templates as $template) {
             $template = substr($template, strrpos($template, 'Plugin') + 7, -4);
+            $template = rtrim($template, '.');
             $this->_generateFile($template, $root);
         }
     }
