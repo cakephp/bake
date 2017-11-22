@@ -54,6 +54,9 @@ class BakeShell extends Shell
         parent::startup();
         Configure::write('debug', true);
         Cache::disable();
+        if (!Plugin::loaded('WyriHaximus/TwigView')) {
+            Plugin::load('WyriHaximus/TwigView', ['bootstrap' => true]);
+        }
 
         $task = $this->_camelize($this->command);
 
