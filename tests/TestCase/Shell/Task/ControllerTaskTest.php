@@ -245,7 +245,7 @@ class ControllerTaskTest extends TestCase
 
         $this->Task->Test->expects($this->at(0))
             ->method('bake')
-            ->with('Controller', 'Admin\BakeArticles');
+            ->with('Controller', 'BakeArticles');
         $result = $this->Task->bake('BakeArticles');
 
         $this->assertTextContains('namespace App\Controller\Admin;', $result);
@@ -268,7 +268,7 @@ class ControllerTaskTest extends TestCase
 
         $this->Task->Test->expects($this->at(0))
             ->method('bake')
-            ->with('Controller', 'Admin\Management\BakeArticles');
+            ->with('Controller', 'BakeArticles');
         $result = $this->Task->bake('BakeArticles');
 
         $this->assertTextContains('namespace App\Controller\Admin\Management;', $result);

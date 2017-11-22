@@ -209,10 +209,6 @@ class ControllerTask extends BakeTask
         }
         $this->Test->plugin = $this->plugin;
         $this->Test->connection = $this->connection;
-        $prefix = $this->_getPrefix();
-        if ($prefix) {
-            $className = str_replace('/', '\\', $prefix) . '\\' . $className;
-        }
 
         return $this->Test->bake('Controller', $className);
     }
