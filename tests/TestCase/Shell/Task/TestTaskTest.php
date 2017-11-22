@@ -197,6 +197,15 @@ class TestTaskTest extends TestCase
             'CategoryThreadsTable'
         ];
 
+        $this->io->expects($this->exactly(5))
+            ->method('out')
+            ->withConsecutive(
+                ['You must provide a class to bake a test for. Some possible options are:', 2],
+                ['1. ArticlesTable'],
+                ['2. CategoryThreadsTable'],
+                [''],
+                ['Re-run your command as `cake bake Table <classname>`']
+            );
         $choices = $this->Task->outputClassChoices('Table');
         $this->assertSame($expected, $choices);
     }

@@ -145,9 +145,9 @@ class TestTask extends BakeTask
      * @param string $type The typename to get classes for.
      * @return array
      */
-    public function outputClassChoices($type)
+    public function outputClassChoices($typeName)
     {
-        $type = $this->mapType($type);
+        $type = $this->mapType($typeName);
         $this->out(
             'You must provide a class to bake a test for. Some possible options are:',
             2
@@ -158,7 +158,7 @@ class TestTask extends BakeTask
             $this->out(++$i . '. ' . $option);
         }
         $this->out('');
-        $this->out('Re-run your command as `cake bake ' . $type . ' <classname>`');
+        $this->out('Re-run your command as `cake bake ' . $typeName . ' <classname>`');
 
         return $options;
     }
