@@ -142,7 +142,7 @@ class TestTask extends BakeTask
     /**
      * Output a list of possible classnames you might want to generate a test for.
      *
-     * @param string $type The typename to get classes for.
+     * @param string $typeName The typename to get classes for.
      * @return array
      */
     public function outputClassChoices($typeName)
