@@ -691,14 +691,14 @@ class ModelTask extends BakeTask
      * @param \Cake\Database\Schema\TableSchema $schema The table schema for the current field.
      * @param string $fieldName Name of field to be validated.
      * @param array $metaData metadata for field
-     * @param string $primaryKey The primary key field
+     * @param array $primaryKey The primary key field
      * @return array Array of validation for the field.
      */
-    public function fieldValidation($schema, $fieldName, array $metaData, $primaryKey)
+    public function fieldValidation($schema, $fieldName, array $metaData, array $primaryKey)
     {
         $ignoreFields = ['lft', 'rght', 'created', 'modified', 'updated'];
         if (in_array($fieldName, $ignoreFields)) {
-            return false;
+            return [];
         }
 
         $rule = false;
