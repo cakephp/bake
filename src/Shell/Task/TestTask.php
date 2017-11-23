@@ -142,12 +142,12 @@ class TestTask extends BakeTask
     /**
      * Output a list of possible classnames you might want to generate a test for.
      *
-     * @param string $type The typename to get classes for.
+     * @param string $typeName The typename to get classes for.
      * @return array
      */
-    public function outputClassChoices($type)
+    public function outputClassChoices($typeName)
     {
-        $type = $this->mapType($type);
+        $type = $this->mapType($typeName);
         $this->out(
             'You must provide a class to bake a test for. Some possible options are:',
             2
@@ -158,7 +158,7 @@ class TestTask extends BakeTask
             $this->out(++$i . '. ' . $option);
         }
         $this->out('');
-        $this->out('Re-run your command as `cake bake ' . $type . ' <classname>`');
+        $this->out('Re-run your command as `cake bake ' . $typeName . ' <classname>`');
 
         return $options;
     }
@@ -708,24 +708,15 @@ class TestTask extends BakeTask
     {
         $parser = parent::getOptionParser();
 
+        $types = array_keys($this->classTypes);
+        $types = array_merge($types, array_map('strtolower', $types));
+
         $parser->setDescription(
             'Bake test case skeletons for classes.'
         )->addArgument('type', [
             'help' => 'Type of class to bake, can be any of the following:' .
                 ' controller, model, helper, component or behavior.',
-            'choices' => [
-                'Controller', 'controller',
-                'Table', 'table',
-                'Entity', 'entity',
-                'Helper', 'helper',
-                'Component', 'component',
-                'Behavior', 'behavior',
-                'Shell', 'shell',
-                'shell_helper',
-                'Cell', 'cell',
-                'Form', 'form',
-                'Mailer', 'mailer',
-            ]
+            'choices' => $types,
         ])->addArgument('name', [
             'help' => 'An existing class to bake tests for.'
         ])->addOption('fixtures', [
