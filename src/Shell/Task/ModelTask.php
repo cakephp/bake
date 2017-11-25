@@ -694,7 +694,7 @@ class ModelTask extends BakeTask
      * @param array $primaryKey The primary key field
      * @return array Array of validation for the field.
      */
-    public function fieldValidation($schema, $fieldName, array $metaData, $primaryKey)
+    public function fieldValidation($schema, $fieldName, array $metaData, array $primaryKey)
     {
         $ignoreFields = ['lft', 'rght', 'created', 'modified', 'updated'];
         if (in_array($fieldName, $ignoreFields)) {
