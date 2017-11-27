@@ -300,6 +300,10 @@ class TemplateTask extends BakeTask
         $singularHumanName = $this->_singularHumanName($this->controllerName);
         $schema = $modelObject->getSchema();
         $fields = $schema->columns();
+        $fieldHumanNames = [];
+        foreach ($fields as $field) {
+            $fieldHumanNames[$field] = Inflector::humanize($field);
+        }
         $modelClass = $this->modelName;
 
         list(, $entityClass) = namespaceSplit($this->_entityName($this->modelName));
@@ -330,6 +334,7 @@ class TemplateTask extends BakeTask
             'singularHumanName',
             'pluralHumanName',
             'fields',
+            'fieldHumanNames',
             'associations',
             'keyFields',
             'namespace'

@@ -49,10 +49,10 @@
     {%- if keyFields[field] %}
         {%- set fieldData = Bake.columnData(field, schema) %}
         {%- if fieldData.null %}
-            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'empty' => true]);
+            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'empty' => true, 'label' => __('{{ fieldHumanNames[field] }}')]);
             {{- "\n" }}
         {%- else %}
-            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]);
+            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'label' => __('{{ fieldHumanNames[field] }}')]);
             {{- "\n" }}
         {%- endif %}
     {%- elseif field not in ['created', 'modified', 'updated'] %}
@@ -61,7 +61,7 @@
             echo $this->Form->control('{{ field }}', ['empty' => true]);
             {{- "\n" }}
         {%- else %}
-            echo $this->Form->control('{{ field }}');
+            echo $this->Form->control('{{ field }}', ['label' => __('{{fieldHumanNames[field]}}')]);
     {{- "\n" }}
         {%- endif %}
     {%- endif %}

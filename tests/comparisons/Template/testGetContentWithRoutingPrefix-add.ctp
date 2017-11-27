@@ -15,8 +15,8 @@
     <fieldset>
         <legend><?= __('Add Test Template Model') ?></legend>
         <?php
-            echo $this->Form->control('name');
-            echo $this->Form->control('body');
+            echo $this->Form->control('name', ['label' => __('')]);
+            echo $this->Form->control('body', ['label' => __('')]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

@@ -17,12 +17,12 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('article_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('published') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('updated') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('id', ['label' => __('Id')]) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('article_id', ['label' => __('Article Id')]) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('user_id', ['label' => __('User Id')]) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('published', ['label' => __('Published')]) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('created', ['label' => __('Created')]) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('updated', ['label' => __('Updated')]) ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
