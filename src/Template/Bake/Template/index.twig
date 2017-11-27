@@ -42,7 +42,7 @@
         <thead>
             <tr>
 {% for field in fields %}
-                <th scope="col"><?= $this->Paginator->sort('{{ field }}') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('{{ field }}', ['label' => __('{{ fieldHumanNames[field] }}')]) ?></th>
 {% endfor %}
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
