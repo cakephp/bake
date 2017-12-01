@@ -1027,18 +1027,14 @@ class ModelTask extends BakeTask
     {
         $db = ConnectionManager::get($this->connection);
         if (!method_exists($db, 'schemaCollection')) {
-            $this->err(
+            $this->abort(
                 'Connections need to implement schemaCollection() to be used with bake.'
             );
-
-            $this->_stop();
         }
         $schema = $db->schemaCollection();
         $tables = $schema->listTables();
         if (empty($tables)) {
-            $this->err('Your database does not have any tables.');
-
-            $this->_stop();
+            $this->abort('Your database does not have any tables.');
         }
         sort($tables);
 
