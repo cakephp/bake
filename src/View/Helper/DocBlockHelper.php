@@ -2,6 +2,7 @@
 namespace Bake\View\Helper;
 
 use Cake\Collection\Collection;
+use Cake\Core\App;
 use Cake\Database\Type;
 use Cake\ORM\Association;
 use Cake\Utility\Inflector;
@@ -242,7 +243,12 @@ class DocBlockHelper extends Helper
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] patchEntities(\$entities, array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} findOrCreate(\$search, callable \$callback = null, \$options = [])";
         foreach ($behaviors as $behavior => $behaviorData) {
-            $annotations[] = "@mixin \Cake\ORM\Behavior\\{$behavior}Behavior";
+            $className = App::className($behavior, 'Model/Behavior', 'Behavior');
+            if ($className === false) {
+                $className = "Cake\ORM\Behavior\\{$behavior}Behavior";
+            }
+
+            $annotations[] = '@mixin \\' . $className;
         }
 
         return $annotations;
