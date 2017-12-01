@@ -43,7 +43,7 @@ class {{ name }}Table extends Table
 {% endif %}
 
 {%- if primaryKey %}
-    {%- if primaryKey is iterable and primaryKey|count > 1 %}
+    {%- if primaryKey is iterable and primaryKey|length > 1 %}
         $this->setPrimaryKey([{{ Bake.stringifyList(primaryKey, {'indent': false})|raw }}]);
         {{- "\n" }}
     {%- else %}
