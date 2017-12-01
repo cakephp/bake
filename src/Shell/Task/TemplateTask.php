@@ -99,6 +99,13 @@ class TemplateTask extends BakeTask
     protected $_associationFilter = null;
 
     /**
+     * Template path.
+     *
+     * @var string
+     */
+    public $path;
+
+    /**
      * Override initialize
      *
      * @return void

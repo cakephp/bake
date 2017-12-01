@@ -45,6 +45,13 @@ class PluginTask extends BakeTask
     ];
 
     /**
+     * Plugin path.
+     *
+     * @var string
+     */
+    public $path;
+
+    /**
      * initialize
      *
      * @return void
@@ -316,6 +323,7 @@ class PluginTask extends BakeTask
             return;
         }
 
+        $choice = null;
         while (!$valid) {
             foreach ($pathOptions as $i => $option) {
                 $this->out($i + 1 . '. ' . $option);
