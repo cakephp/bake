@@ -167,7 +167,7 @@ class BakeHelper extends Helper
      *
      * @param array $fields Fields list.
      * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
-     * @param \Cake\Datasource\RepositoryInterface|null $modelObject Model object.
+     * @param \Cake\ORM\Table|null $modelObject Model object.
      * @param array $takeFields Take fields.
      * @param array $filterTypes Filter field types.
      * @return \Cake\Collection\CollectionInterface
