@@ -1039,11 +1039,14 @@ class ModelTaskTest extends TestCase
         $model = TableRegistry::get('Posts', [
             'table' => 'counter_cache_posts'
         ]);
-        $result = $this->Task->getBehaviors($model);
-        $expected = [
-            'CounterCache' => ["'Users' => ['post_count']"]
+        $behaviors = $this->Task->getBehaviors($model);
+
+        $behaviors['Translate'] = [
+            'defaultLocale' => "'fr_FR'"
         ];
-        $this->assertEquals($expected, $result);
+
+        $result = $this->Task->bakeTable($model, ['behaviors' => $behaviors]);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
