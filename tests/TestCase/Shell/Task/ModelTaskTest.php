@@ -1042,7 +1042,8 @@ class ModelTaskTest extends TestCase
         $behaviors = $this->Task->getBehaviors($model);
 
         $behaviors['Translate'] = [
-            'defaultLocale' => "'fr_FR'"
+            'defaultLocale' => "'fr_FR'",
+            'implementedFinders' => ['translations' => "'findTranslations'"],
         ];
 
         $result = $this->Task->bakeTable($model, ['behaviors' => $behaviors]);

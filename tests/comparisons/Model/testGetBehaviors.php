@@ -39,7 +39,10 @@ class PostsTable extends Table
             'Users' => ['post_count']
         ]);
         $this->addBehavior('Translate', [
-            'defaultLocale' => 'fr_FR'
+            'defaultLocale' => 'fr_FR',
+            'implementedFinders' => [
+                'translations' => 'findTranslations'
+            ]
         ]);
     }
 
