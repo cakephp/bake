@@ -167,7 +167,7 @@ class BakeHelper extends Helper
      *
      * @param array $fields Fields list.
      * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
-     * @param \Cake\Datasource\RepositoryInterface|null $modelObject Model object.
+     * @param \Cake\ORM\Table|null $modelObject Model object.
      * @param array $takeFields Take fields.
      * @param array $filterTypes Filter field types.
      * @return \Cake\Collection\CollectionInterface
@@ -258,7 +258,7 @@ class BakeHelper extends Helper
      * Get column data from schema.
      *
      * @param string $field Field name.
-     * @param Cake\Database\Schema\TableSchemaAwareInterface $schema Schema.
+     * @param \Cake\Database\Schema\TableSchema $schema Schema.
      * @return array
      */
     public function columnData($field, $schema)

@@ -82,6 +82,13 @@ class BakeView extends TwigView
     ];
 
     /**
+     * View file being evaluated.
+     *
+     * @var string
+     */
+    protected $__viewFile;
+
+    /**
      * Initialize view
      *
      * @return void
@@ -187,7 +194,7 @@ class BakeView extends TwigView
 
         $viewString = $this->_getViewFileContents($viewFile);
 
-        $replacements = array_merge($this->getConfig('phpTagReplacements') + $this->getConfig('replacements'));
+        $replacements = $this->getConfig('phpTagReplacements') + $this->getConfig('replacements');
 
         foreach ($replacements as $find => $replace) {
             if ($this->_isRegex($find)) {

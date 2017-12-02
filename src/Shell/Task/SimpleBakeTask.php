@@ -19,6 +19,9 @@ use Cake\Utility\Inflector;
 
 /**
  * Base class for simple bake tasks code generator.
+ *
+ * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
+ * @property \Bake\Shell\Task\TestTask $Test
  */
 abstract class SimpleBakeTask extends BakeTask
 {

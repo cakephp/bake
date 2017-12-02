@@ -595,7 +595,7 @@ class ModelTask extends BakeTask
      * not set, then all non-primary key fields + association
      * fields will be set as accessible.
      *
-     * @param Cake\ORM\Table $table The table instance to get fields for.
+     * @param \Cake\ORM\Table $table The table instance to get fields for.
      * @return array|bool|null Either an array of fields, `false` in
      *   case the no-fields option is used, or `null` if none of the
      *   field options is used.
@@ -1027,18 +1027,14 @@ class ModelTask extends BakeTask
     {
         $db = ConnectionManager::get($this->connection);
         if (!method_exists($db, 'schemaCollection')) {
-            $this->err(
+            $this->abort(
                 'Connections need to implement schemaCollection() to be used with bake.'
             );
-
-            return $this->_stop();
         }
         $schema = $db->schemaCollection();
         $tables = $schema->listTables();
         if (empty($tables)) {
-            $this->err('Your database does not have any tables.');
-
-            return $this->_stop();
+            $this->abort('Your database does not have any tables.');
         }
         sort($tables);
 
