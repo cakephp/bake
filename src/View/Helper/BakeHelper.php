@@ -78,7 +78,19 @@ class BakeHelper extends Helper
                 $v = "'$v'";
             }
             if (!is_numeric($k)) {
-                $v = "'$k' => $v";
+                $nestedOptions = $options;
+                if ($nestedOptions['indent']) {
+                    $nestedOptions['indent'] += 1;
+                }
+                if (is_array($v)) {
+                    $v = sprintf(
+                        "'%s' => [%s]",
+                        $k,
+                        $this->stringifyList($v, $nestedOptions)
+                    );
+                } else {
+                    $v = "'$k' => $v";
+                }
             }
         }
 
