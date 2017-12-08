@@ -43,5 +43,4 @@
     {%- set compact = compact|merge(["'#{otherPlural}'"]) %}
 {% endfor %}
         $this->set(compact({{ compact|join(', ')|raw }}));
-        $this->set('_serialize', ['{{ singularName }}']);
     }
