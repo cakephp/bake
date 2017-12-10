@@ -30,5 +30,4 @@
         ${{ pluralName }} = $this->paginate($this->{{ currentModelName }});
 
         $this->set(compact('{{ pluralName }}'));
-        $this->set('_serialize', ['{{ pluralName }}']);
     }
