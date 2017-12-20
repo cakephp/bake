@@ -120,6 +120,7 @@ class ModelTask extends BakeTask
             // connection because associated models may not yet be baked,
             // causing us to look for the table on the default connection
             $this->out('Not baking tests or test fixtures');
+
             return;
         }
         $this->bakeFixture($tableObject->getAlias(), $tableObject->getTable());
