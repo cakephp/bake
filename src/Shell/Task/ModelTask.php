@@ -113,6 +113,15 @@ class ModelTask extends BakeTask
         $data = $this->getTableContext($tableObject, $table, $name);
         $this->bakeTable($tableObject, $data);
         $this->bakeEntity($tableObject, $data);
+        if (array_key_exists('connection', $this->params) &&
+            array_key_exists('everything', $this->params) &&
+            ($this->params['connection'] !== 'default')) {
+            // Cannot bake tests on 'bake all --everything' on non-default
+            // connection because associated models may not yet be baked,
+            // causing us to look for the table on the default connection
+            $this->out('Not baking tests or test fixtures');
+            return;
+        }
         $this->bakeFixture($tableObject->getAlias(), $tableObject->getTable());
         $this->bakeTest($tableObject->getAlias());
     }
