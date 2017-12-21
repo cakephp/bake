@@ -323,7 +323,7 @@ class ModelTask extends BakeTask
     {
         $schema = $model->getSchema();
         foreach ($schema->columns() as $fieldName) {
-            if (!preg_match('/^.+_id$/', $fieldName) || in_array($fieldName, $schema->primaryKey())) {
+            if (!preg_match('/^.+_id$/', $fieldName) || ([$fieldName] == $schema->primaryKey())) {
                 continue;
             }
 
