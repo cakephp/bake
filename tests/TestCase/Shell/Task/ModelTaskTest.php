@@ -513,6 +513,25 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * Test that belongsTo generation ignores primary key fields
+     *
+     * @return void
+     */
+    public function testBelongsToGenerationPrimaryKey()
+    {
+        $model = TableRegistry::get('Articles');
+        $model->schema([
+            'usr_id' => ['type' => 'integer'],
+            'name' => ['type' => 'string'],
+            '_constraints' => [
+                'primary' => ['type' => 'primary', 'columns' => ['usr_id']]
+            ]
+        ]);
+        $result = $this->Task->findBelongsTo($model, []);
+        $this->assertEquals([], $result);
+    }
+
+    /**
      * test that hasOne and/or hasMany relations are generated properly.
      *
      * @return void
