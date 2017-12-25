@@ -91,6 +91,15 @@ class BakeHelper extends Helper
                 } else {
                     $v = "'$k' => $v";
                 }
+            } elseif (is_array($v)) {
+                $nestedOptions = $options;
+                if ($nestedOptions['indent']) {
+                    $nestedOptions['indent'] += 1;
+                }
+                $v = sprintf(
+                    "[%s]",
+                    $this->stringifyList($v, $nestedOptions)
+                );
             }
         }
 
@@ -315,7 +324,10 @@ class BakeHelper extends Helper
                     $formatTemplate,
                     $rule['rule'],
                     $field,
-                    implode(', ', $this->escapeArguments($rule['args']))
+                    $this->stringifyList(
+                        $rule['args'],
+                        ['indent' => false, 'quotes' => false]
+                    )
                 );
             } elseif ($rule['rule'] && isset($rule['provider'])) {
                 $validationMethods[] = sprintf(

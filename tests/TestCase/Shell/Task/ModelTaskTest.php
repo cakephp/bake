@@ -803,12 +803,12 @@ class ModelTaskTest extends TestCase
         $expected = [
             'bake_user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []]
             ],
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
             ],
@@ -822,7 +822,7 @@ class ModelTaskTest extends TestCase
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ['create']]
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]]
             ]
         ];
         $this->assertEquals($expected, $result);
@@ -832,12 +832,12 @@ class ModelTaskTest extends TestCase
         $expected = [
             'bake_article_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []]
             ],
             'bake_user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []]
             ],
             'comment' => [
@@ -851,7 +851,7 @@ class ModelTaskTest extends TestCase
             ],
             'otherid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ['create']]
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]]
             ]
         ];
         $this->assertEquals($expected, $result);
@@ -876,7 +876,7 @@ class ModelTaskTest extends TestCase
         $this->assertArrayHasKey('release_date', $result);
         $expected = [
             'dateTime' => ['rule' => 'dateTime', 'args' => []],
-            'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+            'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             'notEmpty' => ['rule' => 'notEmpty', 'args' => []]
         ];
         $this->assertEquals($expected, $result['release_date']);
@@ -894,11 +894,11 @@ class ModelTaskTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ['create']]
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]]
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
             ],
@@ -931,7 +931,7 @@ class ModelTaskTest extends TestCase
         $expected = [
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
             ],
@@ -945,7 +945,7 @@ class ModelTaskTest extends TestCase
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ['create']]
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]]
             ]
         ];
         $this->assertEquals($expected, $result);
@@ -1172,7 +1172,7 @@ class ModelTaskTest extends TestCase
                     'rule' => 'maxLength',
                     'args' => [
                         100,
-                        'Name must be shorter than 100 characters.'
+                        "'Name must be shorter than 100 characters.'"
                     ]
                 ]
             ],
@@ -1184,6 +1184,21 @@ class ModelTaskTest extends TestCase
                 'unique' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table'
+                ]
+            ],
+            'image' => [
+                'uploadError' => [
+                    'rule' => 'uploadError',
+                    'args' => ['true'],
+                ],
+                'uploadedFile' => [
+                    'rule' => 'uploadedFile',
+                    'args' => [
+                        [
+                            'optional' => 'true',
+                            'types' => ["'image/jpeg'"]
+                        ]
+                    ]
                 ]
             ]
         ];
