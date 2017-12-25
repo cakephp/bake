@@ -715,7 +715,7 @@ class TemplateTaskTest extends TestCase
 
         $this->Task->expects($this->once())
             ->method('bake')
-            ->with('view', true);
+            ->with('view', true, 'view');
 
         $this->Task->main('TemplateTaskComments', 'view');
     }
@@ -836,14 +836,18 @@ class TemplateTaskTest extends TestCase
      */
     public function testMainWithAlternateTemplates()
     {
-        $this->_setupTask(['in', 'err', 'createFile', 'bake', '_stop']);
+        $this->_setupTask(['in', 'err', 'createFile', '_stop']);
 
         $this->Task->connection = 'test';
         $this->Task->params = [];
 
         $this->Task->expects($this->once())
-            ->method('bake')
-            ->with('list', true);
+            ->method('createFile')
+            ->with(
+                $this->_normalizePath(APP . 'Template/TemplateTaskComments/list.ctp'),
+                $this->stringContains('Template Task Comments')
+            );
+
         $this->Task->main('TemplateTaskComments', 'index', 'list');
     }
 }

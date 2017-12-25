@@ -70,13 +70,6 @@ class TemplateTask extends BakeTask
     public $modelName = null;
 
     /**
-     * The template file to use
-     *
-     * @var string
-     */
-    public $template = null;
-
-    /**
      * Actions to use for scaffolding
      *
      * @var array
@@ -120,7 +113,7 @@ class TemplateTask extends BakeTask
      *
      * @param string|null $name The name of the controller to bake view templates for.
      * @param string|null $template The template to bake with.
-     * @param string|null $action The action to bake with.
+     * @param string|null $action The output action name. Defaults to $template.
      * @return mixed
      */
     public function main($name = null, $template = null, $action = null)
@@ -145,14 +138,11 @@ class TemplateTask extends BakeTask
         $this->controller($name, $controller);
         $this->model($name);
 
-        if (isset($template)) {
-            $this->template = $template;
+        if ($template && $action === null) {
+            $action = $template;
         }
-        if (!$action) {
-            $action = $this->template;
-        }
-        if ($action) {
-            return $this->bake($action, true);
+        if ($template) {
+            return $this->bake($template, true, $action);
         }
 
         $vars = $this->_loadController();
@@ -396,23 +386,27 @@ class TemplateTask extends BakeTask
     /**
      * Assembles and writes bakes the view file.
      *
-     * @param string $action Action to bake.
+     * @param string $template Template file to use.
      * @param string $content Content to write.
+     * @param string $outputFile The output file to create. If null will use `$template`
      * @return string|false Generated file content.
      */
-    public function bake($action, $content = '')
+    public function bake($template, $content = '', $outputFile = null)
     {
+        if ($outputFile === null) {
+            $outputFile = $template;
+        }
         if ($content === true) {
-            $content = $this->getContent($action);
+            $content = $this->getContent($template);
         }
         if (empty($content)) {
-            $this->err("<warning>No generated content for '{$action}.ctp', not generating template.</warning>");
+            $this->err("<warning>No generated content for '{$template}.ctp', not generating template.</warning>");
 
             return false;
         }
-        $this->out("\n" . sprintf('Baking `%s` view template file...', $action), 1, Shell::QUIET);
+        $this->out("\n" . sprintf('Baking `%s` view template file...', $outputFile), 1, Shell::QUIET);
         $path = $this->getPath();
-        $filename = $path . Inflector::underscore($action) . '.ctp';
+        $filename = $path . Inflector::underscore($outputFile) . '.ctp';
         $this->createFile($filename, $content);
 
         return $content;
