@@ -20,8 +20,8 @@ use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
-use Cake\Network\Request;
-use Cake\Network\Response;
+use Cake\Http\Response;
+use Cake\Http\ServerRequest as Request;
 use Cake\ORM\Association;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -551,8 +551,8 @@ class TestTask extends BakeTask
             $construct .= "            ->getMock();";
         }
         if ($type === 'cell') {
-            $pre = "\$this->request = \$this->getMockBuilder('Cake\Network\Request')->getMock();\n";
-            $pre .= "        \$this->response = \$this->getMockBuilder('Cake\Network\Response')->getMock();";
+            $pre = "\$this->request = \$this->getMockBuilder('Cake\Http\ServerRequest')->getMock();\n";
+            $pre .= "        \$this->response = \$this->getMockBuilder('Cake\Http\Response')->getMock();";
             $construct = "new {$className}(\$this->request, \$this->response);";
         }
         if ($type === 'shell_helper') {
@@ -588,7 +588,7 @@ class TestTask extends BakeTask
             case 'cell':
                 $properties[] = [
                     'description' => 'Request mock',
-                    'type' => '\Cake\Network\Request|\PHPUnit_Framework_MockObject_MockObject',
+                    'type' => '\Cake\Http\ServerRequest|\PHPUnit_Framework_MockObject_MockObject',
                     'name' => 'request'
                 ];
                 $properties[] = [
