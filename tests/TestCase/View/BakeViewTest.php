@@ -18,8 +18,8 @@ use Bake\View\BakeView;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Event\Event;
-use Cake\Http\ServerRequest as Request;
 use Cake\Http\Response;
+use Cake\Http\ServerRequest as Request;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
 

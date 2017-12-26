@@ -19,8 +19,8 @@ use Cake\Console\Shell;
 use Cake\Core\ConventionsTrait;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
-use Cake\Http\ServerRequest as Request;
 use Cake\Http\Response;
+use Cake\Http\ServerRequest as Request;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\View\ViewVarsTrait;
 
