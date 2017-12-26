@@ -16,7 +16,7 @@ namespace Bake\Test\TestCase\View\Helper;
 
 use Bake\View\BakeView;
 use Bake\View\Helper\BakeHelper;
-use Cake\Network\Request;
+use Cake\Http\ServerRequest as Request;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\Stub\Response;
 use Cake\TestSuite\TestCase;
