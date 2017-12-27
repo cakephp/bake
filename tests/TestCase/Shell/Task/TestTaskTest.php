@@ -369,7 +369,7 @@ class TestTaskTest extends TestCase
      */
     public function testGetRealClassnamePrefix()
     {
-        $this->Task->params['prefix'] = 'Api/Public';
+        $this->Task->params['prefix'] = 'api/public';
         $result = $this->Task->getRealClassname('Controller', 'Posts');
         $expected = 'App\Controller\Api\Public\PostsController';
         $this->assertEquals($expected, $result);
