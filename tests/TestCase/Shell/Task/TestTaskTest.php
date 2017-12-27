@@ -363,6 +363,19 @@ class TestTaskTest extends TestCase
     }
 
     /**
+     * test resolving class names with prefix
+     *
+     * @return void
+     */
+    public function testGetRealClassnamePrefix()
+    {
+        $this->Task->params['prefix'] = 'Api/Public';
+        $result = $this->Task->getRealClassname('Controller', 'Posts');
+        $expected = 'App\Controller\Api\Public\PostsController';
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Test baking a test for a concrete model with fixtures arg
      *
      * @return void

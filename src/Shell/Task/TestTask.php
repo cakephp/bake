@@ -349,8 +349,9 @@ class TestTask extends BakeTask
         if ($suffix && strpos($class, $suffix) === false) {
             $class .= $suffix;
         }
-        if (strtolower($type) === 'controller' && $this->param('prefix')) {
-            $subSpace .= '\\' . Inflector::camelize($this->param('prefix'));
+        $prefix = $this->_getPrefix();
+        if (strtolower($type) === 'controller' && $prefix) {
+            $subSpace .= '\\' . str_replace('/', '\\', $prefix);
         }
 
         return $namespace . '\\' . $subSpace . '\\' . $class;
