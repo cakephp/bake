@@ -7,7 +7,7 @@ use App\Controller\AppController;
  * BakeArticles Controller
  *
  *
- * @method \App\Model\Entity\BakeArticle[] paginate($object = null, array $settings = [])
+ * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class BakeArticlesController extends AppController
 {

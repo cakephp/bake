@@ -9,7 +9,7 @@ use App\Controller\AppController;
  * @property \Cake\Controller\Component\CsrfComponent $Csrf
  * @property \Cake\Controller\Component\AuthComponent $Auth
  *
- * @method \App\Model\Entity\BakeArticle[] paginate($object = null, array $settings = [])
+ * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class BakeArticlesController extends AppController
 {
