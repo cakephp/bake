@@ -56,6 +56,10 @@ class BakeArticlesTable extends Table
             ->allowEmpty('email')
             ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
+        $validator
+            ->uploadError('image', true)
+            ->uploadedFile('image', ['optional' => true, 'types' => ['image/jpeg']]);
+
         return $validator;
     }
 
