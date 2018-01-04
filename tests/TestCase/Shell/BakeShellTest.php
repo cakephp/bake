@@ -231,6 +231,7 @@ class BakeShellTest extends TestCase
         $this->assertContains('BakeTest.Widget', $this->Shell->tasks);
         $this->assertContains('BakeTest.Zerg', $this->Shell->tasks);
     }
+
     /**
      * Test loading tasks from vendored plugins
      *
@@ -249,5 +250,51 @@ class BakeShellTest extends TestCase
         $this->Shell->main();
         $output = $this->out->messages();
         $this->assertContains("apple_pie", implode(' ', $output));
+    }
+
+    /**
+     * Tests that quiet mode does not ask interactively and does not silently overwrite anywhere.
+     * -f would be needed for that.
+     *
+     * @return void
+     */
+    public function testBakeAllNonInteractive()
+    {
+        $this->Shell->loadTasks();
+
+        $path = APP;
+        $testsPath = ROOT . 'tests' . DS;
+
+        // We ignore our existing CommentsController test file
+        $files = [
+            $path . 'Template/Comments/add.ctp',
+            $path . 'Template/Comments/edit.ctp',
+            $path . 'Template/Comments/index.ctp',
+            $path . 'Template/Comments/view.ctp',
+            $path . 'Model/Table/CommentsTable.php',
+            $path . 'Model/Entity/Comment.php',
+            $testsPath . 'Fixture/CommentsFixture.php',
+            $testsPath . 'TestCase/Model/Table/CommentsTableTest.php',
+            $testsPath . 'TestCase/Controller/CommentsControllerTest.php',
+        ];
+        foreach ($files as $file) {
+            $this->assertFileNotExists($file, 'File should not yet exist before `bake all`.');
+        }
+
+        $existingFile = $path . 'Controller/CommentsController.php';
+        $this->assertFileExists($existingFile);
+        $content = file_get_contents($existingFile);
+
+        $this->Shell->runCommand(['all', 'Comments'], false, ['quiet' => true]);
+        $output = $this->out->messages();
+
+        $this->assertContains('<success>Bake All complete.</success>', implode(' ', $output));
+
+        foreach ($files as $file) {
+            $this->assertFileExists($file, 'File should exist after `bake all`.');
+            unlink($file);
+        }
+
+        $this->assertSame($content, file_get_contents($existingFile), 'File got overwritten, but should not have.');
     }
 }

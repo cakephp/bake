@@ -1134,6 +1134,7 @@ class ModelTask extends BakeTask
         }
         $this->Fixture->connection = $this->connection;
         $this->Fixture->plugin = $this->plugin;
+        $this->Fixture->interactive = $this->interactive;
         $this->Fixture->bake($className, $useTable);
     }
 
@@ -1149,6 +1150,7 @@ class ModelTask extends BakeTask
             return null;
         }
         $this->Test->plugin = $this->plugin;
+        $this->Test->interactive = $this->interactive;
         $this->Test->connection = $this->connection;
 
         return $this->Test->bake('Table', $className);

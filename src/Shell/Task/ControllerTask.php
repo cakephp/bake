@@ -209,6 +209,7 @@ class ControllerTask extends BakeTask
         }
         $this->Test->plugin = $this->plugin;
         $this->Test->connection = $this->connection;
+        $this->Test->interactive = $this->interactive;
 
         return $this->Test->bake('Controller', $className);
     }
