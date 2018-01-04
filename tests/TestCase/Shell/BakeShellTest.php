@@ -265,15 +265,6 @@ class BakeShellTest extends TestCase
         $path = APP;
         $testsPath = ROOT . 'tests' . DS;
 
-        $existingFile = $path . 'Controller/CommentsController.php';
-        $this->assertFileExists($existingFile);
-        $content = file_get_contents($existingFile);
-
-        $this->Shell->runCommand(['all', 'Comments'], false, ['quiet' => true]);
-        $output = $this->out->messages();
-
-        $this->assertContains('<success>Bake All complete.</success>', implode(' ', $output));
-
         // We ignore our existing CommentsController test file
         $files = [
             $path . 'Template/Comments/add.ctp',
@@ -286,12 +277,24 @@ class BakeShellTest extends TestCase
             $testsPath . 'TestCase/Model/Table/CommentsTableTest.php',
             $testsPath . 'TestCase/Controller/CommentsControllerTest.php',
         ];
+        foreach ($files as $file) {
+            $this->assertFileNotExists($file, 'File should not yet exist before `bake all`.');
+        }
+
+        $existingFile = $path . 'Controller/CommentsController.php';
+        $this->assertFileExists($existingFile);
+        $content = file_get_contents($existingFile);
+
+        $this->Shell->runCommand(['all', 'Comments'], false, ['quiet' => true]);
+        $output = $this->out->messages();
+
+        $this->assertContains('<success>Bake All complete.</success>', implode(' ', $output));
 
         foreach ($files as $file) {
-            $this->assertFileExists($file);
+            $this->assertFileExists($file, 'File should exist after `bake all`.');
             unlink($file);
         }
 
-        $this->assertSame($content, file_get_contents($existingFile));
+        $this->assertSame($content, file_get_contents($existingFile), 'File got overwritten, but should not have.');
     }
 }
