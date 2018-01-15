@@ -16,12 +16,17 @@ namespace Bake\Test\TestCase;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\ConsoleIntegrationTestCase;
+use Cake\TestSuite\StringCompareTrait;
 
 abstract class TestCase extends ConsoleIntegrationTestCase
 {
     use StringCompareTrait;
+
+    /**
+     * @var string
+     */
+    protected $generatedFile = '';
 
     public function setUp()
     {
@@ -30,6 +35,16 @@ abstract class TestCase extends ConsoleIntegrationTestCase
         Plugin::load('WyriHaximus/TwigView', [
             'bootstrap' => true,
         ]);
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        if ($this->generatedFile && file_exists($this->generatedFile)) {
+            unlink($this->generatedFile);
+            $this->generatedFile = '';
+        }
     }
 
     /**
@@ -47,5 +62,37 @@ abstract class TestCase extends ConsoleIntegrationTestCase
             'path' => $path,
             'autoload' => true
         ]);
+    }
+
+    /**
+     * Assert that a file contains a substring
+     *
+     * @param string $expected The expected content.
+     * @param string $path The path to check.
+     * @param string $message The error message.
+     * @return void
+     */
+    protected function assertFileContains($expected, $path, $message = '')
+    {
+        $this->assertFileExists($path, 'Cannot test contents, file does not exist.');
+
+        $contents = file_get_contents($path);
+        $this->assertContains($expected, $contents, $message);
+    }
+
+    /**
+     * Assert that a file does not contain a substring
+     *
+     * @param string $expected The expected content.
+     * @param string $path The path to check.
+     * @param string $message The error message.
+     * @return void
+     */
+    protected function assertFileNotContains($expected, $path, $message = '')
+    {
+        $this->assertFileExists($path, 'Cannot test contents, file does not exist.');
+
+        $contents = file_get_contents($path);
+        $this->assertNotContains($expected, $contents, $message);
     }
 }
