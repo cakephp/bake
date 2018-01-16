@@ -13,6 +13,8 @@ use Cake\ORM\Entity;
  * @property bool $published
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $updated
+ * @property array $array_type
+ * @property array $json_type
  * @property $unknown_type
  *
  * @property \App\Model\Entity\BakeUser $bake_user
