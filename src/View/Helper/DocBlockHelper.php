@@ -179,6 +179,10 @@ class DocBlockHelper extends Helper
             case 'boolean':
                 return 'bool';
 
+            case 'array':
+            case 'json':
+                return 'array';
+
             case 'binary':
                 return 'string|resource';
 

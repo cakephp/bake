@@ -1312,6 +1312,12 @@ class ModelTaskTest extends TestCase
         $model = TableRegistry::get('BakeArticles');
         $model->belongsTo('BakeUsers');
         $model->hasMany('BakeTest.Authors');
+        $model->schema()->addColumn('array_type', [
+            'type' => 'array'
+        ]);
+        $model->schema()->addColumn('json_type', [
+            'type' => 'json'
+        ]);
         $model->schema()->addColumn('unknown_type', [
             'type' => 'unknownType'
         ]);
