@@ -28,6 +28,11 @@ abstract class TestCase extends ConsoleIntegrationTestCase
      */
     protected $generatedFile = '';
 
+    /**
+     * @var array
+     */
+    protected $generatedFiles = [];
+
     public function setUp()
     {
         parent::setUp();
@@ -41,9 +46,16 @@ abstract class TestCase extends ConsoleIntegrationTestCase
     {
         parent::tearDown();
 
-        if ($this->generatedFile && file_exists($this->generatedFile)) {
+        if ($this->generatedFile) {
             unlink($this->generatedFile);
             $this->generatedFile = '';
+        }
+
+        if (count($this->generatedFiles)) {
+            foreach ($this->generatedFiles as $file) {
+                unlink($file);
+            }
+            $this->generatedFiles = [];
         }
     }
 
