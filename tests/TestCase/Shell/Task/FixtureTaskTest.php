@@ -16,6 +16,7 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 
@@ -113,11 +114,14 @@ class FixtureTaskTest extends TestCase
      */
     public function testImportRecordsFromDatabase()
     {
-        $this->Task->connection = 'test';
-        $this->Task->params = ['schema' => true, 'records' => true];
+        $this->generatedFile = ROOT . 'tests/Fixture/UsersFixture.php';
+        $this->exec('bake fixture --connection test --schema --records --count 5 Users');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
 
-        $result = $this->Task->bake('Users');
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+        $this->assertSameAsFile(
+            __FUNCTION__ . '.php',
+            file_get_contents($this->generatedFile)
+        );
     }
 
     /**
@@ -127,10 +131,11 @@ class FixtureTaskTest extends TestCase
      */
     public function testImportOptionsAlternateConnection()
     {
-        $this->Task->connection = 'test';
-        $this->Task->params = ['schema' => true];
-        $result = $this->Task->bake('Article');
-        $this->assertContains("'connection' => 'test'", $result);
+        $this->generatedFile = ROOT . 'tests/Fixture/ArticleFixture.php';
+        $this->exec('bake fixture --connection test --schema Article');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+
+        $this->assertContains("'connection' => 'test'", file_get_contents($this->generatedFile));
     }
 
     /**
@@ -143,10 +148,15 @@ class FixtureTaskTest extends TestCase
         $articles = TableRegistry::get('Articles');
         $articles->updateAll(['body' => "Body \"value\""], []);
 
-        $this->Task->connection = 'test';
-        $this->Task->params = ['schema' => 'true', 'records' => true];
-        $result = $this->Task->bake('Article');
-        $this->assertContains("'body' => 'Body \"value\"'", $result, 'Data has bad escaping');
+        $this->generatedFile = ROOT . 'tests/Fixture/ArticleFixture.php';
+        $this->exec('bake fixture --connection test --schema --records Article');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileContains(
+            "'body' => 'Body \"value\"'",
+            $this->generatedFile,
+            'Data has bad escaping'
+        );
     }
 
     /**
@@ -156,15 +166,11 @@ class FixtureTaskTest extends TestCase
      */
     public function testMainWithTableOption()
     {
-        $this->Task->connection = 'test';
-        $this->Task->params = ['table' => 'comments'];
-        $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/ArticlesFixture.php');
+        $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
+        $this->exec('bake fixture --connection test --table comments Articles');
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with($filename, $this->stringContains("public \$table = 'comments';"));
-
-        $this->Task->main('articles');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileContains("public \$table = 'comments';", $this->generatedFile);
     }
 
     /**
@@ -174,14 +180,11 @@ class FixtureTaskTest extends TestCase
      */
     public function testMainWithSingularTable()
     {
-        $this->Task->connection = 'test';
-        $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/CarFixture.php');
+        $this->generatedFile = ROOT . 'tests/Fixture/CarFixture.php';
+        $this->exec('bake fixture --connection test car');
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with($filename, $this->stringContains("public \$table = 'car';"));
-
-        $this->Task->main('car');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileContains("public \$table = 'car';", $this->generatedFile);
     }
 
     /**
@@ -191,16 +194,13 @@ class FixtureTaskTest extends TestCase
      */
     public function testMainWithPluginModel()
     {
-        $this->Task->connection = 'test';
-        $filename = $this->_normalizePath(APP . 'Plugin/FixtureTest/tests/Fixture/ArticlesFixture.php');
-
         Plugin::load('FixtureTest', ['path' => APP . 'Plugin/FixtureTest/']);
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with($filename, $this->stringContains('class ArticlesFixture'));
+        $this->generatedFile = APP . 'Plugin/FixtureTest/tests/Fixture/ArticlesFixture.php';
+        $this->exec('bake fixture --connection test FixtureTest.Articles');
 
-        $this->Task->main('FixtureTest.Articles');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileContains("class ArticlesFixture", $this->generatedFile);
     }
 
     /**
@@ -308,17 +308,14 @@ class FixtureTaskTest extends TestCase
      */
     public function testBake()
     {
-        $this->Task->connection = 'test';
+        $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
+        $this->exec('bake fixture --connection test Articles');
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with($this->anything(), $this->logicalAnd(
-                $this->stringContains('class ArticlesFixture extends TestFixture'),
-                $this->stringContains('public $fields'),
-                $this->stringContains('public $records'),
-                $this->logicalNot($this->stringContains('public $import'))
-            ));
-        $result = $this->Task->main('Articles');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileContains('class ArticlesFixture extends TestFixture', $this->generatedFile);
+        $this->assertFileContains('public $fields', $this->generatedFile);
+        $this->assertFileContains('public $records', $this->generatedFile);
+        $this->assertFileNotContains('public $import', $this->generatedFile);
     }
 
     /**
@@ -328,18 +325,13 @@ class FixtureTaskTest extends TestCase
      */
     public function testMainImportSchema()
     {
-        $this->Task->connection = 'test';
-        $this->Task->params = ['schema' => true];
+        $this->generatedFile = ROOT . 'tests/Fixture/CommentsFixture.php';
+        $this->exec('bake fixture --connection test --schema Comments');
 
         $importString = "public \$import = ['table' => 'comments', 'connection' => 'test'];";
-        $this->Task->expects($this->once())
-            ->method('createFile')
-            ->with($this->anything(), $this->logicalAnd(
-                $this->stringContains($importString),
-                $this->logicalNot($this->stringContains('public $fields')),
-                $this->stringContains('public $records')
-            ));
-        $this->Task->bake('Article', 'comments');
+        $this->assertFileContains($importString, $this->generatedFile);
+        $this->assertFileContains('public $records', $this->generatedFile);
+        $this->assertFileNotContains('public $fields', $this->generatedFile);
     }
 
     /**
@@ -347,11 +339,13 @@ class FixtureTaskTest extends TestCase
      *
      * @return void
      */
-    public function testRecordGenerationForBinaryAndFloat()
+    public function testRecordGenerationForDatatypes()
     {
-        $this->Task->connection = 'test';
+        $this->generatedFile = ROOT . 'tests/Fixture/DatatypesFixture.php';
+        $this->exec('bake fixture --connection test Datatypes');
 
-        $result = $this->Task->bake('Article', 'datatypes');
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
         $this->assertContains("'float_field' => 1", $result);
         $this->assertContains("'decimal_field' => 1.5", $result);
         $this->assertContains("'huge_int' => 1", $result);
@@ -363,9 +357,19 @@ class FixtureTaskTest extends TestCase
         $this->assertContains("'columns' => ['id']", $result);
         $this->assertContains("'uuid' => ['type' => 'uuid'", $result);
         $this->assertRegExp("/(\s+)('uuid' => ')([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})(')/", $result);
+    }
 
-        $result = $this->Task->bake('Article', 'binary_tests');
-        $this->assertContains("'data' => 'Lorem ipsum dolor sit amet'", $result);
+    /**
+     * test record generation with float and binary types
+     *
+     * @return void
+     */
+    public function testRecordGenerationForBinaryType()
+    {
+        $this->generatedFile = ROOT . 'tests/Fixture/BinaryTestsFixture.php';
+        $this->exec('bake fixture --connection test BinaryTests');
+
+        $this->assertFileContains("'data' => 'Lorem ipsum dolor sit amet'", $this->generatedFile);
     }
 
     /**
@@ -375,16 +379,11 @@ class FixtureTaskTest extends TestCase
      */
     public function testGenerateFixtureFile()
     {
-        $this->Task->connection = 'test';
-        $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/ArticlesFixture.php');
+        $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
+        $this->exec('bake fixture --connection test Articles');
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with($filename, $this->stringContains('ArticlesFixture'));
-
-        $result = $this->Task->generateFixtureFile('Articles', []);
-        $this->assertContains('<?php', $result);
-        $this->assertContains('namespace App\Test\Fixture;', $result);
+        $this->assertFileContains('<?php', $this->generatedFile);
+        $this->assertFileContains('namespace App\Test\Fixture;', $this->generatedFile);
     }
 
     /**
@@ -397,15 +396,11 @@ class FixtureTaskTest extends TestCase
         $this->_loadTestPlugin('TestBake');
         $root = Plugin::path('TestBake');
 
-        $this->Task->connection = 'test';
-        $this->Task->plugin = 'TestBake';
-        $filename = $this->_normalizePath($root . 'tests/Fixture/ArticlesFixture.php');
+        $this->generatedFile = $root . 'tests/Fixture/ArticlesFixture.php';
+        $this->exec('bake fixture --connection test --plugin TestBake Articles');
 
-        $this->Task->expects($this->at(0))->method('createFile')
-            ->with($filename, $this->stringContains('class Articles'));
-
-        $result = $this->Task->generateFixtureFile('Articles', []);
-        $this->assertContains('<?php', $result);
-        $this->assertContains('namespace TestBake\Test\Fixture;', $result);
+        $this->assertFileContains('<?php', $this->generatedFile);
+        $this->assertFileContains('namespace TestBake\Test\Fixture;', $this->generatedFile);
+        $this->assertFileContains('class ArticlesFixture', $this->generatedFile);
     }
 }

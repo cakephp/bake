@@ -16,6 +16,7 @@ namespace Bake\Test\TestCase\Shell;
 
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\ConsoleIo;
+use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\TestSuite\Stub\ConsoleOutput;
@@ -121,10 +122,9 @@ class BakeShellTest extends TestCase
      */
     public function testMain()
     {
-        $this->Shell->loadTasks();
-        $this->Shell->main();
-
-        $output = $this->out->messages();
+        $this->exec('bake');
+        $this->assertExitCode(Shell::CODE_ERROR);
+        $output = $this->_out->messages();
 
         $expected = [
             'The following commands can be used to generate skeleton code for your application.',
@@ -149,14 +149,10 @@ class BakeShellTest extends TestCase
             '- task',
             '- template',
             '- test',
+            '- twig_template',
+            '',
+            'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.'
         ];
-
-        if (Plugin::loaded('WyriHaximus/TwigView')) {
-            $expected[] = '- twig_template';
-        }
-
-        $expected[] = '';
-        $expected[] = 'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.';
 
         $this->assertSame($expected, $output);
     }
@@ -210,10 +206,8 @@ class BakeShellTest extends TestCase
             'Bake.Template',
             'Controller',
             'CustomController',
+            'WyriHaximus/TwigView.TwigTemplate',
         ];
-        if (Plugin::loaded('WyriHaximus/TwigView')) {
-            $expected[] = 'WyriHaximus/TwigView.TwigTemplate';
-        }
         sort($this->Shell->tasks);
         sort($expected);
         $this->assertEquals($expected, $this->Shell->tasks);
@@ -247,9 +241,8 @@ class BakeShellTest extends TestCase
         $this->Shell->loadTasks();
         $this->assertContains('Pastry/PastryTest.ApplePie', $this->Shell->tasks);
 
-        $this->Shell->main();
-        $output = $this->out->messages();
-        $this->assertContains("apple_pie", implode(' ', $output));
+        $this->exec('bake');
+        $this->assertOutputContains('apple_pie');
     }
 
     /**
