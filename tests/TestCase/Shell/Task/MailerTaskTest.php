@@ -26,11 +26,6 @@ use Cake\Core\Plugin;
 class MailerTaskTest extends TestCase
 {
     /**
-     * @var \Bake\Shell\Task\MailerTask|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $Task;
-
-    /**
      * setup method
      *
      * @return void
@@ -39,22 +34,6 @@ class MailerTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Mailer' . DS;
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\MailerTask')
-            ->setMethods(['in', 'err', 'createFile', '_stop'])
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->Task->BakeTemplate = new BakeTemplateTask($io);
-        $this->Task->BakeTemplate->initialize();
-        $this->Task->BakeTemplate->interactive = false;
     }
 
     /**
@@ -66,6 +45,7 @@ class MailerTaskTest extends TestCase
     {
         $this->generatedFiles = [
             APP . 'Mailer/ExampleMailer.php',
+            ROOT . 'tests/TestCase/Mailer/ExampleMailerTest.php',
             APP . 'Template/Layout/Email/html/example.ctp',
             APP . 'Template/Layout/Email/text/example.ctp',
         ];
@@ -88,6 +68,7 @@ class MailerTaskTest extends TestCase
 
         $this->generatedFiles = [
             $path . 'src/Mailer/ExampleMailer.php',
+            $path . 'tests/TestCase/Mailer/ExampleMailerTest.php',
             $path . 'src/Template/Layout/Email/html/example.ctp',
             $path . 'src/Template/Layout/Email/text/example.ctp',
         ];
@@ -111,6 +92,7 @@ class MailerTaskTest extends TestCase
 
         $this->generatedFiles = [
             $path . 'src/Mailer/ExampleMailer.php',
+            $path . 'tests/TestCase/Mailer/ExampleMailerTest.php',
             $path . 'src/Template/Layout/Email/html/example.ctp',
             $path . 'src/Template/Layout/Email/text/example.ctp',
         ];
