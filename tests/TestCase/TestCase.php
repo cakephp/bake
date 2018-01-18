@@ -77,6 +77,19 @@ abstract class TestCase extends ConsoleIntegrationTestCase
     }
 
     /**
+     * Assert that a list of files exist.
+     *
+     * @param array $files The list of files to check.
+     * @param string $message The message to use if a check fails.
+     */
+    protected function assertFilesExist(array $files, $message = '')
+    {
+        foreach ($files as $file) {
+            $this->assertFileExists($file, $message);
+        }
+    }
+
+    /**
      * Assert that a file contains a substring
      *
      * @param string $expected The expected content.

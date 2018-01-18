@@ -50,7 +50,7 @@ class CellTaskTest extends TestCase
         $this->exec('bake cell Example');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
-        $this->assertFileExists($this->generatedFiles[1], 'template should be created');
+        $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
     }
 
@@ -71,7 +71,6 @@ class CellTaskTest extends TestCase
         $this->exec('bake cell TestBake.Example');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
-        $this->assertFileExists($this->generatedFiles[1], 'template should be created');
         $this->assertFileContains('namespace TestBake\View\Cell;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
     }
@@ -92,7 +91,7 @@ class CellTaskTest extends TestCase
         ];
         $this->exec('bake cell TestBake.Example');
 
-        $this->assertFileExists($this->generatedFiles[0]);
+        $this->assertFilesExist($this->generatedFiles);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
     }
 }
