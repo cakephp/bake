@@ -16,6 +16,7 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 
@@ -63,30 +64,16 @@ class MailerTaskTest extends TestCase
      */
     public function testMain()
     {
-        $this->Task->Test->expects($this->once())
-            ->method('bake')
-            ->with('mailer', 'Example');
+        $this->generatedFiles = [
+            APP . 'Mailer/ExampleMailer.php',
+            APP . 'Template/Layout/Email/html/example.ctp',
+            APP . 'Template/Layout/Email/text/example.ctp',
+        ];
+        $this->exec('bake mailer Example');
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/Layout/Email/html/example.ctp'),
-                ''
-            );
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/Layout/Email/text/example.ctp'),
-                ''
-            );
-        $this->Task->expects($this->at(2))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Mailer/ExampleMailer.php'),
-                $this->stringContains('class ExampleMailer extends Mailer')
-            );
-
-        $this->Task->main('Example');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles, 'files should be created');
+        $this->assertFileContains('class ExampleMailer extends Mailer', $this->generatedFiles[0]);
     }
 
     /**
@@ -99,26 +86,17 @@ class MailerTaskTest extends TestCase
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/Template/Layout/Email/html/example.ctp'),
-                ''
-            );
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/Template/Layout/Email/text/example.ctp'),
-                ''
-            );
-        $this->Task->expects($this->at(2))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/Mailer/ExampleMailer.php'),
-                $this->stringContains('class ExampleMailer extends Mailer')
-            );
+        $this->generatedFiles = [
+            $path . 'src/Mailer/ExampleMailer.php',
+            $path . 'src/Template/Layout/Email/html/example.ctp',
+            $path . 'src/Template/Layout/Email/text/example.ctp',
+        ];
+        $this->exec('bake mailer TestBake.Example');
 
-        $this->Task->main('TestBake.Example');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles, 'files should be created');
+        $this->assertFileContains('namespace TestBake\Mailer;', $this->generatedFiles[0]);
+        $this->assertFileContains('class ExampleMailer extends Mailer', $this->generatedFiles[0]);
     }
 
     /**
@@ -131,27 +109,14 @@ class MailerTaskTest extends TestCase
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
-        $this->Task->plugin = 'TestBake';
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/Template/Layout/Email/html/example.ctp'),
-                ''
-            );
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/Template/Layout/Email/text/example.ctp'),
-                ''
-            );
-        $this->Task->expects($this->at(2))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/Mailer/ExampleMailer.php'),
-                $this->stringContains('class ExampleMailer extends Mailer')
-            );
+        $this->generatedFiles = [
+            $path . 'src/Mailer/ExampleMailer.php',
+            $path . 'src/Template/Layout/Email/html/example.ctp',
+            $path . 'src/Template/Layout/Email/text/example.ctp',
+        ];
+        $this->exec('bake mailer TestBake.Example');
 
-        $result = $this->Task->bake('Example');
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
     }
 }
