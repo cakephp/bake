@@ -288,17 +288,11 @@ class FixtureTaskTest extends TestCase
      */
     public function testMainNoArgs()
     {
-        $this->Task->connection = 'test';
+        $this->exec('bake fixture --connection test');
 
-        $this->Task->Model->expects($this->any())
-            ->method('listUnskipped')
-            ->will($this->returnValue(['articles', 'comments']));
-
-        $filename = $this->_normalizePath(ROOT . '/tests/Fixture/ArticlesFixture.php');
-        $this->Task->expects($this->never())
-            ->method('createFile');
-
-        $this->Task->main();
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertOutputContains('- Articles');
+        $this->assertOutputContains('- Comments');
     }
 
     /**

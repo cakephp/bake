@@ -16,6 +16,7 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 
@@ -25,11 +26,6 @@ use Cake\Core\Plugin;
 class CellTaskTest extends TestCase
 {
     /**
-     * @var \Bake\Shell\Task\TestTask|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $Task;
-
-    /**
      * setup method
      *
      * @return void
@@ -38,22 +34,6 @@ class CellTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Cell' . DS;
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\CellTask')
-            ->setMethods(['in', 'err', 'createFile', '_stop'])
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->Task->BakeTemplate = new BakeTemplateTask($io);
-        $this->Task->BakeTemplate->initialize();
-        $this->Task->BakeTemplate->interactive = false;
     }
 
     /**
@@ -63,24 +43,16 @@ class CellTaskTest extends TestCase
      */
     public function testMain()
     {
-        $this->Task->Test->expects($this->once())
-            ->method('bake')
-            ->with('cell', 'Example');
+        $this->generatedFiles = [
+            APP . 'View/Cell/ExampleCell.php',
+            ROOT . 'tests/TestCase/View/Cell/ExampleCellTest.php',
+            APP . 'Template/Cell/Example/display.ctp',
+        ];
+        $this->exec('bake cell Example');
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/Cell/Example/display.ctp'),
-                ''
-            );
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'View/Cell/ExampleCell.php'),
-                $this->stringContains('class ExampleCell extends Cell')
-            );
-
-        $this->Task->main('Example');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
     }
 
     /**
@@ -93,20 +65,16 @@ class CellTaskTest extends TestCase
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/Template/Cell/Example/display.ctp'),
-                ''
-            );
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/View/Cell/ExampleCell.php'),
-                $this->stringContains('class ExampleCell extends Cell')
-            );
+        $this->generatedFiles = [
+            $path . 'src/View/Cell/ExampleCell.php',
+            $path . 'tests/TestCase/View/Cell/ExampleCellTest.php',
+            $path . 'src/Template/Cell/Example/display.ctp',
+        ];
+        $this->exec('bake cell TestBake.Example');
 
-        $this->Task->main('TestBake.Example');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileContains('namespace TestBake\View\Cell;', $this->generatedFiles[0]);
+        $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
     }
 
     /**
@@ -119,21 +87,14 @@ class CellTaskTest extends TestCase
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
-        $this->Task->plugin = 'TestBake';
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/Template/Cell/Example/display.ctp'),
-                ''
-            );
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/View/Cell/ExampleCell.php'),
-                $this->stringContains('class ExampleCell extends Cell')
-            );
+        $this->generatedFiles = [
+            $path . 'src/View/Cell/ExampleCell.php',
+            $path . 'tests/TestCase/View/Cell/ExampleCellTest.php',
+            $path . 'src/Template/Cell/Example/display.ctp',
+        ];
+        $this->exec('bake cell TestBake.Example');
 
-        $result = $this->Task->bake('Example');
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
     }
 }

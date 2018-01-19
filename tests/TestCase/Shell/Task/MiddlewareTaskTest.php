@@ -16,6 +16,7 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 
@@ -25,11 +26,6 @@ use Cake\Core\Plugin;
 class MiddlewareTaskTest extends TestCase
 {
     /**
-     * @var \Bake\Shell\Task\TestTask|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $Task;
-
-    /**
      * setup method
      *
      * @return void
@@ -38,22 +34,6 @@ class MiddlewareTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Middleware' . DS;
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\MiddlewareTask')
-            ->setMethods(['in', 'err', 'createFile', '_stop'])
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->Task->BakeTemplate = new BakeTemplateTask($io);
-        $this->Task->BakeTemplate->initialize();
-        $this->Task->BakeTemplate->interactive = false;
     }
 
     /**
@@ -63,18 +43,11 @@ class MiddlewareTaskTest extends TestCase
      */
     public function testMain()
     {
-        $this->Task->Test->expects($this->once())
-            ->method('bake')
-            ->with('middleware', 'Example');
+        $this->generatedFile = APP . 'Middleware/ExampleMiddleware.php';
+        $this->exec('bake middleware example');
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Middleware/ExampleMiddleware.php'),
-                $this->stringContains('class ExampleMiddleware')
-            );
-
-        $this->Task->main('Example');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileContains('class ExampleMiddleware', $this->generatedFile);
     }
 
     /**
@@ -87,14 +60,11 @@ class MiddlewareTaskTest extends TestCase
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/Middleware/ExampleMiddleware.php'),
-                $this->stringContains('class ExampleMiddleware')
-            );
+        $this->generatedFile = $path . 'src/Middleware/ExampleMiddleware.php';
+        $this->exec('bake middleware TestBake.example');
 
-        $this->Task->main('TestBake.Example');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileContains('class ExampleMiddleware', $this->generatedFile);
     }
 
     /**
@@ -107,15 +77,10 @@ class MiddlewareTaskTest extends TestCase
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
-        $this->Task->plugin = 'TestBake';
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/Middleware/ExampleMiddleware.php'),
-                $this->stringContains('class ExampleMiddleware')
-            );
+        $this->generatedFile = $path . 'src/Middleware/ExampleMiddleware.php';
+        $this->exec('bake middleware TestBake.example');
 
-        $result = $this->Task->bake('Example');
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));
     }
 }
