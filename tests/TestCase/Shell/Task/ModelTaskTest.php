@@ -1794,8 +1794,17 @@ class ModelTaskTest extends TestCase
         $result = $this->Task->getAssociationInfo($model);
 
         $expected = [
+            'Articles' => [
+                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable'
+            ],
             'ArticlesAlias' => [
                 'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable'
+            ],
+            'Roles' => [
+                'targetFqn' => '\Bake\Test\App\Model\Table\RolesTable'
+            ],
+            'Profiles' => [
+                'targetFqn' => '\Bake\Test\App\Model\Table\ProfilesTable'
             ]
         ];
         $this->assertEquals($expected, $result);

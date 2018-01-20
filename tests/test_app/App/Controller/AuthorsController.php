@@ -9,23 +9,33 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP Project
- * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\App\Controller;
 
-use Cake\ORM\Table;
+use Cake\Controller\Controller;
 
 /**
- * Test Template Task Comment Model
+ * Class TemplateTaskAuthorsController
  */
-class TemplateTaskCommentsTable extends Table
+class AuthorsController extends Controller
 {
-    public function initialize(array $config)
+
+    /**
+     * Testing public controller action
+     *
+     * @return void
+     */
+    public function index()
     {
-        $this->table('comments');
-        $this->belongsTo('Articles', [
-            'foreignKey' => 'article_id'
-        ]);
+    }
+
+    /**
+     * Testing public controller action
+     *
+     * @return void
+     */
+    public function add()
+    {
     }
 }

@@ -170,15 +170,23 @@ class TestTaskTest extends TestCase
      */
     public function testExecuteWithAll()
     {
-        $this->Task->expects($this->exactly(2))->method('createFile')
+        $this->Task->expects($this->exactly(4))->method('createFile')
             ->withConsecutive(
                 [
                     $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'ArticlesTableTest.php'),
                     $this->stringContains('class ArticlesTableTest extends TestCase')
                 ],
                 [
+                    $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'AuthorsTableTest.php'),
+                    $this->stringContains('class AuthorsTableTest extends TestCase')
+                ],
+                [
                     $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'CategoryThreadsTableTest.php'),
                     $this->stringContains('class CategoryThreadsTableTest extends TestCase')
+                ],
+                [
+                    $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'TemplateTaskCommentsTableTest.php'),
+                    $this->stringContains('class TemplateTaskCommentsTableTest extends TestCase')
                 ]
             );
         $this->Task->params['all'] = true;
@@ -194,15 +202,19 @@ class TestTaskTest extends TestCase
     {
         $expected = [
             'ArticlesTable',
-            'CategoryThreadsTable'
+            'AuthorsTable',
+            'CategoryThreadsTable',
+            'TemplateTaskCommentsTable'
         ];
 
-        $this->io->expects($this->exactly(5))
+        $this->io->expects($this->exactly(7))
             ->method('out')
             ->withConsecutive(
                 ['You must provide a class to bake a test for. Some possible options are:', 2],
                 ['1. ArticlesTable'],
-                ['2. CategoryThreadsTable'],
+                ['2. AuthorsTable'],
+                ['3. CategoryThreadsTable'],
+                ['4. TemplateTaskCommentsTable'],
                 [''],
                 ['Re-run your command as `cake bake Table <classname>`']
             );
