@@ -16,6 +16,7 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 
@@ -25,11 +26,6 @@ use Cake\Core\Plugin;
 class SimpleBakeTaskTest extends TestCase
 {
     /**
-     * @var \Bake\Shell\Task\SimpleBakeTask|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $Task;
-
-    /**
      * setup method
      *
      * @return void
@@ -38,36 +34,6 @@ class SimpleBakeTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Simple' . DS;
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\SimpleBakeTask')
-            ->setMethods(['in', 'err', 'createFile', '_stop', 'name', 'template', 'fileName'])
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->Task->BakeTemplate = new BakeTemplateTask($io);
-        $this->Task->BakeTemplate->initialize();
-        $this->Task->BakeTemplate->interactive = false;
-
-        $this->Task->pathFragment = 'Model/Behavior/';
-
-        $this->Task->expects($this->any())
-            ->method('name')
-            ->will($this->returnValue('behavior'));
-
-        $this->Task->expects($this->any())
-            ->method('template')
-            ->will($this->returnValue('Model/behavior'));
-
-        $this->Task->expects($this->any())
-            ->method('fileName')
-            ->will($this->returnValue('ExampleBehavior.php'));
     }
 
     /**
@@ -77,39 +43,15 @@ class SimpleBakeTaskTest extends TestCase
      */
     public function testMain()
     {
-        $this->Task->expects($this->once())
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Model/Behavior/ExampleBehavior.php'),
-                $this->stringContains('class ExampleBehavior extends Behavior')
-            );
-        $this->Task->Test->expects($this->once())
-            ->method('bake')
-            ->with('behavior', 'Example');
+        $this->generatedFiles = [
+            APP . 'Model/Behavior/ExampleBehavior.php',
+            ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php'
+        ];
+        $this->exec('bake behavior Example');
 
-        $this->Task->main('Example');
-    }
-
-    /**
-     * Test the main with plugin.name method.
-     *
-     * @return void
-     */
-    public function testMainWithPlugin()
-    {
-        Plugin::load('SimpleBakeTest', ['path' => APP . 'Plugin' . DS . 'SimpleBakeTest' . DS]);
-        $filename = $this->_normalizePath(APP . 'Plugin/SimpleBakeTest/src/Model/Behavior/ExampleBehavior.php');
-        $this->Task->expects($this->once())
-            ->method('createFile')
-            ->with(
-                $filename,
-                $this->stringContains('class ExampleBehavior extends Behavior')
-            );
-        $this->Task->Test->expects($this->once())
-            ->method('bake')
-            ->with('behavior', 'Example');
-
-        $this->Task->main('SimpleBakeTest.Example');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileContains('class ExampleBehavior extends Behavior', $this->generatedFiles[0]);
     }
 
     /**
@@ -121,31 +63,17 @@ class SimpleBakeTaskTest extends TestCase
     {
         Configure::write('App.namespace', 'Bake\Test\App');
 
-        $this->Task->expects($this->once())
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Model/Behavior/ExampleBehavior.php'),
-                $this->stringContains('class ExampleBehavior extends Behavior')
-            );
+        $this->generatedFiles = [
+            APP . 'Model/Behavior/ExampleBehavior.php',
+            ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php'
+        ];
+        $this->exec('bake behavior Example');
 
-        $result = $this->Task->bake('Example');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+
+        $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
-    }
-
-    /**
-     * Test bakeTest
-     *
-     * @return void
-     */
-    public function testBakeTest()
-    {
-        $this->Task->plugin = 'TestBake';
-        $this->Task->Test->expects($this->once())
-            ->method('bake')
-            ->with('behavior', 'Example');
-
-        $this->Task->bakeTest('Example');
-        $this->assertEquals($this->Task->plugin, $this->Task->Test->plugin);
     }
 
     /**
@@ -155,11 +83,12 @@ class SimpleBakeTaskTest extends TestCase
      */
     public function testBakeTestNoTest()
     {
-        $this->Task->params['no-test'] = true;
-        $this->Task->Test->expects($this->never())
-            ->method('bake');
+        $this->generatedFile = APP . 'Model/Behavior/ExampleBehavior.php';
+        $this->exec('bake behavior --no-test Example');
 
-        $result = $this->Task->bakeTest('Example');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php');
+        $this->assertFileContains('class ExampleBehavior extends Behavior', $this->generatedFile);
     }
 
     /**
@@ -170,18 +99,18 @@ class SimpleBakeTaskTest extends TestCase
     public function testBakePlugin()
     {
         $this->_loadTestPlugin('TestBake');
-
         $path = Plugin::path('TestBake');
 
-        $this->Task->plugin = 'TestBake';
-        $this->Task->expects($this->once())
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path . 'src/Model/Behavior/ExampleBehavior.php'),
-                $this->stringContains('class ExampleBehavior extends Behavior')
-            );
+        $this->generatedFiles = [
+            $path . 'src/Model/Behavior/ExampleBehavior.php',
+            $path . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php'
+        ];
+        $this->exec('bake behavior TestBake.Example');
 
-        $result = $this->Task->bake('Example');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+
+        $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
