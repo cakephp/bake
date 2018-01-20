@@ -142,7 +142,9 @@ class TemplateTask extends BakeTask
             $action = $template;
         }
         if ($template) {
-            return $this->bake($template, true, $action);
+            $this->bake($template, true, $action);
+
+            return true;
         }
 
         $vars = $this->_loadController();
