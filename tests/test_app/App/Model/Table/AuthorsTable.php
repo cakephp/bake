@@ -11,31 +11,31 @@
  * @link          http://cakephp.org CakePHP Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task\TemplateTask;
+namespace Bake\Test\App\Model\Table;
 
-use Cake\Controller\Controller;
+use Cake\ORM\Table;
 
 /**
- * Class TemplateTaskAuthorsController
+ * Class AuthorsTable
  */
-class AuthorsController extends Controller
+class AuthorsTable extends Table
 {
 
     /**
-     * Testing public controller action
-     *
+     * @param array $config
      * @return void
      */
-    public function index()
+    public function initialize(array $config)
     {
-    }
-
-    /**
-     * Testing public controller action
-     *
-     * @return void
-     */
-    public function add()
-    {
+        $this->table('bake_authors');
+        $this->belongsTo('Roles', [
+            'foreignKey' => 'role_id'
+        ]);
+        $this->hasMany('Articles', [
+            'foreignKey' => 'author_id'
+        ]);
+        $this->hasOne('Profiles', [
+            'foreignKey' => 'author_id'
+        ]);
     }
 }

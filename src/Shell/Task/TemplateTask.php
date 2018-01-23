@@ -77,14 +77,6 @@ class TemplateTask extends BakeTask
     public $scaffoldActions = ['index', 'view', 'add', 'edit'];
 
     /**
-     * An array of action names that don't require templates. These
-     * actions will not emit errors when doing bakeActions()
-     *
-     * @var array
-     */
-    public $noTemplateActions = ['delete'];
-
-    /**
      * AssociationFilter utility
      *
      * @var AssociationFilter
@@ -142,7 +134,9 @@ class TemplateTask extends BakeTask
             $action = $template;
         }
         if ($template) {
-            return $this->bake($template, true, $action);
+            $this->bake($template, true, $action);
+
+            return true;
         }
 
         $vars = $this->_loadController();
@@ -331,56 +325,6 @@ class TemplateTask extends BakeTask
             'keyFields',
             'namespace'
         );
-    }
-
-    /**
-     * Bake a view file for each of the supplied actions
-     *
-     * @param array $actions Array of actions to make files for.
-     * @param array $vars The context for generating views.
-     * @return void
-     */
-    public function bakeActions(array $actions, $vars)
-    {
-        foreach ($actions as $action) {
-            $content = $this->getContent($action, $vars);
-            $this->bake($action, $content);
-        }
-    }
-
-    /**
-     * handle creation of baking a custom action view file
-     *
-     * @return void
-     */
-    public function customAction()
-    {
-        $action = '';
-        while (!$action) {
-            $action = $this->in('Action Name? (use lowercase_underscored function name)');
-            if (!$action) {
-                $this->out('The action name you supplied was empty. Please try again.');
-            }
-        }
-
-        $path = $this->getPath() . $this->controllerName . DS . Inflector::underscore($action) . ".ctp";
-
-        $this->out();
-        $this->hr();
-        $this->out('The following view will be created:');
-        $this->hr();
-        $this->out(sprintf('Controller Name: %s', $this->controllerName));
-        $this->out(sprintf('Action Name:     %s', $action));
-        $this->out(sprintf('Path:            %s', $path));
-        $this->hr();
-        $looksGood = $this->in('Look okay?', ['y', 'n'], 'y');
-        if (strtolower($looksGood) === 'y') {
-            $this->bake($action, ' ');
-            $this->_stop();
-
-            return;
-        }
-        $this->out('Bake Aborted.');
     }
 
     /**

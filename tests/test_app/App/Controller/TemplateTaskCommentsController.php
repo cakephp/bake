@@ -21,8 +21,6 @@ use Cake\Controller\Controller;
  */
 class TemplateTaskCommentsController extends Controller
 {
-    public $modelClass = 'Cake\Test\TestCase\Shell\Task\TemplateTaskCommentsTable';
-
     /**
      * Testing public controller action
      *
