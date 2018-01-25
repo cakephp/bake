@@ -15,25 +15,19 @@
 namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
+use Bake\Shell\Task\PluginTask;
+use Bake\Test\TestCase\TestCase;
+use Cake\Console\Shell;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
-use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase;
 
 /**
  * PluginTaskPlugin class
  */
 class PluginTaskTest extends TestCase
 {
-    use StringCompareTrait;
-
-    /**
-     * @var \Bake\Shell\Task\PluginTask|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $Task;
-
     /**
      * @var \Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -48,25 +42,18 @@ class PluginTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Plugin' . DS;
+
+        // Output into a safe place.
+        $path = TMP . 'plugin_task' . DS;
+        Configure::write('App.paths.plugins', [$path]);
+
+        // Create the test output path
+        $folder = new Folder($path);
+        $folder->create($path);
+
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\PluginTask')
-            ->setMethods(['in', 'err', '_stop', 'clear', 'callProcess', '_rootComposerFilePath', 'findComposer'])
-            ->setConstructorArgs([$this->io])
-            ->getMock();
-
-        $this->Task->BakeTemplate = new BakeTemplateTask($this->io);
-        $this->Task->BakeTemplate->interactive = false;
-
-        $this->Task->path = TMP . 'tests' . DS . 'BakedPlugins' . DS;
-        new Folder($this->Task->path, true);
-
-        $this->Task->bootstrap = TMP . 'tests' . DS . 'bootstrap.php';
-        touch($this->Task->bootstrap);
-
-        $this->_path = App::path('Plugin');
     }
 
     /**
@@ -76,70 +63,52 @@ class PluginTaskTest extends TestCase
      */
     public function tearDown()
     {
-        $Folder = new Folder(TMP . 'tests' . DS . 'BakedPlugins');
-        $Folder->delete();
+        $folder = new Folder(TMP . 'plugin_task');
+        $folder->delete();
 
         parent::tearDown();
     }
 
     /**
-     * test bake()
+     * test creating a plugin skeleton
      *
      * @return void
      */
-    public function testBake()
+    public function testMainBakePluginContents()
     {
-        $this->Task->expects($this->at(0))->method('in')
-            ->will($this->returnValue('y'));
-
-        $this->Task->bake('SimpleExample');
+        $this->exec('bake plugin SimpleExample', ['y']);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertPluginContents('SimpleExample');
     }
 
     /**
-     * test bake() with a custom app namespace.
+     * test creating a plugin with a custom app namespace.
      *
      * @return void
      */
-    public function testBakeCustomAppNamespace()
+    public function testMainCustomAppNamespace()
     {
         Configure::write('App.namespace', 'MyApp');
-        $this->Task->expects($this->at(0))->method('in')
-            ->will($this->returnValue('y'));
 
-        $this->Task->bake('Simple');
-        $bakedRoot = $this->Task->path . 'Simple' . DS;
-        $appController = $bakedRoot . 'src/Controller/AppController.php';
-        $contents = file_get_contents($appController);
-        $this->assertContains('use MyApp\Controller\AppController', $contents);
+        $this->exec('bake plugin Simple', ['y']);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertPluginContents('Simple');
+
+        $bakedRoot = App::path('Plugin')[0];
+        $appController = $bakedRoot . 'Simple/src/Controller/AppController.php';
+        $this->assertFileContains('use MyApp\Controller\AppController', $appController);
     }
 
     /**
-     * test bake with vendor plugin
+     * test generating a plugin with vendor plugin
      *
      * @return void
      */
-    public function testBakeVendorName()
+    public function testMainVendorName()
     {
-        $this->Task->expects($this->at(0))->method('in')
-            ->will($this->returnValue('y'));
-
-        $this->Task->bake('Company/Example');
+        $this->exec('bake plugin Company/Example', ['y']);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertPluginContents('Company/Example');
-    }
-
-    /**
-     * Test the main method
-     *
-     * @return void
-     */
-    public function testMain()
-    {
-        $this->Task->expects($this->at(0))->method('in')
-            ->will($this->returnValue('y'));
-
-        $this->Task->main('SimpleExample');
-        $this->assertPluginContents('SimpleExample');
     }
 
     /**
@@ -149,10 +118,8 @@ class PluginTaskTest extends TestCase
      */
     public function testMainVendorNameCasingFix()
     {
-        $this->Task->expects($this->at(0))->method('in')
-            ->will($this->returnValue('y'));
-
-        $this->Task->main('company/example');
+        $this->exec('bake plugin company/example', ['y']);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertPluginContents('Company/Example');
     }
 
@@ -163,11 +130,10 @@ class PluginTaskTest extends TestCase
      */
     public function testMainWithNoArgs()
     {
-        $this->Task->expects($this->at(0))
-            ->method('err')
-            ->with($this->stringContains('You must'));
+        $this->exec('bake plugin');
 
-        $this->Task->main();
+        $this->assertExitCode(Shell::CODE_ERROR);
+        $this->assertErrorContains('You must');
     }
 
     /**
@@ -178,41 +144,45 @@ class PluginTaskTest extends TestCase
      */
     public function testMainUpdateComposer()
     {
-        $this->Task->expects($this->at(0))->method('in')
-            ->will($this->returnValue('y'));
+        $composerPath = exec('which composer');
+        if (!$composerPath && file_exists('./composer.phar')) {
+            $composerPath = './composer.phar';
+        }
+        $this->skipIf(!file_exists($composerPath), 'Cannot find composer.phar.');
 
-        $this->io->expects($this->any())
-            ->method('askChoice')
-            ->will($this->returnValue('y'));
+        $composerConfig = ROOT . 'composer.json';
 
-        $this->Task->expects($this->any())
-            ->method('findComposer')
-            ->will($this->returnValue('composer.phar'));
+        // Seed the composer.json with valid JSON
+        file_put_contents($composerConfig, '{}');
 
-        $file = TMP . 'tests' . DS . 'main-composer.json';
-        file_put_contents($file, '{}');
+        $this->exec("bake plugin --composer '{$composerPath}' composer_example", ['y', 'y']);
 
-        $savePath = $this->Task->path;
+        $this->assertExitCode(Shell::CODE_SUCCESS);
 
-        $this->Task->path = ROOT . DS . 'tests' . DS . 'BakedPlugins/';
+        $result = json_decode(file_get_contents(ROOT . 'composer.json'), true);
+        $this->assertArrayHasKey('autoload', $result);
+        $this->assertArrayHasKey('psr-4', $result['autoload']);
+        $this->assertArrayHasKey('ComposerExample\\', $result['autoload']['psr-4']);
 
-        $this->Task->expects($this->any())
-            ->method('_rootComposerFilePath')
-            ->will($this->returnValue($file));
+        $this->assertArrayHasKey('autoload-dev', $result);
+        $this->assertArrayHasKey('psr-4', $result['autoload-dev']);
+        $this->assertArrayHasKey('ComposerExample\\Test\\', $result['autoload-dev']['psr-4']);
 
-        $this->Task->expects($this->once())
-            ->method('callProcess')
-            ->with('php ' . escapeshellarg('composer.phar') . ' dump-autoload');
+        $pluginPath = App::path('Plugin')[0];
+        $this->assertEquals(
+            $pluginPath . 'ComposerExample' . DS . 'src',
+            $result['autoload']['psr-4']['ComposerExample\\']
+        );
+        $this->assertEquals(
+            $pluginPath . 'ComposerExample' . DS . 'tests',
+            $result['autoload-dev']['psr-4']['ComposerExample\\Test\\']
+        );
 
-        $this->Task->main('ComposerExample');
+        // Cleanup
+        unlink(ROOT . 'composer.json');
 
-        $result = file_get_contents($file);
-        $this->assertSameAsFile(__FUNCTION__ . '.json', $result);
-
-        $folder = new Folder($this->Task->path);
+        $folder = new Folder(ROOT . 'vendor');
         $folder->delete();
-
-        $this->Task->path = $savePath;
     }
 
     /**
@@ -227,16 +197,12 @@ class PluginTaskTest extends TestCase
         array_unshift($paths, '/fake/path');
         $paths[] = '/fake/path2';
 
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\PluginTask')
-            ->setMethods(['in', 'out', 'err', '_stop'])
-            ->setConstructorArgs([$this->io])
-            ->getMock();
-
-        $this->Task->path = TMP . 'tests' . DS;
-        $result = $this->Task->findPath($paths);
+        $task = new PluginTask($this->io);
+        $task->path = TMP . 'tests' . DS;
+        $result = $task->findPath($paths);
 
         $this->assertNull($result, 'no return');
-        $this->assertEquals(ROOT . 'Plugin' . DS, $this->Task->path);
+        $this->assertEquals(TMP . 'plugin_task' . DS, $task->path);
     }
 
     /**
@@ -250,13 +216,10 @@ class PluginTaskTest extends TestCase
     {
         $paths = ['/fake/path', '/fake/path2'];
 
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\PluginTask')
-            ->setMethods(['in', 'out', 'err', '_stop'])
-            ->setConstructorArgs([$this->io])
-            ->getMock();
-        $this->Task->path = TMP . 'tests' . DS;
+        $task = new PluginTask($this->io);
+        $task->path = TMP . 'tests' . DS;
 
-        $this->Task->findPath($paths);
+        $task->findPath($paths);
     }
 
     /**
@@ -274,7 +237,7 @@ class PluginTaskTest extends TestCase
         $comparisonDir = new Folder($comparisonRoot);
         $comparisonFiles = $comparisonDir->findRecursive();
 
-        $bakedRoot = $this->Task->path . $pluginName . DS;
+        $bakedRoot = App::path('Plugin')[0] . $pluginName . DS;
         $bakedDir = new Folder($bakedRoot);
         $bakedFiles = $comparisonDir->findRecursive();
 
