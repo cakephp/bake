@@ -350,7 +350,7 @@ class TestTask extends BakeTask
             $class .= $suffix;
         }
         $prefix = $this->_getPrefix();
-        if (strtolower($type) === 'controller' && $prefix) {
+        if (in_array(strtolower($type), ['controller', 'cell']) && $prefix) {
             $subSpace .= '\\' . str_replace('/', '\\', $prefix);
         }
 
