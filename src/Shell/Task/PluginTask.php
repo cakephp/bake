@@ -142,6 +142,7 @@ class PluginTask extends BakeTask
         $bootstrap = new File($this->bootstrap, false);
         if (!$bootstrap->exists()) {
             $this->err('<warning>Could not update application bootstrap.php file, as it could not be found.</warning>');
+
             return;
         }
         $contents = $bootstrap->read();
