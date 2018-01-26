@@ -140,6 +140,11 @@ class PluginTask extends BakeTask
     protected function _modifyBootstrap($plugin, $hasAutoloader)
     {
         $bootstrap = new File($this->bootstrap, false);
+        if (!$bootstrap->exists()) {
+            $this->err('<warning>Could not update application bootstrap.php file, as it could not be found.</warning>');
+
+            return;
+        }
         $contents = $bootstrap->read();
         if (!preg_match("@\n\s*Plugin::loadAll@", $contents)) {
             $autoload = $hasAutoloader ? null : "'autoload' => true, ";
