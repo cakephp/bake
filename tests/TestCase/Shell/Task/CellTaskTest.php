@@ -114,6 +114,7 @@ class CellTaskTest extends TestCase
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileContains('namespace App\View\Cell\Admin;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
     }
 
