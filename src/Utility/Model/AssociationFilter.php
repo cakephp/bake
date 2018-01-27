@@ -52,7 +52,7 @@ class AssociationFilter
             return $val->junction()->getAlias();
         };
 
-        return array_map($extractor, $table->associations()->type('BelongsToMany'));
+        return array_map($extractor, $table->associations()->getByType('BelongsToMany'));
     }
 
     /**
@@ -69,7 +69,7 @@ class AssociationFilter
         $associations = [];
 
         foreach ($keys as $type) {
-            foreach ($model->associations()->type($type) as $assoc) {
+            foreach ($model->associations()->getByType($type) as $assoc) {
                 $target = $assoc->getTarget();
                 $assocName = $assoc->getName();
                 $alias = $target->getAlias();

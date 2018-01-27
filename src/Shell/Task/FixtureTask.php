@@ -176,7 +176,7 @@ class FixtureTask extends BakeTask
                 'Cannot generate fixtures for connections that do not implement schemaCollection()'
             );
         }
-        $schemaCollection = $connection->schemaCollection();
+        $schemaCollection = $connection->getSchemaCollection();
         try {
             $data = $schemaCollection->describe($useTable);
         } catch (Exception $e) {
@@ -251,7 +251,7 @@ class FixtureTask extends BakeTask
     {
         $cols = $indexes = $constraints = [];
         foreach ($table->columns() as $field) {
-            $fieldData = $table->column($field);
+            $fieldData = $table->getColumn($field);
             $properties = implode(', ', $this->_values($fieldData));
             $cols[] = "        '$field' => [$properties],";
         }
@@ -261,11 +261,11 @@ class FixtureTask extends BakeTask
             $indexes[] = "            '$index' => [$properties],";
         }
         foreach ($table->constraints() as $index) {
-            $fieldData = $table->constraint($index);
+            $fieldData = $table->getConstraint($index);
             $properties = implode(', ', $this->_values($fieldData));
             $constraints[] = "            '$index' => [$properties],";
         }
-        $options = $this->_values($table->options());
+        $options = $this->_values($table->getOptions());
 
         $content = implode("\n", $cols) . "\n";
         if (!empty($indexes)) {
@@ -328,7 +328,7 @@ class FixtureTask extends BakeTask
         for ($i = 0; $i < $recordCount; $i++) {
             $record = [];
             foreach ($table->columns() as $field) {
-                $fieldInfo = $table->column($field);
+                $fieldInfo = $table->getColumn($field);
                 $insert = '';
                 switch ($fieldInfo['type']) {
                     case 'decimal':

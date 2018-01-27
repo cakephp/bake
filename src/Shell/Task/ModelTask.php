@@ -1031,7 +1031,7 @@ class ModelTask extends BakeTask
                 'Connections need to implement schemaCollection() to be used with bake.'
             );
         }
-        $schema = $db->schemaCollection();
+        $schema = $db->getSchemaCollection();
         $tables = $schema->listTables();
         if (empty($tables)) {
             $this->abort('Your database does not have any tables.');

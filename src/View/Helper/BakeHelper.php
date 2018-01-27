@@ -132,7 +132,7 @@ class BakeHelper extends Helper
         $extractor = function ($val) {
             return $val->getTarget()->getAlias();
         };
-        $aliases = array_map($extractor, $table->associations()->type($assoc));
+        $aliases = array_map($extractor, $table->associations()->getByType($assoc));
         if ($assoc === 'HasMany') {
             return $this->_filterHasManyAssociationsAliases($table, $aliases);
         }
@@ -197,7 +197,7 @@ class BakeHelper extends Helper
     {
         $fields = collection($fields)
             ->filter(function ($field) use ($schema, $filterTypes) {
-                return !in_array($schema->columnType($field), $filterTypes);
+                return !in_array($schema->getColumnType($field), $filterTypes);
             });
 
         if (isset($modelObject) && $modelObject->hasBehavior('Tree')) {
@@ -239,10 +239,10 @@ class BakeHelper extends Helper
 
         $groupedFields = collection($fields)
             ->filter(function ($field) use ($schema) {
-                return $schema->columnType($field) !== 'binary';
+                return $schema->getColumnType($field) !== 'binary';
             })
             ->groupBy(function ($field) use ($schema, $associationFields) {
-                $type = $schema->columnType($field);
+                $type = $schema->getColumnType($field);
                 if (isset($associationFields[$field])) {
                     return 'string';
                 }
@@ -284,7 +284,7 @@ class BakeHelper extends Helper
      */
     public function columnData($field, $schema)
     {
-        return $schema->column($field);
+        return $schema->getColumn($field);
     }
 
     /**
@@ -296,7 +296,7 @@ class BakeHelper extends Helper
      */
     public function getAssociatedTableAlias($modelObj, $assoc)
     {
-        $association = $modelObj->association($assoc);
+        $association = $modelObj->getAssociation($assoc);
 
         return $association->getTarget()->getAlias();
     }

@@ -370,7 +370,7 @@ class TemplateTask extends BakeTask
         }
 
         if (empty($vars['primaryKey'])) {
-            $this->error('Cannot generate views for models with no primary key');
+            $this->abort('Cannot generate views for models with no primary key');
 
             return false;
         }

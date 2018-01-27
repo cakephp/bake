@@ -27,7 +27,7 @@ class AuthorsTable extends Table
      */
     public function initialize(array $config)
     {
-        $this->table('bake_authors');
+        $this->setTable('bake_authors');
         $this->belongsTo('Roles', [
             'foreignKey' => 'role_id'
         ]);

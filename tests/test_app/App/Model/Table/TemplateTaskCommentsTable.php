@@ -23,7 +23,7 @@ class TemplateTaskCommentsTable extends Table
 {
     public function initialize(array $config)
     {
-        $this->table('comments');
+        $this->setTable('comments');
         $this->belongsTo('Articles', [
             'foreignKey' => 'article_id'
         ]);
