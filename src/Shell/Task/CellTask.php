@@ -14,6 +14,8 @@
  */
 namespace Bake\Shell\Task;
 
+use Cake\Core\Configure;
+
 /**
  * Task for creating cells.
  *
@@ -54,6 +56,26 @@ class CellTask extends SimpleBakeTask
     }
 
     /**
+     * Get template data.
+     *
+     * @return array
+     */
+    public function templateData()
+    {
+        $prefix = $this->_getPrefix();
+        if ($prefix) {
+            $prefix = '\\' . str_replace('/', '\\', $prefix);
+        }
+
+        $namespace = Configure::read('App.namespace');
+        if ($this->plugin) {
+            $namespace = $this->_pluginNamespace($this->plugin);
+        }
+
+        return compact('namespace', 'prefix');
+    }
+
+    /**
      * Bake the Cell class and template file.
      *
      * @param string $name The name of the cell to make.
@@ -74,13 +96,30 @@ class CellTask extends SimpleBakeTask
      */
     public function bakeTemplate($name)
     {
-        $templatePath = implode(DS, ['Template', 'Cell', $name, 'display.ctp']);
         $restore = $this->pathFragment;
-        $this->pathFragment = $templatePath;
 
+        $this->pathFragment = 'Template/Cell/';
         $path = $this->getPath();
+        $path .= implode(DS, [$name, 'display.ctp']);
+
         $this->pathFragment = $restore;
 
         $this->createFile($path, '');
+    }
+
+    /**
+     * Gets the option parser instance and configures it.
+     *
+     * @return \Cake\Console\ConsoleOptionParser
+     */
+    public function getOptionParser()
+    {
+        $parser = parent::getOptionParser();
+        $parser
+        ->addOption('prefix', [
+            'help' => 'The namespace prefix to use.'
+        ]);
+
+        return $parser;
     }
 }

@@ -97,4 +97,46 @@ class CellTaskTest extends TestCase
         $this->assertFilesExist($this->generatedFiles);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
     }
+
+    /**
+     * Test the excute method with prefix.
+     *
+     * @return void
+     */
+    public function testMainPrefix()
+    {
+        $this->generatedFiles = [
+            APP . 'View/Cell/Admin/ExampleCell.php',
+            ROOT . 'tests/TestCase/View/Cell/Admin/ExampleCellTest.php',
+            APP . 'Template/Cell/Admin/Example/display.ctp',
+        ];
+        $this->exec('bake cell --prefix Admin Example');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileContains('namespace App\View\Cell\Admin;', $this->generatedFiles[0]);
+        $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
+    }
+
+    /**
+     * Test main within a prefix and plugin.
+     *
+     * @return void
+     */
+    public function testMainPrefixPlugin()
+    {
+        $this->_loadTestPlugin('TestBake');
+        $path = Plugin::path('TestBake');
+
+        $this->generatedFiles = [
+            $path . 'src/View/Cell/Admin/ExampleCell.php',
+            $path . 'tests/TestCase/View/Cell/Admin/ExampleCellTest.php',
+            $path . 'src/Template/Cell/Admin/Example/display.ctp',
+        ];
+        $this->exec('bake cell --prefix Admin TestBake.Example');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileContains('namespace TestBake\View\Cell\Admin;', $this->generatedFiles[0]);
+        $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
+    }
 }
