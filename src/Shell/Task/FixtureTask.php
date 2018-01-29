@@ -444,6 +444,6 @@ class FixtureTask extends BakeTask
             ->limit($recordCount)
             ->enableHydration(false);
 
-        return $records;
+        return $records->toArray();
     }
 }

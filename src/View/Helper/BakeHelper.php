@@ -24,7 +24,7 @@ class BakeHelper extends Helper
     /**
      * AssociationFilter utility
      *
-     * @var AssociationFilter
+     * @var \Bake\Utility\Model\AssociationFilter|null
      */
     protected $_associationFilter = null;
 
@@ -191,7 +191,7 @@ class BakeHelper extends Helper
      * @param \Cake\ORM\Table|null $modelObject Model object.
      * @param array $takeFields Take fields.
      * @param array $filterTypes Filter field types.
-     * @return \Cake\Collection\CollectionInterface
+     * @return array
      */
     public function filterFields($fields, $schema, $modelObject = null, $takeFields = [], $filterTypes = ['binary'])
     {

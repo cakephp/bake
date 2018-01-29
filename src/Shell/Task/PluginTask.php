@@ -366,7 +366,7 @@ class PluginTask extends BakeTask
     /**
      * Uses either the CLI option or looks in $PATH and cwd for composer.
      *
-     * @return string|false Either the path to composer or false if it cannot be found.
+     * @return string|bool Either the path to composer or false if it cannot be found.
      */
     public function findComposer()
     {
