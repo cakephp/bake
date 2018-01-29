@@ -6,4 +6,3 @@ parameters:
         - '#Call to an undefined method Cake\\Database\\Type::getDateTimeClassName\(\)#'
         - '#Constant TESTS not found#'
         - '#Call to an undefined method Cake\\ORM\\Association::junction\(\)#'
-        - '#PHPDoc tag @property has invalid value \(` hints.\): Unexpected token "`", expected TOKEN_IDENTIFIER at offset#'
