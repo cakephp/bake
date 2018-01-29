@@ -630,7 +630,7 @@ class ModelTaskTest extends TestCase
             ],
             'created' => [
                 'kind' => 'column',
-                'type' => 'timestamp'
+                'type' => 'datetime'
             ],
             'bake_user_id' => [
                 'kind' => 'column',
@@ -642,7 +642,7 @@ class ModelTaskTest extends TestCase
             ],
             'updated' => [
                 'kind' => 'column',
-                'type' => 'timestamp'
+                'type' => 'datetime'
             ],
             'bake_user' => [
                 'kind' => 'association',
