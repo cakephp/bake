@@ -57,7 +57,7 @@ class TemplateTaskTest extends TestCase
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
 
         Configure::write('App.namespace', 'Bake\Test\App');
-        $this->_setupTask(['in', 'err', 'error', 'createFile', '_stop']);
+        $this->_setupTask(['in', 'err', 'abort', 'createFile', '_stop']);
 
         TableRegistry::get('TemplateTaskComments', [
             'className' => 'Bake\Test\App\Model\Table\TemplateTaskCommentsTable',
@@ -366,7 +366,7 @@ class TemplateTaskTest extends TestCase
             'namespace' => $namespace,
         ];
         $this->Task->expects($this->once())
-            ->method('error')
+            ->method('abort')
             ->with($this->stringContains('Cannot generate views for models'));
 
         $result = $this->Task->getContent('view', $vars);
