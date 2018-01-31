@@ -170,7 +170,7 @@ class TestTaskTest extends TestCase
      */
     public function testExecuteWithAll()
     {
-        $this->Task->expects($this->exactly(4))->method('createFile')
+        $this->Task->expects($this->exactly(5))->method('createFile')
             ->withConsecutive(
                 [
                     $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'ArticlesTableTest.php'),
@@ -179,6 +179,10 @@ class TestTaskTest extends TestCase
                 [
                     $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'AuthorsTableTest.php'),
                     $this->stringContains('class AuthorsTableTest extends TestCase')
+                ],
+                [
+                    $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'BakeArticlesTableTest.php'),
+                    $this->stringContains('class BakeArticlesTableTest extends TestCase')
                 ],
                 [
                     $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'CategoryThreadsTableTest.php'),
@@ -203,18 +207,20 @@ class TestTaskTest extends TestCase
         $expected = [
             'ArticlesTable',
             'AuthorsTable',
+            'BakeArticlesTable',
             'CategoryThreadsTable',
             'TemplateTaskCommentsTable'
         ];
 
-        $this->io->expects($this->exactly(7))
+        $this->io->expects($this->exactly(8))
             ->method('out')
             ->withConsecutive(
                 ['You must provide a class to bake a test for. Some possible options are:', 2],
                 ['1. ArticlesTable'],
                 ['2. AuthorsTable'],
-                ['3. CategoryThreadsTable'],
-                ['4. TemplateTaskCommentsTable'],
+                ['3. BakeArticlesTable'],
+                ['4. CategoryThreadsTable'],
+                ['5. TemplateTaskCommentsTable'],
                 [''],
                 ['Re-run your command as `cake bake Table <classname>`']
             );
