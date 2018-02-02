@@ -94,32 +94,19 @@ class ControllerTaskTest extends TestCase
     }
 
     /**
-     * test ListAll
+     * test main listing available models.
      *
      * @return void
      */
-    public function testListAll()
+    public function testMainListAvailable()
     {
-        $result = $this->Task->listAll();
-        $this->assertContains('bake_articles', $result);
-        $this->assertContains('bake_articles_bake_tags', $result);
-        $this->assertContains('bake_comments', $result);
-        $this->assertContains('bake_tags', $result);
-    }
+        $this->exec('bake controller');
 
-    /**
-     * test ListAll
-     *
-     * @return void
-     */
-    public function testListAllWithSkippedTable()
-    {
-        $this->Task->Model->skipTables = ['bake_articles', 'bake_comments'];
-        $result = $this->Task->listAll();
-        $this->assertNotContains('bake_articles', $result);
-        $this->assertNotContains('bake_comments', $result);
-        $this->assertContains('bake_articles_bake_tags', $result);
-        $this->assertContains('bake_tags', $result);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertOutputContains('- BakeArticles');
+        $this->assertOutputContains('- BakeArticlesBakeTags');
+        $this->assertOutputContains('- BakeComments');
+        $this->assertOutputContains('- BakeTags');
     }
 
     /**
