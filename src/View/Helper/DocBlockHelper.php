@@ -135,7 +135,7 @@ class DocBlockHelper extends Helper
                 if ($info['association']->type() === Association::MANY_TO_ONE) {
                     $properties = $this->_insertAfter(
                         $properties,
-                        $info['association']->foreignKey(),
+                        $info['association']->getForeignKey(),
                         [$property => $type]
                     );
                 } else {

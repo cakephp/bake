@@ -87,7 +87,7 @@ class PluginTask extends BakeTask
             return false;
         }
         if (!$this->bake($plugin)) {
-            $this->error(sprintf("An error occurred trying to bake: %s in %s", $plugin, $this->path . $plugin));
+            $this->abort(sprintf("An error occurred trying to bake: %s in %s", $plugin, $this->path . $plugin));
         }
     }
 
@@ -264,7 +264,7 @@ class PluginTask extends BakeTask
         $composer = $this->findComposer();
 
         if (!$composer) {
-            $this->error('Could not locate composer. Add composer to your PATH, or use the --composer option.');
+            $this->abort('Could not locate composer. Add composer to your PATH, or use the --composer option.');
 
             return false;
         }
@@ -280,7 +280,7 @@ class PluginTask extends BakeTask
             chdir($cwd);
         } catch (\RuntimeException $e) {
             $error = $e->getMessage();
-            $this->error(sprintf('Could not run `composer dump-autoload`: %s', $error));
+            $this->abort(sprintf('Could not run `composer dump-autoload`: %s', $error));
 
             return false;
         }
@@ -366,7 +366,7 @@ class PluginTask extends BakeTask
     /**
      * Uses either the CLI option or looks in $PATH and cwd for composer.
      *
-     * @return string|false Either the path to composer or false if it cannot be found.
+     * @return string|bool Either the path to composer or false if it cannot be found.
      */
     public function findComposer()
     {

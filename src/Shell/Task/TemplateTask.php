@@ -44,7 +44,7 @@ class TemplateTask extends BakeTask
     /**
      * path to Template directory
      *
-     * @var array
+     * @var string
      */
     public $pathFragment = 'Template/';
 
@@ -79,7 +79,7 @@ class TemplateTask extends BakeTask
     /**
      * AssociationFilter utility
      *
-     * @var AssociationFilter
+     * @var \Bake\Utility\Model\AssociationFilter|null
      */
     protected $_associationFilter = null;
 
@@ -189,7 +189,7 @@ class TemplateTask extends BakeTask
         if ($prefix) {
             $prefix .= '/';
         }
-        $this->controllerClass = App::className($plugin . $prefix . $controller, 'Controller', 'Controller');
+        $this->controllerClass = (string)App::className($plugin . $prefix . $controller, 'Controller', 'Controller');
     }
 
     /**
@@ -331,7 +331,7 @@ class TemplateTask extends BakeTask
      * Assembles and writes bakes the view file.
      *
      * @param string $template Template file to use.
-     * @param string $content Content to write.
+     * @param string|true $content Content to write.
      * @param string $outputFile The output file to create. If null will use `$template`
      * @return string|false Generated file content.
      */
@@ -370,7 +370,7 @@ class TemplateTask extends BakeTask
         }
 
         if (empty($vars['primaryKey'])) {
-            $this->error('Cannot generate views for models with no primary key');
+            $this->abort('Cannot generate views for models with no primary key');
 
             return false;
         }
