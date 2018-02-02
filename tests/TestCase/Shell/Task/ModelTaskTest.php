@@ -16,6 +16,7 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
@@ -144,15 +145,14 @@ class ModelTaskTest extends TestCase
      */
     public function testListAllConnection()
     {
-        $this->_useMockedOut();
-        $this->Task->connection = 'test';
+        $this->exec('bake model --connection test');
 
-        $result = $this->Task->listAll();
-        $this->assertContains('bake_articles', $result);
-        $this->assertContains('bake_articles_bake_tags', $result);
-        $this->assertContains('bake_tags', $result);
-        $this->assertContains('bake_comments', $result);
-        $this->assertContains('category_threads', $result);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertOutputContains('- BakeArticles');
+        $this->assertOutputContains('- BakeArticlesBakeTags');
+        $this->assertOutputContains('- BakeTags');
+        $this->assertOutputContains('- BakeComments');
+        $this->assertOutputContains('- CategoryThreads');
     }
 
     /**
@@ -1092,15 +1092,15 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeFixture()
     {
-        $this->Task->plugin = 'TestBake';
-        $this->Task->Fixture->expects($this->at(0))
-            ->method('bake')
-            ->with('BakeArticle', 'bake_articles');
-        $this->Task->bakeFixture('BakeArticle', 'bake_articles');
+        $this->generatedFiles = [
+            APP . 'Model/Table/BakeTagsTable.php',
+            APP . 'Model/Entity/BakeTag.php',
+            ROOT . 'tests/Fixture/BakeTagsFixture.php',
+        ];
+        $this->exec('bake model --no-test bake_tags');
 
-        $this->assertEquals($this->Task->plugin, $this->Task->Fixture->plugin);
-        $this->assertEquals($this->Task->connection, $this->Task->Fixture->connection);
-        $this->assertEquals($this->Task->interactive, $this->Task->Fixture->interactive);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
     }
 
     /**
@@ -1110,11 +1110,16 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeFixtureDisabled()
     {
-        $this->Task->params['no-fixture'] = true;
-        $this->Task->plugin = 'TestBake';
-        $this->Task->Fixture->expects($this->never())
-            ->method('bake');
-        $this->Task->bakeFixture('BakeArticle', 'bake_articles');
+        $this->generatedFiles = [
+            APP . 'Model/Table/BakeTagsTable.php',
+            APP . 'Model/Entity/BakeTag.php',
+        ];
+        $this->exec('bake model --no-test --no-fixture bake_tags');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileNotExists(ROOT . 'tests/Fixture/BakeTagsFixture.php');
+        $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Table/BakeTagsTableTest.php');
     }
 
     /**
@@ -1124,29 +1129,16 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeTest()
     {
-        $this->Task->plugin = 'TestBake';
-        $this->Task->Test->expects($this->at(0))
-            ->method('bake')
-            ->with('Table', 'BakeArticle');
-        $this->Task->bakeTest('BakeArticle');
+        $this->generatedFiles = [
+            APP . 'Model/Table/BakeTagsTable.php',
+            APP . 'Model/Entity/BakeTag.php',
+            ROOT . 'tests/TestCase/Model/Table/BakeTagsTableTest.php'
+        ];
+        $this->exec('bake model --no-fixture bake_tags');
 
-        $this->assertEquals($this->Task->plugin, $this->Task->Test->plugin);
-        $this->assertEquals($this->Task->connection, $this->Task->Test->connection);
-        $this->assertEquals($this->Task->interactive, $this->Task->Test->interactive);
-    }
-
-    /**
-     * Ensure that test baking can be disabled.
-     *
-     * @return void
-     */
-    public function testBakeTestDisabled()
-    {
-        $this->Task->params['no-test'] = true;
-        $this->Task->plugin = 'TestBake';
-        $this->Task->Test->expects($this->never())
-            ->method('bake');
-        $this->Task->bakeTest('BakeArticle');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileNotExists(ROOT . 'tests/Fixture/BakeTagsFixture.php');
     }
 
     /**
@@ -1281,11 +1273,14 @@ class ModelTaskTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntity()
+    public function testBakeEntitySimple()
     {
-        $config = [];
-        $model = TableRegistry::get('BakeArticles');
-        $result = $this->Task->bakeEntity($model, $config);
+        $this->generatedFile = APP . 'Model/Entity/User.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden users');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1296,9 +1291,12 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntityFullContext()
     {
-        $model = TableRegistry::get('BakeArticles');
-        $context = $this->Task->getTableContext($model, 'bake_articles', 'BakeArticles');
-        $result = $this->Task->bakeEntity($model, $context);
+        $this->generatedFile = APP . 'Model/Entity/User.php';
+        $this->exec('bake model --no-test --no-fixture --no-table users');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1327,7 +1325,12 @@ class ModelTaskTest extends TestCase
             'propertySchema' => $this->Task->getEntityPropertySchema($model)
         ];
 
-        $result = $this->Task->bakeEntity($model, $config);
+        $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields bake_articles');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1354,11 +1357,12 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntityNoFields()
     {
-        $config = [
-            'fields' => false
-        ];
-        $model = TableRegistry::get('BakeArticles');
-        $result = $this->Task->bakeEntity($model, $config);
+        $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields bake_articles');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1369,13 +1373,12 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntityFieldsWhiteList()
     {
-        $config = [
-            'fields' => [
-                'id', 'title', 'body', 'created'
-            ]
-        ];
-        $model = TableRegistry::get('BakeArticles');
-        $result = $this->Task->bakeEntity($model, $config);
+        $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --fields id,title,body,created bake_articles');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1386,11 +1389,12 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntityHidden()
     {
-        $model = TableRegistry::get('BakeUsers');
-        $config = [
-            'hidden' => ['password'],
-        ];
-        $result = $this->Task->bakeEntity($model, $config);
+        $this->generatedFile = APP . 'Model/Entity/User.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields --hidden password users');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1401,11 +1405,12 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntityCustomHidden()
     {
-        $model = TableRegistry::get('BakeUsers');
-        $config = [
-            'hidden' => ['foo', 'bar'],
-        ];
-        $result = $this->Task->bakeEntity($model, $config);
+        $this->generatedFile = APP . 'Model/Entity/User.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields --hidden foo,bar users');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1416,16 +1421,16 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeTableWithPlugin()
     {
-        $this->Task->plugin = 'ModelTest';
+        $this->_loadTestPlugin('BakeTest');
+        $path = Plugin::path('BakeTest');
 
-        // fake plugin path
-        Plugin::load('ModelTest', ['path' => APP . 'Plugin' . DS . 'ModelTest' . DS]);
-        $path = $this->_normalizePath(APP . 'Plugin/ModelTest/src/Model/Table/BakeArticlesTable.php');
-        $this->Task->expects($this->once())->method('createFile')
-            ->with($path);
+        $this->generatedFile = $path . 'src/Model/Table/UsersTable.php';
 
-        $model = TableRegistry::get('BakeArticles');
-        $result = $this->Task->bakeTable($model);
+        $this->exec('bake model --no-test --no-fixture --no-entity BakeTest.Users');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1436,17 +1441,16 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntityWithPlugin()
     {
-        $this->Task->plugin = 'ModelTest';
+        $this->_loadTestPlugin('BakeTest');
+        $path = Plugin::path('BakeTest');
 
-        // fake plugin path
-        Plugin::load('ModelTest', ['path' => APP . 'Plugin' . DS . 'ModelTest' . DS]);
-        $path = APP . 'Plugin' . DS . 'ModelTest' . DS . 'src' . DS . 'Model' . DS . 'Entity' . DS . 'BakeArticle.php';
-        $path = $this->_normalizePath($path);
-        $this->Task->expects($this->once())->method('createFile')
-            ->with($path);
+        $this->generatedFile = $path . 'src/Model/Table/UsersTable.php';
 
-        $model = TableRegistry::get('BakeArticles');
-        $result = $this->Task->bakeEntity($model);
+        $this->exec('bake model --no-test --no-fixture --no-entity -p BakeTest Users');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1488,15 +1492,10 @@ class ModelTaskTest extends TestCase
      */
     public function testMainNoArgs()
     {
-        $this->_useMockedOut();
-        $this->Task->connection = 'test';
-        $this->Task->path = '/my/path/';
+        $this->exec('bake model');
 
-        $this->Task->expects($this->at(0))
-            ->method('out')
-            ->with($this->stringContains('Choose a model to bake from the following:'));
-
-        $this->Task->main();
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertOutputContains('Choose a model to bake from the following:');
     }
 
     /**
@@ -1506,19 +1505,16 @@ class ModelTaskTest extends TestCase
      */
     public function testMainWithNamedModel()
     {
-        $this->Task->connection = 'test';
+        $this->generatedFiles = [
+            APP . 'Model/Table/UsersTable.php',
+            APP . 'Model/Entity/User.php',
+            ROOT . 'tests/TestCase/Model/Table/UsersTableTest.php',
+            ROOT . 'tests/Fixture/UsersFixture.php',
+        ];
+        $this->exec('bake model --connection test users');
 
-        $tableFile = $this->_normalizePath(APP . 'Model/Table/BakeArticlesTable.php');
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with($tableFile, $this->stringContains('class BakeArticlesTable extends Table'));
-
-        $entityFile = $this->_normalizePath(APP . 'Model/Entity/BakeArticle.php');
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with($entityFile, $this->stringContains('class BakeArticle extends Entity'));
-
-        $this->Task->main('BakeArticles');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
     }
 
     /**
@@ -1529,7 +1525,7 @@ class ModelTaskTest extends TestCase
     public static function nameVariations()
     {
         return [
-            ['BakeArticles'], ['bake_articles']
+            ['BakeComments'], ['bake_comments']
         ];
     }
 
@@ -1541,14 +1537,16 @@ class ModelTaskTest extends TestCase
      */
     public function testMainWithNamedModelVariations($name)
     {
-        $this->Task->connection = 'test';
+        $this->generatedFiles = [
+            APP . 'Model/Table/BakeCommentsTable.php',
+            APP . 'Model/Entity/BakeComment.php',
+            ROOT . 'tests/TestCase/Model/Table/BakeCommentsTableTest.php',
+            ROOT . 'tests/Fixture/BakeCommentsFixture.php',
+        ];
+        $this->exec("bake model --connection test {$name}");
 
-        $filename = $this->_normalizePath(APP . 'Model/Table/BakeArticlesTable.php');
-
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with($filename, $this->stringContains('class BakeArticlesTable extends Table'));
-        $this->Task->main($name);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
     }
 
     /**
