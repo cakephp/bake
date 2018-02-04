@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $updated
  *
+ * @property \App\Model\Entity\Comment[] $comments
  * @property \App\Model\Entity\CounterCachePost[] $counter_cache_posts
  */
 class User extends Entity

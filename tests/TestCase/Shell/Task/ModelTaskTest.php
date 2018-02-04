@@ -46,6 +46,7 @@ class ModelTaskTest extends TestCase
         'core.users',
         'core.counter_cache_users',
         'core.counter_cache_posts',
+        'core.comments',
         'core.tags',
         'core.articles_tags',
         'plugin.bake.bake_articles',
@@ -1670,18 +1671,23 @@ class ModelTaskTest extends TestCase
             ->method('createFile')
             ->with($filename);
 
-        $filename = $this->_normalizePath(APP . 'Model/Entity/CounterCacheUser.php');
+        $filename = $this->_normalizePath(APP . 'Model/Entity/Comment.php');
         $this->Task->expects($this->at(9))
             ->method('createFile')
             ->with($filename);
 
-        $filename = $this->_normalizePath(APP . 'Model/Entity/Invitation.php');
+        $filename = $this->_normalizePath(APP . 'Model/Entity/CounterCacheUser.php');
         $this->Task->expects($this->at(11))
             ->method('createFile')
             ->with($filename);
 
-        $filename = $this->_normalizePath(APP . 'Model/Entity/NumberTree.php');
+        $filename = $this->_normalizePath(APP . 'Model/Entity/Invitation.php');
         $this->Task->expects($this->at(13))
+            ->method('createFile')
+            ->with($filename);
+
+        $filename = $this->_normalizePath(APP . 'Model/Entity/NumberTree.php');
+        $this->Task->expects($this->at(15))
             ->method('createFile')
             ->with($filename);
 

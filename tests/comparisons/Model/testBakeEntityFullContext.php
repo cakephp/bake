@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $updated
  *
+ * @property \App\Model\Entity\Comment[] $comments
  * @property \App\Model\Entity\CounterCachePost[] $counter_cache_posts
  */
 class User extends Entity
@@ -31,6 +32,7 @@ class User extends Entity
         'password' => true,
         'created' => true,
         'updated' => true,
+        'comments' => true,
         'counter_cache_posts' => true
     ];
 
