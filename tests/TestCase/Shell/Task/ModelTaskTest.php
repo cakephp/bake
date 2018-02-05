@@ -1427,7 +1427,7 @@ class ModelTaskTest extends TestCase
 
         $this->generatedFile = $path . 'src/Model/Table/UsersTable.php';
 
-        $this->exec('bake model --no-test --no-fixture --no-entity BakeTest.Users');
+        $this->exec('bake model --no-validation --no-test --no-fixture --no-entity BakeTest.Users');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
@@ -1447,7 +1447,7 @@ class ModelTaskTest extends TestCase
 
         $this->generatedFile = $path . 'src/Model/Table/UsersTable.php';
 
-        $this->exec('bake model --no-test --no-fixture --no-entity -p BakeTest Users');
+        $this->exec('bake model --no-validation --no-test --no-fixture --no-entity -p BakeTest Users');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
