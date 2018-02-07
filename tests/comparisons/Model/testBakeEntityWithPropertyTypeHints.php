@@ -19,6 +19,8 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\BakeUser $bake_user
  * @property \BakeTest\Model\Entity\Author[] $authors
+ * @property \App\Model\Entity\BakeComment[] $bake_comments
+ * @property \App\Model\Entity\BakeTag[] $bake_tags
  */
 class BakeArticle extends Entity
 {
