@@ -49,7 +49,7 @@ class {{ className }}Test extends TestCase
      *
      * @var {{ propertyInfo.type }}
      */
-     public ${{ propertyInfo.name }}{% if propertyInfo.value is defined and propertyInfo.value %} = {{ propertyInfo.value }}{% endif %};
+    public ${{ propertyInfo.name }}{% if propertyInfo.value is defined and propertyInfo.value %} = {{ propertyInfo.value }}{% endif %};
 {% endfor %}
 {% endif %}
 
