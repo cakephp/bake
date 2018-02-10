@@ -16,8 +16,11 @@
  */
 #}
 {% set isController = type|lower == 'controller' %}
+{% set isShell = type|lower == 'shell' %}
 {% if isController %}
     {%- set uses = uses|merge(['Cake\\TestSuite\\IntegrationTestCase']) %}
+{% elseif isShell %}
+    {%- set uses = uses|merge(['Cake\\TestSuite\\ConsoleIntegrationTestCase']) %}
 {% else %}
     {%- set uses = uses|merge(['Cake\\TestSuite\\TestCase']) %}
 {% endif %}
@@ -35,6 +38,9 @@ use {{ dependency }};
  */
 {% if isController %}
 class {{ className }}Test extends IntegrationTestCase
+{
+{% elseif isShell %}
+class {{ className }}Test extends ConsoleIntegrationTestCase
 {
 {% else %}
 class {{ className }}Test extends TestCase

@@ -2,12 +2,12 @@
 namespace App\Test\TestCase\Shell;
 
 use App\Shell\ArticlesShell;
-use Cake\TestSuite\TestCase;
+use Cake\TestSuite\ConsoleIntegrationTestCase;
 
 /**
  * App\Shell\ArticlesShell Test Case
  */
-class ArticlesShellTest extends TestCase
+class ArticlesShellTest extends ConsoleIntegrationTestCase
 {
 
     /**
