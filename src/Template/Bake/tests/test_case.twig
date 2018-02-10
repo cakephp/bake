@@ -18,13 +18,13 @@
 {% set isController = type|lower == 'controller' %}
 {% set isShell = type|lower == 'shell' %}
 {% if isController %}
-    {%- set superclassName = 'IntegrationTestCase' %}
+    {%- set superClassName = 'IntegrationTestCase' %}
 {% elseif isShell %}
-    {%- set superclassName = 'ConsoleIntegrationTestCase' %}
+    {%- set superClassName = 'ConsoleIntegrationTestCase' %}
 {% else %}
-    {%- set superclassName = 'TestCase' %}
+    {%- set superClassName = 'TestCase' %}
 {% endif %}
-{%- set uses = uses|merge(["Cake\\TestSuite\\#{superclassName}"]) %}
+{%- set uses = uses|merge(["Cake\\TestSuite\\#{superClassName}"]) %}
 
 {%- set uses = uses|sort %}
 <?php
@@ -37,7 +37,7 @@ use {{ dependency }};
 /**
  * {{ fullClassName }} Test Case
  */
-class {{ className }}Test extends {{ superclassName }}
+class {{ className }}Test extends {{ superClassName }}
 {
 {% if properties %}
 {% for propertyInfo in properties %}
