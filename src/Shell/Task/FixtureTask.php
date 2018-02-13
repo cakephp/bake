@@ -170,19 +170,12 @@ class FixtureTask extends BakeTask
             $import = sprintf("[%s]", implode(', ', $importBits));
         }
 
-        $connection = ConnectionManager::get($this->connection);
-        if (!method_exists($connection, 'schemaCollection')) {
-            throw new \RuntimeException(
-                'Cannot generate fixtures for connections that do not implement schemaCollection()'
-            );
-        }
-        $schemaCollection = $connection->schemaCollection();
         try {
-            $data = $schemaCollection->describe($useTable);
+            $data = $this->readSchema($useTable);
         } catch (Exception $e) {
             $useTable = Inflector::underscore($model);
             $table = $useTable;
-            $data = $schemaCollection->describe($useTable);
+            $data = $this->readSchema($model);
         }
 
         if ($modelImport === null) {
@@ -201,6 +194,28 @@ class FixtureTask extends BakeTask
         }
 
         return $this->generateFixtureFile($model, compact('records', 'table', 'schema', 'import'));
+    }
+
+    /**
+     * Get schema metadata for the current table mapping.
+     *
+     * @param string $table The table name to get schema metadata for.
+     * @return \Cake\Database\Schema\TableSchema
+     */
+    public function readSchema($table)
+    {
+        $connection = ConnectionManager::get($this->connection);
+
+        if (TableRegistry::exists($table)) {
+            $model = TableRegistry::get($table);
+        } else {
+            $model = TableRegistry::get($table, [
+                'table' => $table,
+                'connection' => $connection
+            ]);
+        }
+
+        return $model->getSchema();
     }
 
     /**

@@ -329,7 +329,7 @@ class FixtureTaskTest extends TestCase
     }
 
     /**
-     * test record generation with float and binary types
+     * test record generation with various datatypes
      *
      * @return void
      */
@@ -367,17 +367,20 @@ class FixtureTaskTest extends TestCase
     }
 
     /**
-     * Test that file generation includes headers and correct path for plugins.
+     * Test that file generation works with remapped json types
      *
      * @return void
      */
-    public function testGenerateFixtureFile()
+    public function testGenerateFixtureFileRemappedJsonTypes()
     {
+        $table = TableRegistry::get('articles');
+        $table->getSchema()->addColumn('body', ['type' => 'json']);
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test Articles');
 
         $this->assertFileContains('<?php', $this->generatedFile);
         $this->assertFileContains('namespace App\Test\Fixture;', $this->generatedFile);
+        $this->assertFileContains("'body' => ['type' => 'json'", $this->generatedFile);
     }
 
     /**
