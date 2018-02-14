@@ -171,11 +171,12 @@ class FixtureTask extends BakeTask
         }
 
         try {
-            $data = $this->readSchema($useTable);
+            $data = $this->readSchema($model, $useTable);
         } catch (Exception $e) {
+            TableRegistry::remove($model);
             $useTable = Inflector::underscore($model);
             $table = $useTable;
-            $data = $this->readSchema($model);
+            $data = $this->readSchema($model, $useTable);
         }
 
         if ($modelImport === null) {
@@ -199,17 +200,18 @@ class FixtureTask extends BakeTask
     /**
      * Get schema metadata for the current table mapping.
      *
+     * @param string $name The model alias to use
      * @param string $table The table name to get schema metadata for.
      * @return \Cake\Database\Schema\TableSchema
      */
-    public function readSchema($table)
+    public function readSchema($name, $table)
     {
         $connection = ConnectionManager::get($this->connection);
 
-        if (TableRegistry::exists($table)) {
-            $model = TableRegistry::get($table);
+        if (TableRegistry::exists($name)) {
+            $model = TableRegistry::get($name);
         } else {
-            $model = TableRegistry::get($table, [
+            $model = TableRegistry::get($name, [
                 'table' => $table,
                 'connection' => $connection
             ]);

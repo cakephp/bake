@@ -373,7 +373,7 @@ class FixtureTaskTest extends TestCase
      */
     public function testGenerateFixtureFileRemappedJsonTypes()
     {
-        $table = TableRegistry::get('articles');
+        $table = TableRegistry::get('Articles');
         $table->getSchema()->addColumn('body', ['type' => 'json']);
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test Articles');
