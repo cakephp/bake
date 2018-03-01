@@ -431,8 +431,7 @@ class TestTask extends BakeTask
     }
 
     /**
-     * Process a model recursively and pull out all the
-     * model names converting them to fixture names.
+     * Process a model, pull out model name + associations converted to fixture names.
      *
      * @param \Cake\ORM\Table $subject A Model class to scan for associations and pull fixtures off of.
      * @return void
@@ -447,20 +446,9 @@ class TestTask extends BakeTask
             $assoc = $subject->association($alias);
             $target = $assoc->getTarget();
             $name = $target->getAlias();
-            $subjectClass = get_class($subject);
-
-            if ($subjectClass !== 'Cake\ORM\Table' && $subjectClass === get_class($target)) {
-                continue;
-            }
 
             if (!isset($this->_fixtures[$name])) {
-                $this->_processModel($target);
-            }
-            if ($assoc->type() === Association::MANY_TO_MANY) {
-                $junction = $assoc->junction();
-                if (!isset($this->_fixtures[$junction->getAlias()])) {
-                    $this->_processModel($junction);
-                }
+                $this->_addFixture($target->getAlias());
             }
         }
     }
