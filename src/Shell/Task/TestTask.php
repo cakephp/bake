@@ -446,7 +446,11 @@ class TestTask extends BakeTask
             $assoc = $subject->association($alias);
             $target = $assoc->getTarget();
             $name = $target->getAlias();
+            $subjectClass = get_class($subject);
 
+            if ($subjectClass !== 'Cake\ORM\Table' && $subjectClass === get_class($target)) {
+                continue;
+            }
             if (!isset($this->_fixtures[$name])) {
                 $this->_addFixture($target->getAlias());
             }

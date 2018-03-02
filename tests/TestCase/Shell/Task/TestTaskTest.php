@@ -285,6 +285,22 @@ class TestTaskTest extends TestCase
      *
      * @return void
      */
+    public function testFixtureArrayGenerationIgnoreSelfAssociation()
+    {
+        TableRegistry::clear();
+        $subject = new CategoryThreadsTable();
+        $result = $this->Task->generateFixtureList($subject);
+        $expected = [
+            'app.category_threads',
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * test that the generation of fixtures works correctly.
+     *
+     * @return void
+     */
     public function testFixtureGenerationFromController()
     {
         $subject = new PostsController(new Request(), new Response());
