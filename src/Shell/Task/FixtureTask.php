@@ -425,13 +425,13 @@ class FixtureTask extends BakeTask
                 if ($val === 'NULL') {
                     $val = 'null';
                 }
-                $values[] = "            '$field' => $val";
+                $values[] = "                '$field' => $val";
             }
-            $out .= "        [\n";
+            $out .= "            [\n";
             $out .= implode(",\n", $values);
-            $out .= "\n        ],\n";
+            $out .= "\n            ],\n";
         }
-        $out .= "    ]";
+        $out .= "        ]";
 
         return $out;
     }
