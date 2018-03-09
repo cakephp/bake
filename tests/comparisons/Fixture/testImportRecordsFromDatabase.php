@@ -18,11 +18,13 @@ class UsersFixture extends TestFixture
     public $import = ['table' => 'users', 'connection' => 'test'];
 
     /**
-     * Records
+     * Init method
      *
-     * @var array
+     * @return void
      */
-    public $records = [
+    public function init()
+    {
+        $this->records = [
         [
             'id' => 1,
             'username' => 'mariano',
@@ -52,4 +54,6 @@ class UsersFixture extends TestFixture
             'updated' => '2012-06-12 01:24:31'
         ],
     ];
+        parent::init();
+    }
 }
