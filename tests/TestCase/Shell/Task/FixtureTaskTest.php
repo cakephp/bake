@@ -308,7 +308,7 @@ class FixtureTaskTest extends TestCase
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileContains('class ArticlesFixture extends TestFixture', $this->generatedFile);
         $this->assertFileContains('public $fields', $this->generatedFile);
-        $this->assertFileContains('public $records', $this->generatedFile);
+        $this->assertFileContains('$this->records =', $this->generatedFile);
         $this->assertFileNotContains('public $import', $this->generatedFile);
     }
 
@@ -324,7 +324,7 @@ class FixtureTaskTest extends TestCase
 
         $importString = "public \$import = ['table' => 'comments', 'connection' => 'test'];";
         $this->assertFileContains($importString, $this->generatedFile);
-        $this->assertFileContains('public $records', $this->generatedFile);
+        $this->assertFileContains('$this->records =', $this->generatedFile);
         $this->assertFileNotContains('public $fields', $this->generatedFile);
     }
 

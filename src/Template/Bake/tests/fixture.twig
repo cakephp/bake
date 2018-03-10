@@ -63,10 +63,14 @@ class {{ name }}Fixture extends TestFixture
 {%- if records %}
 
     /**
-     * Records
+     * Init method
      *
-     * @var array
+     * @return void
      */
-    public $records = {{ records|raw }};
+    public function init()
+    {
+        $this->records = {{ records|raw }};
+        parent::init();
+    }
 {% endif %}
 }
