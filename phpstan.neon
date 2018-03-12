@@ -4,5 +4,3 @@ parameters:
     ignoreErrors:
         - '#Call to an undefined method Cake\\Database\\Type::getDateTimeClassName\(\)#'
         - '#Constant TESTS not found#'
-        - '#Call to an undefined method Cake\\ORM\\Association::junction\(\)#'
-        - '#Strict comparison using !== between string and null will always evaluate to true#'

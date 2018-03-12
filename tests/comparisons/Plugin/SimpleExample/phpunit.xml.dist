@@ -13,8 +13,8 @@
 
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
-        <testsuite name="SimpleExample Test Suite">
-            <directory>./tests/TestCase</directory>
+        <testsuite name="SimpleExample">
+            <directory>./tests/TestCase/</directory>
         </testsuite>
     </testsuites>
 

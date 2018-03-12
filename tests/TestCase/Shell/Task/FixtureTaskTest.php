@@ -308,7 +308,7 @@ class FixtureTaskTest extends TestCase
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileContains('class ArticlesFixture extends TestFixture', $this->generatedFile);
         $this->assertFileContains('public $fields', $this->generatedFile);
-        $this->assertFileContains('public $records', $this->generatedFile);
+        $this->assertFileContains('$this->records =', $this->generatedFile);
         $this->assertFileNotContains('public $import', $this->generatedFile);
     }
 
@@ -324,12 +324,12 @@ class FixtureTaskTest extends TestCase
 
         $importString = "public \$import = ['table' => 'comments', 'connection' => 'test'];";
         $this->assertFileContains($importString, $this->generatedFile);
-        $this->assertFileContains('public $records', $this->generatedFile);
+        $this->assertFileContains('$this->records =', $this->generatedFile);
         $this->assertFileNotContains('public $fields', $this->generatedFile);
     }
 
     /**
-     * test record generation with float and binary types
+     * test record generation with various datatypes
      *
      * @return void
      */
@@ -367,17 +367,20 @@ class FixtureTaskTest extends TestCase
     }
 
     /**
-     * Test that file generation includes headers and correct path for plugins.
+     * Test that file generation works with remapped json types
      *
      * @return void
      */
-    public function testGenerateFixtureFile()
+    public function testGenerateFixtureFileRemappedJsonTypes()
     {
+        $table = TableRegistry::get('Articles');
+        $table->getSchema()->addColumn('body', ['type' => 'json']);
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test Articles');
 
         $this->assertFileContains('<?php', $this->generatedFile);
         $this->assertFileContains('namespace App\Test\Fixture;', $this->generatedFile);
+        $this->assertFileContains("'body' => ['type' => 'json'", $this->generatedFile);
     }
 
     /**
