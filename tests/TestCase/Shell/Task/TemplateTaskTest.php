@@ -84,6 +84,7 @@ class TemplateTaskTest extends TestCase
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['listUnskipped', 'execute', 'createFile'])
             ->getMock();
     }
 

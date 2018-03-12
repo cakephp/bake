@@ -118,9 +118,11 @@ class ModelTaskTest extends TestCase
 
         $this->Task->Fixture = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['bake', 'execute'])
             ->getMock();
-        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
+        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['bake', 'execute'])
             ->getMock();
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->interactive = false;
@@ -1658,6 +1660,11 @@ class ModelTaskTest extends TestCase
 
         $filename = $this->_normalizePath(APP . 'Model/Entity/BakeArticlesBakeTag.php');
         $this->Task->expects($this->at(3))
+            ->method('createFile')
+            ->with($filename);
+
+        $filename = $this->_normalizePath(APP . 'Model/Entity/BakeComment.php');
+        $this->Task->expects($this->at(5))
             ->method('createFile')
             ->with($filename);
 
