@@ -83,9 +83,15 @@ class BakeShellTest extends TestCase
      */
     public function testAllWithModelName()
     {
-        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')->getMock();
-        $this->Shell->Controller = $this->getMockBuilder('Bake\Shell\Task\ControllerTask')->getMock();
-        $this->Shell->Template = $this->getMockBuilder('Bake\Shell\Task\TemplateTask')->getMock();
+        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
+            ->setMethods(['main'])
+            ->getMock();
+        $this->Shell->Controller = $this->getMockBuilder('Bake\Shell\Task\ControllerTask')
+            ->setMethods(['main'])
+            ->getMock();
+        $this->Shell->Template = $this->getMockBuilder('Bake\Shell\Task\TemplateTask')
+            ->setMethods(['main'])
+            ->getMock();
 
         $this->Shell->Model->expects($this->once())
             ->method('main')
