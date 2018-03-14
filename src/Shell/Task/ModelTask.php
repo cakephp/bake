@@ -291,7 +291,7 @@ class ModelTask extends BakeTask
                 $namespace = $appNamespace;
 
                 $className = $association->className();
-                if ($className !== null) {
+                if (strlen($className)) {
                     list($plugin, $className) = pluginSplit($className);
                     if ($plugin !== null) {
                         $namespace = $plugin;
