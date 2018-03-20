@@ -210,7 +210,7 @@ class PluginTask extends BakeTask
 
         sort($templates);
         foreach ($templates as $template) {
-            $template = substr($template, strrpos($template, 'Plugin') + 7, -4);
+            $template = substr($template, strrpos($template, 'Plugin' . DIRECTORY_SEPARATOR) + 7, -4);
             $template = rtrim($template, '.');
             $this->_generateFile($template, $root);
         }
