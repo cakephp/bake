@@ -170,11 +170,11 @@ class PluginTaskTest extends TestCase
 
         $pluginPath = App::path('Plugin')[0];
         $this->assertEquals(
-            $pluginPath . 'ComposerExample' . DS . 'src',
+            $pluginPath . 'ComposerExample' . DS . 'src' . DS,
             $result['autoload']['psr-4']['ComposerExample\\']
         );
         $this->assertEquals(
-            $pluginPath . 'ComposerExample' . DS . 'tests',
+            $pluginPath . 'ComposerExample' . DS . 'tests' . DS,
             $result['autoload-dev']['psr-4']['ComposerExample\\Test\\']
         );
 
