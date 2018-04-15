@@ -118,9 +118,11 @@ class ModelTaskTest extends TestCase
 
         $this->Task->Fixture = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['bake', 'execute'])
             ->getMock();
-        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
+        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['bake', 'execute'])
             ->getMock();
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->interactive = false;
@@ -180,8 +182,8 @@ class ModelTaskTest extends TestCase
     {
         $result = $this->Task->getTableObject('Article', 'bake_articles');
         $this->assertInstanceOf('Cake\ORM\Table', $result);
-        $this->assertEquals('bake_articles', $result->table());
-        $this->assertEquals('Article', $result->alias());
+        $this->assertEquals('bake_articles', $result->getTable());
+        $this->assertEquals('Article', $result->getAlias());
 
         $this->Task->params['plugin'] = 'BakeTest';
         $result = $this->Task->getTableObject('Authors', 'bake_articles');
@@ -198,13 +200,13 @@ class ModelTaskTest extends TestCase
         $this->Task->tablePrefix = 'my_prefix_';
 
         $result = $this->Task->getTableObject('Article', 'bake_articles');
-        $this->assertEquals('my_prefix_bake_articles', $result->table());
+        $this->assertEquals('my_prefix_bake_articles', $result->getTable());
         $this->assertInstanceOf('Cake\ORM\Table', $result);
-        $this->assertEquals('Article', $result->alias());
+        $this->assertEquals('Article', $result->getAlias());
 
         $this->Task->params['plugin'] = 'BakeTest';
         $result = $this->Task->getTableObject('Authors', 'bake_articles');
-        $this->assertEquals('my_prefix_bake_articles', $result->table());
+        $this->assertEquals('my_prefix_bake_articles', $result->getTable());
         $this->assertInstanceOf('BakeTest\Model\Table\AuthorsTable', $result);
     }
 
@@ -379,7 +381,7 @@ class ModelTaskTest extends TestCase
     public function testGetAssociationsIgnoreUnderscoreId()
     {
         $model = TableRegistry::get('BakeComments');
-        $model->schema([
+        $model->setSchema([
             'id' => ['type' => 'integer'],
             '_id' => ['type' => 'integer'],
         ]);
@@ -505,7 +507,7 @@ class ModelTaskTest extends TestCase
     public function testBelongsToGenerationIdMidColumn()
     {
         $model = TableRegistry::get('Articles');
-        $model->schema([
+        $model->setSchema([
             'id' => ['type' => 'integer'],
             'thing_id_field' => ['type' => 'integer'],
         ]);
@@ -521,7 +523,7 @@ class ModelTaskTest extends TestCase
     public function testBelongsToGenerationPrimaryKey()
     {
         $model = TableRegistry::get('Articles');
-        $model->schema([
+        $model->setSchema([
             'usr_id' => ['type' => 'integer'],
             'name' => ['type' => 'string'],
             '_constraints' => [
@@ -612,8 +614,8 @@ class ModelTaskTest extends TestCase
         $model = TableRegistry::get('BakeArticles');
         $model->belongsTo('BakeUsers');
         $model->hasMany('BakeTest.Authors');
-        $model->schema()->columnType('created', 'timestamp');
-        $model->schema()->columnType('updated', 'timestamp');
+        $model->getSchema()->setColumnType('created', 'timestamp');
+        $model->getSchema()->setColumnType('updated', 'timestamp');
 
         $result = $this->Task->getEntityPropertySchema($model);
         $expected = [
@@ -647,12 +649,12 @@ class ModelTaskTest extends TestCase
             ],
             'bake_user' => [
                 'kind' => 'association',
-                'association' => $model->association('BakeUsers'),
+                'association' => $model->getAssociation('BakeUsers'),
                 'type' => '\App\Model\Entity\BakeUser'
             ],
             'authors' => [
                 'kind' => 'association',
-                'association' => $model->association('Authors'),
+                'association' => $model->getAssociation('Authors'),
                 'type' => '\BakeTest\Model\Entity\Author'
             ]
         ];
@@ -866,7 +868,7 @@ class ModelTaskTest extends TestCase
     public function testGetValidationUniqueDateField()
     {
         $model = TableRegistry::get('BakeComments');
-        $schema = $model->schema();
+        $schema = $model->getSchema();
         $schema
             ->addColumn('release_date', ['type' => 'datetime'])
             ->addConstraint('unique_date', [
@@ -1019,11 +1021,11 @@ class ModelTaskTest extends TestCase
     public function testGetRulesUniqueKeys()
     {
         $model = TableRegistry::get('BakeArticles');
-        $model->schema()->addConstraint('unique_title', [
+        $model->getSchema()->addConstraint('unique_title', [
             'type' => 'unique',
             'columns' => ['title']
         ]);
-        $model->schema()->addConstraint('ignored_constraint', [
+        $model->getSchema()->addConstraint('ignored_constraint', [
             'type' => 'unique',
             'columns' => ['title', 'bake_user_id']
         ]);
@@ -1311,13 +1313,13 @@ class ModelTaskTest extends TestCase
         $model = TableRegistry::get('BakeArticles');
         $model->belongsTo('BakeUsers');
         $model->hasMany('BakeTest.Authors');
-        $model->schema()->addColumn('array_type', [
+        $model->getSchema()->addColumn('array_type', [
             'type' => 'array'
         ]);
-        $model->schema()->addColumn('json_type', [
+        $model->getSchema()->addColumn('json_type', [
             'type' => 'json'
         ]);
-        $model->schema()->addColumn('unknown_type', [
+        $model->getSchema()->addColumn('unknown_type', [
             'type' => 'unknownType'
         ]);
 
@@ -1666,6 +1668,11 @@ class ModelTaskTest extends TestCase
             ->method('createFile')
             ->with($filename);
 
+        $filename = $this->_normalizePath(APP . 'Model/Entity/BakeComment.php');
+        $this->Task->expects($this->at(5))
+            ->method('createFile')
+            ->with($filename);
+
         $filename = $this->_normalizePath(APP . 'Model/Entity/CategoryThread.php');
         $this->Task->expects($this->at(7))
             ->method('createFile')
@@ -1702,7 +1709,7 @@ class ModelTaskTest extends TestCase
     public function testFindTableReferencedBy()
     {
         $invoices = TableRegistry::get('Invitations');
-        $schema = $invoices->schema();
+        $schema = $invoices->getSchema();
         $result = $this->Task->findTableReferencedBy($schema, 'not_there');
         $this->assertNull($result);
 

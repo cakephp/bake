@@ -443,7 +443,7 @@ class TestTask extends BakeTask
         }
         $this->_addFixture($subject->getAlias());
         foreach ($subject->associations()->keys() as $alias) {
-            $assoc = $subject->association($alias);
+            $assoc = $subject->getAssociation($alias);
             $target = $assoc->getTarget();
             $name = $target->getAlias();
             $subjectClass = get_class($subject);

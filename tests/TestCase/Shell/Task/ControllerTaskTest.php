@@ -68,10 +68,12 @@ class ControllerTaskTest extends TestCase
         $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
             ->setMethods(['in', 'out', 'err', 'createFile', '_stop'])
             ->setConstructorArgs([$io])
+            ->setMethods(['bake'])
             ->getMock();
 
         $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['bake'])
             ->getMock();
 
         TableRegistry::get('BakeArticles', [

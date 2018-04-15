@@ -102,9 +102,11 @@ class ModelTaskAssociationDetectionTest extends TestCase
 
         $this->Task->Fixture = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['bake'])
             ->getMock();
         $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['bake'])
             ->getMock();
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->interactive = false;

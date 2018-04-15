@@ -291,7 +291,7 @@ class ModelTask extends BakeTask
                 $namespace = $appNamespace;
 
                 $className = $association->className();
-                if ($className !== null) {
+                if (strlen($className)) {
                     list($plugin, $className) = pluginSplit($className);
                     if ($plugin !== null) {
                         $namespace = $plugin;
@@ -405,7 +405,7 @@ class ModelTask extends BakeTask
     public function findHasMany($model, array $associations)
     {
         $schema = $model->getSchema();
-        $primaryKey = (array)$schema->primaryKey();
+        $primaryKey = $schema->primaryKey();
         $tableName = $schema->name();
         $foreignKey = $this->_modelKey($tableName);
 
@@ -650,7 +650,7 @@ class ModelTask extends BakeTask
      *
      * @param \Cake\ORM\Table $model The model to introspect.
      * @param array $associations The associations list.
-     * @return array The validation rules.
+     * @return array|false The validation rules.
      */
     public function getValidation($model, $associations = [])
     {
@@ -664,7 +664,7 @@ class ModelTask extends BakeTask
         }
 
         $validate = [];
-        $primaryKey = (array)$schema->primaryKey();
+        $primaryKey = $schema->primaryKey();
         $foreignKeys = [];
         if (isset($associations['belongsTo'])) {
             foreach ($associations['belongsTo'] as $assoc) {
@@ -731,7 +731,7 @@ class ModelTask extends BakeTask
             }
         }
 
-        if (in_array($fieldName, (array)$primaryKey)) {
+        if (in_array($fieldName, $primaryKey)) {
             $rules['allowEmpty'] = ["'create'"];
         } elseif ($metaData['null'] === true) {
             $rules['allowEmpty'] = [];
@@ -1031,7 +1031,7 @@ class ModelTask extends BakeTask
                 'Connections need to implement schemaCollection() to be used with bake.'
             );
         }
-        $schema = $db->schemaCollection();
+        $schema = $db->getSchemaCollection();
         $tables = $schema->listTables();
         if (empty($tables)) {
             $this->abort('Your database does not have any tables.');
@@ -1142,7 +1142,7 @@ class ModelTask extends BakeTask
      * Assembles and writes a unit test file
      *
      * @param string $className Model class name
-     * @return string|null
+     * @return string|bool
      */
     public function bakeTest($className)
     {

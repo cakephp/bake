@@ -9,44 +9,19 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @since         2.0.0
+ * @since         1.7.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
 <?php
-namespace {{ namespace }}\View\Cell{{ prefix }};
 
-use Cake\View\Cell;
+namespace {{ namespace }};
+
+use Cake\Core\BasePlugin;
 
 /**
- * {{ name }} cell
+ * Plugin for {{ namespace }}
  */
-class {{ name }}Cell extends Cell
+class Plugin extends BasePlugin
 {
-
-    /**
-     * List of valid options that can be passed into this
-     * cell's constructor.
-     *
-     * @var array
-     */
-    protected $_validCellOptions = [];
-
-    /**
-     * Initialization logic run at the end of object construction.
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-    }
-
-    /**
-     * Default display method.
-     *
-     * @return void
-     */
-    public function display()
-    {
-    }
 }

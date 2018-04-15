@@ -23,7 +23,7 @@ class CategoryThreadsTable extends Table
 {
     public function initialize(array $config)
     {
-        $this->table('category_threads');
+        $this->setTable('category_threads');
         $this->belongsTo(
             'ParentCategoryThreads',
             [

@@ -200,7 +200,7 @@ class ControllerTask extends BakeTask
      * Assembles and writes a unit test file
      *
      * @param string $className Controller class name
-     * @return string|null Baked test
+     * @return string|bool Baked test
      */
     public function bakeTest($className)
     {

@@ -49,6 +49,7 @@ class TaskTaskTest extends TestCase
 
         $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['bake'])
             ->getMock();
 
         $this->Task->BakeTemplate = new BakeTemplateTask($io);

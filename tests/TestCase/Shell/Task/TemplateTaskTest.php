@@ -57,7 +57,7 @@ class TemplateTaskTest extends TestCase
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
 
         Configure::write('App.namespace', 'Bake\Test\App');
-        $this->_setupTask(['in', 'err', 'error', 'createFile', '_stop']);
+        $this->_setupTask(['in', 'err', 'abort', 'createFile', '_stop']);
 
         TableRegistry::get('TemplateTaskComments', [
             'className' => 'Bake\Test\App\Model\Table\TemplateTaskCommentsTable',
@@ -84,6 +84,7 @@ class TemplateTaskTest extends TestCase
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['listUnskipped', 'execute', 'createFile'])
             ->getMock();
     }
 
@@ -286,7 +287,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TestTemplateModel',
             'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
-            'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
+            'schema' => TableRegistry::get('TemplateTaskComments')->getSchema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
             'singularVar' => 'testTemplateModel',
@@ -313,7 +314,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TemplateTaskComments',
             'entityClass' => $namespace . '\Model\Entity\TemplateTaskComment',
-            'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
+            'schema' => TableRegistry::get('TemplateTaskComments')->getSchema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
             'singularVar' => 'templateTaskComment',
@@ -353,7 +354,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TestTemplateModel',
             'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
-            'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
+            'schema' => TableRegistry::get('TemplateTaskComments')->getSchema(),
             'primaryKey' => [],
             'displayField' => 'name',
             'singularVar' => 'testTemplateModel',
@@ -366,7 +367,7 @@ class TemplateTaskTest extends TestCase
             'namespace' => $namespace,
         ];
         $this->Task->expects($this->once())
-            ->method('error')
+            ->method('abort')
             ->with($this->stringContains('Cannot generate views for models'));
 
         $result = $this->Task->getContent('view', $vars);
@@ -384,7 +385,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TestTemplateModel',
             'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
-            'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
+            'schema' => TableRegistry::get('TemplateTaskComments')->getSchema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
             'singularVar' => 'testTemplateModel',

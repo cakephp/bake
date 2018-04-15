@@ -17,7 +17,7 @@ namespace Bake\Shell\Task;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Database\Exception;
-use Cake\Database\Schema\Table;
+use Cake\Database\Schema\TableSchema;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -261,14 +261,14 @@ class FixtureTask extends BakeTask
     /**
      * Generates a string representation of a schema.
      *
-     * @param \Cake\Database\Schema\Table $table Table schema
+     * @param \Cake\Database\Schema\TableSchema $table Table schema
      * @return string fields definitions
      */
-    protected function _generateSchema(Table $table)
+    protected function _generateSchema(TableSchema $table)
     {
         $cols = $indexes = $constraints = [];
         foreach ($table->columns() as $field) {
-            $fieldData = $table->column($field);
+            $fieldData = $table->getColumn($field);
             $properties = implode(', ', $this->_values($fieldData));
             $cols[] = "        '$field' => [$properties],";
         }
@@ -278,11 +278,11 @@ class FixtureTask extends BakeTask
             $indexes[] = "            '$index' => [$properties],";
         }
         foreach ($table->constraints() as $index) {
-            $fieldData = $table->constraint($index);
+            $fieldData = $table->getConstraint($index);
             $properties = implode(', ', $this->_values($fieldData));
             $constraints[] = "            '$index' => [$properties],";
         }
-        $options = $this->_values($table->options());
+        $options = $this->_values($table->getOptions());
 
         $content = implode("\n", $cols) . "\n";
         if (!empty($indexes)) {
@@ -335,17 +335,17 @@ class FixtureTask extends BakeTask
     /**
      * Generate String representation of Records
      *
-     * @param \Cake\Database\Schema\Table $table Table schema array
+     * @param \Cake\Database\Schema\TableSchema $table Table schema array
      * @param int $recordCount The number of records to generate.
      * @return array Array of records to use in the fixture.
      */
-    protected function _generateRecords(Table $table, $recordCount = 1)
+    protected function _generateRecords(TableSchema $table, $recordCount = 1)
     {
         $records = [];
         for ($i = 0; $i < $recordCount; $i++) {
             $record = [];
             foreach ($table->columns() as $field) {
-                $fieldInfo = $table->column($field);
+                $fieldInfo = $table->getColumn($field);
                 $insert = '';
                 switch ($fieldInfo['type']) {
                     case 'decimal':
@@ -461,6 +461,6 @@ class FixtureTask extends BakeTask
             ->limit($recordCount)
             ->enableHydration(false);
 
-        return $records;
+        return $records->toArray();
     }
 }
