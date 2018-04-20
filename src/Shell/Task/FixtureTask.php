@@ -273,7 +273,7 @@ class FixtureTask extends BakeTask
             $cols[] = "        '$field' => [$properties],";
         }
         foreach ($table->indexes() as $index) {
-            $fieldData = $table->index($index);
+            $fieldData = $table->getIndex($index);
             $properties = implode(', ', $this->_values($fieldData));
             $indexes[] = "            '$index' => [$properties],";
         }
