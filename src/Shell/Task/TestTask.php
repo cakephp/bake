@@ -724,6 +724,8 @@ class TestTask extends BakeTask
     }
 
     /**
+     * Normalizes string into CamelCase format.
+     *
      * @param string $string String to inflect
      * @return string
      */
@@ -733,6 +735,8 @@ class TestTask extends BakeTask
     }
 
     /**
+     * Helper to allow under_score format for CLI env usage.
+     *
      * @param string $string String to inflect
      * @return string
      */
