@@ -724,7 +724,7 @@ class TestTask extends BakeTask
     }
 
     /**
-     * @param string $string
+     * @param string $string String to inflect
      * @return string
      */
     protected function normalize($string)
@@ -733,7 +733,7 @@ class TestTask extends BakeTask
     }
 
     /**
-     * @param string $string
+     * @param string $string String to inflect
      * @return string
      */
     protected function underscore($string)
