@@ -334,23 +334,23 @@ class TestTaskTest extends TestCase
     {
         return [
             ['Entity', 'Article', 'App\Model\Entity\Article'],
-            ['entity', 'ArticleEntity', 'App\Model\Entity\ArticleEntity'],
+            ['Entity', 'ArticleEntity', 'App\Model\Entity\ArticleEntity'],
             ['Table', 'Posts', 'App\Model\Table\PostsTable'],
-            ['table', 'PostsTable', 'App\Model\Table\PostsTable'],
+            ['Table', 'PostsTable', 'App\Model\Table\PostsTable'],
             ['Controller', 'Posts', 'App\Controller\PostsController'],
-            ['controller', 'PostsController', 'App\Controller\PostsController'],
+            ['Controller', 'PostsController', 'App\Controller\PostsController'],
             ['Behavior', 'Timestamp', 'App\Model\Behavior\TimestampBehavior'],
-            ['behavior', 'TimestampBehavior', 'App\Model\Behavior\TimestampBehavior'],
+            ['Behavior', 'TimestampBehavior', 'App\Model\Behavior\TimestampBehavior'],
             ['Helper', 'Form', 'App\View\Helper\FormHelper'],
-            ['helper', 'FormHelper', 'App\View\Helper\FormHelper'],
+            ['Helper', 'FormHelper', 'App\View\Helper\FormHelper'],
             ['Component', 'Auth', 'App\Controller\Component\AuthComponent'],
-            ['component', 'AuthComponent', 'App\Controller\Component\AuthComponent'],
+            ['Component', 'AuthComponent', 'App\Controller\Component\AuthComponent'],
             ['Shell', 'Example', 'App\Shell\ExampleShell'],
-            ['shell', 'Example', 'App\Shell\ExampleShell'],
+            ['Shell', 'Example', 'App\Shell\ExampleShell'],
             ['Task', 'Example', 'App\Shell\Task\ExampleTask'],
-            ['task', 'Example', 'App\Shell\Task\ExampleTask'],
+            ['Task', 'Example', 'App\Shell\Task\ExampleTask'],
             ['Cell', 'Example', 'App\View\Cell\ExampleCell'],
-            ['cell', 'Example', 'App\View\Cell\ExampleCell'],
+            ['Cell', 'Example', 'App\View\Cell\ExampleCell'],
         ];
     }
 
@@ -597,7 +597,7 @@ class TestTaskTest extends TestCase
             ->method('createFile')
             ->will($this->returnValue(true));
 
-        $result = $this->Task->bake('Shell_helper', 'Example');
+        $result = $this->Task->bake('shell_helper', 'Example');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -619,11 +619,11 @@ class TestTaskTest extends TestCase
      */
     public function testGenerateConstructor()
     {
-        $result = $this->Task->generateConstructor('controller', 'PostsController');
+        $result = $this->Task->generateConstructor('Controller', 'PostsController');
         $expected = ['', '', ''];
         $this->assertEquals($expected, $result);
 
-        $result = $this->Task->generateConstructor('table', 'App\Model\\Table\PostsTable');
+        $result = $this->Task->generateConstructor('Table', 'App\Model\\Table\PostsTable');
         $expected = [
             "\$config = TableRegistry::exists('Posts') ? [] : ['className' => PostsTable::class];",
             "TableRegistry::get('Posts', \$config);",
@@ -631,15 +631,15 @@ class TestTaskTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        $result = $this->Task->generateConstructor('helper', 'FormHelper');
+        $result = $this->Task->generateConstructor('Helper', 'FormHelper');
         $expected = ["\$view = new View();", "new FormHelper(\$view);", ''];
         $this->assertEquals($expected, $result);
 
-        $result = $this->Task->generateConstructor('entity', 'TestBake\Model\Entity\Article');
+        $result = $this->Task->generateConstructor('Entity', 'TestBake\Model\Entity\Article');
         $expected = ["", "new Article();", ''];
         $this->assertEquals($expected, $result);
 
-        $result = $this->Task->generateConstructor('shell_helper', 'TestBake\Shell\Helper\ExampleHelper');
+        $result = $this->Task->generateConstructor('ShellHelper', 'TestBake\Shell\Helper\ExampleHelper');
         $expected = [
             "\$this->stub = new ConsoleOutput();\n        \$this->io = new ConsoleIo(\$this->stub);",
             "new ExampleHelper(\$this->io);",
@@ -647,7 +647,7 @@ class TestTaskTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        $result = $this->Task->generateConstructor('form', 'TestBake\Form\ExampleForm');
+        $result = $this->Task->generateConstructor('Form', 'TestBake\Form\ExampleForm');
         $expected = [
             '',
             "new ExampleForm();",
@@ -663,34 +663,34 @@ class TestTaskTest extends TestCase
      */
     public function testGenerateUses()
     {
-        $result = $this->Task->generateUses('table', 'App\Model\Table\PostsTable');
+        $result = $this->Task->generateUses('Table', 'App\Model\Table\PostsTable');
         $expected = [
             'Cake\ORM\TableRegistry',
             'App\Model\Table\PostsTable',
         ];
         $this->assertEquals($expected, $result);
 
-        $result = $this->Task->generateUses('controller', 'App\Controller\PostsController');
+        $result = $this->Task->generateUses('Controller', 'App\Controller\PostsController');
         $expected = [
             'App\Controller\PostsController',
         ];
         $this->assertEquals($expected, $result);
 
-        $result = $this->Task->generateUses('helper', 'App\View\Helper\FormHelper');
+        $result = $this->Task->generateUses('Helper', 'App\View\Helper\FormHelper');
         $expected = [
             'Cake\View\View',
             'App\View\Helper\FormHelper',
         ];
         $this->assertEquals($expected, $result);
 
-        $result = $this->Task->generateUses('component', 'App\Controller\Component\AuthComponent');
+        $result = $this->Task->generateUses('Component', 'App\Controller\Component\AuthComponent');
         $expected = [
             'Cake\Controller\ComponentRegistry',
             'App\Controller\Component\AuthComponent',
         ];
         $this->assertEquals($expected, $result);
 
-        $result = $this->Task->generateUses('shell_helper', 'App\Shell\Helper\ExampleHelper');
+        $result = $this->Task->generateUses('ShellHelper', 'App\Shell\Helper\ExampleHelper');
         $expected = [
             'Cake\TestSuite\Stub\ConsoleOutput',
             'Cake\Console\ConsoleIo',
@@ -706,7 +706,7 @@ class TestTaskTest extends TestCase
      */
     public function testMockClassGeneration()
     {
-        $result = $this->Task->hasMockClass('controller');
+        $result = $this->Task->hasMockClass('Controller');
         $this->assertTrue($result);
     }
 
@@ -800,19 +800,13 @@ class TestTaskTest extends TestCase
     public static function mapTypeProvider()
     {
         return [
-            ['controller', 'Controller'],
             ['Controller', 'Controller'],
-            ['component', 'Controller\Component'],
             ['Component', 'Controller\Component'],
-            ['table', 'Model\Table'],
             ['Table', 'Model\Table'],
-            ['entity', 'Model\Entity'],
             ['Entity', 'Model\Entity'],
-            ['behavior', 'Model\Behavior'],
             ['Behavior', 'Model\Behavior'],
-            ['helper', 'View\Helper'],
             ['Helper', 'View\Helper'],
-            ['Helper', 'View\Helper'],
+            ['ShellHelper', 'Shell\Helper'],
         ];
     }
 
