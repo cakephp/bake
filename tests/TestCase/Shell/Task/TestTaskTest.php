@@ -346,11 +346,11 @@ class TestTaskTest extends TestCase
             ['Component', 'Auth', 'App\Controller\Component\AuthComponent'],
             ['Component', 'AuthComponent', 'App\Controller\Component\AuthComponent'],
             ['Shell', 'Example', 'App\Shell\ExampleShell'],
-            ['Shell', 'Example', 'App\Shell\ExampleShell'],
+            ['Shell', 'ExampleShell', 'App\Shell\ExampleShell'],
             ['Task', 'Example', 'App\Shell\Task\ExampleTask'],
-            ['Task', 'Example', 'App\Shell\Task\ExampleTask'],
+            ['Task', 'ExampleTask', 'App\Shell\Task\ExampleTask'],
             ['Cell', 'Example', 'App\View\Cell\ExampleCell'],
-            ['Cell', 'Example', 'App\View\Cell\ExampleCell'],
+            ['Cell', 'ExampleCell', 'App\View\Cell\ExampleCell'],
         ];
     }
 
