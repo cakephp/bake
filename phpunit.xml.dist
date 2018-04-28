@@ -4,21 +4,20 @@
 	processIsolation="false"
 	stopOnFailure="false"
 	syntaxCheck="false"
-	bootstrap="./tests/bootstrap.php"
+	bootstrap="tests/bootstrap.php"
 	>
 
 	<!-- Add any additional test suites you want to run here -->
 	<testsuites>
-		<testsuite name="Bake Test Suite">
-			<directory>./tests/TestCase</directory>
+		<testsuite name="bake">
+			<directory>tests/TestCase/</directory>
 		</testsuite>
 	</testsuites>
 
 	<!-- Setup a listener for fixtures -->
 	<listeners>
 		<listener
-		class="\Cake\TestSuite\Fixture\FixtureInjector"
-		file="./vendor/cakephp/cakephp/src/TestSuite/Fixture/FixtureInjector.php">
+		class="\Cake\TestSuite\Fixture\FixtureInjector">
 			<arguments>
 				<object class="\Cake\TestSuite\Fixture\FixtureManager" />
 			</arguments>
@@ -28,7 +27,7 @@
 	<!-- Configure coverage reports -->
 	<filter>
 		<whitelist>
-			<directory suffix=".php">./src/</directory>
+			<directory suffix=".php">src/</directory>
 		</whitelist>
 	</filter>
 
