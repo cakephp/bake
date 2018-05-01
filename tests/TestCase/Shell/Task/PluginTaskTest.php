@@ -144,6 +144,10 @@ class PluginTaskTest extends TestCase
      */
     public function testMainUpdateComposer()
     {
+        $this->skipIf(
+            DIRECTORY_SEPARATOR == '\\',
+            'Skipping composer test on windows as `which` does not work well.'
+        );
         $composerPath = exec('which composer');
         if (!$composerPath && file_exists('./composer.phar')) {
             $composerPath = './composer.phar';
