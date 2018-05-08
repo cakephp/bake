@@ -287,7 +287,7 @@ class TestTaskTest extends TestCase
      */
     public function testFixtureArrayGenerationIgnoreSelfAssociation()
     {
-        TableRegistry::clear();
+        TableRegistry::getTableLocator()->clear();
         $subject = new CategoryThreadsTable();
         $result = $this->Task->generateFixtureList($subject);
         $expected = [
@@ -625,8 +625,8 @@ class TestTaskTest extends TestCase
 
         $result = $this->Task->generateConstructor('Table', 'App\Model\\Table\PostsTable');
         $expected = [
-            "\$config = TableRegistry::exists('Posts') ? [] : ['className' => PostsTable::class];",
-            "TableRegistry::get('Posts', \$config);",
+            "\$config = TableRegistry::getTableLocator()->exists('Posts') ? [] : ['className' => PostsTable::class];",
+            "TableRegistry::getTableLocator()->get('Posts', \$config);",
             ''
         ];
         $this->assertEquals($expected, $result);

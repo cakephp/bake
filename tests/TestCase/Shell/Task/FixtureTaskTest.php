@@ -145,7 +145,7 @@ class FixtureTaskTest extends TestCase
      */
     public function testImportRecordsNoEscaping()
     {
-        $articles = TableRegistry::get('Articles');
+        $articles = TableRegistry::getTableLocator()->get('Articles');
         $articles->updateAll(['body' => "Body \"value\""], []);
 
         $this->generatedFile = ROOT . 'tests/Fixture/ArticleFixture.php';
@@ -373,7 +373,7 @@ class FixtureTaskTest extends TestCase
      */
     public function testGenerateFixtureFileRemappedJsonTypes()
     {
-        $table = TableRegistry::get('Articles');
+        $table = TableRegistry::getTableLocator()->get('Articles');
         $table->getSchema()->addColumn('body', ['type' => 'json']);
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test Articles');

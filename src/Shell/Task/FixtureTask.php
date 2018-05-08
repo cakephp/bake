@@ -173,7 +173,7 @@ class FixtureTask extends BakeTask
         try {
             $data = $this->readSchema($model, $useTable);
         } catch (Exception $e) {
-            TableRegistry::remove($model);
+            TableRegistry::getTableLocator()->remove($model);
             $useTable = Inflector::underscore($model);
             $table = $useTable;
             $data = $this->readSchema($model, $useTable);
@@ -208,10 +208,10 @@ class FixtureTask extends BakeTask
     {
         $connection = ConnectionManager::get($this->connection);
 
-        if (TableRegistry::exists($name)) {
-            $model = TableRegistry::get($name);
+        if (TableRegistry::getTableLocator()->exists($name)) {
+            $model = TableRegistry::getTableLocator()->get($name);
         } else {
-            $model = TableRegistry::get($name, [
+            $model = TableRegistry::getTableLocator()->get($name, [
                 'table' => $table,
                 'connection' => $connection
             ]);
@@ -448,10 +448,10 @@ class FixtureTask extends BakeTask
     {
         $recordCount = (isset($this->params['count']) ? $this->params['count'] : 10);
         $conditions = (isset($this->params['conditions']) ? $this->params['conditions'] : '1=1');
-        if (TableRegistry::exists($modelName)) {
-            $model = TableRegistry::get($modelName);
+        if (TableRegistry::getTableLocator()->exists($modelName)) {
+            $model = TableRegistry::getTableLocator()->get($modelName);
         } else {
-            $model = TableRegistry::get($modelName, [
+            $model = TableRegistry::getTableLocator()->get($modelName, [
                 'table' => $useTable,
                 'connection' => ConnectionManager::get($this->connection)
             ]);
