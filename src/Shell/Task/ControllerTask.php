@@ -78,7 +78,7 @@ class ControllerTask extends BakeTask
     {
         $tables = $this->listAll();
         foreach ($tables as $table) {
-            TableRegistry::clear();
+            TableRegistry::getTableLocator()->clear();
             $this->main($table);
         }
     }
@@ -121,10 +121,10 @@ class ControllerTask extends BakeTask
             $plugin .= '.';
         }
 
-        if (TableRegistry::exists($plugin . $currentModelName)) {
-            $modelObj = TableRegistry::get($plugin . $currentModelName);
+        if (TableRegistry::getTableLocator()->exists($plugin . $currentModelName)) {
+            $modelObj = TableRegistry::getTableLocator()->get($plugin . $currentModelName);
         } else {
-            $modelObj = TableRegistry::get($plugin . $currentModelName, [
+            $modelObj = TableRegistry::getTableLocator()->get($plugin . $currentModelName, [
                 'connectionName' => $this->connection
             ]);
         }

@@ -166,7 +166,7 @@ class ModelTask extends BakeTask
     {
         $tables = $this->listUnskipped();
         foreach ($tables as $table) {
-            TableRegistry::clear();
+            TableRegistry::getTableLocator()->clear();
             $this->main($table);
         }
     }
@@ -185,11 +185,11 @@ class ModelTask extends BakeTask
             $className = $plugin . '.' . $className;
         }
 
-        if (TableRegistry::exists($className)) {
-            return TableRegistry::get($className);
+        if (TableRegistry::getTableLocator()->exists($className)) {
+            return TableRegistry::getTableLocator()->get($className);
         }
 
-        return TableRegistry::get($className, [
+        return TableRegistry::getTableLocator()->get($className, [
             'name' => $className,
             'table' => $this->tablePrefix . $table,
             'connection' => ConnectionManager::get($this->connection)
@@ -965,7 +965,7 @@ class ModelTask extends BakeTask
         if (file_exists($filename)) {
             require_once $filename;
         }
-        TableRegistry::clear();
+        TableRegistry::getTableLocator()->clear();
 
         $emptyFile = $path . 'Table' . DS . 'empty';
         $this->_deleteEmptyFile($emptyFile);

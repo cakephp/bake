@@ -315,10 +315,10 @@ class TestTask extends BakeTask
             if ($this->plugin) {
                 $name = $this->plugin . '.' . $name;
             }
-            if (TableRegistry::exists($name)) {
-                $instance = TableRegistry::get($name);
+            if (TableRegistry::getTableLocator()->exists($name)) {
+                $instance = TableRegistry::getTableLocator()->get($name);
             } else {
-                $instance = TableRegistry::get($name, [
+                $instance = TableRegistry::getTableLocator()->get($name, [
                     'connectionName' => $this->connection
                 ]);
             }
@@ -516,8 +516,8 @@ class TestTask extends BakeTask
         $pre = $construct = $post = '';
         if ($type === 'Table') {
             $tableName = str_replace('Table', '', $className);
-            $pre = "\$config = TableRegistry::exists('{$tableName}') ? [] : ['className' => {$className}::class];";
-            $construct = "TableRegistry::get('{$tableName}', \$config);";
+            $pre = "\$config = TableRegistry::getTableLocator()->exists('{$tableName}') ? [] : ['className' => {$className}::class];";
+            $construct = "TableRegistry::getTableLocator()->get('{$tableName}', \$config);";
         }
         if ($type === 'Behavior' || $type === 'Entity' || $type === 'Form') {
             $construct = "new {$className}();";

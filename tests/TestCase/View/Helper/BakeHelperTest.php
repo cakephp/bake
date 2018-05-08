@@ -86,7 +86,7 @@ class BakeHelperTest extends TestCase
      */
     public function testAliasExtractorFilteredHasMany()
     {
-        $table = TableRegistry::get('Articles', [
+        $table = TableRegistry::getTableLocator()->get('Articles', [
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
         ]);
         $this->BakeHelper = $this->getMockBuilder('Bake\View\Helper\BakeHelper')
@@ -107,7 +107,7 @@ class BakeHelperTest extends TestCase
      */
     public function testAliasExtractorBelongsTo()
     {
-        $table = TableRegistry::get('Articles', [
+        $table = TableRegistry::getTableLocator()->get('Articles', [
                     'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
         ]);
         $result = $this->BakeHelper->aliasExtractor($table, 'BelongsTo');
@@ -122,7 +122,7 @@ class BakeHelperTest extends TestCase
      */
     public function testAliasExtractorBelongsToMany()
     {
-        $table = TableRegistry::get('Articles', [
+        $table = TableRegistry::getTableLocator()->get('Articles', [
                     'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
         ]);
         $result = $this->BakeHelper->aliasExtractor($table, 'BelongsToMany');

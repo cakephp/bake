@@ -59,7 +59,7 @@ class TemplateTaskTest extends TestCase
         Configure::write('App.namespace', 'Bake\Test\App');
         $this->_setupTask(['in', 'err', 'abort', 'createFile', '_stop']);
 
-        TableRegistry::get('TemplateTaskComments', [
+        TableRegistry::getTableLocator()->get('TemplateTaskComments', [
             'className' => 'Bake\Test\App\Model\Table\TemplateTaskCommentsTable',
         ]);
     }
@@ -96,7 +96,7 @@ class TemplateTaskTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
-        TableRegistry::clear();
+        TableRegistry::getTableLocator()->clear();
         unset($this->Task);
     }
 
@@ -287,7 +287,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TestTemplateModel',
             'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
-            'schema' => TableRegistry::get('TemplateTaskComments')->getSchema(),
+            'schema' => TableRegistry::getTableLocator()->get('TemplateTaskComments')->getSchema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
             'singularVar' => 'testTemplateModel',
@@ -314,7 +314,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TemplateTaskComments',
             'entityClass' => $namespace . '\Model\Entity\TemplateTaskComment',
-            'schema' => TableRegistry::get('TemplateTaskComments')->getSchema(),
+            'schema' => TableRegistry::getTableLocator()->get('TemplateTaskComments')->getSchema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
             'singularVar' => 'templateTaskComment',
@@ -354,7 +354,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TestTemplateModel',
             'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
-            'schema' => TableRegistry::get('TemplateTaskComments')->getSchema(),
+            'schema' => TableRegistry::getTableLocator()->get('TemplateTaskComments')->getSchema(),
             'primaryKey' => [],
             'displayField' => 'name',
             'singularVar' => 'testTemplateModel',
@@ -385,7 +385,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TestTemplateModel',
             'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
-            'schema' => TableRegistry::get('TemplateTaskComments')->getSchema(),
+            'schema' => TableRegistry::getTableLocator()->get('TemplateTaskComments')->getSchema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
             'singularVar' => 'testTemplateModel',
@@ -484,7 +484,7 @@ class TemplateTaskTest extends TestCase
         $path = Plugin::path('BakeTest');
 
         // Setup association to ensure properties don't have dots
-        $model = TableRegistry::get('BakeTest.Comments');
+        $model = TableRegistry::getTableLocator()->get('BakeTest.Comments');
         $model->belongsTo('Articles');
 
         $this->generatedFile = $path . 'src/Template/Comments/index.ctp';
