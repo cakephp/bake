@@ -10,6 +10,8 @@ use Cake\ORM\Entity;
  * @property int $bake_user_id
  * @property string $title
  * @property string $body
+ * @property float $rating
+ * @property float $score
  * @property bool $published
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $updated
