@@ -16,11 +16,13 @@ namespace Bake\Test\TestCase;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\TestSuite\ConsoleIntegrationTestCase;
+use Cake\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
+use Cake\TestSuite\TestCase as BaseTestCase;
 
-abstract class TestCase extends ConsoleIntegrationTestCase
+abstract class TestCase extends BaseTestCase
 {
+    use ConsoleIntegrationTestTrait;
     use StringCompareTrait;
 
     /**

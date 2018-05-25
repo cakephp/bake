@@ -33,12 +33,12 @@ class BakeShellTest extends TestCase
     /**
      * @var ConsoleOutput
      */
-    protected $out;
+    protected $_out;
 
     /**
      * @var ConsoleIo
      */
-    protected $io;
+    protected $_io;
 
     /**
      * @var \Bake\Shell\BakeShell|\PHPUnit_Framework_MockObject_MockObject
@@ -54,12 +54,12 @@ class BakeShellTest extends TestCase
     {
         parent::setUp();
 
-        $this->out = new ConsoleOutput();
-        $this->io = new ConsoleIo($this->out);
+        $this->_out = new ConsoleOutput();
+        $this->_io = new ConsoleIo($this->_out);
 
         $this->Shell = $this->getMockBuilder('Bake\Shell\BakeShell')
             ->setMethods(['in', 'createFile', '_stop'])
-            ->setConstructorArgs([$this->io])
+            ->setConstructorArgs([$this->_io])
             ->getMock();
 
         Configure::write('App.namespace', 'Bake\Test\App');
@@ -111,7 +111,7 @@ class BakeShellTest extends TestCase
         $this->Shell->params = ['prefix' => 'account'];
         $this->Shell->all('Comments');
 
-        $output = $this->out->messages();
+        $output = $this->_out->messages();
 
         $expected = [
             'Bake All',
@@ -130,7 +130,6 @@ class BakeShellTest extends TestCase
     {
         $this->exec('bake');
         $this->assertExitCode(Shell::CODE_ERROR);
-        $output = $this->_out->messages();
 
         $expected = [
             'The following commands can be used to generate skeleton code for your application.',
@@ -160,7 +159,7 @@ class BakeShellTest extends TestCase
             'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.'
         ];
 
-        $this->assertSame($expected, $output);
+        $this->assertOutputContains(implode(PHP_EOL, $expected));
     }
 
     /**
@@ -285,7 +284,7 @@ class BakeShellTest extends TestCase
         $content = file_get_contents($existingFile);
 
         $this->Shell->runCommand(['all', 'Comments'], false, ['quiet' => true]);
-        $output = $this->out->messages();
+        $output = $this->_out->messages();
 
         $this->assertContains('<success>Bake All complete.</success>', implode(' ', $output));
 
