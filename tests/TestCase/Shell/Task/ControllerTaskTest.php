@@ -292,7 +292,11 @@ class ControllerTaskTest extends TestCase
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
-            'class BakeArticlesControllerTest extends IntegrationTestCase',
+            'class BakeArticlesControllerTest extends TestCase',
+            $this->generatedFiles[1]
+        );
+        $this->assertFileContains(
+            'use IntegrationTestTrait',
             $this->generatedFiles[1]
         );
     }

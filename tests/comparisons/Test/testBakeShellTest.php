@@ -2,13 +2,15 @@
 namespace App\Test\TestCase\Shell;
 
 use App\Shell\ArticlesShell;
-use Cake\TestSuite\ConsoleIntegrationTestCase;
+use Cake\TestSuite\ConsoleIntegrationTestTrait;
+use Cake\TestSuite\TestCase;
 
 /**
  * App\Shell\ArticlesShell Test Case
  */
-class ArticlesShellTest extends ConsoleIntegrationTestCase
+class ArticlesShellTest extends TestCase
 {
+    use ConsoleIntegrationTestTrait;
 
     /**
      * ConsoleIo mock
