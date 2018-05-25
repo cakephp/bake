@@ -12,6 +12,7 @@
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
@@ -614,7 +615,7 @@ class TestTask extends BakeTask
                 break;
         }
 
-        if ($type !== 'Controller' && $type !== 'Command' ) {
+        if (!in_array($type, ['Controller', 'Command'])) {
             $properties[] = [
                 'description' => 'Test subject',
                 'type' => '\\' . $fullClassName,

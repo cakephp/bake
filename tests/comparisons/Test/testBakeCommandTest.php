@@ -21,7 +21,6 @@ class ExampleCommandTest extends ConsoleIntegrationTestCase
         $this->$this->useCommandRunner();
     }
 
-
     /**
      * Test initial setup
      *
