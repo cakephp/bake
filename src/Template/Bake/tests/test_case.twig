@@ -17,9 +17,10 @@
 #}
 {% set isController = type|lower == 'controller' %}
 {% set isShell = type|lower == 'shell' %}
+{% set isCommand = type|lower == 'command' %}
 {% if isController %}
     {%- set superClassName = 'IntegrationTestCase' %}
-{% elseif isShell %}
+{% elseif isShell or isCommand %}
     {%- set superClassName = 'ConsoleIntegrationTestCase' %}
 {% else %}
     {%- set superClassName = 'TestCase' %}
@@ -74,12 +75,17 @@ class {{ className }}Test extends {{ superClassName }}
 {% if preConstruct %}
         {{ preConstruct|raw }}
 {% endif %}
+{% if isCommand %}
+        $this->{{ construction|raw }}
+{% else %}
         $this->{{ (subject ~ ' = ' ~ construction)|raw }}
+{% endif %}
 {% if postConstruct %}
         {{ postConstruct|raw }}
 {% endif %}
     }
 
+{% if not isCommand %}
     /**
      * tearDown method
      *
@@ -91,6 +97,7 @@ class {{ className }}Test extends {{ superClassName }}
 
         parent::tearDown();
     }
+{% endif %}
 {% endif %}
 
 {%- for method in methods %}

@@ -60,6 +60,7 @@ class TestTask extends BakeTask
         'Cell' => 'View\Cell',
         'Form' => 'Form',
         'Mailer' => 'Mailer',
+        'Command' => 'Command',
     ];
 
     /**
@@ -80,6 +81,7 @@ class TestTask extends BakeTask
         'Cell' => 'Cell',
         'Form' => 'Form',
         'Mailer' => 'Mailer',
+        'Command' => 'Command',
     ];
 
     /**
@@ -526,6 +528,9 @@ class TestTask extends BakeTask
             $pre = "\$view = new View();";
             $construct = "new {$className}(\$view);";
         }
+        if ($type === 'Command') {
+            $construct = "\$this->useCommandRunner();";
+        }
         if ($type === 'Component') {
             $pre = "\$registry = new ComponentRegistry();";
             $construct = "new {$className}(\$registry);";
@@ -609,7 +614,7 @@ class TestTask extends BakeTask
                 break;
         }
 
-        if ($type !== 'Controller') {
+        if ($type !== 'Controller' && $type !== 'Command' ) {
             $properties[] = [
                 'description' => 'Test subject',
                 'type' => '\\' . $fullClassName,
