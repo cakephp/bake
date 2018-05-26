@@ -441,6 +441,21 @@ class TestTaskTest extends TestCase
     }
 
     /**
+     * Test baking a test for a command.
+     *
+     * @return void
+     */
+    public function testBakeCommandTest()
+    {
+        $this->Task->expects($this->once())
+            ->method('createFile')
+            ->will($this->returnValue(true));
+
+        $result = $this->Task->bake('Command', 'Example');
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
      * Test baking a test for a concrete model.
      *
      * @return void

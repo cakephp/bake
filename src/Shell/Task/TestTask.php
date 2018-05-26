@@ -12,6 +12,7 @@
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Bake\Shell\Task;
 
 use Cake\Console\Shell;
@@ -60,6 +61,7 @@ class TestTask extends BakeTask
         'Cell' => 'View\Cell',
         'Form' => 'Form',
         'Mailer' => 'Mailer',
+        'Command' => 'Command',
     ];
 
     /**
@@ -80,6 +82,7 @@ class TestTask extends BakeTask
         'Cell' => 'Cell',
         'Form' => 'Form',
         'Mailer' => 'Mailer',
+        'Command' => 'Command',
     ];
 
     /**
@@ -526,6 +529,9 @@ class TestTask extends BakeTask
             $pre = "\$view = new View();";
             $construct = "new {$className}(\$view);";
         }
+        if ($type === 'Command') {
+            $construct = "\$this->useCommandRunner();";
+        }
         if ($type === 'Component') {
             $pre = "\$registry = new ComponentRegistry();";
             $construct = "new {$className}(\$registry);";
@@ -609,7 +615,7 @@ class TestTask extends BakeTask
                 break;
         }
 
-        if ($type !== 'Controller') {
+        if (!in_array($type, ['Controller', 'Command'])) {
             $properties[] = [
                 'description' => 'Test subject',
                 'type' => '\\' . $fullClassName,
