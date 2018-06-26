@@ -18,7 +18,7 @@ class ExampleCommandTest extends ConsoleIntegrationTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->$this->useCommandRunner();
+        $this->useCommandRunner();
     }
 
     /**
