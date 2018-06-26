@@ -76,7 +76,7 @@ class {{ className }}Test extends {{ superClassName }}
         {{ preConstruct|raw }}
 {% endif %}
 {% if isCommand %}
-        $this->{{ construction|raw }}
+        {{ construction|raw }}
 {% else %}
         $this->{{ (subject ~ ' = ' ~ construction)|raw }}
 {% endif %}
