@@ -15,6 +15,8 @@
 namespace Bake;
 
 use Cake\Core\BasePlugin;
+use Cake\Core\PluginApplicationInterface;
+use Cake\Core\Plugin as CorePlugin;
 
 /**
  * Plugin class for bake
@@ -36,5 +38,20 @@ class Plugin extends BasePlugin
      */
     public function routes($routes)
     {
+    }
+
+    /**
+     * load WyriHaximus/TwigView plugin.
+     *
+     * @param \Cake\Core\PluginApplicationInterface $app The host application
+     * @return void
+     */
+    public function bootstrap(PluginApplicationInterface $app)
+    {
+        if (!CorePlugin::getCollection()->has('WyriHaximus/TwigView')) {
+            $app->addPlugin('WyriHaximus/TwigView', ['bootstrap' => false]);
+            $plugin = CorePlugin::getCollection()->get('WyriHaximus/TwigView');
+            $plugin->bootstrap($app);
+        }
     }
 }
