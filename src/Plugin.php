@@ -47,8 +47,6 @@ class Plugin extends BasePlugin
      */
     public function bootstrap(PluginApplicationInterface $app)
     {
-        if (!$app->getPlugins()->has('WyriHaximus/TwigView')) {
-            $app->addPlugin('WyriHaximus/TwigView');
-        }
+        $app->addPlugin('WyriHaximus/TwigView');
     }
 }
