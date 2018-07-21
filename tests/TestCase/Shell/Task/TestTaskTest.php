@@ -164,6 +164,28 @@ class TestTaskTest extends TestCase
     }
 
     /**
+     * test execute with plugin syntax
+     *
+     * @return void
+     */
+    public function testExecuteWithPluginName()
+    {
+        $this->_loadTestPlugin('TestBake');
+
+        $this->Task
+            ->expects($this->once())->method('createFile')
+            ->with(
+                $this->stringContains(
+                    'Plugin' . DS . 'TestBake' . DS . 'tests' . DS . 'TestCase' . DS . 'Model' . DS . 'Table' . DS . 'ArticlesTableTest.php'
+                ),
+                $this->matchesRegularExpression(
+                    '/namespace TestBake\\\\Test\\\\TestCase\\\\Model\\\\Table;.*?class ArticlesTableTest extends TestCase/s'
+                )
+            );
+        $this->Task->main('Table', 'TestBake.Articles');
+    }
+
+    /**
      * test execute with type and class name defined
      *
      * @return void
