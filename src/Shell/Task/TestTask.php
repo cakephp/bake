@@ -103,6 +103,7 @@ class TestTask extends BakeTask
     {
         parent::main();
         $type = $this->normalize($type);
+        $name = $this->_getName($name);
 
         if (empty($type) && empty($name)) {
             $this->outputTypeChoices();
