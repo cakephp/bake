@@ -33,10 +33,7 @@ class ArticlesTaskTest extends TestCase
     {
         parent::setUp();
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
-
-        $this->Articles = $this->getMockBuilder('App\Shell\Task\ArticlesTask')
-            ->setConstructorArgs([$this->io])
-            ->getMock();
+        $this->Articles = new ArticlesTask($this->io);
     }
 
     /**
