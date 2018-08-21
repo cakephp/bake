@@ -19,6 +19,11 @@ use Bake\Test\TestCase\TestCase;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Database\Driver\Mysql;
+use Cake\Database\Driver\Postgres;
+use Cake\Database\Driver\Sqlite;
+use Cake\Database\Driver\Sqlserver;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -631,6 +636,14 @@ class ModelTaskTest extends TestCase
                 'kind' => 'column',
                 'type' => 'text'
             ],
+            'rating' => [
+                'kind' => 'column',
+                'type' => 'float'
+            ],
+            'score' => [
+                'kind' => 'column',
+                'type' => 'decimal'
+            ],
             'created' => [
                 'kind' => 'column',
                 'type' => 'timestamp'
@@ -676,6 +689,8 @@ class ModelTaskTest extends TestCase
             'bake_user_id',
             'title',
             'body',
+            'rating',
+            'score',
             'published',
             'created',
             'updated',
@@ -801,6 +816,10 @@ class ModelTaskTest extends TestCase
      */
     public function testGetValidation()
     {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
+        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
+
         $model = TableRegistry::getTableLocator()->get('BakeArticles');
         $result = $this->Task->getValidation($model);
         $expected = [
@@ -818,6 +837,108 @@ class ModelTaskTest extends TestCase
             'body' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'rating' => [
+                'numeric' => ['rule' => 'numeric', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'greaterThanOrEqual' => [
+                    'rule' => 'greaterThanOrEqual',
+                    'args' => [
+                        0,
+                    ],
+                ],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+            ],
+            'score' => [
+                'decimal' => ['rule' => 'decimal', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'greaterThanOrEqual' => [
+                    'rule' => 'greaterThanOrEqual',
+                    'args' => [
+                        0,
+                    ],
+                ],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+            ],
+            'published' => [
+                'boolean' => ['rule' => 'boolean', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]]
+            ]
+        ];
+        $this->assertEquals($expected, $result);
+
+        $model = TableRegistry::getTableLocator()->get('BakeComments');
+        $result = $this->Task->getValidation($model);
+        $expected = [
+            'bake_article_id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []]
+            ],
+            'bake_user_id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []]
+            ],
+            'comment' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'published' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'maxLength' => ['rule' => 'maxLength', 'args' => [1]],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'otherid' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]]
+            ]
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * test getting validation rules.
+     *
+     * @return void
+     */
+    public function testGetValidationSigned()
+    {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
+        $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
+
+        $model = TableRegistry::getTableLocator()->get('BakeArticles');
+        $result = $this->Task->getValidation($model);
+        $expected = [
+            'bake_user_id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []]
+            ],
+            'title' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+            ],
+            'body' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'rating' => [
+                'numeric' => ['rule' => 'numeric', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+            ],
+            'score' => [
+                'decimal' => ['rule' => 'decimal', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
             ],
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
@@ -892,6 +1013,46 @@ class ModelTaskTest extends TestCase
      */
     public function testGetValidationTree()
     {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
+        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
+
+        $model = TableRegistry::getTableLocator()->get('NumberTrees');
+        $result = $this->Task->getValidation($model);
+        $expected = [
+            'id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]]
+            ],
+            'name' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+            ],
+            'parent_id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'depth' => [
+                'nonNegativeInteger' => ['rule' => 'nonNegativeInteger', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * test getting validation rules for tree-ish models
+     *
+     * @return void
+     */
+    public function testGetValidationTreeSigned()
+    {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
+        $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
+
         $model = TableRegistry::getTableLocator()->get('NumberTrees');
         $result = $this->Task->getValidation($model);
         $expected = [
@@ -924,6 +1085,10 @@ class ModelTaskTest extends TestCase
      */
     public function testGetValidationExcludeForeignKeys()
     {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
+        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
+
         $model = TableRegistry::getTableLocator()->get('BakeArticles');
         $associations = [
             'belongsTo' => [
@@ -949,6 +1114,79 @@ class ModelTaskTest extends TestCase
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]]
+            ],
+            'rating' => [
+                'numeric' => ['rule' => 'numeric', 'args' => []],
+                'greaterThanOrEqual' => [
+                    'rule' => 'greaterThanOrEqual',
+                    'args' => [
+                        0,
+                    ],
+                ],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+            ],
+            'score' => [
+                'decimal' => ['rule' => 'decimal', 'args' => []],
+                'greaterThanOrEqual' => [
+                    'rule' => 'greaterThanOrEqual',
+                    'args' => [
+                        0,
+                    ],
+                ],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+            ]
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * test getting validation rules and exempting foreign keys
+     *
+     * @return void
+     */
+    public function testGetValidationExcludeForeignKeysSigned()
+    {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
+        $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
+
+        $model = TableRegistry::getTableLocator()->get('BakeArticles');
+        $associations = [
+            'belongsTo' => [
+                'BakeUsers' => ['foreignKey' => 'bake_user_id'],
+            ]
+        ];
+        $result = $this->Task->getValidation($model, $associations);
+        $expected = [
+            'title' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+            ],
+            'body' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'published' => [
+                'boolean' => ['rule' => 'boolean', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+            ],
+            'id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]]
+            ],
+            'rating' => [
+                'numeric' => ['rule' => 'numeric', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+            ],
+            'score' => [
+                'decimal' => ['rule' => 'decimal', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ]
         ];
         $this->assertEquals($expected, $result);
@@ -1169,6 +1407,21 @@ class ModelTaskTest extends TestCase
                         100,
                         "'Name must be shorter than 100 characters.'"
                     ]
+                ]
+            ],
+            'count' => [
+                'valid' => [
+                    'allowEmpty' => false,
+                    'rule' => 'nonNegativeInteger',
+                ]
+            ],
+            'price' => [
+                'valid' => [
+                    'allowEmpty' => false,
+                    'rule' => 'greaterThanOrEqual',
+                    'args' => [
+                        0
+                    ],
                 ]
             ],
             'email' => [

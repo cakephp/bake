@@ -53,6 +53,16 @@ class BakeArticlesTable extends Table
             ->maxLength('name', 100, 'Name must be shorter than 100 characters.');
 
         $validator
+            ->nonNegativeInteger('count')
+            ->requirePresence('count', 'create')
+            ->notEmpty('count');
+
+        $validator
+            ->greaterThanOrEqual('price', 0)
+            ->requirePresence('price', 'create')
+            ->notEmpty('price');
+
+        $validator
             ->email('email')
             ->allowEmpty('email')
             ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
