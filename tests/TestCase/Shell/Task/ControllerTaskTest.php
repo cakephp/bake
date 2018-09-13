@@ -33,10 +33,10 @@ class ControllerTaskTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.bake.bake_articles',
-        'plugin.bake.bake_articles_bake_tags',
-        'plugin.bake.bake_comments',
-        'plugin.bake.bake_tags'
+        'plugin.Bake.BakeArticles',
+        'plugin.Bake.BakeArticlesBakeTags',
+        'plugin.Bake.BakeComments',
+        'plugin.Bake.BakeTags'
     ];
 
     /**
