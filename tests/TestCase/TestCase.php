@@ -39,9 +39,11 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        Plugin::load('WyriHaximus/TwigView', [
-            'bootstrap' => true,
-        ]);
+        $this->deprecated(function () {
+            Plugin::load('WyriHaximus/TwigView', [
+                'bootstrap' => true,
+            ]);
+        });
     }
 
     public function tearDown()
@@ -72,10 +74,12 @@ abstract class TestCase extends BaseTestCase
         $root = dirname(dirname(__FILE__)) . DS;
         $path = $root . 'test_app' . DS . 'Plugin' . DS . $name . DS;
 
-        Plugin::load($name, [
-            'path' => $path,
-            'autoload' => true
-        ]);
+        $this->deprecated(function () use ($name, $path) {
+            Plugin::load($name, [
+                'path' => $path,
+                'autoload' => true
+            ]);
+        });
     }
 
     /**

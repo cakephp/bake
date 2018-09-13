@@ -257,7 +257,9 @@ class TestTaskTest extends TestCase
      */
     public function testOutputClassOptionsForTablePlugin()
     {
-        Plugin::load('BakeTest');
+        $this->deprecated(function () {
+            Plugin::load('BakeTest');
+        });
         $this->Task->plugin = 'BakeTest';
 
         $expected = [
@@ -756,7 +758,9 @@ class TestTaskTest extends TestCase
     {
         $this->Task->plugin = 'TestTest';
 
-        Plugin::load('TestTest', ['path' => APP . 'Plugin' . DS . 'TestTest' . DS]);
+        $this->deprecated(function () {
+            Plugin::load('TestTest', ['path' => APP . 'Plugin' . DS . 'TestTest' . DS]);
+        });
         $path = APP . 'Plugin/TestTest/tests/TestCase/View/Helper/FormHelperTest.php';
         $path = str_replace('/', DS, $path);
         $this->Task->expects($this->once())->method('createFile')
@@ -820,7 +824,9 @@ class TestTaskTest extends TestCase
     {
         $this->Task->path = DS . 'my/path/tests/';
 
-        Plugin::load('TestTest', ['path' => APP . 'Plugin' . DS . 'TestTest' . DS]);
+        $this->deprecated(function () {
+            Plugin::load('TestTest', ['path' => APP . 'Plugin' . DS . 'TestTest' . DS]);
+        });
         $this->Task->plugin = 'TestTest';
         $class = 'TestBake\Model\Entity\Post';
         $result = $this->Task->testCaseFileName('entity', $class);
