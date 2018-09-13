@@ -13,6 +13,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\BakeArticle newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\BakeArticle[] newEntities(array $data, array $options = [])
  * @method \App\Model\Entity\BakeArticle|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\BakeArticle|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\BakeArticle patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\BakeArticle[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\BakeArticle findOrCreate($search, callable $callback = null, $options = [])
@@ -50,6 +51,16 @@ class BakeArticlesTable extends Table
             ->requirePresence('name', 'create')
             ->notEmpty('name')
             ->maxLength('name', 100, 'Name must be shorter than 100 characters.');
+
+        $validator
+            ->nonNegativeInteger('count')
+            ->requirePresence('count', 'create')
+            ->notEmpty('count');
+
+        $validator
+            ->greaterThanOrEqual('price', 0)
+            ->requirePresence('price', 'create')
+            ->notEmpty('price');
 
         $validator
             ->email('email')

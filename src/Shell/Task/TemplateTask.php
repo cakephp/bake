@@ -275,10 +275,10 @@ class TemplateTask extends BakeTask
      */
     protected function _loadController()
     {
-        if (TableRegistry::exists($this->modelName)) {
-            $modelObject = TableRegistry::get($this->modelName);
+        if (TableRegistry::getTableLocator()->exists($this->modelName)) {
+            $modelObject = TableRegistry::getTableLocator()->get($this->modelName);
         } else {
-            $modelObject = TableRegistry::get($this->modelName, [
+            $modelObject = TableRegistry::getTableLocator()->get($this->modelName, [
                 'connectionName' => $this->connection
             ]);
         }

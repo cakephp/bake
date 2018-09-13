@@ -76,7 +76,7 @@ class ControllerTaskTest extends TestCase
             ->setMethods(['bake'])
             ->getMock();
 
-        TableRegistry::get('BakeArticles', [
+        TableRegistry::getTableLocator()->get('BakeArticles', [
             'className' => BakeArticlesTable::class
         ]);
     }
@@ -89,7 +89,7 @@ class ControllerTaskTest extends TestCase
     public function tearDown()
     {
         unset($this->Task);
-        TableRegistry::clear();
+        TableRegistry::getTableLocator()->clear();
         parent::tearDown();
         Plugin::unload('ControllerTest');
         Plugin::unload('Company/Pastry');

@@ -144,6 +144,10 @@ class PluginTaskTest extends TestCase
      */
     public function testMainUpdateComposer()
     {
+        $this->skipIf(
+            DIRECTORY_SEPARATOR == '\\',
+            'Skipping composer test on windows as `which` does not work well.'
+        );
         $composerPath = exec('which composer');
         if (!$composerPath && file_exists('./composer.phar')) {
             $composerPath = './composer.phar';
@@ -170,11 +174,11 @@ class PluginTaskTest extends TestCase
 
         $pluginPath = App::path('Plugin')[0];
         $this->assertEquals(
-            $pluginPath . 'ComposerExample' . DS . 'src',
+            $pluginPath . 'ComposerExample' . DS . 'src' . DS,
             $result['autoload']['psr-4']['ComposerExample\\']
         );
         $this->assertEquals(
-            $pluginPath . 'ComposerExample' . DS . 'tests',
+            $pluginPath . 'ComposerExample' . DS . 'tests' . DS,
             $result['autoload-dev']['psr-4']['ComposerExample\\Test\\']
         );
 

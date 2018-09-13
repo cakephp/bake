@@ -139,6 +139,7 @@ class BakeShellTest extends TestCase
             '- all',
             '- behavior',
             '- cell',
+            '- command',
             '- component',
             '- controller',
             '- custom_controller',
@@ -196,6 +197,7 @@ class BakeShellTest extends TestCase
         $expected = [
             'Bake.Behavior',
             'Bake.Cell',
+            'Bake.Command',
             'Bake.Component',
             'Bake.Fixture',
             'Bake.Form',

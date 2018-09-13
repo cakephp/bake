@@ -33,9 +33,9 @@ class NumberTreesFixture extends TestFixture
         'id' => ['type' => 'integer'],
         'name' => ['type' => 'string', 'length' => 50, 'null' => false],
         'parent_id' => 'integer',
-        'lft' => ['type' => 'integer'],
-        'rght' => ['type' => 'integer'],
-        'depth' => ['type' => 'integer'],
+        'lft' => ['type' => 'integer', 'unsigned' => true],
+        'rght' => ['type' => 'integer', 'unsigned' => true],
+        'depth' => ['type' => 'integer', 'unsigned' => true],
         '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
     ];
 
