@@ -37,11 +37,11 @@ class TestTaskTest extends TestCase
      * @var string
      */
     public $fixtures = [
-        'core.articles',
-        'core.tags',
-        'core.articles_tags',
-        'core.authors',
-        'core.comments',
+        'core.Articles',
+        'core.Tags',
+        'core.ArticlesTags',
+        'core.Authors',
+        'core.Comments',
     ];
 
     /**
@@ -296,10 +296,10 @@ class TestTaskTest extends TestCase
         $subject = new ArticlesTable();
         $result = $this->Task->generateFixtureList($subject);
         $expected = [
-            'app.articles',
-            'app.authors',
-            'app.tags',
-            'app.articles_tags'
+            'app.Articles',
+            'app.Authors',
+            'app.Tags',
+            'app.ArticlesTags'
         ];
         $this->assertEquals($expected, $result);
     }
@@ -315,7 +315,7 @@ class TestTaskTest extends TestCase
         $subject = new CategoryThreadsTable();
         $result = $this->Task->generateFixtureList($subject);
         $expected = [
-            'app.category_threads',
+            'app.CategoryThreads',
         ];
         $this->assertEquals($expected, $result);
     }
@@ -330,7 +330,7 @@ class TestTaskTest extends TestCase
         $subject = new PostsController(new Request(), new Response());
         $result = $this->Task->generateFixtureList($subject);
         $expected = [
-            'app.posts',
+            'app.Posts',
         ];
         $this->assertEquals($expected, $result);
     }
@@ -428,7 +428,7 @@ class TestTaskTest extends TestCase
             ->method('createFile')
             ->will($this->returnValue(true));
 
-        $this->Task->params['fixtures'] = 'app.posts, app.comments , app.users ,';
+        $this->Task->params['fixtures'] = 'app.Posts, app.Comments, app.Users,';
         $result = $this->Task->bake('Table', 'Articles');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }

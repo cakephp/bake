@@ -32,16 +32,16 @@ class TemplateTaskTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'core.articles',
-        'core.tags',
-        'core.articles_tags',
-        'core.posts',
-        'core.comments',
-        'core.test_plugin_comments',
-        'plugin.bake.bake_template_authors',
-        'plugin.bake.bake_template_roles',
-        'plugin.bake.bake_template_profiles',
-        'plugin.bake.category_threads',
+        'core.Articles',
+        'core.Tags',
+        'core.ArticlesTags',
+        'core.Posts',
+        'core.Comments',
+        'core.TestPluginComments',
+        'plugin.Bake.BakeTemplateAuthors',
+        'plugin.Bake.BakeTemplateRoles',
+        'plugin.Bake.BakeTemplateProfiles',
+        'plugin.Bake.CategoryThreads',
     ];
 
     /**

@@ -18,7 +18,7 @@ class PostsControllerTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.posts'
+        'app.Posts'
     ];
 
     /**

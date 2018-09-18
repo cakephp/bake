@@ -34,13 +34,13 @@ class AssociationFilterTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'core.authors',
-        'core.tags',
-        'plugin.bake.bake_articles',
-        'plugin.bake.bake_comments',
-        'plugin.bake.bake_articles_bake_tags',
-        'plugin.bake.bake_tags',
-        'plugin.bake.category_threads',
+        'core.Authors',
+        'core.Tags',
+        'plugin.Bake.BakeArticles',
+        'plugin.Bake.BakeComments',
+        'plugin.Bake.BakeArticlesBakeTags',
+        'plugin.Bake.BakeTags',
+        'plugin.Bake.CategoryThreads',
     ];
 
     /**
