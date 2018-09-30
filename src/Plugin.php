@@ -16,6 +16,7 @@ namespace Bake;
 
 use Cake\Core\BasePlugin;
 use Cake\Core\PluginApplicationInterface;
+use Cake\Routing\RouteBuilder;
 
 /**
  * Plugin class for bake
@@ -35,7 +36,7 @@ class Plugin extends BasePlugin
      * @param \Cake\Routing\RouteBuilder $routes The route builder to update.
      * @return void
      */
-    public function routes($routes)
+    public function routes(RouteBuilder $routes): void
     {
     }
 
@@ -45,7 +46,7 @@ class Plugin extends BasePlugin
      * @param \Cake\Core\PluginApplicationInterface $app The host application
      * @return void
      */
-    public function bootstrap(PluginApplicationInterface $app)
+    public function bootstrap(PluginApplicationInterface $app): void
     {
         $app->addPlugin('WyriHaximus/TwigView');
     }
