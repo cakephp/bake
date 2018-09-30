@@ -17,10 +17,16 @@
         "irc": "irc://irc.freenode.org/cakephp",
         "source": "https://github.com/cakephp/bake"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ADmad/TwigView"
+        }
+    ],
     "require": {
         "cakephp/cakephp": "4.x-dev as 4.0.0",
         "cakephp/plugin-installer": "^1.0",
-        "wyrihaximus/twig-view": "dev-master"
+        "wyrihaximus/twig-view": "dev-cake-4.x"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^3.0",
