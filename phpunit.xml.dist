@@ -1,34 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-	colors="true"
-	processIsolation="false"
-	stopOnFailure="false"
-	syntaxCheck="false"
-	bootstrap="tests/bootstrap.php"
-	>
+    colors="true"
+    processIsolation="false"
+    stopOnFailure="false"
+    bootstrap="tests/bootstrap.php"
+    >
 
-	<!-- Add any additional test suites you want to run here -->
-	<testsuites>
-		<testsuite name="bake">
-			<directory>tests/TestCase/</directory>
-		</testsuite>
-	</testsuites>
+    <!-- Add any additional test suites you want to run here -->
+    <testsuites>
+        <testsuite name="bake">
+            <directory>tests/TestCase/</directory>
+        </testsuite>
+    </testsuites>
 
-	<!-- Setup a listener for fixtures -->
-	<listeners>
-		<listener
-		class="\Cake\TestSuite\Fixture\FixtureInjector">
-			<arguments>
-				<object class="\Cake\TestSuite\Fixture\FixtureManager" />
-			</arguments>
-		</listener>
-	</listeners>
-
-	<!-- Configure coverage reports -->
-	<filter>
-		<whitelist>
-			<directory suffix=".php">src/</directory>
-		</whitelist>
-	</filter>
+    <!-- Setup a listener for fixtures -->
+    <listeners>
+        <listener
+        class="\Cake\TestSuite\Fixture\FixtureInjector">
+            <arguments>
+                <object class="\Cake\TestSuite\Fixture\FixtureManager" />
+            </arguments>
+        </listener>
+    </listeners>
 
 </phpunit>
