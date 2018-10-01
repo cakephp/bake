@@ -14,6 +14,7 @@
  */
 namespace Bake\Shell\Task;
 
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Database\Exception;
@@ -51,7 +52,7 @@ class FixtureTask extends BakeTask
     {
         $dir = 'Fixture/';
         $path = defined('TESTS') ? TESTS . $dir : ROOT . DS . 'tests' . DS . $dir;
-        if (isset($this->plugin)) {
+        if ($this->plugin) {
             $path = $this->_pluginPath($this->plugin) . 'tests/' . $dir;
         }
 
@@ -63,7 +64,7 @@ class FixtureTask extends BakeTask
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
 

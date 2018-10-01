@@ -238,19 +238,19 @@ class TemplateTaskTest extends TestCase
         $this->Task->controllerName = 'Posts';
 
         $result = $this->Task->getPath();
-        $this->assertPathEquals(APP . 'Template/Posts/', $result);
+        $this->assertPathEquals(APP . '../templates/Posts/', $result);
 
         $this->Task->params['prefix'] = 'admin';
         $result = $this->Task->getPath();
-        $this->assertPathEquals(APP . 'Template/Admin/Posts/', $result);
+        $this->assertPathEquals(APP . '../templates/Admin/Posts/', $result);
 
         $this->Task->params['prefix'] = 'admin/management';
         $result = $this->Task->getPath();
-        $this->assertPathEquals(APP . 'Template/Admin/Management/Posts/', $result);
+        $this->assertPathEquals(APP . '../templates/Admin/Management/Posts/', $result);
 
         $this->Task->params['prefix'] = 'Admin/management';
         $result = $this->Task->getPath();
-        $this->assertPathEquals(APP . 'Template/Admin/Management/Posts/', $result);
+        $this->assertPathEquals(APP . '../templates/Admin/Management/Posts/', $result);
     }
 
     /**
@@ -263,17 +263,15 @@ class TemplateTaskTest extends TestCase
         $this->Task->controllerName = 'Posts';
 
         $pluginPath = APP . 'Plugin/TestTemplate/';
-        $this->deprecated(function () use ($pluginPath) {
-            Plugin::load('TestTemplate', ['path' => $pluginPath]);
-        });
+        $this->loadPlugins(['TestTemplate' => ['path' => $pluginPath]]);
 
         $this->Task->params['plugin'] = $this->Task->plugin = 'TestTemplate';
         $result = $this->Task->getPath();
-        $this->assertPathEquals($pluginPath . 'src/Template/Posts/', $result);
+        $this->assertPathEquals($pluginPath . 'src/../templates/Posts/', $result);
 
         $this->Task->params['prefix'] = 'admin';
         $result = $this->Task->getPath();
-        $this->assertPathEquals($pluginPath . 'src/Template/Admin/Posts/', $result);
+        $this->assertPathEquals($pluginPath . 'src/../templates/Admin/Posts/', $result);
 
         Plugin::unload('TestTemplate');
     }
@@ -302,7 +300,7 @@ class TemplateTaskTest extends TestCase
             'namespace' => $namespace,
         ];
         $result = $this->Task->getContent('view', $vars);
-        $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
@@ -342,7 +340,7 @@ class TemplateTaskTest extends TestCase
             'namespace' => $namespace,
         ];
         $result = $this->Task->getContent('view', $vars);
-        $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
@@ -401,10 +399,10 @@ class TemplateTaskTest extends TestCase
         ];
         $this->Task->params['prefix'] = 'Admin';
         $result = $this->Task->getContent('view', $vars);
-        $this->assertSameAsFile(__FUNCTION__ . '-view.ctp', $result);
+        $this->assertSameAsFile(__FUNCTION__ . '-view.php', $result);
 
         $result = $this->Task->getContent('add', $vars);
-        $this->assertSameAsFile(__FUNCTION__ . '-add.ctp', $result);
+        $this->assertSameAsFile(__FUNCTION__ . '-add.php', $result);
     }
 
     /**
@@ -414,14 +412,14 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeView()
     {
-        $this->generatedFile = APP . 'Template/Authors/view.ctp';
+        $this->generatedFile = ROOT . 'templates/Authors/view.php';
         $this->exec('bake template authors view');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
 
         $result = file_get_contents($this->generatedFile);
-        $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
@@ -431,14 +429,14 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeEdit()
     {
-        $this->generatedFile = APP . 'Template/Authors/edit.ctp';
+        $this->generatedFile = ROOT . 'templates/Authors/edit.php';
         $this->exec('bake template authors edit');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
 
         $result = file_get_contents($this->generatedFile);
-        $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
@@ -448,14 +446,14 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeIndex()
     {
-        $this->generatedFile = APP . 'Template/TemplateTaskComments/index.ctp';
+        $this->generatedFile = ROOT . 'templates/TemplateTaskComments/index.php';
         $this->exec('bake template template_task_comments index');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
 
         $result = file_get_contents($this->generatedFile);
-        $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
@@ -465,14 +463,14 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeIndexWithIndexLimit()
     {
-        $this->generatedFile = APP . 'Template/TemplateTaskComments/index.ctp';
+        $this->generatedFile = ROOT . 'templates/TemplateTaskComments/index.php';
         $this->exec('bake template template_task_comments --index-columns 3 index');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
 
         $result = file_get_contents($this->generatedFile);
-        $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
@@ -489,7 +487,7 @@ class TemplateTaskTest extends TestCase
         $model = TableRegistry::getTableLocator()->get('BakeTest.Comments');
         $model->belongsTo('Articles');
 
-        $this->generatedFile = $path . 'src/Template/Comments/index.ctp';
+        $this->generatedFile = $path . 'src/Template/Comments/index.php';
         $this->exec('bake template BakeTest.comments index');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
@@ -510,7 +508,7 @@ class TemplateTaskTest extends TestCase
         $this->Task->expects($this->at(0))
             ->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/CategoryThreads/add.ctp'),
+                $this->_normalizePath(APP . '../templates/CategoryThreads/add.php'),
                 $this->logicalNot(
                     $this->logicalAnd(
                         $this->stringContains('rght'),
@@ -521,7 +519,7 @@ class TemplateTaskTest extends TestCase
         $this->Task->expects($this->at(1))
             ->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/CategoryThreads/index.ctp'),
+                $this->_normalizePath(APP . '../templates/CategoryThreads/index.php'),
                 $this->logicalNot(
                     $this->logicalAnd(
                         $this->stringContains('rght'),
@@ -548,7 +546,7 @@ class TemplateTaskTest extends TestCase
         $this->Task->expects($this->once())
             ->method('createFile')
             ->with(
-                $this->_normalizePath(APP . 'Template/CategoryThreads/index.ctp'),
+                $this->_normalizePath(APP . '../templates/CategoryThreads/index.php'),
                 $this->logicalNot(
                     $this->logicalAnd(
                         $this->stringContains('New Parent Category Thread'),
@@ -570,7 +568,7 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeSelfAssociationsRelatedAssociations()
     {
-        $this->generatedFile = APP . 'Template/CategoryThreads/view.ctp';
+        $this->generatedFile = ROOT . 'templates/CategoryThreads/view.php';
         $this->exec('bake template category_threads view');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
@@ -590,7 +588,7 @@ class TemplateTaskTest extends TestCase
         $this->exec('bake template template_task_comments delete');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
-        $this->assertFileNotExists(APP . 'Template/TemplateTaskComments/delete.ctp');
+        $this->assertFileNotExists(ROOT . 'templates/TemplateTaskComments/delete.php');
     }
 
     /**
@@ -640,17 +638,17 @@ class TemplateTaskTest extends TestCase
      */
     public function testMainWithActionParam()
     {
-        $this->generatedFile = APP . 'Template/TemplateTaskComments/view.ctp';
+        $this->generatedFile = ROOT . 'templates/TemplateTaskComments/view.php';
         $this->exec('bake template TemplateTaskComments view');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $this->assertFileNotExists(
-            APP . 'Template/TemplateTaskComments/edit.ctp',
+            ROOT . 'templates/TemplateTaskComments/edit.php',
             'no extra files'
         );
         $this->assertFileNotExists(
-            APP . 'Template/TemplateTaskComments/add.ctp',
+            ROOT . 'templates/TemplateTaskComments/add.php',
             'no extra files'
         );
     }
@@ -664,19 +662,19 @@ class TemplateTaskTest extends TestCase
     public function testMainWithExistingController()
     {
         $this->generatedFiles = [
-            APP . 'Template/TemplateTaskComments/index.ctp',
-            APP . 'Template/TemplateTaskComments/add.ctp',
+            ROOT . 'templates/TemplateTaskComments/index.php',
+            ROOT . 'templates/TemplateTaskComments/add.php',
         ];
         $this->exec('bake template TemplateTaskComments');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileNotExists(
-            APP . 'Template/TemplateTaskComments/edit.ctp',
+            ROOT . 'templates/TemplateTaskComments/edit.php',
             'no extra files'
         );
         $this->assertFileNotExists(
-            APP . 'Template/TemplateTaskComments/view.ctp',
+            ROOT . 'templates/TemplateTaskComments/view.php',
             'no extra files'
         );
     }
@@ -691,13 +689,13 @@ class TemplateTaskTest extends TestCase
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
-        $this->generatedFile = $path . 'src/Template/Comments/index.ctp';
+        $this->generatedFile = $path . 'src/Template/Comments/index.php';
         $this->exec('bake template --connection test TestBake.Comments index');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $this->assertFileNotExists(
-            $path . 'src/Template/Comments/view.ctp',
+            $path . 'src/Template/Comments/view.php',
             'No other templates made'
         );
     }
@@ -720,10 +718,10 @@ class TemplateTaskTest extends TestCase
     public function testMainWithControllerFlag()
     {
         $this->generatedFiles = [
-            APP . 'Template/Blog/index.ctp',
-            APP . 'Template/Blog/view.ctp',
-            APP . 'Template/Blog/add.ctp',
-            APP . 'Template/Blog/edit.ctp',
+            ROOT . 'templates/Blog/index.php',
+            ROOT . 'templates/Blog/view.php',
+            ROOT . 'templates/Blog/add.php',
+            ROOT . 'templates/Blog/edit.php',
         ];
         $this->exec('bake template --controller Blog Posts');
 
@@ -739,8 +737,8 @@ class TemplateTaskTest extends TestCase
     public function testMainWithControllerAndAdminFlag()
     {
         $this->generatedFiles = [
-            APP . 'Template/Admin/Posts/index.ctp',
-            APP . 'Template/Admin/Posts/add.ctp'
+            ROOT . 'templates/Admin/Posts/index.php',
+            ROOT . 'templates/Admin/Posts/add.php'
         ];
         $this->exec('bake template --prefix Admin Posts');
 
@@ -755,7 +753,7 @@ class TemplateTaskTest extends TestCase
      */
     public function testMainWithAlternateTemplates()
     {
-        $this->generatedFile = APP . 'Template/TemplateTaskComments/list.ctp';
+        $this->generatedFile = ROOT . 'templates/TemplateTaskComments/list.php';
         $this->exec('bake template TemplateTaskComments index list');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);

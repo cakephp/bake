@@ -14,6 +14,7 @@
  */
 namespace Bake\Shell\Task;
 
+use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 
 /**
@@ -98,9 +99,9 @@ class CellTask extends SimpleBakeTask
     {
         $restore = $this->pathFragment;
 
-        $this->pathFragment = 'Template/Cell/';
+        $this->pathFragment = '../templates/Cell/';
         $path = $this->getPath();
-        $path .= implode(DS, [$name, 'display.ctp']);
+        $path .= implode(DS, [$name, 'display.php']);
 
         $this->pathFragment = $restore;
 
@@ -112,7 +113,7 @@ class CellTask extends SimpleBakeTask
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
         $parser

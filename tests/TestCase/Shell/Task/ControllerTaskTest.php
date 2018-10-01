@@ -151,7 +151,7 @@ class ControllerTaskTest extends TestCase
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
             'bake controller --connection test --no-test --no-actions ' .
-            '--components "Csrf, Auth, Company/TestBakeThree.Something, TestBake.Other, Apple, NonExistent" ' .
+            '--components "RequestHandler, Auth, Company/TestBakeThree.Something, TestBake.Other, Apple, NonExistent" ' .
             'BakeArticles'
         );
 
@@ -170,7 +170,7 @@ class ControllerTaskTest extends TestCase
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
             'bake controller --connection test --no-test ' .
-            '--helpers Html,Time --components Csrf,Auth ' .
+            '--helpers Html,Time --components RequestHandler,Auth ' .
             '--actions login,logout BakeArticles'
         );
 
@@ -189,7 +189,7 @@ class ControllerTaskTest extends TestCase
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
             'bake controller --connection test --no-test ' .
-            '--helpers Html,Time --components Csrf,Auth --no-actions BakeArticles'
+            '--helpers Html,Time --components RequestHandler,Auth --no-actions BakeArticles'
         );
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
@@ -207,7 +207,7 @@ class ControllerTaskTest extends TestCase
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
             'bake controller --connection test --no-test ' .
-            '--helpers Html,Time --components "Csrf, Auth" BakeArticles'
+            '--helpers Html,Time --components "RequestHandler, Auth" BakeArticles'
         );
 
         $this->assertExitCode(Shell::CODE_SUCCESS);

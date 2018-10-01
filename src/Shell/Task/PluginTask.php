@@ -14,6 +14,7 @@
  */
 namespace Bake\Shell\Task;
 
+use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -56,7 +57,7 @@ class PluginTask extends BakeTask
      *
      * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
         $this->path = current(App::path('Plugin'));
         $this->bootstrap = ROOT . DS . 'config' . DS . 'bootstrap.php';
@@ -196,16 +197,16 @@ class PluginTask extends BakeTask
 
         $paths = [];
         if (!empty($this->params['theme'])) {
-            $paths[] = Plugin::path($this->params['theme']) . 'src/Template/';
+            $paths[] = Plugin::templatePath($this->params['theme']);
         }
 
         $paths = array_merge($paths, Configure::read('App.paths.templates'));
-        $paths[] = Plugin::path('Bake') . 'src/Template/';
+        $paths[] = Plugin::templatePath('Bake');
 
         do {
             $templatesPath = array_shift($paths) . 'Bake/Plugin';
             $templatesDir = new Folder($templatesPath);
-            $templates = $templatesDir->findRecursive('.*\.(twig|ctp)');
+            $templates = $templatesDir->findRecursive('.*\.(twig|php)');
         } while (!$templates);
 
         sort($templates);
@@ -347,7 +348,7 @@ class PluginTask extends BakeTask
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
         $parser->setDescription(

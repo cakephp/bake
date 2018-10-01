@@ -46,8 +46,8 @@ class MailerTaskTest extends TestCase
         $this->generatedFiles = [
             APP . 'Mailer/ExampleMailer.php',
             ROOT . 'tests/TestCase/Mailer/ExampleMailerTest.php',
-            APP . 'Template/Layout/Email/html/example.ctp',
-            APP . 'Template/Layout/Email/text/example.ctp',
+            ROOT . 'templates/Layout/Email/html/example.php',
+            ROOT . 'templates/Layout/Email/text/example.php',
         ];
         $this->exec('bake mailer Example');
 

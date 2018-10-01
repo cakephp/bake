@@ -15,6 +15,7 @@
 namespace Bake\Shell\Task;
 
 use Bake\Utility\Model\AssociationFilter;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\App;
 use Cake\Core\Configure;
@@ -46,7 +47,7 @@ class TemplateTask extends BakeTask
      *
      * @var string
      */
-    public $pathFragment = 'Template/';
+    public $pathFragment = '../templates/';
 
     /**
      * Name of the controller being used
@@ -95,7 +96,7 @@ class TemplateTask extends BakeTask
      *
      * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
         $this->path = current(App::path('Template'));
     }
@@ -344,13 +345,13 @@ class TemplateTask extends BakeTask
             $content = $this->getContent($template);
         }
         if (empty($content)) {
-            $this->err("<warning>No generated content for '{$template}.ctp', not generating template.</warning>");
+            $this->err("<warning>No generated content for '{$template}.php', not generating template.</warning>");
 
             return false;
         }
         $this->out("\n" . sprintf('Baking `%s` view template file...', $outputFile), 1, Shell::QUIET);
         $path = $this->getPath();
-        $filename = $path . Inflector::underscore($outputFile) . '.ctp';
+        $filename = $path . Inflector::underscore($outputFile) . '.php';
         $this->createFile($filename, $content);
 
         return $content;
@@ -391,7 +392,7 @@ class TemplateTask extends BakeTask
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
 

@@ -15,6 +15,7 @@
 
 // @codingStandardsIgnoreFile
 
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
@@ -49,6 +50,15 @@ Configure::write('App', [
         'templates' => [ROOT . 'templates' . DS]
     ],
     'encoding' => 'UTF-8'
+]);
+
+Cache::setConfig([
+    '_cake_core_' => [
+        'engine' => 'File',
+        'prefix' => 'cake_core_',
+        'serialize' => true,
+        'path' => CACHE,
+    ],
 ]);
 
 if (!getenv('db_dsn')) {

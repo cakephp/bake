@@ -13,8 +13,8 @@ use Cake\ORM\Entity;
  * @property float $rating
  * @property float $score
  * @property bool $published
- * @property \Cake\I18n\Time $created
- * @property \Cake\I18n\Time $updated
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $updated
  * @property array $array_type
  * @property array $json_type
  * @property $unknown_type

@@ -85,7 +85,7 @@ class BakeTemplateTask extends Shell
             $this->set($vars);
         }
 
-        $this->getView()->set($this->viewVars);
+        $this->getView()->set($this->viewBuilder()->getVars());
 
         try {
             return $this->View->render($template);

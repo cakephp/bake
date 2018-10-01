@@ -16,6 +16,7 @@ namespace Bake\Shell\Task;
 
 use Bake\Utility\CommonOptionsTrait;
 use Cake\Cache\Cache;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
@@ -64,7 +65,7 @@ class BakeTask extends Shell
      *
      * @return void
      */
-    public function startup()
+    public function startup(): void
     {
         Configure::write('debug', true);
         Cache::disable();
@@ -77,7 +78,7 @@ class BakeTask extends Shell
      *
      * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
         if (empty($this->connection) && !empty($this->params['connection'])) {
             $this->connection = $this->params['connection'];
@@ -111,7 +112,7 @@ class BakeTask extends Shell
     public function getPath()
     {
         $path = APP . $this->pathFragment;
-        if (isset($this->plugin)) {
+        if ($this->plugin) {
             $path = $this->_pluginPath($this->plugin) . 'src/' . $this->pathFragment;
         }
         $prefix = $this->_getPrefix();
@@ -225,7 +226,7 @@ class BakeTask extends Shell
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         return $this->_setCommonOptions(parent::getOptionParser());
     }

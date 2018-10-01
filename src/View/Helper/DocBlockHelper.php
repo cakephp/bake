@@ -249,7 +249,7 @@ class DocBlockHelper extends Helper
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} findOrCreate(\$search, callable \$callback = null, \$options = [])";
         foreach ($behaviors as $behavior => $behaviorData) {
             $className = App::className($behavior, 'Model/Behavior', 'Behavior');
-            if ($className === false) {
+            if (!$className) {
                 $className = "Cake\ORM\Behavior\\{$behavior}Behavior";
             }
 

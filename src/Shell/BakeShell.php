@@ -16,6 +16,7 @@ namespace Bake\Shell;
 
 use Bake\Utility\CommonOptionsTrait;
 use Cake\Cache\Cache;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
@@ -51,15 +52,11 @@ class BakeShell extends Shell
      *
      * @return void
      */
-    public function startup()
+    public function startup(): void
     {
         parent::startup();
         Configure::write('debug', true);
         Cache::disable();
-        // Loading WyriHaximus/TwigView Plugin through the Plugin::load() for backward compatibility.
-        if (!Plugin::isLoaded('WyriHaximus/TwigView')) {
-            Plugin::load('WyriHaximus/TwigView', ['bootstrap' => true]);
-        }
 
         $task = $this->_camelize($this->command);
 
@@ -136,9 +133,9 @@ class BakeShell extends Shell
      * - Shell/Task for each loaded plugin
      * - App/Shell/Task/
      *
-     * @return void
+     * @return bool
      */
-    public function loadTasks()
+    public function loadTasks(): bool
     {
         $tasks = [];
 
@@ -153,7 +150,8 @@ class BakeShell extends Shell
         $tasks = $this->_findTasks($tasks, APP, Configure::read('App.namespace'));
 
         $this->tasks = array_values($tasks);
-        parent::loadTasks();
+
+        return parent::loadTasks();
     }
 
     /**
@@ -284,7 +282,7 @@ class BakeShell extends Shell
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
 

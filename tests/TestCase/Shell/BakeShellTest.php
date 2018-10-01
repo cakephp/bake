@@ -240,12 +240,9 @@ class BakeShellTest extends TestCase
      */
     public function testLoadTasksVendoredPlugin()
     {
-        $this->deprecated(function () {
-            Plugin::load('Pastry/PastryTest', [
-                'path' => Configure::read('App.paths.plugins')[0] . 'PastryTest' . DS,
-                'autoload' => true
-            ]);
-        });
+        $this->loadPlugins(['Pastry/PastryTest' => [
+            'path' => Configure::read('App.paths.plugins')[0] . 'PastryTest' . DS,
+        ]]);
 
         $this->Shell->loadTasks();
         $this->assertContains('Pastry/PastryTest.ApplePie', $this->Shell->tasks);
@@ -266,13 +263,14 @@ class BakeShellTest extends TestCase
 
         $path = APP;
         $testsPath = ROOT . 'tests' . DS;
+        $templatesPath = ROOT . 'templates' . DS;
 
         // We ignore our existing CommentsController test file
         $files = [
-            $path . 'Template/Comments/add.ctp',
-            $path . 'Template/Comments/edit.ctp',
-            $path . 'Template/Comments/index.ctp',
-            $path . 'Template/Comments/view.ctp',
+            $templatesPath . 'Comments/add.php',
+            $templatesPath . 'Comments/edit.php',
+            $templatesPath . 'Comments/index.php',
+            $templatesPath . 'Comments/view.php',
             $path . 'Model/Table/CommentsTable.php',
             $path . 'Model/Entity/Comment.php',
             $testsPath . 'Fixture/CommentsFixture.php',

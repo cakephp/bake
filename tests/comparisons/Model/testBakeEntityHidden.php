@@ -9,8 +9,8 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $username
  * @property string $password
- * @property \Cake\I18n\Time $created
- * @property \Cake\I18n\Time $updated
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $updated
  *
  * @property \App\Model\Entity\Comment[] $comments
  * @property \App\Model\Entity\CounterCachePost[] $counter_cache_posts

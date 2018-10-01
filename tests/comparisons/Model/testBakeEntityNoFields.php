@@ -13,8 +13,8 @@ use Cake\ORM\Entity;
  * @property float $rating
  * @property float $score
  * @property bool $published
- * @property \Cake\I18n\Time $created
- * @property \Cake\I18n\Time $updated
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $updated
  *
  * @property \App\Model\Entity\BakeUser $bake_user
  * @property \App\Model\Entity\BakeComment[] $bake_comments

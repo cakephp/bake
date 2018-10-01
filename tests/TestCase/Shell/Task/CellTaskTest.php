@@ -46,7 +46,7 @@ class CellTaskTest extends TestCase
         $this->generatedFiles = [
             APP . 'View/Cell/ExampleCell.php',
             ROOT . 'tests/TestCase/View/Cell/ExampleCellTest.php',
-            APP . 'Template/Cell/Example/display.ctp',
+            ROOT . 'templates/Cell/Example/display.php',
         ];
         $this->exec('bake cell Example');
 
@@ -108,7 +108,7 @@ class CellTaskTest extends TestCase
         $this->generatedFiles = [
             APP . 'View/Cell/Admin/ExampleCell.php',
             ROOT . 'tests/TestCase/View/Cell/Admin/ExampleCellTest.php',
-            APP . 'Template/Cell/Admin/Example/display.ctp',
+            ROOT . 'templates/Cell/Admin/Example/display.php',
         ];
         $this->exec('bake cell --prefix Admin Example');
 

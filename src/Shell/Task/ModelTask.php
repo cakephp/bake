@@ -14,6 +14,7 @@
  */
 namespace Bake\Shell\Task;
 
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Database\Schema\TableSchema;
@@ -291,8 +292,8 @@ class ModelTask extends BakeTask
             if ($tableClass === 'Cake\ORM\Table') {
                 $namespace = $appNamespace;
 
-                $className = $association->className();
-                if (strlen($className)) {
+                $className = $association->getClassName();
+                if ($className) {
                     list($plugin, $className) = pluginSplit($className);
                     if ($plugin !== null) {
                         $namespace = $plugin;
@@ -1041,9 +1042,9 @@ class ModelTask extends BakeTask
     protected function _getAllTables()
     {
         $db = ConnectionManager::get($this->connection);
-        if (!method_exists($db, 'schemaCollection')) {
+        if (!method_exists($db, 'getSchemaCollection')) {
             $this->abort(
-                'Connections need to implement schemaCollection() to be used with bake.'
+                'Connections need to implement getSchemaCollection() to be used with bake.'
             );
         }
         $schema = $db->getSchemaCollection();
@@ -1078,7 +1079,7 @@ class ModelTask extends BakeTask
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
 

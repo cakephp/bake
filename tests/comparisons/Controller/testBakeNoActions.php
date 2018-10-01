@@ -6,7 +6,7 @@ use App\Controller\AppController;
 /**
  * BakeArticles Controller
  *
- * @property \Cake\Controller\Component\CsrfComponent $Csrf
+ * @property \Cake\Controller\Component\RequestHandlerComponent $RequestHandler
  * @property \Cake\Controller\Component\AuthComponent $Auth
  */
 class BakeArticlesController extends AppController
@@ -24,5 +24,5 @@ class BakeArticlesController extends AppController
      *
      * @var array
      */
-    public $components = ['Csrf', 'Auth'];
+    public $components = ['RequestHandler', 'Auth'];
 }

@@ -15,6 +15,7 @@
 
 namespace Bake\Shell\Task;
 
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
@@ -102,14 +103,15 @@ class TestTask extends BakeTask
     public function main($type = null, $name = null)
     {
         parent::main();
-        $type = $this->normalize($type);
-        $name = $this->_getName($name);
 
         if (empty($type) && empty($name)) {
             $this->outputTypeChoices();
 
             return null;
         }
+
+        $type = $this->normalize($type);
+        $name = $this->_getName($name);
 
         if ($this->param('all')) {
             $this->_bakeAll($type);
@@ -662,7 +664,7 @@ class TestTask extends BakeTask
     {
         $dir = 'TestCase/';
         $path = defined('TESTS') ? TESTS . $dir : ROOT . DS . 'tests' . DS . $dir;
-        if (isset($this->plugin)) {
+        if ($this->plugin) {
             $path = $this->_pluginPath($this->plugin) . 'tests/' . $dir;
         }
 
@@ -696,7 +698,7 @@ class TestTask extends BakeTask
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
 

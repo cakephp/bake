@@ -6,7 +6,7 @@ use App\Controller\AppController;
 /**
  * BakeArticles Controller
  *
- * @property \Cake\Controller\Component\CsrfComponent $Csrf
+ * @property \Cake\Controller\Component\RequestHandlerComponent $RequestHandler
  * @property \Cake\Controller\Component\AuthComponent $Auth
  *
  * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
@@ -26,7 +26,7 @@ class BakeArticlesController extends AppController
      *
      * @var array
      */
-    public $components = ['Csrf', 'Auth'];
+    public $components = ['RequestHandler', 'Auth'];
 
     /**
      * Index method
