@@ -481,13 +481,13 @@ class TemplateTaskTest extends TestCase
     public function testBakeIndexPlugin()
     {
         $this->_loadTestPlugin('BakeTest');
-        $path = Plugin::path('BakeTest');
+        $path = Plugin::templatePath('BakeTest');
 
         // Setup association to ensure properties don't have dots
         $model = TableRegistry::getTableLocator()->get('BakeTest.Comments');
         $model->belongsTo('Articles');
 
-        $this->generatedFile = $path . 'src/Template/Comments/index.php';
+        $this->generatedFile = $path . 'Comments/index.php';
         $this->exec('bake template BakeTest.comments index');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
@@ -687,15 +687,15 @@ class TemplateTaskTest extends TestCase
     public function testMainWithPluginName()
     {
         $this->_loadTestPlugin('TestBake');
-        $path = Plugin::path('TestBake');
+        $path = Plugin::templatePath('TestBake');
 
-        $this->generatedFile = $path . 'src/Template/Comments/index.php';
+        $this->generatedFile = $path . 'Comments/index.php';
         $this->exec('bake template --connection test TestBake.Comments index');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $this->assertFileNotExists(
-            $path . 'src/Template/Comments/view.php',
+            $path . 'Comments/view.php',
             'No other templates made'
         );
     }

@@ -65,12 +65,13 @@ class MailerTaskTest extends TestCase
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
+        $templatePath = Plugin::templatePath('TestBake');
 
         $this->generatedFiles = [
             $path . 'src/Mailer/ExampleMailer.php',
             $path . 'tests/TestCase/Mailer/ExampleMailerTest.php',
-            $path . 'src/Template/Layout/Email/html/example.ctp',
-            $path . 'src/Template/Layout/Email/text/example.ctp',
+            $templatePath . 'Layout/Email/html/example.php',
+            $templatePath . 'Layout/Email/text/example.php',
         ];
         $this->exec('bake mailer TestBake.Example');
 
@@ -89,12 +90,13 @@ class MailerTaskTest extends TestCase
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
+        $templatePath = Plugin::templatePath('TestBake');
 
         $this->generatedFiles = [
             $path . 'src/Mailer/ExampleMailer.php',
             $path . 'tests/TestCase/Mailer/ExampleMailerTest.php',
-            $path . 'src/Template/Layout/Email/html/example.ctp',
-            $path . 'src/Template/Layout/Email/text/example.ctp',
+            $templatePath . 'Layout/Email/html/example.php',
+            $templatePath . 'Layout/Email/text/example.php',
         ];
         $this->exec('bake mailer TestBake.Example');
 

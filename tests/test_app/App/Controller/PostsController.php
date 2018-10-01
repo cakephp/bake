@@ -20,14 +20,15 @@ namespace Bake\Test\App\Controller;
 class PostsController extends AppController
 {
     /**
-     * Components array
+     * Initialize controller
      *
-     * @var array
+     * @return void
      */
-    public $components = [
-        'Flash',
-        'RequestHandler',
-    ];
+    public function initialize(): void
+    {
+        $this->loadComponent('Flash');
+        $this->loadComponent('RequestHandler');
+    }
 
     /**
      * Index method.

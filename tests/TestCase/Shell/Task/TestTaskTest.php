@@ -334,20 +334,6 @@ class TestTaskTest extends TestCase
     }
 
     /**
-     * Test generation of fixtures skips invalid modelClass
-     *
-     * @return void
-     */
-    public function testFixtureGenerationFromControllerInvalid()
-    {
-        $subject = new PostsController(new Request(), new Response());
-        $subject->modelClass = 'View';
-        $result = $this->Task->generateFixtureList($subject);
-        $expected = [];
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
      * Dataprovider for class name generation.
      *
      * @return array

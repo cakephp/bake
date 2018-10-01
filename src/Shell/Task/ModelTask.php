@@ -1067,7 +1067,7 @@ class ModelTask extends BakeTask
      */
     public function getTable($name)
     {
-        if (isset($this->params['table'])) {
+        if (!empty($this->params['table'])) {
             return $this->params['table'];
         }
 

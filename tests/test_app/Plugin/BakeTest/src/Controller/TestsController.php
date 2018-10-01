@@ -19,9 +19,11 @@ namespace BakeTest\Controller;
  */
 class TestsController extends BakeTestAppController
 {
-    public $helpers = ['BakeTest.OtherHelper', 'Html'];
-
-    public $components = ['BakeTest.Plugins'];
+    public function initialize(): void
+    {
+        $this->loadComponent('BakeTest.Plugins');
+        $this->setHelpers(['BakeTest.OtherHelper', 'Html']);
+    }
 
     public function index()
     {

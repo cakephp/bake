@@ -24,13 +24,6 @@ use Cake\Controller\Controller;
 class CommentsController extends Controller
 {
     /**
-     * components
-     *
-     * @var array
-     */
-    public $components = [];
-
-    /**
      * index action
      *
      * @return void

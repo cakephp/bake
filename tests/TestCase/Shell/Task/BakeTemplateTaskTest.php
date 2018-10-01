@@ -69,7 +69,7 @@ class BakeTemplateTaskTest extends TestCase
         $this->Task->expects($this->any())->method('in')->will($this->returnValue(1));
 
         $result = $this->Task->generate('example', ['test' => 'foo']);
-        $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
@@ -85,7 +85,7 @@ class BakeTemplateTaskTest extends TestCase
             'plugin' => 'Special'
         ]);
         $result = $this->Task->generate('config/routes');
-        $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
     /**
      * test generate with a missing template in the chosen template.
@@ -106,6 +106,6 @@ class BakeTemplateTaskTest extends TestCase
             'namespace' => ''
         ]);
         $result = $this->Task->generate('tests/fixture');
-        $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 }

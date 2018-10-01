@@ -64,11 +64,12 @@ class CellTaskTest extends TestCase
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
+        $templatePath = Plugin::templatePath('TestBake');
 
         $this->generatedFiles = [
             $path . 'src/View/Cell/ExampleCell.php',
             $path . 'tests/TestCase/View/Cell/ExampleCellTest.php',
-            $path . 'src/Template/Cell/Example/display.ctp',
+            $templatePath . 'Cell/Example/display.php',
         ];
         $this->exec('bake cell TestBake.Example');
 
@@ -86,11 +87,12 @@ class CellTaskTest extends TestCase
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
+        $templatePath = Plugin::templatePath('TestBake');
 
         $this->generatedFiles = [
             $path . 'src/View/Cell/ExampleCell.php',
             $path . 'tests/TestCase/View/Cell/ExampleCellTest.php',
-            $path . 'src/Template/Cell/Example/display.ctp',
+            $templatePath . 'Cell/Example/display.php',
         ];
         $this->exec('bake cell TestBake.Example');
 
@@ -127,11 +129,12 @@ class CellTaskTest extends TestCase
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
+        $templatePath = Plugin::templatePath('TestBake');
 
         $this->generatedFiles = [
             $path . 'src/View/Cell/Admin/ExampleCell.php',
             $path . 'tests/TestCase/View/Cell/Admin/ExampleCellTest.php',
-            $path . 'src/Template/Cell/Admin/Example/display.ctp',
+            $templatePath . 'Cell/Admin/Example/display.php',
         ];
         $this->exec('bake cell --prefix Admin TestBake.Example');
 
