@@ -104,6 +104,9 @@ class AssociationFilter
                         'navLink' => $navLink,
                     ];
                 } catch (Exception $e) {
+                    if ($assocName === 'Authors') {
+                        dd($e);
+                    }
                     // Do nothing it could be a bogus association name.
                 }
             }

@@ -36,6 +36,7 @@ class AssociationFilterTest extends TestCase
     public $fixtures = [
         'core.Authors',
         'core.Tags',
+        'core.Articles',
         'plugin.Bake.BakeArticles',
         'plugin.Bake.BakeComments',
         'plugin.Bake.BakeArticlesBakeTags',

@@ -21,7 +21,7 @@ use Cake\ORM\Table;
  */
 class TemplateTaskCommentsTable extends Table
 {
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->setTable('comments');
         $this->belongsTo('Articles', [

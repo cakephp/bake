@@ -21,7 +21,7 @@ use Cake\ORM\Table;
  */
 class BakeArticlesTable extends Table
 {
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->belongsTo('BakeUsers');
         $this->hasMany('BakeComments');

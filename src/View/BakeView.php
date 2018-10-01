@@ -17,6 +17,7 @@ namespace Bake\View;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Core\InstanceConfigTrait;
+use Cake\Event\EventInterface;
 use Cake\Utility\Text;
 use WyriHaximus\TwigView\View\TwigView;
 
@@ -78,7 +79,7 @@ class BakeView extends TwigView
      */
     protected $extensions = [
         '.twig',
-        '.ctp',
+        '.php',
     ];
 
     /**
@@ -93,9 +94,9 @@ class BakeView extends TwigView
      *
      * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
-        $bakeTemplates = dirname(dirname(__FILE__)) . DS . 'Template' . DS;
+        $bakeTemplates = dirname(dirname(dirname(__FILE__))) . DS . 'templates' . DS;
         $paths = (array)Configure::read('App.paths.templates');
 
         if (!in_array($bakeTemplates, $paths)) {
@@ -131,21 +132,21 @@ class BakeView extends TwigView
      * @return string|null Rendered content.
      * @throws \Cake\Core\Exception\Exception If there is an error in the view.
      */
-    public function render($view = null, $layout = null)
+    public function render($view = null, $layout = null): ?string
     {
         $viewFileName = $this->_getViewFileName($view);
         $templateEventName = str_replace(
-            ['.ctp', '.twig', DS],
+            ['.php', '.twig', DS],
             ['', '', '.'],
-            explode('Template' . DS . 'Bake' . DS, $viewFileName)[1]
+            explode('templates' . DS . 'Bake' . DS, $viewFileName)[1]
         );
 
         $this->_currentType = static::TYPE_TEMPLATE;
         $this->dispatchEvent('View.beforeRender', [$viewFileName]);
-        $this->dispatchEvent('View.beforeRender' . $templateEventName, [$viewFileName]);
+        $this->dispatchEvent('View.beforeRender.' . $templateEventName, [$viewFileName]);
         $this->Blocks->set('content', $this->_render($viewFileName));
         $this->dispatchEvent('View.afterRender', [$viewFileName]);
-        $this->dispatchEvent('View.afterRender' . $templateEventName, [$viewFileName]);
+        $this->dispatchEvent('View.afterRender.' . $templateEventName, [$viewFileName]);
 
         if ($layout === null) {
             $layout = $this->layout;
@@ -169,9 +170,9 @@ class BakeView extends TwigView
      * @param object|null $subject The object that this event applies to
      * ($this by default).
      *
-     * @return \Cake\Event\Event
+     * @return \Cake\Event\EventInterface
      */
-    public function dispatchEvent($name, $data = null, $subject = null)
+    public function dispatchEvent(string $name, $data = null, $subject = null): EventInterface
     {
         $name = preg_replace('/^View\./', 'Bake.', $name);
 
@@ -186,7 +187,7 @@ class BakeView extends TwigView
      *    If empty the current View::$viewVars will be used.
      * @return string Rendered output
      */
-    protected function _evaluate($viewFile, $dataForView)
+    protected function _evaluate(string $viewFile, array $dataForView): string
     {
         if (substr($viewFile, -4) === 'twig') {
             return parent::_evaluate($viewFile, $dataForView);
@@ -238,7 +239,7 @@ class BakeView extends TwigView
      * @param bool $cached Set to false to force a refresh of view paths. Default true.
      * @return array paths
      */
-    protected function _paths($plugin = null, $cached = true)
+    protected function _paths(?string $plugin = null, bool $cached = true): array
     {
         $paths = parent::_paths($plugin, false);
         foreach ($paths as &$path) {

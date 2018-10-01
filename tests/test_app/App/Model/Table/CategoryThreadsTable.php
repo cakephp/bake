@@ -21,7 +21,7 @@ use Cake\ORM\Table;
  */
 class CategoryThreadsTable extends Table
 {
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->setTable('category_threads');
         $this->belongsTo(
