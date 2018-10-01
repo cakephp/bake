@@ -11,18 +11,17 @@ use App\Controller\AppController;
  */
 class BakeArticlesController extends AppController
 {
-
     /**
-     * Helpers
+     * Initialize controller
      *
-     * @var array
+     * @return void
      */
-    public $helpers = ['Html', 'Time'];
+    public function initialize(): void
+    {
+        parent::initialize();
 
-    /**
-     * Components
-     *
-     * @var array
-     */
-    public $components = ['RequestHandler', 'Auth'];
+        $this->loadComponent('RequestHandler');
+        $this->loadComponent('Auth');
+        $this->viewBuilder()->setHelpers(['Html', 'Time']);
+    }
 }

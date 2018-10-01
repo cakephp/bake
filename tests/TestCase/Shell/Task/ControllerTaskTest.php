@@ -121,9 +121,9 @@ class ControllerTaskTest extends TestCase
         $result = $this->Task->getComponents();
         $this->assertSame([], $result);
 
-        $this->Task->params['components'] = '  , Security, ,  Csrf';
+        $this->Task->params['components'] = '  , Auth, ,  RequestHandler';
         $result = $this->Task->getComponents();
-        $this->assertSame(['Security', 'Csrf'], $result);
+        $this->assertSame(['Auth', 'RequestHandler'], $result);
     }
 
     /**
@@ -352,7 +352,7 @@ class ControllerTaskTest extends TestCase
             ->method('createFile')
             ->with($filename, $this->logicalAnd(
                 $this->stringContains('class BakeArticlesController'),
-                $this->stringContains("\$helpers = ['Time', 'Text']")
+                $this->stringContains("\$this->viewBuilder()->setHelpers(['Time', 'Text']);")
             ))
             ->will($this->returnValue(true));
 

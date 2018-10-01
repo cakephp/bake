@@ -15,11 +15,20 @@ use App\Controller\AppController;
  */
 class BakeArticlesController extends AppController
 {
-
     /**
-     * Components
+     * Initialize controller
      *
-     * @var array
+     * @return void
      */
-    public $components = ['RequestHandler', 'Auth', 'Company/TestBakeThree.Something', 'TestBake.Other', 'Apple', 'NonExistent'];
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('RequestHandler');
+        $this->loadComponent('Auth');
+        $this->loadComponent('Company/TestBakeThree.Something');
+        $this->loadComponent('TestBake.Other');
+        $this->loadComponent('Apple');
+        $this->loadComponent('NonExistent');
+    }
 }
