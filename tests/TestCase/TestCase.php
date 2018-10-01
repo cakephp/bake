@@ -41,6 +41,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         Router::reload();
+        $this->loadPlugins(['WyriHaximus/TwigView']);
     }
 
     public function tearDown()

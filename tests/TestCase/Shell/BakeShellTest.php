@@ -155,6 +155,7 @@ class BakeShellTest extends TestCase
             '- task',
             '- template',
             '- test',
+            '- twig_template',
             '',
             'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.'
         ];
@@ -212,6 +213,7 @@ class BakeShellTest extends TestCase
             'Bake.Template',
             'Controller',
             'CustomController',
+            'WyriHaximus/TwigView.TwigTemplate',
         ];
         sort($this->Shell->tasks);
         sort($expected);
