@@ -17,6 +17,7 @@ namespace Bake\View;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Core\InstanceConfigTrait;
+use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\Utility\Text;
 use WyriHaximus\TwigView\View\TwigView;
@@ -96,7 +97,7 @@ class BakeView extends TwigView
      */
     public function initialize(): void
     {
-        $bakeTemplates = dirname(dirname(dirname(__FILE__))) . DS . 'templates' . DS;
+        $bakeTemplates = Plugin::templatePath('Bake');
         $paths = (array)Configure::read('App.paths.templates');
 
         if (!in_array($bakeTemplates, $paths)) {
