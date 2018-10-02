@@ -7,7 +7,7 @@
     number
     number
 
-This should make no difference:
+This should make no different:
     1
     2
     3

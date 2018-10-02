@@ -19,51 +19,12 @@ use Cake\Core\ConventionsTrait;
 use Cake\Core\InstanceConfigTrait;
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
-use Cake\Utility\Text;
 use WyriHaximus\TwigView\View\TwigView;
 
 class BakeView extends TwigView
 {
     use ConventionsTrait;
     use InstanceConfigTrait;
-
-    /**
-     * Default class config
-     *
-     * This config is read when evaluating a template file.
-     *
-     * - `phpTagReplacements` are applied to the contents of a bake template, to allow php tags
-     *   to be treated as plain text
-     * - `replacements` are applied in order on the template contents before the template is evaluated.
-     *
-     * The default replacements are (in the following order):
-     *
-     * - swallow leading whitespace for <%- tags
-     * - swallow trailing whitespace for -%> tags
-     * - Add an extra newline to <%=, to counteract php automatically removing a newline
-     * - Replace remaining <=% with php short echo tags
-     * - Replace <% with php open tags
-     * - Replace %> with php close tags
-     *
-     * Replacements that start with `/` will be treated as regex replacements.
-     * All other values will be treated used with str_replace()
-     *
-     * @var array
-     */
-    protected $_defaultConfig = [
-        'phpTagReplacements' => [
-            '<?' => "<CakePHPBakeOpenTag",
-            '?>' => "CakePHPBakeCloseTag>"
-        ],
-        'replacements' => [
-            '/\n[ \t]+<%-( |$)/' => "\n<% ",
-            '/-%>/' => "?>",
-            '/<%=(.*)\%>\n(.)/' => "<%=$1%>\n\n$2",
-            '<%=' => '<?=',
-            '<%' => '<?php',
-            '%>' => '?>'
-        ]
-    ];
 
     /**
      * Path where bake's intermediary files are written.
@@ -80,15 +41,7 @@ class BakeView extends TwigView
      */
     protected $extensions = [
         '.twig',
-        '.php',
     ];
-
-    /**
-     * View file being evaluated.
-     *
-     * @var string
-     */
-    protected $__viewFile;
 
     /**
      * Initialize view
@@ -137,8 +90,8 @@ class BakeView extends TwigView
     {
         $viewFileName = $this->_getViewFileName($view);
         $templateEventName = str_replace(
-            ['.php', '.twig', DS],
-            ['', '', '.'],
+            ['.twig', DS],
+            ['', '.'],
             explode('templates' . DS . 'Bake' . DS, $viewFileName)[1]
         );
 
@@ -181,59 +134,6 @@ class BakeView extends TwigView
     }
 
     /**
-     * Sandbox method to evaluate a template / view script in.
-     *
-     * @param string $viewFile Filename of the view
-     * @param array $dataForView Data to include in rendered view.
-     *    If empty the current View::$viewVars will be used.
-     * @return string Rendered output
-     */
-    protected function _evaluate(string $viewFile, array $dataForView): string
-    {
-        if (substr($viewFile, -4) === 'twig') {
-            return parent::_evaluate($viewFile, $dataForView);
-        }
-
-        $viewString = $this->_getViewFileContents($viewFile);
-
-        $replacements = $this->getConfig('phpTagReplacements') + $this->getConfig('replacements');
-
-        foreach ($replacements as $find => $replace) {
-            if ($this->_isRegex($find)) {
-                $viewString = preg_replace($find, $replace, $viewString);
-            } else {
-                $viewString = str_replace($find, $replace, $viewString);
-            }
-        }
-
-        $this->__viewFile = $this->_tmpLocation . Text::slug(preg_replace('@.*Template[/\\\\]@', '', $viewFile)) . '.php';
-        file_put_contents($this->__viewFile, $viewString);
-
-        unset($viewFile, $viewString, $replacements, $find, $replace);
-        extract($dataForView);
-        ob_start();
-
-        include $this->__viewFile;
-
-        $content = ob_get_clean();
-
-        $unPhp = $this->getConfig('phpTagReplacements');
-
-        return str_replace(array_values($unPhp), array_keys($unPhp), $content);
-    }
-
-    /**
-     * Get the contents of the template file
-     *
-     * @param string $filename A template filename
-     * @return string Bake template to evaluate
-     */
-    protected function _getViewFileContents($filename)
-    {
-        return file_get_contents($filename);
-    }
-
-    /**
      * Return all possible paths to find view files in order
      *
      * @param string $plugin Optional plugin name to scan for view files.
@@ -248,18 +148,5 @@ class BakeView extends TwigView
         }
 
         return $paths;
-    }
-
-    /**
-     * Check if a replacement pattern is a regex
-     *
-     * Use preg_match to detect invalid regexes
-     *
-     * @param string $maybeRegex a fixed string or a regex
-     * @return bool
-     */
-    protected function _isRegex($maybeRegex)
-    {
-        return substr($maybeRegex, 0, 1) === '/';
     }
 }

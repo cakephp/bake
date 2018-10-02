@@ -158,12 +158,12 @@ class BakeViewTest extends TestCase
      */
     public function testCustomRenderEvents()
     {
-        // $this->View->set('test', 'success');
-        // $result = $this->View->render('Custom' . DS . 'file');
-        // $this->assertSame(
-        //     'success',
-        //     $result
-        // );
+        $this->View->set('test', 'success');
+        $result = $this->View->render('Custom' . DS . 'file');
+        $this->assertSame(
+            'success' . "\n",
+            $result
+        );
 
         $this->View->set('test', 'success');
         $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
@@ -171,7 +171,7 @@ class BakeViewTest extends TestCase
         });
         $result = $this->View->render('Custom' . DS . 'file');
         $this->assertSame(
-            'pass',
+            'pass' . "\n",
             $result
         );
     }
