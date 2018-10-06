@@ -1,6 +1,6 @@
 {
     "name": "cakephp/bake",
-    "description": "Bake plugin for CakePHP 3",
+    "description": "Bake plugin for CakePHP",
     "type": "cakephp-plugin",
     "keywords": ["cakephp", "bake"],
     "homepage": "https://github.com/cakephp/bake",
@@ -17,16 +17,10 @@
         "irc": "irc://irc.freenode.org/cakephp",
         "source": "https://github.com/cakephp/bake"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/ADmad/TwigView"
-        }
-    ],
     "require": {
         "cakephp/cakephp": "4.x-dev as 4.0.0",
         "cakephp/plugin-installer": "^1.0",
-        "wyrihaximus/twig-view": "dev-cake-4.x"
+        "wyrihaximus/twig-view": "dev-master"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^3.0",
