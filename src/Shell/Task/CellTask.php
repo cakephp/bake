@@ -16,6 +16,7 @@ namespace Bake\Shell\Task;
 
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
+use Cake\View\Cell;
 
 /**
  * Task for creating cells.
@@ -99,7 +100,7 @@ class CellTask extends SimpleBakeTask
     {
         $restore = $this->pathFragment;
 
-        $this->pathFragment = '../templates/Cell/';
+        $this->pathFragment = '../templates/' . Cell::TEMPLATE_FOLDER . '/';
         $path = $this->getPath();
         $path .= implode(DS, [$name, 'display.php']);
 
