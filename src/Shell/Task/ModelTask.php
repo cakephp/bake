@@ -291,7 +291,7 @@ class ModelTask extends BakeTask
             if ($tableClass === 'Cake\ORM\Table') {
                 $namespace = $appNamespace;
 
-                $className = $association->className();
+                $className = $association->getClassName();
                 if (strlen($className)) {
                     list($plugin, $className) = pluginSplit($className);
                     if ($plugin !== null) {
