@@ -27,7 +27,7 @@ class BakeView extends TwigView
     use InstanceConfigTrait;
 
     /**
-     * Folder containing bake tempalates.
+     * Folder containing bake templates.
      *
      * @var string
      */
