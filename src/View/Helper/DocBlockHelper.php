@@ -192,7 +192,7 @@ class DocBlockHelper extends Helper
             case 'timestamp':
                 $dbType = Type::build($type);
                 if (method_exists($dbType, 'getDateTimeClassName')) {
-                    return '\\' . Type::build($type)->getDateTimeClassName();
+                    return '\\' . $dbType->getDateTimeClassName();
                 }
 
                 return '\Cake\I18n\Time';

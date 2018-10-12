@@ -48,7 +48,7 @@ class BakeTemplateTask extends Shell
      */
     public function getView()
     {
-        if ($this->View) {
+        if ($this->View !== null) {
             return $this->View;
         }
 
