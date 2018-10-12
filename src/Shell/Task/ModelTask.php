@@ -484,7 +484,7 @@ class ModelTask extends BakeTask
                     'targetForeignKey' => $this->_modelKey($habtmName),
                     'joinTable' => $otherTableName
                 ];
-                if ($assoc && $this->plugin) {
+                if ($this->plugin) {
                     $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
                 }
                 $associations['belongsToMany'][] = $assoc;
@@ -1158,7 +1158,7 @@ class ModelTask extends BakeTask
      * Assembles and writes a unit test file
      *
      * @param string $className Model class name
-     * @return string|bool
+     * @return string|bool|null
      */
     public function bakeTest($className)
     {
