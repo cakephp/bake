@@ -46,7 +46,7 @@ class CellTaskTest extends TestCase
         $this->generatedFiles = [
             APP . 'View/Cell/ExampleCell.php',
             ROOT . 'tests/TestCase/View/Cell/ExampleCellTest.php',
-            ROOT . 'templates/Cell/Example/display.php',
+            ROOT . 'templates/cell/Example/display.php',
         ];
         $this->exec('bake cell Example');
 
@@ -69,7 +69,7 @@ class CellTaskTest extends TestCase
         $this->generatedFiles = [
             $path . 'src/View/Cell/ExampleCell.php',
             $path . 'tests/TestCase/View/Cell/ExampleCellTest.php',
-            $templatePath . 'Cell/Example/display.php',
+            $templatePath . 'cell/Example/display.php',
         ];
         $this->exec('bake cell TestBake.Example');
 
@@ -92,7 +92,7 @@ class CellTaskTest extends TestCase
         $this->generatedFiles = [
             $path . 'src/View/Cell/ExampleCell.php',
             $path . 'tests/TestCase/View/Cell/ExampleCellTest.php',
-            $templatePath . 'Cell/Example/display.php',
+            $templatePath . 'cell/Example/display.php',
         ];
         $this->exec('bake cell TestBake.Example');
 
@@ -110,7 +110,7 @@ class CellTaskTest extends TestCase
         $this->generatedFiles = [
             APP . 'View/Cell/Admin/ExampleCell.php',
             ROOT . 'tests/TestCase/View/Cell/Admin/ExampleCellTest.php',
-            ROOT . 'templates/Cell/Admin/Example/display.php',
+            ROOT . 'templates/cell/Admin/Example/display.php',
         ];
         $this->exec('bake cell --prefix Admin Example');
 
@@ -134,7 +134,7 @@ class CellTaskTest extends TestCase
         $this->generatedFiles = [
             $path . 'src/View/Cell/Admin/ExampleCell.php',
             $path . 'tests/TestCase/View/Cell/Admin/ExampleCellTest.php',
-            $templatePath . 'Cell/Admin/Example/display.php',
+            $templatePath . 'cell/Admin/Example/display.php',
         ];
         $this->exec('bake cell --prefix Admin TestBake.Example');
 

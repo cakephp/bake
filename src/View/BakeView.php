@@ -27,6 +27,13 @@ class BakeView extends TwigView
     use InstanceConfigTrait;
 
     /**
+     * Folder containing bake templates.
+     *
+     * @var string
+     */
+    public const BAKE_TEMPLATE_FOLDER = 'bake';
+
+    /**
      * Path where bake's intermediary files are written.
      * Defaults to `TMP . 'bake' . DS`.
      *
@@ -92,7 +99,7 @@ class BakeView extends TwigView
         $templateEventName = str_replace(
             ['.twig', DS],
             ['', '.'],
-            explode('templates' . DS . 'Bake' . DS, $viewFileName)[1]
+            explode('templates' . DS . static::BAKE_TEMPLATE_FOLDER . DS, $viewFileName)[1]
         );
 
         $this->_currentType = static::TYPE_TEMPLATE;
@@ -144,7 +151,7 @@ class BakeView extends TwigView
     {
         $paths = parent::_paths($plugin, false);
         foreach ($paths as &$path) {
-            $path .= 'Bake' . DS;
+            $path .= static::BAKE_TEMPLATE_FOLDER . DS;
         }
 
         return $paths;

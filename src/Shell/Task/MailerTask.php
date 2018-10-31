@@ -77,7 +77,7 @@ class MailerTask extends SimpleBakeTask
     public function bakeLayouts($name)
     {
         $restore = $this->pathFragment;
-        $layoutsPath = implode(DS, ['..', 'templates', 'Layout', 'Email']);
+        $layoutsPath = implode(DS, ['..', 'templates', 'layout', 'email']);
 
         foreach (['html', 'text'] as $type) {
             $this->pathFragment = implode(DS, [$layoutsPath, $type, Inflector::underscore($name) . '.php']);

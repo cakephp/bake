@@ -14,6 +14,7 @@
  */
 namespace Bake\Shell\Task;
 
+use Bake\View\BakeView;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
 use Cake\Core\Configure;
@@ -204,7 +205,7 @@ class PluginTask extends BakeTask
         $paths[] = Plugin::templatePath('Bake');
 
         do {
-            $templatesPath = array_shift($paths) . 'Bake/Plugin';
+            $templatesPath = array_shift($paths) . BakeView::BAKE_TEMPLATE_FOLDER . '/Plugin';
             $templatesDir = new Folder($templatesPath);
             $templates = $templatesDir->findRecursive('.*\.(twig|php)');
         } while (!$templates);

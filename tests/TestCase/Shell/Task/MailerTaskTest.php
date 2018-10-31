@@ -46,8 +46,8 @@ class MailerTaskTest extends TestCase
         $this->generatedFiles = [
             APP . 'Mailer/ExampleMailer.php',
             ROOT . 'tests/TestCase/Mailer/ExampleMailerTest.php',
-            ROOT . 'templates/Layout/Email/html/example.php',
-            ROOT . 'templates/Layout/Email/text/example.php',
+            ROOT . 'templates/layout/email/html/example.php',
+            ROOT . 'templates/layout/email/text/example.php',
         ];
         $this->exec('bake mailer Example');
 
@@ -70,8 +70,8 @@ class MailerTaskTest extends TestCase
         $this->generatedFiles = [
             $path . 'src/Mailer/ExampleMailer.php',
             $path . 'tests/TestCase/Mailer/ExampleMailerTest.php',
-            $templatePath . 'Layout/Email/html/example.php',
-            $templatePath . 'Layout/Email/text/example.php',
+            $templatePath . 'layout/email/html/example.php',
+            $templatePath . 'layout/email/text/example.php',
         ];
         $this->exec('bake mailer TestBake.Example');
 
@@ -95,8 +95,8 @@ class MailerTaskTest extends TestCase
         $this->generatedFiles = [
             $path . 'src/Mailer/ExampleMailer.php',
             $path . 'tests/TestCase/Mailer/ExampleMailerTest.php',
-            $templatePath . 'Layout/Email/html/example.php',
-            $templatePath . 'Layout/Email/text/example.php',
+            $templatePath . 'layout/email/html/example.php',
+            $templatePath . 'layout/email/text/example.php',
         ];
         $this->exec('bake mailer TestBake.Example');
 
