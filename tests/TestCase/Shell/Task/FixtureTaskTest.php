@@ -18,6 +18,8 @@ use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
+use Cake\Database\Driver\Postgres;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -360,10 +362,31 @@ class FixtureTaskTest extends TestCase
      */
     public function testRecordGenerationForBinaryType()
     {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
+
         $this->generatedFile = ROOT . 'tests/Fixture/BinaryTestsFixture.php';
         $this->exec('bake fixture --connection test BinaryTests');
 
         $this->assertFileContains("'data' => 'Lorem ipsum dolor sit amet'", $this->generatedFile);
+        $this->assertFileContains("'byte' => 'L'", $this->generatedFile);
+    }
+
+    /**
+     * test record generation with float and binary types
+     *
+     * @return void
+     */
+    public function testRecordGenerationForBinaryTypePostgres()
+    {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf(($driver instanceof Postgres) === false, 'Only compatible with postgres');
+
+        $this->generatedFile = ROOT . 'tests/Fixture/BinaryTestsFixture.php';
+        $this->exec('bake fixture --connection test BinaryTests');
+
+        $this->assertFileContains("'data' => 'Lorem ipsum dolor sit amet'", $this->generatedFile);
+        $this->assertFileContains("'byte' => 'Lorem ipsum dolor sit amet'", $this->generatedFile);
     }
 
     /**
