@@ -556,10 +556,11 @@ class ModelTask extends BakeTask
 
         $schema = $model->getSchema();
         foreach ($schema->columns() as $column) {
+            $columnSchema = $schema->getColumn($column);
+
             $properties[$column] = [
                 'kind' => 'column',
-                'type' => $schema->getColumnType($column)
-            ];
+            ] + $columnSchema;
         }
 
         foreach ($model->associations() as $association) {
