@@ -7,9 +7,9 @@ use Cake\ORM\Entity;
  * User Entity
  *
  * @property int $id
- * @property string $username
+ * @property string|null $username
  * @property string|null $password
- * @property \Cake\I18n\Time $created
+ * @property \Cake\I18n\Time|null $created
  * @property \Cake\I18n\Time|null $updated
  *
  * @property \App\Model\Entity\Comment[] $comments
