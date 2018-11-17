@@ -627,93 +627,63 @@ class ModelTaskTest extends TestCase
             'id' => [
                 'kind' => 'column',
                 'type' => 'integer',
-                'length' => null,
-                'unsigned' => false,
                 'null' => false,
-                'default' => null,
-                'autoIncrement' => true,
-                'precision' => null,
-                'comment' => null,
             ],
             'title' => [
                 'kind' => 'column',
                 'type' => 'string',
-                'length' => 50,
                 'null' => false,
-                'default' => null,
-                'precision' => null,
-                'comment' => null,
-                'fixed' => null,
-                'collate' => null,
             ],
             'body' => [
                 'kind' => 'column',
                 'type' => 'text',
-                'length' => null,
                 'null' => true,
-                'default' => null,
-                'precision' => null,
-                'comment' => null,
-                'collate' => null,
             ],
             'rating' => [
                 'kind' => 'column',
                 'type' => 'float',
-                'length' => null,
-                'unsigned' => true,
                 'null' => false,
-                'default' => '0',
-                'precision' => null,
-                'comment' => null,
             ],
             'score' => [
                 'kind' => 'column',
                 'type' => 'decimal',
-                'length' => null,
-                'unsigned' => true,
                 'null' => false,
-                'default' => '0',
-                'precision' => null,
-                'comment' => null,
             ],
             'created' => [
                 'kind' => 'column',
                 'type' => 'timestamp',
-                'length' => null,
                 'null' => true,
-                'default' => null,
-                'precision' => null,
-                'comment' => null,
             ],
             'bake_user_id' => [
                 'kind' => 'column',
                 'type' => 'integer',
-                'length' => null,
-                'unsigned' => false,
                 'null' => false,
-                'default' => null,
-                'precision' => null,
-                'comment' => null,
-                'autoIncrement' => null,
             ],
             'published' => [
                 'kind' => 'column',
                 'type' => 'boolean',
-                'length' => null,
                 'null' => false,
-                'default' => 'FALSE',
-                'precision' => null,
-                'comment' => null,
             ],
             'updated' => [
                 'kind' => 'column',
                 'type' => 'timestamp',
-                'length' => null,
-                'null' => true,
-                'default' => null,
-                'precision' => null,
-                'comment' => null,
-            ],
+                'null' => true
+            ]
+        ];
+        foreach ($expected as $key => $value) {
+            $this->assertArrayHasKey($key, $result);
+
+            $this->assertArrayHasKey('kind', $result[$key]);
+            $this->assertSame($value['kind'], $result[$key]['kind']);
+
+            $this->assertArrayHasKey('type', $result[$key]);
+            $this->assertSame($value['type'], $result[$key]['type']);
+
+            $this->assertArrayHasKey('null', $result[$key]);
+            $this->assertSame($value['null'], $result[$key]['null']);
+        }
+
+        $expectedAssociations = [
             'bake_user' => [
                 'kind' => 'association',
                 'association' => $model->getAssociation('BakeUsers'),
@@ -725,7 +695,9 @@ class ModelTaskTest extends TestCase
                 'type' => '\BakeTest\Model\Entity\Author'
             ]
         ];
-        $this->assertEquals($expected, $result);
+        foreach ($expectedAssociations as $key => $expected) {
+            $this->assertEquals($expected, $result[$key]);
+        }
     }
 
     /**
@@ -1003,7 +975,8 @@ class ModelTaskTest extends TestCase
             ],
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -1243,7 +1216,8 @@ class ModelTaskTest extends TestCase
             ],
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],

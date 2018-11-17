@@ -560,7 +560,9 @@ class ModelTask extends BakeTask
 
             $properties[$column] = [
                 'kind' => 'column',
-            ] + $columnSchema;
+                'type' => $columnSchema['type'],
+                'null' => $columnSchema['null'],
+            ];
         }
 
         foreach ($model->associations() as $association) {
