@@ -626,40 +626,64 @@ class ModelTaskTest extends TestCase
         $expected = [
             'id' => [
                 'kind' => 'column',
-                'type' => 'integer'
+                'type' => 'integer',
+                'null' => false,
             ],
             'title' => [
                 'kind' => 'column',
-                'type' => 'string'
+                'type' => 'string',
+                'null' => false,
             ],
             'body' => [
                 'kind' => 'column',
-                'type' => 'text'
+                'type' => 'text',
+                'null' => true,
             ],
             'rating' => [
                 'kind' => 'column',
-                'type' => 'float'
+                'type' => 'float',
+                'null' => false,
             ],
             'score' => [
                 'kind' => 'column',
-                'type' => 'decimal'
+                'type' => 'decimal',
+                'null' => false,
             ],
             'created' => [
                 'kind' => 'column',
-                'type' => 'timestamp'
+                'type' => 'timestamp',
+                'null' => true,
             ],
             'bake_user_id' => [
                 'kind' => 'column',
-                'type' => 'integer'
+                'type' => 'integer',
+                'null' => false,
             ],
             'published' => [
                 'kind' => 'column',
-                'type' => 'boolean'
+                'type' => 'boolean',
+                'null' => false,
             ],
             'updated' => [
                 'kind' => 'column',
-                'type' => 'timestamp'
-            ],
+                'type' => 'timestamp',
+                'null' => true
+            ]
+        ];
+        foreach ($expected as $key => $value) {
+            $this->assertArrayHasKey($key, $result);
+
+            $this->assertArrayHasKey('kind', $result[$key]);
+            $this->assertSame($value['kind'], $result[$key]['kind']);
+
+            $this->assertArrayHasKey('type', $result[$key]);
+            $this->assertSame($value['type'], $result[$key]['type']);
+
+            $this->assertArrayHasKey('null', $result[$key]);
+            $this->assertSame($value['null'], $result[$key]['null']);
+        }
+
+        $expectedAssociations = [
             'bake_user' => [
                 'kind' => 'association',
                 'association' => $model->getAssociation('BakeUsers'),
@@ -671,7 +695,9 @@ class ModelTaskTest extends TestCase
                 'type' => '\BakeTest\Model\Entity\Author'
             ]
         ];
-        $this->assertEquals($expected, $result);
+        foreach ($expectedAssociations as $key => $expected) {
+            $this->assertEquals($expected, $result[$key]);
+        }
     }
 
     /**
@@ -862,7 +888,14 @@ class ModelTaskTest extends TestCase
             ],
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+                'requirePresence' => [
+                    'rule' => 'requirePresence',
+                    'args' => ["'create'" ],
+                ],
+                'notEmpty' => [
+                    'rule' => 'notEmpty',
+                    'args' => [],
+                ],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -942,7 +975,8 @@ class ModelTaskTest extends TestCase
             ],
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -1097,6 +1131,10 @@ class ModelTaskTest extends TestCase
         ];
         $result = $this->Task->getValidation($model, $associations);
         $expected = [
+            'id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]]
+            ],
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
@@ -1106,14 +1144,6 @@ class ModelTaskTest extends TestCase
             'body' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
-            ],
-            'published' => [
-                'boolean' => ['rule' => 'boolean', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
-            ],
-            'id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]]
             ],
             'rating' => [
                 'numeric' => ['rule' => 'numeric', 'args' => []],
@@ -1134,9 +1164,23 @@ class ModelTaskTest extends TestCase
                         0,
                     ],
                 ],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-            ]
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+            ],
+            'published' => [
+                'boolean' => [
+                    'rule' => 'boolean',
+                    'args' => [],
+                ],
+                'requirePresence' => [
+                    'rule' => 'requirePresence',
+                    'args' => ["'create'" ],
+                ],
+                'notEmpty' => [
+                    'rule' => 'notEmpty',
+                    'args' => [],
+                ],
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -1172,7 +1216,8 @@ class ModelTaskTest extends TestCase
             ],
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []]
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
