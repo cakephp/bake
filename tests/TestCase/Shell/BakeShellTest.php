@@ -55,7 +55,7 @@ class BakeShellTest extends TestCase
         parent::setUp();
 
         $this->out = new ConsoleOutput();
-        $this->io = new ConsoleIo($this->out);
+        $this->io = new ConsoleIo($this->out, $this->out);
 
         $this->Shell = $this->getMockBuilder('Bake\Shell\BakeShell')
             ->setMethods(['in', 'createFile', '_stop'])
@@ -118,6 +118,71 @@ class BakeShellTest extends TestCase
             '---------------------------------------------------------------',
             '<success>Bake All complete.</success>'
         ];
+        $this->assertSame($expected, $output);
+    }
+
+    /**
+     * test bake all --everything [--connection default]
+     *
+     * @return void
+     */
+    public function testAllEverythingDefault()
+    {
+        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
+            ->setMethods(['listAll'])
+            ->getMock();
+
+        $this->Shell->Model->expects($this->once())
+            ->method('listAll')
+            ->will($this->returnValue([]));
+
+        $this->Shell->connection = '';
+        $this->Shell->params = ['prefix' => 'account', 'everything' => true];
+        $this->Shell->all();
+
+        $output = $this->out->messages();
+
+        $expected = [
+            'Bake All',
+            '---------------------------------------------------------------',
+            '<success>Bake All complete.</success>'
+        ];
+        $this->assertSame($expected, $output);
+    }
+
+    /**
+     * test bake all --everything --connection test
+     *
+     * @return void
+     */
+    public function testAllEverything()
+    {
+        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
+            ->setMethods(['main'])
+            ->getMock();
+        $this->Shell->Controller = $this->getMockBuilder('Bake\Shell\Task\ControllerTask')
+            ->setMethods(['main'])
+            ->getMock();
+        $this->Shell->Template = $this->getMockBuilder('Bake\Shell\Task\TemplateTask')
+            ->setMethods(['main'])
+            ->getMock();
+
+        $this->Shell->Model->expects($this->never())
+            ->method('main');
+
+        $this->Shell->Controller->expects($this->never())
+            ->method('main');
+
+        $this->Shell->Template->expects($this->never())
+            ->method('main');
+
+        $this->Shell->connection = 'test';
+        $this->Shell->params = ['prefix' => 'account', 'everything' => true, 'connection' => 'test'];
+        $this->Shell->all();
+
+        $output = $this->out->messages();
+
+        $expected = ['<warning>Can only bake everything on default connection</warning>'];
         $this->assertSame($expected, $output);
     }
 
