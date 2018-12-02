@@ -78,7 +78,7 @@ class ControllerTask extends BakeTask
     {
         $tables = $this->listAll();
         foreach ($tables as $table) {
-            TableRegistry::clear();
+            TableRegistry::getTableLocator()->clear();
             $this->main($table);
         }
     }
@@ -121,10 +121,10 @@ class ControllerTask extends BakeTask
             $plugin .= '.';
         }
 
-        if (TableRegistry::exists($plugin . $currentModelName)) {
-            $modelObj = TableRegistry::get($plugin . $currentModelName);
+        if (TableRegistry::getTableLocator()->exists($plugin . $currentModelName)) {
+            $modelObj = TableRegistry::getTableLocator()->get($plugin . $currentModelName);
         } else {
-            $modelObj = TableRegistry::get($plugin . $currentModelName, [
+            $modelObj = TableRegistry::getTableLocator()->get($plugin . $currentModelName, [
                 'connectionName' => $this->connection
             ]);
         }
@@ -142,7 +142,6 @@ class ControllerTask extends BakeTask
 
         $data = compact(
             'actions',
-            'admin',
             'components',
             'currentModelName',
             'defaultModel',
@@ -200,7 +199,7 @@ class ControllerTask extends BakeTask
      * Assembles and writes a unit test file
      *
      * @param string $className Controller class name
-     * @return string|null Baked test
+     * @return string|bool Baked test
      */
     public function bakeTest($className)
     {
@@ -209,6 +208,7 @@ class ControllerTask extends BakeTask
         }
         $this->Test->plugin = $this->plugin;
         $this->Test->connection = $this->connection;
+        $this->Test->interactive = $this->interactive;
 
         return $this->Test->bake('Controller', $className);
     }

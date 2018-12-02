@@ -17,7 +17,7 @@ namespace Bake\Shell\Task;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Database\Exception;
-use Cake\Database\Schema\Table;
+use Cake\Database\Schema\TableSchema;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -170,19 +170,13 @@ class FixtureTask extends BakeTask
             $import = sprintf("[%s]", implode(', ', $importBits));
         }
 
-        $connection = ConnectionManager::get($this->connection);
-        if (!method_exists($connection, 'schemaCollection')) {
-            throw new \RuntimeException(
-                'Cannot generate fixtures for connections that do not implement schemaCollection()'
-            );
-        }
-        $schemaCollection = $connection->schemaCollection();
         try {
-            $data = $schemaCollection->describe($useTable);
+            $data = $this->readSchema($model, $useTable);
         } catch (Exception $e) {
+            TableRegistry::getTableLocator()->remove($model);
             $useTable = Inflector::underscore($model);
             $table = $useTable;
-            $data = $schemaCollection->describe($useTable);
+            $data = $this->readSchema($model, $useTable);
         }
 
         if ($modelImport === null) {
@@ -201,6 +195,29 @@ class FixtureTask extends BakeTask
         }
 
         return $this->generateFixtureFile($model, compact('records', 'table', 'schema', 'import'));
+    }
+
+    /**
+     * Get schema metadata for the current table mapping.
+     *
+     * @param string $name The model alias to use
+     * @param string $table The table name to get schema metadata for.
+     * @return \Cake\Database\Schema\TableSchema
+     */
+    public function readSchema($name, $table)
+    {
+        $connection = ConnectionManager::get($this->connection);
+
+        if (TableRegistry::getTableLocator()->exists($name)) {
+            $model = TableRegistry::getTableLocator()->get($name);
+        } else {
+            $model = TableRegistry::getTableLocator()->get($name, [
+                'table' => $table,
+                'connection' => $connection
+            ]);
+        }
+
+        return $model->getSchema();
     }
 
     /**
@@ -244,28 +261,28 @@ class FixtureTask extends BakeTask
     /**
      * Generates a string representation of a schema.
      *
-     * @param \Cake\Database\Schema\Table $table Table schema
+     * @param \Cake\Database\Schema\TableSchema $table Table schema
      * @return string fields definitions
      */
-    protected function _generateSchema(Table $table)
+    protected function _generateSchema(TableSchema $table)
     {
         $cols = $indexes = $constraints = [];
         foreach ($table->columns() as $field) {
-            $fieldData = $table->column($field);
+            $fieldData = $table->getColumn($field);
             $properties = implode(', ', $this->_values($fieldData));
             $cols[] = "        '$field' => [$properties],";
         }
         foreach ($table->indexes() as $index) {
-            $fieldData = $table->index($index);
+            $fieldData = $table->getIndex($index);
             $properties = implode(', ', $this->_values($fieldData));
             $indexes[] = "            '$index' => [$properties],";
         }
         foreach ($table->constraints() as $index) {
-            $fieldData = $table->constraint($index);
+            $fieldData = $table->getConstraint($index);
             $properties = implode(', ', $this->_values($fieldData));
             $constraints[] = "            '$index' => [$properties],";
         }
-        $options = $this->_values($table->options());
+        $options = $this->_values($table->getOptions());
 
         $content = implode("\n", $cols) . "\n";
         if (!empty($indexes)) {
@@ -318,17 +335,17 @@ class FixtureTask extends BakeTask
     /**
      * Generate String representation of Records
      *
-     * @param \Cake\Database\Schema\Table $table Table schema array
+     * @param \Cake\Database\Schema\TableSchema $table Table schema array
      * @param int $recordCount The number of records to generate.
      * @return array Array of records to use in the fixture.
      */
-    protected function _generateRecords(Table $table, $recordCount = 1)
+    protected function _generateRecords(TableSchema $table, $recordCount = 1)
     {
         $records = [];
         for ($i = 0; $i < $recordCount; $i++) {
             $record = [];
             foreach ($table->columns() as $field) {
-                $fieldInfo = $table->column($field);
+                $fieldInfo = $table->getColumn($field);
                 $insert = '';
                 switch ($fieldInfo['type']) {
                     case 'decimal':
@@ -349,7 +366,7 @@ class FixtureTask extends BakeTask
                         } else {
                             $insert = "Lorem ipsum dolor sit amet";
                             if (!empty($fieldInfo['length'])) {
-                                $insert = substr($insert, 0, (int)$fieldInfo['length'] - 2);
+                                $insert = substr($insert, 0, (int)$fieldInfo['length'] > 2 ? (int)$fieldInfo['length'] - 2 : (int)$fieldInfo['length']);
                             }
                         }
                         break;
@@ -408,13 +425,13 @@ class FixtureTask extends BakeTask
                 if ($val === 'NULL') {
                     $val = 'null';
                 }
-                $values[] = "            '$field' => $val";
+                $values[] = "                '$field' => $val";
             }
-            $out .= "        [\n";
+            $out .= "            [\n";
             $out .= implode(",\n", $values);
-            $out .= "\n        ],\n";
+            $out .= "\n            ],\n";
         }
-        $out .= "    ]";
+        $out .= "        ]";
 
         return $out;
     }
@@ -431,10 +448,10 @@ class FixtureTask extends BakeTask
     {
         $recordCount = (isset($this->params['count']) ? $this->params['count'] : 10);
         $conditions = (isset($this->params['conditions']) ? $this->params['conditions'] : '1=1');
-        if (TableRegistry::exists($modelName)) {
-            $model = TableRegistry::get($modelName);
+        if (TableRegistry::getTableLocator()->exists($modelName)) {
+            $model = TableRegistry::getTableLocator()->get($modelName);
         } else {
-            $model = TableRegistry::get($modelName, [
+            $model = TableRegistry::getTableLocator()->get($modelName, [
                 'table' => $useTable,
                 'connection' => ConnectionManager::get($this->connection)
             ]);
@@ -444,6 +461,6 @@ class FixtureTask extends BakeTask
             ->limit($recordCount)
             ->enableHydration(false);
 
-        return $records;
+        return $records->toArray();
     }
 }

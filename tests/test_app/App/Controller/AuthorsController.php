@@ -11,7 +11,7 @@
  * @link          http://cakephp.org CakePHP Project
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task\TemplateTask;
+namespace Bake\Test\App\Controller;
 
 use Cake\Controller\Controller;
 

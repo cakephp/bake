@@ -23,6 +23,6 @@ class TemplateTaskArticlesTable extends Table
 {
     public function intialize(array $config)
     {
-        $this->table('articles');
+        $this->setTable('articles');
     }
 }

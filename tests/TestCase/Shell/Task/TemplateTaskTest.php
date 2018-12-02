@@ -16,6 +16,7 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
@@ -56,10 +57,10 @@ class TemplateTaskTest extends TestCase
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
 
         Configure::write('App.namespace', 'Bake\Test\App');
-        $this->_setupTask(['in', 'err', 'error', 'createFile', '_stop']);
+        $this->_setupTask(['in', 'err', 'abort', 'createFile', '_stop']);
 
-        TableRegistry::get('TemplateTaskComments', [
-            'className' => __NAMESPACE__ . '\TemplateTaskCommentsTable',
+        TableRegistry::getTableLocator()->get('TemplateTaskComments', [
+            'className' => 'Bake\Test\App\Model\Table\TemplateTaskCommentsTable',
         ]);
     }
 
@@ -83,6 +84,7 @@ class TemplateTaskTest extends TestCase
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['listUnskipped', 'execute', 'createFile'])
             ->getMock();
     }
 
@@ -94,7 +96,7 @@ class TemplateTaskTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
-        TableRegistry::clear();
+        TableRegistry::getTableLocator()->clear();
         unset($this->Task);
     }
 
@@ -285,7 +287,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TestTemplateModel',
             'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
-            'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
+            'schema' => TableRegistry::getTableLocator()->get('TemplateTaskComments')->getSchema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
             'singularVar' => 'testTemplateModel',
@@ -312,7 +314,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TemplateTaskComments',
             'entityClass' => $namespace . '\Model\Entity\TemplateTaskComment',
-            'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
+            'schema' => TableRegistry::getTableLocator()->get('TemplateTaskComments')->getSchema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
             'singularVar' => 'templateTaskComment',
@@ -352,7 +354,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TestTemplateModel',
             'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
-            'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
+            'schema' => TableRegistry::getTableLocator()->get('TemplateTaskComments')->getSchema(),
             'primaryKey' => [],
             'displayField' => 'name',
             'singularVar' => 'testTemplateModel',
@@ -365,7 +367,7 @@ class TemplateTaskTest extends TestCase
             'namespace' => $namespace,
         ];
         $this->Task->expects($this->once())
-            ->method('error')
+            ->method('abort')
             ->with($this->stringContains('Cannot generate views for models'));
 
         $result = $this->Task->getContent('view', $vars);
@@ -383,7 +385,7 @@ class TemplateTaskTest extends TestCase
         $vars = [
             'modelClass' => 'TestTemplateModel',
             'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
-            'schema' => TableRegistry::get('TemplateTaskComments')->schema(),
+            'schema' => TableRegistry::getTableLocator()->get('TemplateTaskComments')->getSchema(),
             'primaryKey' => ['id'],
             'displayField' => 'name',
             'singularVar' => 'testTemplateModel',
@@ -410,16 +412,13 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeView()
     {
-        $this->Task->modelName = __NAMESPACE__ . '\\TemplateTask\\AuthorsTable';
-        $this->Task->controllerName = 'Authors';
-        $this->Task->controllerClass = __NAMESPACE__ . '\\TemplateTask\\AuthorsController';
+        $this->generatedFile = APP . 'Template/Authors/view.ctp';
+        $this->exec('bake template authors view');
 
-        $this->Task
-            ->expects($this->at(0))
-            ->method('createFile')
-            ->with($this->_normalizePath(APP . 'Template/Authors/view.ctp'));
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
 
-        $result = $this->Task->bake('view', true);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
 
@@ -430,15 +429,13 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeEdit()
     {
-        $this->Task->modelName = __NAMESPACE__ . '\\TemplateTask\\AuthorsTable';
-        $this->Task->controllerName = 'Authors';
-        $this->Task->controllerClass = __NAMESPACE__ . '\\TemplateTask\\AuthorsController';
+        $this->generatedFile = APP . 'Template/Authors/edit.ctp';
+        $this->exec('bake template authors edit');
 
-        $this->Task->expects($this->at(0))->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/Authors/edit.ctp')
-            );
-        $result = $this->Task->bake('edit', true);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
 
@@ -449,15 +446,13 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeIndex()
     {
-        $this->Task->controllerName = 'TemplateTaskComments';
-        $this->Task->modelName = 'TemplateTaskComments';
-        $this->Task->controllerClass = __NAMESPACE__ . '\TemplateTaskCommentsController';
+        $this->generatedFile = APP . 'Template/TemplateTaskComments/index.ctp';
+        $this->exec('bake template template_task_comments index');
 
-        $this->Task->expects($this->at(0))->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/TemplateTaskComments/index.ctp')
-            );
-        $result = $this->Task->bake('index', true);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
 
@@ -468,15 +463,13 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeIndexWithIndexLimit()
     {
-        $this->Task->controllerName = 'TemplateTaskComments';
-        $this->Task->modelName = 'TemplateTaskComments';
-        $this->Task->controllerClass = __NAMESPACE__ . '\TemplateTaskCommentsController';
-        $this->Task->params['index-columns'] = 3;
-        $this->Task->expects($this->at(0))->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/TemplateTaskComments/index.ctp')
-            );
-        $result = $this->Task->bake('index', true);
+        $this->generatedFile = APP . 'Template/TemplateTaskComments/index.ctp';
+        $this->exec('bake template template_task_comments --index-columns 3 index');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
 
@@ -487,20 +480,19 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeIndexPlugin()
     {
-        $this->Task->controllerName = 'TemplateTaskComments';
-        $this->Task->modelName = 'BakeTest.BakeTestComments';
-        $this->Task->controllerClass = __NAMESPACE__ . '\TemplateTaskCommentsController';
-        $table = TableRegistry::get('BakeTest.BakeTestComments');
-        $table->belongsTo('Articles');
+        $this->_loadTestPlugin('BakeTest');
+        $path = Plugin::path('BakeTest');
 
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/TemplateTaskComments/index.ctp'),
-                $this->stringContains('$templateTaskComment->article->id')
-            );
+        // Setup association to ensure properties don't have dots
+        $model = TableRegistry::getTableLocator()->get('BakeTest.Comments');
+        $model->belongsTo('Articles');
 
-        $this->Task->bake('index', true);
+        $this->generatedFile = $path . 'src/Template/Comments/index.ctp';
+        $this->exec('bake template BakeTest.comments index');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertFileContains('$comment->article->id', $this->generatedFile);
     }
 
     /**
@@ -576,20 +568,14 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeSelfAssociationsRelatedAssociations()
     {
-        $this->Task->controllerName = 'CategoryThreads';
-        $this->Task->modelName = 'Bake\Test\App\Model\Table\CategoryThreadsTable';
+        $this->generatedFile = APP . 'Template/CategoryThreads/view.ctp';
+        $this->exec('bake template category_threads view');
 
-        $this->Task->expects($this->once())
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/CategoryThreads/view.ctp'),
-                $this->logicalAnd(
-                    $this->stringContains('Related Category Threads'),
-                    $this->stringContains('Parent Category Thread')
-                )
-            );
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
 
-        $this->Task->bake('view', true);
+        $this->assertFileContains('Related Category Threads', $this->generatedFile);
+        $this->assertFileContains('Parent Category Threads', $this->generatedFile);
     }
 
     /**
@@ -599,65 +585,10 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeWithNoTemplate()
     {
-        $this->Task->controllerName = 'TemplateTaskComments';
-        $this->Task->modelName = 'TemplateTaskComments';
-        $this->Task->controllerClass = __NAMESPACE__ . '\TemplateTaskCommentsController';
+        $this->exec('bake template template_task_comments delete');
 
-        $this->Task->expects($this->never())->method('createFile');
-        $this->Task->bake('delete', true);
-    }
-
-    /**
-     * test bake actions baking multiple actions.
-     *
-     * @return void
-     */
-    public function testBakeActions()
-    {
-        $this->Task->controllerName = 'TemplateTaskComments';
-        $this->Task->modelName = 'TemplateTaskComments';
-        $this->Task->controllerClass = __NAMESPACE__ . '\TemplateTaskCommentsController';
-
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/TemplateTaskComments/view.ctp'),
-                $this->stringContains('Template Task Comments')
-            );
-        $this->Task->expects($this->at(1))->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/TemplateTaskComments/edit.ctp'),
-                $this->stringContains('Edit Template Task Comment')
-            );
-        $this->Task->expects($this->at(2))->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/TemplateTaskComments/index.ctp'),
-                $this->stringContains('TemplateTaskComment')
-            );
-
-        $this->Task->bakeActions(['view', 'edit', 'index'], []);
-    }
-
-    /**
-     * test baking a customAction (non crud)
-     *
-     * @return void
-     */
-    public function testCustomAction()
-    {
-        $this->Task->controllerName = 'TemplateTaskComments';
-        $this->Task->modelName = 'TemplateTaskComments';
-        $this->Task->controllerClass = __NAMESPACE__ . '\TemplateTaskCommentsController';
-
-        $this->Task->expects($this->any())->method('in')
-            ->will($this->onConsecutiveCalls('', 'my_action', 'y'));
-
-        $this->Task->expects($this->once())->method('createFile')
-            ->with(
-                $this->_normalizePath(APP . 'Template/TemplateTaskComments/my_action.ctp')
-            );
-
-        $this->Task->customAction();
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileNotExists(APP . 'Template/TemplateTaskComments/delete.ctp');
     }
 
     /**
@@ -667,16 +598,12 @@ class TemplateTaskTest extends TestCase
      */
     public function testMainNoArgs()
     {
-        $this->_setupTask(['in', 'err', 'bake', 'createFile', '_stop']);
+        $this->exec('bake template');
 
-        $this->Task->Model->expects($this->once())
-            ->method('listUnskipped')
-            ->will($this->returnValue(['comments', 'articles']));
-
-        $this->Task->expects($this->never())
-            ->method('bake');
-
-        $this->Task->main();
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertOutputContains('Possible tables to bake view templates for based on your current database:');
+        $this->assertOutputContains('- Comments');
+        $this->assertOutputContains('- Articles');
     }
 
     /**
@@ -711,13 +638,19 @@ class TemplateTaskTest extends TestCase
      */
     public function testMainWithActionParam()
     {
-        $this->_setupTask(['in', 'err', 'createFile', 'bake', '_stop']);
+        $this->generatedFile = APP . 'Template/TemplateTaskComments/view.ctp';
+        $this->exec('bake template TemplateTaskComments view');
 
-        $this->Task->expects($this->once())
-            ->method('bake')
-            ->with('view', true);
-
-        $this->Task->main('TemplateTaskComments', 'view');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertFileNotExists(
+            APP . 'Template/TemplateTaskComments/edit.ctp',
+            'no extra files'
+        );
+        $this->assertFileNotExists(
+            APP . 'Template/TemplateTaskComments/add.ctp',
+            'no extra files'
+        );
     }
 
     /**
@@ -726,26 +659,24 @@ class TemplateTaskTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithController()
+    public function testMainWithExistingController()
     {
-        $this->_setupTask(['in', 'err', 'createFile', 'getContent', '_stop']);
+        $this->generatedFiles = [
+            APP . 'Template/TemplateTaskComments/index.ctp',
+            APP . 'Template/TemplateTaskComments/add.ctp',
+        ];
+        $this->exec('bake template TemplateTaskComments');
 
-        $this->Task->expects($this->exactly(3))
-            ->method('getContent');
-
-        $this->Task->expects($this->at(0))
-            ->method('getContent')
-            ->with('index');
-
-        $this->Task->expects($this->at(1))
-            ->method('getContent')
-            ->with('add', $this->anything());
-
-        $this->Task->expects($this->at(2))
-            ->method('getContent')
-            ->with('add_comment', $this->anything());
-
-        $this->Task->main('TemplateTaskComments');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileNotExists(
+            APP . 'Template/TemplateTaskComments/edit.ctp',
+            'no extra files'
+        );
+        $this->assertFileNotExists(
+            APP . 'Template/TemplateTaskComments/view.ctp',
+            'no extra files'
+        );
     }
 
     /**
@@ -755,24 +686,18 @@ class TemplateTaskTest extends TestCase
      */
     public function testMainWithPluginName()
     {
-        // Populate the table registry with a "plugin" model
-        TableRegistry::get('TestTemplate.TemplateTaskComments', [
-            'className' => __NAMESPACE__ . '\TemplateTaskCommentsTable',
-        ]);
+        $this->_loadTestPlugin('TestBake');
+        $path = Plugin::path('TestBake');
 
-        $this->_setupTask(['in', 'err', 'createFile']);
+        $this->generatedFile = $path . 'src/Template/Comments/index.ctp';
+        $this->exec('bake template --connection test TestBake.Comments index');
 
-        $this->Task->connection = 'test';
-        $filename = $this->_normalizePath(
-            APP . 'Plugin/TestTemplate/src/Template/TemplateTaskComments/index.ctp'
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertFileNotExists(
+            $path . 'src/Template/Comments/view.ctp',
+            'No other templates made'
         );
-
-        Plugin::load('TestTemplate', ['path' => APP . 'Plugin/TestTemplate/']);
-
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with($filename);
-        $this->Task->main('TestTemplate.TemplateTaskComments');
     }
 
     /**
@@ -792,19 +717,16 @@ class TemplateTaskTest extends TestCase
      */
     public function testMainWithControllerFlag()
     {
-        $this->Task->params['controller'] = 'Blog';
+        $this->generatedFiles = [
+            APP . 'Template/Blog/index.ctp',
+            APP . 'Template/Blog/view.ctp',
+            APP . 'Template/Blog/add.ctp',
+            APP . 'Template/Blog/edit.ctp',
+        ];
+        $this->exec('bake template --controller Blog Posts');
 
-        $this->Task->expects($this->exactly(4))
-            ->method('createFile');
-
-        $templates = ['index.ctp', 'view.ctp', 'add.ctp', 'edit.ctp'];
-        foreach ($templates as $i => $template) {
-            $this->Task->expects($this->at($i))->method('createFile')
-                ->with(
-                    $this->_normalizePath(APP . 'Template/Blog/' . $template)
-                );
-        }
-        $this->Task->main('Posts');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
     }
 
     /**
@@ -814,19 +736,14 @@ class TemplateTaskTest extends TestCase
      */
     public function testMainWithControllerAndAdminFlag()
     {
-        $this->Task->params['prefix'] = 'Admin';
+        $this->generatedFiles = [
+            APP . 'Template/Admin/Posts/index.ctp',
+            APP . 'Template/Admin/Posts/add.ctp'
+        ];
+        $this->exec('bake template --prefix Admin Posts');
 
-        $this->Task->expects($this->exactly(2))
-            ->method('createFile');
-
-        $templates = ['index.ctp', 'add.ctp'];
-        foreach ($templates as $i => $template) {
-            $this->Task->expects($this->at($i))->method('createFile')
-                ->with(
-                    $this->_normalizePath(APP . 'Template/Admin/Posts/' . $template)
-                );
-        }
-        $this->Task->main('Posts');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
     }
 
     /**
@@ -836,14 +753,11 @@ class TemplateTaskTest extends TestCase
      */
     public function testMainWithAlternateTemplates()
     {
-        $this->_setupTask(['in', 'err', 'createFile', 'bake', '_stop']);
+        $this->generatedFile = APP . 'Template/TemplateTaskComments/list.ctp';
+        $this->exec('bake template TemplateTaskComments index list');
 
-        $this->Task->connection = 'test';
-        $this->Task->params = [];
-
-        $this->Task->expects($this->once())
-            ->method('bake')
-            ->with('list', true);
-        $this->Task->main('TemplateTaskComments', 'index', 'list');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertFileContains('Template Task Comments', $this->generatedFile);
     }
 }

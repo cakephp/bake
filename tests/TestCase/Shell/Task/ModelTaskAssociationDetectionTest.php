@@ -18,6 +18,11 @@ use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Database\Driver\Mysql;
+use Cake\Database\Driver\Postgres;
+use Cake\Database\Driver\Sqlite;
+use Cake\Database\Driver\Sqlserver;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -67,7 +72,7 @@ class ModelTaskAssociationDetectionTest extends TestCase
 
         $this->Task->connection = 'default';
         $this->_setupOtherMocks();
-        TableRegistry::clear();
+        TableRegistry::getTableLocator()->clear();
     }
 
     /**
@@ -102,9 +107,11 @@ class ModelTaskAssociationDetectionTest extends TestCase
 
         $this->Task->Fixture = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['bake'])
             ->getMock();
         $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['bake'])
             ->getMock();
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->BakeTemplate->interactive = false;
@@ -144,6 +151,22 @@ class ModelTaskAssociationDetectionTest extends TestCase
      */
     public function testBakeAssociationDetectionCategoriesTable()
     {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
+        $this->_compareBakeTableResult('Categories', __FUNCTION__);
+    }
+
+    /**
+     * test checking if associations where built correctly for categories.
+     *
+     * @return void
+     */
+    public function testBakeAssociationDetectionCategoriesTableSigned()
+    {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
+        $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
+        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
         $this->_compareBakeTableResult('Categories', __FUNCTION__);
     }
 
@@ -164,6 +187,22 @@ class ModelTaskAssociationDetectionTest extends TestCase
      */
     public function testBakeAssociationDetectionOldProductsTable()
     {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
+        $this->_compareBakeTableResult('OldProducts', __FUNCTION__);
+    }
+
+    /**
+     * test checking if associations where built correctly for old_products.
+     *
+     * @return void
+     */
+    public function testBakeAssociationDetectionOldProductsTableSigned()
+    {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
+        $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
+        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
         $this->_compareBakeTableResult('OldProducts', __FUNCTION__);
     }
 
@@ -174,6 +213,22 @@ class ModelTaskAssociationDetectionTest extends TestCase
      */
     public function testBakeAssociationDetectionProductVersionsTable()
     {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
+        $this->_compareBakeTableResult('ProductVersions', __FUNCTION__);
+    }
+
+    /**
+     * test checking if associations where built correctly for product_versions.
+     *
+     * @return void
+     */
+    public function testBakeAssociationDetectionProductVersionsTableSigned()
+    {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
+        $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
+        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
         $this->_compareBakeTableResult('ProductVersions', __FUNCTION__);
     }
 
@@ -184,6 +239,22 @@ class ModelTaskAssociationDetectionTest extends TestCase
      */
     public function testBakeAssociationDetectionProductsTable()
     {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
+        $this->_compareBakeTableResult('Products', __FUNCTION__);
+    }
+
+    /**
+     * test checking if associations where built correctly for products.
+     *
+     * @return void
+     */
+    public function testBakeAssociationDetectionProductsTableSigned()
+    {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
+        $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
+        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
         $this->_compareBakeTableResult('Products', __FUNCTION__);
     }
 }

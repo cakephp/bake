@@ -16,12 +16,22 @@ namespace Bake\Test\TestCase;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\TestSuite\ConsoleIntegrationTestCase;
 use Cake\TestSuite\StringCompareTrait;
-use Cake\TestSuite\TestCase as ParentTestCase;
 
-abstract class TestCase extends ParentTestCase
+abstract class TestCase extends ConsoleIntegrationTestCase
 {
     use StringCompareTrait;
+
+    /**
+     * @var string
+     */
+    protected $generatedFile = '';
+
+    /**
+     * @var array
+     */
+    protected $generatedFiles = [];
 
     public function setUp()
     {
@@ -30,6 +40,23 @@ abstract class TestCase extends ParentTestCase
         Plugin::load('WyriHaximus/TwigView', [
             'bootstrap' => true,
         ]);
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        if ($this->generatedFile) {
+            unlink($this->generatedFile);
+            $this->generatedFile = '';
+        }
+
+        if (count($this->generatedFiles)) {
+            foreach ($this->generatedFiles as $file) {
+                unlink($file);
+            }
+            $this->generatedFiles = [];
+        }
     }
 
     /**
@@ -47,5 +74,50 @@ abstract class TestCase extends ParentTestCase
             'path' => $path,
             'autoload' => true
         ]);
+    }
+
+    /**
+     * Assert that a list of files exist.
+     *
+     * @param array $files The list of files to check.
+     * @param string $message The message to use if a check fails.
+     */
+    protected function assertFilesExist(array $files, $message = '')
+    {
+        foreach ($files as $file) {
+            $this->assertFileExists($file, $message);
+        }
+    }
+
+    /**
+     * Assert that a file contains a substring
+     *
+     * @param string $expected The expected content.
+     * @param string $path The path to check.
+     * @param string $message The error message.
+     * @return void
+     */
+    protected function assertFileContains($expected, $path, $message = '')
+    {
+        $this->assertFileExists($path, 'Cannot test contents, file does not exist.');
+
+        $contents = file_get_contents($path);
+        $this->assertContains($expected, $contents, $message);
+    }
+
+    /**
+     * Assert that a file does not contain a substring
+     *
+     * @param string $expected The expected content.
+     * @param string $path The path to check.
+     * @param string $message The error message.
+     * @return void
+     */
+    protected function assertFileNotContains($expected, $path, $message = '')
+    {
+        $this->assertFileExists($path, 'Cannot test contents, file does not exist.');
+
+        $contents = file_get_contents($path);
+        $this->assertNotContains($expected, $contents, $message);
     }
 }

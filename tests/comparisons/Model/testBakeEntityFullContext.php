@@ -4,21 +4,18 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * BakeArticle Entity
+ * User Entity
  *
  * @property int $id
- * @property int $bake_user_id
- * @property string $title
- * @property string $body
- * @property bool $published
- * @property \Cake\I18n\Time $created
- * @property \Cake\I18n\Time $updated
+ * @property string|null $username
+ * @property string|null $password
+ * @property \Cake\I18n\Time|null $created
+ * @property \Cake\I18n\Time|null $updated
  *
- * @property \App\Model\Entity\BakeUser $bake_user
- * @property \App\Model\Entity\BakeComment[] $bake_comments
- * @property \App\Model\Entity\BakeTag[] $bake_tags
+ * @property \App\Model\Entity\Comment[] $comments
+ * @property \App\Model\Entity\CounterCachePost[] $counter_cache_posts
  */
-class BakeArticle extends Entity
+class User extends Entity
 {
 
     /**
@@ -31,14 +28,20 @@ class BakeArticle extends Entity
      * @var array
      */
     protected $_accessible = [
-        'bake_user_id' => true,
-        'title' => true,
-        'body' => true,
-        'published' => true,
+        'username' => true,
+        'password' => true,
         'created' => true,
         'updated' => true,
-        'bake_user' => true,
-        'bake_comments' => true,
-        'bake_tags' => true
+        'comments' => true,
+        'counter_cache_posts' => true
+    ];
+
+    /**
+     * Fields that are excluded from JSON versions of the entity.
+     *
+     * @var array
+     */
+    protected $_hidden = [
+        'password'
     ];
 }

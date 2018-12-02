@@ -16,11 +16,16 @@
  */
 #}
 {% set isController = type|lower == 'controller' %}
+{% set isShell = type|lower == 'shell' %}
+{% set isCommand = type|lower == 'command' %}
 {% if isController %}
-    {%- set uses = uses|merge(['Cake\\TestSuite\\IntegrationTestCase']) %}
+    {%- set superClassName = 'IntegrationTestCase' %}
+{% elseif isShell or isCommand %}
+    {%- set superClassName = 'ConsoleIntegrationTestCase' %}
 {% else %}
-    {%- set uses = uses|merge(['Cake\\TestSuite\\TestCase']) %}
+    {%- set superClassName = 'TestCase' %}
 {% endif %}
+{%- set uses = uses|merge(["Cake\\TestSuite\\#{superClassName}"]) %}
 
 {%- set uses = uses|sort %}
 <?php
@@ -33,15 +38,9 @@ use {{ dependency }};
 /**
  * {{ fullClassName }} Test Case
  */
-{% if isController %}
-class {{ className }}Test extends IntegrationTestCase
+class {{ className }}Test extends {{ superClassName }}
 {
-{% else %}
-class {{ className }}Test extends TestCase
-{
-{% endif %}
-
-{%- if properties %}
+{% if properties %}
 {% for propertyInfo in properties %}
 
     /**
@@ -49,7 +48,7 @@ class {{ className }}Test extends TestCase
      *
      * @var {{ propertyInfo.type }}
      */
-    public ${{ propertyInfo.name }}{% if propertyInfo.value %} = {{ propertyInfo.value }}{% endif %};
+    public ${{ propertyInfo.name }}{% if propertyInfo.value is defined and propertyInfo.value %} = {{ propertyInfo.value }}{% endif %};
 {% endfor %}
 {% endif %}
 
@@ -76,11 +75,16 @@ class {{ className }}Test extends TestCase
 {% if preConstruct %}
         {{ preConstruct|raw }}
 {% endif %}
+{% if isCommand %}
+        {{ construction|raw }}
+{% else %}
         $this->{{ (subject ~ ' = ' ~ construction)|raw }}
+{% endif %}
 {% if postConstruct %}
         {{ postConstruct|raw }}
 {% endif %}
     }
+{% if not isCommand %}
 
     /**
      * tearDown method
@@ -93,6 +97,7 @@ class {{ className }}Test extends TestCase
 
         parent::tearDown();
     }
+{% endif %}
 {% endif %}
 
 {%- for method in methods %}

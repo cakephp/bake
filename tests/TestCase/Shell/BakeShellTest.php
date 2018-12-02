@@ -16,6 +16,7 @@ namespace Bake\Test\TestCase\Shell;
 
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\ConsoleIo;
+use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\TestSuite\Stub\ConsoleOutput;
@@ -82,9 +83,15 @@ class BakeShellTest extends TestCase
      */
     public function testAllWithModelName()
     {
-        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')->getMock();
-        $this->Shell->Controller = $this->getMockBuilder('Bake\Shell\Task\ControllerTask')->getMock();
-        $this->Shell->Template = $this->getMockBuilder('Bake\Shell\Task\TemplateTask')->getMock();
+        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
+            ->setMethods(['main'])
+            ->getMock();
+        $this->Shell->Controller = $this->getMockBuilder('Bake\Shell\Task\ControllerTask')
+            ->setMethods(['main'])
+            ->getMock();
+        $this->Shell->Template = $this->getMockBuilder('Bake\Shell\Task\TemplateTask')
+            ->setMethods(['main'])
+            ->getMock();
 
         $this->Shell->Model->expects($this->once())
             ->method('main')
@@ -121,10 +128,9 @@ class BakeShellTest extends TestCase
      */
     public function testMain()
     {
-        $this->Shell->loadTasks();
-        $this->Shell->main();
-
-        $output = $this->out->messages();
+        $this->exec('bake');
+        $this->assertExitCode(Shell::CODE_ERROR);
+        $output = $this->_out->messages();
 
         $expected = [
             'The following commands can be used to generate skeleton code for your application.',
@@ -134,6 +140,7 @@ class BakeShellTest extends TestCase
             '- all',
             '- behavior',
             '- cell',
+            '- command',
             '- component',
             '- controller',
             '- custom_controller',
@@ -149,14 +156,10 @@ class BakeShellTest extends TestCase
             '- task',
             '- template',
             '- test',
+            '- twig_template',
+            '',
+            'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.'
         ];
-
-        if (Plugin::loaded('WyriHaximus/TwigView')) {
-            $expected[] = '- twig_template';
-        }
-
-        $expected[] = '';
-        $expected[] = 'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.';
 
         $this->assertSame($expected, $output);
     }
@@ -195,6 +198,7 @@ class BakeShellTest extends TestCase
         $expected = [
             'Bake.Behavior',
             'Bake.Cell',
+            'Bake.Command',
             'Bake.Component',
             'Bake.Fixture',
             'Bake.Form',
@@ -210,10 +214,8 @@ class BakeShellTest extends TestCase
             'Bake.Template',
             'Controller',
             'CustomController',
+            'WyriHaximus/TwigView.TwigTemplate',
         ];
-        if (Plugin::loaded('WyriHaximus/TwigView')) {
-            $expected[] = 'WyriHaximus/TwigView.TwigTemplate';
-        }
         sort($this->Shell->tasks);
         sort($expected);
         $this->assertEquals($expected, $this->Shell->tasks);
@@ -231,6 +233,7 @@ class BakeShellTest extends TestCase
         $this->assertContains('BakeTest.Widget', $this->Shell->tasks);
         $this->assertContains('BakeTest.Zerg', $this->Shell->tasks);
     }
+
     /**
      * Test loading tasks from vendored plugins
      *
@@ -246,8 +249,53 @@ class BakeShellTest extends TestCase
         $this->Shell->loadTasks();
         $this->assertContains('Pastry/PastryTest.ApplePie', $this->Shell->tasks);
 
-        $this->Shell->main();
+        $this->exec('bake');
+        $this->assertOutputContains('apple_pie');
+    }
+
+    /**
+     * Tests that quiet mode does not ask interactively and does not silently overwrite anywhere.
+     * -f would be needed for that.
+     *
+     * @return void
+     */
+    public function testBakeAllNonInteractive()
+    {
+        $this->Shell->loadTasks();
+
+        $path = APP;
+        $testsPath = ROOT . 'tests' . DS;
+
+        // We ignore our existing CommentsController test file
+        $files = [
+            $path . 'Template/Comments/add.ctp',
+            $path . 'Template/Comments/edit.ctp',
+            $path . 'Template/Comments/index.ctp',
+            $path . 'Template/Comments/view.ctp',
+            $path . 'Model/Table/CommentsTable.php',
+            $path . 'Model/Entity/Comment.php',
+            $testsPath . 'Fixture/CommentsFixture.php',
+            $testsPath . 'TestCase/Model/Table/CommentsTableTest.php',
+            $testsPath . 'TestCase/Controller/CommentsControllerTest.php',
+        ];
+        foreach ($files as $file) {
+            $this->assertFileNotExists($file, 'File should not yet exist before `bake all`.');
+        }
+
+        $existingFile = $path . 'Controller/CommentsController.php';
+        $this->assertFileExists($existingFile);
+        $content = file_get_contents($existingFile);
+
+        $this->Shell->runCommand(['all', 'Comments'], false, ['quiet' => true]);
         $output = $this->out->messages();
-        $this->assertContains("apple_pie", implode(' ', $output));
+
+        $this->assertContains('<success>Bake All complete.</success>', implode(' ', $output));
+
+        foreach ($files as $file) {
+            $this->assertFileExists($file, 'File should exist after `bake all`.');
+            unlink($file);
+        }
+
+        $this->assertSame($content, file_get_contents($existingFile), 'File got overwritten, but should not have.');
     }
 }

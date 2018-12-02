@@ -8,7 +8,7 @@ use BakeTest\Controller\AppController;
  *
  * @property \BakeTest\Model\Table\BakeArticlesTable $BakeArticles
  *
- * @method \BakeTest\Model\Entity\BakeArticle[] paginate($object = null, array $settings = [])
+ * @method \BakeTest\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class BakeArticlesController extends AppController
 {
@@ -71,7 +71,7 @@ class BakeArticlesController extends AppController
      *
      * @param string|null $id Bake Article id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit($id = null)
     {

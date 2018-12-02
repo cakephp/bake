@@ -1,4 +1,4 @@
-<?php
+{#
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -9,22 +9,19 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @since         0.1.0
+ * @since         1.7.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+#}
+<?php
 
-use Cake\ORM\Table;
+namespace {{ namespace }};
+
+use Cake\Core\BasePlugin;
 
 /**
- * Class BakeArticle
+ * Plugin for {{ namespace }}
  */
-class BakeArticlesTable extends Table
+class Plugin extends BasePlugin
 {
-    public function initialize(array $config)
-    {
-        $this->belongsTo('BakeUsers');
-        $this->hasMany('BakeComments');
-        $this->belongsToMany('BakeTags');
-    }
 }

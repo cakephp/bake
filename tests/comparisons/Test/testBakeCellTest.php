@@ -13,7 +13,7 @@ class ArticlesCellTest extends TestCase
     /**
      * Request mock
      *
-     * @var \Cake\Network\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Cake\Http\ServerRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     public $request;
 
@@ -39,8 +39,8 @@ class ArticlesCellTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->request = $this->getMockBuilder('Cake\Network\Request')->getMock();
-        $this->response = $this->getMockBuilder('Cake\Network\Response')->getMock();
+        $this->request = $this->getMockBuilder('Cake\Http\ServerRequest')->getMock();
+        $this->response = $this->getMockBuilder('Cake\Http\Response')->getMock();
         $this->Articles = new ArticlesCell($this->request, $this->response);
     }
 

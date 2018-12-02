@@ -98,7 +98,12 @@ class DocBlockHelper extends Helper
         $properties = [];
         foreach ($propertySchema as $property => $info) {
             if ($info['kind'] === 'column') {
-                $properties[$property] = $this->columnTypeToHintType($info['type']);
+                $type = $this->columnTypeToHintType($info['type']);
+                if (!empty($info['null'])) {
+                    $type .= '|null';
+                }
+
+                $properties[$property] = $type;
             }
         }
 
@@ -135,7 +140,7 @@ class DocBlockHelper extends Helper
                 if ($info['association']->type() === Association::MANY_TO_ONE) {
                     $properties = $this->_insertAfter(
                         $properties,
-                        $info['association']->foreignKey(),
+                        $info['association']->getForeignKey(),
                         [$property => $type]
                     );
                 } else {
@@ -178,6 +183,10 @@ class DocBlockHelper extends Helper
 
             case 'boolean':
                 return 'bool';
+
+            case 'array':
+            case 'json':
+                return 'array';
 
             case 'binary':
                 return 'string|resource';
@@ -239,6 +248,7 @@ class DocBlockHelper extends Helper
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} newEntity(\$data = null, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] newEntities(array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}|bool save(\\Cake\\Datasource\\EntityInterface \$entity, \$options = [])";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}|bool saveOrFail(\\Cake\\Datasource\\EntityInterface \$entity, \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} patchEntity(\\Cake\\Datasource\\EntityInterface \$entity, array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] patchEntities(\$entities, array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} findOrCreate(\$search, callable \$callback = null, \$options = [])";

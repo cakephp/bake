@@ -21,6 +21,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use Cake\Validation\Validation;
 
 /**
  * Task class for generating model files.
@@ -176,7 +177,7 @@ class ModelTask extends BakeTask
     {
         $tables = $this->listUnskipped();
         foreach ($tables as $table) {
-            TableRegistry::clear();
+            TableRegistry::getTableLocator()->clear();
             $this->main($table);
         }
     }
@@ -195,11 +196,11 @@ class ModelTask extends BakeTask
             $className = $plugin . '.' . $className;
         }
 
-        if (TableRegistry::exists($className)) {
-            return TableRegistry::get($className);
+        if (TableRegistry::getTableLocator()->exists($className)) {
+            return TableRegistry::getTableLocator()->get($className);
         }
 
-        return TableRegistry::get($className, [
+        return TableRegistry::getTableLocator()->get($className, [
             'name' => $className,
             'table' => $this->tablePrefix . $table,
             'connection' => ConnectionManager::get($this->connection)
@@ -301,7 +302,7 @@ class ModelTask extends BakeTask
                 $namespace = $appNamespace;
 
                 $className = $association->className();
-                if ($className !== null) {
+                if (strlen($className)) {
                     list($plugin, $className) = pluginSplit($className);
                     if ($plugin !== null) {
                         $namespace = $plugin;
@@ -333,7 +334,7 @@ class ModelTask extends BakeTask
     {
         $schema = $model->getSchema();
         foreach ($schema->columns() as $fieldName) {
-            if (!preg_match('/^.+_id$/', $fieldName)) {
+            if (!preg_match('/^.+_id$/', $fieldName) || ([$fieldName] === $schema->primaryKey())) {
                 continue;
             }
 
@@ -415,7 +416,7 @@ class ModelTask extends BakeTask
     public function findHasMany($model, array $associations)
     {
         $schema = $model->getSchema();
-        $primaryKey = (array)$schema->primaryKey();
+        $primaryKey = $schema->primaryKey();
         $tableName = $schema->name();
         $foreignKey = $this->_modelKey($tableName);
 
@@ -565,9 +566,12 @@ class ModelTask extends BakeTask
 
         $schema = $model->getSchema();
         foreach ($schema->columns() as $column) {
+            $columnSchema = $schema->getColumn($column);
+
             $properties[$column] = [
                 'kind' => 'column',
-                'type' => $schema->getColumnType($column)
+                'type' => $columnSchema['type'],
+                'null' => $columnSchema['null'],
             ];
         }
 
@@ -660,7 +664,7 @@ class ModelTask extends BakeTask
      *
      * @param \Cake\ORM\Table $model The model to introspect.
      * @param array $associations The associations list.
-     * @return array The validation rules.
+     * @return array|false The validation rules.
      */
     public function getValidation($model, $associations = [])
     {
@@ -674,7 +678,7 @@ class ModelTask extends BakeTask
         }
 
         $validate = [];
-        $primaryKey = (array)$schema->primaryKey();
+        $primaryKey = $schema->primaryKey();
         $foreignKeys = [];
         if (isset($associations['belongsTo'])) {
             foreach ($associations['belongsTo'] as $assoc) {
@@ -717,11 +721,25 @@ class ModelTask extends BakeTask
         } elseif ($metaData['type'] === 'uuid') {
             $rules['uuid'] = [];
         } elseif ($metaData['type'] === 'integer') {
-            $rules['integer'] = [];
+            if ($metaData['unsigned']) {
+                $rules['nonNegativeInteger'] = [];
+            } else {
+                $rules['integer'] = [];
+            }
         } elseif ($metaData['type'] === 'float') {
             $rules['numeric'] = [];
+            if ($metaData['unsigned']) {
+                $rules['greaterThanOrEqual'] = [
+                    0
+                ];
+            }
         } elseif ($metaData['type'] === 'decimal') {
             $rules['decimal'] = [];
+            if ($metaData['unsigned']) {
+                $rules['greaterThanOrEqual'] = [
+                    0
+                ];
+            }
         } elseif ($metaData['type'] === 'boolean') {
             $rules['boolean'] = [];
         } elseif ($metaData['type'] === 'date') {
@@ -741,12 +759,12 @@ class ModelTask extends BakeTask
             }
         }
 
-        if (in_array($fieldName, (array)$primaryKey)) {
-            $rules['allowEmpty'] = ['create'];
+        if (in_array($fieldName, $primaryKey)) {
+            $rules['allowEmpty'] = ["'create'"];
         } elseif ($metaData['null'] === true) {
             $rules['allowEmpty'] = [];
         } else {
-            $rules['requirePresence'] = ['create'];
+            $rules['requirePresence'] = ["'create'"];
             $rules['notEmpty'] = [];
         }
 
@@ -975,7 +993,7 @@ class ModelTask extends BakeTask
         if (file_exists($filename)) {
             require_once $filename;
         }
-        TableRegistry::clear();
+        TableRegistry::getTableLocator()->clear();
 
         $emptyFile = $path . 'Table' . DS . 'empty';
         $this->_deleteEmptyFile($emptyFile);
@@ -1041,7 +1059,7 @@ class ModelTask extends BakeTask
                 'Connections need to implement schemaCollection() to be used with bake.'
             );
         }
-        $schema = $db->schemaCollection();
+        $schema = $db->getSchemaCollection();
         $tables = $schema->listTables();
         if (empty($tables)) {
             $this->abort('Your database does not have any tables.');
@@ -1144,6 +1162,7 @@ class ModelTask extends BakeTask
         }
         $this->Fixture->connection = $this->connection;
         $this->Fixture->plugin = $this->plugin;
+        $this->Fixture->interactive = $this->interactive;
         $this->Fixture->bake($className, $useTable);
     }
 
@@ -1151,7 +1170,7 @@ class ModelTask extends BakeTask
      * Assembles and writes a unit test file
      *
      * @param string $className Model class name
-     * @return string|null
+     * @return string|bool
      */
     public function bakeTest($className)
     {
@@ -1159,6 +1178,7 @@ class ModelTask extends BakeTask
             return null;
         }
         $this->Test->plugin = $this->plugin;
+        $this->Test->interactive = $this->interactive;
         $this->Test->connection = $this->connection;
 
         return $this->Test->bake('Table', $className);

@@ -18,8 +18,8 @@ use Bake\View\BakeView;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Event\Event;
-use Cake\Network\Request;
-use Cake\Network\Response;
+use Cake\Http\Response;
+use Cake\Http\ServerRequest as Request;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase;
 
@@ -166,8 +166,8 @@ class BakeViewTest extends TestCase
         );
 
         $this->View->set('test', 'success');
-        $this->View->eventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
-            $event->subject->set('test', 'pass');
+        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
+            $event->getSubject()->set('test', 'pass');
         });
         $result = $this->View->render('Custom' . DS . 'file');
         $this->assertSame(

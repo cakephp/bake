@@ -9,23 +9,33 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP Project
- * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Table;
 
 /**
- * Test Template Task Comment Model
+ * Class AuthorsTable
  */
-class TemplateTaskCommentsTable extends Table
+class AuthorsTable extends Table
 {
+
+    /**
+     * @param array $config
+     * @return void
+     */
     public function initialize(array $config)
     {
-        $this->table('comments');
-        $this->belongsTo('Articles', [
-            'foreignKey' => 'article_id'
+        $this->setTable('bake_authors');
+        $this->belongsTo('Roles', [
+            'foreignKey' => 'role_id'
+        ]);
+        $this->hasMany('Articles', [
+            'foreignKey' => 'author_id'
+        ]);
+        $this->hasOne('Profiles', [
+            'foreignKey' => 'author_id'
         ]);
     }
 }

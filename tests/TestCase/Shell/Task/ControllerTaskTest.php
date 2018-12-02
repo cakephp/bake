@@ -15,7 +15,9 @@
 namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
+use Bake\Test\App\Model\Table\BakeArticlesTable;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 
@@ -61,20 +63,21 @@ class ControllerTaskTest extends TestCase
 
         $this->Task->name = 'Controller';
         $this->Task->connection = 'test';
-
         $this->Task->BakeTemplate = new BakeTemplateTask($io);
 
         $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
             ->setMethods(['in', 'out', 'err', 'createFile', '_stop'])
             ->setConstructorArgs([$io])
+            ->setMethods(['bake'])
             ->getMock();
 
         $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
             ->setConstructorArgs([$io])
+            ->setMethods(['bake'])
             ->getMock();
 
-        TableRegistry::get('BakeArticles', [
-            'className' => __NAMESPACE__ . '\BakeArticlesTable'
+        TableRegistry::getTableLocator()->get('BakeArticles', [
+            'className' => BakeArticlesTable::class
         ]);
     }
 
@@ -86,39 +89,26 @@ class ControllerTaskTest extends TestCase
     public function tearDown()
     {
         unset($this->Task);
-        TableRegistry::clear();
+        TableRegistry::getTableLocator()->clear();
         parent::tearDown();
         Plugin::unload('ControllerTest');
         Plugin::unload('Company/Pastry');
     }
 
     /**
-     * test ListAll
+     * test main listing available models.
      *
      * @return void
      */
-    public function testListAll()
+    public function testMainListAvailable()
     {
-        $result = $this->Task->listAll();
-        $this->assertContains('bake_articles', $result);
-        $this->assertContains('bake_articles_bake_tags', $result);
-        $this->assertContains('bake_comments', $result);
-        $this->assertContains('bake_tags', $result);
-    }
+        $this->exec('bake controller');
 
-    /**
-     * test ListAll
-     *
-     * @return void
-     */
-    public function testListAllWithSkippedTable()
-    {
-        $this->Task->Model->skipTables = ['bake_articles', 'bake_comments'];
-        $result = $this->Task->listAll();
-        $this->assertNotContains('bake_articles', $result);
-        $this->assertNotContains('bake_comments', $result);
-        $this->assertContains('bake_articles_bake_tags', $result);
-        $this->assertContains('bake_tags', $result);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertOutputContains('- BakeArticles');
+        $this->assertOutputContains('- BakeArticlesBakeTags');
+        $this->assertOutputContains('- BakeComments');
+        $this->assertOutputContains('- BakeTags');
     }
 
     /**
@@ -158,15 +148,15 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakeComponents()
     {
-        $this->Task->expects($this->any())
-            ->method('createFile')
-            ->will($this->returnValue(true));
+        $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
+        $this->exec(
+            'bake controller --connection test --no-test --no-actions ' .
+            '--components "Csrf, Auth, Company/TestBakeThree.Something, TestBake.Other, Apple, NonExistent" ' .
+            'BakeArticles'
+        );
 
-        $this->Task->params['no-actions'] = true;
-        $this->Task->params['components'] = 'Csrf, Auth, Company/TestBakeThree.Something,' .
-           ' TestBake.Other, Apple, NonExistent';
-
-        $result = $this->Task->bake('BakeArticles');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -177,15 +167,15 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakeActionsOption()
     {
-        $this->Task->expects($this->any())
-            ->method('createFile')
-            ->will($this->returnValue(true));
+        $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
+        $this->exec(
+            'bake controller --connection test --no-test ' .
+            '--helpers Html,Time --components Csrf,Auth ' .
+            '--actions login,logout BakeArticles'
+        );
 
-        $this->Task->params['actions'] = 'login,  logout,';
-        $this->Task->params['helpers'] = 'Html,Time';
-        $this->Task->params['components'] = 'Csrf, Auth';
-
-        $result = $this->Task->bake('BakeArticles');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -196,15 +186,14 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakeNoActions()
     {
-        $this->Task->expects($this->any())
-            ->method('createFile')
-            ->will($this->returnValue(true));
+        $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
+        $this->exec(
+            'bake controller --connection test --no-test ' .
+            '--helpers Html,Time --components Csrf,Auth --no-actions BakeArticles'
+        );
 
-        $this->Task->params['no-actions'] = true;
-        $this->Task->params['helpers'] = 'Html,Time';
-        $this->Task->params['components'] = 'Csrf, Auth';
-
-        $result = $this->Task->bake('BakeArticles');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -215,17 +204,14 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakeActions()
     {
-        $this->Task->params['helpers'] = 'Html,Time';
-        $this->Task->params['components'] = 'Csrf, Auth';
+        $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
+        $this->exec(
+            'bake controller --connection test --no-test ' .
+            '--helpers Html,Time --components "Csrf, Auth" BakeArticles'
+        );
 
-        $filename = APP . 'Controller/BakeArticlesController.php';
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($filename),
-                $this->stringContains('class BakeArticlesController')
-            );
-        $result = $this->Task->bake('BakeArticles');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -236,20 +222,12 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakePrefixed()
     {
-        $this->Task->params['prefix'] = 'admin';
+        $this->generatedFile = APP . 'Controller/Admin/BakeArticlesController.php';
+        $this->exec('bake controller --connection test --no-test --prefix admin BakeArticles');
 
-        $filename = $this->_normalizePath(APP . 'Controller/Admin/BakeArticlesController.php');
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with($filename, $this->anything());
-
-        $this->Task->Test->expects($this->at(0))
-            ->method('bake')
-            ->with('Controller', 'BakeArticles');
-        $result = $this->Task->bake('BakeArticles');
-
-        $this->assertTextContains('namespace App\Controller\Admin;', $result);
-        $this->assertTextContains('use App\Controller\AppController;', $result);
+        $this->assertFileContains('namespace App\Controller\Admin;', $this->generatedFile);
+        $this->assertFileContains('use App\Controller\AppController;', $this->generatedFile);
+        $this->assertFileContains('class BakeArticlesController extends', $this->generatedFile);
     }
 
     /**
@@ -259,20 +237,12 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakePrefixNested()
     {
-        $this->Task->params['prefix'] = 'admin/management';
+        $this->generatedFile = APP . 'Controller/Admin/Management/BakeArticlesController.php';
+        $this->exec('bake controller --connection test --no-test --prefix admin/management BakeArticles');
 
-        $filename = $this->_normalizePath(APP . 'Controller/Admin/Management/BakeArticlesController.php');
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with($filename, $this->anything());
-
-        $this->Task->Test->expects($this->at(0))
-            ->method('bake')
-            ->with('Controller', 'BakeArticles');
-        $result = $this->Task->bake('BakeArticles');
-
-        $this->assertTextContains('namespace App\Controller\Admin\Management;', $result);
-        $this->assertTextContains('use App\Controller\AppController;', $result);
+        $this->assertFileContains('namespace App\Controller\Admin\Management;', $this->generatedFile);
+        $this->assertFileContains('use App\Controller\AppController;', $this->generatedFile);
+        $this->assertFileContains('class BakeArticlesController extends', $this->generatedFile);
     }
 
     /**
@@ -282,30 +252,27 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakeWithPlugin()
     {
-        $this->Task->plugin = 'BakeTest';
+        $this->_loadTestPlugin('BakeTest');
+        $path = Plugin::path('BakeTest');
 
-        Plugin::load('BakeTest', ['path' => APP . 'Plugin/BakeTest/']);
-        $path = APP . 'Plugin/BakeTest/src/Controller/BakeArticlesController.php';
+        $this->generatedFile = $path . 'src/Controller/BakeArticlesController.php';
+        $this->exec('bake controller --connection test --no-test BakeTest.BakeArticles');
 
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with($this->_normalizePath($path))
-            ->will($this->returnValue(true));
-
-        $result = $this->Task->bake('BakeArticles');
-
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
-     *
      * test that bakeActions is creating the correct controller Code. (Using sessions)
      *
      * @return void
      */
     public function testBakeActionsContent()
     {
-        $result = $this->Task->bake('BakeArticles');
+        $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
+        $this->exec('bake controller --connection test --no-test BakeArticles');
+
+        $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -316,16 +283,18 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakeTest()
     {
-        $this->Task->plugin = 'ControllerTest';
-        $this->Task->connection = 'test';
+        $this->generatedFiles = [
+            APP . 'Controller/BakeArticlesController.php',
+            ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php'
+        ];
+        $this->exec('bake controller --connection test BakeArticles');
 
-        $this->Task->Test->expects($this->once())
-            ->method('bake')
-            ->with('Controller', 'BakeArticles');
-        $this->Task->bakeTest('BakeArticles');
-
-        $this->assertEquals($this->Task->plugin, $this->Task->Test->plugin);
-        $this->assertEquals($this->Task->connection, $this->Task->Test->connection);
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileContains(
+            'class BakeArticlesControllerTest extends IntegrationTestCase',
+            $this->generatedFiles[1]
+        );
     }
 
     /**
@@ -335,13 +304,12 @@ class ControllerTaskTest extends TestCase
      */
     public function testBakeTestDisabled()
     {
-        $this->Task->plugin = 'ControllerTest';
-        $this->Task->connection = 'test';
-        $this->Task->params['no-test'] = true;
+        $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
+        $this->exec('bake controller --connection test --no-test BakeArticles');
 
-        $this->Task->Test->expects($this->never())
-            ->method('bake');
-        $this->Task->bakeTest('BakeArticles');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileNotExists(ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php');
+        $this->assertFileExists($this->generatedFile);
     }
 
     /**
@@ -351,14 +319,11 @@ class ControllerTaskTest extends TestCase
      */
     public function testMainNoArgs()
     {
-        $this->Task->expects($this->never())
-            ->method('createFile');
+        $this->exec('bake controller');
 
-        $this->Task->expects($this->at(0))
-            ->method('out')
-            ->with($this->stringContains('Possible controllers based on your current database'));
-
-        $this->Task->main();
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertOutputContains('Possible controllers based on your current database');
+        $this->assertOutputContains('- BakeArticles');
     }
 
     /**
@@ -410,13 +375,12 @@ class ControllerTaskTest extends TestCase
      */
     public function testMainWithControllerNameVariations($name)
     {
-        $this->Task->connection = 'test';
+        $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
+        $this->exec("bake controller --connection test --no-test {$name}");
+        $this->assertExitCode(Shell::CODE_SUCCESS);
 
-        $filename = $this->_normalizePath(APP . 'Controller/BakeArticlesController.php');
-        $this->Task->expects($this->once())
-            ->method('createFile')
-            ->with($filename, $this->stringContains('public function index()'));
-        $this->Task->main($name);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertFileContains('BakeArticlesController extends AppController', $this->generatedFile);
     }
 
     /**
@@ -426,19 +390,17 @@ class ControllerTaskTest extends TestCase
      */
     public function testMainWithPluginDot()
     {
-        $this->Task->connection = 'test';
+        $this->_loadTestPlugin('Company/Pastry');
+        $path = Plugin::path('Company/Pastry');
 
-        Plugin::load('ControllerTest', ['path' => APP . 'Plugin/ControllerTest/']);
-        $path = APP . 'Plugin/ControllerTest/src/Controller/BakeArticlesController.php';
+        $this->generatedFile = $path . 'src/Controller/BakeArticlesController.php';
 
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path),
-                $this->stringContains('BakeArticlesController extends AppController')
-            )->will($this->returnValue(true));
+        $this->exec('bake controller --connection test --no-test Company/Pastry.BakeArticles');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
 
-        $this->Task->main('ControllerTest.BakeArticles');
+        $this->assertFileExists($this->generatedFile);
+        $this->assertFileContains('namespace Company\Pastry\Controller;', $this->generatedFile);
+        $this->assertFileContains('BakeArticlesController extends AppController', $this->generatedFile);
     }
 
     /**
@@ -448,19 +410,16 @@ class ControllerTaskTest extends TestCase
      */
     public function testMainWithPluginOption()
     {
-        $this->Task->connection = 'test';
-        $this->Task->params['plugin'] = 'company/pastry';
+        $this->_loadTestPlugin('Company/Pastry');
+        $path = Plugin::path('Company/Pastry');
 
-        Plugin::load('Company/Pastry', ['path' => APP . 'Plugin/Company/Pastry/']);
-        $path = APP . 'Plugin/Company/Pastry/src/Controller/BakeArticlesController.php';
+        $this->generatedFile = $path . 'src/Controller/BakeArticlesController.php';
 
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with(
-                $this->_normalizePath($path),
-                $this->stringContains('BakeArticlesController extends AppController')
-            )->will($this->returnValue(true));
+        $this->exec('bake controller --connection test --no-test --plugin Company/Pastry bake_articles');
+        $this->assertExitCode(Shell::CODE_SUCCESS);
 
-        $this->Task->main('bake_articles');
+        $this->assertFileExists($this->generatedFile);
+        $this->assertFileContains('namespace Company\Pastry\Controller;', $this->generatedFile);
+        $this->assertFileContains('BakeArticlesController extends AppController', $this->generatedFile);
     }
 }
