@@ -239,6 +239,12 @@ class BakeShell extends Shell
      */
     public function all($name = null)
     {
+        if ($this->param('connection') && $this->param('everything') &&
+            $this->param('connection') !== 'default') {
+            $this->warn('Can only bake everything on default connection');
+
+            return false;
+        }
         $this->out('Bake All');
         $this->hr();
 
