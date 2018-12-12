@@ -263,9 +263,9 @@ class TemplateTaskTest extends TestCase
         $this->Task->controllerName = 'Posts';
 
         $pluginPath = APP . 'Plugin/TestTemplate/';
-        $this->deprecated(function () use ($pluginPath) {
-            Plugin::load('TestTemplate', ['path' => $pluginPath]);
-        });
+        $this->loadPlugins([
+            'TestTemplate' => ['path' => $pluginPath],
+        ]);
 
         $this->Task->params['plugin'] = $this->Task->plugin = 'TestTemplate';
         $result = $this->Task->getPath();

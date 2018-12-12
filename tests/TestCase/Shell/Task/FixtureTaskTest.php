@@ -196,9 +196,7 @@ class FixtureTaskTest extends TestCase
      */
     public function testMainWithPluginModel()
     {
-        $this->deprecated(function () {
-            Plugin::load('FixtureTest', ['path' => APP . 'Plugin/FixtureTest/']);
-        });
+        $this->loadPlugins(['FixtureTest' => ['path' => APP . 'Plugin/FixtureTest/']]);
 
         $this->generatedFile = APP . 'Plugin/FixtureTest/tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test FixtureTest.Articles');

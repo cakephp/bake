@@ -305,12 +305,12 @@ class BakeShellTest extends TestCase
      */
     public function testLoadTasksVendoredPlugin()
     {
-        $this->deprecated(function () {
-            Plugin::load('Pastry/PastryTest', [
+        $this->loadPlugins([
+            'Pastry/PastryTest' => [
                 'path' => Configure::read('App.paths.plugins')[0] . 'PastryTest' . DS,
-                'autoload' => true
-            ]);
-        });
+                'autoload' => true,
+            ],
+        ]);
 
         $this->Shell->loadTasks();
         $this->assertContains('Pastry/PastryTest.ApplePie', $this->Shell->tasks);

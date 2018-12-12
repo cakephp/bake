@@ -90,9 +90,10 @@ class ControllerTaskTest extends TestCase
     {
         unset($this->Task);
         TableRegistry::getTableLocator()->clear();
+
         parent::tearDown();
-        $this->removePlugins(['ControllerTest']);
-        $this->removePlugins(['Company/Pastry']);
+
+        $this->removePlugins(['ControllerTest', 'Company/Pastry']);
     }
 
     /**
