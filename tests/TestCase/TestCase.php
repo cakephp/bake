@@ -16,11 +16,13 @@ namespace Bake\Test\TestCase;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\TestSuite\ConsoleIntegrationTestCase;
+use Cake\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
+use Cake\TestSuite\TestCase as BaseTestCase;
 
-abstract class TestCase extends ConsoleIntegrationTestCase
+abstract class TestCase extends BaseTestCase
 {
+    use ConsoleIntegrationTestTrait;
     use StringCompareTrait;
 
     /**
@@ -37,9 +39,11 @@ abstract class TestCase extends ConsoleIntegrationTestCase
     {
         parent::setUp();
 
-        Plugin::load('WyriHaximus/TwigView', [
-            'bootstrap' => true,
-        ]);
+        $this->deprecated(function () {
+            Plugin::load('WyriHaximus/TwigView', [
+                'bootstrap' => true,
+            ]);
+        });
     }
 
     public function tearDown()
@@ -70,10 +74,12 @@ abstract class TestCase extends ConsoleIntegrationTestCase
         $root = dirname(dirname(__FILE__)) . DS;
         $path = $root . 'test_app' . DS . 'Plugin' . DS . $name . DS;
 
-        Plugin::load($name, [
-            'path' => $path,
-            'autoload' => true
-        ]);
+        $this->deprecated(function () use ($name, $path) {
+            Plugin::load($name, [
+                'path' => $path,
+                'autoload' => true
+            ]);
+        });
     }
 
     /**

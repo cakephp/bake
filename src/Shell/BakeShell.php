@@ -57,7 +57,7 @@ class BakeShell extends Shell
         Configure::write('debug', true);
         Cache::disable();
         // Loading WyriHaximus/TwigView Plugin through the Plugin::load() for backward compatibility.
-        if (!Plugin::loaded('WyriHaximus/TwigView')) {
+        if (!Plugin::isLoaded('WyriHaximus/TwigView')) {
             Plugin::load('WyriHaximus/TwigView', ['bootstrap' => true]);
         }
 

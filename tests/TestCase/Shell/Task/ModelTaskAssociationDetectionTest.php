@@ -40,11 +40,11 @@ class ModelTaskAssociationDetectionTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.bake.categories',
-        'plugin.bake.categories_products',
-        'plugin.bake.old_products',
-        'plugin.bake.products',
-        'plugin.bake.product_versions',
+        'plugin.Bake.Categories',
+        'plugin.Bake.CategoriesProducts',
+        'plugin.Bake.OldProducts',
+        'plugin.Bake.Products',
+        'plugin.Bake.ProductVersions',
     ];
 
     /**

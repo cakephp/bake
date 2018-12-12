@@ -33,10 +33,10 @@ class ControllerTaskTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.bake.bake_articles',
-        'plugin.bake.bake_articles_bake_tags',
-        'plugin.bake.bake_comments',
-        'plugin.bake.bake_tags'
+        'plugin.Bake.BakeArticles',
+        'plugin.Bake.BakeArticlesBakeTags',
+        'plugin.Bake.BakeComments',
+        'plugin.Bake.BakeTags'
     ];
 
     /**
@@ -91,8 +91,8 @@ class ControllerTaskTest extends TestCase
         unset($this->Task);
         TableRegistry::getTableLocator()->clear();
         parent::tearDown();
-        Plugin::unload('ControllerTest');
-        Plugin::unload('Company/Pastry');
+        $this->removePlugins(['ControllerTest']);
+        $this->removePlugins(['Company/Pastry']);
     }
 
     /**
@@ -292,7 +292,11 @@ class ControllerTaskTest extends TestCase
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
-            'class BakeArticlesControllerTest extends IntegrationTestCase',
+            'class BakeArticlesControllerTest extends TestCase',
+            $this->generatedFiles[1]
+        );
+        $this->assertFileContains(
+            'use IntegrationTestTrait',
             $this->generatedFiles[1]
         );
     }

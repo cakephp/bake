@@ -28,7 +28,7 @@ class BakeShellTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = ['core.comments'];
+    public $fixtures = ['core.Comments'];
 
     /**
      * @var ConsoleOutput
@@ -195,7 +195,6 @@ class BakeShellTest extends TestCase
     {
         $this->exec('bake');
         $this->assertExitCode(Shell::CODE_ERROR);
-        $output = $this->_out->messages();
 
         $expected = [
             'The following commands can be used to generate skeleton code for your application.',
@@ -226,7 +225,7 @@ class BakeShellTest extends TestCase
             'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.'
         ];
 
-        $this->assertSame($expected, $output);
+        $this->assertOutputContains(implode(PHP_EOL, $expected));
     }
 
     /**
@@ -306,10 +305,12 @@ class BakeShellTest extends TestCase
      */
     public function testLoadTasksVendoredPlugin()
     {
-        Plugin::load('Pastry/PastryTest', [
-            'path' => Configure::read('App.paths.plugins')[0] . 'PastryTest' . DS,
-            'autoload' => true
-        ]);
+        $this->deprecated(function () {
+            Plugin::load('Pastry/PastryTest', [
+                'path' => Configure::read('App.paths.plugins')[0] . 'PastryTest' . DS,
+                'autoload' => true
+            ]);
+        });
 
         $this->Shell->loadTasks();
         $this->assertContains('Pastry/PastryTest.ApplePie', $this->Shell->tasks);

@@ -2,13 +2,15 @@
 namespace Bake\Test\App\Test\TestCase\Controller;
 
 use Bake\Test\App\Controller\PostsController;
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
 
 /**
  * Bake\Test\App\Controller\PostsController Test Case
  */
-class PostsControllerTest extends IntegrationTestCase
+class PostsControllerTest extends TestCase
 {
+    use IntegrationTestTrait;
 
     /**
      * Fixtures
@@ -16,7 +18,7 @@ class PostsControllerTest extends IntegrationTestCase
      * @var array
      */
     public $fixtures = [
-        'app.posts'
+        'app.Posts'
     ];
 
     /**

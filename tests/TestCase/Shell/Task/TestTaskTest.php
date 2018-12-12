@@ -37,11 +37,11 @@ class TestTaskTest extends TestCase
      * @var string
      */
     public $fixtures = [
-        'core.articles',
-        'core.tags',
-        'core.articles_tags',
-        'core.authors',
-        'core.comments',
+        'core.Articles',
+        'core.Tags',
+        'core.ArticlesTags',
+        'core.Authors',
+        'core.Comments',
     ];
 
     /**
@@ -257,7 +257,9 @@ class TestTaskTest extends TestCase
      */
     public function testOutputClassOptionsForTablePlugin()
     {
-        Plugin::load('BakeTest');
+        $this->deprecated(function () {
+            Plugin::load('BakeTest');
+        });
         $this->Task->plugin = 'BakeTest';
 
         $expected = [
@@ -294,10 +296,10 @@ class TestTaskTest extends TestCase
         $subject = new ArticlesTable();
         $result = $this->Task->generateFixtureList($subject);
         $expected = [
-            'app.articles',
-            'app.authors',
-            'app.tags',
-            'app.articles_tags'
+            'app.Articles',
+            'app.Authors',
+            'app.Tags',
+            'app.ArticlesTags'
         ];
         $this->assertEquals($expected, $result);
     }
@@ -313,7 +315,7 @@ class TestTaskTest extends TestCase
         $subject = new CategoryThreadsTable();
         $result = $this->Task->generateFixtureList($subject);
         $expected = [
-            'app.category_threads',
+            'app.CategoryThreads',
         ];
         $this->assertEquals($expected, $result);
     }
@@ -328,7 +330,7 @@ class TestTaskTest extends TestCase
         $subject = new PostsController(new Request(), new Response());
         $result = $this->Task->generateFixtureList($subject);
         $expected = [
-            'app.posts',
+            'app.Posts',
         ];
         $this->assertEquals($expected, $result);
     }
@@ -426,7 +428,7 @@ class TestTaskTest extends TestCase
             ->method('createFile')
             ->will($this->returnValue(true));
 
-        $this->Task->params['fixtures'] = 'app.posts, app.comments , app.users ,';
+        $this->Task->params['fixtures'] = 'app.Posts, app.Comments, app.Users,';
         $result = $this->Task->bake('Table', 'Articles');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
@@ -756,7 +758,9 @@ class TestTaskTest extends TestCase
     {
         $this->Task->plugin = 'TestTest';
 
-        Plugin::load('TestTest', ['path' => APP . 'Plugin' . DS . 'TestTest' . DS]);
+        $this->deprecated(function () {
+            Plugin::load('TestTest', ['path' => APP . 'Plugin' . DS . 'TestTest' . DS]);
+        });
         $path = APP . 'Plugin/TestTest/tests/TestCase/View/Helper/FormHelperTest.php';
         $path = str_replace('/', DS, $path);
         $this->Task->expects($this->once())->method('createFile')
@@ -820,7 +824,9 @@ class TestTaskTest extends TestCase
     {
         $this->Task->path = DS . 'my/path/tests/';
 
-        Plugin::load('TestTest', ['path' => APP . 'Plugin' . DS . 'TestTest' . DS]);
+        $this->deprecated(function () {
+            Plugin::load('TestTest', ['path' => APP . 'Plugin' . DS . 'TestTest' . DS]);
+        });
         $this->Task->plugin = 'TestTest';
         $class = 'TestBake\Model\Entity\Post';
         $result = $this->Task->testCaseFileName('entity', $class);

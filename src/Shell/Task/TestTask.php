@@ -487,7 +487,7 @@ class TestTask extends BakeTask
     protected function _addFixture($name)
     {
         if ($this->plugin) {
-            $prefix = 'plugin.' . Inflector::underscore($this->plugin) . '.';
+            $prefix = 'plugin.' . $this->plugin . '.';
         } else {
             $prefix = 'app.';
         }
