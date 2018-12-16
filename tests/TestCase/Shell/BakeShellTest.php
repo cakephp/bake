@@ -33,12 +33,12 @@ class BakeShellTest extends TestCase
     /**
      * @var ConsoleOutput
      */
-    protected $_out;
+    protected $out;
 
     /**
      * @var ConsoleIo
      */
-    protected $_io;
+    protected $io;
 
     /**
      * @var \Bake\Shell\BakeShell|\PHPUnit_Framework_MockObject_MockObject
@@ -54,12 +54,12 @@ class BakeShellTest extends TestCase
     {
         parent::setUp();
 
-        $this->_out = new ConsoleOutput();
-        $this->_io = new ConsoleIo($this->_out);
+        $this->out = new ConsoleOutput();
+        $this->io = new ConsoleIo($this->out, $this->out);
 
         $this->Shell = $this->getMockBuilder('Bake\Shell\BakeShell')
             ->setMethods(['in', 'createFile', '_stop'])
-            ->setConstructorArgs([$this->_io])
+            ->setConstructorArgs([$this->io])
             ->getMock();
 
         Configure::write('App.namespace', 'Bake\Test\App');
@@ -111,13 +111,78 @@ class BakeShellTest extends TestCase
         $this->Shell->params = ['prefix' => 'account'];
         $this->Shell->all('Comments');
 
-        $output = $this->_out->messages();
+        $output = $this->out->messages();
 
         $expected = [
             'Bake All',
             '---------------------------------------------------------------',
             '<success>Bake All complete.</success>'
         ];
+        $this->assertSame($expected, $output);
+    }
+
+    /**
+     * test bake all --everything [--connection default]
+     *
+     * @return void
+     */
+    public function testAllEverythingDefault()
+    {
+        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
+            ->setMethods(['listAll'])
+            ->getMock();
+
+        $this->Shell->Model->expects($this->once())
+            ->method('listAll')
+            ->will($this->returnValue([]));
+
+        $this->Shell->connection = '';
+        $this->Shell->params = ['prefix' => 'account', 'everything' => true];
+        $this->Shell->all();
+
+        $output = $this->out->messages();
+
+        $expected = [
+            'Bake All',
+            '---------------------------------------------------------------',
+            '<success>Bake All complete.</success>'
+        ];
+        $this->assertSame($expected, $output);
+    }
+
+    /**
+     * test bake all --everything --connection test
+     *
+     * @return void
+     */
+    public function testAllEverything()
+    {
+        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
+            ->setMethods(['main'])
+            ->getMock();
+        $this->Shell->Controller = $this->getMockBuilder('Bake\Shell\Task\ControllerTask')
+            ->setMethods(['main'])
+            ->getMock();
+        $this->Shell->Template = $this->getMockBuilder('Bake\Shell\Task\TemplateTask')
+            ->setMethods(['main'])
+            ->getMock();
+
+        $this->Shell->Model->expects($this->never())
+            ->method('main');
+
+        $this->Shell->Controller->expects($this->never())
+            ->method('main');
+
+        $this->Shell->Template->expects($this->never())
+            ->method('main');
+
+        $this->Shell->connection = 'test';
+        $this->Shell->params = ['prefix' => 'account', 'everything' => true, 'connection' => 'test'];
+        $this->Shell->all();
+
+        $output = $this->out->messages();
+
+        $expected = ['<warning>Can only bake everything on default connection</warning>'];
         $this->assertSame($expected, $output);
     }
 
@@ -286,7 +351,7 @@ class BakeShellTest extends TestCase
         $content = file_get_contents($existingFile);
 
         $this->Shell->runCommand(['all', 'Comments'], false, ['quiet' => true]);
-        $output = $this->_out->messages();
+        $output = $this->out->messages();
 
         $this->assertContains('<success>Bake All complete.</success>', implode(' ', $output));
 

@@ -273,7 +273,7 @@ class TemplateTaskTest extends TestCase
         $result = $this->Task->getPath();
         $this->assertPathEquals($pluginPath . 'src/../templates/Admin/Posts/', $result);
 
-        Plugin::unload('TestTemplate');
+        $this->removePlugins(['TestTemplate']);
     }
 
     /**

@@ -2,3 +2,4 @@
 /phpunit.xml
 /vendor
 /.idea/
+tests/test_app/App/Model/Table/CommentsTable.php

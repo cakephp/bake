@@ -55,8 +55,9 @@ class BakeTemplateTaskTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
+
         unset($this->Task);
-        Plugin::unload('TestBakeTheme');
+        $this->removePlugins(['TestBakeTheme']);
     }
 
     /**

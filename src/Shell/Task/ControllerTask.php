@@ -143,7 +143,6 @@ class ControllerTask extends BakeTask
 
         $data = compact(
             'actions',
-            'admin',
             'components',
             'currentModelName',
             'defaultModel',

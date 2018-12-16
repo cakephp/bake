@@ -293,7 +293,7 @@ class ModelTask extends BakeTask
                 $namespace = $appNamespace;
 
                 $className = $association->getClassName();
-                if ($className) {
+                if (strlen($className)) {
                     list($plugin, $className) = pluginSplit($className);
                     if ($plugin !== null) {
                         $namespace = $plugin;
@@ -557,9 +557,12 @@ class ModelTask extends BakeTask
 
         $schema = $model->getSchema();
         foreach ($schema->columns() as $column) {
+            $columnSchema = $schema->getColumn($column);
+
             $properties[$column] = [
                 'kind' => 'column',
-                'type' => $schema->getColumnType($column)
+                'type' => $columnSchema['type'],
+                'null' => $columnSchema['null'],
             ];
         }
 

@@ -14,7 +14,6 @@
  */
 namespace Bake\Test\TestCase;
 
-use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Routing\Router;
 use Cake\TestSuite\ConsoleIntegrationTestTrait;

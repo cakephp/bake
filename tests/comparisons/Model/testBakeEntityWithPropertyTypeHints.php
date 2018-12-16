@@ -9,12 +9,12 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int $bake_user_id
  * @property string $title
- * @property string $body
+ * @property string|null $body
  * @property float $rating
  * @property float $score
  * @property bool $published
- * @property \Cake\I18n\FrozenTime $created
- * @property \Cake\I18n\FrozenTime $updated
+ * @property \Cake\I18n\FrozenTime|null $created
+ * @property \Cake\I18n\FrozenTime|null $updated
  * @property array $array_type
  * @property array $json_type
  * @property $unknown_type

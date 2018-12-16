@@ -7,10 +7,10 @@ use Cake\ORM\Entity;
  * User Entity
  *
  * @property int $id
- * @property string $username
- * @property string $password
- * @property \Cake\I18n\FrozenTime $created
- * @property \Cake\I18n\FrozenTime $updated
+ * @property string|null $username
+ * @property string|null $password
+ * @property \Cake\I18n\FrozenTime|null $created
+ * @property \Cake\I18n\FrozenTime|null $updated
  *
  * @property \App\Model\Entity\Comment[] $comments
  * @property \App\Model\Entity\CounterCachePost[] $counter_cache_posts

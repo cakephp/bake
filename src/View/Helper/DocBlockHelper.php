@@ -98,7 +98,12 @@ class DocBlockHelper extends Helper
         $properties = [];
         foreach ($propertySchema as $property => $info) {
             if ($info['kind'] === 'column') {
-                $properties[$property] = $this->columnTypeToHintType($info['type']);
+                $type = $this->columnTypeToHintType($info['type']);
+                if (!empty($info['null'])) {
+                    $type .= '|null';
+                }
+
+                $properties[$property] = $type;
             }
         }
 
