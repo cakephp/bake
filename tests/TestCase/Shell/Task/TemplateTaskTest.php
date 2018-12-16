@@ -15,12 +15,12 @@ declare(strict_types=1);
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
+use RuntimeException;
 
 /**
  * TemplateTaskTest class
@@ -82,7 +82,6 @@ class TemplateTaskTest extends TestCase
             ->setConstructorArgs([$io])
             ->getMock();
 
-        $this->Task->BakeTemplate = new BakeTemplateTask($io);
         $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
             ->setConstructorArgs([$io])
             ->setMethods(['listUnskipped', 'execute', 'createFile'])
@@ -586,10 +585,9 @@ class TemplateTaskTest extends TestCase
      */
     public function testBakeWithNoTemplate()
     {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('No bake template found for "Template/delete"');
         $this->exec('bake template template_task_comments delete');
-
-        $this->assertExitCode(Shell::CODE_SUCCESS);
-        $this->assertFileNotExists(ROOT . 'templates/TemplateTaskComments/delete.php');
     }
 
     /**

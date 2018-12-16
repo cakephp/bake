@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Bake\Shell\Task;
 
 use Bake\Utility\Model\AssociationFilter;
+use Bake\Utility\TemplateRenderer;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\App;
@@ -24,12 +25,12 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use RuntimeException;
 
 /**
  * Task class for creating and updating view template files.
  *
  * @property \Bake\Shell\Task\ModelTask $Model
- * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
  */
 class TemplateTask extends BakeTask
 {
@@ -40,7 +41,6 @@ class TemplateTask extends BakeTask
      */
     public $tasks = [
         'Bake.Model',
-        'Bake.BakeTemplate',
     ];
 
     /**
@@ -145,9 +145,11 @@ class TemplateTask extends BakeTask
         $methods = $this->_methodsToBake();
 
         foreach ($methods as $method) {
-            $content = $this->getContent($method, $vars);
-            if ($content) {
+            try {
+                $content = $this->getContent($method, $vars);
                 $this->bake($method, $content);
+            } catch (RuntimeException $e) {
+                $this->_io->err($e->getMessage());
             }
         }
     }
@@ -377,15 +379,16 @@ class TemplateTask extends BakeTask
             return false;
         }
 
+        $renderer = new TemplateRenderer($this->param('theme'));
         if ($action === "index" && !empty($this->params['index-columns'])) {
-            $this->BakeTemplate->set('indexColumns', $this->params['index-columns']);
+            $renderer->set('indexColumns', $this->params['index-columns']);
         }
 
-        $this->BakeTemplate->set('action', $action);
-        $this->BakeTemplate->set('plugin', $this->plugin);
-        $this->BakeTemplate->set($vars);
+        $renderer->set('action', $action);
+        $renderer->set('plugin', $this->plugin);
+        $renderer->set($vars);
 
-        return $this->BakeTemplate->generate("Template/$action");
+        return $renderer->generate("Template/$action");
     }
 
     /**

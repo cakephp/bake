@@ -15,7 +15,6 @@ declare(strict_types=1);
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
@@ -112,8 +111,6 @@ class ModelTaskAssociationDetectionTest extends TestCase
             ->setConstructorArgs([$io])
             ->setMethods(['bake'])
             ->getMock();
-        $this->Task->BakeTemplate = new BakeTemplateTask($io);
-        $this->Task->BakeTemplate->interactive = false;
 
         $this->Task->name = 'Model';
     }

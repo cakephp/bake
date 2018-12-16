@@ -18,7 +18,6 @@ namespace Bake\Shell\Task;
 /**
  * Middleware code generator.
  *
- * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
  * @property \Bake\Shell\Task\TestTask $Test
  */
 class MiddlewareTask extends SimpleBakeTask
