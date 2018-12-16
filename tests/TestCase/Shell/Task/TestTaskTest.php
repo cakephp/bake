@@ -14,7 +14,6 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\App\Controller\PostsController;
 use Bake\Test\App\Model\Table\ArticlesTable;
 use Bake\Test\App\Model\Table\CategoryThreadsTable;
@@ -73,8 +72,6 @@ class TestTaskTest extends TestCase
             ->getMock();
 
         $this->Task->name = 'Test';
-        $this->Task->BakeTemplate = new BakeTemplateTask($this->io);
-        $this->Task->BakeTemplate->interactive = false;
     }
 
     /**

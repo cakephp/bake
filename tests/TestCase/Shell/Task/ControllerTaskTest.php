@@ -14,7 +14,6 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\App\Model\Table\BakeArticlesTable;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Shell;
@@ -63,7 +62,6 @@ class ControllerTaskTest extends TestCase
 
         $this->Task->name = 'Controller';
         $this->Task->connection = 'test';
-        $this->Task->BakeTemplate = new BakeTemplateTask($io);
 
         $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
             ->setMethods(['in', 'out', 'err', 'createFile', '_stop'])

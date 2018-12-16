@@ -14,6 +14,7 @@
  */
 namespace Bake\Shell\Task;
 
+use Bake\Utility\TemplateRenderer;
 use Bake\View\BakeView;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
@@ -26,7 +27,6 @@ use Cake\Utility\Inflector;
 /**
  * The Plugin Task handles creating an empty plugin, ready to be used
  *
- * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
  */
 class PluginTask extends BakeTask
 {
@@ -43,7 +43,6 @@ class PluginTask extends BakeTask
      * @var array
      */
     public $tasks = [
-        'Bake.BakeTemplate'
     ];
 
     /**
@@ -184,7 +183,8 @@ class PluginTask extends BakeTask
         }
         $package = $vendor . '/' . $name;
 
-        $this->BakeTemplate->set([
+        $renderer = new TemplateRenderer($this->param('theme'));
+        $renderer->set([
             'package' => $package,
             'namespace' => $namespace,
             'baseNamespace' => $baseNamespace,
@@ -214,21 +214,22 @@ class PluginTask extends BakeTask
         foreach ($templates as $template) {
             $template = substr($template, strrpos($template, 'Plugin' . DIRECTORY_SEPARATOR) + 7, -4);
             $template = rtrim($template, '.');
-            $this->_generateFile($template, $root);
+            $this->_generateFile($renderer, $template, $root);
         }
     }
 
     /**
      * Generate a file
      *
+     * @param \Bake\Utility\TemplateRenderer $renderer The renderer to use.
      * @param string $template The template to render
      * @param string $root The path to the plugin's root
      * @return void
      */
-    protected function _generateFile($template, $root)
+    protected function _generateFile($renderer, $template, $root)
     {
         $this->out(sprintf('Generating %s file...', $template));
-        $out = $this->BakeTemplate->generate('Plugin/' . $template);
+        $out = $renderer->generate('Plugin/' . $template);
         $this->createFile($root . $template, $out);
     }
 

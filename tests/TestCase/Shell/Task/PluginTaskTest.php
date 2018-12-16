@@ -14,7 +14,6 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Shell\Task\PluginTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Shell;

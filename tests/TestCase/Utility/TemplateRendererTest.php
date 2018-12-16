@@ -12,20 +12,21 @@
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Utility;
 
 use Bake\Test\TestCase\TestCase;
+use Bake\Utility\TemplateRenderer;
 use Cake\Core\Plugin;
 
 /**
- * BakeTemplateTaskTest class
+ * TemplateRendererTest class
  */
-class BakeTemplateTaskTest extends TestCase
+class TemplateRendererTest extends TestCase
 {
     /**
-     * @var \Bake\Shell\Task\BakeTemplateTask|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Bake\Utility\TemplateRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $Task;
+    protected $renderer;
 
     /**
      * setUp method
@@ -35,16 +36,8 @@ class BakeTemplateTaskTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'BakeTemplate' . DS;
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\BakeTemplateTask')
-            ->setMethods(['in', 'err', 'createFile', '_stop', 'clear'])
-            ->setConstructorArgs([$io])
-            ->getMock();
-        ;
+        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'TemplateRenderer' . DS;
+        $this->renderer = new TemplateRenderer();
     }
 
     /**
@@ -55,8 +48,7 @@ class BakeTemplateTaskTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
-
-        unset($this->Task);
+        unset($this->renderer);
         $this->removePlugins(['TestBakeTheme']);
     }
 
@@ -67,9 +59,7 @@ class BakeTemplateTaskTest extends TestCase
      */
     public function testGenerate()
     {
-        $this->Task->expects($this->any())->method('in')->will($this->returnValue(1));
-
-        $result = $this->Task->generate('example', ['test' => 'foo']);
+        $result = $this->renderer->generate('example', ['test' => 'foo']);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -81,11 +71,11 @@ class BakeTemplateTaskTest extends TestCase
     public function testGenerateWithTemplateOverride()
     {
         $this->_loadTestPlugin('TestBakeTheme');
-        $this->Task->params['theme'] = 'TestBakeTheme';
-        $this->Task->set([
+        $renderer = new TemplateRenderer('TestBakeTheme');
+        $renderer->set([
             'plugin' => 'Special'
         ]);
-        $result = $this->Task->generate('config/routes');
+        $result = $renderer->generate('config/routes');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
     /**
@@ -97,8 +87,8 @@ class BakeTemplateTaskTest extends TestCase
     public function testGenerateWithTemplateFallbacks()
     {
         $this->_loadTestPlugin('TestBakeTheme');
-        $this->Task->params['theme'] = 'TestBakeTheme';
-        $this->Task->set([
+        $renderer = new TemplateRenderer('TestBakeTheme');
+        $renderer->set([
             'name' => 'Articles',
             'table' => 'articles',
             'import' => false,
@@ -106,7 +96,7 @@ class BakeTemplateTaskTest extends TestCase
             'schema' => '',
             'namespace' => ''
         ]);
-        $result = $this->Task->generate('tests/fixture');
+        $result = $renderer->generate('tests/fixture');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 }

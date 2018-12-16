@@ -15,6 +15,7 @@
 
 namespace Bake\Shell\Task;
 
+use Bake\Utility\TemplateRenderer;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Controller\Controller;
@@ -33,16 +34,9 @@ use ReflectionClass;
 /**
  * Task class for creating and updating test files.
  *
- * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
  */
 class TestTask extends BakeTask
 {
-    /**
-     * Tasks used.
-     *
-     * @var array
-     */
-    public $tasks = ['Bake.BakeTemplate'];
 
     /**
      * class types that methods can be generated for
@@ -262,9 +256,10 @@ class TestTask extends BakeTask
 
         $this->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, Shell::QUIET);
 
-        $this->BakeTemplate->set('fixtures', $this->_fixtures);
-        $this->BakeTemplate->set('plugin', $this->plugin);
-        $this->BakeTemplate->set(compact(
+        $renderer = new TemplateRenderer($this->param('theme'));
+        $renderer->set('fixtures', $this->_fixtures);
+        $renderer->set('plugin', $this->plugin);
+        $renderer->set(compact(
             'subject',
             'className',
             'properties',
@@ -281,7 +276,7 @@ class TestTask extends BakeTask
             'subNamespace',
             'namespace'
         ));
-        $out = $this->BakeTemplate->generate('tests/test_case');
+        $out = $renderer->generate('tests/test_case');
 
         $filename = $this->testCaseFileName($type, $fullClassName);
         $emptyFile = $this->getPath() . $this->getSubspacePath($type) . DS . 'empty';

@@ -14,7 +14,6 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -51,10 +50,6 @@ class TaskTaskTest extends TestCase
             ->setConstructorArgs([$io])
             ->setMethods(['bake'])
             ->getMock();
-
-        $this->Task->BakeTemplate = new BakeTemplateTask($io);
-        $this->Task->BakeTemplate->initialize();
-        $this->Task->BakeTemplate->interactive = false;
     }
 
     /**

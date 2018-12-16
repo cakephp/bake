@@ -14,7 +14,6 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
@@ -67,9 +66,6 @@ class FixtureTaskTest extends TestCase
             ->setMethods(['in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listUnskipped'])
             ->setConstructorArgs([$io])
             ->getMock();
-        $this->Task->BakeTemplate = new BakeTemplateTask($io);
-        $this->Task->BakeTemplate->interactive = false;
-        $this->Task->BakeTemplate->initialize();
 
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
     }
