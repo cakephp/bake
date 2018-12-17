@@ -1,12 +1,12 @@
 <?php
-namespace App\Test\TestCase\Command;
+namespace Bake\Test\App\Test\TestCase\Command;
 
-use App\Command\ExampleCommand;
+use Bake\Test\App\Command\ExampleCommand;
 use Cake\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Command\ExampleCommand Test Case
+ * Bake\Test\App\Command\ExampleCommand Test Case
  */
 class ExampleCommandTest extends TestCase
 {

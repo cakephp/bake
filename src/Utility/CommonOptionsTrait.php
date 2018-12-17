@@ -15,18 +15,65 @@ declare(strict_types=1);
  */
 namespace Bake\Utility;
 
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 
+/**
+ * Long term this trait should be folded into Bake\Command\BakeCommand
+ *
+ * For now it is a helpful bridge between tasks and commands.
+ */
 trait CommonOptionsTrait
 {
+    /**
+     * @var string
+     */
+    public $plugin;
+
+    /**
+     * @var string
+     */
+    public $theme;
+
+    /**
+     * @var string
+     */
+    public $connection = 'default';
+
+    /**
+     * Pull common/frequently used arguments & options into properties
+     * so that method signatures can be simpler.
+     *
+     * @param \Cake\Console\Arguments $args Arguments to extract
+     * @return void
+     */
+    protected function extractCommonProperties(Arguments $args): void
+    {
+        if ($args->hasOption('plugin')) {
+            $plugin = $args->getOption('plugin');
+            $parts = explode('/', $plugin);
+            $this->plugin = implode('/', array_map([$this, '_camelize'], $parts));
+
+            if (strpos($this->plugin, '\\')) {
+                $this->abort('Invalid plugin namespace separator, please use / instead of \ for plugins.');
+
+                return;
+            }
+        }
+
+        $this->theme = $args->getOption('theme');
+        $this->connection = $args->getOption('connection');
+    }
+
     /**
      * Set common options used by all bake tasks.
      *
      * @param \Cake\Console\ConsoleOptionParser $parser Options parser.
      * @return \Cake\Console\ConsoleOptionParser
      */
-    protected function _setCommonOptions($parser)
+    protected function _setCommonOptions(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $bakeThemes = [];
         foreach (Plugin::loaded() as $plugin) {

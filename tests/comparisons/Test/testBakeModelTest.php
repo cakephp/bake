@@ -1,12 +1,12 @@
 <?php
-namespace App\Test\TestCase\Model\Table;
+namespace Bake\Test\App\Test\TestCase\Model\Table;
 
-use App\Model\Table\ArticlesTable;
+use Bake\Test\App\Model\Table\ArticlesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\ArticlesTable Test Case
+ * Bake\Test\App\Model\Table\ArticlesTable Test Case
  */
 class ArticlesTableTest extends TestCase
 {
@@ -14,9 +14,21 @@ class ArticlesTableTest extends TestCase
     /**
      * Test subject
      *
-     * @var \App\Model\Table\ArticlesTable
+     * @var \Bake\Test\App\Model\Table\ArticlesTable
      */
     public $Articles;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = [
+        'app.Articles',
+        'app.Authors',
+        'app.Tags',
+        'app.ArticlesTags'
+    ];
 
     /**
      * setUp method
@@ -43,11 +55,41 @@ class ArticlesTableTest extends TestCase
     }
 
     /**
-     * Test initial setup
+     * Test initialize method
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialize()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test findPublished method
+     *
+     * @return void
+     */
+    public function testFindPublished()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test doSomething method
+     *
+     * @return void
+     */
+    public function testDoSomething()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test doSomethingElse method
+     *
+     * @return void
+     */
+    public function testDoSomethingElse()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

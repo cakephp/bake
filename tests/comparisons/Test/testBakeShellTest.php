@@ -1,12 +1,12 @@
 <?php
-namespace App\Test\TestCase\Shell;
+namespace Bake\Test\App\Test\TestCase\Shell;
 
-use App\Shell\ArticlesShell;
+use Bake\Test\App\Shell\ArticlesShell;
 use Cake\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Shell\ArticlesShell Test Case
+ * Bake\Test\App\Shell\ArticlesShell Test Case
  */
 class ArticlesShellTest extends TestCase
 {
@@ -22,7 +22,7 @@ class ArticlesShellTest extends TestCase
     /**
      * Test subject
      *
-     * @var \App\Shell\ArticlesShell
+     * @var \Bake\Test\App\Shell\ArticlesShell
      */
     public $Articles;
 

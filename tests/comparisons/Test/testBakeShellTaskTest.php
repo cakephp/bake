@@ -1,11 +1,11 @@
 <?php
-namespace App\Test\TestCase\Shell\Task;
+namespace Bake\Test\App\Test\TestCase\Shell\Task;
 
-use App\Shell\Task\ArticlesTask;
+use Bake\Test\App\Shell\Task\ArticlesTask;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Shell\Task\ArticlesTask Test Case
+ * Bake\Test\App\Shell\Task\ArticlesTask Test Case
  */
 class ArticlesTaskTest extends TestCase
 {
@@ -20,7 +20,7 @@ class ArticlesTaskTest extends TestCase
     /**
      * Test subject
      *
-     * @var \App\Shell\Task\ArticlesTask
+     * @var \Bake\Test\App\Shell\Task\ArticlesTask
      */
     public $Articles;
 

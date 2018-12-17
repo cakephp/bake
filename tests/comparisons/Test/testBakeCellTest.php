@@ -1,11 +1,11 @@
 <?php
-namespace App\Test\TestCase\View\Cell;
+namespace Bake\Test\App\Test\TestCase\View\Cell;
 
-use App\View\Cell\ArticlesCell;
+use Bake\Test\App\View\Cell\ArticlesCell;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\View\Cell\ArticlesCell Test Case
+ * Bake\Test\App\View\Cell\ArticlesCell Test Case
  */
 class ArticlesCellTest extends TestCase
 {
@@ -27,7 +27,7 @@ class ArticlesCellTest extends TestCase
     /**
      * Test subject
      *
-     * @var \App\View\Cell\ArticlesCell
+     * @var \Bake\Test\App\View\Cell\ArticlesCell
      */
     public $Articles;
 

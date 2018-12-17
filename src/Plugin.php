@@ -15,6 +15,9 @@ declare(strict_types=1);
  */
 namespace Bake;
 
+use Bake\Command\TestCommand;
+use Bake\Shell\BakeShell;
+use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Routing\RouteBuilder;
@@ -50,5 +53,19 @@ class Plugin extends BasePlugin
     public function bootstrap(PluginApplicationInterface $app): void
     {
         $app->addPlugin('WyriHaximus/TwigView');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function console(CommandCollection $commands): CommandCollection
+    {
+        // Temporary until cakephp/cakephp#12824 is merged
+        $commands->add('bake:test', TestCommand::class);
+
+        // Add shell for incomplete tasks and backwards compatibility discover.
+        $commands->add('bake', BakeShell::class);
+
+        return $commands;
     }
 }

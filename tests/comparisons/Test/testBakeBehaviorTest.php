@@ -1,11 +1,11 @@
 <?php
-namespace App\Test\TestCase\Model\Behavior;
+namespace Bake\Test\App\Test\TestCase\Model\Behavior;
 
-use App\Model\Behavior\ExampleBehavior;
+use Bake\Test\App\Model\Behavior\ExampleBehavior;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Behavior\ExampleBehavior Test Case
+ * Bake\Test\App\Model\Behavior\ExampleBehavior Test Case
  */
 class ExampleBehaviorTest extends TestCase
 {
@@ -13,7 +13,7 @@ class ExampleBehaviorTest extends TestCase
     /**
      * Test subject
      *
-     * @var \App\Model\Behavior\ExampleBehavior
+     * @var \Bake\Test\App\Model\Behavior\ExampleBehavior
      */
     public $Example;
 
