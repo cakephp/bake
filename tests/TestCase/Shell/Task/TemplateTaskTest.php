@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -333,8 +334,8 @@ class TemplateTaskTest extends TestCase
                         'alias' => 'Authors',
                         'controller' => 'TemplateTaskAuthors',
                         'fields' => ['name'],
-                    ]
-                ]
+                    ],
+                ],
             ],
             'keyFields' => [],
             'namespace' => $namespace,
@@ -738,7 +739,7 @@ class TemplateTaskTest extends TestCase
     {
         $this->generatedFiles = [
             ROOT . 'templates/Admin/Posts/index.php',
-            ROOT . 'templates/Admin/Posts/add.php'
+            ROOT . 'templates/Admin/Posts/add.php',
         ];
         $this->exec('bake template --prefix Admin Posts');
 

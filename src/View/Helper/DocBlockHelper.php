@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Bake\View\Helper;
 
 use Cake\Collection\Collection;
@@ -244,6 +245,7 @@ class DocBlockHelper extends Helper
                 $annotations[] = "@property {$tableFqn}|\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
             }
         }
+        // phpcs:disable
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} get(\$primaryKey, \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} newEntity(\$data = null, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] newEntities(array \$data, array \$options = [])";
@@ -252,6 +254,7 @@ class DocBlockHelper extends Helper
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} patchEntity(\\Cake\\Datasource\\EntityInterface \$entity, array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] patchEntities(\$entities, array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} findOrCreate(\$search, callable \$callback = null, \$options = [])";
+        // phpcs:enable
         foreach ($behaviors as $behavior => $behaviorData) {
             $className = App::className($behavior, 'Model/Behavior', 'Behavior');
             if (!$className) {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -18,7 +19,6 @@ use Bake\Test\TestCase\TestCase;
 use Cake\Console\ConsoleIo;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 use Cake\TestSuite\Stub\ConsoleOutput;
 
 class BakeShellTest extends TestCase
@@ -116,7 +116,7 @@ class BakeShellTest extends TestCase
         $expected = [
             'Bake All',
             '---------------------------------------------------------------',
-            '<success>Bake All complete.</success>'
+            '<success>Bake All complete.</success>',
         ];
         $this->assertSame($expected, $output);
     }
@@ -145,7 +145,7 @@ class BakeShellTest extends TestCase
         $expected = [
             'Bake All',
             '---------------------------------------------------------------',
-            '<success>Bake All complete.</success>'
+            '<success>Bake All complete.</success>',
         ];
         $this->assertSame($expected, $output);
     }
@@ -222,7 +222,7 @@ class BakeShellTest extends TestCase
             '- test',
             '- twig_template',
             '',
-            'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.'
+            'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.',
         ];
 
         $this->assertOutputContains(implode(PHP_EOL, $expected));

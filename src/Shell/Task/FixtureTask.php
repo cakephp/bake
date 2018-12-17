@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -40,7 +41,7 @@ class FixtureTask extends BakeTask
      */
     public $tasks = [
         'Bake.Model',
-        'Bake.BakeTemplate'
+        'Bake.BakeTemplate',
     ];
 
     /**
@@ -72,27 +73,27 @@ class FixtureTask extends BakeTask
             'Generate fixtures for use with the test suite. You can use `bake fixture all` to bake all fixtures.'
         )->addArgument('name', [
             'help' => 'Name of the fixture to bake (without the `Fixture` suffix). ' .
-                'You can use Plugin.name to bake plugin fixtures.'
+                'You can use Plugin.name to bake plugin fixtures.',
         ])->addOption('table', [
             'help' => 'The table name if it does not follow conventions.',
         ])->addOption('count', [
             'help' => 'When using generated data, the number of records to include in the fixture(s).',
             'short' => 'n',
-            'default' => 1
+            'default' => 1,
         ])->addOption('schema', [
             'help' => 'Create a fixture that imports schema, instead of dumping a schema snapshot into the fixture.',
             'short' => 's',
-            'boolean' => true
+            'boolean' => true,
         ])->addOption('records', [
             'help' => 'Generate a fixture with records from the non-test database.' .
             ' Used with --count and --conditions to limit which records are added to the fixture.',
             'short' => 'r',
-            'boolean' => true
+            'boolean' => true,
         ])->addOption('conditions', [
             'help' => 'The SQL snippet to use when importing records.',
             'default' => '1=1',
         ])->addSubcommand('all', [
-            'help' => 'Bake all fixture files for tables in the chosen connection.'
+            'help' => 'Bake all fixture files for tables in the chosen connection.',
         ]);
 
         return $parser;
@@ -214,7 +215,7 @@ class FixtureTask extends BakeTask
         } else {
             $model = TableRegistry::getTableLocator()->get($name, [
                 'table' => $table,
-                'connection' => $connection
+                'connection' => $connection,
             ]);
         }
 
@@ -237,7 +238,7 @@ class FixtureTask extends BakeTask
             'records' => null,
             'import' => null,
             'fields' => null,
-            'namespace' => Configure::read('App.namespace')
+            'namespace' => Configure::read('App.namespace'),
         ];
         if ($this->plugin) {
             $defaults['namespace'] = $this->_pluginNamespace($this->plugin);
@@ -367,7 +368,13 @@ class FixtureTask extends BakeTask
                         } else {
                             $insert = "Lorem ipsum dolor sit amet";
                             if (!empty($fieldInfo['length'])) {
-                                $insert = substr($insert, 0, (int)$fieldInfo['length'] > 2 ? (int)$fieldInfo['length'] - 2 : (int)$fieldInfo['length']);
+                                $insert = substr(
+                                    $insert,
+                                    0,
+                                    (int)$fieldInfo['length'] > 2
+                                        ? (int)$fieldInfo['length'] - 2
+                                        : (int)$fieldInfo['length']
+                                );
                             }
                         }
                         break;
@@ -447,14 +454,14 @@ class FixtureTask extends BakeTask
      */
     protected function _getRecordsFromTable($modelName, $useTable = null)
     {
-        $recordCount = (isset($this->params['count']) ? $this->params['count'] : 10);
-        $conditions = (isset($this->params['conditions']) ? $this->params['conditions'] : '1=1');
+        $recordCount = ($this->params['count'] ?? 10);
+        $conditions = ($this->params['conditions'] ?? '1=1');
         if (TableRegistry::getTableLocator()->exists($modelName)) {
             $model = TableRegistry::getTableLocator()->get($modelName);
         } else {
             $model = TableRegistry::getTableLocator()->get($modelName, [
                 'table' => $useTable,
-                'connection' => ConnectionManager::get($this->connection)
+                'connection' => ConnectionManager::get($this->connection),
             ]);
         }
         $records = $model->find('all')

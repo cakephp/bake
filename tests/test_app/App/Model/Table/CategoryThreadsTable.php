@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -28,14 +29,14 @@ class CategoryThreadsTable extends Table
             'ParentCategoryThreads',
             [
             'className' => __CLASS__,
-            'foreignKey' => 'parent_id'
+            'foreignKey' => 'parent_id',
             ]
         );
         $this->hasMany(
             'ChildCategoryThreads',
             [
             'className' => __CLASS__,
-            'foreignKey' => 'parent_id'
+            'foreignKey' => 'parent_id',
             ]
         );
         $this->addBehavior('Tree');

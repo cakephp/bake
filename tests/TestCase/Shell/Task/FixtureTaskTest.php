@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -39,7 +40,7 @@ class FixtureTaskTest extends TestCase
         'plugin.Bake.Datatypes',
         'plugin.Bake.BinaryTests',
         'plugin.Bake.BakeCar',
-        'core.Users'
+        'core.Users',
     ];
 
     /**

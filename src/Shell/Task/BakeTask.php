@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -157,7 +158,7 @@ class BakeTask extends Shell
         $descriptorSpec = [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
-            2 => ['pipe', 'w']
+            2 => ['pipe', 'w'],
         ];
         $this->_io->verbose('Running ' . $command);
         $process = proc_open(
@@ -196,6 +197,10 @@ class BakeTask extends Shell
      */
     protected function _getName($name)
     {
+        if (empty($name)) {
+            return $name;
+        }
+
         if (strpos($name, '.')) {
             list($plugin, $name) = pluginSplit($name);
             $this->plugin = $this->params['plugin'] = $plugin;

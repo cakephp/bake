@@ -22,7 +22,6 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class CategoriesProductsFixture extends TestFixture
 {
-
     /**
      * Fields
      *
@@ -50,7 +49,7 @@ class CategoriesProductsFixture extends TestFixture
     public $records = [
         [
             'category_id' => 1,
-            'product_id' => 1
+            'product_id' => 1,
         ],
     ];
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -83,7 +84,7 @@ class BakeTemplateTaskTest extends TestCase
         $this->_loadTestPlugin('TestBakeTheme');
         $this->Task->params['theme'] = 'TestBakeTheme';
         $this->Task->set([
-            'plugin' => 'Special'
+            'plugin' => 'Special',
         ]);
         $result = $this->Task->generate('config/routes');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -104,7 +105,7 @@ class BakeTemplateTaskTest extends TestCase
             'import' => false,
             'records' => false,
             'schema' => '',
-            'namespace' => ''
+            'namespace' => '',
         ]);
         $result = $this->Task->generate('tests/fixture');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);

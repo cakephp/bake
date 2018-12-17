@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -43,7 +44,7 @@ class PluginTask extends BakeTask
      * @var array
      */
     public $tasks = [
-        'Bake.BakeTemplate'
+        'Bake.BakeTemplate',
     ];
 
     /**
@@ -356,10 +357,10 @@ class PluginTask extends BakeTask
             'Create the directory structure, AppController class and testing setup for a new plugin. ' .
             'Can create plugins in any of your bootstrapped plugin paths.'
         )->addArgument('name', [
-            'help' => 'CamelCased name of the plugin to create.'
+            'help' => 'CamelCased name of the plugin to create.',
         ])->addOption('composer', [
             'default' => ROOT . DS . 'composer.phar',
-            'help' => 'The path to the composer executable.'
+            'help' => 'The path to the composer executable.',
         ])->removeOption('plugin');
 
         return $parser;

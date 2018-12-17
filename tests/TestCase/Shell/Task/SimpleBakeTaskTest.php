@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -14,7 +15,6 @@
  */
 namespace Bake\Test\TestCase\Shell\Task;
 
-use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
@@ -45,7 +45,7 @@ class SimpleBakeTaskTest extends TestCase
     {
         $this->generatedFiles = [
             APP . 'Model/Behavior/ExampleBehavior.php',
-            ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php'
+            ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
         ];
         $this->exec('bake behavior Example');
 
@@ -65,7 +65,7 @@ class SimpleBakeTaskTest extends TestCase
 
         $this->generatedFiles = [
             APP . 'Model/Behavior/ExampleBehavior.php',
-            ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php'
+            ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
         ];
         $this->exec('bake behavior Example');
 
@@ -103,7 +103,7 @@ class SimpleBakeTaskTest extends TestCase
 
         $this->generatedFiles = [
             $path . 'src/Model/Behavior/ExampleBehavior.php',
-            $path . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php'
+            $path . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
         ];
         $this->exec('bake behavior TestBake.Example');
 

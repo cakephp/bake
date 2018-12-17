@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Bake\View\Helper;
 
 use Bake\Utility\Model\AssociationFilter;
@@ -47,7 +48,7 @@ class BakeHelper extends Helper
         }
         $options += [
             'name' => $name,
-            'value' => $value
+            'value' => $value,
         ];
 
         return $this->_View->element('array_property', $options);
@@ -66,7 +67,7 @@ class BakeHelper extends Helper
             'indent' => 2,
             'tab' => '    ',
             'trailingComma' => false,
-            'quotes' => true
+            'quotes' => true,
         ];
 
         if (!$list) {
@@ -179,7 +180,7 @@ class BakeHelper extends Helper
             'plugin' => $plugin,
             'class' => $name . $suffix,
             'name' => $name,
-            'fullName' => $class
+            'fullName' => $class,
         ];
     }
 
@@ -189,11 +190,11 @@ class BakeHelper extends Helper
      * @param array $fields Fields list.
      * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
      * @param \Cake\ORM\Table|null $modelObject Model object.
-     * @param array $takeFields Take fields.
+     * @param string|int $takeFields Take fields.
      * @param array $filterTypes Filter field types.
      * @return array
      */
-    public function filterFields($fields, $schema, $modelObject = null, $takeFields = [], $filterTypes = ['binary'])
+    public function filterFields($fields, $schema, $modelObject = null, $takeFields = 0, $filterTypes = ['binary'])
     {
         $fields = collection($fields)
             ->filter(function ($field) use ($schema, $filterTypes) {
@@ -207,7 +208,7 @@ class BakeHelper extends Helper
         }
 
         if (!empty($takeFields)) {
-            $fields = $fields->take($takeFields);
+            $fields = $fields->take((int)$takeFields);
         }
 
         return $fields->toArray();
