@@ -190,11 +190,11 @@ class BakeHelper extends Helper
      * @param array $fields Fields list.
      * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
      * @param \Cake\ORM\Table|null $modelObject Model object.
-     * @param array $takeFields Take fields.
+     * @param string|int $takeFields Take fields.
      * @param array $filterTypes Filter field types.
      * @return array
      */
-    public function filterFields($fields, $schema, $modelObject = null, $takeFields = [], $filterTypes = ['binary'])
+    public function filterFields($fields, $schema, $modelObject = null, $takeFields = 0, $filterTypes = ['binary'])
     {
         $fields = collection($fields)
             ->filter(function ($field) use ($schema, $filterTypes) {
