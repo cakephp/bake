@@ -22,7 +22,6 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class BakeTemplateAuthorsFixture extends TestFixture
 {
-
     /**
      * Avoid overriding core.authors
      * @var string
@@ -44,7 +43,7 @@ class BakeTemplateAuthorsFixture extends TestFixture
         'account_balance' => ['type' => 'decimal', 'null' => true, 'precision' => 2, 'length' => 12],
         'created' => 'datetime',
         'modified' => 'datetime',
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ];
 
     /**

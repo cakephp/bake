@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -20,7 +21,6 @@ use Cake\ORM\Table;
  */
 class AuthorsTable extends Table
 {
-
     /**
      * @param array $config
      * @return void
@@ -29,13 +29,13 @@ class AuthorsTable extends Table
     {
         $this->setTable('bake_authors');
         $this->belongsTo('Roles', [
-            'foreignKey' => 'role_id'
+            'foreignKey' => 'role_id',
         ]);
         $this->hasMany('Articles', [
-            'foreignKey' => 'author_id'
+            'foreignKey' => 'author_id',
         ]);
         $this->hasOne('Profiles', [
-            'foreignKey' => 'author_id'
+            'foreignKey' => 'author_id',
         ]);
     }
 }

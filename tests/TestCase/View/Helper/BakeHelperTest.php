@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -28,7 +29,6 @@ use Cake\TestSuite\TestCase;
  */
 class BakeHelperTest extends TestCase
 {
-
     /**
      * fixtures
      *
@@ -88,7 +88,7 @@ class BakeHelperTest extends TestCase
     public function testAliasExtractorFilteredHasMany()
     {
         $table = TableRegistry::getTableLocator()->get('Articles', [
-            'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
+            'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
         ]);
         $this->BakeHelper = $this->getMockBuilder('Bake\View\Helper\BakeHelper')
                 ->disableOriginalConstructor()
@@ -109,7 +109,7 @@ class BakeHelperTest extends TestCase
     public function testAliasExtractorBelongsTo()
     {
         $table = TableRegistry::getTableLocator()->get('Articles', [
-                    'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
+                    'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
         ]);
         $result = $this->BakeHelper->aliasExtractor($table, 'BelongsTo');
         $expected = ['authors'];
@@ -124,7 +124,7 @@ class BakeHelperTest extends TestCase
     public function testAliasExtractorBelongsToMany()
     {
         $table = TableRegistry::getTableLocator()->get('Articles', [
-                    'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
+                    'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
         ]);
         $result = $this->BakeHelper->aliasExtractor($table, 'BelongsToMany');
         $expected = ['tags'];

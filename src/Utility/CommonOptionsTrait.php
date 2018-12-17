@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -19,7 +20,6 @@ use Cake\Core\Plugin;
 
 trait CommonOptionsTrait
 {
-
     /**
      * Set common options used by all bake tasks.
      *
@@ -38,20 +38,20 @@ trait CommonOptionsTrait
 
         $parser->addOption('plugin', [
             'short' => 'p',
-            'help' => 'Plugin to bake into.'
+            'help' => 'Plugin to bake into.',
         ])->addOption('force', [
             'short' => 'f',
             'boolean' => true,
-            'help' => 'Force overwriting existing files without prompting.'
+            'help' => 'Force overwriting existing files without prompting.',
         ])->addOption('connection', [
             'short' => 'c',
             'default' => 'default',
-            'help' => 'The datasource connection to get data from.'
+            'help' => 'The datasource connection to get data from.',
         ])->addOption('theme', [
             'short' => 't',
             'help' => 'The theme to use when baking code.',
             'default' => Configure::read('Bake.theme'),
-            'choices' => $bakeThemes
+            'choices' => $bakeThemes,
         ]);
 
         return $parser;

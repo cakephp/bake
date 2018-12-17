@@ -21,7 +21,6 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class BinaryTestsFixture extends TestFixture
 {
-
     /**
      * fields property
      *
@@ -31,7 +30,7 @@ class BinaryTestsFixture extends TestFixture
         'id' => ['type' => 'integer'],
         'byte' => ['type' => 'binary', 'length' => 1],
         'data' => ['type' => 'binary', 'length' => 300],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ];
 
     /**

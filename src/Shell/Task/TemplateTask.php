@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -39,7 +40,7 @@ class TemplateTask extends BakeTask
      */
     public $tasks = [
         'Bake.Model',
-        'Bake.BakeTemplate'
+        'Bake.BakeTemplate',
     ];
 
     /**
@@ -280,7 +281,7 @@ class TemplateTask extends BakeTask
             $modelObject = TableRegistry::getTableLocator()->get($this->modelName);
         } else {
             $modelObject = TableRegistry::getTableLocator()->get($this->modelName, [
-                'connectionName' => $this->connection
+                'connectionName' => $this->connection,
             ]);
         }
 
@@ -399,20 +400,21 @@ class TemplateTask extends BakeTask
         $parser->setDescription(
             'Bake views for a controller, using built-in or custom templates. '
         )->addArgument('controller', [
-            'help' => 'Name of the controller views to bake. You can use Plugin.name as a shortcut for plugin baking.'
+            'help' => 'Name of the controller views to bake. You can use Plugin.name as a shortcut for plugin baking.',
         ])->addArgument('action', [
-            'help' => "Will bake a single action's file. core templates are (index, add, edit, view)"
+            'help' => "Will bake a single action's file. core templates are (index, add, edit, view)",
         ])->addArgument('alias', [
-            'help' => 'Will bake the template in <action> but create the filename after <alias>.'
+            'help' => 'Will bake the template in <action> but create the filename after <alias>.',
         ])->addOption('controller', [
-            'help' => 'The controller name if you have a controller that does not follow conventions.'
+            'help' => 'The controller name if you have a controller that does not follow conventions.',
         ])->addOption('prefix', [
             'help' => 'The routing prefix to generate views for.',
         ])->addOption('index-columns', [
             'help' => 'Limit for the number of index columns',
-            'default' => 0
+            'default' => 0,
         ])->addSubcommand('all', [
-            'help' => '[optional] Bake all CRUD action views for all controllers. Requires models and controllers to exist.'
+            'help' => '[optional] Bake all CRUD action views for all controllers.' .
+                'Requires models and controllers to exist.',
         ]);
 
         return $parser;

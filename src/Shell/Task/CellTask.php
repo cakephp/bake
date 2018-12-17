@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -119,7 +120,7 @@ class CellTask extends SimpleBakeTask
         $parser = parent::getOptionParser();
         $parser
         ->addOption('prefix', [
-            'help' => 'The namespace prefix to use.'
+            'help' => 'The namespace prefix to use.',
         ]);
 
         return $parser;

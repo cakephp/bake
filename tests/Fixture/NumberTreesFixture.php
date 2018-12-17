@@ -23,7 +23,6 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class NumberTreesFixture extends TestFixture
 {
-
     /**
      * fields property
      *
@@ -36,7 +35,7 @@ class NumberTreesFixture extends TestFixture
         'lft' => ['type' => 'integer', 'unsigned' => true],
         'rght' => ['type' => 'integer', 'unsigned' => true],
         'depth' => ['type' => 'integer', 'unsigned' => true],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ];
 
     /**

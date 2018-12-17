@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -52,14 +53,14 @@ class BakeTemplateTask extends Shell
             return $this->View;
         }
 
-        $theme = isset($this->params['theme']) ? $this->params['theme'] : '';
+        $theme = $this->params['theme'] ?? '';
 
         $viewOptions = [
             'helpers' => [
                 'Bake.Bake',
-                'Bake.DocBlock'
+                'Bake.DocBlock',
             ],
-            'theme' => $theme
+            'theme' => $theme,
         ];
 
         $view = new BakeView(new Request(), new Response(), null, $viewOptions);

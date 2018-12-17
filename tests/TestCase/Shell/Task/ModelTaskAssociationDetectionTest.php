@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -16,7 +17,6 @@ namespace Bake\Test\TestCase\Shell\Task;
 
 use Bake\Shell\Task\BakeTemplateTask;
 use Bake\Test\TestCase\TestCase;
-use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
@@ -30,7 +30,6 @@ use Cake\ORM\TableRegistry;
  */
 class ModelTaskAssociationDetectionTest extends TestCase
 {
-
     /**
      * fixtures
      *

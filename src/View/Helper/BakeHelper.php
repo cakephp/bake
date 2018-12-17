@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Bake\View\Helper;
 
 use Bake\Utility\Model\AssociationFilter;
@@ -47,7 +48,7 @@ class BakeHelper extends Helper
         }
         $options += [
             'name' => $name,
-            'value' => $value
+            'value' => $value,
         ];
 
         return $this->_View->element('array_property', $options);
@@ -66,7 +67,7 @@ class BakeHelper extends Helper
             'indent' => 2,
             'tab' => '    ',
             'trailingComma' => false,
-            'quotes' => true
+            'quotes' => true,
         ];
 
         if (!$list) {
@@ -179,7 +180,7 @@ class BakeHelper extends Helper
             'plugin' => $plugin,
             'class' => $name . $suffix,
             'name' => $name,
-            'fullName' => $class
+            'fullName' => $class,
         ];
     }
 

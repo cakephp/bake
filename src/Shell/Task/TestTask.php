@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -24,7 +25,6 @@ use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest as Request;
-use Cake\ORM\Association;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -325,7 +325,7 @@ class TestTask extends BakeTask
                 $instance = TableRegistry::getTableLocator()->get($name);
             } else {
                 $instance = TableRegistry::getTableLocator()->get($name, [
-                    'connectionName' => $this->connection
+                    'connectionName' => $this->connection,
                 ]);
             }
         } elseif ($type === 'Controller') {
@@ -522,6 +522,7 @@ class TestTask extends BakeTask
         $pre = $construct = $post = '';
         if ($type === 'Table') {
             $tableName = str_replace('Table', '', $className);
+            // phpcs:ignore
             $pre = "\$config = TableRegistry::getTableLocator()->exists('{$tableName}') ? [] : ['className' => {$className}::class];";
             $construct = "TableRegistry::getTableLocator()->get('{$tableName}', \$config);";
         }
@@ -584,12 +585,12 @@ class TestTask extends BakeTask
                 $properties[] = [
                     'description' => 'Request mock',
                     'type' => '\Cake\Http\ServerRequest|\PHPUnit_Framework_MockObject_MockObject',
-                    'name' => 'request'
+                    'name' => 'request',
                 ];
                 $properties[] = [
                     'description' => 'Response mock',
                     'type' => '\Cake\Http\Response|\PHPUnit_Framework_MockObject_MockObject',
-                    'name' => 'response'
+                    'name' => 'response',
                 ];
                 break;
 
@@ -598,7 +599,7 @@ class TestTask extends BakeTask
                 $properties[] = [
                     'description' => 'ConsoleIo mock',
                     'type' => '\Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject',
-                    'name' => 'io'
+                    'name' => 'io',
                 ];
                 break;
 
@@ -606,12 +607,12 @@ class TestTask extends BakeTask
                 $properties[] = [
                     'description' => 'ConsoleOutput stub',
                     'type' => '\Cake\TestSuite\Stub\ConsoleOutput',
-                    'name' => 'stub'
+                    'name' => 'stub',
                 ];
                 $properties[] = [
                     'description' => 'ConsoleIo mock',
                     'type' => '\Cake\Console\ConsoleIo',
-                    'name' => 'io'
+                    'name' => 'io',
                 ];
                 break;
         }
@@ -620,7 +621,7 @@ class TestTask extends BakeTask
             $properties[] = [
                 'description' => 'Test subject',
                 'type' => '\\' . $fullClassName,
-                'name' => $subject
+                'name' => $subject,
             ];
         }
 
@@ -712,19 +713,19 @@ class TestTask extends BakeTask
                 ' controller, model, helper, component or behavior.',
             'choices' => $types,
         ])->addArgument('name', [
-            'help' => 'An existing class to bake tests for.'
+            'help' => 'An existing class to bake tests for.',
         ])->addOption('fixtures', [
-            'help' => 'A comma separated list of fixture names you want to include.'
+            'help' => 'A comma separated list of fixture names you want to include.',
         ])->addOption('no-fixture', [
             'boolean' => true,
             'default' => false,
-            'help' => 'Select if you want to bake without fixture.'
+            'help' => 'Select if you want to bake without fixture.',
         ])->addOption('prefix', [
             'default' => false,
-            'help' => 'Use when baking tests for prefixed controllers.'
+            'help' => 'Use when baking tests for prefixed controllers.',
         ])->addOption('all', [
             'boolean' => true,
-            'help' => 'Bake all classes of the given type'
+            'help' => 'Bake all classes of the given type',
         ]);
 
         return $parser;

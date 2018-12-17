@@ -21,7 +21,6 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class DatatypesFixture extends TestFixture
 {
-
     /**
      * Fields property
      *
@@ -36,7 +35,7 @@ class DatatypesFixture extends TestFixture
         'tiny_int' => ['type' => 'tinyinteger'],
         'bool' => ['type' => 'boolean', 'null' => false, 'default' => false],
         'uuid' => ['type' => 'uuid'],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ];
 
     /**
