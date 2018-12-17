@@ -5,8 +5,8 @@ use Cake\Http\BaseApplication;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\RouteBuilder;
 
-class Application extends BaseApplication {
-
+class Application extends BaseApplication
+{
     public function middleware(MiddlewareQueue $middleware): MiddlewareQueue
     {
         return $middleware;

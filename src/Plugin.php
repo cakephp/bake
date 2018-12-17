@@ -56,7 +56,10 @@ class Plugin extends BasePlugin
     }
 
     /**
-     * @inheritDoc
+     * Define the console commands for an application.
+     *
+     * @param \Cake\Console\CommandCollection $commands The CommandCollection to add commands into.
+     * @return \Cake\Console\CommandCollection The updated collection.
      */
     public function console(CommandCollection $commands): CommandCollection
     {
