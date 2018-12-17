@@ -293,7 +293,7 @@ class ModelTask extends BakeTask
                 $namespace = $appNamespace;
 
                 $className = $association->getClassName();
-                if (strlen($className)) {
+                if ($className !== null && strlen($className)) {
                     list($plugin, $className) = pluginSplit($className);
                     if ($plugin !== null) {
                         $namespace = $plugin;
@@ -386,7 +386,7 @@ class ModelTask extends BakeTask
             if (!isset($constraintInfo['references'])) {
                 continue;
             }
-            $length = mb_strlen($this->tablePrefix);
+            $length = $this->tablePrefix ? mb_strlen($this->tablePrefix) : 0;
             if ($length > 0 && mb_substr($constraintInfo['references'][0], 0, $length) === $this->tablePrefix) {
                 return mb_substr($constraintInfo['references'][0], $length);
             }

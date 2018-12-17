@@ -197,6 +197,10 @@ class BakeTask extends Shell
      */
     protected function _getName($name)
     {
+        if (empty($name)) {
+            return $name;
+        }
+
         if (strpos($name, '.')) {
             list($plugin, $name) = pluginSplit($name);
             $this->plugin = $this->params['plugin'] = $plugin;

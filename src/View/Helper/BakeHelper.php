@@ -208,7 +208,7 @@ class BakeHelper extends Helper
         }
 
         if (!empty($takeFields)) {
-            $fields = $fields->take($takeFields);
+            $fields = $fields->take((int)$takeFields);
         }
 
         return $fields->toArray();
