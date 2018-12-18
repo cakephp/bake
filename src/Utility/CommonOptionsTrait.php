@@ -28,19 +28,19 @@ use Cake\Core\Plugin;
 trait CommonOptionsTrait
 {
     /**
-     * @var string
+     * @var string|null
      */
     public $plugin;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $theme;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $connection = 'default';
+    public $connection;
 
     /**
      * Pull common/frequently used arguments & options into properties
