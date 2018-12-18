@@ -13,25 +13,22 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Shell\Task;
+namespace Bake\Utility;
 
 use Bake\View\BakeView;
-use Cake\Console\Shell;
 use Cake\Core\ConventionsTrait;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
-use Cake\Http\Response;
-use Cake\Http\ServerRequest as Request;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\View\ViewVarsTrait;
+use RuntimeException;
 
 /**
  * Used by other tasks to generate templated output, Acts as an interface to BakeView
  */
-class BakeTemplateTask extends Shell
+class TemplateRenderer
 {
     use ConventionsTrait;
-
     use ViewVarsTrait;
 
     /**
@@ -39,7 +36,24 @@ class BakeTemplateTask extends Shell
      *
      * @var \Bake\View\BakeView
      */
-    public $View;
+    protected $view;
+
+    /**
+     * Template theme
+     *
+     * @var string
+     */
+    protected $theme;
+
+    /**
+     * Constructor
+     *
+     * @param string $theme The template theme/plugin to use.
+     */
+    public function __construct($theme = '')
+    {
+        $this->theme = $theme;
+    }
 
     /**
      * Get view instance
@@ -49,28 +63,22 @@ class BakeTemplateTask extends Shell
      */
     public function getView()
     {
-        if ($this->View !== null) {
-            return $this->View;
+        if ($this->view) {
+            return $this->view;
         }
 
-        $theme = $this->params['theme'] ?? '';
+        $this->viewBuilder()
+            ->setHelpers(['Bake.Bake', 'Bake.DocBlock'])
+            ->setTheme($this->theme);
 
-        $viewOptions = [
-            'helpers' => [
-                'Bake.Bake',
-                'Bake.DocBlock',
-            ],
-            'theme' => $theme,
-        ];
-
-        $view = new BakeView(new Request(), new Response(), null, $viewOptions);
+        $view = $this->createView(BakeView::class);
         $event = new Event('Bake.initialize', $view);
         EventManager::instance()->dispatch($event);
         /** @var \Bake\View\BakeView $view */
         $view = $event->getSubject();
-        $this->View = $view;
+        $this->view = $view;
 
-        return $this->View;
+        return $this->view;
     }
 
     /**
@@ -86,14 +94,12 @@ class BakeTemplateTask extends Shell
             $this->set($vars);
         }
 
-        $this->getView()->set($this->viewBuilder()->getVars());
+        $view = $this->getView();
 
         try {
-            return $this->View->render($template);
+            return $view->render($template);
         } catch (MissingTemplateException $e) {
-            $this->_io->verbose(sprintf('No bake template found for "%s"', $template));
-
-            return '';
+            throw new RuntimeException(sprintf('No bake template found for "%s"', $template));
         }
     }
 }

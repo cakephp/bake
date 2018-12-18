@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 namespace Bake\Shell\Task;
 
+use Bake\Utility\TemplateRenderer;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
@@ -24,7 +25,6 @@ use Cake\ORM\TableRegistry;
  * Task class for creating and updating controller files.
  *
  * @property \Bake\Shell\Task\ModelTask $Model
- * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
  * @property \Bake\Shell\Task\TestTask $Test
  */
 class ControllerTask extends BakeTask
@@ -36,7 +36,6 @@ class ControllerTask extends BakeTask
      */
     public $tasks = [
         'Bake.Model',
-        'Bake.BakeTemplate',
         'Bake.Test',
     ];
 
@@ -186,9 +185,10 @@ class ControllerTask extends BakeTask
             'pluginPath' => null,
         ];
 
-        $this->BakeTemplate->set($data);
+        $renderer = new TemplateRenderer($this->param('theme'));
+        $renderer->set($data);
 
-        $contents = $this->BakeTemplate->generate('Controller/controller');
+        $contents = $renderer->generate('Controller/controller');
 
         $path = $this->getPath();
         $filename = $path . $controllerName . 'Controller.php';

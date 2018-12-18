@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 namespace Bake\Shell\Task;
 
+use Bake\Utility\TemplateRenderer;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
@@ -22,7 +23,6 @@ use Cake\Utility\Inflector;
 /**
  * Base class for simple bake tasks code generator.
  *
- * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
  * @property \Bake\Shell\Task\TestTask $Test
  */
 abstract class SimpleBakeTask extends BakeTask
@@ -33,7 +33,6 @@ abstract class SimpleBakeTask extends BakeTask
      * @var array
      */
     public $tasks = [
-        'Bake.BakeTemplate',
         'Bake.Test',
     ];
 
@@ -102,9 +101,10 @@ abstract class SimpleBakeTask extends BakeTask
      */
     public function bake($name)
     {
-        $this->BakeTemplate->set('name', $name);
-        $this->BakeTemplate->set($this->templateData());
-        $contents = $this->BakeTemplate->generate($this->template());
+        $renderer = new TemplateRenderer($this->param('theme'));
+        $renderer->set('name', $name);
+        $renderer->set($this->templateData());
+        $contents = $renderer->generate($this->template());
 
         $filename = $this->getPath() . $this->fileName($name);
         $this->createFile($filename, $contents);

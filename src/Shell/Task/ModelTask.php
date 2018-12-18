@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 namespace Bake\Shell\Task;
 
+use Bake\Utility\TemplateRenderer;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
@@ -28,7 +29,6 @@ use Cake\Utility\Inflector;
  * Task class for generating model files.
  *
  * @property \Bake\Shell\Task\FixtureTask $Fixture
- * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
  * @property \Bake\Shell\Task\TestTask $Test
  */
 class ModelTask extends BakeTask
@@ -47,7 +47,6 @@ class ModelTask extends BakeTask
      */
     public $tasks = [
         'Bake.Fixture',
-        'Bake.BakeTemplate',
         'Bake.Test',
     ];
 
@@ -921,8 +920,9 @@ class ModelTask extends BakeTask
             'primaryKey' => [],
         ];
 
-        $this->BakeTemplate->set($data);
-        $out = $this->BakeTemplate->generate('Model/entity');
+        $renderer = new TemplateRenderer($this->param('theme'));
+        $renderer->set($data);
+        $out = $renderer->generate('Model/entity');
 
         $path = $this->getPath();
         $filename = $path . 'Entity' . DS . $name . '.php';
@@ -971,8 +971,9 @@ class ModelTask extends BakeTask
             'connection' => $this->connection,
         ];
 
-        $this->BakeTemplate->set($data);
-        $out = $this->BakeTemplate->generate('Model/table');
+        $renderer = new TemplateRenderer($this->param('theme'));
+        $renderer->set($data);
+        $out = $renderer->generate('Model/table');
 
         $path = $this->getPath();
         $filename = $path . 'Table' . DS . $name . 'Table.php';

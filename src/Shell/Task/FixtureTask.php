@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 namespace Bake\Shell\Task;
 
+use Bake\Utility\TemplateRenderer;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
@@ -29,7 +30,6 @@ use DateTimeInterface;
 /**
  * Task class for creating and updating fixtures files.
  *
- * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
  * @property \Bake\Shell\Task\ModelTask $Model
  */
 class FixtureTask extends BakeTask
@@ -41,7 +41,6 @@ class FixtureTask extends BakeTask
      */
     public $tasks = [
         'Bake.Model',
-        'Bake.BakeTemplate',
     ];
 
     /**
@@ -248,9 +247,10 @@ class FixtureTask extends BakeTask
         $path = $this->getPath();
         $filename = $vars['name'] . 'Fixture.php';
 
-        $this->BakeTemplate->set('model', $model);
-        $this->BakeTemplate->set($vars);
-        $content = $this->BakeTemplate->generate('tests/fixture');
+        $renderer = new TemplateRenderer($this->param('theme'));
+        $renderer->set('model', $model);
+        $renderer->set($vars);
+        $content = $renderer->generate('tests/fixture');
 
         $this->out("\n" . sprintf('Baking test fixture for %s...', $model), 1, Shell::QUIET);
         $this->createFile($path . $filename, $content);
