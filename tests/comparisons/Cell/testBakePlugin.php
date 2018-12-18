@@ -5,6 +5,7 @@ use Cake\View\Cell;
 
 /**
  * Example cell
+ *
  */
 class ExampleCell extends Cell
 {
@@ -22,7 +23,7 @@ class ExampleCell extends Cell
      *
      * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
     }
 

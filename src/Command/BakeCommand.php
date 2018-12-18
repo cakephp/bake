@@ -69,6 +69,27 @@ abstract class BakeCommand extends Command
     }
 
     /**
+     * Gets the path for output. Checks the plugin property
+     * and returns the correct path.
+     *
+     * @param \Cake\Console\Arguments $args Arguments instance to read the prefix option from.
+     * @return string Path to output.
+     */
+    public function getPath(Arguments $args)
+    {
+        $path = APP . $this->pathFragment;
+        if ($this->plugin) {
+            $path = $this->_pluginPath($this->plugin) . 'src/' . $this->pathFragment;
+        }
+        $prefix = $this->getPrefix($args);
+        if ($prefix) {
+            $path .= $prefix . DS;
+        }
+
+        return str_replace('/', DS, $path);
+    }
+
+    /**
      * Delete empty file in a given path
      *
      * @param string $path Path to folder which contains 'empty' file.

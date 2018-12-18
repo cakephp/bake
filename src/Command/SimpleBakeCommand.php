@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Bake\Command\TestCommand;
 use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -74,7 +75,8 @@ abstract class SimpleBakeCommand extends BakeCommand
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {
-        $name = $arguments->getArgument('name');
+        $this->extractCommonProperties($args);
+        $name = $args->getArgument('name');
         if (empty($name)) {
             $this->abort('You must provide a name to bake a ' . $this->name());
 
@@ -82,47 +84,48 @@ abstract class SimpleBakeCommand extends BakeCommand
         }
         $name = $this->_getName($name);
         $name = Inflector::camelize($name);
-        $this->bake($name, $arguments, $io);
-        $this->bakeTest($arguments);
+        $this->bake($name, $args, $io);
+        $this->bakeTest($name, $args, $io);
     }
 
     /**
      * Generate a class stub
      *
      * @param string $name The class name
-     * @param \Cake\Console\Arguments $arguments The console arguments
+     * @param \Cake\Console\Arguments $args The console arguments
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return string
+     * @return void
      */
-    protected function bake(string $name, Arguments $arguments, ConsoleIo $io)
+    protected function bake(string $name, Arguments $args, ConsoleIo $io)
     {
         $renderer = new TemplateRenderer();
         $renderer->set('name', $name);
-        $renderer->set($this->templateData($arguments));
+        $renderer->set($this->templateData($args));
         $contents = $renderer->generate($this->template());
 
-        $filename = $this->getPath() . $this->fileName($name);
-        $this->createFile($filename, $contents);
-        $emptyFile = $this->getPath() . 'empty';
-        $this->_deleteEmptyFile($emptyFile);
+        $filename = $this->getPath($args) . $this->fileName($name);
+        $io->createFile($filename, $contents);
 
-        return $contents;
+        $emptyFile = $this->getPath($args) . 'empty';
+        $this->deleteEmptyFile($emptyFile, $io);
     }
 
     /**
      * Generate a test case.
      *
      * @param string $className The class to bake a test for.
-     * @return string|bool|null
+     * @param \Cake\Console\Arguments $args The console arguments
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return void
      */
-    public function bakeTest($className)
+    public function bakeTest($className, $args, $io)
     {
-        if (!empty($this->params['no-test'])) {
-            return null;
+        if ($args->getOption('no-test')) {
+            return;
         }
-        $this->Test->plugin = $this->plugin;
-
-        return $this->Test->bake($this->name(), $className);
+        $test = new TestCommand();
+        $test->plugin = $this->plugin;
+        $test->bake($this->name(), $className, $args, $io);
     }
 
     /**
@@ -131,7 +134,7 @@ abstract class SimpleBakeCommand extends BakeCommand
      * @param \Cake\Console\ConsoleOptionParser $parser Option parser to update.
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser)
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = $this->_setCommonOptions($parser);
         $name = $this->name();

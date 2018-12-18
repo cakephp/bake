@@ -231,7 +231,7 @@ class TestCommand extends BakeCommand
         $fullClassName = $this->getRealClassName($type, $className, $prefix);
 
         if (!$args->getOption('no-fixture')) {
-            if (strlen($args->getOption('fixtures'))) {
+            if ($args->getOption('fixtures')) {
                 $fixtures = array_map('trim', explode(',', $args->getOption('fixtures')));
                 $this->_fixtures = array_filter($fixtures);
             } elseif ($this->typeCanDetectFixtures($type) && class_exists($fullClassName)) {
@@ -285,7 +285,7 @@ class TestCommand extends BakeCommand
         $out = $renderer->generate('tests/test_case');
 
         $filename = $this->testCaseFileName($type, $fullClassName);
-        $emptyFile = $this->getPath() . $this->getSubspacePath($type) . DS . 'empty';
+        $emptyFile = dirname($filename) . DS . 'empty';
         $this->deleteEmptyFile($emptyFile, $io);
         if ($io->createFile($filename, $out)) {
             return $out;
@@ -523,7 +523,7 @@ class TestCommand extends BakeCommand
         $pre = $construct = $post = '';
         if ($type === 'Table') {
             $tableName = str_replace('Table', '', $className);
-            $pre = "\$config = TableRegistry::getTableLocator()->exists('{$tableName}')" .
+            $pre = "\$config = TableRegistry::getTableLocator()->exists('{$tableName}') " .
                 "? [] : ['className' => {$className}::class];";
             $construct = "TableRegistry::getTableLocator()->get('{$tableName}', \$config);";
         }
@@ -658,11 +658,11 @@ class TestCommand extends BakeCommand
     }
 
     /**
-     * Get the file path.
+     * Get the base path to the plugin/app tests.
      *
      * @return string
      */
-    public function getPath()
+    public function getBasePath()
     {
         $dir = 'TestCase/';
         $path = defined('TESTS') ? TESTS . $dir : ROOT . DS . 'tests' . DS . $dir;
@@ -683,7 +683,7 @@ class TestCommand extends BakeCommand
      */
     public function testCaseFileName($type, $className)
     {
-        $path = $this->getPath();
+        $path = $this->getBasePath();
         $namespace = Configure::read('App.namespace');
         if ($this->plugin) {
             $namespace = $this->plugin;

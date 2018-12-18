@@ -206,7 +206,6 @@ class BakeShellTest extends TestCase
             '',
             '- all',
             '- behavior',
-            '- cell',
             '- command',
             '- component',
             '- controller',
@@ -264,7 +263,6 @@ class BakeShellTest extends TestCase
         $this->Shell->loadTasks();
         $expected = [
             'Bake.Behavior',
-            'Bake.Cell',
             'Bake.Command',
             'Bake.Component',
             'Bake.Fixture',
