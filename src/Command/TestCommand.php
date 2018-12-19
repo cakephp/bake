@@ -523,7 +523,8 @@ class TestCommand extends BakeCommand
         $pre = $construct = $post = '';
         if ($type === 'Table') {
             $tableName = str_replace('Table', '', $className);
-            $pre = "\$config = TableRegistry::getTableLocator()->exists('{$tableName}') ? [] : ['className' => {$className}::class];";
+            $pre = "\$config = TableRegistry::getTableLocator()->exists('{$tableName}')" .
+                "? [] : ['className' => {$className}::class];";
             $construct = "TableRegistry::getTableLocator()->get('{$tableName}', \$config);";
         }
         if ($type === 'Behavior' || $type === 'Entity' || $type === 'Form') {
