@@ -37,7 +37,6 @@ use ReflectionClass;
  */
 class TestTask extends BakeTask
 {
-
     /**
      * class types that methods can be generated for
      *

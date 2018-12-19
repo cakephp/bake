@@ -29,7 +29,7 @@ class BakeShellTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'core.Comments'
+        'core.Comments',
     ];
 
     /**

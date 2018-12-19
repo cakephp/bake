@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP :  Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -20,7 +21,6 @@ use Bake\Test\App\Model\Table\ArticlesTable;
 use Bake\Test\App\Model\Table\CategoryThreadsTable;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Command;
-use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest as Request;
@@ -227,7 +227,7 @@ class TestCommandTest extends TestCase
             'app.Articles',
             'app.Authors',
             'app.Tags',
-            'app.ArticlesTags'
+            'app.ArticlesTags',
         ];
         $this->assertEquals($expected, $result);
     }
@@ -605,7 +605,7 @@ class TestCommandTest extends TestCase
         $expected = [
             "\$config = TableRegistry::getTableLocator()->exists('Posts') ? [] : ['className' => PostsTable::class];",
             "TableRegistry::getTableLocator()->get('Posts', \$config);",
-            ''
+            '',
         ];
         $this->assertEquals($expected, $result);
 
@@ -621,7 +621,7 @@ class TestCommandTest extends TestCase
         $expected = [
             "\$this->stub = new ConsoleOutput();\n        \$this->io = new ConsoleIo(\$this->stub);",
             "new ExampleHelper(\$this->io);",
-            ''
+            '',
         ];
         $this->assertEquals($expected, $result);
 
@@ -629,7 +629,7 @@ class TestCommandTest extends TestCase
         $expected = [
             '',
             "new ExampleForm();",
-            ''
+            '',
         ];
         $this->assertEquals($expected, $result);
     }
@@ -707,7 +707,7 @@ class TestCommandTest extends TestCase
             [
                 'Component',
                 'App\Controller\Component\AuthComponent',
-                'TestCase/Controller/Component/AuthComponentTest.php'
+                'TestCase/Controller/Component/AuthComponentTest.php',
             ],
             ['entity', 'App\Model\Entity\Article', 'TestCase/Model/Entity/ArticleTest.php'],
             ['table', 'App\Model\Table\PostsTable', 'TestCase/Model/Table/PostsTableTest.php'],
@@ -717,7 +717,7 @@ class TestCommandTest extends TestCase
             [
                 'component',
                 'App\Controller\Component\AuthComponent',
-                'TestCase/Controller/Component/AuthComponentTest.php'
+                'TestCase/Controller/Component/AuthComponentTest.php',
             ],
             ['Shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
             ['shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
@@ -748,8 +748,8 @@ class TestCommandTest extends TestCase
     {
         $this->loadPlugins([
             'TestTest' => [
-                'path' => APP . 'Plugin' . DS . 'TestTest' . DS
-            ]
+                'path' => APP . 'Plugin' . DS . 'TestTest' . DS,
+            ],
         ]);
         $this->generatedFiles = [
             APP . 'Plugin/TestTest/tests/TestCase/Model/Entity/ArticleTest.php',

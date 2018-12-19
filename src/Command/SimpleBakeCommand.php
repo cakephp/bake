@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -141,10 +142,10 @@ abstract class SimpleBakeCommand extends BakeCommand
                 'Name of the %s to bake. Can use Plugin.name to bake %s files into plugins.',
                 $name,
                 $name
-            )
+            ),
         ])->addOption('no-test', [
             'boolean' => true,
-            'help' => 'Do not generate a test skeleton.'
+            'help' => 'Do not generate a test skeleton.',
         ]);
 
         return $parser;
