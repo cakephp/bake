@@ -28,7 +28,9 @@ class BakeShellTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = ['core.Comments'];
+    public $fixtures = [
+        'core.Comments',
+    ];
 
     /**
      * @var ConsoleOutput
@@ -62,7 +64,7 @@ class BakeShellTest extends TestCase
             ->setConstructorArgs([$this->io])
             ->getMock();
 
-        Configure::write('App.namespace', 'Bake\Test\App');
+        $this->setAppNamespace('Bake\Test\App');
     }
 
     /**
@@ -73,6 +75,7 @@ class BakeShellTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
+        $this->removePlugins(['BakeTest']);
         unset($this->Shell);
     }
 
@@ -324,6 +327,8 @@ class BakeShellTest extends TestCase
      */
     public function testBakeAllNonInteractive()
     {
+        $this->setAppNamespace('App');
+
         $this->Shell->loadTasks();
 
         $path = APP;

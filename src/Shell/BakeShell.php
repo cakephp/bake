@@ -42,13 +42,6 @@ class BakeShell extends Shell
     use ConventionsTrait;
 
     /**
-     * The connection being used.
-     *
-     * @var string
-     */
-    public $connection = 'default';
-
-    /**
      * Assign $this->connection to the active task if a connection param is set.
      *
      * @return void

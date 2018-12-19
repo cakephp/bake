@@ -38,7 +38,6 @@ class PluginTask extends BakeTask
      */
     public $bootstrap = null;
 
-
     /**
      * Plugin path.
      *

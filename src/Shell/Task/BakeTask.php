@@ -47,20 +47,6 @@ class BakeTask extends Shell
     public $pathFragment;
 
     /**
-     * Name of plugin
-     *
-     * @var string
-     */
-    public $plugin = null;
-
-    /**
-     * The db connection being used for baking
-     *
-     * @var string
-     */
-    public $connection = null;
-
-    /**
      * Disable caching and enable debug for baking.
      * This forces the most current database schema to be used.
      *

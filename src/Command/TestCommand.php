@@ -13,10 +13,11 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
-namespace Bake\Shell\Task;
+namespace Bake\Command;
 
 use Bake\Utility\TemplateRenderer;
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Controller\Controller;
@@ -32,10 +33,9 @@ use Cake\Utility\Inflector;
 use ReflectionClass;
 
 /**
- * Task class for creating and updating test files.
- *
+ * Command class for generating test files.
  */
-class TestTask extends BakeTask
+class TestCommand extends BakeCommand
 {
     /**
      * class types that methods can be generated for
@@ -87,101 +87,105 @@ class TestTask extends BakeTask
     protected $_fixtures = [];
 
     /**
-     * Execution method always used for tasks
+     * Execute test generation
      *
-     * @param string|null $type Class type.
-     * @param string|null $name Name.
-     * @return array|null
+     * @param \Cake\Console\Arguments $args The command arguments.
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return null|int The exit code or null for success
      */
-    public function main($type = null, $name = null)
+    public function execute(Arguments $args, ConsoleIo $io)
     {
-        parent::main();
-
-        if (empty($type) && empty($name)) {
-            $this->outputTypeChoices();
+        $this->extractCommonProperties($args);
+        if (!$args->hasArgument('type') && !$args->hasArgument('name')) {
+            $this->outputTypeChoices($io);
 
             return null;
         }
+        $type = $this->normalize($args->getArgument('type'));
 
-        $type = $this->normalize($type);
+        if ($args->getOption('all')) {
+            $this->_bakeAll($type, $args, $io);
+
+            return null;
+        }
+        if (!$args->hasArgument('name')) {
+            $this->outputClassChoices($type, $io);
+
+            return null;
+        }
+        $name = $args->getArgument('name');
         $name = $this->_getName($name);
 
-        if ($this->param('all')) {
-            $this->_bakeAll($type);
-
-            return null;
-        }
-
-        if (empty($name)) {
-            return $this->outputClassChoices($type);
-        }
-
-        if ($this->bake($type, $name)) {
-            $this->out('<success>Done</success>');
+        if ($this->bake($type, $name, $args, $io)) {
+            $io->out('<success>Done</success>');
         }
     }
 
     /**
      * Output a list of class types you can bake a test for.
      *
+     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function outputTypeChoices()
+    protected function outputTypeChoices($io)
     {
-        $this->out(
+        $io->out(
             'You must provide a class type to bake a test for. The valid types are:',
             2
         );
         $i = 0;
         foreach ($this->classTypes as $option => $package) {
-            $this->out(++$i . '. ' . $option);
+            $io->out(++$i . '. ' . $option);
         }
-        $this->out('');
-        $this->out('Re-run your command as `cake bake <type> <classname>`');
+        $io->out('');
+        $io->out('Re-run your command as `cake bake <type> <classname>`');
     }
 
     /**
      * Output a list of possible classnames you might want to generate a test for.
      *
      * @param string $typeName The typename to get classes for.
-     * @return array
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return void
      */
-    public function outputClassChoices($typeName)
+    protected function outputClassChoices($typeName, $io)
     {
         $type = $this->mapType($typeName);
-        $this->out(
+        $io->out(
             'You must provide a class to bake a test for. Some possible options are:',
             2
         );
         $options = $this->_getClassOptions($type);
         $i = 0;
         foreach ($options as $option) {
-            $this->out(++$i . '. ' . $option);
+            $io->out(++$i . '. ' . $option);
         }
-        $this->out('');
-        $this->out('Re-run your command as `cake bake ' . $typeName . ' <classname>`');
-
-        return $options;
+        $io->out('');
+        $io->out('Re-run your command as `cake bake ' . $typeName . ' <classname>`');
     }
 
     /**
+     * Bake all tests for one class type.
+     *
      * @param string $type The typename to get bake all classes for.
+     * @param \Cake\Console\Arguments $args Arguments
+     * @param \Cake\Console\ConsoleIo $io ConsoleIo instance
      * @return void
      */
-    protected function _bakeAll($type)
+    protected function _bakeAll($type, $args, $io)
     {
         $mappedType = $this->mapType($type);
         $classes = $this->_getClassOptions($mappedType);
 
         foreach ($classes as $class) {
-            if ($this->bake($type, $class)) {
-                $this->out('<success>Done - ' . $class . '</success>');
+            if ($this->bake($type, $class, $args, $io)) {
+                $io->out('<success>Done - ' . $class . '</success>');
             } else {
-                $this->out('<error>Failed - ' . $class . '</error>');
+                $io->out('<error>Failed - ' . $class . '</error>');
             }
         }
 
-        $this->out('<info>Bake finished</info>');
+        $io->out('<info>Bake finished</info>');
     }
 
     /**
@@ -212,23 +216,26 @@ class TestTask extends BakeTask
      *
      * @param string $type Type of object to bake test case for ie. Model, Controller
      * @param string $className the 'cake name' for the class ie. Posts for the PostsController
+     * @param \Cake\Console\Arguments $args Arguments
+     * @param \Cake\Console\ConsoleIo $io ConsoleIo instance
      * @return string|bool
      */
-    public function bake($type, $className)
+    public function bake($type, $className, $args, $io)
     {
         $type = $this->normalize($type);
         if (!isset($this->classSuffixes[$type]) || !isset($this->classTypes[$type])) {
             return false;
         }
 
-        $fullClassName = $this->getRealClassName($type, $className);
+        $prefix = $this->getPrefix($args);
+        $fullClassName = $this->getRealClassName($type, $className, $prefix);
 
-        if (empty($this->params['no-fixture'])) {
-            if (!empty($this->params['fixtures'])) {
-                $fixtures = array_map('trim', explode(',', $this->params['fixtures']));
+        if (!$args->getOption('no-fixture')) {
+            if (strlen($args->getOption('fixtures'))) {
+                $fixtures = array_map('trim', explode(',', $args->getOption('fixtures')));
                 $this->_fixtures = array_filter($fixtures);
             } elseif ($this->typeCanDetectFixtures($type) && class_exists($fullClassName)) {
-                $this->out('Bake is detecting possible fixtures...');
+                $io->out('Bake is detecting possible fixtures...');
                 $testSubject = $this->buildTestSubject($type, $fullClassName);
                 $this->generateFixtureList($testSubject);
             }
@@ -253,9 +260,9 @@ class TestTask extends BakeTask
 
         $properties = $this->generateProperties($type, $subject, $fullClassName);
 
-        $this->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, Shell::QUIET);
+        $io->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, Shell::QUIET);
 
-        $renderer = new TemplateRenderer($this->param('theme'));
+        $renderer = new TemplateRenderer($this->theme);
         $renderer->set('fixtures', $this->_fixtures);
         $renderer->set('plugin', $this->plugin);
         $renderer->set(compact(
@@ -279,8 +286,8 @@ class TestTask extends BakeTask
 
         $filename = $this->testCaseFileName($type, $fullClassName);
         $emptyFile = $this->getPath() . $this->getSubspacePath($type) . DS . 'empty';
-        $this->_deleteEmptyFile($emptyFile);
-        if ($this->createFile($filename, $out)) {
+        $this->deleteEmptyFile($emptyFile, $io);
+        if ($io->createFile($filename, $out)) {
             return $out;
         }
 
@@ -337,9 +344,10 @@ class TestTask extends BakeTask
      *
      * @param string $type The Type of object you are generating tests for eg. controller.
      * @param string $class the Classname of the class the test is being generated for.
+     * @param string|null $prefix The namespace prefix if any
      * @return string Real class name
      */
-    public function getRealClassName($type, $class)
+    public function getRealClassName($type, $class, $prefix = null)
     {
         $namespace = Configure::read('App.namespace');
         if ($this->plugin) {
@@ -350,7 +358,6 @@ class TestTask extends BakeTask
         if ($suffix && strpos($class, $suffix) === false) {
             $class .= $suffix;
         }
-        $prefix = $this->_getPrefix();
         if (in_array($type, ['Controller', 'Cell'], true) && $prefix) {
             $subSpace .= '\\' . str_replace('/', '\\', $prefix);
         }
@@ -516,8 +523,8 @@ class TestTask extends BakeTask
         $pre = $construct = $post = '';
         if ($type === 'Table') {
             $tableName = str_replace('Table', '', $className);
-            // phpcs:ignore
-            $pre = "\$config = TableRegistry::getTableLocator()->exists('{$tableName}') ? [] : ['className' => {$className}::class];";
+            $pre = "\$config = TableRegistry::getTableLocator()->exists('{$tableName}')" .
+                "? [] : ['className' => {$className}::class];";
             $construct = "TableRegistry::getTableLocator()->get('{$tableName}', \$config);";
         }
         if ($type === 'Behavior' || $type === 'Entity' || $type === 'Form') {
@@ -689,13 +696,14 @@ class TestTask extends BakeTask
     }
 
     /**
-     * Gets the option parser instance and configures it.
+     * Build the option parser
      *
+     * @param \Cake\Console\ConsoleOptionParser $parser Option parser to update
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser(): ConsoleOptionParser
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = parent::getOptionParser();
+        $parser = $this->_setCommonOptions($parser);
 
         $types = array_keys($this->classTypes);
         $types = array_merge($types, array_map([$this, 'underscore'], $types));

@@ -1,13 +1,13 @@
 <?php
-namespace App\Test\TestCase\Shell\Helper;
+namespace Bake\Test\App\Test\TestCase\Shell\Helper;
 
-use App\Shell\Helper\ExampleHelper;
+use Bake\Test\App\Shell\Helper\ExampleHelper;
 use Cake\Console\ConsoleIo;
 use Cake\TestSuite\Stub\ConsoleOutput;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Shell\Helper\ExampleHelper Test Case
+ * Bake\Test\App\Shell\Helper\ExampleHelper Test Case
  */
 class ExampleHelperTest extends TestCase
 {
@@ -29,7 +29,7 @@ class ExampleHelperTest extends TestCase
     /**
      * Test subject
      *
-     * @var \App\Shell\Helper\ExampleHelper
+     * @var \Bake\Test\App\Shell\Helper\ExampleHelper
      */
     public $Example;
 
