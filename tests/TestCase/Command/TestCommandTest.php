@@ -398,9 +398,9 @@ class TestCommandTest extends TestCase
     public function testBakeCommandTest()
     {
         $this->generatedFiles = [
-            ROOT . 'tests/TestCase/Command/ExampleCommandTest.php',
+            ROOT . 'tests/TestCase/Command/OtherExampleCommandTest.php',
         ];
-        $this->exec('bake test command Example');
+        $this->exec('bake test command OtherExample');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);

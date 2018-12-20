@@ -1,14 +1,14 @@
 <?php
 namespace Bake\Test\App\Test\TestCase\Command;
 
-use Bake\Test\App\Command\ExampleCommand;
+use Bake\Test\App\Command\OtherExampleCommand;
 use Cake\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * Bake\Test\App\Command\ExampleCommand Test Case
+ * Bake\Test\App\Command\OtherExampleCommand Test Case
  */
-class ExampleCommandTest extends TestCase
+class OtherExampleCommandTest extends TestCase
 {
     use ConsoleIntegrationTestTrait;
 
@@ -24,21 +24,11 @@ class ExampleCommandTest extends TestCase
     }
 
     /**
-     * Test buildOptionParser method
+     * Test initial setup
      *
      * @return void
      */
-    public function testBuildOptionParser()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test execute method
-     *
-     * @return void
-     */
-    public function testExecute()
+    public function testInitialization()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
