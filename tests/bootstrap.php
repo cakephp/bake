@@ -45,6 +45,7 @@ define('CACHE', TMP . 'cache' . DS);
 
 Configure::write('debug', true);
 Configure::write('App', [
+    'debug' => true,
     'namespace' => 'App',
     'paths' => [
         'plugins' => [ROOT . 'Plugin' . DS],
