@@ -18,6 +18,7 @@ namespace Bake\Command;
 use Bake\Utility\CommonOptionsTrait;
 use Cake\Console\Arguments;
 use Cake\Console\Command;
+use Cake\Console\ConsoleIo;
 use Cake\Core\ConventionsTrait;
 
 /**
@@ -30,6 +31,13 @@ abstract class BakeCommand extends Command
 {
     use CommonOptionsTrait;
     use ConventionsTrait;
+
+    /**
+     * The pathFragment appended to the plugin/app path.
+     *
+     * @var string
+     */
+    protected $pathFragment;
 
     /**
      * Handles splitting up the plugin prefix and classname.
@@ -100,7 +108,7 @@ abstract class BakeCommand extends Command
     {
         if (file_exists($path)) {
             unlink($path);
-            $io->out(sprintf('<success>Deleted</success> `%s`', $path), 1, Shell::QUIET);
+            $io->out(sprintf('<success>Deleted</success> `%s`', $path), 1, ConsoleIo::QUIET);
         }
     }
 }
