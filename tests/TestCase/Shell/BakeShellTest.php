@@ -259,8 +259,6 @@ class BakeShellTest extends TestCase
     {
         $this->Shell->loadTasks();
         $expected = [
-            'Bake.Command',
-            'Bake.Component',
             'Bake.Fixture',
             'Bake.Form',
             'Bake.Helper',

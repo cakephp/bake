@@ -34,6 +34,7 @@ class SimpleBakeTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Simple' . DS;
+        $this->markTestSkipped('Skipping until this can be updated with a non-core task');
     }
 
     /**
@@ -122,8 +123,6 @@ class SimpleBakeTaskTest extends TestCase
     public function subclassProvider()
     {
         return [
-            ['Bake\Shell\Task\BehaviorTask'],
-            ['Bake\Shell\Task\ComponentTask'],
             ['Bake\Shell\Task\FormTask'],
             ['Bake\Shell\Task\HelperTask'],
             ['Bake\Shell\Task\ShellTask'],
