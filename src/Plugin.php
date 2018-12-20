@@ -17,6 +17,8 @@ namespace Bake;
 
 use Bake\Command\BehaviorCommand;
 use Bake\Command\CellCommand;
+use Bake\Command\CommandCommand;
+use Bake\Command\ComponentCommand;
 use Bake\Command\TestCommand;
 use Bake\Shell\BakeShell;
 use Cake\Console\CommandCollection;
@@ -67,6 +69,8 @@ class Plugin extends BasePlugin
     {
         $commands->add('bake behavior', BehaviorCommand::class);
         $commands->add('bake cell', CellCommand::class);
+        $commands->add('bake command', CommandCommand::class);
+        $commands->add('bake component', ComponentCommand::class);
         $commands->add('bake test', TestCommand::class);
 
         // Add shell for incomplete tasks and backwards compatibility discover.
