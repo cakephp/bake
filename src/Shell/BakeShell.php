@@ -133,6 +133,8 @@ class BakeShell extends Shell
     {
         $tasks = [];
 
+        // TODO Read from commands from collection and add
+        // command discovery to the plugin console hook.
         foreach (Plugin::loaded() as $plugin) {
             $tasks = $this->_findTasks(
                 $tasks,

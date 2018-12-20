@@ -24,11 +24,21 @@ class ExampleCommandTest extends TestCase
     }
 
     /**
-     * Test initial setup
+     * Test buildOptionParser method
      *
      * @return void
      */
-    public function testInitialization()
+    public function testBuildOptionParser()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test execute method
+     *
+     * @return void
+     */
+    public function testExecute()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

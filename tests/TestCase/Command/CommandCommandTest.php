@@ -13,16 +13,16 @@ declare(strict_types=1);
  * @since         1.7.4
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Console\Shell;
+use Cake\Console\Command;
 use Cake\Core\Plugin;
 
 /**
- * CellTaskTest class
+ * CommandCommandTest class
  */
-class CommandTaskTest extends TestCase
+class CommandCommandTest extends TestCase
 {
     /**
      * setup method
@@ -33,6 +33,8 @@ class CommandTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Command' . DS;
+        $this->setAppNamespace('Bake\Test\App');
+        $this->useCommandRunner();
     }
 
     /**
@@ -48,7 +50,7 @@ class CommandTaskTest extends TestCase
         ];
         $this->exec('bake command Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class ExampleCommand extends Command', $this->generatedFiles[0]);
     }
@@ -69,7 +71,7 @@ class CommandTaskTest extends TestCase
         ];
         $this->exec('bake command TestBake.Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileContains('namespace TestBake\Command;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleCommand extends Command', $this->generatedFiles[0]);
     }
