@@ -22,7 +22,7 @@ class ExampleCell extends Cell
      *
      * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
     }
 

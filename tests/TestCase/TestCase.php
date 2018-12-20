@@ -47,14 +47,16 @@ abstract class TestCase extends BaseTestCase
     {
         parent::tearDown();
 
-        if ($this->generatedFile) {
+        if ($this->generatedFile && file_exists($this->generatedFile)) {
             unlink($this->generatedFile);
             $this->generatedFile = '';
         }
 
         if (count($this->generatedFiles)) {
             foreach ($this->generatedFiles as $file) {
-                unlink($file);
+                if (file_exists($file)) {
+                    unlink($file);
+                }
             }
             $this->generatedFiles = [];
         }

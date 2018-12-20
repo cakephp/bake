@@ -34,7 +34,7 @@ class TemplateRenderer
     /**
      * BakeView instance
      *
-     * @var \Bake\View\BakeView
+     * @var \Bake\View\BakeView|null
      */
     protected $view;
 

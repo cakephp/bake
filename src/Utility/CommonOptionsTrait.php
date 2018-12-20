@@ -51,6 +51,8 @@ trait CommonOptionsTrait
      */
     protected function extractCommonProperties(Arguments $args): void
     {
+        // These properties should ideally not exist, but until ConsoleOptionParser
+        // gets validation and transform logic they will have to stay.
         if ($args->hasOption('plugin')) {
             $plugin = $args->getOption('plugin');
             $parts = explode('/', $plugin);

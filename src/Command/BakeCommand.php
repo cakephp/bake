@@ -18,6 +18,7 @@ namespace Bake\Command;
 use Bake\Utility\CommonOptionsTrait;
 use Cake\Console\Arguments;
 use Cake\Console\Command;
+use Cake\Console\ConsoleIo;
 use Cake\Core\ConventionsTrait;
 
 /**
@@ -30,6 +31,13 @@ abstract class BakeCommand extends Command
 {
     use CommonOptionsTrait;
     use ConventionsTrait;
+
+    /**
+     * The pathFragment appended to the plugin/app path.
+     *
+     * @var string
+     */
+    protected $pathFragment;
 
     /**
      * Handles splitting up the plugin prefix and classname.
@@ -69,6 +77,27 @@ abstract class BakeCommand extends Command
     }
 
     /**
+     * Gets the path for output. Checks the plugin property
+     * and returns the correct path.
+     *
+     * @param \Cake\Console\Arguments $args Arguments instance to read the prefix option from.
+     * @return string Path to output.
+     */
+    public function getPath(Arguments $args)
+    {
+        $path = APP . $this->pathFragment;
+        if ($this->plugin) {
+            $path = $this->_pluginPath($this->plugin) . 'src/' . $this->pathFragment;
+        }
+        $prefix = $this->getPrefix($args);
+        if ($prefix) {
+            $path .= $prefix . DS;
+        }
+
+        return str_replace('/', DS, $path);
+    }
+
+    /**
      * Delete empty file in a given path
      *
      * @param string $path Path to folder which contains 'empty' file.
@@ -79,7 +108,7 @@ abstract class BakeCommand extends Command
     {
         if (file_exists($path)) {
             unlink($path);
-            $io->out(sprintf('<success>Deleted</success> `%s`', $path), 1, Shell::QUIET);
+            $io->out(sprintf('<success>Deleted</success> `%s`', $path), 1, ConsoleIo::QUIET);
         }
     }
 }

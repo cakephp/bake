@@ -13,18 +13,17 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Shell\Task;
+namespace Bake\Command;
 
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
-use Cake\View\Cell;
 
 /**
  * Task for creating cells.
- *
- * @property \Bake\Shell\Task\TestTask $Test
  */
-class CellTask extends SimpleBakeTask
+class CellCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
@@ -60,11 +59,12 @@ class CellTask extends SimpleBakeTask
     /**
      * Get template data.
      *
+     * @param \Cake\Console\Arguments $arguments Arguments object.
      * @return array
      */
-    public function templateData()
+    public function templateData(Arguments $arguments): array
     {
-        $prefix = $this->_getPrefix();
+        $prefix = $this->getPrefix($arguments);
         if ($prefix) {
             $prefix = '\\' . str_replace('/', '\\', $prefix);
         }
@@ -81,44 +81,48 @@ class CellTask extends SimpleBakeTask
      * Bake the Cell class and template file.
      *
      * @param string $name The name of the cell to make.
-     * @return string
+     * @param \Cake\Console\Arguments $args The console arguments
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return void
      */
-    public function bake($name)
+    public function bake(string $name, Arguments $args, ConsoleIo $io)
     {
-        $this->bakeTemplate($name);
+        $this->bakeTemplate($name, $args, $io);
 
-        return parent::bake($name);
+        parent::bake($name, $args, $io);
     }
 
     /**
      * Bake an empty file for a cell.
      *
      * @param string $name The name of the cell a template is needed for.
+     * @param \Cake\Console\Arguments $args The console arguments
+     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bakeTemplate($name)
+    protected function bakeTemplate($name, $args, $io)
     {
         $restore = $this->pathFragment;
 
-        $this->pathFragment = '../templates/' . Cell::TEMPLATE_FOLDER . '/';
-        $path = $this->getPath();
-        $path .= implode(DS, [$name, 'display.php']);
+        $this->pathFragment = 'Template/Cell/';
+        $path = $this->getPath($args);
+        $path .= implode(DS, [$name, 'display.ctp']);
 
         $this->pathFragment = $restore;
 
-        $this->createFile($path, '');
+        $io->createFile($path, '');
     }
 
     /**
      * Gets the option parser instance and configures it.
      *
+     * @param \Cake\Console\ConsoleOptionParser $parser Parser instance
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser(): ConsoleOptionParser
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = parent::getOptionParser();
-        $parser
-        ->addOption('prefix', [
+        $parser = parent::buildOptionParser($parser);
+        $parser->addOption('prefix', [
             'help' => 'The namespace prefix to use.',
         ]);
 

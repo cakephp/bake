@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 namespace Bake;
 
+use Bake\Command\CellCommand;
 use Bake\Command\TestCommand;
 use Bake\Shell\BakeShell;
 use Cake\Console\CommandCollection;
@@ -65,6 +66,7 @@ class Plugin extends BasePlugin
     {
         // Temporary until cakephp/cakephp#12824 is merged
         $commands->add('bake:test', TestCommand::class);
+        $commands->add('bake:cell', CellCommand::class);
 
         // Add shell for incomplete tasks and backwards compatibility discover.
         $commands->add('bake', BakeShell::class);
