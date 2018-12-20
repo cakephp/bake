@@ -123,7 +123,7 @@ class CellCommand extends SimpleBakeCommand
     {
         $parser = parent::buildOptionParser($parser);
         $parser->addOption('prefix', [
-            'help' => 'The namespace prefix to use.'
+            'help' => 'The namespace prefix to use.',
         ]);
 
         return $parser;

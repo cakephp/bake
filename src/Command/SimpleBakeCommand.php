@@ -15,7 +15,6 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Bake\Command\TestCommand;
 use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;

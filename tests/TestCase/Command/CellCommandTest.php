@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -16,7 +17,6 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Shell;
-use Cake\Core\Configure;
 use Cake\Core\Plugin;
 
 /**
