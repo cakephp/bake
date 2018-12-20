@@ -16,13 +16,13 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Console\Shell;
+use Cake\Console\Command;
 use Cake\Core\Plugin;
 
 /**
- * CellTaskTest class
+ * CellCommandTest class
  */
-class CellTaskTest extends TestCase
+class CellCommandTest extends TestCase
 {
     /**
      * setup method
@@ -50,9 +50,9 @@ class CellTaskTest extends TestCase
             ROOT . 'tests/TestCase/View/Cell/ExampleCellTest.php',
             APP . 'Template/Cell/Example/display.ctp',
         ];
-        $this->exec('bake:cell Example');
+        $this->exec('bake cell Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
     }
@@ -72,9 +72,9 @@ class CellTaskTest extends TestCase
             $path . 'tests/TestCase/View/Cell/ExampleCellTest.php',
             $path . 'src/Template/Cell/Example/display.ctp',
         ];
-        $this->exec('bake:cell TestBake.Example');
+        $this->exec('bake cell TestBake.Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileContains('namespace TestBake\View\Cell;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
     }
@@ -94,7 +94,7 @@ class CellTaskTest extends TestCase
             $path . 'tests/TestCase/View/Cell/ExampleCellTest.php',
             $path . 'src/Template/Cell/Example/display.ctp',
         ];
-        $this->exec('bake:cell --plugin TestBake Example');
+        $this->exec('bake cell --plugin TestBake Example');
 
         $this->assertFilesExist($this->generatedFiles);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
@@ -112,9 +112,9 @@ class CellTaskTest extends TestCase
             ROOT . 'tests/TestCase/View/Cell/Admin/ExampleCellTest.php',
             APP . 'Template/Cell/Admin/Example/display.ctp',
         ];
-        $this->exec('bake:cell --prefix Admin Example');
+        $this->exec('bake cell --prefix Admin Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('namespace Bake\Test\App\View\Cell\Admin;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
@@ -135,9 +135,9 @@ class CellTaskTest extends TestCase
             $path . 'tests/TestCase/View/Cell/Admin/ExampleCellTest.php',
             $path . 'src/Template/Cell/Admin/Example/display.ctp',
         ];
-        $this->exec('bake:cell --prefix Admin TestBake.Example');
+        $this->exec('bake cell --prefix Admin TestBake.Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileContains('namespace TestBake\View\Cell\Admin;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
     }

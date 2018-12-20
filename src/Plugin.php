@@ -65,10 +65,9 @@ class Plugin extends BasePlugin
      */
     public function console(CommandCollection $commands): CommandCollection
     {
-        // Temporary until cakephp/cakephp#12824 is merged
-        $commands->add('bake:test', TestCommand::class);
-        $commands->add('bake:cell', CellCommand::class);
-        $commands->add('bake:behavior', BehaviorCommand::class);
+        $commands->add('bake behavior', BehaviorCommand::class);
+        $commands->add('bake cell', CellCommand::class);
+        $commands->add('bake test', TestCommand::class);
 
         // Add shell for incomplete tasks and backwards compatibility discover.
         $commands->add('bake', BakeShell::class);

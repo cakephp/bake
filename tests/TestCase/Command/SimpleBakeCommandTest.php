@@ -47,9 +47,9 @@ class SimpleBakeCommandTest extends TestCase
             APP . 'Model/Behavior/ExampleBehavior.php',
             ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
         ];
-        $this->exec('bake:behavior Example');
+        $this->exec('bake behavior Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class ExampleBehavior extends Behavior', $this->generatedFiles[0]);
     }
@@ -65,9 +65,9 @@ class SimpleBakeCommandTest extends TestCase
             APP . 'Model/Behavior/ExampleBehavior.php',
             ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
         ];
-        $this->exec('bake:behavior Example');
+        $this->exec('bake behavior Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
 
         $result = file_get_contents($this->generatedFiles[0]);
@@ -82,9 +82,9 @@ class SimpleBakeCommandTest extends TestCase
     public function testBakeTestNoTest()
     {
         $this->generatedFile = APP . 'Model/Behavior/ExampleBehavior.php';
-        $this->exec('bake:behavior --no-test Example');
+        $this->exec('bake behavior --no-test Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php');
         $this->assertFileContains('class ExampleBehavior extends Behavior', $this->generatedFile);
     }
@@ -103,9 +103,9 @@ class SimpleBakeCommandTest extends TestCase
             $path . 'src/Model/Behavior/ExampleBehavior.php',
             $path . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
         ];
-        $this->exec('bake:behavior TestBake.Example');
+        $this->exec('bake behavior TestBake.Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
 
         $result = file_get_contents($this->generatedFiles[0]);
