@@ -749,20 +749,32 @@ class ModelTask extends BakeTask
             }
         }
 
-        if (in_array($fieldName, $primaryKey)) {
-            $rules['allowEmpty'] = ["'create'"];
-        } elseif ($metaData['null'] === true) {
-            $rules['allowEmpty'] = [];
-        } else {
-            $rules['requirePresence'] = ["'create'"];
-            $rules['notEmpty'] = [];
-        }
-
         $validation = [];
         foreach ($rules as $rule => $args) {
             $validation[$rule] = [
                 'rule' => $rule,
                 'args' => $args
+            ];
+        }
+
+        if (in_array($fieldName, $primaryKey)) {
+            $validation['allowEmpty'] = [
+                'rule' => 'allowEmpty' . $this->getEmptyMethodType($fieldName, $metaData),
+                'args' => ["'create'"],
+            ];
+        } elseif ($metaData['null'] === true) {
+            $validation['allowEmpty'] = [
+                'rule' => 'allowEmpty' . $this->getEmptyMethodType($fieldName, $metaData),
+                'args' => [],
+            ];
+        } else {
+            $validation['requirePresence'] = [
+                'rule' => 'requirePresence',
+                'args' => ["'create'"],
+            ];
+            $validation['notEmpty'] = [
+                'rule' => 'notEmpty' . $this->getEmptyMethodType($fieldName, $metaData),
+                'args' => [],
             ];
         }
 
@@ -779,6 +791,27 @@ class ModelTask extends BakeTask
         }
 
         return $validation;
+    }
+
+    protected function getEmptyMethodType($fieldName, $metaData)
+    {
+        switch ($metaData['type']) {
+            case 'date':
+                return 'Date';
+
+            case 'time':
+                return 'Time';
+
+            case 'datetime':
+            case 'timestamp':
+                return 'DateTime';
+        }
+
+        if (preg_match('/file|image/', $fieldName)) {
+            return 'File';
+        }
+
+        return 'String';
     }
 
     /**

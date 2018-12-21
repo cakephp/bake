@@ -53,12 +53,12 @@ class ProductVersionsTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->dateTime('version')
             ->requirePresence('version', 'create')
-            ->notEmpty('version');
+            ->notEmptyDateTime('version');
 
         return $validator;
     }
