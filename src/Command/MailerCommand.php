@@ -61,13 +61,13 @@ class MailerCommand extends SimpleBakeCommand
      * @param string $name The name of the mailer to make.
      * @param \Cake\Console\Arguments $args The console arguments
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return string
+     * @return void
      */
     public function bake(string $name, Arguments $args, ConsoleIo $io)
     {
         $this->bakeLayouts($name, $args, $io);
 
-        return parent::bake($name, $args, $io);
+        parent::bake($name, $args, $io);
     }
 
     /**
