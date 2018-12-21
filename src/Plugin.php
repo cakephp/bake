@@ -22,6 +22,7 @@ use Bake\Command\ComponentCommand;
 use Bake\Command\FormCommand;
 use Bake\Command\HelperCommand;
 use Bake\Command\MailerCommand;
+use Bake\Command\MiddlewareCommand;
 use Bake\Command\TestCommand;
 use Bake\Shell\BakeShell;
 use Cake\Console\CommandCollection;
@@ -77,6 +78,7 @@ class Plugin extends BasePlugin
         $commands->add('bake form', FormCommand::class);
         $commands->add('bake helper', HelperCommand::class);
         $commands->add('bake mailer', MailerCommand::class);
+        $commands->add('bake middleware', MiddlewareCommand::class);
         $commands->add('bake test', TestCommand::class);
 
         // Add shell for incomplete tasks and backwards compatibility discover.

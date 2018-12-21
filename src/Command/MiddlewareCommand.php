@@ -13,14 +13,12 @@ declare(strict_types=1);
  * @since         1.3.6
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Shell\Task;
+namespace Bake\Command;
 
 /**
  * Middleware code generator.
- *
- * @property \Bake\Shell\Task\TestTask $Test
  */
-class MiddlewareTask extends SimpleBakeTask
+class MiddlewareCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
