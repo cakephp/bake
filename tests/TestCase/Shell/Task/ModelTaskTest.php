@@ -1097,7 +1097,7 @@ class ModelTaskTest extends TestCase
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => ['rule' => 'notEmptyString', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
             ],
             'parent_id' => [
@@ -1212,7 +1212,7 @@ class ModelTaskTest extends TestCase
             ],
             'body' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmptyString' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
             ],
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
