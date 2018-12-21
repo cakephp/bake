@@ -9,14 +9,18 @@ use Bake\Shell\Task\SimpleBakeTask;
  */
 class CustomControllerTask extends SimpleBakeTask
 {
+    public $pathFragment = 'Controller/';
+
     public function name()
     {
-        return 'CustomController';
+        return 'Controller';
     }
+
     public function fileName($name)
     {
         return $name . 'CustomController.php';
     }
+
     public function template()
     {
         return 'CustomController';
