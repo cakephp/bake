@@ -126,8 +126,8 @@ class SimpleBakeCommandTest extends TestCase
             ['Bake\Command\FormCommand'],
             ['Bake\Command\HelperCommand'],
             ['Bake\Command\MiddlewareCommand'],
+            ['Bake\Command\ShellHelperCommand'],
             // ['Bake\Shell\Task\ShellTask'],
-            // ['Bake\Shell\Task\ShellHelperTask'],
             // ['Bake\Shell\Task\TaskTask'],
         ];
     }
