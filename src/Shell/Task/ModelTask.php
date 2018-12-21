@@ -793,6 +793,13 @@ class ModelTask extends BakeTask
         return $validation;
     }
 
+    /**
+     * Get the type specific allowempty/notempty method suffix.
+     *
+     * @param string $fieldName Field name.
+     * @param array $metaData Field meta data.
+     * @return string
+     */
     protected function getEmptyMethodType($fieldName, $metaData)
     {
         switch ($metaData['type']) {
