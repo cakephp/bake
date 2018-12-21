@@ -1523,6 +1523,10 @@ class ModelTaskTest extends TestCase
                             'types' => ["'image/jpeg'"]
                         ]
                     ]
+                ],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyFile',
+                    'args' => [],
                 ]
             ]
         ];

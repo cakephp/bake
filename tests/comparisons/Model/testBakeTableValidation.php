@@ -69,7 +69,8 @@ class BakeArticlesTable extends Table
 
         $validator
             ->uploadError('image', true)
-            ->uploadedFile('image', ['optional' => true, 'types' => ['image/jpeg']]);
+            ->uploadedFile('image', ['optional' => true, 'types' => ['image/jpeg']])
+            ->allowEmptyFile('image');
 
         return $validator;
     }
