@@ -951,36 +951,36 @@ class ModelTaskTest extends TestCase
             'bake_user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []]
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []]
             ],
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
             ],
             'body' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmptyString' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
             ],
             'rating' => [
                 'numeric' => ['rule' => 'numeric', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'score' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmptyString' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
             ]
         ];
         $this->assertEquals($expected, $result);
@@ -991,25 +991,25 @@ class ModelTaskTest extends TestCase
             'bake_article_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []]
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []]
             ],
             'bake_user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []]
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []]
             ],
             'comment' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmptyString' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
             ],
             'published' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [1]],
-                'allowEmptyString' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
             ],
             'otherid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmptyString' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
             ]
         ];
         $this->assertEquals($expected, $result);
@@ -1092,21 +1092,21 @@ class ModelTaskTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmptyString' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []],
+                'allowEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
             ],
             'parent_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmptyString' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
             ],
             'depth' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmptyString' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1207,7 +1207,7 @@ class ModelTaskTest extends TestCase
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
             ],
             'body' => [
@@ -1216,21 +1216,21 @@ class ModelTaskTest extends TestCase
             ],
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmptyString' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
             ],
             'rating' => [
                 'numeric' => ['rule' => 'numeric', 'args' => []],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'score' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
-                'notEmptyString' => ['rule' => 'notEmptyString', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ]
         ];
