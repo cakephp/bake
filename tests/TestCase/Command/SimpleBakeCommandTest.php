@@ -13,17 +13,16 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Console\Shell;
-use Cake\Core\Configure;
+use Cake\Console\Command;
 use Cake\Core\Plugin;
 
 /**
- * SimpleBakeTaskTest class
+ * SimpleBakeCommandTest class
  */
-class SimpleBakeTaskTest extends TestCase
+class SimpleBakeCommandTest extends TestCase
 {
     /**
      * setup method
@@ -34,7 +33,8 @@ class SimpleBakeTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Simple' . DS;
-        $this->markTestSkipped('Skipping until this can be updated with a non-core task');
+        $this->useCommandRunner();
+        $this->setAppNamespace('Bake\Test\App');
     }
 
     /**
@@ -50,7 +50,7 @@ class SimpleBakeTaskTest extends TestCase
         ];
         $this->exec('bake behavior Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class ExampleBehavior extends Behavior', $this->generatedFiles[0]);
     }
@@ -62,15 +62,13 @@ class SimpleBakeTaskTest extends TestCase
      */
     public function testBake()
     {
-        Configure::write('App.namespace', 'Bake\Test\App');
-
         $this->generatedFiles = [
             APP . 'Model/Behavior/ExampleBehavior.php',
             ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
         ];
         $this->exec('bake behavior Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
 
         $result = file_get_contents($this->generatedFiles[0]);
@@ -87,7 +85,7 @@ class SimpleBakeTaskTest extends TestCase
         $this->generatedFile = APP . 'Model/Behavior/ExampleBehavior.php';
         $this->exec('bake behavior --no-test Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php');
         $this->assertFileContains('class ExampleBehavior extends Behavior', $this->generatedFile);
     }
@@ -108,7 +106,7 @@ class SimpleBakeTaskTest extends TestCase
         ];
         $this->exec('bake behavior TestBake.Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
 
         $result = file_get_contents($this->generatedFiles[0]);
@@ -123,11 +121,13 @@ class SimpleBakeTaskTest extends TestCase
     public function subclassProvider()
     {
         return [
-            ['Bake\Shell\Task\FormTask'],
-            ['Bake\Shell\Task\HelperTask'],
-            ['Bake\Shell\Task\ShellTask'],
-            ['Bake\Shell\Task\ShellHelperTask'],
-            ['Bake\Shell\Task\TaskTask'],
+            ['Bake\Command\BehaviorCommand'],
+            ['Bake\Command\ComponentCommand'],
+            // ['Bake\Shell\Task\FormTask'],
+            // ['Bake\Shell\Task\HelperTask'],
+            // ['Bake\Shell\Task\ShellTask'],
+            // ['Bake\Shell\Task\ShellHelperTask'],
+            // ['Bake\Shell\Task\TaskTask'],
         ];
     }
 
@@ -139,10 +139,7 @@ class SimpleBakeTaskTest extends TestCase
      */
     public function testImplementations($class)
     {
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $task = new $class($io);
+        $task = new $class();
         $this->assertInternalType('string', $task->name());
         $this->assertInternalType('string', $task->fileName('Example'));
         $this->assertInternalType('string', $task->template());

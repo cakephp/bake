@@ -205,9 +205,6 @@ class BakeShellTest extends TestCase
             '<info>Available bake commands:</info>',
             '',
             '- all',
-            '- behavior',
-            '- command',
-            '- component',
             '- controller',
             '- custom_controller',
             '- fixture',
@@ -262,9 +259,6 @@ class BakeShellTest extends TestCase
     {
         $this->Shell->loadTasks();
         $expected = [
-            'Bake.Behavior',
-            'Bake.Command',
-            'Bake.Component',
             'Bake.Fixture',
             'Bake.Form',
             'Bake.Helper',

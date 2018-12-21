@@ -10,31 +10,29 @@ declare(strict_types=1);
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @since         1.7.4
+ * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Shell\Task;
+namespace Bake\Command;
 
 /**
- * Shell code generator.
- *
- * @property \Bake\Shell\Task\TestTask $Test
+ * Component code generator.
  */
-class CommandTask extends SimpleBakeTask
+class ComponentCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
      *
      * @var string
      */
-    public $pathFragment = 'Command/';
+    public $pathFragment = 'Controller/Component/';
 
     /**
      * {@inheritDoc}
      */
     public function name()
     {
-        return 'command';
+        return 'component';
     }
 
     /**
@@ -42,7 +40,7 @@ class CommandTask extends SimpleBakeTask
      */
     public function fileName($name)
     {
-        return $name . 'Command.php';
+        return $name . 'Component.php';
     }
 
     /**
@@ -50,6 +48,6 @@ class CommandTask extends SimpleBakeTask
      */
     public function template()
     {
-        return 'Command/command';
+        return 'Controller/component';
     }
 }

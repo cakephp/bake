@@ -73,7 +73,7 @@ class TestCommandTest extends TestCase
      */
     public function testExecuteNoArgsPrintsTypeOptions()
     {
-        $this->exec('bake:test');
+        $this->exec('bake test');
 
         $this->assertOutputContains('You must provide a class type');
         $this->assertOutputContains('1. Entity');
@@ -90,7 +90,7 @@ class TestCommandTest extends TestCase
      */
     public function testExecuteOneArgPrintsClassOptions()
     {
-        $this->exec('bake:test entity');
+        $this->exec('bake test entity');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('You must provide a class to bake');
@@ -106,7 +106,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Model/Table/TestTaskTagTableTest.php',
         ];
-        $this->exec('bake:test Table TestTaskTag');
+        $this->exec('bake test Table TestTaskTag');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -128,7 +128,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'Plugin/TestBake/tests/TestCase/Model/Table/ArticlesTableTest.php',
         ];
-        $this->exec('bake:test table TestBake.Articles');
+        $this->exec('bake test table TestBake.Articles');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -156,7 +156,7 @@ class TestCommandTest extends TestCase
             ROOT . 'tests/TestCase/Model/Table/CategoryThreadsTableTest.php',
             ROOT . 'tests/TestCase/Model/Table/TemplateTaskCommentsTableTest.php',
         ];
-        $this->exec('bake:test table --all');
+        $this->exec('bake test table --all');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -169,7 +169,7 @@ class TestCommandTest extends TestCase
      */
     public function testOutputClassOptionsForTable()
     {
-        $this->exec('bake:test table');
+        $this->exec('bake test table');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('You must provide a class to bake a test for. Some possible options are:');
@@ -189,7 +189,7 @@ class TestCommandTest extends TestCase
     public function testOutputClassOptionsForTablePlugin()
     {
         $this->loadPlugins(['BakeTest' => ['path' => ROOT . 'Plugin' . DS . 'BakeTest' . DS]]);
-        $this->exec('bake:test table --plugin BakeTest');
+        $this->exec('bake test table --plugin BakeTest');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('You must provide a class to bake a test for. Some possible options are:');
@@ -349,7 +349,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Model/Table/AuthorsTableTest.php',
         ];
-        $this->exec('bake:test table Authors --fixtures app.Posts,app.Comments,app.Users');
+        $this->exec('bake test table Authors --fixtures app.Posts,app.Comments,app.Users');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -366,7 +366,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Model/Table/AuthorsTableTest.php',
         ];
-        $this->exec('bake:test table Authors --no-fixture');
+        $this->exec('bake test table Authors --no-fixture');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -383,7 +383,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/View/Cell/ArticlesCellTest.php',
         ];
-        $this->exec('bake:test cell Articles');
+        $this->exec('bake test cell Articles');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -398,9 +398,9 @@ class TestCommandTest extends TestCase
     public function testBakeCommandTest()
     {
         $this->generatedFiles = [
-            ROOT . 'tests/TestCase/Command/ExampleCommandTest.php',
+            ROOT . 'tests/TestCase/Command/OtherExampleCommandTest.php',
         ];
-        $this->exec('bake:test command Example');
+        $this->exec('bake test command OtherExample');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -417,7 +417,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Model/Table/ArticlesTableTest.php',
         ];
-        $this->exec('bake:test table Articles');
+        $this->exec('bake test table Articles');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -434,7 +434,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Controller/PostsControllerTest.php',
         ];
-        $this->exec('bake:test controller PostsController');
+        $this->exec('bake test controller PostsController');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -451,7 +451,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Controller/Admin/PostsControllerTest.php',
         ];
-        $this->exec('bake:test controller Admin\PostsController');
+        $this->exec('bake test controller Admin\PostsController');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -468,7 +468,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Controller/Admin/PostsControllerTest.php',
         ];
-        $this->exec('bake:test controller --prefix Admin PostsController');
+        $this->exec('bake test controller --prefix Admin PostsController');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -485,7 +485,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Controller/Component/AppleComponentTest.php',
         ];
-        $this->exec('bake:test component Apple');
+        $this->exec('bake test component Apple');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -502,7 +502,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
         ];
-        $this->exec('bake:test behavior Example');
+        $this->exec('bake test behavior Example');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -519,7 +519,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/View/Helper/ExampleHelperTest.php',
         ];
-        $this->exec('bake:test helper Example');
+        $this->exec('bake test helper Example');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -536,7 +536,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Shell/ArticlesShellTest.php',
         ];
-        $this->exec('bake:test shell Articles');
+        $this->exec('bake test shell Articles');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -553,7 +553,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Shell/Task/ArticlesTaskTest.php',
         ];
-        $this->exec('bake:test task Articles');
+        $this->exec('bake test task Articles');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -570,7 +570,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Shell/Helper/ExampleHelperTest.php',
         ];
-        $this->exec('bake:test shell_helper Example');
+        $this->exec('bake test shell_helper Example');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -584,7 +584,7 @@ class TestCommandTest extends TestCase
      */
     public function testBakeUnknownClass()
     {
-        $this->exec('bake:test Foo Example');
+        $this->exec('bake test Foo Example');
 
         $this->assertExitCode(Command::CODE_ERROR);
     }
@@ -754,7 +754,7 @@ class TestCommandTest extends TestCase
         $this->generatedFiles = [
             APP . 'Plugin/TestTest/tests/TestCase/Model/Entity/ArticleTest.php',
         ];
-        $this->exec('bake:test entity --plugin TestTest Article');
+        $this->exec('bake test entity --plugin TestTest Article');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
