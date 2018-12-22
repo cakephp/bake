@@ -10,31 +10,29 @@ declare(strict_types=1);
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @since         1.1.0
+ * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Shell\Task;
+namespace Bake\Command;
 
 /**
- * ShellHelper code generator.
- *
- * @property \Bake\Shell\Task\TestTask $Test
+ * Helper code generator.
  */
-class ShellHelperTask extends SimpleBakeTask
+class HelperCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
      *
      * @var string
      */
-    public $pathFragment = 'Shell/Helper/';
+    public $pathFragment = 'View/Helper/';
 
     /**
      * {@inheritDoc}
      */
     public function name()
     {
-        return 'shell_helper';
+        return 'helper';
     }
 
     /**
@@ -50,6 +48,6 @@ class ShellHelperTask extends SimpleBakeTask
      */
     public function template()
     {
-        return 'Shell/helper';
+        return 'View/helper';
     }
 }

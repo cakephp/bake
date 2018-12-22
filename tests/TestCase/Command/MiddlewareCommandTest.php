@@ -13,10 +13,10 @@ declare(strict_types=1);
  * @since         1.3.6
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Console\Shell;
+use Cake\Console\Command;
 use Cake\Core\Plugin;
 
 /**
@@ -33,6 +33,8 @@ class MiddlewareTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Middleware' . DS;
+        $this->setAppNamespace('Bake\Test\App');
+        $this->useCommandRunner();
     }
 
     /**
@@ -45,7 +47,7 @@ class MiddlewareTaskTest extends TestCase
         $this->generatedFile = APP . 'Middleware/ExampleMiddleware.php';
         $this->exec('bake middleware example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileContains('class ExampleMiddleware', $this->generatedFile);
     }
 
@@ -62,7 +64,7 @@ class MiddlewareTaskTest extends TestCase
         $this->generatedFile = $path . 'src/Middleware/ExampleMiddleware.php';
         $this->exec('bake middleware TestBake.example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileContains('class ExampleMiddleware', $this->generatedFile);
     }
 
@@ -79,7 +81,7 @@ class MiddlewareTaskTest extends TestCase
         $this->generatedFile = $path . 'src/Middleware/ExampleMiddleware.php';
         $this->exec('bake middleware TestBake.example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));
     }
 }

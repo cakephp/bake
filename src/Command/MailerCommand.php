@@ -13,16 +13,16 @@ declare(strict_types=1);
  * @since         1.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Shell\Task;
+namespace Bake\Command;
 
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
 use Cake\Utility\Inflector;
 
 /**
  * Mailer code generator.
- *
- * @property \Bake\Shell\Task\TestTask $Test
  */
-class MailerTask extends SimpleBakeTask
+class MailerCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
@@ -59,30 +59,34 @@ class MailerTask extends SimpleBakeTask
      * Bake the Mailer class and html/text layout files.
      *
      * @param string $name The name of the mailer to make.
-     * @return string
+     * @param \Cake\Console\Arguments $args The console arguments
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return void
      */
-    public function bake($name)
+    public function bake(string $name, Arguments $args, ConsoleIo $io)
     {
-        $this->bakeLayouts($name);
+        $this->bakeLayouts($name, $args, $io);
 
-        return parent::bake($name);
+        parent::bake($name, $args, $io);
     }
 
     /**
      * Bake empty layout files for html/text emails.
      *
      * @param string $name The name of the mailer layouts are needed for.
+     * @param \Cake\Console\Arguments $args The console arguments
+     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bakeLayouts($name)
+    protected function bakeLayouts($name, $args, $io)
     {
         $restore = $this->pathFragment;
         $layoutsPath = implode(DS, ['..', 'templates', 'layout', 'email']);
 
         foreach (['html', 'text'] as $type) {
             $this->pathFragment = implode(DS, [$layoutsPath, $type, Inflector::underscore($name) . '.php']);
-            $path = $this->getPath();
-            $this->createFile($path, '');
+            $path = $this->getPath($args);
+            $io->createFile($path, '');
         }
 
         $this->pathFragment = $restore;

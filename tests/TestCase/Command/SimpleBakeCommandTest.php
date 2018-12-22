@@ -123,11 +123,12 @@ class SimpleBakeCommandTest extends TestCase
         return [
             ['Bake\Command\BehaviorCommand'],
             ['Bake\Command\ComponentCommand'],
-            // ['Bake\Shell\Task\FormTask'],
-            // ['Bake\Shell\Task\HelperTask'],
-            // ['Bake\Shell\Task\ShellTask'],
-            // ['Bake\Shell\Task\ShellHelperTask'],
-            // ['Bake\Shell\Task\TaskTask'],
+            ['Bake\Command\FormCommand'],
+            ['Bake\Command\HelperCommand'],
+            ['Bake\Command\MiddlewareCommand'],
+            ['Bake\Command\ShellHelperCommand'],
+            ['Bake\Command\ShellCommand'],
+            ['Bake\Command\TaskCommand'],
         ];
     }
 

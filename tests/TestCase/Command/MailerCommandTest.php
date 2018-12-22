@@ -13,10 +13,10 @@ declare(strict_types=1);
  * @since         1.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Console\Shell;
+use Cake\Console\Command;
 use Cake\Core\Plugin;
 
 /**
@@ -33,6 +33,8 @@ class MailerTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Mailer' . DS;
+        $this->setAppNamespace('Bake\Test\App');
+        $this->useCommandRunner();
     }
 
     /**
@@ -50,7 +52,7 @@ class MailerTaskTest extends TestCase
         ];
         $this->exec('bake mailer Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles, 'files should be created');
         $this->assertFileContains('class ExampleMailer extends Mailer', $this->generatedFiles[0]);
     }
@@ -74,7 +76,7 @@ class MailerTaskTest extends TestCase
         ];
         $this->exec('bake mailer TestBake.Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles, 'files should be created');
         $this->assertFileContains('namespace TestBake\Mailer;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleMailer extends Mailer', $this->generatedFiles[0]);
@@ -99,7 +101,7 @@ class MailerTaskTest extends TestCase
         ];
         $this->exec('bake mailer TestBake.Example');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
     }
 }

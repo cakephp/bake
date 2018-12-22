@@ -10,31 +10,29 @@ declare(strict_types=1);
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @since         1.3.6
+ * @since         1.0.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Shell\Task;
+namespace Bake\Command;
 
 /**
- * Middleware code generator.
- *
- * @property \Bake\Shell\Task\TestTask $Test
+ * Form code generator.
  */
-class MiddlewareTask extends SimpleBakeTask
+class FormCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
      *
      * @var string
      */
-    public $pathFragment = 'Middleware/';
+    public $pathFragment = 'Form/';
 
     /**
      * {@inheritDoc}
      */
     public function name()
     {
-        return 'middleware';
+        return 'form';
     }
 
     /**
@@ -42,7 +40,7 @@ class MiddlewareTask extends SimpleBakeTask
      */
     public function fileName($name)
     {
-        return $name . 'Middleware.php';
+        return $name . 'Form.php';
     }
 
     /**
@@ -50,6 +48,6 @@ class MiddlewareTask extends SimpleBakeTask
      */
     public function template()
     {
-        return 'Middleware/middleware';
+        return 'Form/form';
     }
 }

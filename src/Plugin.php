@@ -19,6 +19,13 @@ use Bake\Command\BehaviorCommand;
 use Bake\Command\CellCommand;
 use Bake\Command\CommandCommand;
 use Bake\Command\ComponentCommand;
+use Bake\Command\FormCommand;
+use Bake\Command\HelperCommand;
+use Bake\Command\MailerCommand;
+use Bake\Command\MiddlewareCommand;
+use Bake\Command\ShellCommand;
+use Bake\Command\ShellHelperCommand;
+use Bake\Command\TaskCommand;
 use Bake\Command\TestCommand;
 use Bake\Shell\BakeShell;
 use Cake\Console\CommandCollection;
@@ -71,6 +78,13 @@ class Plugin extends BasePlugin
         $commands->add('bake cell', CellCommand::class);
         $commands->add('bake command', CommandCommand::class);
         $commands->add('bake component', ComponentCommand::class);
+        $commands->add('bake form', FormCommand::class);
+        $commands->add('bake helper', HelperCommand::class);
+        $commands->add('bake mailer', MailerCommand::class);
+        $commands->add('bake middleware', MiddlewareCommand::class);
+        $commands->add('bake shell_helper', ShellHelperCommand::class);
+        $commands->add('bake shell', ShellCommand::class);
+        $commands->add('bake task', TaskCommand::class);
         $commands->add('bake test', TestCommand::class);
 
         // Add shell for incomplete tasks and backwards compatibility discover.
