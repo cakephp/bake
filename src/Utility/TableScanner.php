@@ -29,7 +29,7 @@ use RuntimeException;
 class TableScanner
 {
     /**
-     * @var \Cake\Datasource\Connection
+     * @var \Cake\Database\Connection
      */
     protected $connection;
 
