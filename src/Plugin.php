@@ -19,6 +19,8 @@ use Bake\Command\BehaviorCommand;
 use Bake\Command\CellCommand;
 use Bake\Command\CommandCommand;
 use Bake\Command\ComponentCommand;
+use Bake\Command\FixtureAllCommand;
+use Bake\Command\FixtureCommand;
 use Bake\Command\FormCommand;
 use Bake\Command\HelperCommand;
 use Bake\Command\MailerCommand;
@@ -78,6 +80,8 @@ class Plugin extends BasePlugin
         $commands->add('bake cell', CellCommand::class);
         $commands->add('bake command', CommandCommand::class);
         $commands->add('bake component', ComponentCommand::class);
+        $commands->add('bake fixture', FixtureCommand::class);
+        $commands->add('bake fixture all', FixtureAllCommand::class);
         $commands->add('bake form', FormCommand::class);
         $commands->add('bake helper', HelperCommand::class);
         $commands->add('bake mailer', MailerCommand::class);

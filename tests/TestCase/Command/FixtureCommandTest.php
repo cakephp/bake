@@ -13,7 +13,7 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Shell;
@@ -23,10 +23,10 @@ use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 
 /**
- * FixtureTaskTest class
+ * FixtureCommand Test
  *
  */
-class FixtureTaskTest extends TestCase
+class FixtureCommandTest extends TestCase
 {
     /**
      * fixtures
@@ -43,11 +43,6 @@ class FixtureTaskTest extends TestCase
     ];
 
     /**
-     * @var \Bake\Shell\Task\ModelTask|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $Task;
-
-    /**
      * setUp method
      *
      * @return void
@@ -55,55 +50,10 @@ class FixtureTaskTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
-            ->setMethods(['in', 'err', 'createFile', '_stop', 'clear'])
-            ->setConstructorArgs([$io])
-            ->getMock();
-        $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
-            ->setMethods(['in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listUnskipped'])
-            ->setConstructorArgs([$io])
-            ->getMock();
 
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
-    }
-
-    /**
-     * tearDown method
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-        unset($this->Task);
-    }
-
-    /**
-     * Test that initialize() copies the connection property over.
-     *
-     * @return void
-     */
-    public function testInitializeCopyConnection()
-    {
-        $this->assertEquals('', $this->Task->connection);
-        $this->Task->params = ['connection' => 'test'];
-
-        $this->Task->initialize();
-        $this->assertEquals('test', $this->Task->connection);
-    }
-
-    /**
-     * test that initialize sets the path
-     *
-     * @return void
-     */
-    public function testGetPath()
-    {
-        $this->assertPathEquals(ROOT . DS . 'tests' . DS . 'Fixture/', $this->Task->getPath());
+        $this->setAppNamespace('Bake\Test\App');
+        $this->useCommandRunner();
     }
 
     /**
@@ -209,6 +159,7 @@ class FixtureTaskTest extends TestCase
      */
     public function testMainIntoAll()
     {
+        $this->markTestIncomplete('Move to fixture all test');
         $this->Task->connection = 'test';
         $this->Task->Model->expects($this->any())
             ->method('listUnskipped')
@@ -234,6 +185,7 @@ class FixtureTaskTest extends TestCase
      */
     public function testAllWithCountAndRecordsFlags()
     {
+        $this->markTestIncomplete('Move to fixture all test');
         $this->Task->connection = 'test';
         $this->Task->params = ['count' => 10, 'records' => true];
 
@@ -262,6 +214,7 @@ class FixtureTaskTest extends TestCase
      */
     public function testAllWithSchemaImport()
     {
+        $this->markTestIncomplete('Move to fixture all test');
         $this->Task->connection = 'test';
         $this->Task->params = ['schema' => true];
 
@@ -399,7 +352,7 @@ class FixtureTaskTest extends TestCase
         $this->exec('bake fixture --connection test Articles');
 
         $this->assertFileContains('<?php', $this->generatedFile);
-        $this->assertFileContains('namespace App\Test\Fixture;', $this->generatedFile);
+        $this->assertFileContains('namespace Bake\Test\App\Test\Fixture;', $this->generatedFile);
         $this->assertFileContains("'body' => ['type' => 'json'", $this->generatedFile);
     }
 
