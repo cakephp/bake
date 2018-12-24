@@ -64,7 +64,7 @@ class FixtureCommandTest extends TestCase
     public function testImportRecordsFromDatabase()
     {
         $this->generatedFile = ROOT . 'tests/Fixture/UsersFixture.php';
-        $this->exec('bake fixture --connection test --schema --records --count 5 Users');
+        $this->exec('bake fixture --connection test --schema --records --count 2 Users');
         $this->assertExitCode(Shell::CODE_SUCCESS);
 
         $this->assertSameAsFile(

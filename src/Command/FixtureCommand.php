@@ -166,11 +166,11 @@ class FixtureCommand extends BakeCommand
         }
 
         if ($args->getOption('records')) {
-            $records = $this->_makeRecordString($this->_getRecordsFromTable($model, $useTable));
+            $records = $this->_makeRecordString($this->_getRecordsFromTable($args, $model, $useTable));
         } else {
             $recordCount = 1;
-            if (isset($this->params['count'])) {
-                $recordCount = $this->params['count'];
+            if ($args->hasOption('count')) {
+                $recordCount = $args->getOption('count');
             }
             $records = $this->_makeRecordString($this->_generateRecords($data, $recordCount));
         }
@@ -428,14 +428,15 @@ class FixtureCommand extends BakeCommand
      * Interact with the user to get a custom SQL condition and use that to extract data
      * to build a fixture.
      *
+     * @param \Cake\Console\Arguments $args CLI arguments
      * @param string $modelName name of the model to take records from.
      * @param string|null $useTable Name of table to use.
      * @return array Array of records.
      */
-    protected function _getRecordsFromTable($modelName, $useTable = null)
+    protected function _getRecordsFromTable(Arguments $args, $modelName, $useTable = null)
     {
-        $recordCount = ($this->params['count'] ?? 10);
-        $conditions = ($this->params['conditions'] ?? '1=1');
+        $recordCount = ($args->getOption('count') ?? 10);
+        $conditions = ($args->getOption('conditions') ?? '1=1');
         if (TableRegistry::getTableLocator()->exists($modelName)) {
             $model = TableRegistry::getTableLocator()->get($modelName);
         } else {
