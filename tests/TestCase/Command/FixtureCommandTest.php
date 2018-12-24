@@ -13,7 +13,7 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Shell;
@@ -23,10 +23,10 @@ use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 
 /**
- * FixtureTaskTest class
+ * FixtureCommand Test
  *
  */
-class FixtureTaskTest extends TestCase
+class FixtureCommandTest extends TestCase
 {
     /**
      * fixtures
@@ -43,11 +43,6 @@ class FixtureTaskTest extends TestCase
     ];
 
     /**
-     * @var \Bake\Shell\Task\ModelTask|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $Task;
-
-    /**
      * setUp method
      *
      * @return void
@@ -55,55 +50,10 @@ class FixtureTaskTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
-            ->setMethods(['in', 'err', 'createFile', '_stop', 'clear'])
-            ->setConstructorArgs([$io])
-            ->getMock();
-        $this->Task->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
-            ->setMethods(['in', 'out', 'err', 'createFile', 'getName', 'getTable', 'listUnskipped'])
-            ->setConstructorArgs([$io])
-            ->getMock();
 
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
-    }
-
-    /**
-     * tearDown method
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-        unset($this->Task);
-    }
-
-    /**
-     * Test that initialize() copies the connection property over.
-     *
-     * @return void
-     */
-    public function testInitializeCopyConnection()
-    {
-        $this->assertEquals('', $this->Task->connection);
-        $this->Task->params = ['connection' => 'test'];
-
-        $this->Task->initialize();
-        $this->assertEquals('test', $this->Task->connection);
-    }
-
-    /**
-     * test that initialize sets the path
-     *
-     * @return void
-     */
-    public function testGetPath()
-    {
-        $this->assertPathEquals(ROOT . DS . 'tests' . DS . 'Fixture/', $this->Task->getPath());
+        $this->setAppNamespace('Bake\Test\App');
+        $this->useCommandRunner();
     }
 
     /**
@@ -114,7 +64,7 @@ class FixtureTaskTest extends TestCase
     public function testImportRecordsFromDatabase()
     {
         $this->generatedFile = ROOT . 'tests/Fixture/UsersFixture.php';
-        $this->exec('bake fixture --connection test --schema --records --count 5 Users');
+        $this->exec('bake fixture --connection test --schema --records --count 2 Users');
         $this->assertExitCode(Shell::CODE_SUCCESS);
 
         $this->assertSameAsFile(
@@ -200,84 +150,6 @@ class FixtureTaskTest extends TestCase
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileContains("class ArticlesFixture", $this->generatedFile);
-    }
-
-    /**
-     * test that execute runs all() when args[0] = all
-     *
-     * @return void
-     */
-    public function testMainIntoAll()
-    {
-        $this->Task->connection = 'test';
-        $this->Task->Model->expects($this->any())
-            ->method('listUnskipped')
-            ->will($this->returnValue(['articles', 'comments']));
-
-        $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/ArticlesFixture.php');
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with($filename, $this->stringContains('class ArticlesFixture'));
-
-        $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/CommentsFixture.php');
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with($filename, $this->stringContains('class CommentsFixture'));
-
-        $this->Task->all();
-    }
-
-    /**
-     * test using all() with -count and -records
-     *
-     * @return void
-     */
-    public function testAllWithCountAndRecordsFlags()
-    {
-        $this->Task->connection = 'test';
-        $this->Task->params = ['count' => 10, 'records' => true];
-
-        $this->Task->Model->expects($this->any())->method('listUnskipped')
-            ->will($this->returnValue(['Articles', 'comments']));
-
-        $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/ArticlesFixture.php');
-        $this->Task->expects($this->at(0))
-            ->method('createFile')
-            ->with($filename, $this->stringContains("'title' => 'Third Article'"));
-
-        $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/CommentsFixture.php');
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with($filename, $this->stringContains("'comment' => 'First Comment for First Article'"));
-
-        $this->Task->expects($this->exactly(2))->method('createFile');
-
-        $this->Task->all();
-    }
-
-    /**
-     * test using all() with -schema
-     *
-     * @return void
-     */
-    public function testAllWithSchemaImport()
-    {
-        $this->Task->connection = 'test';
-        $this->Task->params = ['schema' => true];
-
-        $this->Task->Model->expects($this->any())->method('listUnskipped')
-            ->will($this->returnValue(['Articles', 'comments']));
-
-        $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/ArticlesFixture.php');
-        $this->Task->expects($this->at(0))->method('createFile')
-            ->with($filename, $this->stringContains("public \$import = ['table' => 'articles'"));
-
-        $filename = $this->_normalizePath(ROOT . DS . 'tests' . DS . 'Fixture/CommentsFixture.php');
-        $this->Task->expects($this->at(1))->method('createFile')
-            ->with($filename, $this->stringContains("public \$import = ['table' => 'comments'"));
-        $this->Task->expects($this->exactly(2))->method('createFile');
-
-        $this->Task->all();
     }
 
     /**
@@ -399,7 +271,7 @@ class FixtureTaskTest extends TestCase
         $this->exec('bake fixture --connection test Articles');
 
         $this->assertFileContains('<?php', $this->generatedFile);
-        $this->assertFileContains('namespace App\Test\Fixture;', $this->generatedFile);
+        $this->assertFileContains('namespace Bake\Test\App\Test\Fixture;', $this->generatedFile);
         $this->assertFileContains("'body' => ['type' => 'json'", $this->generatedFile);
     }
 
