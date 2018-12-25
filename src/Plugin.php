@@ -25,6 +25,7 @@ use Bake\Command\FormCommand;
 use Bake\Command\HelperCommand;
 use Bake\Command\MailerCommand;
 use Bake\Command\MiddlewareCommand;
+use Bake\Command\PluginCommand;
 use Bake\Command\ShellCommand;
 use Bake\Command\ShellHelperCommand;
 use Bake\Command\TaskCommand;
@@ -86,6 +87,7 @@ class Plugin extends BasePlugin
         $commands->add('bake helper', HelperCommand::class);
         $commands->add('bake mailer', MailerCommand::class);
         $commands->add('bake middleware', MiddlewareCommand::class);
+        $commands->add('bake plugin', PluginCommand::class);
         $commands->add('bake shell_helper', ShellHelperCommand::class);
         $commands->add('bake shell', ShellCommand::class);
         $commands->add('bake task', TaskCommand::class);
@@ -93,6 +95,8 @@ class Plugin extends BasePlugin
 
         // Add shell for incomplete tasks and backwards compatibility discover.
         $commands->add('bake', BakeShell::class);
+
+        // Add autodiscovery for userland defined commands
 
         return $commands;
     }

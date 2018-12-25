@@ -13,10 +13,13 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Shell\Task;
+namespace Bake\Command;
 
 use Bake\Utility\TemplateRenderer;
+use Bake\Utility\Process;
 use Bake\View\BakeView;
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
 use Cake\Core\Configure;
@@ -26,10 +29,10 @@ use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
 
 /**
- * The Plugin Task handles creating an empty plugin, ready to be used
+ * The Plugin Command handles creating an empty plugin, ready to be used
  *
  */
-class PluginTask extends BakeTask
+class PluginCommand extends BakeCommand
 {
     /**
      * Path to the bootstrap file. Changed in tests.
@@ -50,38 +53,41 @@ class PluginTask extends BakeTask
      *
      * @return void
      */
-    public function initialize(): void
+    public function __construct()
     {
         $this->path = current(App::path('Plugin'));
         $this->bootstrap = ROOT . DS . 'config' . DS . 'bootstrap.php';
     }
 
     /**
-     * Execution method always used for tasks
+     * Execute the command.
      *
-     * @param string|null $name The name of the plugin to bake.
-     * @return null|bool
+     * @param \Cake\Console\Arguments $args The command arguments.
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return null|int The exit code or null for success
      */
-    public function main($name = null)
+    public function execute(Arguments $args, ConsoleIo $io)
     {
+        $name = $args->getArgument('name');
         if (empty($name)) {
-            $this->err('<error>You must provide a plugin name in CamelCase format.</error>');
-            $this->err('To make an "MyExample" plugin, run <info>`cake bake plugin MyExample`</info>.');
+            $io->err('<error>You must provide a plugin name in CamelCase format.</error>');
+            $io->err('To make an "MyExample" plugin, run <info>`cake bake plugin MyExample`</info>.');
 
-            return false;
+            return static::CODE_ERROR;
         }
         $parts = explode('/', $name);
-        $plugin = implode('/', array_map([$this, '_camelize'], $parts));
+        $plugin = implode('/', array_map([Inflector::class, 'camelize'], $parts));
 
         $pluginPath = $this->_pluginPath($plugin);
         if (is_dir($pluginPath)) {
-            $this->out(sprintf('Plugin: %s already exists, no action taken', $plugin));
-            $this->out(sprintf('Path: %s', $pluginPath));
+            $io->out(sprintf('Plugin: %s already exists, no action taken', $plugin));
+            $io->out(sprintf('Path: %s', $pluginPath));
 
-            return false;
+            return static::CODE_ERROR;
         }
-        if (!$this->bake($plugin)) {
-            $this->abort(sprintf("An error occurred trying to bake: %s in %s", $plugin, $this->path . $plugin));
+        if (!$this->bake($plugin, $args, $io)) {
+            $io->error(sprintf("An error occurred trying to bake: %s in %s", $plugin, $this->path . $plugin));
+            $this->abort();
         }
     }
 
@@ -91,34 +97,36 @@ class PluginTask extends BakeTask
      * Also update the autoloader and the root composer.json file if it can be found
      *
      * @param string $plugin Name of the plugin in CamelCased format
+     * @param \Cake\Console\Arguments $args The command arguments.
+     * @param \Cake\Console\ConsoleIo $io The console io
      * @return bool|null
      */
-    public function bake($plugin)
+    public function bake($plugin, $args, $io)
     {
         $pathOptions = App::path('Plugin');
         if (count($pathOptions) > 1) {
-            $this->findPath($pathOptions);
+            $this->findPath($io, $pathOptions);
         }
-        $this->out(sprintf("<info>Plugin Name:</info> %s", $plugin));
-        $this->out(sprintf("<info>Plugin Directory:</info> %s", $this->path . $plugin));
-        $this->hr();
+        $io->out(sprintf("<info>Plugin Name:</info> %s", $plugin));
+        $io->out(sprintf("<info>Plugin Directory:</info> %s", $this->path . $plugin));
+        $io->hr();
 
-        $looksGood = $this->in('Look okay?', ['y', 'n', 'q'], 'y');
+        $looksGood = $io->askChoice('Look okay?', ['y', 'n', 'q'], 'y');
 
         if (strtolower($looksGood) !== 'y') {
             return null;
         }
 
-        $this->_generateFiles($plugin, $this->path);
+        $this->_generateFiles($plugin, $this->path, $args, $io);
 
-        $hasAutoloader = $this->_modifyAutoloader($plugin, $this->path);
-        $this->_modifyBootstrap($plugin, $hasAutoloader);
+        $hasAutoloader = $this->_modifyAutoloader($plugin, $this->path, $args, $io);
+        $this->_modifyBootstrap($plugin, $hasAutoloader, $io);
 
-        $this->hr();
-        $this->out(sprintf('<success>Created:</success> %s in %s', $plugin, $this->path . $plugin), 2);
+        $io->hr();
+        $io->out(sprintf('<success>Created:</success> %s in %s', $plugin, $this->path . $plugin), 2);
 
         $emptyFile = $this->path . 'empty';
-        $this->_deleteEmptyFile($emptyFile);
+        $this->deleteEmptyFile($emptyFile, $io);
 
         return true;
     }
@@ -129,13 +137,14 @@ class PluginTask extends BakeTask
      * @param string $plugin Name of plugin
      * @param bool $hasAutoloader Whether or not there is an autoloader configured for
      * the plugin
+     * @param \Cake\Console\ConsoleIo $io The io instance.
      * @return void
      */
-    protected function _modifyBootstrap($plugin, $hasAutoloader)
+    protected function _modifyBootstrap($plugin, $hasAutoloader, $io)
     {
         $bootstrap = new File($this->bootstrap, false);
         if (!$bootstrap->exists()) {
-            $this->err('<warning>Could not update application bootstrap.php file, as it could not be found.</warning>');
+            $io->err('<warning>Could not update application bootstrap.php file, as it could not be found.</warning>');
 
             return;
         }
@@ -147,8 +156,8 @@ class PluginTask extends BakeTask
                 $plugin,
                 $autoload
             ));
-            $this->out('');
-            $this->out(sprintf('%s modified', $this->bootstrap));
+            $io->out('');
+            $io->out(sprintf('%s modified', $this->bootstrap));
         }
     }
 
@@ -162,9 +171,11 @@ class PluginTask extends BakeTask
      *
      * @param string $pluginName the CamelCase name of the plugin
      * @param string $path the path to the plugins dir (the containing folder)
+     * @param \Cake\Console\Arguments $args CLI arguments.
+     * @param \Cake\Console\ConsoleIo $io The io instance.
      * @return void
      */
-    protected function _generateFiles($pluginName, $path)
+    protected function _generateFiles($pluginName, $path, $args, $io)
     {
         $namespace = str_replace('/', '\\', $pluginName);
         $baseNamespace = Configure::read('App.namespace');
@@ -176,7 +187,7 @@ class PluginTask extends BakeTask
         }
         $package = $vendor . '/' . $name;
 
-        $renderer = new TemplateRenderer($this->param('theme'));
+        $renderer = new TemplateRenderer($args->getOption('theme'));
         $renderer->set([
             'package' => $package,
             'namespace' => $namespace,
@@ -190,8 +201,8 @@ class PluginTask extends BakeTask
         $root = $path . $pluginName . DS;
 
         $paths = [];
-        if (!empty($this->params['theme'])) {
-            $paths[] = Plugin::templatePath($this->params['theme']);
+        if ($args->hasOption('theme')) {
+            $paths[] = Plugin::templatePath($args->getOption('theme'));
         }
 
         $paths = array_merge($paths, Configure::read('App.paths.templates'));
@@ -207,7 +218,7 @@ class PluginTask extends BakeTask
         foreach ($templates as $template) {
             $template = substr($template, strrpos($template, 'Plugin' . DIRECTORY_SEPARATOR) + 7, -4);
             $template = rtrim($template, '.');
-            $this->_generateFile($renderer, $template, $root);
+            $this->_generateFile($renderer, $template, $root, $io);
         }
     }
 
@@ -217,13 +228,14 @@ class PluginTask extends BakeTask
      * @param \Bake\Utility\TemplateRenderer $renderer The renderer to use.
      * @param string $template The template to render
      * @param string $root The path to the plugin's root
+     * @param \Cake\Console\ConsoleIo $io The io instance.
      * @return void
      */
-    protected function _generateFile($renderer, $template, $root)
+    protected function _generateFile($renderer, $template, $root, $io)
     {
-        $this->out(sprintf('Generating %s file...', $template));
+        $io->out(sprintf('Generating %s file...', $template));
         $out = $renderer->generate('Plugin/' . $template);
-        $this->createFile($root . $template, $out);
+        $io->createFile($root . $template, $out);
     }
 
     /**
@@ -232,14 +244,16 @@ class PluginTask extends BakeTask
      *
      * @param string $plugin Name of plugin
      * @param string $path The path to save the phpunit.xml file to.
+     * @param \Cake\Console\Arguments $args The Arguments instance.
+     * @param \Cake\Console\ConsoleIo $io The io instance.
      * @return bool True if composer could be modified correctly
      */
-    protected function _modifyAutoloader($plugin, $path)
+    protected function _modifyAutoloader($plugin, $path, $args, $io)
     {
         $file = $this->_rootComposerFilePath();
 
         if (!file_exists($file)) {
-            $this->out(sprintf('<info>Main composer file %s not found</info>', $file));
+            $io->out(sprintf('<info>Main composer file %s not found</info>', $file));
 
             return false;
         }
@@ -252,17 +266,16 @@ class PluginTask extends BakeTask
         $config['autoload']['psr-4'][$namespace . '\\'] = $autoloadPath . $plugin . "/src/";
         $config['autoload-dev']['psr-4'][$namespace . '\\Test\\'] = $autoloadPath . $plugin . "/tests/";
 
-        $this->out('<info>Modifying composer autoloader</info>');
+        $io->out('<info>Modifying composer autoloader</info>');
 
         $out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
-        $this->createFile($file, $out);
+        $io->createFile($file, $out);
 
-        $composer = $this->findComposer();
+        $composer = $this->findComposer($args, $io);
 
         if (!$composer) {
-            $this->abort('Could not locate composer. Add composer to your PATH, or use the --composer option.');
-
-            return false;
+            $io->error('Could not locate composer. Add composer to your PATH, or use the --composer option.');
+            $this->abort();
         }
 
         try {
@@ -271,14 +284,14 @@ class PluginTask extends BakeTask
             // Windows makes running multiple commands at once hard.
             chdir(dirname($this->_rootComposerFilePath()));
             $command = 'php ' . escapeshellarg($composer) . ' dump-autoload';
-            $this->callProcess($command);
+            $process = new Process($io);
+            $io->out($process->call($command));
 
             chdir($cwd);
         } catch (\RuntimeException $e) {
             $error = $e->getMessage();
-            $this->abort(sprintf('Could not run `composer dump-autoload`: %s', $error));
-
-            return false;
+            $io->error(sprintf('Could not run `composer dump-autoload`: %s', $error));
+            $this->abort();
         }
 
         return true;
@@ -300,9 +313,10 @@ class PluginTask extends BakeTask
      * find and change $this->path to the user selection
      *
      * @param array $pathOptions The list of paths to look in.
+     * @param \Cake\Console\ConsoleIo $io The io object
      * @return void
      */
-    public function findPath(array $pathOptions)
+    public function findPath(array $pathOptions, ConsoleIo $io)
     {
         $valid = false;
         foreach ($pathOptions as $i => $path) {
@@ -314,8 +328,8 @@ class PluginTask extends BakeTask
         $max = count($pathOptions);
 
         if ($max === 0) {
-            $this->err('No valid plugin paths found! Please configure a plugin path that exists.');
-            throw new \RuntimeException();
+            $io->error('No valid plugin paths found! Please configure a plugin path that exists.');
+            $this->abort();
         }
 
         if ($max === 1) {
@@ -327,10 +341,10 @@ class PluginTask extends BakeTask
         $choice = null;
         while (!$valid) {
             foreach ($pathOptions as $i => $option) {
-                $this->out($i + 1 . '. ' . $option);
+                $io->out($i + 1 . '. ' . $option);
             }
             $prompt = 'Choose a plugin path from the paths above.';
-            $choice = $this->in($prompt, null, 1);
+            $choice = $io->ask($prompt, null, 1);
             if ((int)$choice > 0 && (int)$choice <= $max) {
                 $valid = true;
             }
@@ -341,11 +355,11 @@ class PluginTask extends BakeTask
     /**
      * Gets the option parser instance and configures it.
      *
+     * @param \Cake\Console\ConsoleOptionParser $parser The option parser
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser(): ConsoleOptionParser
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = parent::getOptionParser();
         $parser->setDescription(
             'Create the directory structure, AppController class and testing setup for a new plugin. ' .
             'Can create plugins in any of your bootstrapped plugin paths.'
@@ -354,7 +368,7 @@ class PluginTask extends BakeTask
         ])->addOption('composer', [
             'default' => ROOT . DS . 'composer.phar',
             'help' => 'The path to the composer executable.',
-        ])->removeOption('plugin');
+        ]);
 
         return $parser;
     }
@@ -362,12 +376,14 @@ class PluginTask extends BakeTask
     /**
      * Uses either the CLI option or looks in $PATH and cwd for composer.
      *
+     * @param \Cake\Console\Arguments $args The command arguments.
+     * @param \Cake\Console\ConsoleIo $io The console io
      * @return string|bool Either the path to composer or false if it cannot be found.
      */
-    public function findComposer()
+    public function findComposer(Arguments $args, ConsoleIo $io)
     {
-        if (!empty($this->params['composer'])) {
-            $path = $this->params['composer'];
+        if ($args->hasOption('composer')) {
+            $path = $args->getOption('composer');
             if (file_exists($path)) {
                 return $path;
             }
@@ -376,7 +392,7 @@ class PluginTask extends BakeTask
         $path = env('PATH');
         if (!empty($path)) {
             $paths = explode(PATH_SEPARATOR, $path);
-            $composer = $this->_searchPath($paths);
+            $composer = $this->_searchPath($paths, $io);
         }
 
         return $composer;
@@ -386,15 +402,16 @@ class PluginTask extends BakeTask
      * Search the $PATH for composer.
      *
      * @param array $path The paths to search.
+     * @param \Cake\Console\ConsoleIo $io The console io
      * @return string|bool
      */
-    protected function _searchPath($path)
+    protected function _searchPath($path, $io)
     {
         $composer = ['composer.phar', 'composer'];
         foreach ($path as $dir) {
             foreach ($composer as $cmd) {
                 if (is_file($dir . DS . $cmd)) {
-                    $this->_io->verbose('Found composer executable in ' . $dir);
+                    $io->verbose('Found composer executable in ' . $dir);
 
                     return $dir . DS . $cmd;
                 }

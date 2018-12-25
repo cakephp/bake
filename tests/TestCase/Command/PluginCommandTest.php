@@ -13,26 +13,24 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Command;
 
-use Bake\Shell\Task\PluginTask;
+use Bake\Command\PluginCommand;
 use Bake\Test\TestCase\TestCase;
-use Cake\Console\Shell;
+use Cake\Console\Command;
+use Cake\Console\ConsoleIo;
+use Cake\Console\Exception\StopException;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
 
-/**
- * PluginTaskPlugin class
- */
-class PluginTaskTest extends TestCase
-{
-    /**
-     * @var \Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $io;
 
+/**
+ * PluginCommand Test
+ */
+class PluginCommandTest extends TestCase
+{
     /**
      * setUp method
      *
@@ -42,18 +40,15 @@ class PluginTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Plugin' . DS;
+        $this->setAppNamespace('Bake\Test\App');
+        $this->useCommandRunner();
 
         // Output into a safe place.
         $path = TMP . 'plugin_task' . DS;
         Configure::write('App.paths.plugins', [$path]);
 
         // Create the test output path
-        $folder = new Folder($path);
-        $folder->create($path);
-
-        $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        mkdir($path, 0777, true);
     }
 
     /**
@@ -77,7 +72,7 @@ class PluginTaskTest extends TestCase
     public function testMainBakePluginContents()
     {
         $this->exec('bake plugin SimpleExample', ['y']);
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertPluginContents('SimpleExample');
     }
 
@@ -88,15 +83,13 @@ class PluginTaskTest extends TestCase
      */
     public function testMainCustomAppNamespace()
     {
-        Configure::write('App.namespace', 'MyApp');
-
         $this->exec('bake plugin Simple', ['y']);
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertPluginContents('Simple');
 
         $bakedRoot = App::path('Plugin')[0];
         $appController = $bakedRoot . 'Simple/src/Controller/AppController.php';
-        $this->assertFileContains('use MyApp\Controller\AppController', $appController);
+        $this->assertFileContains('use Bake\Test\App\Controller\AppController', $appController);
     }
 
     /**
@@ -107,7 +100,7 @@ class PluginTaskTest extends TestCase
     public function testMainVendorName()
     {
         $this->exec('bake plugin Company/Example', ['y']);
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertPluginContents('Company/Example');
     }
 
@@ -119,7 +112,7 @@ class PluginTaskTest extends TestCase
     public function testMainVendorNameCasingFix()
     {
         $this->exec('bake plugin company/example', ['y']);
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertPluginContents('Company/Example');
     }
 
@@ -132,7 +125,7 @@ class PluginTaskTest extends TestCase
     {
         $this->exec('bake plugin');
 
-        $this->assertExitCode(Shell::CODE_ERROR);
+        $this->assertExitCode(Command::CODE_ERROR);
         $this->assertErrorContains('You must');
     }
 
@@ -161,7 +154,7 @@ class PluginTaskTest extends TestCase
 
         $this->exec("bake plugin --composer '{$composerPath}' composer_example", ['y', 'y']);
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
 
         $result = json_decode(file_get_contents(ROOT . 'composer.json'), true);
         $this->assertArrayHasKey('autoload', $result);
@@ -196,34 +189,36 @@ class PluginTaskTest extends TestCase
      */
     public function testFindPathNonExistent()
     {
+        $io = $this->createMock(ConsoleIo::class);
         $paths = App::path('Plugin');
 
         array_unshift($paths, '/fake/path');
         $paths[] = '/fake/path2';
 
-        $task = new PluginTask($this->io);
-        $task->path = TMP . 'tests' . DS;
-        $result = $task->findPath($paths);
+        $command = new PluginCommand();
+        $command->path = TMP . 'tests' . DS;
+        $result = $command->findPath($paths, $io);
 
         $this->assertNull($result, 'no return');
-        $this->assertEquals(TMP . 'plugin_task' . DS, $task->path);
+        $this->assertEquals(TMP . 'plugin_task' . DS, $command->path);
     }
 
     /**
      * Test that findPath throws RunTimeException when no
      * path exists for plugins
      *
-     * @expectedException \RunTimeException
      * @return void
      */
     public function testFindPathEmpty()
     {
+        $this->expectException(StopException::class);
+        $io = $this->createMock(ConsoleIo::class);
         $paths = ['/fake/path', '/fake/path2'];
 
-        $task = new PluginTask($this->io);
-        $task->path = TMP . 'tests' . DS;
+        $command = new PluginCommand();
+        $command->path = TMP . 'tests' . DS;
 
-        $task->findPath($paths);
+        $command->findPath($paths, $io);
     }
 
     /**
