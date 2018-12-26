@@ -15,8 +15,8 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Bake\Utility\TemplateRenderer;
 use Bake\Utility\Process;
+use Bake\Utility\TemplateRenderer;
 use Bake\View\BakeView;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -53,8 +53,9 @@ class PluginCommand extends BakeCommand
      *
      * @return void
      */
-    public function __construct()
+    public function initialize(): void
     {
+        parent::initialize();
         $this->path = current(App::path('Plugin'));
         $this->bootstrap = ROOT . DS . 'config' . DS . 'bootstrap.php';
     }
@@ -344,7 +345,7 @@ class PluginCommand extends BakeCommand
                 $io->out($i + 1 . '. ' . $option);
             }
             $prompt = 'Choose a plugin path from the paths above.';
-            $choice = $io->ask($prompt, null, 1);
+            $choice = $io->ask($prompt);
             if ((int)$choice > 0 && (int)$choice <= $max) {
                 $valid = true;
             }
