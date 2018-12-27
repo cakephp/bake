@@ -1,5 +1,5 @@
 <?php
-namespace App\Model\Entity;
+namespace Bake\Test\App\Model\Entity;
 
 use Cake\ORM\Entity;
 
@@ -12,8 +12,8 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $updated
  *
- * @property \App\Model\Entity\Comment[] $comments
- * @property \App\Model\Entity\CounterCachePost[] $counter_cache_posts
+ * @property \Bake\Test\App\Model\Entity\Comment[] $comments
+ * @property \Bake\Test\App\Model\Entity\CounterCachePost[] $counter_cache_posts
  */
 class User extends Entity
 {
