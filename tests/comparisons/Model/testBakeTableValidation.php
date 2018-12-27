@@ -50,17 +50,17 @@ class BakeArticlesTable extends Table
             ->scalar('name')
             ->maxLength('name', 100, 'Name must be shorter than 100 characters.')
             ->requirePresence('name', 'create')
-            ->notEmptyString('name');
+            ->allowEmptyString('name', false);
 
         $validator
             ->nonNegativeInteger('count')
             ->requirePresence('count', 'create')
-            ->notEmptyString('count');
+            ->allowEmptyString('count', false);
 
         $validator
             ->greaterThanOrEqual('price', 0)
             ->requirePresence('price', 'create')
-            ->notEmptyString('price');
+            ->allowEmptyString('price', false);
 
         $validator
             ->email('email')

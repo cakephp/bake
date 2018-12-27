@@ -56,7 +56,7 @@ class OldProductsTable extends Table
             ->scalar('name')
             ->maxLength('name', 100)
             ->requirePresence('name', 'create')
-            ->notEmptyString('name');
+            ->allowEmptyString('name', false);
 
         return $validator;
     }

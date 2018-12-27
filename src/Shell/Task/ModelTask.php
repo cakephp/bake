@@ -759,12 +759,12 @@ class ModelTask extends BakeTask
 
         if (in_array($fieldName, $primaryKey)) {
             $validation['allowEmpty'] = [
-                'rule' => 'allowEmpty' . $this->getEmptyMethodType($fieldName, $metaData),
+                'rule' => $this->getAllowEmptyMethod($fieldName, $metaData),
                 'args' => ["'create'"],
             ];
         } elseif ($metaData['null'] === true) {
             $validation['allowEmpty'] = [
-                'rule' => 'allowEmpty' . $this->getEmptyMethodType($fieldName, $metaData),
+                'rule' => $this->getAllowEmptyMethod($fieldName, $metaData),
                 'args' => [],
             ];
         } else {
@@ -772,9 +772,9 @@ class ModelTask extends BakeTask
                 'rule' => 'requirePresence',
                 'args' => ["'create'"],
             ];
-            $validation['notEmpty'] = [
-                'rule' => 'notEmpty' . $this->getEmptyMethodType($fieldName, $metaData),
-                'args' => [],
+            $validation['allowEmpty'] = [
+                'rule' => $this->getAllowEmptyMethod($fieldName, $metaData),
+                'args' => ['false'],
             ];
         }
 
@@ -794,31 +794,31 @@ class ModelTask extends BakeTask
     }
 
     /**
-     * Get the type specific allowempty/notempty method suffix.
+     * Get the specific allow empty method for field based on metadata.
      *
      * @param string $fieldName Field name.
      * @param array $metaData Field meta data.
      * @return string
      */
-    protected function getEmptyMethodType($fieldName, $metaData)
+    protected function getAllowEmptyMethod($fieldName, $metaData)
     {
         switch ($metaData['type']) {
             case 'date':
-                return 'Date';
+                return 'allowEmptyDate';
 
             case 'time':
-                return 'Time';
+                return 'allowEmptyTime';
 
             case 'datetime':
             case 'timestamp':
-                return 'DateTime';
+                return 'allowEmptyDateTime';
         }
 
         if (preg_match('/file|image/', $fieldName)) {
-            return 'File';
+            return 'allowEmptyFile';
         }
 
-        return 'String';
+        return 'allowEmptyString';
     }
 
     /**
