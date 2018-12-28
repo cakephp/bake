@@ -71,6 +71,7 @@ class ModelTaskAssociationDetectionTest extends TestCase
         $this->Task->connection = 'default';
         $this->_setupOtherMocks();
         TableRegistry::getTableLocator()->clear();
+        $this->markTestSkipped('Skipping until converted to command');
     }
 
     /**
