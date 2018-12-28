@@ -369,6 +369,36 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * test finding referenced tables using constraints.
+     *
+     * @return void
+     */
+    public function testGetAssociationsConstraints()
+    {
+        $model = TableRegistry::getTableLocator()->get('Invitations');
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $args = new Arguments([], [], []);
+        $io = $this->createMock(ConsoleIo::class);
+        $result = $command->getAssociations($model, $args, $io);
+
+        $expected = [
+            [
+                'alias' => 'Users',
+                'foreignKey' => 'sender_id',
+                'joinType' => 'INNER',
+            ],
+            [
+                'alias' => 'Users',
+                'foreignKey' => 'receiver_id',
+                'joinType' => 'INNER',
+            ],
+        ];
+        $this->assertEquals($expected, $result['belongsTo']);
+    }
+
+    /**
      * test that belongsTo generation works.
      *
      * @return void
@@ -1270,6 +1300,7 @@ class ModelCommandTest extends TestCase
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
     }
 
     /**
@@ -1311,80 +1342,6 @@ class ModelCommandTest extends TestCase
     }
 
     /**
-     * test baking validation
-     *
-     * @return void
-     */
-    public function testBakeTableValidation()
-    {
-        $this->markTestIncomplete('Consider modifying the model schema to get complex validation rules.');
-        $validation = [
-            'id' => [
-                'valid' => [
-                    'allowEmpty' => 'create',
-                    'rule' => 'numeric',
-                ],
-            ],
-            'name' => [
-                'valid' => [
-                    'allowEmpty' => false,
-                    'rule' => 'scalar',
-                ],
-                'maxLength' => [
-                    'rule' => 'maxLength',
-                    'args' => [
-                        100,
-                        "'Name must be shorter than 100 characters.'",
-                    ],
-                ],
-            ],
-            'count' => [
-                'valid' => [
-                    'allowEmpty' => false,
-                    'rule' => 'nonNegativeInteger',
-                ],
-            ],
-            'price' => [
-                'valid' => [
-                    'allowEmpty' => false,
-                    'rule' => 'greaterThanOrEqual',
-                    'args' => [
-                        0,
-                    ],
-                ],
-            ],
-            'email' => [
-                'valid' => [
-                    'allowEmpty' => true,
-                    'rule' => 'email',
-                ],
-                'unique' => [
-                    'rule' => 'validateUnique',
-                    'provider' => 'table',
-                ],
-            ],
-            'image' => [
-                'uploadError' => [
-                    'rule' => 'uploadError',
-                    'args' => ['true'],
-                ],
-                'uploadedFile' => [
-                    'rule' => 'uploadedFile',
-                    'args' => [
-                        [
-                            'optional' => 'true',
-                            'types' => ["'image/jpeg'"],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->bakeTable($model, compact('validation'));
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
-    }
-
-    /**
      * test baking with table config and connection option
      *
      * @return void
@@ -1400,51 +1357,6 @@ class ModelCommandTest extends TestCase
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $result = file_get_contents($this->generatedFiles[0]);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
-    }
-
-    /**
-     * test baking relations
-     *
-     * @return void
-     */
-    public function testBakeTableRelations()
-    {
-        $this->markTestIncomplete('needs fixing');
-        $associations = [
-            'belongsTo' => [
-                [
-                    'alias' => 'SomethingElse',
-                    'foreignKey' => 'something_else_id',
-                ],
-                [
-                    'alias' => 'BakeUser',
-                    'foreignKey' => 'bake_user_id',
-                ],
-            ],
-            'hasMany' => [
-                [
-                    'alias' => 'BakeComment',
-                    'foreignKey' => 'parent_id',
-                ],
-            ],
-            'belongsToMany' => [
-                [
-                    'alias' => 'BakeTag',
-                    'foreignKey' => 'bake_article_id',
-                    'joinTable' => 'bake_articles_bake_tags',
-                    'targetForeignKey' => 'bake_tag_id',
-                ],
-            ],
-        ];
-        $associationInfo = [
-            'SomethingElse' => ['targetFqn' => '\App\Model\Table\SomethingElseTable'],
-            'BakeUser' => ['targetFqn' => '\App\Model\Table\BakeUserTable'],
-            'BakeComment' => ['targetFqn' => '\App\Model\Table\BakeCommentTable'],
-            'BakeTag' => ['targetFqn' => '\App\Model\Table\BakeTagTable'],
-        ];
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->bakeTable($model, compact('associations', 'associationInfo'));
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1636,30 +1548,17 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeWithRules()
+    public function testBakeWithRulesUnique()
     {
-        $this->markTestIncomplete('needs fixing');
-        $model = TableRegistry::getTableLocator()->get('Users');
-        $associations = [
-            'belongsTo' => [
-                [
-                    'alias' => 'Countries',
-                    'foreignKey' => 'country_id',
-                ],
-                [
-                    'alias' => 'Sites',
-                    'foreignKey' => 'site_id',
-                ],
-            ],
-            'hasMany' => [
-                [
-                    'alias' => 'BakeComments',
-                    'foreignKey' => 'bake_user_id',
-                ],
-            ],
+        $this->generatedFiles = [
+            APP . 'Model/Table/UsersTable.php',
         ];
-        $rulesChecker = $this->Task->getRules($model, $associations);
-        $result = $this->Task->bakeTable($model, compact('rulesChecker'));
+        $this->exec('bake model --no-test --no-fixture --no-entity Users');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+
+        $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1876,152 +1775,5 @@ class ModelCommandTest extends TestCase
             ->with($filename);
 
         $this->Task->all();
-    }
-
-    /**
-     * test finding referenced tables using constraints.
-     *
-     * @return void
-     */
-    public function testFindTableReferencedBy()
-    {
-        $this->markTestIncomplete('needs fixing');
-        $invoices = TableRegistry::getTableLocator()->get('Invitations');
-        $schema = $invoices->getSchema();
-        $result = $this->Task->findTableReferencedBy($schema, 'not_there');
-        $this->assertNull($result);
-
-        $result = $this->Task->findTableReferencedBy($schema, 'sender_id');
-        $this->assertEquals('users', $result);
-
-        $result = $this->Task->findTableReferencedBy($schema, 'receiver_id');
-        $this->assertEquals('users', $result);
-    }
-
-    /**
-     * Tests collecting association info with default association configuration.
-     *
-     * @return void
-     */
-    public function testGetAssociationInfo()
-    {
-        $this->markTestIncomplete('needs fixing');
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $model->belongsTo('BakeUsers');
-        $model->hasMany('BakeTest.Authors');
-        $model->hasMany('BakeTest.Publishers');
-
-        $result = $this->Task->getAssociationInfo($model);
-
-        $expected = [
-            'BakeUsers' => [
-                'targetFqn' => '\App\Model\Table\BakeUsersTable',
-            ],
-            'Authors' => [
-                'targetFqn' => '\BakeTest\Model\Table\AuthorsTable',
-            ],
-            'Publishers' => [
-                'targetFqn' => '\BakeTest\Model\Table\PublishersTable',
-            ],
-        ];
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests collecting association info with short classnames configured.
-     *
-     * @return void
-     */
-    public function testGetAssociationInfoShortClassName()
-    {
-        $this->markTestIncomplete('needs fixing');
-        $model = TableRegistry::getTableLocator()->get('Authors');
-        $model->belongsTo('BakeUsersAlias', [
-            'className' => 'BakeTest.BakeUsers',
-        ]);
-        $model->hasMany('ArticlesAlias', [
-            'className' => 'Articles',
-        ]);
-        $model->hasMany('BakeTestArticlesAlias', [
-            'className' => 'BakeTest.BakeTestArticles',
-        ]);
-        $model->hasMany('PublishersAlias', [
-            'className' => 'BakeTest.Publishers',
-        ]);
-
-        $result = $this->Task->getAssociationInfo($model);
-
-        $expected = [
-            'BakeUsersAlias' => [
-                'targetFqn' => '\BakeTest\Model\Table\BakeUsersTable',
-            ],
-            'ArticlesAlias' => [
-                'targetFqn' => '\App\Model\Table\ArticlesTable',
-            ],
-            'BakeTestArticlesAlias' => [
-                'targetFqn' => '\BakeTest\Model\Table\BakeTestArticlesTable',
-            ],
-            'PublishersAlias' => [
-                'targetFqn' => '\BakeTest\Model\Table\PublishersTable',
-            ],
-        ];
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests collecting association info with short classnames and a non-default namespace configured.
-     *
-     * @return void
-     */
-    public function testGetAssociationInfoShortClassNameNonDefaultAppNamespace()
-    {
-        $this->markTestIncomplete('needs fixing');
-        Configure::write('App.namespace', 'Bake\Test\App');
-
-        $model = TableRegistry::getTableLocator()->get('Authors');
-        $model->hasMany('ArticlesAlias', [
-            'className' => 'Articles',
-        ]);
-
-        $result = $this->Task->getAssociationInfo($model);
-
-        $expected = [
-            'Articles' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable',
-            ],
-            'ArticlesAlias' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable',
-            ],
-            'Roles' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\RolesTable',
-            ],
-            'Profiles' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ProfilesTable',
-            ],
-        ];
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests collecting association info with fully qualified classnames configured.
-     *
-     * @return void
-     */
-    public function testGetAssociationInfoFqnClassName()
-    {
-        $this->markTestIncomplete('needs fixing');
-        $model = TableRegistry::getTableLocator()->get('Authors');
-        $model->hasMany('ArticlesAlias', [
-            'className' => 'Bake\Test\App\Model\Table\ArticlesTable',
-        ]);
-
-        $result = $this->Task->getAssociationInfo($model);
-
-        $expected = [
-            'ArticlesAlias' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable',
-            ],
-        ];
-        $this->assertEquals($expected, $result);
     }
 }
