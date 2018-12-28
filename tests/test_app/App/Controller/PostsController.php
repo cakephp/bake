@@ -39,12 +39,10 @@ class PostsController extends AppController
     public function index()
     {
         $this->Flash->error('An error message');
-        $this->response->cookie(
-            [
+        $this->response = $this->response->withCookie([
             'name' => 'remember_me',
             'value' => 1,
-            ]
-        );
+        ]);
         $this->set('test', 'value');
     }
 }
