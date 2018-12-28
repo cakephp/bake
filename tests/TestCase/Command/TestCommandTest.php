@@ -38,11 +38,11 @@ class TestCommandTest extends TestCase
      * @var string
      */
     public $fixtures = [
-        'core.Articles',
-        'core.Tags',
-        'core.ArticlesTags',
+        'plugin.Bake.BakeArticles',
+        'plugin.Bake.BakeArticlesBakeTags',
+        'plugin.Bake.BakeComments',
+        'plugin.Bake.BakeTags',
         'core.Authors',
-        'core.Comments',
     ];
 
     /**
@@ -58,11 +58,10 @@ class TestCommandTest extends TestCase
         $this->useCommandRunner();
     }
 
-    protected function mockIo()
+    public function tearDown()
     {
-        return $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        parent::tearDown();
+        TableRegistry::getTableLocator()->clear();
     }
 
     /**
@@ -126,14 +125,14 @@ class TestCommandTest extends TestCase
         $this->_loadTestPlugin('TestBake');
 
         $this->generatedFiles = [
-            ROOT . 'Plugin/TestBake/tests/TestCase/Model/Table/ArticlesTableTest.php',
+            ROOT . 'Plugin/TestBake/tests/TestCase/Model/Table/BakeArticlesTableTest.php',
         ];
-        $this->exec('bake test table TestBake.Articles');
+        $this->exec('bake test table TestBake.BakeArticles');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
-            'class ArticlesTableTest extends TestCase',
+            'class BakeArticlesTableTest extends TestCase',
             $this->generatedFiles[0]
         );
         $this->assertFileContains(
