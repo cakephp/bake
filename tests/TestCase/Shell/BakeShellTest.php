@@ -209,7 +209,6 @@ class BakeShellTest extends TestCase
             '- custom_controller',
             '- fixture',
             '- model',
-            '- plugin',
             '- template',
             '- test',
             '- twig_template',
@@ -254,7 +253,6 @@ class BakeShellTest extends TestCase
         $expected = [
             'Bake.Fixture',
             'Bake.Model',
-            'Bake.Plugin',
             'Bake.Test',
             'Bake.Template',
             'Controller',
