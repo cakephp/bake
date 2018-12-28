@@ -90,6 +90,11 @@ class ItemsTable extends Table
             ->requirePresence('completed', 'create')
             ->notEmpty('completed');
 
+        $validator
+            ->integer('todo_task_count')
+            ->requirePresence('todo_task_count', 'create')
+            ->notEmpty('todo_task_count');
+
         return $validator;
     }
 

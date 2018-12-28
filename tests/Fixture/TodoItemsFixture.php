@@ -36,6 +36,7 @@ class TodoItemsFixture extends TestFixture
         'body' => ['type' => 'text'],
         'effort' => ['type' => 'decimal', 'default' => 0, 'null' => false, 'unsigned' => true],
         'completed' => ['type' => 'boolean', 'default' => false, 'null' => false],
+        'todo_task_count' => ['type' => 'integer', 'default' => 0, 'null' => false],
         'created' => ['type' => 'datetime'],
         'updated' => ['type' => 'datetime'],
         '_constraints' => [

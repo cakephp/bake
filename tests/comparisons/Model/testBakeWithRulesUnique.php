@@ -10,7 +10,6 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \Bake\Test\App\Model\Table\CommentsTable|\Cake\ORM\Association\HasMany $Comments
- * @property \Bake\Test\App\Model\Table\CounterCachePostsTable|\Cake\ORM\Association\HasMany $CounterCachePosts
  * @property \Bake\Test\App\Model\Table\TodoItemsTable|\Cake\ORM\Association\HasMany $TodoItems
  *
  * @method \Bake\Test\App\Model\Entity\User get($primaryKey, $options = [])
@@ -44,9 +43,6 @@ class UsersTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->hasMany('Comments', [
-            'foreignKey' => 'user_id'
-        ]);
-        $this->hasMany('CounterCachePosts', [
             'foreignKey' => 'user_id'
         ]);
         $this->hasMany('TodoItems', [

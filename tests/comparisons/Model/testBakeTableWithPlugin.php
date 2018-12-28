@@ -10,7 +10,6 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \BakeTest\Model\Table\CommentsTable|\Cake\ORM\Association\HasMany $Comments
- * @property \BakeTest\Model\Table\CounterCachePostsTable|\Cake\ORM\Association\HasMany $CounterCachePosts
  * @property \BakeTest\Model\Table\TodoItemsTable|\Cake\ORM\Association\HasMany $TodoItems
  *
  * @method \BakeTest\Model\Entity\User get($primaryKey, $options = [])
@@ -46,10 +45,6 @@ class UsersTable extends Table
         $this->hasMany('Comments', [
             'foreignKey' => 'user_id',
             'className' => 'BakeTest.Comments'
-        ]);
-        $this->hasMany('CounterCachePosts', [
-            'foreignKey' => 'user_id',
-            'className' => 'BakeTest.CounterCachePosts'
         ]);
         $this->hasMany('TodoItems', [
             'foreignKey' => 'user_id',

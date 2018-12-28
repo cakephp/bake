@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property string|null $body
  * @property float $effort
  * @property bool $completed
+ * @property int $todo_task_count
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $updated
  *
@@ -37,6 +38,7 @@ class TodoItem extends Entity
         'body' => true,
         'effort' => true,
         'completed' => true,
+        'todo_task_count' => true,
         'created' => true,
         'updated' => true,
         'user' => true,

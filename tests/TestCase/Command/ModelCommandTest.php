@@ -44,8 +44,6 @@ class ModelCommandTest extends TestCase
      */
     public $fixtures = [
         'core.Users',
-        'core.CounterCacheUsers',
-        'core.CounterCachePosts',
         'core.Comments',
         'core.Tags',
         'core.ArticlesTags',
@@ -712,6 +710,7 @@ class ModelCommandTest extends TestCase
             'body',
             'effort',
             'completed',
+            'todo_task_count',
             'created',
             'updated',
         ];
@@ -895,6 +894,11 @@ class ModelCommandTest extends TestCase
                     'rule' => 'notEmpty',
                     'args' => [],
                 ],
+            ],
+            'todo_task_count' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -1244,29 +1248,6 @@ class ModelCommandTest extends TestCase
     }
 
     /**
-     * test non interactive doActsAs
-     *
-     * @return void
-     */
-    public function testGetBehaviors()
-    {
-        TableRegistry::getTableLocator()->clear();
-        TableRegistry::getTableLocator()->get('Users', [
-            'table' => 'counter_cache_users',
-        ]);
-        $model = TableRegistry::getTableLocator()->get('Posts', [
-            'table' => 'counter_cache_posts',
-        ]);
-        $this->generatedFile = APP . 'Model/Table/PostsTable.php';
-        $this->exec('bake model --no-test --no-fixture --no-entity Posts');
-
-        $this->assertExitCode(Command::CODE_SUCCESS);
-        $this->assertFileExists($this->generatedFile);
-        $result = file_get_contents($this->generatedFile);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
-    }
-
-    /**
      * Test getDisplayField() method.
      *
      * @return void
@@ -1520,6 +1501,24 @@ class ModelCommandTest extends TestCase
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test generation with counter cach
+     *
+     * @return void
+     */
+    public function testBakeTableWithCounterCache()
+    {
+        $this->generatedFile = APP . 'Model/Table/TodoTasksTable.php';
+
+        $this->exec('bake model --no-validation --no-test --no-fixture --no-entity TodoTasks');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertContains('CounterCache', $result);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
