@@ -1048,7 +1048,7 @@ class ModelCommand extends BakeCommand
             'help' => 'Name of the model to bake (without the Table suffix). ' .
                 'You can use Plugin.name to bake plugin models.',
         ])->addSubcommand('all', [
-            // TODO create ModelAllCommand
+            // Next: create ModelAllCommand
             'help' => 'Bake all model files with associations and validation.',
         ])->addOption('table', [
             'help' => 'The table name to use if you have non-conventional table names.',
