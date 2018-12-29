@@ -29,7 +29,7 @@ class UsersFixture extends TestFixture
     public $fields = [
         'id' => ['type' => 'integer'],
         'username' => ['type' => 'string', 'null' => true, 'length' => 255],
-        'password' => ['type' => 'string', 'null' => true],
+        'password' => ['type' => 'string', 'null' => true, 'length' => 255],
         'created' => ['type' => 'timestamp', 'null' => true],
         'updated' => ['type' => 'timestamp', 'null' => true],
         '_constraints' => [
