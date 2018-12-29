@@ -43,7 +43,6 @@ class ModelCommandTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'core.Users',
         'core.Comments',
         'core.Tags',
         'core.ArticlesTags',
@@ -54,6 +53,7 @@ class ModelCommandTest extends TestCase
         'plugin.Bake.CategoryThreads',
         'plugin.Bake.Invitations',
         'plugin.Bake.NumberTrees',
+        'plugin.Bake.Users',
     ];
 
     /**

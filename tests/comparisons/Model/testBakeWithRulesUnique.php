@@ -64,6 +64,7 @@ class UsersTable extends Table
 
         $validator
             ->scalar('username')
+            ->maxLength('username', 255)
             ->allowEmpty('username');
 
         $validator

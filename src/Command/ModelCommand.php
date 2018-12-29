@@ -147,11 +147,13 @@ class ModelCommand extends BakeCommand
      */
     public function all()
     {
+        /*
         $tables = $this->listUnskipped();
         foreach ($tables as $table) {
             TableRegistry::getTableLocator()->clear();
             $this->main($table);
         }
+        */
     }
 
     /**
