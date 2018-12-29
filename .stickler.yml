@@ -1,3 +1,3 @@
 linters:
   phpcs:
-    standard: CakePHP
+    standard: ./phpcs.xml.dist
