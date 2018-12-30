@@ -60,17 +60,17 @@ class UsersTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->scalar('username')
             ->maxLength('username', 255)
-            ->allowEmpty('username');
+            ->allowEmptyString('username');
 
         $validator
             ->scalar('password')
             ->maxLength('password', 255)
-            ->allowEmpty('password');
+            ->allowEmptyString('password');
 
         return $validator;
     }

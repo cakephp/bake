@@ -67,32 +67,32 @@ class ItemsTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->scalar('title')
             ->maxLength('title', 50)
             ->requirePresence('title', 'create')
-            ->notEmpty('title');
+            ->allowEmptyString('title', false);
 
         $validator
             ->scalar('body')
-            ->allowEmpty('body');
+            ->allowEmptyString('body');
 
         $validator
             ->decimal('effort')
             ->requirePresence('effort', 'create')
-            ->notEmpty('effort');
+            ->allowEmptyString('effort', false);
 
         $validator
             ->boolean('completed')
             ->requirePresence('completed', 'create')
-            ->notEmpty('completed');
+            ->allowEmptyString('completed', false);
 
         $validator
             ->integer('todo_task_count')
             ->requirePresence('todo_task_count', 'create')
-            ->notEmpty('todo_task_count');
+            ->allowEmptyString('todo_task_count', false);
 
         return $validator;
     }

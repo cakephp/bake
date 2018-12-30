@@ -44,32 +44,33 @@ class BakeArticlesTable extends Table
     {
         $validator
             ->numeric('id')
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->scalar('name')
+            ->maxLength('name', 100, 'Name must be shorter than 100 characters.')
             ->requirePresence('name', 'create')
-            ->notEmpty('name')
-            ->maxLength('name', 100, 'Name must be shorter than 100 characters.');
+            ->allowEmptyString('name', false);
 
         $validator
             ->nonNegativeInteger('count')
             ->requirePresence('count', 'create')
-            ->notEmpty('count');
+            ->allowEmptyString('count', false);
 
         $validator
             ->greaterThanOrEqual('price', 0)
             ->requirePresence('price', 'create')
-            ->notEmpty('price');
+            ->allowEmptyString('price', false);
 
         $validator
             ->email('email')
-            ->allowEmpty('email')
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table'])
+            ->allowEmptyString('email');
 
         $validator
             ->uploadError('image', true)
-            ->uploadedFile('image', ['optional' => true, 'types' => ['image/jpeg']]);
+            ->uploadedFile('image', ['optional' => true, 'types' => ['image/jpeg']])
+            ->allowEmptyFile('image');
 
         return $validator;
     }

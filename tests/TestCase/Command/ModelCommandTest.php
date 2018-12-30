@@ -861,22 +861,37 @@ class ModelCommandTest extends TestCase
             'user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => ['false'],
+                ],
             ],
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => ['false'],
+                ],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'body' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'effort' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'greaterThanOrEqual' => [
+                    'rule' => 'greaterThanOrEqual',
+                    'args' => [
+                        0,
+                    ],
+                ],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => ['false'],
+                ],
             ],
             'completed' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
@@ -884,19 +899,54 @@ class ModelCommandTest extends TestCase
                     'rule' => 'requirePresence',
                     'args' => ["'create'" ],
                 ],
-                'notEmpty' => [
-                    'rule' => 'notEmpty',
-                    'args' => [],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => ['false'],
                 ],
             ],
             'todo_task_count' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+
+        $model = TableRegistry::getTableLocator()->get('BakeComments');
+        $result = $this->Task->getValidation($model);
+        $expected = [
+            'bake_article_id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => ['false'],
+                ],
+            ],
+            'id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => ['false'],
+                ],
+            ],
+            'comment' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
+            ],
+            'published' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'maxLength' => ['rule' => 'maxLength', 'args' => [1]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
+            ],
+            'otherid' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -921,31 +971,31 @@ class ModelCommandTest extends TestCase
             'todo_item_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
             ],
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'body' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'effort' => [
-                'decimal' => ['rule' => 'decimal', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'decimal' => ['rule' => 'decimal', 'args' => []],
             ],
             'completed' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'uid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -974,7 +1024,10 @@ class ModelCommandTest extends TestCase
         $expected = [
             'dateTime' => ['rule' => 'dateTime', 'args' => []],
             'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-            'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+            'allowEmpty' => [
+                'rule' => 'allowEmptyDateTime',
+                'args' => ['false'],
+            ],
         ];
         $this->assertEquals($expected, $result['release_date']);
     }
@@ -997,21 +1050,24 @@ class ModelCommandTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => ['false'],
+                ],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'parent_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'depth' => [
                 'nonNegativeInteger' => ['rule' => 'nonNegativeInteger', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1035,21 +1091,21 @@ class ModelCommandTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'parent_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'depth' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1072,6 +1128,7 @@ class ModelCommandTest extends TestCase
                 'Users' => ['foreignKey' => 'user_id'],
             ],
         ];
+        $result = $this->Task->getValidation($model, $associations);
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
         $result = $command->getValidation($model, $associations, $args);
@@ -1102,37 +1159,31 @@ class ModelCommandTest extends TestCase
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'body' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'effort' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
             ],
             'completed' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'requirePresence' => [
-                    'rule' => 'requirePresence',
-                    'args' => ["'create'" ],
-                ],
-                'notEmpty' => [
-                    'rule' => 'notEmpty',
-                    'args' => [],
-                ],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'" ]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
             ],
             'todo_task_count' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
             ],
         ];
         $this->assertEquals($expected, $result);
