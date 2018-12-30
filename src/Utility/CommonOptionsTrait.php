@@ -19,6 +19,7 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use InvalidArgumentException;
 
 /**
  * Long term this trait should be folded into Bake\Command\BakeCommand
@@ -59,9 +60,9 @@ trait CommonOptionsTrait
             $this->plugin = implode('/', array_map([$this, '_camelize'], $parts));
 
             if (strpos($this->plugin, '\\')) {
-                $this->abort('Invalid plugin namespace separator, please use / instead of \ for plugins.');
-
-                return;
+                throw new InvalidArgumentException(
+                    'Invalid plugin namespace separator, please use / instead of \ for plugins.'
+                );
             }
         }
 

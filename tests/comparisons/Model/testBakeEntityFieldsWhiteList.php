@@ -1,26 +1,26 @@
 <?php
-namespace App\Model\Entity;
+namespace Bake\Test\App\Model\Entity;
 
 use Cake\ORM\Entity;
 
 /**
- * BakeArticle Entity
+ * TodoItem Entity
  *
  * @property int $id
- * @property int $bake_user_id
+ * @property int $user_id
  * @property string $title
  * @property string|null $body
- * @property float $rating
- * @property float $score
- * @property bool $published
+ * @property float $effort
+ * @property bool $completed
+ * @property int $todo_task_count
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $updated
  *
- * @property \App\Model\Entity\BakeUser $bake_user
- * @property \App\Model\Entity\BakeComment[] $bake_comments
- * @property \App\Model\Entity\BakeTag[] $bake_tags
+ * @property \Bake\Test\App\Model\Entity\User $user
+ * @property \Bake\Test\App\Model\Entity\TodoTask[] $todo_tasks
+ * @property \Bake\Test\App\Model\Entity\TodoLabel[] $todo_labels
  */
-class BakeArticle extends Entity
+class TodoItem extends Entity
 {
 
     /**
@@ -36,6 +36,6 @@ class BakeArticle extends Entity
         'id' => true,
         'title' => true,
         'body' => true,
-        'created' => true
+        'completed' => true
     ];
 }

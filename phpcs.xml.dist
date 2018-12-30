@@ -5,4 +5,9 @@
     <rule ref="CakePHP" />
 
     <exclude-pattern>*/comparisons/*</exclude-pattern>
+
+    <rule ref="CakePHP">
+        <!-- Exclude unwanted sniffs -->
+        <exclude name="Generic.Commenting.Todo.TaskFound" /> <!-- Excluded because it triggers on Todo* models -->
+    </rule>
 </ruleset>

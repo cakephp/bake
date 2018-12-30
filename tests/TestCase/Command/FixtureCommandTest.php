@@ -39,7 +39,7 @@ class FixtureCommandTest extends TestCase
         'plugin.Bake.Datatypes',
         'plugin.Bake.BinaryTests',
         'plugin.Bake.BakeCar',
-        'core.Users',
+        'plugin.Bake.Users',
     ];
 
     /**

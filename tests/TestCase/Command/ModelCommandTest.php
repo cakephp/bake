@@ -13,10 +13,13 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Command;
 
+use Bake\Command\ModelCommand;
 use Bake\Test\TestCase\TestCase;
-use Cake\Console\Shell;
+use Cake\Console\Arguments;
+use Cake\Console\Command;
+use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
@@ -27,17 +30,10 @@ use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 
 /**
- * ModelTaskTest class
+ * ModelCommand test class
  */
-class ModelTaskTest extends TestCase
+class ModelCommandTest extends TestCase
 {
-    /**
-     * Fixtures should be dropped after each tests
-     *
-     * @var bool
-     */
-    public $dropTables = true;
-
     /**
      * fixtures
      *
@@ -47,25 +43,18 @@ class ModelTaskTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'core.Users',
-        'core.CounterCacheUsers',
-        'core.CounterCachePosts',
         'core.Comments',
         'core.Tags',
         'core.ArticlesTags',
-        'plugin.Bake.BakeArticles',
-        'plugin.Bake.BakeComments',
-        'plugin.Bake.BakeArticlesBakeTags',
-        'plugin.Bake.BakeTags',
+        'plugin.Bake.TodoTasks',
+        'plugin.Bake.TodoItems',
+        'plugin.Bake.TodoLabels',
+        'plugin.Bake.TodoItemsTodoLabels',
         'plugin.Bake.CategoryThreads',
         'plugin.Bake.Invitations',
         'plugin.Bake.NumberTrees',
+        'plugin.Bake.Users',
     ];
-
-    /**
-     * @var \Bake\Shell\Task\ModelTask|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $Task;
 
     /**
      * setUp method
@@ -76,71 +65,19 @@ class ModelTaskTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
-            ->setMethods(['in', 'err', 'createFile', '_stop', '_checkUnitTest'])
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->Task->connection = 'test';
-        $this->_setupOtherMocks();
-        TableRegistry::getTableLocator()->clear();
+        $this->setAppNamespace('Bake\Test\App');
+        $this->useCommandRunner();
     }
 
     /**
-     * Setup a mock that has out mocked. Normally this is not used as it makes $this->at() really tricky.
-     *
-     * @return void
-     */
-    protected function _useMockedOut()
-    {
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
-            ->setMethods(['in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest'])
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->_setupOtherMocks();
-    }
-
-    /**
-     * sets up the rest of the dependencies for Model Task
-     *
-     * @return void
-     */
-    protected function _setupOtherMocks()
-    {
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task->Fixture = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
-            ->setConstructorArgs([$io])
-            ->setMethods(['bake', 'execute'])
-            ->getMock();
-        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\TestTask')
-            ->setConstructorArgs([$io])
-            ->setMethods(['bake', 'execute'])
-            ->getMock();
-
-        $this->Task->name = 'Model';
-    }
-
-    /**
-     * tearDown method
+     * teardown method
      *
      * @return void
      */
     public function tearDown()
     {
         parent::tearDown();
-        unset($this->Task);
+        TableRegistry::getTableLocator()->clear();
     }
 
     /**
@@ -152,11 +89,11 @@ class ModelTaskTest extends TestCase
     {
         $this->exec('bake model --connection test');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
-        $this->assertOutputContains('- BakeArticles');
-        $this->assertOutputContains('- BakeArticlesBakeTags');
-        $this->assertOutputContains('- BakeTags');
-        $this->assertOutputContains('- BakeComments');
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertOutputContains('- TodoItems');
+        $this->assertOutputContains('- TodoTasks');
+        $this->assertOutputContains('- TodoLabels');
+        $this->assertOutputContains('- TodoItemsTodoLabels');
         $this->assertOutputContains('- CategoryThreads');
     }
 
@@ -167,12 +104,14 @@ class ModelTaskTest extends TestCase
      */
     public function testGetTable()
     {
-        $result = $this->Task->getTable('BakeArticles');
-        $this->assertEquals('bake_articles', $result);
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+        $result = $command->getTable('TodoItems', $args);
+        $this->assertEquals('todo_items', $result);
 
-        $this->Task->params['table'] = 'bake_articles';
-        $result = $this->Task->getTable('Article');
-        $this->assertEquals('bake_articles', $result);
+        $args = new Arguments([], ['table' => 'items'], []);
+        $result = $command->getTable('TodoItems', $args);
+        $this->assertEquals('items', $result);
     }
 
     /**
@@ -182,13 +121,16 @@ class ModelTaskTest extends TestCase
      */
     public function testGetTableObject()
     {
-        $result = $this->Task->getTableObject('Article', 'bake_articles');
-        $this->assertInstanceOf('Cake\ORM\Table', $result);
-        $this->assertEquals('bake_articles', $result->getTable());
-        $this->assertEquals('Article', $result->getAlias());
+        $command = new ModelCommand();
+        $command->connection = 'test';
 
-        $this->Task->params['plugin'] = 'BakeTest';
-        $result = $this->Task->getTableObject('Authors', 'bake_articles');
+        $result = $command->getTableObject('TodoItems', 'todo_items');
+        $this->assertInstanceOf('Cake\ORM\Table', $result);
+        $this->assertEquals('todo_items', $result->getTable());
+        $this->assertEquals('TodoItems', $result->getAlias());
+
+        $command->plugin = 'BakeTest';
+        $result = $command->getTableObject('Authors', 'todo_items');
         $this->assertInstanceOf('BakeTest\Model\Table\AuthorsTable', $result);
     }
 
@@ -199,29 +141,19 @@ class ModelTaskTest extends TestCase
      */
     public function testGetTableObjectPrefix()
     {
-        $this->Task->tablePrefix = 'my_prefix_';
+        $command = new ModelCommand();
+        $command->connection = 'test';
+        $command->tablePrefix = 'my_prefix_';
 
-        $result = $this->Task->getTableObject('Article', 'bake_articles');
-        $this->assertEquals('my_prefix_bake_articles', $result->getTable());
+        $result = $command->getTableObject('TodoItems', 'todo_items');
+        $this->assertEquals('my_prefix_todo_items', $result->getTable());
         $this->assertInstanceOf('Cake\ORM\Table', $result);
-        $this->assertEquals('Article', $result->getAlias());
+        $this->assertEquals('TodoItems', $result->getAlias());
 
-        $this->Task->params['plugin'] = 'BakeTest';
-        $result = $this->Task->getTableObject('Authors', 'bake_articles');
-        $this->assertEquals('my_prefix_bake_articles', $result->getTable());
+        $command->plugin = 'BakeTest';
+        $result = $command->getTableObject('Authors', 'todo_items');
+        $this->assertEquals('my_prefix_todo_items', $result->getTable());
         $this->assertInstanceOf('BakeTest\Model\Table\AuthorsTable', $result);
-    }
-
-    /**
-     * Test getAssociations with off flag.
-     *
-     * @return void
-     */
-    public function testGetAssociationsNoFlag()
-    {
-        $this->Task->params['no-associations'] = true;
-        $articles = TableRegistry::getTableLocator()->get('BakeArticle');
-        $this->assertEquals([], $this->Task->getAssociations($articles));
     }
 
     /**
@@ -231,35 +163,38 @@ class ModelTaskTest extends TestCase
      */
     public function testApplyAssociations()
     {
-        $articles = TableRegistry::getTableLocator()->get('BakeArticles');
+        $articles = TableRegistry::getTableLocator()->get('TodoItems');
         $assocs = [
             'belongsTo' => [
                 [
-                    'alias' => 'BakeUsers',
-                    'foreignKey' => 'bake_user_id',
+                    'alias' => 'Users',
+                    'foreignKey' => 'user_id',
                 ],
             ],
             'hasMany' => [
                 [
-                    'alias' => 'BakeComments',
-                    'foreignKey' => 'bake_article_id',
+                    'alias' => 'TodoTasks',
+                    'foreignKey' => 'todo_item_id',
                 ],
             ],
             'belongsToMany' => [
                 [
-                    'alias' => 'BakeTags',
-                    'foreignKey' => 'bake_article_id',
-                    'joinTable' => 'bake_articles_bake_tags',
-                    'targetForeignKey' => 'bake_tag_id',
+                    'alias' => 'TodoLabels',
+                    'foreignKey' => 'todo_item_id',
+                    'joinTable' => 'todo_items_todo_labels',
+                    'targetForeignKey' => 'todo_label_id',
                 ],
             ],
         ];
         $original = $articles->associations()->keys();
         $this->assertEquals([], $original);
 
-        $this->Task->applyAssociations($articles, $assocs);
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $command->applyAssociations($articles, $assocs);
         $new = $articles->associations()->keys();
-        $expected = ['bakeusers', 'bakecomments', 'baketags'];
+        $expected = ['users', 'todotasks', 'todolabels'];
         $this->assertEquals($expected, $new);
     }
 
@@ -295,7 +230,9 @@ class ModelTaskTest extends TestCase
             ],
         ];
         $original = $articles->associations()->keys();
-        $this->Task->applyAssociations($articles, $assocs);
+
+        $command = new ModelCommand();
+        $command->applyAssociations($articles, $assocs);
         $new = $articles->associations()->keys();
         $this->assertEquals($original, $new);
     }
@@ -307,32 +244,55 @@ class ModelTaskTest extends TestCase
      */
     public function testGetAssociations()
     {
-        $articles = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->getAssociations($articles);
+        $items = TableRegistry::getTableLocator()->get('TodoItems');
+
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $args = new Arguments([], [], []);
+        $io = $this->createMock(ConsoleIo::class);
+        $result = $command->getAssociations($items, $args, $io);
+
         $expected = [
             'belongsTo' => [
                 [
-                    'alias' => 'BakeUsers',
-                    'foreignKey' => 'bake_user_id',
+                    'alias' => 'Users',
+                    'foreignKey' => 'user_id',
                     'joinType' => 'INNER',
                 ],
             ],
             'hasMany' => [
                 [
-                    'alias' => 'BakeComments',
-                    'foreignKey' => 'bake_article_id',
+                    'alias' => 'TodoTasks',
+                    'foreignKey' => 'todo_item_id',
                 ],
             ],
             'belongsToMany' => [
                 [
-                    'alias' => 'BakeTags',
-                    'foreignKey' => 'bake_article_id',
-                    'joinTable' => 'bake_articles_bake_tags',
-                    'targetForeignKey' => 'bake_tag_id',
+                    'alias' => 'TodoLabels',
+                    'foreignKey' => 'todo_item_id',
+                    'joinTable' => 'todo_items_todo_labels',
+                    'targetForeignKey' => 'todo_label_id',
                 ],
             ],
         ];
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test getAssociations with off flag.
+     *
+     * @return void
+     */
+    public function testGetAssociationsNoFlag()
+    {
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $arguments = new Arguments([], ['no-associations' => true], []);
+        $io = $this->createMock(ConsoleIo::class);
+        $articles = TableRegistry::getTableLocator()->get('BakeArticle');
+        $this->assertEquals([], $command->getAssociations($articles, $arguments, $io));
     }
 
     /**
@@ -342,33 +302,37 @@ class ModelTaskTest extends TestCase
      */
     public function testGetAssociationsPlugin()
     {
-        $articles = TableRegistry::getTableLocator()->get('BakeArticles');
-        $this->Task->plugin = 'TestBake';
+        $items = TableRegistry::getTableLocator()->get('TodoItems');
+        $command = new ModelCommand();
+        $command->plugin = 'TestBake';
+        $command->connection = 'test';
 
-        $result = $this->Task->getAssociations($articles);
+        $args = new Arguments([], [], []);
+        $io = $this->createMock(ConsoleIo::class);
+        $result = $command->getAssociations($items, $args, $io);
         $expected = [
             'belongsTo' => [
                 [
-                    'alias' => 'BakeUsers',
-                    'className' => 'TestBake.BakeUsers',
-                    'foreignKey' => 'bake_user_id',
+                    'alias' => 'Users',
+                    'className' => 'TestBake.Users',
+                    'foreignKey' => 'user_id',
                     'joinType' => 'INNER',
                 ],
             ],
             'hasMany' => [
                 [
-                    'alias' => 'BakeComments',
-                    'className' => 'TestBake.BakeComments',
-                    'foreignKey' => 'bake_article_id',
+                    'alias' => 'TodoTasks',
+                    'className' => 'TestBake.TodoTasks',
+                    'foreignKey' => 'todo_item_id',
                 ],
             ],
             'belongsToMany' => [
                 [
-                    'alias' => 'BakeTags',
-                    'className' => 'TestBake.BakeTags',
-                    'foreignKey' => 'bake_article_id',
-                    'joinTable' => 'bake_articles_bake_tags',
-                    'targetForeignKey' => 'bake_tag_id',
+                    'alias' => 'TodoLabels',
+                    'className' => 'TestBake.TodoLabels',
+                    'foreignKey' => 'todo_item_id',
+                    'joinTable' => 'todo_items_todo_labels',
+                    'targetForeignKey' => 'todo_label_id',
                 ],
             ],
         ];
@@ -387,7 +351,13 @@ class ModelTaskTest extends TestCase
             'id' => ['type' => 'integer'],
             '_id' => ['type' => 'integer'],
         ]);
-        $result = $this->Task->getAssociations($model);
+
+        $args = new Arguments([], [], []);
+        $io = $this->createMock(ConsoleIo::class);
+
+        $command = new ModelCommand();
+        $command->connection = 'test';
+        $result = $command->getAssociations($model, $args, $io);
         $expected = [
             'hasMany' => [],
             'belongsTo' => [],
@@ -397,24 +367,52 @@ class ModelTaskTest extends TestCase
     }
 
     /**
+     * test finding referenced tables using constraints.
+     *
+     * @return void
+     */
+    public function testGetAssociationsConstraints()
+    {
+        $model = TableRegistry::getTableLocator()->get('Invitations');
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $args = new Arguments([], [], []);
+        $io = $this->createMock(ConsoleIo::class);
+        $result = $command->getAssociations($model, $args, $io);
+
+        $expected = [
+            [
+                'alias' => 'Users',
+                'foreignKey' => 'sender_id',
+                'joinType' => 'INNER',
+            ],
+            [
+                'alias' => 'Users',
+                'foreignKey' => 'receiver_id',
+                'joinType' => 'INNER',
+            ],
+        ];
+        $this->assertEquals($expected, $result['belongsTo']);
+    }
+
+    /**
      * test that belongsTo generation works.
      *
      * @return void
      */
     public function testBelongsToGeneration()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeComments');
-        $result = $this->Task->findBelongsTo($model, []);
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
                 [
-                    'alias' => 'BakeArticles',
-                    'foreignKey' => 'bake_article_id',
-                    'joinType' => 'INNER',
-                ],
-                [
-                    'alias' => 'BakeUsers',
-                    'foreignKey' => 'bake_user_id',
+                    'alias' => 'Users',
+                    'foreignKey' => 'user_id',
                     'joinType' => 'INNER',
                 ],
             ],
@@ -422,7 +420,7 @@ class ModelTaskTest extends TestCase
         $this->assertEquals($expected, $result);
 
         $model = TableRegistry::getTableLocator()->get('CategoryThreads');
-        $result = $this->Task->findBelongsTo($model, []);
+        $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
                 [
@@ -434,8 +432,8 @@ class ModelTaskTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        $this->Task->plugin = 'Blog';
-        $result = $this->Task->findBelongsTo($model, []);
+        $command->plugin = 'Blog';
+        $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
                 [
@@ -456,7 +454,8 @@ class ModelTaskTest extends TestCase
     public function testBelongsToGenerationConstraints()
     {
         $model = TableRegistry::getTableLocator()->get('Invitations');
-        $result = $this->Task->findBelongsTo($model, []);
+        $command = new ModelCommand();
+        $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
                 [
@@ -482,18 +481,19 @@ class ModelTaskTest extends TestCase
      */
     public function testBelongsToGenerationCompositeKey()
     {
-        $model = TableRegistry::getTableLocator()->get('ArticlesTags');
-        $result = $this->Task->findBelongsTo($model, []);
+        $model = TableRegistry::getTableLocator()->get('TodoItemsTodoLabels');
+        $command = new ModelCommand();
+        $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
                 [
-                    'alias' => 'Articles',
-                    'foreignKey' => 'article_id',
+                    'alias' => 'TodoItems',
+                    'foreignKey' => 'todo_item_id',
                     'joinType' => 'INNER',
                 ],
                 [
-                    'alias' => 'Tags',
-                    'foreignKey' => 'tag_id',
+                    'alias' => 'TodoLabels',
+                    'foreignKey' => 'todo_label_id',
                     'joinType' => 'INNER',
                 ],
             ],
@@ -508,12 +508,13 @@ class ModelTaskTest extends TestCase
      */
     public function testBelongsToGenerationIdMidColumn()
     {
-        $model = TableRegistry::getTableLocator()->get('Articles');
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
         $model->setSchema([
             'id' => ['type' => 'integer'],
             'thing_id_field' => ['type' => 'integer'],
         ]);
-        $result = $this->Task->findBelongsTo($model, []);
+        $command = new ModelCommand();
+        $result = $command->findBelongsTo($model, []);
         $this->assertEquals([], $result);
     }
 
@@ -532,7 +533,8 @@ class ModelTaskTest extends TestCase
                 'primary' => ['type' => 'primary', 'columns' => ['usr_id']],
             ],
         ]);
-        $result = $this->Task->findBelongsTo($model, []);
+        $command = new ModelCommand();
+        $result = $command->findBelongsTo($model, []);
         $this->assertEquals([], $result);
     }
 
@@ -543,21 +545,23 @@ class ModelTaskTest extends TestCase
      */
     public function testHasManyGeneration()
     {
-        $this->Task->connection = 'test';
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->findHasMany($model, []);
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $result = $command->findHasMany($model, []);
         $expected = [
             'hasMany' => [
                 [
-                    'alias' => 'BakeComments',
-                    'foreignKey' => 'bake_article_id',
+                    'alias' => 'TodoTasks',
+                    'foreignKey' => 'todo_item_id',
                 ],
             ],
         ];
         $this->assertEquals($expected, $result);
 
         $model = TableRegistry::getTableLocator()->get('CategoryThreads');
-        $result = $this->Task->findHasMany($model, []);
+        $result = $command->findHasMany($model, []);
         $expected = [
             'hasMany' => [
                 [
@@ -569,8 +573,8 @@ class ModelTaskTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        $this->Task->plugin = 'Blog';
-        $result = $this->Task->findHasMany($model, []);
+        $command->plugin = 'Blog';
+        $result = $command->findHasMany($model, []);
         $expected = [
             'hasMany' => [
                 [
@@ -590,16 +594,17 @@ class ModelTaskTest extends TestCase
      */
     public function testHasAndBelongsToManyGeneration()
     {
-        $this->Task->connection = 'test';
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->findBelongsToMany($model, []);
+        $command = new ModelCommand();
+        $command->connection = 'test';
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $result = $command->findBelongsToMany($model, []);
         $expected = [
             'belongsToMany' => [
                 [
-                    'alias' => 'BakeTags',
-                    'foreignKey' => 'bake_article_id',
-                    'joinTable' => 'bake_articles_bake_tags',
-                    'targetForeignKey' => 'bake_tag_id',
+                    'alias' => 'TodoLabels',
+                    'foreignKey' => 'todo_item_id',
+                    'joinTable' => 'todo_items_todo_labels',
+                    'targetForeignKey' => 'todo_label_id',
                 ],
             ],
         ];
@@ -613,13 +618,14 @@ class ModelTaskTest extends TestCase
      */
     public function testGetEntityPropertySchema()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
         $model->belongsTo('BakeUsers');
         $model->hasMany('BakeTest.Authors');
         $model->getSchema()->setColumnType('created', 'timestamp');
         $model->getSchema()->setColumnType('updated', 'timestamp');
 
-        $result = $this->Task->getEntityPropertySchema($model);
+        $command = new ModelCommand();
+        $result = $command->getEntityPropertySchema($model);
         $expected = [
             'id' => [
                 'kind' => 'column',
@@ -636,30 +642,20 @@ class ModelTaskTest extends TestCase
                 'type' => 'text',
                 'null' => true,
             ],
-            'rating' => [
-                'kind' => 'column',
-                'type' => 'float',
-                'null' => false,
-            ],
-            'score' => [
+            'effort' => [
                 'kind' => 'column',
                 'type' => 'decimal',
+                'null' => false,
+            ],
+            'completed' => [
+                'kind' => 'column',
+                'type' => 'boolean',
                 'null' => false,
             ],
             'created' => [
                 'kind' => 'column',
                 'type' => 'timestamp',
                 'null' => true,
-            ],
-            'bake_user_id' => [
-                'kind' => 'column',
-                'type' => 'integer',
-                'null' => false,
-            ],
-            'published' => [
-                'kind' => 'column',
-                'type' => 'boolean',
-                'null' => false,
             ],
             'updated' => [
                 'kind' => 'column',
@@ -684,7 +680,7 @@ class ModelTaskTest extends TestCase
             'bake_user' => [
                 'kind' => 'association',
                 'association' => $model->getAssociation('BakeUsers'),
-                'type' => '\App\Model\Entity\BakeUser',
+                'type' => '\Bake\Test\App\Model\Entity\BakeUser',
             ],
             'authors' => [
                 'kind' => 'association',
@@ -704,20 +700,19 @@ class ModelTaskTest extends TestCase
      */
     public function testGetFields()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $model->belongsTo('BakeUser');
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
 
-        $result = $this->Task->getFields($model);
+        $command = new ModelCommand();
+        $result = $command->getFields($model, new Arguments([], [], []));
         $expected = [
-            'bake_user_id',
+            'user_id',
             'title',
             'body',
-            'rating',
-            'score',
-            'published',
+            'effort',
+            'completed',
+            'todo_task_count',
             'created',
             'updated',
-            'bake_user',
         ];
         $this->assertSame($expected, $result);
     }
@@ -729,9 +724,10 @@ class ModelTaskTest extends TestCase
      */
     public function testGetFieldsDisabled()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $this->Task->params['no-fields'] = true;
-        $result = $this->Task->getFields($model);
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $args = new Arguments([], ['no-fields' => true], []);
+        $command = new ModelCommand();
+        $result = $command->getFields($model, $args);
         $this->assertFalse($result);
     }
 
@@ -742,9 +738,11 @@ class ModelTaskTest extends TestCase
      */
     public function testGetFieldsWhiteList()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $this->Task->params['fields'] = 'id, title  , , body ,  created';
-        $result = $this->Task->getFields($model);
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
+
+        $args = new Arguments([], ['fields' => 'id, title  , , body ,  created'], []);
+        $command = new ModelCommand();
+        $result = $command->getFields($model, $args);
         $expected = [
             'id',
             'title',
@@ -762,7 +760,10 @@ class ModelTaskTest extends TestCase
     public function testGetHiddenFields()
     {
         $model = TableRegistry::getTableLocator()->get('Users');
-        $result = $this->Task->getHiddenFields($model);
+
+        $args = new Arguments([], [], []);
+        $command = new ModelCommand();
+        $result = $command->getHiddenFields($model, $args);
         $expected = [
             'password',
         ];
@@ -777,8 +778,10 @@ class ModelTaskTest extends TestCase
     public function testGetHiddenFieldsDisabled()
     {
         $model = TableRegistry::getTableLocator()->get('Users');
-        $this->Task->params['no-hidden'] = true;
-        $result = $this->Task->getHiddenFields($model);
+
+        $args = new Arguments([], ['no-hidden' => true], []);
+        $command = new ModelCommand();
+        $result = $command->getHiddenFields($model, $args);
         $this->assertEquals([], $result);
     }
 
@@ -790,8 +793,10 @@ class ModelTaskTest extends TestCase
     public function testGetHiddenFieldsWhiteList()
     {
         $model = TableRegistry::getTableLocator()->get('Users');
-        $this->Task->params['hidden'] = 'id, title  , , body ,  created';
-        $result = $this->Task->getHiddenFields($model);
+
+        $args = new Arguments([], ['hidden' => 'id, title  , , body ,  created'], []);
+        $command = new ModelCommand();
+        $result = $command->getHiddenFields($model, $args);
         $expected = [
             'id',
             'title',
@@ -808,13 +813,16 @@ class ModelTaskTest extends TestCase
      */
     public function testGetPrimaryKey()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->getPrimaryKey($model);
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+
+        $result = $command->getPrimaryKey($model, $args);
         $expected = ['id'];
         $this->assertEquals($expected, $result);
 
-        $this->Task->params['primary-key'] = 'id, , account_id';
-        $result = $this->Task->getPrimaryKey($model);
+        $args = new Arguments([], ['primary-key' => 'id, , account_id'], []);
+        $result = $command->getPrimaryKey($model, $args);
         $expected = ['id', 'account_id'];
         $this->assertEquals($expected, $result);
     }
@@ -826,9 +834,10 @@ class ModelTaskTest extends TestCase
      */
     public function testGetValidationDisabled()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $this->Task->params['no-validation'] = true;
-        $result = $this->Task->getValidation($model);
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $command = new ModelCommand();
+        $args = new Arguments([], ['no-validation' => true], []);
+        $result = $command->getValidation($model, [], $args);
         $this->assertEquals([], $result);
     }
 
@@ -843,10 +852,13 @@ class ModelTaskTest extends TestCase
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
         $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
 
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->getValidation($model);
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
+
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+        $result = $command->getValidation($model, [], $args);
         $expected = [
-            'bake_user_id' => [
+            'user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
@@ -861,29 +873,12 @@ class ModelTaskTest extends TestCase
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
             ],
-            'rating' => [
-                'numeric' => ['rule' => 'numeric', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'greaterThanOrEqual' => [
-                    'rule' => 'greaterThanOrEqual',
-                    'args' => [
-                        0,
-                    ],
-                ],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-            ],
-            'score' => [
+            'effort' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'greaterThanOrEqual' => [
-                    'rule' => 'greaterThanOrEqual',
-                    'args' => [
-                        0,
-                    ],
-                ],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
             ],
-            'published' => [
+            'completed' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
                 'requirePresence' => [
                     'rule' => 'requirePresence',
@@ -894,36 +889,12 @@ class ModelTaskTest extends TestCase
                     'args' => [],
                 ],
             ],
+            'todo_task_count' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+            ],
             'id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
-            ],
-        ];
-        $this->assertEquals($expected, $result);
-
-        $model = TableRegistry::getTableLocator()->get('BakeComments');
-        $result = $this->Task->getValidation($model);
-        $expected = [
-            'bake_article_id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-            ],
-            'bake_user_id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-            ],
-            'comment' => [
-                'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
-            ],
-            'published' => [
-                'scalar' => ['rule' => 'scalar', 'args' => []],
-                'maxLength' => ['rule' => 'maxLength', 'args' => [1]],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
-            ],
-            'otherid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
             ],
@@ -942,10 +913,12 @@ class ModelTaskTest extends TestCase
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
 
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->getValidation($model);
+        $model = TableRegistry::getTableLocator()->get('TodoTasks');
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+        $result = $command->getValidation($model, [], $args);
         $expected = [
-            'bake_user_id' => [
+            'todo_item_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
@@ -960,51 +933,17 @@ class ModelTaskTest extends TestCase
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
             ],
-            'rating' => [
-                'numeric' => ['rule' => 'numeric', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-            ],
-            'score' => [
+            'effort' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
             ],
-            'published' => [
+            'completed' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
-            'id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
-            ],
-        ];
-        $this->assertEquals($expected, $result);
-
-        $model = TableRegistry::getTableLocator()->get('BakeComments');
-        $result = $this->Task->getValidation($model);
-        $expected = [
-            'bake_article_id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-            ],
-            'bake_user_id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-            ],
-            'comment' => [
-                'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
-            ],
-            'published' => [
-                'scalar' => ['rule' => 'scalar', 'args' => []],
-                'maxLength' => ['rule' => 'maxLength', 'args' => [1]],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
-            ],
-            'otherid' => [
+            'uid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
             ],
@@ -1019,7 +958,7 @@ class ModelTaskTest extends TestCase
      */
     public function testGetValidationUniqueDateField()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeComments');
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
         $schema = $model->getSchema();
         $schema
             ->addColumn('release_date', ['type' => 'datetime'])
@@ -1027,7 +966,10 @@ class ModelTaskTest extends TestCase
                 'columns' => ['release_date'],
                 'type' => 'unique',
             ]);
-        $result = $this->Task->getValidation($model);
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+
+        $result = $command->getValidation($model, [], $args);
         $this->assertArrayHasKey('release_date', $result);
         $expected = [
             'dateTime' => ['rule' => 'dateTime', 'args' => []],
@@ -1049,7 +991,9 @@ class ModelTaskTest extends TestCase
         $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
 
         $model = TableRegistry::getTableLocator()->get('NumberTrees');
-        $result = $this->Task->getValidation($model);
+        $args = new Arguments([], [], []);
+        $command = new ModelCommand();
+        $result = $command->getValidation($model, [], $args);
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -1085,7 +1029,9 @@ class ModelTaskTest extends TestCase
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
 
         $model = TableRegistry::getTableLocator()->get('NumberTrees');
-        $result = $this->Task->getValidation($model);
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+        $result = $command->getValidation($model, [], $args);
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -1120,66 +1066,16 @@ class ModelTaskTest extends TestCase
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
         $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
 
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
         $associations = [
             'belongsTo' => [
-                'BakeUsers' => ['foreignKey' => 'bake_user_id'],
+                'Users' => ['foreignKey' => 'user_id'],
             ],
         ];
-        $result = $this->Task->getValidation($model, $associations);
-        $expected = [
-            'id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
-            ],
-            'title' => [
-                'scalar' => ['rule' => 'scalar', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-                'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
-            ],
-            'body' => [
-                'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
-            ],
-            'rating' => [
-                'numeric' => ['rule' => 'numeric', 'args' => []],
-                'greaterThanOrEqual' => [
-                    'rule' => 'greaterThanOrEqual',
-                    'args' => [
-                        0,
-                    ],
-                ],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-            ],
-            'score' => [
-                'decimal' => ['rule' => 'decimal', 'args' => []],
-                'greaterThanOrEqual' => [
-                    'rule' => 'greaterThanOrEqual',
-                    'args' => [
-                        0,
-                    ],
-                ],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-            ],
-            'published' => [
-                'boolean' => [
-                    'rule' => 'boolean',
-                    'args' => [],
-                ],
-                'requirePresence' => [
-                    'rule' => 'requirePresence',
-                    'args' => ["'create'" ],
-                ],
-                'notEmpty' => [
-                    'rule' => 'notEmpty',
-                    'args' => [],
-                ],
-            ],
-        ];
-        $this->assertEquals($expected, $result);
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+        $result = $command->getValidation($model, $associations, $args);
+        $this->assertArrayNotHasKey('user_id', $result);
     }
 
     /**
@@ -1193,13 +1089,15 @@ class ModelTaskTest extends TestCase
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
 
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
         $associations = [
             'belongsTo' => [
-                'BakeUsers' => ['foreignKey' => 'bake_user_id'],
+                'Users' => ['foreignKey' => 'user_id'],
             ],
         ];
-        $result = $this->Task->getValidation($model, $associations);
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+        $result = $command->getValidation($model, $associations, $args);
         $expected = [
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
@@ -1211,24 +1109,30 @@ class ModelTaskTest extends TestCase
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
             ],
-            'published' => [
-                'boolean' => ['rule' => 'boolean', 'args' => []],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+            'effort' => [
+                'decimal' => ['rule' => 'decimal', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+            ],
+            'completed' => [
+                'boolean' => ['rule' => 'boolean', 'args' => []],
+                'requirePresence' => [
+                    'rule' => 'requirePresence',
+                    'args' => ["'create'" ],
+                ],
+                'notEmpty' => [
+                    'rule' => 'notEmpty',
+                    'args' => [],
+                ],
+            ],
+            'todo_task_count' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
-            ],
-            'rating' => [
-                'numeric' => ['rule' => 'numeric', 'args' => []],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-            ],
-            'score' => [
-                'decimal' => ['rule' => 'decimal', 'args' => []],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1242,8 +1146,9 @@ class ModelTaskTest extends TestCase
     public function testGetRulesDisabled()
     {
         $model = TableRegistry::getTableLocator()->get('Users');
-        $this->Task->params['no-rules'] = true;
-        $result = $this->Task->getRules($model, []);
+        $command = new ModelCommand();
+        $args = new Arguments([], ['no-rules' => true], []);
+        $result = $command->getRules($model, [], $args);
         $this->assertEquals([], $result);
     }
 
@@ -1273,7 +1178,9 @@ class ModelTaskTest extends TestCase
                 ],
             ],
         ];
-        $result = $this->Task->getRules($model, $associations);
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+        $result = $command->getRules($model, $associations, $args);
         $expected = [
             'username' => [
                 'name' => 'isUnique',
@@ -1300,17 +1207,19 @@ class ModelTaskTest extends TestCase
      */
     public function testGetRulesUniqueKeys()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
         $model->getSchema()->addConstraint('unique_title', [
             'type' => 'unique',
             'columns' => ['title'],
         ]);
         $model->getSchema()->addConstraint('ignored_constraint', [
             'type' => 'unique',
-            'columns' => ['title', 'bake_user_id'],
+            'columns' => ['title', 'user_id'],
         ]);
 
-        $result = $this->Task->getRules($model, []);
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+        $result = $command->getRules($model, [], $args);
         $expected = [
             'title' => [
                 'name' => 'isUnique',
@@ -1320,36 +1229,22 @@ class ModelTaskTest extends TestCase
     }
 
     /**
-     * test non interactive doActsAs
+     * Test that specific behaviors are auto-detected
      *
      * @return void
      */
-    public function testGetBehaviors()
+    public function testGetBehaviorsAutoDetect()
     {
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
         $model = TableRegistry::getTableLocator()->get('NumberTrees');
-        $result = $this->Task->getBehaviors($model);
+        $result = $command->getBehaviors($model);
         $this->assertEquals(['Tree' => []], $result);
 
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->getBehaviors($model);
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $result = $command->getBehaviors($model);
         $this->assertEquals(['Timestamp' => []], $result);
-
-        TableRegistry::getTableLocator()->clear();
-        TableRegistry::getTableLocator()->get('Users', [
-            'table' => 'counter_cache_users',
-        ]);
-        $model = TableRegistry::getTableLocator()->get('Posts', [
-            'table' => 'counter_cache_posts',
-        ]);
-        $behaviors = $this->Task->getBehaviors($model);
-
-        $behaviors['Translate'] = [
-            'defaultLocale' => "'fr_FR'",
-            'implementedFinders' => ['translations' => "'findTranslations'"],
-        ];
-
-        $result = $this->Task->bakeTable($model, ['behaviors' => $behaviors]);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
     /**
@@ -1359,12 +1254,14 @@ class ModelTaskTest extends TestCase
      */
     public function testGetDisplayField()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->getDisplayField($model);
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+        $result = $command->getDisplayField($model, $args);
         $this->assertEquals('title', $result);
 
-        $this->Task->params['display-field'] = 'custom';
-        $result = $this->Task->getDisplayField($model);
+        $args = new Arguments([], ['display-field' => 'custom'], []);
+        $result = $command->getDisplayField($model, $args);
         $this->assertEquals('custom', $result);
     }
 
@@ -1376,14 +1273,15 @@ class ModelTaskTest extends TestCase
     public function testBakeFixture()
     {
         $this->generatedFiles = [
-            APP . 'Model/Table/BakeTagsTable.php',
-            APP . 'Model/Entity/BakeTag.php',
-            ROOT . 'tests/Fixture/BakeTagsFixture.php',
+            APP . 'Model/Table/TodoItemsTable.php',
+            APP . 'Model/Entity/TodoItem.php',
+            ROOT . 'tests/Fixture/TodoItemsFixture.php',
         ];
-        $this->exec('bake model --no-test bake_tags');
+        $this->exec('bake model --no-test todo_items');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
     }
 
     /**
@@ -1394,15 +1292,15 @@ class ModelTaskTest extends TestCase
     public function testBakeFixtureDisabled()
     {
         $this->generatedFiles = [
-            APP . 'Model/Table/BakeTagsTable.php',
-            APP . 'Model/Entity/BakeTag.php',
+            APP . 'Model/Table/TodoItemsTable.php',
+            APP . 'Model/Entity/TodoItem.php',
         ];
-        $this->exec('bake model --no-test --no-fixture bake_tags');
+        $this->exec('bake model --no-test --no-fixture todo_items');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
-        $this->assertFileNotExists(ROOT . 'tests/Fixture/BakeTagsFixture.php');
-        $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Table/BakeTagsTableTest.php');
+        $this->assertFileNotExists(ROOT . 'tests/Fixture/TodoItemsFixture.php');
+        $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
     }
 
     /**
@@ -1413,156 +1311,33 @@ class ModelTaskTest extends TestCase
     public function testBakeTest()
     {
         $this->generatedFiles = [
-            APP . 'Model/Table/BakeTagsTable.php',
-            APP . 'Model/Entity/BakeTag.php',
-            ROOT . 'tests/TestCase/Model/Table/BakeTagsTableTest.php',
+            APP . 'Model/Table/TodoItemsTable.php',
+            APP . 'Model/Entity/TodoItem.php',
+            ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php',
         ];
-        $this->exec('bake model --no-fixture bake_tags');
+        $this->exec('bake model --no-fixture todo_items');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
-        $this->assertFileNotExists(ROOT . 'tests/Fixture/BakeTagsFixture.php');
+        $this->assertFileNotExists(ROOT . 'tests/Fixture/TodoItemsFixture.php');
     }
 
     /**
-     * test baking validation
-     *
-     * @return void
-     */
-    public function testBakeTableValidation()
-    {
-        $validation = [
-            'id' => [
-                'valid' => [
-                    'allowEmpty' => 'create',
-                    'rule' => 'numeric',
-                ],
-            ],
-            'name' => [
-                'valid' => [
-                    'allowEmpty' => false,
-                    'rule' => 'scalar',
-                ],
-                'maxLength' => [
-                    'rule' => 'maxLength',
-                    'args' => [
-                        100,
-                        "'Name must be shorter than 100 characters.'",
-                    ],
-                ],
-            ],
-            'count' => [
-                'valid' => [
-                    'allowEmpty' => false,
-                    'rule' => 'nonNegativeInteger',
-                ],
-            ],
-            'price' => [
-                'valid' => [
-                    'allowEmpty' => false,
-                    'rule' => 'greaterThanOrEqual',
-                    'args' => [
-                        0,
-                    ],
-                ],
-            ],
-            'email' => [
-                'valid' => [
-                    'allowEmpty' => true,
-                    'rule' => 'email',
-                ],
-                'unique' => [
-                    'rule' => 'validateUnique',
-                    'provider' => 'table',
-                ],
-            ],
-            'image' => [
-                'uploadError' => [
-                    'rule' => 'uploadError',
-                    'args' => ['true'],
-                ],
-                'uploadedFile' => [
-                    'rule' => 'uploadedFile',
-                    'args' => [
-                        [
-                            'optional' => 'true',
-                            'types' => ["'image/jpeg'"],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->bakeTable($model, compact('validation'));
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
-    }
-
-    /**
-     * test baking with table config and ensure that prefixes are ignored.
+     * test baking with table config and connection option
      *
      * @return void
      */
     public function testBakeTableConfig()
     {
-        $config = [
-            'table' => 'articles',
-            'primaryKey' => ['id'],
-            'displayField' => 'title',
-            'behaviors' => ['Timestamp' => ''],
-            'connection' => 'website',
+        $this->generatedFiles = [
+            APP . 'Model/Table/ItemsTable.php',
+            APP . 'Model/Entity/Item.php',
         ];
+        $this->exec('bake model --no-test --no-fixture --connection test --table todo_items Items');
 
-        $this->Task->params['prefix'] = 'Admin';
-        $this->Task->expects($this->once())
-            ->method('createFile')
-            ->with($this->stringContains('App' . DS . 'Model' . DS . 'Table' . DS . 'BakeArticlesTable.php'));
-
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->bakeTable($model, $config);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
-    }
-
-    /**
-     * test baking relations
-     *
-     * @return void
-     */
-    public function testBakeTableRelations()
-    {
-        $associations = [
-            'belongsTo' => [
-                [
-                    'alias' => 'SomethingElse',
-                    'foreignKey' => 'something_else_id',
-                ],
-                [
-                    'alias' => 'BakeUser',
-                    'foreignKey' => 'bake_user_id',
-                ],
-            ],
-            'hasMany' => [
-                [
-                    'alias' => 'BakeComment',
-                    'foreignKey' => 'parent_id',
-                ],
-            ],
-            'belongsToMany' => [
-                [
-                    'alias' => 'BakeTag',
-                    'foreignKey' => 'bake_article_id',
-                    'joinTable' => 'bake_articles_bake_tags',
-                    'targetForeignKey' => 'bake_tag_id',
-                ],
-            ],
-        ];
-        $associationInfo = [
-            'SomethingElse' => ['targetFqn' => '\App\Model\Table\SomethingElseTable'],
-            'BakeUser' => ['targetFqn' => '\App\Model\Table\BakeUserTable'],
-            'BakeComment' => ['targetFqn' => '\App\Model\Table\BakeCommentTable'],
-            'BakeTag' => ['targetFqn' => '\App\Model\Table\BakeTagTable'],
-        ];
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->bakeTable($model, compact('associations', 'associationInfo'));
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1576,7 +1351,7 @@ class ModelTaskTest extends TestCase
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden users');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1592,7 +1367,7 @@ class ModelTaskTest extends TestCase
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table users');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1605,9 +1380,9 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntityWithPropertyTypeHints()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $model->belongsTo('BakeUsers');
-        $model->hasMany('BakeTest.Authors');
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model->belongsTo('Users');
+        $model->hasMany('BakeTest.TodoTasks');
         $model->getSchema()->addColumn('array_type', [
             'type' => 'array',
         ]);
@@ -1618,15 +1393,10 @@ class ModelTaskTest extends TestCase
             'type' => 'unknownType',
         ]);
 
-        $config = [
-            'fields' => false,
-            'propertySchema' => $this->Task->getEntityPropertySchema($model),
-        ];
+        $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields todo_items');
 
-        $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
-        $this->exec('bake model --no-test --no-fixture --no-table --no-fields bake_articles');
-
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1639,12 +1409,14 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntityFieldsDefaults()
     {
-        $config = [
-            'primaryKey' => ['id'],
-            'fields' => null,
+        $this->generatedFiles = [
+            APP . 'Model/Entity/TodoItem.php',
         ];
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $result = $this->Task->bakeEntity($model, $config);
+        $this->exec('bake model --no-test --no-table --no-fixture TodoItems');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1655,10 +1427,10 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntityNoFields()
     {
-        $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
-        $this->exec('bake model --no-test --no-fixture --no-table --no-fields bake_articles');
+        $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields todo_items');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1671,10 +1443,10 @@ class ModelTaskTest extends TestCase
      */
     public function testBakeEntityFieldsWhiteList()
     {
-        $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
-        $this->exec('bake model --no-test --no-fixture --no-table --fields id,title,body,created bake_articles');
+        $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --fields id,title,body,completed todo_items');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1690,7 +1462,7 @@ class ModelTaskTest extends TestCase
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --hidden password users');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1706,7 +1478,7 @@ class ModelTaskTest extends TestCase
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --hidden foo,bar users');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1726,9 +1498,27 @@ class ModelTaskTest extends TestCase
 
         $this->exec('bake model --no-validation --no-test --no-fixture --no-entity BakeTest.Users');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test generation with counter cach
+     *
+     * @return void
+     */
+    public function testBakeTableWithCounterCache()
+    {
+        $this->generatedFile = APP . 'Model/Table/TodoTasksTable.php';
+
+        $this->exec('bake model --no-validation --no-test --no-fixture --no-entity TodoTasks');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertContains('CounterCache', $result);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1746,7 +1536,7 @@ class ModelTaskTest extends TestCase
 
         $this->exec('bake model --no-validation --no-test --no-fixture --no-entity -p BakeTest Users');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1757,29 +1547,17 @@ class ModelTaskTest extends TestCase
      *
      * @return void
      */
-    public function testBakeWithRules()
+    public function testBakeWithRulesUnique()
     {
-        $model = TableRegistry::getTableLocator()->get('Users');
-        $associations = [
-            'belongsTo' => [
-                [
-                    'alias' => 'Countries',
-                    'foreignKey' => 'country_id',
-                ],
-                [
-                    'alias' => 'Sites',
-                    'foreignKey' => 'site_id',
-                ],
-            ],
-            'hasMany' => [
-                [
-                    'alias' => 'BakeComments',
-                    'foreignKey' => 'bake_user_id',
-                ],
-            ],
+        $this->generatedFiles = [
+            APP . 'Model/Table/UsersTable.php',
         ];
-        $rulesChecker = $this->Task->getRules($model, $associations);
-        $result = $this->Task->bakeTable($model, compact('rulesChecker'));
+        $this->exec('bake model --no-test --no-fixture --no-entity Users');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+
+        $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -1792,7 +1570,7 @@ class ModelTaskTest extends TestCase
     {
         $this->exec('bake model');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('Choose a model to bake from the following:');
     }
 
@@ -1811,7 +1589,7 @@ class ModelTaskTest extends TestCase
         ];
         $this->exec('bake model --connection test users');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
     }
 
@@ -1823,7 +1601,7 @@ class ModelTaskTest extends TestCase
     public static function nameVariations()
     {
         return [
-            ['BakeComments'], ['bake_comments'],
+            ['TodoItems'], ['todo_items'],
         ];
     }
 
@@ -1836,14 +1614,14 @@ class ModelTaskTest extends TestCase
     public function testMainWithNamedModelVariations($name)
     {
         $this->generatedFiles = [
-            APP . 'Model/Table/BakeCommentsTable.php',
-            APP . 'Model/Entity/BakeComment.php',
-            ROOT . 'tests/TestCase/Model/Table/BakeCommentsTableTest.php',
-            ROOT . 'tests/Fixture/BakeCommentsFixture.php',
+            APP . 'Model/Table/TodoItemsTable.php',
+            APP . 'Model/Entity/TodoItem.php',
+            ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php',
+            ROOT . 'tests/Fixture/TodoItemsFixture.php',
         ];
         $this->exec("bake model --connection test {$name}");
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
     }
 
@@ -1854,6 +1632,7 @@ class ModelTaskTest extends TestCase
      */
     public function testMainIntoAll()
     {
+        $this->markTestIncomplete('move to modelall fixing');
         $count = count($this->Task->listAll());
         if ($count != count($this->fixtures)) {
             $this->markTestSkipped('Additional tables detected.');
@@ -1936,6 +1715,7 @@ class ModelTaskTest extends TestCase
      */
     public function testSkipTablesAndAll()
     {
+        $this->markTestIncomplete('move to modelall fixing');
         if ($this->Task->listAll()[1] != 'bake_articles') {
             $this->markTestSkipped('Additional tables detected.');
         }
@@ -1994,147 +1774,5 @@ class ModelTaskTest extends TestCase
             ->with($filename);
 
         $this->Task->all();
-    }
-
-    /**
-     * test finding referenced tables using constraints.
-     *
-     * @return void
-     */
-    public function testFindTableReferencedBy()
-    {
-        $invoices = TableRegistry::getTableLocator()->get('Invitations');
-        $schema = $invoices->getSchema();
-        $result = $this->Task->findTableReferencedBy($schema, 'not_there');
-        $this->assertNull($result);
-
-        $result = $this->Task->findTableReferencedBy($schema, 'sender_id');
-        $this->assertEquals('users', $result);
-
-        $result = $this->Task->findTableReferencedBy($schema, 'receiver_id');
-        $this->assertEquals('users', $result);
-    }
-
-    /**
-     * Tests collecting association info with default association configuration.
-     *
-     * @return void
-     */
-    public function testGetAssociationInfo()
-    {
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
-        $model->belongsTo('BakeUsers');
-        $model->hasMany('BakeTest.Authors');
-        $model->hasMany('BakeTest.Publishers');
-
-        $result = $this->Task->getAssociationInfo($model);
-
-        $expected = [
-            'BakeUsers' => [
-                'targetFqn' => '\App\Model\Table\BakeUsersTable',
-            ],
-            'Authors' => [
-                'targetFqn' => '\BakeTest\Model\Table\AuthorsTable',
-            ],
-            'Publishers' => [
-                'targetFqn' => '\BakeTest\Model\Table\PublishersTable',
-            ],
-        ];
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests collecting association info with short classnames configured.
-     *
-     * @return void
-     */
-    public function testGetAssociationInfoShortClassName()
-    {
-        $model = TableRegistry::getTableLocator()->get('Authors');
-        $model->belongsTo('BakeUsersAlias', [
-            'className' => 'BakeTest.BakeUsers',
-        ]);
-        $model->hasMany('ArticlesAlias', [
-            'className' => 'Articles',
-        ]);
-        $model->hasMany('BakeTestArticlesAlias', [
-            'className' => 'BakeTest.BakeTestArticles',
-        ]);
-        $model->hasMany('PublishersAlias', [
-            'className' => 'BakeTest.Publishers',
-        ]);
-
-        $result = $this->Task->getAssociationInfo($model);
-
-        $expected = [
-            'BakeUsersAlias' => [
-                'targetFqn' => '\BakeTest\Model\Table\BakeUsersTable',
-            ],
-            'ArticlesAlias' => [
-                'targetFqn' => '\App\Model\Table\ArticlesTable',
-            ],
-            'BakeTestArticlesAlias' => [
-                'targetFqn' => '\BakeTest\Model\Table\BakeTestArticlesTable',
-            ],
-            'PublishersAlias' => [
-                'targetFqn' => '\BakeTest\Model\Table\PublishersTable',
-            ],
-        ];
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests collecting association info with short classnames and a non-default namespace configured.
-     *
-     * @return void
-     */
-    public function testGetAssociationInfoShortClassNameNonDefaultAppNamespace()
-    {
-        Configure::write('App.namespace', 'Bake\Test\App');
-
-        $model = TableRegistry::getTableLocator()->get('Authors');
-        $model->hasMany('ArticlesAlias', [
-            'className' => 'Articles',
-        ]);
-
-        $result = $this->Task->getAssociationInfo($model);
-
-        $expected = [
-            'Articles' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable',
-            ],
-            'ArticlesAlias' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable',
-            ],
-            'Roles' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\RolesTable',
-            ],
-            'Profiles' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ProfilesTable',
-            ],
-        ];
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Tests collecting association info with fully qualified classnames configured.
-     *
-     * @return void
-     */
-    public function testGetAssociationInfoFqnClassName()
-    {
-        $model = TableRegistry::getTableLocator()->get('Authors');
-        $model->hasMany('ArticlesAlias', [
-            'className' => 'Bake\Test\App\Model\Table\ArticlesTable',
-        ]);
-
-        $result = $this->Task->getAssociationInfo($model);
-
-        $expected = [
-            'ArticlesAlias' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable',
-            ],
-        ];
-        $this->assertEquals($expected, $result);
     }
 }
