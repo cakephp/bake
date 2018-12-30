@@ -21,7 +21,7 @@
         "php": ">=5.6.0",
         "cakephp/cakephp": "^3.7.0",
         "cakephp/plugin-installer": "^1.0",
-        "wyrihaximus/twig-view": "^4.3.4"
+        "wyrihaximus/twig-view": "^4.3.7"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^3.0",
