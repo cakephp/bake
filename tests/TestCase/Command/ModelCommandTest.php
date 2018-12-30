@@ -876,12 +876,6 @@ class ModelCommandTest extends TestCase
             'effort' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'greaterThanOrEqual' => [
-                    'rule' => 'greaterThanOrEqual',
-                    'args' => [
-                        0,
-                    ],
-                ],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
             ],
             'completed' => [
@@ -919,12 +913,12 @@ class ModelCommandTest extends TestCase
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
 
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
+        $model = TableRegistry::getTableLocator()->get('TodoTasks');
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
         $result = $command->getValidation($model, [], $args);
         $expected = [
-            'user_id' => [
+            'todo_item_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
@@ -949,7 +943,7 @@ class ModelCommandTest extends TestCase
                 'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
-            'id' => [
+            'uid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
             ],
@@ -1095,10 +1089,10 @@ class ModelCommandTest extends TestCase
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
 
-        $model = TableRegistry::getTableLocator()->get('BakeArticles');
+        $model = TableRegistry::getTableLocator()->get('TodoItems');
         $associations = [
             'belongsTo' => [
-                'BakeUsers' => ['foreignKey' => 'bake_user_id'],
+                'Users' => ['foreignKey' => 'user_id'],
             ],
         ];
         $command = new ModelCommand();
@@ -1115,24 +1109,30 @@ class ModelCommandTest extends TestCase
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => []],
             ],
-            'published' => [
-                'boolean' => ['rule' => 'boolean', 'args' => []],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+            'effort' => [
+                'decimal' => ['rule' => 'decimal', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
+            ],
+            'completed' => [
+                'boolean' => ['rule' => 'boolean', 'args' => []],
+                'requirePresence' => [
+                    'rule' => 'requirePresence',
+                    'args' => ["'create'" ],
+                ],
+                'notEmpty' => [
+                    'rule' => 'notEmpty',
+                    'args' => [],
+                ],
+            ],
+            'todo_task_count' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmpty', 'args' => ["'create'"]],
-            ],
-            'rating' => [
-                'numeric' => ['rule' => 'numeric', 'args' => []],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-            ],
-            'score' => [
-                'decimal' => ['rule' => 'decimal', 'args' => []],
-                'notEmpty' => ['rule' => 'notEmpty', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
         ];
         $this->assertEquals($expected, $result);

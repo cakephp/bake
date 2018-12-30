@@ -81,7 +81,6 @@ class ItemsTable extends Table
 
         $validator
             ->decimal('effort')
-            ->greaterThanOrEqual('effort', 0)
             ->requirePresence('effort', 'create')
             ->notEmpty('effort');
 

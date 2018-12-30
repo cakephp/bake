@@ -35,6 +35,7 @@ class TodoTasksFixture extends TestFixture
         'title' => ['type' => 'string', 'length' => 50, 'null' => false],
         'body' => 'text',
         'completed' => ['type' => 'boolean', 'default' => false, 'null' => false],
+        'effort' => ['type' => 'decimal', 'default' => 0.0, 'null' => false, 'unsigned' => true],
         'created' => 'datetime',
         'updated' => 'datetime',
         '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['uid']]],

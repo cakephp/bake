@@ -34,7 +34,7 @@ class TodoItemsFixture extends TestFixture
         'user_id' => ['type' => 'integer', 'null' => false],
         'title' => ['type' => 'string', 'length' => 50, 'null' => false],
         'body' => ['type' => 'text'],
-        'effort' => ['type' => 'decimal', 'default' => 0, 'null' => false, 'unsigned' => true],
+        'effort' => ['type' => 'decimal', 'default' => 0, 'null' => false],
         'completed' => ['type' => 'boolean', 'default' => false, 'null' => false],
         'todo_task_count' => ['type' => 'integer', 'default' => 0, 'null' => false],
         'created' => ['type' => 'datetime'],
