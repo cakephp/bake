@@ -141,22 +141,6 @@ class ModelCommand extends BakeCommand
     }
 
     /**
-     * Bake all models at once.
-     *
-     * @return void
-     */
-    public function all()
-    {
-        /*
-        $tables = $this->listUnskipped();
-        foreach ($tables as $table) {
-            TableRegistry::getTableLocator()->clear();
-            $this->main($table);
-        }
-        */
-    }
-
-    /**
      * Get a model object for a class name.
      *
      * @param string $className Name of class you want model to be.
@@ -1090,7 +1074,6 @@ class ModelCommand extends BakeCommand
             'help' => 'Name of the model to bake (without the Table suffix). ' .
                 'You can use Plugin.name to bake plugin models.',
         ])->addSubcommand('all', [
-            // Next: create ModelAllCommand
             'help' => 'Bake all model files with associations and validation.',
         ])->addOption('table', [
             'help' => 'The table name to use if you have non-conventional table names.',

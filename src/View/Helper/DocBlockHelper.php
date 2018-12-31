@@ -241,8 +241,10 @@ class DocBlockHelper extends Helper
         foreach ($associations as $type => $assocs) {
             foreach ($assocs as $assoc) {
                 $typeStr = Inflector::camelize($type);
-                $tableFqn = $associationInfo[$assoc['alias']]['targetFqn'];
-                $annotations[] = "@property {$tableFqn}|\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
+                if (isset($associationInfo[$assoc['alias']])) {
+                    $tableFqn = $associationInfo[$assoc['alias']]['targetFqn'];
+                    $annotations[] = "@property {$tableFqn}|\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
+                }
             }
         }
         // phpcs:disable
