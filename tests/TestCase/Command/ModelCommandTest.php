@@ -884,12 +884,6 @@ class ModelCommandTest extends TestCase
             'effort' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'greaterThanOrEqual' => [
-                    'rule' => 'greaterThanOrEqual',
-                    'args' => [
-                        0,
-                    ],
-                ],
                 'allowEmpty' => [
                     'rule' => 'allowEmptyString',
                     'args' => ['false'],
@@ -912,41 +906,6 @@ class ModelCommandTest extends TestCase
                 'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
             ],
             'id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
-            ],
-        ];
-        $this->assertEquals($expected, $result);
-
-        $model = TableRegistry::getTableLocator()->get('BakeComments');
-        $result = $this->Task->getValidation($model);
-        $expected = [
-            'bake_article_id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => [
-                    'rule' => 'allowEmptyString',
-                    'args' => ['false'],
-                ],
-            ],
-            'id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => [
-                    'rule' => 'allowEmptyString',
-                    'args' => ['false'],
-                ],
-            ],
-            'comment' => [
-                'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
-            ],
-            'published' => [
-                'scalar' => ['rule' => 'scalar', 'args' => []],
-                'maxLength' => ['rule' => 'maxLength', 'args' => [1]],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
-            ],
-            'otherid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
             ],
@@ -1130,7 +1089,6 @@ class ModelCommandTest extends TestCase
                 'Users' => ['foreignKey' => 'user_id'],
             ],
         ];
-        $result = $this->Task->getValidation($model, $associations);
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
         $result = $command->getValidation($model, $associations, $args);
