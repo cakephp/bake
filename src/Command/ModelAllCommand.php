@@ -33,10 +33,13 @@ class ModelAllCommand extends BakeCommand
     protected $modelCommand;
 
     /**
-     * Constructor
+     * initialize
+     *
+     * @return void
      */
-    public function __construct()
+    public function initialize(): void
     {
+        parent::initialize();
         $this->modelCommand = new ModelCommand();
     }
 

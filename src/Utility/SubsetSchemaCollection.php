@@ -32,6 +32,11 @@ class SubsetSchemaCollection extends Collection
     protected $collection;
 
     /**
+     * @var array
+     */
+    protected $tables = [];
+
+    /**
      *
      * @param \Cake\Database\Schema\Collection $collection The wrapped collection
      * @param array $tables The subset of tables.
