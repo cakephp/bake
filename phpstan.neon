@@ -2,4 +2,4 @@ parameters:
     autoload_files:
         - tests/bootstrap.php
     ignoreErrors:
-        - '#Bake\\Utility\\SubsetSchemaCollection::__construct() does not call parent#'
+        - '#Bake\\Utility\\SubsetSchemaCollection::__construct\(\) does not call parent#'
