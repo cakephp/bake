@@ -20,13 +20,15 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
+use Cake\ORM\Locator\LocatorAwareTrait;
 
 /**
  * Command for generating all model files.
  */
 class ModelAllCommand extends BakeCommand
 {
+    use LocatorAwareTrait;
+
     /**
      * @var \Bake\Command\ModelCommand
      */
@@ -71,7 +73,7 @@ class ModelAllCommand extends BakeCommand
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
         foreach ($scanner->listUnskipped() as $table) {
-            TableRegistry::getTableLocator()->clear();
+            $this->getTableLocator()->clear();
             $modelArgs = new Arguments([$table], $args->getOptions(), ['name']);
             $this->modelCommand->execute($modelArgs, $io);
         }
