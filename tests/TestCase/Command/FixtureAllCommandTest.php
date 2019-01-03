@@ -16,8 +16,10 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
+use Bake\Utility\SubsetSchemaCollection;
 use Cake\Console\Command;
 use Cake\Core\Plugin;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * FixtureAllCommand Test
@@ -36,6 +38,11 @@ class FixtureAllCommandTest extends TestCase
     ];
 
     /**
+     * @var array
+     */
+    protected $tables = ['articles', 'comments'];
+
+    /**
      * setUp method
      *
      * @return void
@@ -47,6 +54,22 @@ class FixtureAllCommandTest extends TestCase
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
         $this->setAppNamespace('Bake\Test\App');
         $this->useCommandRunner();
+
+        $connection = ConnectionManager::get('test');
+        $subsetCollection = new SubsetSchemaCollection($connection->getSchemaCollection(), $this->tables);
+        $connection->setSchemaCollection($subsetCollection);
+    }
+
+    /**
+     * teardown method
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        $connection = ConnectionManager::get('test');
+        $connection->setSchemaCollection($connection->getSchemaCollection()->getInnerCollection());
     }
 
     /**

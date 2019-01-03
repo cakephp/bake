@@ -25,6 +25,7 @@ use Bake\Command\FormCommand;
 use Bake\Command\HelperCommand;
 use Bake\Command\MailerCommand;
 use Bake\Command\MiddlewareCommand;
+use Bake\Command\ModelAllCommand;
 use Bake\Command\ModelCommand;
 use Bake\Command\PluginCommand;
 use Bake\Command\ShellCommand;
@@ -89,6 +90,7 @@ class Plugin extends BasePlugin
         $commands->add('bake mailer', MailerCommand::class);
         $commands->add('bake middleware', MiddlewareCommand::class);
         $commands->add('bake model', ModelCommand::class);
+        $commands->add('bake model all', ModelAllCommand::class);
         $commands->add('bake plugin', PluginCommand::class);
         $commands->add('bake shell_helper', ShellHelperCommand::class);
         $commands->add('bake shell', ShellCommand::class);
