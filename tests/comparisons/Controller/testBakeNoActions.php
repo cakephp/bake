@@ -1,11 +1,12 @@
 <?php
-namespace App\Controller;
+namespace Bake\Test\App\Controller;
 
-use App\Controller\AppController;
+use Bake\Test\App\Controller\AppController;
 
 /**
  * BakeArticles Controller
  *
+ * @property \Bake\Test\App\Model\Table\BakeArticlesTable $BakeArticles
  * @property \Cake\Controller\Component\RequestHandlerComponent $RequestHandler
  * @property \Cake\Controller\Component\AuthComponent $Auth
  */
