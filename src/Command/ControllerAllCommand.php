@@ -10,7 +10,7 @@ declare(strict_types=1);
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @since         2.0.0
+ * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 namespace Bake\Command;
@@ -23,16 +23,16 @@ use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Locator\LocatorAwareTrait;
 
 /**
- * Command for generating all model files.
+ * Task class for creating all controllers at once
  */
-class ModelAllCommand extends BakeCommand
+class ControllerAllCommand extends BakeCommand
 {
     use LocatorAwareTrait;
 
     /**
-     * @var \Bake\Command\ModelCommand
+     * @var \Bake\Command\ControllerCommand
      */
-    protected $modelCommand;
+    protected $controllerCommand;
 
     /**
      * initialize
@@ -42,24 +42,7 @@ class ModelAllCommand extends BakeCommand
     public function initialize(): void
     {
         parent::initialize();
-        $this->modelCommand = new ModelCommand();
-    }
-
-    /**
-     * Gets the option parser instance and configures it.
-     *
-     * @param \Cake\Console\ConsoleOptionParser $parser The parser to configure
-     * @return \Cake\Console\ConsoleOptionParser
-     */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
-    {
-        $parser = $this->modelCommand->buildOptionParser($parser);
-        $parser
-            ->setDescription('Bake all model files with associations and validation.')
-            ->removeSubcommand('all')
-            ->setEpilog('');
-
-        return $parser;
+        $this->controllerCommand = new ControllerCommand();
     }
 
     /**
@@ -72,14 +55,32 @@ class ModelAllCommand extends BakeCommand
     public function execute(Arguments $args, ConsoleIo $io)
     {
         $this->extractCommonProperties($args);
+
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
         foreach ($scanner->listUnskipped() as $table) {
             $this->getTableLocator()->clear();
-            $modelArgs = new Arguments([$table], $args->getOptions(), ['name']);
-            $this->modelCommand->execute($modelArgs, $io);
+            $controllerArgs = new Arguments([$table], $args->getOptions(), ['name']);
+            $this->controllerCommand->execute($controllerArgs, $io);
         }
 
         return static::CODE_SUCCESS;
+    }
+
+    /**
+     * Gets the option parser instance and configures it.
+     *
+     * @param \Cake\Console\ConsoleOptionParser $parser The console option parser
+     * @return \Cake\Console\ConsoleOptionParser
+     */
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        $parser = $this->controllerCommand->buildOptionParser($parser);
+        $parser
+            ->setDescription('Bake all controller files with tests.')
+            ->removeSubcommand('all')
+            ->setEpilog('');
+
+        return $parser;
     }
 }
