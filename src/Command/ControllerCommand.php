@@ -13,32 +13,22 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Shell\Task;
+namespace Bake\Command;
 
+use Bake\Utility\TableScanner;
 use Bake\Utility\TemplateRenderer;
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Cake\Console\Shell;
 use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 
 /**
  * Task class for creating and updating controller files.
- *
- * @property \Bake\Shell\Task\ModelTask $Model
- * @property \Bake\Shell\Task\TestTask $Test
  */
-class ControllerTask extends BakeTask
+class ControllerCommand extends BakeCommand
 {
-    /**
-     * Tasks to be loaded by this Task
-     *
-     * @var array
-     */
-    public $tasks = [
-        'Bake.Model',
-        'Bake.Test',
-    ];
-
     /**
      * Path fragment for generated code.
      *
@@ -47,66 +37,59 @@ class ControllerTask extends BakeTask
     public $pathFragment = 'Controller/';
 
     /**
-     * Execution method always used for tasks
+     * Execute the command.
      *
-     * @param string|null $name The name of the controller to bake.
-     * @return null|bool
+     * @param \Cake\Console\Arguments $args The command arguments.
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return null|int The exit code or null for success
      */
-    public function main($name = null)
+    public function execute(Arguments $args, ConsoleIo $io)
     {
-        parent::main();
+        $this->extractCommonProperties($args);
+        $name = $args->getArgument('name') ?? '';
         $name = $this->_getName($name);
 
         if (empty($name)) {
-            $this->out('Possible controllers based on your current database:');
-            foreach ($this->listAll() as $table) {
-                $this->out('- ' . $this->_camelize($table));
+            $scanner = new TableScanner(ConnectionManager::get($this->connection));
+            $io->out('Possible controllers based on your current database:');
+            foreach ($scanner->listUnskipped() as $table) {
+                $io->out('- ' . $this->_camelize($table));
             }
 
-            return true;
+            return static::CODE_SUCCESS;
         }
 
         $controller = $this->_camelize($name);
-        $this->bake($controller);
-    }
+        $this->bake($controller, $args, $io);
 
-    /**
-     * Bake All the controllers at once. Will only bake controllers for models that exist.
-     *
-     * @return void
-     */
-    public function all()
-    {
-        $tables = $this->listAll();
-        foreach ($tables as $table) {
-            TableRegistry::getTableLocator()->clear();
-            $this->main($table);
-        }
+        return static::CODE_SUCCESS;
     }
 
     /**
      * Assembles and writes a Controller file
      *
      * @param string $controllerName Controller name already pluralized and correctly cased.
-     * @return string Baked controller
+     * @param \Cake\Console\Arguments $args The console arguments
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return void
      */
-    public function bake($controllerName)
+    public function bake(string $controllerName, Arguments $args, ConsoleIo $io)
     {
-        $this->out("\n" . sprintf('Baking controller class for %s...', $controllerName), 1, Shell::QUIET);
+        $io->quiet(sprintf('Baking controller class for %s...', $controllerName));
 
         $actions = [];
-        if (!$this->param('no-actions') && !$this->param('actions')) {
+        if (!$args->getOption('no-actions') && !$args->getOption('actions')) {
             $actions = ['index', 'view', 'add', 'edit', 'delete'];
         }
-        if ($this->param('actions')) {
-            $actions = array_map('trim', explode(',', $this->param('actions')));
+        if ($args->getOption('actions')) {
+            $actions = array_map('trim', explode(',', $args->getOption('actions')));
             $actions = array_filter($actions);
         }
 
-        $helpers = $this->getHelpers();
-        $components = $this->getComponents();
+        $helpers = $this->getHelpers($args);
+        $components = $this->getComponents($args);
 
-        $prefix = $this->_getPrefix();
+        $prefix = $this->getPrefix($args);
         if ($prefix) {
             $prefix = '\\' . str_replace('/', '\\', $prefix);
         }
@@ -159,10 +142,8 @@ class ControllerTask extends BakeTask
         );
         $data['name'] = $controllerName;
 
-        $out = $this->bakeController($controllerName, $data);
-        $this->bakeTest($controllerName);
-
-        return $out;
+        $this->bakeController($controllerName, $data, $args, $io);
+        $this->bakeTest($controllerName, $args, $io);
     }
 
     /**
@@ -170,9 +151,11 @@ class ControllerTask extends BakeTask
      *
      * @param string $controllerName The name of the controller.
      * @param array $data The data to turn into code.
-     * @return string The generated controller file.
+     * @param \Cake\Console\Arguments $args The console args
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return void
      */
-    public function bakeController($controllerName, array $data)
+    public function bakeController($controllerName, array $data, Arguments $args, ConsoleIo $io)
     {
         $data += [
             'name' => null,
@@ -185,46 +168,49 @@ class ControllerTask extends BakeTask
             'pluginPath' => null,
         ];
 
-        $renderer = new TemplateRenderer($this->param('theme'));
+        $renderer = new TemplateRenderer($this->theme);
         $renderer->set($data);
 
         $contents = $renderer->generate('Controller/controller');
 
-        $path = $this->getPath();
+        $path = $this->getPath($args);
         $filename = $path . $controllerName . 'Controller.php';
-        $this->createFile($filename, $contents);
-
-        return $contents;
+        $io->createFile($filename, $contents);
     }
 
     /**
      * Assembles and writes a unit test file
      *
      * @param string $className Controller class name
-     * @return string|bool|null Baked test
+     * @param \Cake\Console\Arguments $args The console arguments
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return void
      */
-    public function bakeTest($className)
+    public function bakeTest($className, Arguments $args, ConsoleIo $io)
     {
-        if (!empty($this->params['no-test'])) {
-            return null;
+        if ($args->getOption('no-test')) {
+            return;
         }
-        $this->Test->plugin = $this->plugin;
-        $this->Test->connection = $this->connection;
-        $this->Test->interactive = $this->interactive;
-
-        return $this->Test->bake('Controller', $className);
+        $test = new TestCommand();
+        $testArgs = new Arguments(
+            ['controller', $className],
+            $args->getOptions(),
+            ['type', 'name']
+        );
+        $test->execute($testArgs, $io);
     }
 
     /**
      * Get the list of components for the controller.
      *
+     * @param \Cake\Console\Arguments $args The console arguments
      * @return array
      */
-    public function getComponents()
+    public function getComponents(Arguments $args)
     {
         $components = [];
-        if (!empty($this->params['components'])) {
-            $components = explode(',', $this->params['components']);
+        if ($args->getOption('components')) {
+            $components = explode(',', $args->getOption('components'));
             $components = array_values(array_filter(array_map('trim', $components)));
         }
 
@@ -234,13 +220,14 @@ class ControllerTask extends BakeTask
     /**
      * Get the list of helpers for the controller.
      *
+     * @param \Cake\Console\Arguments $args The console arguments
      * @return array
      */
-    public function getHelpers()
+    public function getHelpers(Arguments $args)
     {
         $helpers = [];
-        if (!empty($this->params['helpers'])) {
-            $helpers = explode(',', $this->params['helpers']);
+        if ($args->getOption('helpers')) {
+            $helpers = explode(',', $args->getOption('helpers'));
             $helpers = array_values(array_filter(array_map('trim', $helpers)));
         }
 
@@ -248,25 +235,14 @@ class ControllerTask extends BakeTask
     }
 
     /**
-     * Outputs and gets the list of possible controllers from database
-     *
-     * @return array Set of controllers
-     */
-    public function listAll()
-    {
-        $this->Model->connection = $this->connection;
-
-        return $this->Model->listUnskipped();
-    }
-
-    /**
      * Gets the option parser instance and configures it.
      *
+     * @param \Cake\Console\ConsoleOptionParser $parser The console option parser
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser(): ConsoleOptionParser
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = parent::getOptionParser();
+        $parser = $this->_setCommonOptions($parser);
         $parser->setDescription(
             'Bake a controller skeleton.'
         )->addArgument('name', [

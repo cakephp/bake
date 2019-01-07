@@ -1,17 +1,18 @@
 <?php
-namespace App\Controller;
+namespace Bake\Test\App\Controller;
 
-use App\Controller\AppController;
+use Bake\Test\App\Controller\AppController;
 
 /**
  * BakeArticles Controller
  *
+ * @property \Bake\Test\App\Model\Table\BakeArticlesTable $BakeArticles
  * @property \Cake\Controller\Component\RequestHandlerComponent $RequestHandler
  * @property \Cake\Controller\Component\AuthComponent $Auth
  * @property \Company\TestBakeThree\Controller\Component\SomethingComponent $Something
  * @property \TestBake\Controller\Component\OtherComponent $Other
- * @property \App\Controller\Component\AppleComponent $Apple
- * @property \App\Controller\Component\NonExistentComponent $NonExistent
+ * @property \Bake\Test\App\Controller\Component\AppleComponent $Apple
+ * @property \Bake\Test\App\Controller\Component\NonExistentComponent $NonExistent
  */
 class BakeArticlesController extends AppController
 {
