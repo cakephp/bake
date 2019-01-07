@@ -66,21 +66,6 @@ class ControllerCommand extends BakeCommand
     }
 
     /**
-     * Bake All the controllers at once. Will only bake controllers for models that exist.
-     *
-     * @return void
-     */
-    public function all()
-    {
-        // Move to an all command
-        $tables = $this->listAll();
-        foreach ($tables as $table) {
-            TableRegistry::getTableLocator()->clear();
-            $this->main($table);
-        }
-    }
-
-    /**
      * Assembles and writes a Controller file
      *
      * @param string $controllerName Controller name already pluralized and correctly cased.
