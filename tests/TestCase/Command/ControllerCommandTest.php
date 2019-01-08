@@ -24,10 +24,9 @@ use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 
 /**
- * ControllerTaskTest class
- *
+ * ControllerCommand Test
  */
-class ControllerTaskTest extends TestCase
+class ControllerCommandTest extends TestCase
 {
     /**
      * fixtures
