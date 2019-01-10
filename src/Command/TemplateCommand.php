@@ -13,14 +13,18 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Shell\Task;
+namespace Bake\Command;
 
 use Bake\Utility\Model\AssociationFilter;
+use Bake\Utility\TableScanner;
 use Bake\Utility\TemplateRenderer;
+use Cake\Console\Arguments;
+use Cake\Console\Command;
+use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Cake\Console\Shell;
 use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -28,21 +32,10 @@ use Cake\Utility\Inflector;
 use RuntimeException;
 
 /**
- * Task class for creating and updating view template files.
- *
- * @property \Bake\Shell\Task\ModelTask $Model
+ * Task class for creating view template files.
  */
-class TemplateTask extends BakeTask
+class TemplateCommand extends BakeCommand
 {
-    /**
-     * Tasks to be loaded by this Task
-     *
-     * @var array
-     */
-    public $tasks = [
-        'Bake.Model',
-    ];
-
     /**
      * path to Template directory
      *
@@ -103,42 +96,41 @@ class TemplateTask extends BakeTask
     }
 
     /**
-     * Execution method always used for tasks
+     * Execute the command.
      *
-     * @param string|null $name The name of the controller to bake view templates for.
-     * @param string|null $template The template to bake with.
-     * @param string|null $action The output action name. Defaults to $template.
-     * @return mixed
+     * @param \Cake\Console\Arguments $args The command arguments.
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return null|int The exit code or null for success
      */
-    public function main($name = null, $template = null, $action = null)
+    public function execute(Arguments $args, ConsoleIo $io)
     {
-        parent::main();
-
-        if (empty($name)) {
-            $this->out('Possible tables to bake view templates for based on your current database:');
-            $this->Model->connection = $this->connection;
-            foreach ($this->Model->listUnskipped() as $table) {
-                $this->out('- ' . $this->_camelize($table));
-            }
-
-            return true;
-        }
+        $this->extractCommonProperties($args);
+        $name = $args->getArgument('name') ?? '';
         $name = $this->_getName($name);
 
-        $controller = null;
-        if (!empty($this->params['controller'])) {
-            $controller = $this->params['controller'];
+        if (empty($name)) {
+            $io->out('Possible tables to bake view templates for based on your current database:');
+            $scanner = new TableScanner(ConnectionManager::get($this->connection));
+            foreach ($scanner->listUnskipped() as $table) {
+                $io->out('- ' . $this->_camelize($table));
+            }
+
+            return Command::CODE_SUCCESS;
         }
-        $this->controller($name, $controller);
+        $template = $args->getArgument('template');
+        $action = $args->getArgument('action');
+
+        $controller = $args->getOption('controller');
+        $this->controller($args, $name, $controller);
         $this->model($name);
 
         if ($template && $action === null) {
             $action = $template;
         }
         if ($template) {
-            $this->bake($template, true, $action);
+            $this->bake($args, $io, $template, true, $action);
 
-            return true;
+            return Command::CODE_SUCCESS;
         }
 
         $vars = $this->_loadController();
@@ -146,10 +138,10 @@ class TemplateTask extends BakeTask
 
         foreach ($methods as $method) {
             try {
-                $content = $this->getContent($method, $vars);
-                $this->bake($method, $content);
+                $content = $this->getContent($args, $io, $method, $vars);
+                $this->bake($args, $io, $method, $content);
             } catch (RuntimeException $e) {
-                $this->_io->err($e->getMessage());
+                $io->error($e->getMessage());
             }
         }
     }
@@ -163,9 +155,9 @@ class TemplateTask extends BakeTask
     public function model($table)
     {
         $tableName = $this->_camelize($table);
-        $plugin = null;
-        if (!empty($this->params['plugin'])) {
-            $plugin = $this->params['plugin'] . '.';
+        $plugin = $this->plugin;
+        if ($plugin) {
+            $plugin = $plugin . '.';
         }
         $this->modelName = $plugin . $tableName;
     }
@@ -173,11 +165,12 @@ class TemplateTask extends BakeTask
     /**
      * Set the controller related properties.
      *
+     * @param \Cake\Console\Arguments $args The arguments
      * @param string $table The table/model that is being baked.
      * @param string|null $controller The controller name if specified.
      * @return void
      */
-    public function controller($table, $controller = null)
+    public function controller(Arguments $args, $table, $controller = null)
     {
         $tableName = $this->_camelize($table);
         if (empty($controller)) {
@@ -185,11 +178,11 @@ class TemplateTask extends BakeTask
         }
         $this->controllerName = $controller;
 
-        $plugin = $this->param('plugin');
+        $plugin = $this->plugin;
         if ($plugin) {
             $plugin .= '.';
         }
-        $prefix = $this->_getPrefix();
+        $prefix = $this->getPrefix($args);
         if ($prefix) {
             $prefix .= '/';
         }
@@ -199,11 +192,12 @@ class TemplateTask extends BakeTask
     /**
      * Get the path base for view templates.
      *
+     * @param \Cake\Console\Arguments $args The arguments
      * @return string
      */
-    public function getPath()
+    public function getPath(Arguments $args)
     {
-        $path = parent::getPath();
+        $path = parent::getPath($args);
         $path .= $this->controllerName . DS;
 
         return $path;
@@ -250,12 +244,15 @@ class TemplateTask extends BakeTask
      */
     public function all()
     {
+        /*
+         * Need to move into a TemplateAllCommand
         $this->Model->connection = $this->connection;
         $tables = $this->Model->listUnskipped();
 
         foreach ($tables as $table) {
             $this->main($table);
         }
+        */
     }
 
     /**
@@ -334,54 +331,56 @@ class TemplateTask extends BakeTask
     /**
      * Assembles and writes bakes the view file.
      *
+     * @param \Cake\Console\Arguments $args CLI arguments
+     * @param \Cake\Console\ConsoleIo $io Console io
      * @param string $template Template file to use.
      * @param string|true $content Content to write.
      * @param string $outputFile The output file to create. If null will use `$template`
-     * @return string|false Generated file content.
+     * @return void
      */
-    public function bake($template, $content = '', $outputFile = null)
+    public function bake($args, $io, $template, $content = '', $outputFile = null)
     {
         if ($outputFile === null) {
             $outputFile = $template;
         }
         if ($content === true) {
-            $content = $this->getContent($template);
+            $content = $this->getContent($args, $io, $template);
         }
         if (empty($content)) {
-            $this->err("<warning>No generated content for '{$template}.php', not generating template.</warning>");
+            $io->err("<warning>No generated content for '{$template}.php', not generating template.</warning>");
 
-            return false;
+            return;
         }
-        $this->out("\n" . sprintf('Baking `%s` view template file...', $outputFile), 1, Shell::QUIET);
-        $path = $this->getPath();
+        $path = $this->getPath($args);
         $filename = $path . Inflector::underscore($outputFile) . '.php';
-        $this->createFile($filename, $content);
 
-        return $content;
+        $io->out("\n" . sprintf('Baking `%s` view template file...', $outputFile), 1, ConsoleIo::QUIET);
+        $io->createFile($filename, $content);
     }
 
     /**
      * Builds content from template and variables
      *
+     * @param \Cake\Console\Arguments $args The CLI arguments
+     * @param \Cake\Console\ConsoleIo $io The console io
      * @param string $action name to generate content to
      * @param array|null $vars passed for use in templates
      * @return string|false Content from template
      */
-    public function getContent($action, $vars = null)
+    public function getContent(Arguments $args, ConsoleIo $io, $action, $vars = null)
     {
         if (!$vars) {
             $vars = $this->_loadController();
         }
 
         if (empty($vars['primaryKey'])) {
-            $this->abort('Cannot generate views for models with no primary key');
-
-            return false;
+            $io->error('Cannot generate views for models with no primary key');
+            $this->abort();
         }
 
-        $renderer = new TemplateRenderer($this->param('theme'));
-        if ($action === "index" && !empty($this->params['index-columns'])) {
-            $renderer->set('indexColumns', $this->params['index-columns']);
+        $renderer = new TemplateRenderer($args->getOption('theme'));
+        if ($action === "index" && $args->getOption('index-columns')) {
+            $renderer->set('indexColumns', $args->getOption('index-columns'));
         }
 
         $renderer->set('action', $action);
@@ -394,20 +393,21 @@ class TemplateTask extends BakeTask
     /**
      * Gets the option parser instance and configures it.
      *
+     * @param \Cake\Console\ConsoleOptionParser $parser The option parser to update.
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser(): ConsoleOptionParser
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = parent::getOptionParser();
+        $parser = $this->_setCommonOptions($parser);
 
         $parser->setDescription(
             'Bake views for a controller, using built-in or custom templates. '
-        )->addArgument('controller', [
+        )->addArgument('name', [
             'help' => 'Name of the controller views to bake. You can use Plugin.name as a shortcut for plugin baking.',
-        ])->addArgument('action', [
+        ])->addArgument('template', [
             'help' => "Will bake a single action's file. core templates are (index, add, edit, view)",
-        ])->addArgument('alias', [
-            'help' => 'Will bake the template in <action> but create the filename after <alias>.',
+        ])->addArgument('action', [
+            'help' => 'Will bake the template in <template> but create the filename named <action>.',
         ])->addOption('controller', [
             'help' => 'The controller name if you have a controller that does not follow conventions.',
         ])->addOption('prefix', [
@@ -416,7 +416,7 @@ class TemplateTask extends BakeTask
             'help' => 'Limit for the number of index columns',
             'default' => 0,
         ])->addSubcommand('all', [
-            'help' => '[optional] Bake all CRUD action views for all controllers.' .
+            'help' => 'Bake all CRUD action views for all controllers.' .
                 'Requires models and controllers to exist.',
         ]);
 
