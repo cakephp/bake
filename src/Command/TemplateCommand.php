@@ -19,9 +19,9 @@ use Bake\Utility\Model\AssociationFilter;
 use Bake\Utility\TableScanner;
 use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
+use Cake\Console\Command;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Cake\Console\Command;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -244,7 +244,7 @@ class TemplateCommand extends BakeCommand
      */
     public function all()
     {
-        /**
+        /*
          * Need to move into a TemplateAllCommand
         $this->Model->connection = $this->connection;
         $tables = $this->Model->listUnskipped();
