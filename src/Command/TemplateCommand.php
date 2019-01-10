@@ -347,7 +347,7 @@ class TemplateCommand extends BakeCommand
             $content = $this->getContent($args, $io, $template);
         }
         if (empty($content)) {
-            $this->err("<warning>No generated content for '{$template}.php', not generating template.</warning>");
+            $io->err("<warning>No generated content for '{$template}.php', not generating template.</warning>");
 
             return;
         }
