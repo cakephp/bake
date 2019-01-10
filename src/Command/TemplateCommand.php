@@ -238,24 +238,6 @@ class TemplateCommand extends BakeCommand
     }
 
     /**
-     * Bake All view templates for all controller actions.
-     *
-     * @return void
-     */
-    public function all()
-    {
-        /*
-         * Need to move into a TemplateAllCommand
-        $this->Model->connection = $this->connection;
-        $tables = $this->Model->listUnskipped();
-
-        foreach ($tables as $table) {
-            $this->main($table);
-        }
-        */
-    }
-
-    /**
      * Loads Controller and sets variables for the template
      * Available template variables:
      *
