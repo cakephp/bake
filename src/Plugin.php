@@ -33,6 +33,7 @@ use Bake\Command\PluginCommand;
 use Bake\Command\ShellCommand;
 use Bake\Command\ShellHelperCommand;
 use Bake\Command\TaskCommand;
+use Bake\Command\TemplateAllCommand;
 use Bake\Command\TemplateCommand;
 use Bake\Command\TestCommand;
 use Bake\Shell\BakeShell;
@@ -101,6 +102,7 @@ class Plugin extends BasePlugin
         $commands->add('bake shell', ShellCommand::class);
         $commands->add('bake task', TaskCommand::class);
         $commands->add('bake template', TemplateCommand::class);
+        $commands->add('bake template all', TemplateAllCommand::class);
         $commands->add('bake test', TestCommand::class);
 
         // Add shell for incomplete tasks and backwards compatibility discover.
