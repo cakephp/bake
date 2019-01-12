@@ -237,7 +237,7 @@ class BakeShell extends Shell
             ' If run with no command line arguments, Bake guides the user through the class creation process.' .
             ' You can customize the generation process by telling Bake where different parts of your application' .
             ' are using command line arguments.'
-        ])->addOption('prefix', [
+        )->addOption('prefix', [
             'help' => 'Prefix to bake controllers and templates into.',
         ])->addOption('tablePrefix', [
             'help' => 'Table prefix to be used in models.',
