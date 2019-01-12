@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 namespace Bake;
 
+use Bake\Command\AllCommand;
 use Bake\Command\BehaviorCommand;
 use Bake\Command\CellCommand;
 use Bake\Command\CommandCommand;
@@ -83,6 +84,7 @@ class Plugin extends BasePlugin
      */
     public function console(CommandCollection $commands): CommandCollection
     {
+        $commands->add('bake all', AllCommand::class);
         $commands->add('bake behavior', BehaviorCommand::class);
         $commands->add('bake cell', CellCommand::class);
         $commands->add('bake command', CommandCommand::class);

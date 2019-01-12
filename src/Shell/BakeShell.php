@@ -33,8 +33,6 @@ use Cake\Utility\Inflector;
  * models, and templates. Going further, Bake can also write Unit Tests for you.
  *
  * @link https://book.cakephp.org/3.0/en/bake/usage.html
- *
- * @property \Bake\Shell\Task\ModelTask $Model
  */
 class BakeShell extends Shell
 {
@@ -54,7 +52,7 @@ class BakeShell extends Shell
 
         $task = $this->_camelize($this->command);
 
-        if (isset($this->{$task}) && !in_array($task, ['Project'])) {
+        if (isset($this->{$task})) {
             if (isset($this->params['connection'])) {
                 $this->{$task}->connection = $this->params['connection'];
             }
@@ -226,60 +224,6 @@ class BakeShell extends Shell
     }
 
     /**
-     * Quickly bake the MVC
-     *
-     * @param string|null $name Name.
-     * @return bool
-     */
-    public function all($name = null)
-    {
-        if ($this->param('connection') && $this->param('everything') &&
-            $this->param('connection') !== 'default') {
-            $this->warn('Can only bake everything on default connection');
-
-            return false;
-        }
-        $this->out('Bake All');
-        $this->hr();
-
-        if (!empty($this->params['connection'])) {
-            $this->connection = $this->params['connection'];
-        }
-
-        if (empty($name) && !$this->param('everything')) {
-            $this->Model->connection = $this->connection;
-            $this->out('Possible model names based on your database:');
-            foreach ($this->Model->listUnskipped() as $table) {
-                $this->out('- ' . $table);
-            }
-            $this->out('Run <info>`cake bake all [name]`</info> to generate skeleton files.');
-
-            return false;
-        }
-
-        $allTables = collection([$name]);
-        $filteredTables = $allTables;
-
-        if ($this->param('everything')) {
-            $this->Model->connection = $this->connection;
-            $filteredTables = collection($this->Model->listUnskipped());
-        }
-
-        foreach (['Model', 'Controller', 'Template'] as $task) {
-            $filteredTables->each(function ($tableName) use ($task) {
-                $tableName = $this->_camelize($tableName);
-                $this->{$task}->connection = $this->connection;
-                $this->{$task}->interactive = $this->interactive;
-                $this->{$task}->main($tableName);
-            });
-        }
-
-        $this->out('<success>Bake All complete.</success>', 1, Shell::QUIET);
-
-        return true;
-    }
-
-    /**
      * Gets the option parser instance and configures it.
      *
      * @return \Cake\Console\ConsoleOptionParser
@@ -293,13 +237,6 @@ class BakeShell extends Shell
             ' If run with no command line arguments, Bake guides the user through the class creation process.' .
             ' You can customize the generation process by telling Bake where different parts of your application' .
             ' are using command line arguments.'
-        )->addSubcommand('all', [
-            'help' => 'Bake a complete MVC skeleton.',
-        ])->addOption('everything', [
-            'help' => 'Bake a complete MVC skeleton, using all the available tables. ' .
-                'Usage: "bake all --everything"',
-            'default' => false,
-            'boolean' => true,
         ])->addOption('prefix', [
             'help' => 'Prefix to bake controllers and templates into.',
         ])->addOption('tablePrefix', [

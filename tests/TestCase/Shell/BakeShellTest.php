@@ -80,116 +80,6 @@ class BakeShellTest extends TestCase
     }
 
     /**
-     * test bake all
-     *
-     * @return void
-     */
-    public function testAllWithModelName()
-    {
-        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
-            ->setMethods(['main'])
-            ->getMock();
-        $this->Shell->Controller = $this->getMockBuilder('Bake\Shell\Task\ControllerTask')
-            ->setMethods(['main'])
-            ->getMock();
-        $this->Shell->Template = $this->getMockBuilder('Bake\Shell\Task\TemplateTask')
-            ->setMethods(['main'])
-            ->getMock();
-
-        $this->Shell->Model->expects($this->once())
-            ->method('main')
-            ->with('Comments')
-            ->will($this->returnValue(true));
-
-        $this->Shell->Controller->expects($this->once())
-            ->method('main')
-            ->with('Comments')
-            ->will($this->returnValue(true));
-
-        $this->Shell->Template->expects($this->once())
-            ->method('main')
-            ->with('Comments');
-
-        $this->Shell->connection = '';
-        $this->Shell->params = ['prefix' => 'account'];
-        $this->Shell->all('Comments');
-
-        $output = $this->out->messages();
-
-        $expected = [
-            'Bake All',
-            '---------------------------------------------------------------',
-            '<success>Bake All complete.</success>',
-        ];
-        $this->assertSame($expected, $output);
-    }
-
-    /**
-     * test bake all --everything [--connection default]
-     *
-     * @return void
-     */
-    public function testAllEverythingDefault()
-    {
-        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
-            ->setMethods(['listAll'])
-            ->getMock();
-
-        $this->Shell->Model->expects($this->once())
-            ->method('listAll')
-            ->will($this->returnValue([]));
-
-        $this->Shell->connection = '';
-        $this->Shell->params = ['prefix' => 'account', 'everything' => true];
-        $this->Shell->all();
-
-        $output = $this->out->messages();
-
-        $expected = [
-            'Bake All',
-            '---------------------------------------------------------------',
-            '<success>Bake All complete.</success>',
-        ];
-        $this->assertSame($expected, $output);
-    }
-
-    /**
-     * test bake all --everything --connection test
-     *
-     * @return void
-     */
-    public function testAllEverything()
-    {
-        $this->Shell->Model = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
-            ->setMethods(['main'])
-            ->getMock();
-        $this->Shell->Controller = $this->getMockBuilder('Bake\Shell\Task\ControllerTask')
-            ->setMethods(['main'])
-            ->getMock();
-        $this->Shell->Template = $this->getMockBuilder('Bake\Shell\Task\TemplateTask')
-            ->setMethods(['main'])
-            ->getMock();
-
-        $this->Shell->Model->expects($this->never())
-            ->method('main');
-
-        $this->Shell->Controller->expects($this->never())
-            ->method('main');
-
-        $this->Shell->Template->expects($this->never())
-            ->method('main');
-
-        $this->Shell->connection = 'test';
-        $this->Shell->params = ['prefix' => 'account', 'everything' => true, 'connection' => 'test'];
-        $this->Shell->all();
-
-        $output = $this->out->messages();
-
-        $expected = ['<warning>Can only bake everything on default connection</warning>'];
-        $this->assertSame($expected, $output);
-    }
-
-    /**
      * Test the main function.
      *
      * @return void
@@ -204,12 +94,8 @@ class BakeShellTest extends TestCase
             '',
             '<info>Available bake commands:</info>',
             '',
-            '- all',
             '- controller',
             '- custom_controller',
-            '- fixture',
-            '- model',
-            '- test',
             '',
             'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.',
         ];
@@ -218,41 +104,14 @@ class BakeShellTest extends TestCase
     }
 
     /**
-     * Test that the generated option parser reflects all tasks.
+     * Test loading tasks from app directories.
      *
      * @return void
      */
-    public function testGetOptionParser()
-    {
-        $this->markTestSkipped('Will revisit once all bake tasks are commands');
-        $this->Shell->loadTasks();
-        $parser = $this->Shell->getOptionParser();
-        $commands = $parser->subcommands();
-        $this->assertArrayHasKey('fixture', $commands);
-        $this->assertArrayHasKey('template', $commands);
-        $this->assertArrayHasKey('controller', $commands);
-        $this->assertArrayHasKey('model', $commands);
-
-        $this->assertNull($parser->options()['theme']->defaultValue());
-
-        Configure::write('Bake.theme', 'Mytheme');
-        $parser = $this->Shell->getOptionParser();
-        $this->assertSame('Mytheme', $parser->options()['theme']->defaultValue());
-        Configure::delete('Bake.theme');
-    }
-
-    /**
-     * Test loading tasks from core directories.
-     *
-     * @return void
-     */
-    public function testLoadTasksCoreAndApp()
+    public function testLoadTasksFromApp()
     {
         $this->Shell->loadTasks();
         $expected = [
-            'Bake.Fixture',
-            'Bake.Model',
-            'Bake.Test',
             'Controller',
             'CustomController',
         ];
@@ -290,55 +149,5 @@ class BakeShellTest extends TestCase
 
         $this->exec('bake');
         $this->assertOutputContains('apple_pie');
-    }
-
-    /**
-     * Tests that quiet mode does not ask interactively and does not silently overwrite anywhere.
-     * -f would be needed for that.
-     *
-     * @return void
-     */
-    public function testBakeAllNonInteractive()
-    {
-        $this->markTestSkipped('Skipping until all tasks are commands.');
-        $this->setAppNamespace('App');
-
-        $this->Shell->loadTasks();
-
-        $path = APP;
-        $testsPath = ROOT . 'tests' . DS;
-        $templatesPath = ROOT . 'templates' . DS;
-
-        // We ignore our existing CommentsController test file
-        $files = [
-            $templatesPath . 'Comments/add.php',
-            $templatesPath . 'Comments/edit.php',
-            $templatesPath . 'Comments/index.php',
-            $templatesPath . 'Comments/view.php',
-            $path . 'Model/Table/CommentsTable.php',
-            $path . 'Model/Entity/Comment.php',
-            $testsPath . 'Fixture/CommentsFixture.php',
-            $testsPath . 'TestCase/Model/Table/CommentsTableTest.php',
-            $testsPath . 'TestCase/Controller/CommentsControllerTest.php',
-        ];
-        foreach ($files as $file) {
-            $this->assertFileNotExists($file, 'File should not yet exist before `bake all`.');
-        }
-
-        $existingFile = $path . 'Controller/CommentsController.php';
-        $this->assertFileExists($existingFile);
-        $content = file_get_contents($existingFile);
-
-        $this->Shell->runCommand(['all', 'Comments'], false, ['quiet' => true]);
-        $output = $this->out->messages();
-
-        $this->assertContains('<success>Bake All complete.</success>', implode(' ', $output));
-
-        foreach ($files as $file) {
-            $this->assertFileExists($file, 'File should exist after `bake all`.');
-            unlink($file);
-        }
-
-        $this->assertSame($content, file_get_contents($existingFile), 'File got overwritten, but should not have.');
     }
 }
