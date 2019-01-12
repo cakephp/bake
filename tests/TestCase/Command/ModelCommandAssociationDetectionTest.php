@@ -176,30 +176,4 @@ class ModelCommandAssociationDetectionTest extends TestCase
         $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
         $this->_compareBakeTableResult('ProductVersions', __FUNCTION__);
     }
-
-    /**
-     * test checking if associations where built correctly for products.
-     *
-     * @return void
-     */
-    public function testBakeAssociationDetectionProductsTable()
-    {
-        $driver = ConnectionManager::get('test')->getDriver();
-        $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
-        $this->_compareBakeTableResult('Products', __FUNCTION__);
-    }
-
-    /**
-     * test checking if associations where built correctly for products.
-     *
-     * @return void
-     */
-    public function testBakeAssociationDetectionProductsTableSigned()
-    {
-        $driver = ConnectionManager::get('test')->getDriver();
-        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
-        $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
-        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
-        $this->_compareBakeTableResult('Products', __FUNCTION__);
-    }
 }

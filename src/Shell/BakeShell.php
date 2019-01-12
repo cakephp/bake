@@ -99,7 +99,6 @@ class BakeShell extends Shell
         }
         $this->out('The following commands can be used to generate skeleton code for your application.', 2);
         $this->out('<info>Available bake commands:</info>', 2);
-        $this->out('- all');
         $names = [];
         foreach ($this->tasks as $task) {
             list(, $name) = pluginSplit($task);

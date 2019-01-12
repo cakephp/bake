@@ -65,6 +65,7 @@ class BakeShellTest extends TestCase
             ->getMock();
 
         $this->setAppNamespace('Bake\Test\App');
+        $this->removePlugins(['BakeTest']);
     }
 
     /**
@@ -96,6 +97,8 @@ class BakeShellTest extends TestCase
             '',
             '- controller',
             '- custom_controller',
+            '- template',
+            '- twig_template',
             '',
             'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.',
         ];
@@ -112,8 +115,10 @@ class BakeShellTest extends TestCase
     {
         $this->Shell->loadTasks();
         $expected = [
+            'Bake.Template',
             'Controller',
             'CustomController',
+            'WyriHaximus/TwigView.TwigTemplate',
         ];
         sort($this->Shell->tasks);
         sort($expected);

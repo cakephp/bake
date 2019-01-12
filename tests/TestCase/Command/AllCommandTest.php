@@ -31,14 +31,14 @@ class AllCommandTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.Bake.TodoItems',
-        'plugin.Bake.TodoTasks',
+        'plugin.Bake.Products',
+        'plugin.Bake.ProductVersions',
     ];
 
     /**
      * @var array
      */
-    protected $tables = ['todo_items', 'todo_tasks'];
+    protected $tables = ['products', 'product_versions'];
 
     /**
      * setUp method
@@ -81,18 +81,18 @@ class AllCommandTest extends TestCase
         $templatesPath = ROOT . 'templates' . DS;
 
         $this->generatedFiles = [
-            $templatesPath . 'TodoItems/add.php',
-            $templatesPath . 'TodoItems/edit.php',
-            $templatesPath . 'TodoItems/index.php',
-            $templatesPath . 'TodoItems/view.php',
-            $path . 'Controller/TodoItemsController.php',
-            $path . 'Model/Table/TodoItemsTable.php',
-            $path . 'Model/Entity/TodoItem.php',
-            $testsPath . 'Fixture/TodoItemsFixture.php',
-            $testsPath . 'TestCase/Model/Table/TodoItemsTableTest.php',
-            $testsPath . 'TestCase/Controller/TodoItemsControllerTest.php',
+            $templatesPath . 'Products/add.php',
+            $templatesPath . 'Products/edit.php',
+            $templatesPath . 'Products/index.php',
+            $templatesPath . 'Products/view.php',
+            $path . 'Controller/ProductsController.php',
+            $path . 'Model/Table/ProductsTable.php',
+            $path . 'Model/Entity/Product.php',
+            $testsPath . 'Fixture/ProductsFixture.php',
+            $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
+            $testsPath . 'TestCase/Controller/ProductsControllerTest.php',
         ];
-        $this->exec('bake all --connection test TodoItems');
+        $this->exec('bake all --connection test Products');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -111,26 +111,27 @@ class AllCommandTest extends TestCase
         $templatesPath = ROOT . 'templates' . DS;
 
         $this->generatedFiles = [
-            $templatesPath . 'TodoItems/add.php',
-            $templatesPath . 'TodoItems/edit.php',
-            $templatesPath . 'TodoItems/index.php',
-            $templatesPath . 'TodoItems/view.php',
-            $templatesPath . 'TodoTasks/add.php',
-            $templatesPath . 'TodoTasks/edit.php',
-            $templatesPath . 'TodoTasks/index.php',
-            $templatesPath . 'TodoTasks/view.php',
-            $path . 'Controller/TodoItemsController.php',
-            $path . 'Model/Table/TodoItemsTable.php',
-            $path . 'Model/Entity/TodoItem.php',
-            $path . 'Controller/TodoTasksController.php',
-            $path . 'Model/Table/TodoTasksTable.php',
-            $path . 'Model/Entity/TodoTask.php',
-            $testsPath . 'Fixture/TodoItemsFixture.php',
-            $testsPath . 'TestCase/Model/Table/TodoItemsTableTest.php',
-            $testsPath . 'TestCase/Controller/TodoItemsControllerTest.php',
-            $testsPath . 'Fixture/TodoTasksFixture.php',
-            $testsPath . 'TestCase/Model/Table/TodoTasksTableTest.php',
-            $testsPath . 'TestCase/Controller/TodoTasksControllerTest.php',
+            $templatesPath . 'Products/add.php',
+            $templatesPath . 'Products/edit.php',
+            $templatesPath . 'Products/index.php',
+            $templatesPath . 'Products/view.php',
+            $path . 'Controller/ProductsController.php',
+            $path . 'Model/Table/ProductsTable.php',
+            $path . 'Model/Entity/Product.php',
+            $testsPath . 'Fixture/ProductsFixture.php',
+            $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
+            $testsPath . 'TestCase/Controller/ProductsControllerTest.php',
+
+            $templatesPath . 'ProductVersions/add.php',
+            $templatesPath . 'ProductVersions/edit.php',
+            $templatesPath . 'ProductVersions/index.php',
+            $templatesPath . 'ProductVersions/view.php',
+            $path . 'Controller/ProductVersionsController.php',
+            $path . 'Model/Table/ProductVersionsTable.php',
+            $path . 'Model/Entity/ProductVersion.php',
+            $testsPath . 'Fixture/ProductVersionsFixture.php',
+            $testsPath . 'TestCase/Model/Table/ProductVersionsTableTest.php',
+            $testsPath . 'TestCase/Controller/ProductVersionsControllerTest.php',
         ];
         $this->exec('bake all --connection test --everything');
 

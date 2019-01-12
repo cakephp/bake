@@ -49,28 +49,12 @@ class SimpleBakeTaskTest extends TestCase
     {
         $this->generatedFiles = [
             APP . 'Controller/ExampleCustomController.php',
-            ROOT . 'tests/TestCase/Controller/ExampleControllerTest.php',
         ];
         $this->exec('bake custom_controller Example');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class ExampleController extends AppController', $this->generatedFiles[0]);
-    }
-
-    /**
-     * Test the no-test option.
-     *
-     * @return void
-     */
-    public function testBakeTestNoTest()
-    {
-        $this->generatedFile = APP . 'Controller/ExampleCustomController.php';
-        $this->exec('bake custom_controller --no-test Example');
-
-        $this->assertExitCode(Shell::CODE_SUCCESS);
-        $this->assertFileNotExists(ROOT . 'tests/TestCase/Controller/ExampleControllerTest.php');
-        $this->assertFileContains('class ExampleController extends AppController', $this->generatedFile);
     }
 
     /**
@@ -85,7 +69,6 @@ class SimpleBakeTaskTest extends TestCase
 
         $this->generatedFiles = [
             $path . 'src/Controller/ExampleCustomController.php',
-            $path . 'tests/TestCase/Controller/ExampleControllerTest.php',
         ];
         $this->exec('bake custom_controller TestBake.Example');
 
