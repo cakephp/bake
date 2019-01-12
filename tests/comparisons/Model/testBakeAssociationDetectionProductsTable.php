@@ -1,5 +1,5 @@
 <?php
-namespace App\Model\Table;
+namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
@@ -9,17 +9,17 @@ use Cake\Validation\Validator;
 /**
  * Products Model
  *
- * @property \App\Model\Table\ProductVersionsTable|\Cake\ORM\Association\HasMany $ProductVersions
- * @property \App\Model\Table\CategoriesTable|\Cake\ORM\Association\BelongsToMany $Categories
+ * @property \Bake\Test\App\Model\Table\ProductVersionsTable|\Cake\ORM\Association\HasMany $ProductVersions
+ * @property \Bake\Test\App\Model\Table\CategoriesTable|\Cake\ORM\Association\BelongsToMany $Categories
  *
- * @method \App\Model\Entity\Product get($primaryKey, $options = [])
- * @method \App\Model\Entity\Product newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Product[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Product|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Product|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Product patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Product[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Product findOrCreate($search, callable $callback = null, $options = [])
+ * @method \Bake\Test\App\Model\Entity\Product get($primaryKey, $options = [])
+ * @method \Bake\Test\App\Model\Entity\Product newEntity($data = null, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\Product[] newEntities(array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\Product|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\Product|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\Product patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\Product[] patchEntities($entities, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\Product findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
@@ -71,5 +71,15 @@ class ProductsTable extends Table
             ->allowEmptyString('name', false);
 
         return $validator;
+    }
+
+    /**
+     * Returns the database connection name to use by default.
+     *
+     * @return string
+     */
+    public static function defaultConnectionName(): string
+    {
+        return 'test';
     }
 }

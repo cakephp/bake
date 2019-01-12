@@ -1,5 +1,5 @@
 <?php
-namespace App\Model\Table;
+namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
@@ -9,16 +9,16 @@ use Cake\Validation\Validator;
 /**
  * ProductVersions Model
  *
- * @property \App\Model\Table\ProductsTable|\Cake\ORM\Association\BelongsTo $Products
+ * @property \Bake\Test\App\Model\Table\ProductsTable|\Cake\ORM\Association\BelongsTo $Products
  *
- * @method \App\Model\Entity\ProductVersion get($primaryKey, $options = [])
- * @method \App\Model\Entity\ProductVersion newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\ProductVersion[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\ProductVersion|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\ProductVersion|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\ProductVersion patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\ProductVersion[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\ProductVersion findOrCreate($search, callable $callback = null, $options = [])
+ * @method \Bake\Test\App\Model\Entity\ProductVersion get($primaryKey, $options = [])
+ * @method \Bake\Test\App\Model\Entity\ProductVersion newEntity($data = null, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\ProductVersion[] newEntities(array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\ProductVersion|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\ProductVersion|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\ProductVersion patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\ProductVersion[] patchEntities($entities, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\ProductVersion findOrCreate($search, callable $callback = null, $options = [])
  */
 class ProductVersionsTable extends Table
 {
@@ -75,5 +75,15 @@ class ProductVersionsTable extends Table
         $rules->add($rules->existsIn(['product_id'], 'Products'));
 
         return $rules;
+    }
+
+    /**
+     * Returns the database connection name to use by default.
+     *
+     * @return string
+     */
+    public static function defaultConnectionName(): string
+    {
+        return 'test';
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace App\Model\Table;
+namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
@@ -9,14 +9,14 @@ use Cake\Validation\Validator;
 /**
  * OldProducts Model
  *
- * @method \App\Model\Entity\OldProduct get($primaryKey, $options = [])
- * @method \App\Model\Entity\OldProduct newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\OldProduct[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\OldProduct|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\OldProduct|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\OldProduct patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\OldProduct[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\OldProduct findOrCreate($search, callable $callback = null, $options = [])
+ * @method \Bake\Test\App\Model\Entity\OldProduct get($primaryKey, $options = [])
+ * @method \Bake\Test\App\Model\Entity\OldProduct newEntity($data = null, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\OldProduct[] newEntities(array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\OldProduct|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\OldProduct|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\OldProduct patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\OldProduct[] patchEntities($entities, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\OldProduct findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
@@ -59,5 +59,15 @@ class OldProductsTable extends Table
             ->allowEmptyString('name', false);
 
         return $validator;
+    }
+
+    /**
+     * Returns the database connection name to use by default.
+     *
+     * @return string
+     */
+    public static function defaultConnectionName(): string
+    {
+        return 'test';
     }
 }
