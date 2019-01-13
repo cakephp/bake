@@ -31,8 +31,6 @@ use RuntimeException;
 
 /**
  * Task class for creating and updating view template files.
- *
- * @property \Bake\Shell\Task\ModelTask $Model
  */
 class TemplateTask extends BakeTask
 {
@@ -235,21 +233,6 @@ class TemplateTask extends BakeTask
         }
 
         return $methods;
-    }
-
-    /**
-     * Bake All view templates for all controller actions.
-     *
-     * @return void
-     */
-    public function all()
-    {
-        $this->Model->connection = $this->connection;
-        $tables = $this->Model->listUnskipped();
-
-        foreach ($tables as $table) {
-            $this->main($table);
-        }
     }
 
     /**
