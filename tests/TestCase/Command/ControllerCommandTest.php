@@ -310,36 +310,6 @@ class ControllerCommandTest extends TestCase
     }
 
     /**
-     * test that execute runs all when the first arg == all
-     *
-     * @return void
-     */
-    public function testMainIntoAll()
-    {
-        $this->markTestIncomplete();
-        if ($this->Task->listAll()[0] != 'bake_articles') {
-            $this->markTestSkipped('Additional tables detected.');
-        }
-
-        $this->Task->connection = 'test';
-        $this->Task->params = ['helpers' => 'Time,Text'];
-
-        $this->Task->Test->expects($this->atLeastOnce())
-            ->method('bake');
-
-        $filename = $this->_normalizePath(APP . 'Controller/BakeArticlesController.php');
-        $this->Task->expects($this->at(1))
-            ->method('createFile')
-            ->with($filename, $this->logicalAnd(
-                $this->stringContains('class BakeArticlesController'),
-                $this->stringContains("\$this->viewBuilder()->setHelpers(['Time', 'Text']);")
-            ))
-            ->will($this->returnValue(true));
-
-        $this->Task->all();
-    }
-
-    /**
      * data provider for testMainWithControllerNameVariations
      *
      * @return void
