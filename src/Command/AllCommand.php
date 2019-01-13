@@ -39,7 +39,7 @@ class AllCommand extends BakeCommand
         $parser = $parser->setDescription(
             'Generate the model, controller, template, tests and fixture for a table.'
         )->addArgument('name', [
-            'help' => 'Name of the fixture to table to generate code for.',
+            'help' => 'Name of the table to generate code for.',
         ])->addOption('everything', [
             'help' => 'Generate code for all tables.',
             'default' => false,

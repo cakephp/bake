@@ -27,7 +27,7 @@ use Cake\Filesystem\File;
 /**
  * Base class for Bake Tasks.
  *
- * @deprecated 2.0 Support for Tasks will be removed in Bake 3.0
+ * @deprecated 2.0.0 Support for Tasks will be removed in Bake 3.0
  */
 class BakeTask extends Shell
 {
