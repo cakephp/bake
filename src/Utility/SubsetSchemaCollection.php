@@ -15,7 +15,7 @@ declare(strict_types=1);
  */
 namespace Bake\Utility;
 
-use Cake\Database\Schema\Collection;
+use Cake\Database\Schema\CollectionInterface;
 use Cake\Database\Schema\TableSchemaInterface;
 
 /**
@@ -24,7 +24,7 @@ use Cake\Database\Schema\TableSchemaInterface;
  * Useful to create determinsitic subsets of fixtures when
  * testing.
  */
-class SubsetSchemaCollection extends Collection
+class SubsetSchemaCollection implements CollectionInterface
 {
     /**
      * @var \Cake\Database\Schema\Collection
@@ -38,10 +38,10 @@ class SubsetSchemaCollection extends Collection
 
     /**
      *
-     * @param \Cake\Database\Schema\Collection $collection The wrapped collection
+     * @param \Cake\Database\Schema\CollectionInterface $collection The wrapped collection
      * @param array $tables The subset of tables.
      */
-    public function __construct(Collection $collection, array $tables)
+    public function __construct(CollectionInterface $collection, array $tables)
     {
         $this->collection = $collection;
         $this->tables = $tables;
@@ -50,9 +50,9 @@ class SubsetSchemaCollection extends Collection
     /**
      * Get the wrapped collection
      *
-     * @return \Cake\Database\Schema\Collection
+     * @return \Cake\Database\Schema\CollectionInterface
      */
-    public function getInnerCollection(): Collection
+    public function getInnerCollection(): CollectionInterface
     {
         return $this->collection;
     }
