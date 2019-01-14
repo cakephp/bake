@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Bake\Shell\Task;
 
 use Bake\Utility\CommonOptionsTrait;
+use Bake\Utility\Process;
 use Cake\Cache\Cache;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
@@ -26,6 +27,7 @@ use Cake\Filesystem\File;
 /**
  * Base class for Bake Tasks.
  *
+ * @deprecated 2.0.0 Support for Tasks will be removed in Bake 3.0
  */
 class BakeTask extends Shell
 {
@@ -141,36 +143,9 @@ class BakeTask extends Shell
      */
     public function callProcess($command)
     {
-        $descriptorSpec = [
-            0 => ['pipe', 'r'],
-            1 => ['pipe', 'w'],
-            2 => ['pipe', 'w'],
-        ];
-        $this->_io->verbose('Running ' . $command);
-        $process = proc_open(
-            $command,
-            $descriptorSpec,
-            $pipes
-        );
-        if (!is_resource($process)) {
-            $this->abort('Could not start subprocess.');
-
-            return;
-        }
-        fclose($pipes[0]);
-
-        $output = stream_get_contents($pipes[1]);
-        fclose($pipes[1]);
-
-        $error = stream_get_contents($pipes[2]);
-        fclose($pipes[2]);
-        $exit = proc_close($process);
-
-        if ($exit !== 0) {
-            throw new \RuntimeException($error);
-        }
-
-        $this->out($output);
+        $process = new Process($this->_io);
+        $out = $process->call($command);
+        $this->out($out);
     }
 
     /**

@@ -13,9 +13,10 @@ declare(strict_types=1);
  * @since         1.1.4
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Shell\Task;
+namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\Command;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
@@ -25,9 +26,9 @@ use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 
 /**
- * ModelTaskAssociationDetectionTest class
+ * ModelCommand Association detection test
  */
-class ModelTaskAssociationDetectionTest extends TestCase
+class ModelCommandAssociationDetectionTest extends TestCase
 {
     /**
      * fixtures
@@ -46,11 +47,6 @@ class ModelTaskAssociationDetectionTest extends TestCase
     ];
 
     /**
-     * @var \Bake\Shell\Task\ModelTask|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $Task;
-
-    /**
      * setUp method
      *
      * @return void
@@ -59,61 +55,10 @@ class ModelTaskAssociationDetectionTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->setAppNamespace('Bake\Test\App');
+        $this->useCommandRunner();
 
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
-            ->setMethods(['in', 'err', 'createFile', '_stop', '_checkUnitTest'])
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->Task->connection = 'default';
-        $this->_setupOtherMocks();
         TableRegistry::getTableLocator()->clear();
-        $this->markTestSkipped('Skipping until converted to command');
-    }
-
-    /**
-     * Setup a mock that has out mocked. Normally this is not used as it makes $this->at() really tricky.
-     *
-     * @return void
-     */
-    protected function _useMockedOut()
-    {
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task = $this->getMockBuilder('Bake\Shell\Task\ModelTask')
-            ->setMethods(['in', 'out', 'err', 'hr', 'createFile', '_stop', '_checkUnitTest'])
-            ->setConstructorArgs([$io])
-            ->getMock();
-
-        $this->_setupOtherMocks();
-    }
-
-    /**
-     * sets up the rest of the dependencies for Model Task
-     *
-     * @return void
-     */
-    protected function _setupOtherMocks()
-    {
-        $io = $this->getMockBuilder('Cake\Console\ConsoleIo')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->Task->Fixture = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
-            ->setConstructorArgs([$io])
-            ->setMethods(['bake'])
-            ->getMock();
-        $this->Task->Test = $this->getMockBuilder('Bake\Shell\Task\FixtureTask')
-            ->setConstructorArgs([$io])
-            ->setMethods(['bake'])
-            ->getMock();
-
-        $this->Task->name = 'Model';
     }
 
     /**
@@ -124,7 +69,7 @@ class ModelTaskAssociationDetectionTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
-        unset($this->Task);
+        TableRegistry::getTableLocator()->clear();
     }
 
     /**
@@ -134,11 +79,14 @@ class ModelTaskAssociationDetectionTest extends TestCase
      */
     protected function _compareBakeTableResult($name, $comparisonFile)
     {
-        $table = $this->Task->getTable($name);
-        $tableObject = $this->Task->getTableObject($name, $table);
-        $data = $this->Task->getTableContext($tableObject, $table, $name);
-        $result = $this->Task->bakeTable($tableObject, $data);
-        $this->assertSameAsFile($comparisonFile . '.php', $result);
+        $this->generatedFiles = [
+            APP . "Model/Table/{$name}Table.php",
+        ];
+        $this->exec("bake model --no-entity --no-fixture --no-test --connection test {$name}");
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $contents = file_get_contents($this->generatedFiles[0]);
+        $this->assertSameAsFile($comparisonFile . '.php', $contents);
     }
 
     /**
@@ -227,31 +175,5 @@ class ModelTaskAssociationDetectionTest extends TestCase
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
         $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
         $this->_compareBakeTableResult('ProductVersions', __FUNCTION__);
-    }
-
-    /**
-     * test checking if associations where built correctly for products.
-     *
-     * @return void
-     */
-    public function testBakeAssociationDetectionProductsTable()
-    {
-        $driver = ConnectionManager::get('test')->getDriver();
-        $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
-        $this->_compareBakeTableResult('Products', __FUNCTION__);
-    }
-
-    /**
-     * test checking if associations where built correctly for products.
-     *
-     * @return void
-     */
-    public function testBakeAssociationDetectionProductsTableSigned()
-    {
-        $driver = ConnectionManager::get('test')->getDriver();
-        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
-        $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
-        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
-        $this->_compareBakeTableResult('Products', __FUNCTION__);
     }
 }

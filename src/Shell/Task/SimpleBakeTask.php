@@ -22,20 +22,9 @@ use Cake\Utility\Inflector;
 
 /**
  * Base class for simple bake tasks code generator.
- *
- * @property \Bake\Shell\Task\TestTask $Test
  */
 abstract class SimpleBakeTask extends BakeTask
 {
-    /**
-     * Tasks to be loaded by this Task
-     *
-     * @var array
-     */
-    public $tasks = [
-        'Bake.Test',
-    ];
-
     /**
      * Get the generated object's name.
      *
@@ -90,7 +79,6 @@ abstract class SimpleBakeTask extends BakeTask
         $name = $this->_getName($name);
         $name = Inflector::camelize($name);
         $this->bake($name);
-        $this->bakeTest($name);
     }
 
     /**
@@ -115,22 +103,6 @@ abstract class SimpleBakeTask extends BakeTask
     }
 
     /**
-     * Generate a test case.
-     *
-     * @param string $className The class to bake a test for.
-     * @return string|bool|null
-     */
-    public function bakeTest($className)
-    {
-        if (!empty($this->params['no-test'])) {
-            return null;
-        }
-        $this->Test->plugin = $this->plugin;
-
-        return $this->Test->bake($this->name(), $className);
-    }
-
-    /**
      * Gets the option parser instance and configures it.
      *
      * @return \Cake\Console\ConsoleOptionParser
@@ -147,9 +119,6 @@ abstract class SimpleBakeTask extends BakeTask
                 $name,
                 $name
             ),
-        ])->addOption('no-test', [
-            'boolean' => true,
-            'help' => 'Do not generate a test skeleton.',
         ]);
 
         return $parser;
