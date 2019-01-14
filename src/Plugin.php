@@ -135,7 +135,7 @@ class Plugin extends BasePlugin
             } catch (ReflectionException $e) {
                 continue;
             }
-            if ($reflection->isAbstract() || !$reflection->isSubclassOf(BakeCommand::class)) {
+            if (!$reflection->isInstantiable() || !$reflection->isSubclassOf(BakeCommand::class)) {
                 continue;
             }
 
