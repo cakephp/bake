@@ -15,33 +15,18 @@ declare(strict_types=1);
  */
 namespace Bake;
 
-use Bake\Command\AllCommand;
-use Bake\Command\BehaviorCommand;
-use Bake\Command\CellCommand;
-use Bake\Command\CommandCommand;
-use Bake\Command\ComponentCommand;
-use Bake\Command\ControllerAllCommand;
-use Bake\Command\ControllerCommand;
-use Bake\Command\FixtureAllCommand;
-use Bake\Command\FixtureCommand;
-use Bake\Command\FormCommand;
-use Bake\Command\HelperCommand;
-use Bake\Command\MailerCommand;
-use Bake\Command\MiddlewareCommand;
-use Bake\Command\ModelAllCommand;
-use Bake\Command\ModelCommand;
-use Bake\Command\PluginCommand;
-use Bake\Command\ShellCommand;
-use Bake\Command\ShellHelperCommand;
-use Bake\Command\TaskCommand;
-use Bake\Command\TemplateAllCommand;
-use Bake\Command\TemplateCommand;
-use Bake\Command\TestCommand;
+use Bake\Command\BakeCommand;
 use Bake\Shell\BakeShell;
 use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
+use Cake\Core\Configure;
+use Cake\Core\Plugin as CorePlugin;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Routing\RouteBuilder;
+use Cake\Utility\Inflector;
+use DirectoryIterator;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Plugin class for bake
@@ -84,34 +69,87 @@ class Plugin extends BasePlugin
      */
     public function console(CommandCollection $commands): CommandCollection
     {
-        $commands->add('bake all', AllCommand::class);
-        $commands->add('bake behavior', BehaviorCommand::class);
-        $commands->add('bake cell', CellCommand::class);
-        $commands->add('bake command', CommandCommand::class);
-        $commands->add('bake component', ComponentCommand::class);
-        $commands->add('bake controller', ControllerCommand::class);
-        $commands->add('bake controller all', ControllerAllCommand::class);
-        $commands->add('bake fixture', FixtureCommand::class);
-        $commands->add('bake fixture all', FixtureAllCommand::class);
-        $commands->add('bake form', FormCommand::class);
-        $commands->add('bake helper', HelperCommand::class);
-        $commands->add('bake mailer', MailerCommand::class);
-        $commands->add('bake middleware', MiddlewareCommand::class);
-        $commands->add('bake model', ModelCommand::class);
-        $commands->add('bake model all', ModelAllCommand::class);
-        $commands->add('bake plugin', PluginCommand::class);
-        $commands->add('bake shell_helper', ShellHelperCommand::class);
-        $commands->add('bake shell', ShellCommand::class);
-        $commands->add('bake task', TaskCommand::class);
-        $commands->add('bake template', TemplateCommand::class);
-        $commands->add('bake template all', TemplateAllCommand::class);
-        $commands->add('bake test', TestCommand::class);
+        // Add commands in plugins and app.
+        $commands = $this->discoverCommands($commands);
 
         // Add shell for incomplete tasks and backwards compatibility discover.
         $commands->add('bake', BakeShell::class);
 
-        // Add autodiscovery for userland defined commands
+        return $commands;
+    }
+
+    /**
+     * Scan plugins and application to find commands that are intended
+     * to be used with bake.
+     *
+     * Non-Abstract commands extending `Bake\Command\BakeCommand` are included.
+     * Plugins are scanned in the order they are listed in `Plugin::loaded()`
+     *
+     * @param \Cake\Console\CommandCollection $commands The CommandCollection to add commands into.
+     * @return \Cake\Console\CommandCollection The updated collection.
+     */
+    protected function discoverCommands(CommandCollection $commands): CommandCollection
+    {
+        $plugins = CorePlugin::getCollection();
+        foreach ($plugins as $plugin) {
+            $namespace = str_replace('/', '\\', $plugin->getName());
+            $pluginPath = $plugin->getClassPath();
+
+            $found = $this->findInPath($namespace, $pluginPath);
+            if (count($found)) {
+                $commands->addMany($found);
+            }
+        }
+
+        $found = $this->findInPath(Configure::read('App.namespace'), APP);
+        if (count($found)) {
+            $commands->addMany($found);
+        }
 
         return $commands;
+    }
+
+    /**
+     * Search a path for commands.
+     *
+     * @param string $namespace The namespace classes are expected to be in.
+     * @param string $path The path to look in.
+     * @return array
+     */
+    protected function findInPath(string $namespace, string $path)
+    {
+        $path .= 'Command/';
+        if (!file_exists($path)) {
+            return [];
+        }
+        $iterator = new DirectoryIterator($path);
+        $candidates = [];
+        foreach ($iterator as $item) {
+            if ($item->isDot() || $item->isDir()) {
+                continue;
+            }
+            $class = $namespace . '\Command\\' . $item->getBasename('.php');
+
+            try {
+                $reflection = new ReflectionClass($class);
+            } catch (ReflectionException $e) {
+                continue;
+            }
+            if (!$reflection->isInstantiable() || !$reflection->isSubclassOf(BakeCommand::class)) {
+                continue;
+            }
+
+            // Trim off 'Command' from the name.
+            list($ns, $className) = namespaceSplit($class);
+            $name = Inflector::underscore(substr($className, 0, -7));
+
+            // Commands ending with `_all` should be ` all` instead.
+            if (substr($name, -4) === '_all') {
+                $name = substr($name, 0, -4) . ' all';
+            }
+            $candidates["bake {$name}"] = $class;
+        }
+
+        return $candidates;
     }
 }
