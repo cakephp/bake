@@ -16,7 +16,7 @@ declare(strict_types=1);
 namespace Bake;
 
 use Bake\Command\BakeCommand;
-use Bake\Shell\BakeShell;
+use Bake\Command\EntryCommand;
 use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
 use Cake\Core\Configure;
@@ -72,8 +72,8 @@ class Plugin extends BasePlugin
         // Add commands in plugins and app.
         $commands = $this->discoverCommands($commands);
 
-        // Add shell for incomplete tasks and backwards compatibility discover.
-        $commands->add('bake', BakeShell::class);
+        // Add entry command to handle entry point and backwards compat.
+        $commands->add('bake', EntryCommand::class);
 
         return $commands;
     }
