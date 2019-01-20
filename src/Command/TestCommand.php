@@ -316,7 +316,7 @@ class TestCommand extends BakeCommand
      * @param string $class The classname of the class the test is being generated for.
      * @return object And instance of the class that is going to be tested.
      */
-    public function buildTestSubject(string $type, string $class): object
+    public function buildTestSubject(string $type, string $class)
     {
         if ($type === 'Table') {
             list(, $name) = namespaceSplit($class);
@@ -424,10 +424,10 @@ class TestCommand extends BakeCommand
      * Generate the list of fixtures that will be required to run this test based on
      * loaded models.
      *
-     * @param object $subject The object you want to generate fixtures for.
+     * @param \Cake\ORM\Table|\Cake\Controller\Controller $subject The object you want to generate fixtures for.
      * @return array Array of fixtures to be included in the test.
      */
-    public function generateFixtureList(object $subject): array
+    public function generateFixtureList($subject): array
     {
         $this->_fixtures = [];
         if ($subject instanceof Table) {
