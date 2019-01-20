@@ -100,7 +100,7 @@ trait CommonOptionsTrait
         ])->addOption('theme', [
             'short' => 't',
             'help' => 'The theme to use when baking code.',
-            'default' => Configure::read('Bake.theme'),
+            'default' => Configure::read('Bake.theme') ?? '',
             'choices' => $bakeThemes,
         ]);
 

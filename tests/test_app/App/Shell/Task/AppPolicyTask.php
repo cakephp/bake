@@ -13,18 +13,17 @@ declare(strict_types=1);
  * @since     0.1.0
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace BakeTest\Shell\Task;
+namespace Bake\Test\App\Shell\Task;
 
 use Bake\Shell\Task\BakeTask;
 
 /**
  * Test stub for BakeShell.
  */
-class ZergTask extends BakeTask
+class AppPolicyTask extends BakeTask
 {
     public function main()
     {
-        $this->out('Zerg generated.');
-        $this->verbose('Loud noises');
+        $this->out('App Policy Generated');
     }
 }
