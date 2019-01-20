@@ -22,6 +22,7 @@ use Cake\Console\CommandCollection;
 use Cake\Console\CommandCollectionAwareInterface;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Console\Exception\ConsoleException;
 use Cake\Core\Configure;
 use Cake\Core\Plugin as CorePlugin;
 use Cake\Utility\Inflector;
@@ -138,30 +139,27 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
     {
         $found = false;
         $name = Inflector::camelize($name);
+        $factory = function ($className, $io) {
+            $task = new $className($io);
+            $task->setRootName('cake bake');
+
+            return $task;
+        };
+
         // Look in each plugin for the requested task
         foreach (CorePlugin::loaded() as $plugin) {
             $namespace = str_replace('/', '\\', $plugin);
             $candidate = $namespace . '\Shell\Task\\' . $name . 'Task';
             if (class_exists($candidate) && is_subclass_of($candidate, BakeTask::class)) {
-                $found = true;
-                break;
+                return $factory($candidate, $io);
             }
-        }
-        if ($found) {
-            $task = new $candidate($io);
-            $task->setRootName('cake bake');
-
-            return $task;
         }
 
         // Try the app as well
         $namespace = Configure::read('App.namespace');
         $candidate = $namespace . '\Shell\Task\\' . $name . 'Task';
         if (class_exists($candidate) && is_subclass_of($candidate, BakeTask::class)) {
-            $task = new $candidate($io);
-            $task->setRootName('cake bake');
-
-            return $task;
+            return $factory($candidate, $io);
         }
 
         return null;
