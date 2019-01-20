@@ -47,7 +47,7 @@ abstract class BakeCommand extends Command
      * @param string $name The name to possibly split.
      * @return string The name without the plugin prefix.
      */
-    protected function _getName($name)
+    protected function _getName(string $name): string
     {
         if (strpos($name, '.')) {
             list($plugin, $name) = pluginSplit($name);
@@ -65,7 +65,7 @@ abstract class BakeCommand extends Command
      * @param \Cake\Console\Arguments $args Arguments instance to read the prefix option from.
      * @return string The inflected prefix path.
      */
-    protected function getPrefix(Arguments $args)
+    protected function getPrefix(Arguments $args): string
     {
         $prefix = $args->getOption('prefix');
         if (!$prefix) {
@@ -83,7 +83,7 @@ abstract class BakeCommand extends Command
      * @param \Cake\Console\Arguments $args Arguments instance to read the prefix option from.
      * @return string Path to output.
      */
-    public function getPath(Arguments $args)
+    public function getPath(Arguments $args): string
     {
         $path = APP . $this->pathFragment;
         if ($this->plugin) {
@@ -104,7 +104,7 @@ abstract class BakeCommand extends Command
      * @param \Cake\Console\ConsoleIo $io ConsoleIo to delete file with.
      * @return void
      */
-    protected function deleteEmptyFile($path, $io)
+    protected function deleteEmptyFile(string $path, ConsoleIo $io): void
     {
         if (file_exists($path)) {
             unlink($path);

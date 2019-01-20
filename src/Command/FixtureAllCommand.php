@@ -67,9 +67,9 @@ class FixtureAllCommand extends BakeCommand
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return void
+     * @return int|null
      */
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $this->extractCommonProperties($args);
 
@@ -80,5 +80,7 @@ class FixtureAllCommand extends BakeCommand
             $fixtureArgs = new Arguments([$table], $args->getOptions(), ['name']);
             $fixture->execute($fixtureArgs, $io);
         }
+
+        return static::CODE_SUCCESS;
     }
 }

@@ -30,7 +30,7 @@ class HelperCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function name()
+    public function name(): string
     {
         return 'helper';
     }
@@ -38,7 +38,7 @@ class HelperCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function fileName($name)
+    public function fileName(string $name): string
     {
         return $name . 'Helper.php';
     }
@@ -46,7 +46,7 @@ class HelperCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function template()
+    public function template(): string
     {
         return 'View/helper';
     }

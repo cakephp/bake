@@ -19,7 +19,6 @@ use Bake\Utility\Model\AssociationFilter;
 use Bake\Utility\TableScanner;
 use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
-use Cake\Console\Command;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
@@ -102,7 +101,7 @@ class TemplateCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return null|int The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $this->extractCommonProperties($args);
         $name = $args->getArgument('name') ?? '';
@@ -115,7 +114,7 @@ class TemplateCommand extends BakeCommand
                 $io->out('- ' . $this->_camelize($table));
             }
 
-            return Command::CODE_SUCCESS;
+            return static::CODE_SUCCESS;
         }
         $template = $args->getArgument('template');
         $action = $args->getArgument('action');
@@ -130,7 +129,7 @@ class TemplateCommand extends BakeCommand
         if ($template) {
             $this->bake($args, $io, $template, true, $action);
 
-            return Command::CODE_SUCCESS;
+            return static::CODE_SUCCESS;
         }
 
         $vars = $this->_loadController();
@@ -144,6 +143,8 @@ class TemplateCommand extends BakeCommand
                 $io->error($e->getMessage());
             }
         }
+
+        return static::CODE_SUCCESS;
     }
 
     /**
@@ -152,7 +153,7 @@ class TemplateCommand extends BakeCommand
      * @param string $table The table/model that is being baked.
      * @return void
      */
-    public function model($table)
+    public function model(string $table): void
     {
         $tableName = $this->_camelize($table);
         $plugin = $this->plugin;
@@ -170,7 +171,7 @@ class TemplateCommand extends BakeCommand
      * @param string|null $controller The controller name if specified.
      * @return void
      */
-    public function controller(Arguments $args, $table, $controller = null)
+    public function controller(Arguments $args, string $table, ?string $controller = null): void
     {
         $tableName = $this->_camelize($table);
         if (empty($controller)) {
@@ -195,7 +196,7 @@ class TemplateCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args The arguments
      * @return string
      */
-    public function getPath(Arguments $args)
+    public function getPath(Arguments $args): string
     {
         $path = parent::getPath($args);
         $path .= $this->controllerName . DS;
@@ -208,7 +209,7 @@ class TemplateCommand extends BakeCommand
      *
      * @return array Array of action names that should be baked
      */
-    protected function _methodsToBake()
+    protected function _methodsToBake(): array
     {
         $base = Configure::read('App.namespace');
 
@@ -256,7 +257,7 @@ class TemplateCommand extends BakeCommand
      *
      * @return array Returns variables to be made available to a view template
      */
-    protected function _loadController()
+    protected function _loadController(): array
     {
         if (TableRegistry::getTableLocator()->exists($this->modelName)) {
             $modelObject = TableRegistry::getTableLocator()->get($this->modelName);
@@ -320,8 +321,13 @@ class TemplateCommand extends BakeCommand
      * @param string $outputFile The output file to create. If null will use `$template`
      * @return void
      */
-    public function bake($args, $io, $template, $content = '', $outputFile = null)
-    {
+    public function bake(
+        Arguments $args,
+        ConsoleIo $io,
+        string $template,
+        $content = '',
+        ?string $outputFile = null
+    ): void {
         if ($outputFile === null) {
             $outputFile = $template;
         }
@@ -349,7 +355,7 @@ class TemplateCommand extends BakeCommand
      * @param array|null $vars passed for use in templates
      * @return string|false Content from template
      */
-    public function getContent(Arguments $args, ConsoleIo $io, $action, $vars = null)
+    public function getContent(Arguments $args, ConsoleIo $io, string $action, ?array $vars = null)
     {
         if (!$vars) {
             $vars = $this->_loadController();
@@ -412,7 +418,7 @@ class TemplateCommand extends BakeCommand
      * @param \Cake\ORM\Table $model Table
      * @return array associations
      */
-    protected function _filteredAssociations(Table $model)
+    protected function _filteredAssociations(Table $model): array
     {
         if (is_null($this->_associationFilter)) {
             $this->_associationFilter = new AssociationFilter();

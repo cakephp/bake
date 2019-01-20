@@ -40,7 +40,7 @@ class FixtureCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args Arguments instance to read the prefix option from.
      * @return string Path to output.
      */
-    public function getPath(Arguments $args)
+    public function getPath(Arguments $args): string
     {
         $dir = 'Fixture/';
         $path = defined('TESTS') ? TESTS . $dir : ROOT . DS . 'tests' . DS . $dir;
@@ -98,7 +98,7 @@ class FixtureCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return null|int The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $this->extractCommonProperties($args);
         $name = $args->getArgument('name') ?? '';
@@ -115,9 +115,11 @@ class FixtureCommand extends BakeCommand
             return static::CODE_SUCCESS;
         }
 
-        $table = $args->getOption('table');
+        $table = $args->getOption('table') ?? '';
         $model = $this->_camelize($name);
         $this->bake($model, $table, $args, $io);
+
+        return static::CODE_SUCCESS;
     }
 
     /**
@@ -130,7 +132,7 @@ class FixtureCommand extends BakeCommand
      * @return void
      * @throws \RuntimeException
      */
-    protected function bake($model, $useTable, $args, $io)
+    protected function bake(string $model, string $useTable, Arguments $args, ConsoleIo $io): void
     {
         $table = $schema = $records = $import = $modelImport = null;
 
@@ -185,7 +187,7 @@ class FixtureCommand extends BakeCommand
      * @param string $table The table name to get schema metadata for.
      * @return \Cake\Database\Schema\TableSchema
      */
-    public function readSchema($name, $table)
+    public function readSchema(string $name, string $table): TableSchema
     {
         $connection = ConnectionManager::get($this->connection);
 
@@ -210,7 +212,7 @@ class FixtureCommand extends BakeCommand
      * @param array $otherVars Contents of the fixture file.
      * @return void
      */
-    public function generateFixtureFile($args, $io, $model, array $otherVars)
+    public function generateFixtureFile(Arguments $args, ConsoleIo $io, string $model, array $otherVars): void
     {
         $defaults = [
             'name' => $model,
@@ -246,7 +248,7 @@ class FixtureCommand extends BakeCommand
      * @param \Cake\Database\Schema\TableSchema $table Table schema
      * @return string fields definitions
      */
-    protected function _generateSchema(TableSchema $table)
+    protected function _generateSchema(TableSchema $table): string
     {
         $cols = $indexes = $constraints = [];
         foreach ($table->columns() as $field) {
@@ -289,7 +291,7 @@ class FixtureCommand extends BakeCommand
      * @param array $values options keys(type, null, default, key, length, extra)
      * @return array Formatted values
      */
-    protected function _values($values)
+    protected function _values(array $values): array
     {
         $vals = [];
         if (!is_array($values)) {
@@ -321,7 +323,7 @@ class FixtureCommand extends BakeCommand
      * @param int $recordCount The number of records to generate.
      * @return array Array of records to use in the fixture.
      */
-    protected function _generateRecords(TableSchema $table, $recordCount = 1)
+    protected function _generateRecords(TableSchema $table, int $recordCount = 1): array
     {
         $records = [];
         for ($i = 0; $i < $recordCount; $i++) {
@@ -400,7 +402,7 @@ class FixtureCommand extends BakeCommand
      * @param array $records Array of records to be converted to string
      * @return string A string value of the $records array.
      */
-    protected function _makeRecordString($records)
+    protected function _makeRecordString(array $records): string
     {
         $out = "[\n";
         foreach ($records as $record) {
@@ -433,7 +435,7 @@ class FixtureCommand extends BakeCommand
      * @param string|null $useTable Name of table to use.
      * @return array Array of records.
      */
-    protected function _getRecordsFromTable(Arguments $args, $modelName, $useTable = null)
+    protected function _getRecordsFromTable(Arguments $args, string $modelName, ?string $useTable = null): array
     {
         $recordCount = ($args->getOption('count') ?? 10);
         $conditions = ($args->getOption('conditions') ?? '1=1');

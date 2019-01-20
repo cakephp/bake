@@ -30,7 +30,7 @@ class TaskCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function name()
+    public function name(): string
     {
         return 'task';
     }
@@ -38,7 +38,7 @@ class TaskCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function fileName($name)
+    public function fileName(string $name): string
     {
         return $name . 'Task.php';
     }
@@ -46,7 +46,7 @@ class TaskCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function template()
+    public function template(): string
     {
         return 'Shell/task';
     }

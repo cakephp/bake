@@ -34,7 +34,7 @@ class MailerCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function name()
+    public function name(): string
     {
         return 'mailer';
     }
@@ -42,7 +42,7 @@ class MailerCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function fileName($name)
+    public function fileName(string $name): string
     {
         return $name . 'Mailer.php';
     }
@@ -50,7 +50,7 @@ class MailerCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function template()
+    public function template(): string
     {
         return 'Mailer/mailer';
     }
@@ -63,7 +63,7 @@ class MailerCommand extends SimpleBakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bake(string $name, Arguments $args, ConsoleIo $io)
+    public function bake(string $name, Arguments $args, ConsoleIo $io): void
     {
         $this->bakeLayouts($name, $args, $io);
 
@@ -78,7 +78,7 @@ class MailerCommand extends SimpleBakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function bakeLayouts($name, $args, $io)
+    protected function bakeLayouts(string $name, Arguments $args, ConsoleIo $io): void
     {
         $restore = $this->pathFragment;
         $layoutsPath = implode(DS, ['..', 'templates', 'layout', 'email']);

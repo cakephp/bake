@@ -49,7 +49,7 @@ class TemplateAllCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return int The exit code
      */
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute(Arguments $args, ConsoleIo $io): int
     {
         $this->extractCommonProperties($args);
         $scanner = new TableScanner(ConnectionManager::get($this->connection));

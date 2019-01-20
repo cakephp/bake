@@ -30,7 +30,7 @@ abstract class SimpleBakeTask extends BakeTask
      *
      * @return string
      */
-    abstract public function name();
+    abstract public function name(): string;
 
     /**
      * Get the generated object's filename without the leading path.
@@ -38,21 +38,21 @@ abstract class SimpleBakeTask extends BakeTask
      * @param string $name The name of the object being generated
      * @return string
      */
-    abstract public function fileName($name);
+    abstract public function fileName(string $name): string;
 
     /**
      * Get the template name.
      *
      * @return string
      */
-    abstract public function template();
+    abstract public function template(): string;
 
     /**
      * Get template data.
      *
      * @return array
      */
-    public function templateData()
+    public function templateData(): array
     {
         $namespace = Configure::read('App.namespace');
         if ($this->plugin) {
@@ -68,7 +68,7 @@ abstract class SimpleBakeTask extends BakeTask
      * @param string|null $name The name of the object to bake.
      * @return int|null
      */
-    public function main($name = null)
+    public function main(?string $name = null): ?int
     {
         parent::main();
         if (empty($name)) {
@@ -87,7 +87,7 @@ abstract class SimpleBakeTask extends BakeTask
      * @param string $name The classname to generate.
      * @return string
      */
-    public function bake($name)
+    public function bake(string $name): string
     {
         $renderer = new TemplateRenderer($this->param('theme'));
         $renderer->set('name', $name);

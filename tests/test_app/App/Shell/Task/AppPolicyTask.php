@@ -22,7 +22,7 @@ use Bake\Shell\Task\BakeTask;
  */
 class AppPolicyTask extends BakeTask
 {
-    public function main()
+    public function main(): void
     {
         $this->out('App Policy Generated');
     }

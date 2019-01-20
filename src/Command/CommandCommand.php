@@ -30,7 +30,7 @@ class CommandCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function name()
+    public function name(): string
     {
         return 'command';
     }
@@ -38,7 +38,7 @@ class CommandCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function fileName($name)
+    public function fileName(string $name): string
     {
         return $name . 'Command.php';
     }
@@ -46,7 +46,7 @@ class CommandCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function template()
+    public function template(): string
     {
         return 'Command/command';
     }

@@ -23,6 +23,7 @@ use Cake\Console\CommandCollectionAwareInterface;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Exception\ConsoleException;
+use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin as CorePlugin;
 use Cake\Utility\Inflector;
@@ -96,7 +97,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return null|int The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         if ($args->hasArgumentAt(0)) {
             $name = $args->getArgumentAt(0);
@@ -135,7 +136,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
      * @param \Cake\Console\ConsoleIo $io The console io.
      * @return \Cake\Console\Shell|null
      */
-    protected function createTask(string $name, ConsoleIo $io)
+    protected function createTask(string $name, ConsoleIo $io): ?Shell
     {
         $found = false;
         $name = Inflector::camelize($name);
