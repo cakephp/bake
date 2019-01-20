@@ -601,32 +601,6 @@ class TemplateCommandTest extends TestCase
     }
 
     /**
-     * Test all() calls execute
-     *
-     * @return void
-     */
-    public function testAllCallsMain()
-    {
-        $this->markTestSkipped('all needs to be extracted');
-        $this->_setupTask(['in', 'err', 'createFile', 'main', '_stop']);
-
-        $this->Task->Model->expects($this->once())
-            ->method('listUnskipped')
-            ->will($this->returnValue(['comments', 'articles']));
-
-        $this->Task->expects($this->exactly(2))
-            ->method('main');
-        $this->Task->expects($this->at(0))
-            ->method('main')
-            ->with('comments');
-        $this->Task->expects($this->at(1))
-            ->method('main')
-            ->with('articles');
-
-        $this->Task->all();
-    }
-
-    /**
      * test `cake bake view $controller view`
      *
      * @return void
