@@ -235,8 +235,13 @@ class DocBlockHelper extends Helper
      * @param string $namespace Namespace.
      * @return array
      */
-    public function buildTableAnnotations(array $associations, array $associationInfo, array $behaviors, string $entity, string $namespace): array
-    {
+    public function buildTableAnnotations(
+        array $associations,
+        array $associationInfo,
+        array $behaviors,
+        string $entity,
+        string $namespace
+    ): array {
         $annotations = [];
         foreach ($associations as $type => $assocs) {
             foreach ($assocs as $assoc) {
