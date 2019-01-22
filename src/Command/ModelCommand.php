@@ -305,7 +305,7 @@ class ModelCommand extends BakeCommand
             }
 
             if ($fieldName === 'parent_id') {
-                $className = ($this->plugin) ? $this->plugin . '.' . $model->getAlias() : $model->getAlias();
+                $className = $this->plugin ? $this->plugin . '.' . $model->getAlias() : $model->getAlias();
                 $assoc = [
                     'alias' => 'Parent' . $model->getAlias(),
                     'className' => $className,
@@ -408,7 +408,7 @@ class ModelCommand extends BakeCommand
                         'foreignKey' => $fieldName,
                     ];
                 } elseif ($otherTableName === $tableName && $fieldName === 'parent_id') {
-                    $className = ($this->plugin) ? $this->plugin . '.' . $model->getAlias() : $model->getAlias();
+                    $className = $this->plugin ? $this->plugin . '.' . $model->getAlias() : $model->getAlias();
                     $assoc = [
                         'alias' => 'Child' . $model->getAlias(),
                         'className' => $className,
