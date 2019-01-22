@@ -96,12 +96,9 @@ class TemplateTask extends BakeTask
     /**
      * Execution method always used for tasks
      *
-     * @param string|null $name The name of the controller to bake view templates for.
-     * @param string|null $template The template to bake with.
-     * @param string|null $action The output action name. Defaults to $template.
      * @return mixed
      */
-    public function main(?string $name = null, ?string $template = null, ?string $action = null)
+    public function main()
     {
         parent::main();
         list($name, $template, $action) = $this->args + [null, null, null];
