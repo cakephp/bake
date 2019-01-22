@@ -116,9 +116,9 @@ class BakeTask extends Shell
      * Base execute method parses some parameters and sets some properties on the bake tasks.
      * call when overriding execute()
      *
-     * @return void
+     * @return null|int
      */
-    public function main(): void
+    public function main(): ?int
     {
         if (isset($this->params['plugin'])) {
             $parts = explode('/', $this->params['plugin']);
@@ -126,7 +126,7 @@ class BakeTask extends Shell
             if (strpos($this->plugin, '\\')) {
                 $this->abort('Invalid plugin namespace separator, please use / instead of \ for plugins.');
 
-                return;
+                return static::CODE_ERROR;
             }
         }
         if (isset($this->params['connection'])) {

@@ -96,9 +96,9 @@ class TemplateTask extends BakeTask
     /**
      * Execution method always used for tasks
      *
-     * @return mixed
+     * @return null|int
      */
-    public function main()
+    public function main(): ?int
     {
         parent::main();
         list($name, $template, $action) = $this->args + [null, null, null];
@@ -111,7 +111,7 @@ class TemplateTask extends BakeTask
                 $this->out('- ' . $this->_camelize($table));
             }
 
-            return true;
+            return static::CODE_SUCCESS;
         }
         $name = $this->_getName($name);
 
@@ -142,6 +142,8 @@ class TemplateTask extends BakeTask
                 $this->_io->err($e->getMessage());
             }
         }
+
+        return static::CODE_SUCCESS;
     }
 
     /**
