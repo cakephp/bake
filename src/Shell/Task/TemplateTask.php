@@ -104,6 +104,7 @@ class TemplateTask extends BakeTask
     public function main(?string $name = null, ?string $template = null, ?string $action = null)
     {
         parent::main();
+        list($name, $template, $action) = $this->args + [null, null, null];
 
         if (empty($name)) {
             $this->out('Possible tables to bake view templates for based on your current database:');
