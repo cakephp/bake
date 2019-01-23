@@ -35,7 +35,7 @@ class CellCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function name()
+    public function name(): string
     {
         return 'cell';
     }
@@ -43,7 +43,7 @@ class CellCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function fileName($name)
+    public function fileName(string $name): string
     {
         return $name . 'Cell.php';
     }
@@ -51,7 +51,7 @@ class CellCommand extends SimpleBakeCommand
     /**
      * {@inheritDoc}
      */
-    public function template()
+    public function template(): string
     {
         return 'View/cell';
     }
@@ -85,7 +85,7 @@ class CellCommand extends SimpleBakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bake(string $name, Arguments $args, ConsoleIo $io)
+    public function bake(string $name, Arguments $args, ConsoleIo $io): void
     {
         $this->bakeTemplate($name, $args, $io);
 
@@ -100,7 +100,7 @@ class CellCommand extends SimpleBakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function bakeTemplate($name, $args, $io)
+    protected function bakeTemplate(string $name, Arguments $args, ConsoleIo $io): void
     {
         $restore = $this->pathFragment;
 

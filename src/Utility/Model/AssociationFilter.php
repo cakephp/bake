@@ -33,7 +33,7 @@ class AssociationFilter
      * @param array $aliases array of aliases
      * @return array $aliases
      */
-    public function filterHasManyAssociationsAliases(Table $table, array $aliases)
+    public function filterHasManyAssociationsAliases(Table $table, array $aliases): array
     {
         $belongsToManyJunctionsAliases = $this->belongsToManyJunctionAliases($table);
 
@@ -46,7 +46,7 @@ class AssociationFilter
      * @param \Cake\ORM\Table $table Table
      * @return array junction aliases of all the BelongsToMany associations
      */
-    public function belongsToManyJunctionAliases(Table $table)
+    public function belongsToManyJunctionAliases(Table $table): array
     {
         $extractor = function ($val) {
             return $val->junction()->getAlias();
@@ -62,7 +62,7 @@ class AssociationFilter
      * @param \Cake\ORM\Table $model The model to build associations for.
      * @return array associations
      */
-    public function filterAssociations(Table $model)
+    public function filterAssociations(Table $model): array
     {
         $belongsToManyJunctionsAliases = $this->belongsToManyJunctionAliases($model);
         $keys = ['BelongsTo', 'HasOne', 'HasMany', 'BelongsToMany'];

@@ -43,7 +43,7 @@ class ControllerCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return null|int The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $this->extractCommonProperties($args);
         $name = $args->getArgument('name') ?? '';
@@ -73,7 +73,7 @@ class ControllerCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bake(string $controllerName, Arguments $args, ConsoleIo $io)
+    public function bake(string $controllerName, Arguments $args, ConsoleIo $io): void
     {
         $io->quiet(sprintf('Baking controller class for %s...', $controllerName));
 
@@ -155,7 +155,7 @@ class ControllerCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bakeController($controllerName, array $data, Arguments $args, ConsoleIo $io)
+    public function bakeController(string $controllerName, array $data, Arguments $args, ConsoleIo $io): void
     {
         $data += [
             'name' => null,
@@ -186,7 +186,7 @@ class ControllerCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bakeTest($className, Arguments $args, ConsoleIo $io)
+    public function bakeTest(string $className, Arguments $args, ConsoleIo $io): void
     {
         if ($args->getOption('no-test')) {
             return;
@@ -206,7 +206,7 @@ class ControllerCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args The console arguments
      * @return array
      */
-    public function getComponents(Arguments $args)
+    public function getComponents(Arguments $args): array
     {
         $components = [];
         if ($args->getOption('components')) {
@@ -223,7 +223,7 @@ class ControllerCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args The console arguments
      * @return array
      */
-    public function getHelpers(Arguments $args)
+    public function getHelpers(Arguments $args): array
     {
         $helpers = [];
         if ($args->getOption('helpers')) {

@@ -67,7 +67,7 @@ class PluginCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return null|int The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $name = $args->getArgument('name');
         if (empty($name)) {
@@ -90,6 +90,8 @@ class PluginCommand extends BakeCommand
             $io->error(sprintf("An error occurred trying to bake: %s in %s", $plugin, $this->path . $plugin));
             $this->abort();
         }
+
+        return static::CODE_SUCCESS;
     }
 
     /**
@@ -102,7 +104,7 @@ class PluginCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return bool|null
      */
-    public function bake($plugin, $args, $io)
+    public function bake(string $plugin, Arguments $args, ConsoleIo $io): ?bool
     {
         $pathOptions = App::path('Plugin');
         if (count($pathOptions) > 1) {
@@ -141,7 +143,7 @@ class PluginCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The io instance.
      * @return void
      */
-    protected function _modifyBootstrap($plugin, $hasAutoloader, $io)
+    protected function _modifyBootstrap(string $plugin, bool $hasAutoloader, ConsoleIo $io): void
     {
         $bootstrap = new File($this->bootstrap, false);
         if (!$bootstrap->exists()) {
@@ -176,8 +178,12 @@ class PluginCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The io instance.
      * @return void
      */
-    protected function _generateFiles($pluginName, $path, $args, $io)
-    {
+    protected function _generateFiles(
+        string $pluginName,
+        string $path,
+        Arguments $args,
+        ConsoleIo $io
+    ): void {
         $namespace = str_replace('/', '\\', $pluginName);
         $baseNamespace = Configure::read('App.namespace');
 
@@ -232,8 +238,12 @@ class PluginCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The io instance.
      * @return void
      */
-    protected function _generateFile($renderer, $template, $root, $io)
-    {
+    protected function _generateFile(
+        TemplateRenderer $renderer,
+        string $template,
+        string $root,
+        ConsoleIo $io
+    ): void {
         $io->out(sprintf('Generating %s file...', $template));
         $out = $renderer->generate('Plugin/' . $template);
         $io->createFile($root . $template, $out);
@@ -249,8 +259,12 @@ class PluginCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The io instance.
      * @return bool True if composer could be modified correctly
      */
-    protected function _modifyAutoloader($plugin, $path, $args, $io)
-    {
+    protected function _modifyAutoloader(
+        string $plugin,
+        string $path,
+        Arguments $args,
+        ConsoleIo $io
+    ): bool {
         $file = $this->_rootComposerFilePath();
 
         if (!file_exists($file)) {
@@ -305,7 +319,7 @@ class PluginCommand extends BakeCommand
      *
      * @return string the abs file path
      */
-    protected function _rootComposerFilePath()
+    protected function _rootComposerFilePath(): string
     {
         return ROOT . DS . 'composer.json';
     }
@@ -317,7 +331,7 @@ class PluginCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The io object
      * @return void
      */
-    public function findPath(array $pathOptions, ConsoleIo $io)
+    public function findPath(array $pathOptions, ConsoleIo $io): void
     {
         $valid = false;
         foreach ($pathOptions as $i => $path) {
@@ -406,7 +420,7 @@ class PluginCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return string|bool
      */
-    protected function _searchPath($path, $io)
+    protected function _searchPath(array $path, ConsoleIo $io)
     {
         $composer = ['composer.phar', 'composer'];
         foreach ($path as $dir) {

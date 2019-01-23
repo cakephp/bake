@@ -93,7 +93,7 @@ class TestCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return null|int The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $this->extractCommonProperties($args);
         if (!$args->hasArgument('type') && !$args->hasArgument('name')) {
@@ -119,6 +119,8 @@ class TestCommand extends BakeCommand
         if ($this->bake($type, $name, $args, $io)) {
             $io->out('<success>Done</success>');
         }
+
+        return static::CODE_SUCCESS;
     }
 
     /**
@@ -127,7 +129,7 @@ class TestCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function outputTypeChoices($io)
+    protected function outputTypeChoices(ConsoleIo $io): void
     {
         $io->out(
             'You must provide a class type to bake a test for. The valid types are:',
@@ -148,7 +150,7 @@ class TestCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function outputClassChoices($typeName, $io)
+    protected function outputClassChoices(string $typeName, ConsoleIo $io): void
     {
         $type = $this->mapType($typeName);
         $io->out(
@@ -172,7 +174,7 @@ class TestCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io ConsoleIo instance
      * @return void
      */
-    protected function _bakeAll($type, $args, $io)
+    protected function _bakeAll(string $type, Arguments $args, ConsoleIo $io): void
     {
         $mappedType = $this->mapType($type);
         $classes = $this->_getClassOptions($mappedType);
@@ -194,7 +196,7 @@ class TestCommand extends BakeCommand
      * @param string $namespace The namespace fragment to look for classes in.
      * @return array
      */
-    protected function _getClassOptions($namespace)
+    protected function _getClassOptions(string $namespace): array
     {
         $classes = [];
         $base = APP;
@@ -220,7 +222,7 @@ class TestCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io ConsoleIo instance
      * @return string|bool
      */
-    public function bake($type, $className, $args, $io)
+    public function bake(string $type, string $className, Arguments $args, ConsoleIo $io)
     {
         $type = $this->normalize($type);
         if (!isset($this->classSuffixes[$type]) || !isset($this->classTypes[$type])) {
@@ -301,7 +303,7 @@ class TestCommand extends BakeCommand
      * @param string $type The Type of object you are generating tests for eg. controller
      * @return bool
      */
-    public function typeCanDetectFixtures($type)
+    public function typeCanDetectFixtures(string $type): bool
     {
         return in_array($type, ['Controller', 'Table'], true);
     }
@@ -314,7 +316,7 @@ class TestCommand extends BakeCommand
      * @param string $class The classname of the class the test is being generated for.
      * @return object And instance of the class that is going to be tested.
      */
-    public function buildTestSubject($type, $class)
+    public function buildTestSubject(string $type, string $class)
     {
         if ($type === 'Table') {
             list(, $name) = namespaceSplit($class);
@@ -347,7 +349,7 @@ class TestCommand extends BakeCommand
      * @param string|null $prefix The namespace prefix if any
      * @return string Real class name
      */
-    public function getRealClassName($type, $class, $prefix = null)
+    public function getRealClassName(string $type, string $class, ?string $prefix = null): string
     {
         $namespace = Configure::read('App.namespace');
         if ($this->plugin) {
@@ -371,7 +373,7 @@ class TestCommand extends BakeCommand
      * @param string $type The Type of object you are generating tests for eg. controller.
      * @return string Path of the subspace.
      */
-    public function getSubspacePath($type)
+    public function getSubspacePath(string $type): string
     {
         $subspace = $this->mapType($type);
 
@@ -385,7 +387,7 @@ class TestCommand extends BakeCommand
      * @return string
      * @throws \Cake\Core\Exception\Exception When invalid object types are requested.
      */
-    public function mapType($type)
+    public function mapType(string $type): string
     {
         if (empty($this->classTypes[$type])) {
             throw new Exception('Invalid object type.');
@@ -401,7 +403,7 @@ class TestCommand extends BakeCommand
      * @param string $className Name of class to look at.
      * @return array Array of method names.
      */
-    public function getTestableMethods($className)
+    public function getTestableMethods(string $className): array
     {
         $class = new ReflectionClass($className);
         $out = [];
@@ -422,10 +424,10 @@ class TestCommand extends BakeCommand
      * Generate the list of fixtures that will be required to run this test based on
      * loaded models.
      *
-     * @param object $subject The object you want to generate fixtures for.
+     * @param \Cake\ORM\Table|\Cake\Controller\Controller $subject The object you want to generate fixtures for.
      * @return array Array of fixtures to be included in the test.
      */
-    public function generateFixtureList($subject)
+    public function generateFixtureList($subject): array
     {
         $this->_fixtures = [];
         if ($subject instanceof Table) {
@@ -443,7 +445,7 @@ class TestCommand extends BakeCommand
      * @param \Cake\ORM\Table $subject A Model class to scan for associations and pull fixtures off of.
      * @return void
      */
-    protected function _processModel($subject)
+    protected function _processModel(Table $subject): void
     {
         if (!$subject instanceof Table) {
             return;
@@ -471,7 +473,7 @@ class TestCommand extends BakeCommand
      * @param \Cake\Controller\Controller $subject A controller to pull model names off of.
      * @return void
      */
-    protected function _processController($subject)
+    protected function _processController(Controller $subject): void
     {
         $models = [$subject->modelClass];
         foreach ($models as $model) {
@@ -487,7 +489,7 @@ class TestCommand extends BakeCommand
      * @param string $name Name of the Model class that a fixture might be required for.
      * @return void
      */
-    protected function _addFixture($name)
+    protected function _addFixture(string $name): void
     {
         if ($this->plugin) {
             $prefix = 'plugin.' . $this->plugin . '.';
@@ -505,7 +507,7 @@ class TestCommand extends BakeCommand
      * @param string $type The type of object tests are being generated for eg. controller.
      * @return bool
      */
-    public function hasMockClass($type)
+    public function hasMockClass(string $type): bool
     {
         return $type === 'Controller';
     }
@@ -517,7 +519,7 @@ class TestCommand extends BakeCommand
      * @param string $fullClassName The full classname of the class the test is being generated for.
      * @return array Constructor snippets for the thing you are building.
      */
-    public function generateConstructor($type, $fullClassName)
+    public function generateConstructor(string $type, string $fullClassName): array
     {
         list(, $className) = namespaceSplit($fullClassName);
         $pre = $construct = $post = '';
@@ -578,7 +580,7 @@ class TestCommand extends BakeCommand
      * @param string $fullClassName The Classname of the class the test is being generated for.
      * @return array An array containing property info
      */
-    public function generateProperties($type, $subject, $fullClassName)
+    public function generateProperties(string $type, string $subject, string $fullClassName): array
     {
         $properties = [];
         switch ($type) {
@@ -636,7 +638,7 @@ class TestCommand extends BakeCommand
      * @param string $fullClassName The Classname of the class the test is being generated for.
      * @return array An array containing used classes
      */
-    public function generateUses($type, $fullClassName)
+    public function generateUses(string $type, string $fullClassName): array
     {
         $uses = [];
         if ($type === 'Component') {
@@ -662,7 +664,7 @@ class TestCommand extends BakeCommand
      *
      * @return string
      */
-    public function getBasePath()
+    public function getBasePath(): string
     {
         $dir = 'TestCase/';
         $path = defined('TESTS') ? TESTS . $dir : ROOT . DS . 'tests' . DS . $dir;
@@ -681,7 +683,7 @@ class TestCommand extends BakeCommand
      * @param string $className The fully qualified classname of the class the test is being generated for.
      * @return string filename the test should be created on.
      */
-    public function testCaseFileName($type, $className)
+    public function testCaseFileName(string $type, string $className): string
     {
         $path = $this->getBasePath();
         $namespace = Configure::read('App.namespace');
@@ -739,7 +741,7 @@ class TestCommand extends BakeCommand
      * @param string $string String to inflect
      * @return string
      */
-    protected function normalize($string)
+    protected function normalize(string $string): string
     {
         return Inflector::camelize(Inflector::underscore($string));
     }
@@ -750,7 +752,7 @@ class TestCommand extends BakeCommand
      * @param string $string String to inflect
      * @return string
      */
-    protected function underscore($string)
+    protected function underscore(string $string): string
     {
         return Inflector::underscore($string);
     }

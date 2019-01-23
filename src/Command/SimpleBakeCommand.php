@@ -32,7 +32,7 @@ abstract class SimpleBakeCommand extends BakeCommand
      *
      * @return string
      */
-    abstract public function name();
+    abstract public function name(): string;
 
     /**
      * Get the generated object's filename without the leading path.
@@ -40,14 +40,14 @@ abstract class SimpleBakeCommand extends BakeCommand
      * @param string $name The name of the object being generated
      * @return string
      */
-    abstract public function fileName($name);
+    abstract public function fileName(string $name): string;
 
     /**
      * Get the template name.
      *
      * @return string
      */
-    abstract public function template();
+    abstract public function template(): string;
 
     /**
      * Get template data.
@@ -72,7 +72,7 @@ abstract class SimpleBakeCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return null|int The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $this->extractCommonProperties($args);
         $name = $args->getArgument('name');
@@ -85,6 +85,8 @@ abstract class SimpleBakeCommand extends BakeCommand
         $name = Inflector::camelize($name);
         $this->bake($name, $args, $io);
         $this->bakeTest($name, $args, $io);
+
+        return static::CODE_SUCCESS;
     }
 
     /**
@@ -95,7 +97,7 @@ abstract class SimpleBakeCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function bake(string $name, Arguments $args, ConsoleIo $io)
+    protected function bake(string $name, Arguments $args, ConsoleIo $io): void
     {
         $renderer = new TemplateRenderer();
         $renderer->set('name', $name);
@@ -117,7 +119,7 @@ abstract class SimpleBakeCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bakeTest($className, $args, $io)
+    public function bakeTest(string $className, Arguments $args, ConsoleIo $io): void
     {
         if ($args->getOption('no-test')) {
             return;

@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -116,7 +117,7 @@ class Plugin extends BasePlugin
      * @param string $path The path to look in.
      * @return array
      */
-    protected function findInPath(string $namespace, string $path)
+    protected function findInPath(string $namespace, string $path): array
     {
         $path .= 'Command/';
         if (!file_exists($path)) {

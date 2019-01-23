@@ -96,14 +96,12 @@ class TemplateTask extends BakeTask
     /**
      * Execution method always used for tasks
      *
-     * @param string|null $name The name of the controller to bake view templates for.
-     * @param string|null $template The template to bake with.
-     * @param string|null $action The output action name. Defaults to $template.
-     * @return mixed
+     * @return null|int
      */
-    public function main($name = null, $template = null, $action = null)
+    public function main(): ?int
     {
         parent::main();
+        list($name, $template, $action) = $this->args + [null, null, null];
 
         if (empty($name)) {
             $this->out('Possible tables to bake view templates for based on your current database:');
@@ -113,7 +111,7 @@ class TemplateTask extends BakeTask
                 $this->out('- ' . $this->_camelize($table));
             }
 
-            return true;
+            return static::CODE_SUCCESS;
         }
         $name = $this->_getName($name);
 
@@ -130,7 +128,7 @@ class TemplateTask extends BakeTask
         if ($template) {
             $this->bake($template, true, $action);
 
-            return true;
+            return static::CODE_SUCCESS;
         }
 
         $vars = $this->_loadController();
@@ -144,6 +142,8 @@ class TemplateTask extends BakeTask
                 $this->_io->err($e->getMessage());
             }
         }
+
+        return static::CODE_SUCCESS;
     }
 
     /**
@@ -152,7 +152,7 @@ class TemplateTask extends BakeTask
      * @param string $table The table/model that is being baked.
      * @return void
      */
-    public function model($table)
+    public function model(string $table): void
     {
         $tableName = $this->_camelize($table);
         $plugin = null;
@@ -169,7 +169,7 @@ class TemplateTask extends BakeTask
      * @param string|null $controller The controller name if specified.
      * @return void
      */
-    public function controller($table, $controller = null)
+    public function controller(string $table, ?string $controller = null): void
     {
         $tableName = $this->_camelize($table);
         if (empty($controller)) {
@@ -193,7 +193,7 @@ class TemplateTask extends BakeTask
      *
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         $path = parent::getPath();
         $path .= $this->controllerName . DS;
@@ -206,7 +206,7 @@ class TemplateTask extends BakeTask
      *
      * @return array Array of action names that should be baked
      */
-    protected function _methodsToBake()
+    protected function _methodsToBake(): array
     {
         $base = Configure::read('App.namespace');
 
@@ -254,7 +254,7 @@ class TemplateTask extends BakeTask
      *
      * @return array Returns variables to be made available to a view template
      */
-    protected function _loadController()
+    protected function _loadController(): array
     {
         if (TableRegistry::getTableLocator()->exists($this->modelName)) {
             $modelObject = TableRegistry::getTableLocator()->get($this->modelName);
@@ -316,7 +316,7 @@ class TemplateTask extends BakeTask
      * @param string $outputFile The output file to create. If null will use `$template`
      * @return string|false Generated file content.
      */
-    public function bake($template, $content = '', $outputFile = null)
+    public function bake(string $template, $content = '', $outputFile = null)
     {
         if ($outputFile === null) {
             $outputFile = $template;
@@ -344,7 +344,7 @@ class TemplateTask extends BakeTask
      * @param array|null $vars passed for use in templates
      * @return string|false Content from template
      */
-    public function getContent($action, $vars = null)
+    public function getContent(string $action, ?array $vars = null)
     {
         if (!$vars) {
             $vars = $this->_loadController();
@@ -407,7 +407,7 @@ class TemplateTask extends BakeTask
      * @param \Cake\ORM\Table $model Table
      * @return array associations
      */
-    protected function _filteredAssociations(Table $model)
+    protected function _filteredAssociations(Table $model): array
     {
         if (is_null($this->_associationFilter)) {
             $this->_associationFilter = new AssociationFilter();

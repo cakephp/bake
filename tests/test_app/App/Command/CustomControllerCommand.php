@@ -11,17 +11,17 @@ class CustomControllerCommand extends SimpleBakeCommand
 {
     public $pathFragment = 'Controller/';
 
-    public function name()
+    public function name(): string
     {
         return 'Controller';
     }
 
-    public function fileName($name)
+    public function fileName(string $name): string
     {
         return $name . 'CustomController.php';
     }
 
-    public function template()
+    public function template(): string
     {
         return 'CustomController';
     }

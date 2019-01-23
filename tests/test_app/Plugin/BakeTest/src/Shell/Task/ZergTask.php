@@ -22,7 +22,7 @@ use Bake\Shell\Task\BakeTask;
  */
 class ZergTask extends BakeTask
 {
-    public function main()
+    public function main(): void
     {
         $this->out('Zerg generated.');
         $this->verbose('Loud noises');

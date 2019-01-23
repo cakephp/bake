@@ -20,6 +20,7 @@ use Cake\Core\ConventionsTrait;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\View\Exception\MissingTemplateException;
+use Cake\View\View;
 use Cake\View\ViewVarsTrait;
 use RuntimeException;
 
@@ -50,9 +51,9 @@ class TemplateRenderer
      *
      * @param string $theme The template theme/plugin to use.
      */
-    public function __construct($theme = '')
+    public function __construct(?string $theme = '')
     {
-        $this->theme = $theme;
+        $this->theme = $theme ?? '';
     }
 
     /**
@@ -61,7 +62,7 @@ class TemplateRenderer
      * @return \Cake\View\View
      * @triggers Bake.initialize $view
      */
-    public function getView()
+    public function getView(): View
     {
         if ($this->view) {
             return $this->view;
@@ -88,7 +89,7 @@ class TemplateRenderer
      * @param array|null $vars Additional vars to set to template scope.
      * @return string contents of generated code template
      */
-    public function generate($template, $vars = null)
+    public function generate(string $template, ?array $vars = null): string
     {
         if ($vars !== null) {
             $this->set($vars);

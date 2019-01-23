@@ -59,7 +59,7 @@ class TableScanner
      *
      * @return array
      */
-    public function listAll()
+    public function listAll(): array
     {
         $schema = $this->connection->getSchemaCollection();
         $tables = $schema->listTables();
@@ -76,7 +76,7 @@ class TableScanner
      *
      * @return array
      */
-    public function listUnskipped()
+    public function listUnskipped(): array
     {
         $tables = $this->listAll();
 

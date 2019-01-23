@@ -89,8 +89,8 @@ class BakeView extends TwigView
      *
      * View can also be a template string, rather than the name of a view file
      *
-     * @param string|null $view Name of view file to use, or a template string to render
-     * @param string|null $layout Layout to use. Not used, for consistency with other views only
+     * @param string|false|null $view Name of view file to use, or a template string to render
+     * @param string|false|null $layout Layout to use. Not used, for consistency with other views only
      * @return string|null Rendered content.
      * @throws \Cake\Core\Exception\Exception If there is an error in the view.
      */
@@ -126,10 +126,10 @@ class BakeView extends TwigView
      * Use the Bake prefix for bake related view events
      *
      * @param string $name Name of the event.
-     * @param array|null $data Any value you wish to be transported with this event to
+     * @param mixed $data Any value you wish to be transported with this event to
      * it can be read by listeners.
      *
-     * @param object|null $subject The object that this event applies to
+     * @param mixed $subject The object that this event applies to
      * ($this by default).
      *
      * @return \Cake\Event\EventInterface

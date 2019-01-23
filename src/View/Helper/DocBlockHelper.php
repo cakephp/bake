@@ -25,7 +25,7 @@ class DocBlockHelper extends Helper
      * @param array $annotations An array of PHP comment block annotations.
      * @return string The DocBlock for a class header.
      */
-    public function classDescription($className, $classType, array $annotations)
+    public function classDescription(string $className, string $classType, array $annotations): string
     {
         $lines = [];
         if ($className && $classType) {
@@ -62,7 +62,7 @@ class DocBlockHelper extends Helper
      * @param \Cake\ORM\Association $association The association related to the entity class.
      * @return string The DocBlock type
      */
-    public function associatedEntityTypeToHintType($type, Association $association)
+    public function associatedEntityTypeToHintType(string $type, Association $association): string
     {
         if ($association->type() === Association::MANY_TO_MANY ||
             $association->type() === Association::ONE_TO_MANY
@@ -94,7 +94,7 @@ class DocBlockHelper extends Helper
      * @param array $propertySchema The property schema to use for generating the type map.
      * @return array The property DocType map.
      */
-    public function buildEntityPropertyHintTypeMap(array $propertySchema)
+    public function buildEntityPropertyHintTypeMap(array $propertySchema): array
     {
         $properties = [];
         foreach ($propertySchema as $property => $info) {
@@ -132,7 +132,7 @@ class DocBlockHelper extends Helper
      * @param array $propertySchema The property schema to use for generating the type map.
      * @return array The property DocType map.
      */
-    public function buildEntityAssociationHintTypeMap(array $propertySchema)
+    public function buildEntityAssociationHintTypeMap(array $propertySchema): array
     {
         $properties = [];
         foreach ($propertySchema as $property => $info) {
@@ -164,7 +164,7 @@ class DocBlockHelper extends Helper
      * @param string $type The column type.
      * @return null|string The DocBlock type, or `null` for unsupported column types.
      */
-    public function columnTypeToHintType($type)
+    public function columnTypeToHintType(string $type): ?string
     {
         switch ($type) {
             case 'string':
@@ -214,7 +214,7 @@ class DocBlockHelper extends Helper
      * @param array $properties A key value pair where key is the name of a property and the value is the type.
      * @return array
      */
-    public function propertyHints(array $properties)
+    public function propertyHints(array $properties): array
     {
         $lines = [];
         foreach ($properties as $property => $type) {
@@ -235,8 +235,13 @@ class DocBlockHelper extends Helper
      * @param string $namespace Namespace.
      * @return array
      */
-    public function buildTableAnnotations($associations, $associationInfo, $behaviors, $entity, $namespace)
-    {
+    public function buildTableAnnotations(
+        array $associations,
+        array $associationInfo,
+        array $behaviors,
+        string $entity,
+        string $namespace
+    ): array {
         $annotations = [];
         foreach ($associations as $type => $assocs) {
             foreach ($assocs as $assoc) {
@@ -279,7 +284,7 @@ class DocBlockHelper extends Helper
      * @param mixed $value The entry to insert.
      * @return array The array with the new value inserted.
      */
-    protected function _insertAfter(array $target, $key, $value)
+    protected function _insertAfter(array $target, string $key, $value): array
     {
         $index = array_search($key, array_keys($target));
         if ($index !== false) {
