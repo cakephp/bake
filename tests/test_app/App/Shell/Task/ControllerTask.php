@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Bake\Test\App\Shell\Task;
 
+use Bake\Shell\Task\BakeTask;
+
 /**
  * Test for a task core overloaded
  */
-class ControllerTask extends \Bake\Shell\Task\BakeTask
+class ControllerTask extends BakeTask
 {
-    public function main($name = null)
+    public function main(): ?int
     {
-        // new code here
-
-        parent::main($name);
+        return static::CODE_SUCCESS;
     }
 }

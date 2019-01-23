@@ -118,7 +118,7 @@ class BakeTask extends Shell
      *
      * @return null|int
      */
-    public function main(): ?int
+    public function main()
     {
         if (isset($this->params['plugin'])) {
             $parts = explode('/', $this->params['plugin']);
