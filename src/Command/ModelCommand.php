@@ -269,7 +269,7 @@ class ModelCommand extends BakeCommand
 
                 $className = $association->getClassName();
                 if ($className !== null && strlen($className)) {
-                    list($plugin, $className) = pluginSplit($className);
+                    [$plugin, $className] = pluginSplit($className);
                     if ($plugin !== null) {
                         $namespace = $plugin;
                     }
@@ -549,7 +549,7 @@ class ModelCommand extends BakeCommand
             if ($entityClass === '\Cake\ORM\Entity') {
                 $namespace = Configure::read('App.namespace');
 
-                list($plugin, ) = pluginSplit($association->getTarget()->getRegistryAlias());
+                [$plugin, ] = pluginSplit($association->getTarget()->getRegistryAlias());
                 if ($plugin !== null) {
                     $namespace = $plugin;
                 }

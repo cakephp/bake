@@ -77,7 +77,7 @@ abstract class SimpleBakeCommand extends BakeCommand
         $this->extractCommonProperties($args);
         $name = $args->getArgument('name');
         if (empty($name)) {
-            $this->err('You must provide a name to bake a ' . $this->name());
+            $io->err('You must provide a name to bake a ' . $this->name());
             $this->abort();
 
             return null;

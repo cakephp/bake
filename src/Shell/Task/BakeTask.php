@@ -163,7 +163,7 @@ class BakeTask extends Shell
         }
 
         if (strpos($name, '.')) {
-            list($plugin, $name) = pluginSplit($name);
+            [$plugin, $name] = pluginSplit($name);
             $this->plugin = $this->params['plugin'] = $plugin;
         }
 

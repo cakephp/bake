@@ -205,7 +205,7 @@ class TestCommand extends BakeCommand
         }
         $path = $base . str_replace('\\', DS, $namespace);
         $folder = new Folder($path);
-        list(, $files) = $folder->read();
+        [, $files] = $folder->read();
         foreach ($files as $file) {
             $classes[] = str_replace('.php', '', $file);
         }
@@ -248,11 +248,11 @@ class TestCommand extends BakeCommand
             $methods = $this->getTestableMethods($fullClassName);
         }
         $mock = $this->hasMockClass($type);
-        list($preConstruct, $construction, $postConstruct) = $this->generateConstructor($type, $fullClassName);
+        [$preConstruct, $construction, $postConstruct] = $this->generateConstructor($type, $fullClassName);
         $uses = $this->generateUses($type, $fullClassName);
 
         $subject = $className;
-        list($namespace, $className) = namespaceSplit($fullClassName);
+        [$namespace, $className] = namespaceSplit($fullClassName);
 
         $baseNamespace = Configure::read('App.namespace');
         if ($this->plugin) {
@@ -319,7 +319,7 @@ class TestCommand extends BakeCommand
     public function buildTestSubject(string $type, string $class)
     {
         if ($type === 'Table') {
-            list(, $name) = namespaceSplit($class);
+            [, $name] = namespaceSplit($class);
             $name = str_replace('Table', '', $name);
             if ($this->plugin) {
                 $name = $this->plugin . '.' . $name;
@@ -477,7 +477,7 @@ class TestCommand extends BakeCommand
     {
         $models = [$subject->modelClass];
         foreach ($models as $model) {
-            list(, $model) = pluginSplit($model);
+            [, $model] = pluginSplit($model);
             $this->_processModel($subject->{$model});
         }
     }
@@ -521,7 +521,7 @@ class TestCommand extends BakeCommand
      */
     public function generateConstructor(string $type, string $fullClassName): array
     {
-        list(, $className) = namespaceSplit($fullClassName);
+        [, $className] = namespaceSplit($fullClassName);
         $pre = $construct = $post = '';
         if ($type === 'Table') {
             $tableName = str_replace('Table', '', $className);

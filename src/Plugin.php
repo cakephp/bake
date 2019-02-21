@@ -141,7 +141,7 @@ class Plugin extends BasePlugin
             }
 
             // Trim off 'Command' from the name.
-            list($ns, $className) = namespaceSplit($class);
+            [$ns, $className] = namespaceSplit($class);
             $name = Inflector::underscore(substr($className, 0, -7));
 
             // Commands ending with `_all` should be ` all` instead.

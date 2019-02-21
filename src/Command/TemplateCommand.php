@@ -277,7 +277,7 @@ class TemplateCommand extends BakeCommand
         $fields = $schema->columns();
         $modelClass = $this->modelName;
 
-        list(, $entityClass) = namespaceSplit($this->_entityName($this->modelName));
+        [, $entityClass] = namespaceSplit($this->_entityName($this->modelName));
         $entityClass = sprintf('%s\Model\Entity\%s', $namespace, $entityClass);
         if (!class_exists($entityClass)) {
             $entityClass = EntityInterface::class;

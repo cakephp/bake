@@ -28,14 +28,14 @@ class CategoryThreadsTable extends Table
         $this->belongsTo(
             'ParentCategoryThreads',
             [
-            'className' => __CLASS__,
+            'className' => self::class,
             'foreignKey' => 'parent_id',
             ]
         );
         $this->hasMany(
             'ChildCategoryThreads',
             [
-            'className' => __CLASS__,
+            'className' => self::class,
             'foreignKey' => 'parent_id',
             ]
         );
