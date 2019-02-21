@@ -20,9 +20,9 @@ use Cake\Console\Command;
 use Cake\Core\Plugin;
 
 /**
- * MailerTaskTest class
+ * MailerCommandTest class
  */
-class MailerTaskTest extends TestCase
+class MailerCommandTest extends TestCase
 {
     /**
      * setup method

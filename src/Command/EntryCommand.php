@@ -64,7 +64,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
 
         $parser = $this->getOptionParser();
         try {
-            list($options, $arguments) = $parser->parse($argv);
+            [$options, $arguments] = $parser->parse($argv);
             $args = new Arguments(
                 $arguments,
                 $options,

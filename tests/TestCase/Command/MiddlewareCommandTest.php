@@ -20,9 +20,9 @@ use Cake\Console\Command;
 use Cake\Core\Plugin;
 
 /**
- * MiddlewareTaskTest class
+ * MiddlewareCommandTest class
  */
-class MiddlewareTaskTest extends TestCase
+class MiddlewareCommandTest extends TestCase
 {
     /**
      * setup method

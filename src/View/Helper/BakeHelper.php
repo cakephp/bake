@@ -163,7 +163,7 @@ class BakeHelper extends Helper
      */
     public function classInfo(string $class, string $type, string $suffix): array
     {
-        list($plugin, $name) = \pluginSplit($class);
+        [$plugin, $name] = \pluginSplit($class);
 
         $base = Configure::read('App.namespace');
         if ($plugin !== null) {

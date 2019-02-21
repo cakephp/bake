@@ -190,7 +190,7 @@ class PluginCommand extends BakeCommand
         $name = $pluginName;
         $vendor = 'your-name-here';
         if (strpos($pluginName, '/') !== false) {
-            list($vendor, $name) = explode('/', $pluginName);
+            [$vendor, $name] = explode('/', $pluginName);
         }
         $package = $vendor . '/' . $name;
 

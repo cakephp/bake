@@ -78,7 +78,7 @@ class AssociationFilter
                     continue;
                 }
                 $targetClass = get_class($target);
-                list(, $className) = namespaceSplit($targetClass);
+                [, $className] = namespaceSplit($targetClass);
 
                 $navLink = true;
                 $modelClass = get_class($model);

@@ -50,7 +50,7 @@ abstract class BakeCommand extends Command
     protected function _getName(string $name): string
     {
         if (strpos($name, '.')) {
-            list($plugin, $name) = pluginSplit($name);
+            [$plugin, $name] = pluginSplit($name);
             $this->plugin = $plugin;
         }
 

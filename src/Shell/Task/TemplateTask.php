@@ -101,7 +101,7 @@ class TemplateTask extends BakeTask
     public function main(): ?int
     {
         parent::main();
-        list($name, $template, $action) = $this->args + [null, null, null];
+        [$name, $template, $action] = $this->args + [null, null, null];
 
         if (empty($name)) {
             $this->out('Possible tables to bake view templates for based on your current database:');
@@ -274,7 +274,7 @@ class TemplateTask extends BakeTask
         $fields = $schema->columns();
         $modelClass = $this->modelName;
 
-        list(, $entityClass) = namespaceSplit($this->_entityName($this->modelName));
+        [, $entityClass] = namespaceSplit($this->_entityName($this->modelName));
         $entityClass = sprintf('%s\Model\Entity\%s', $namespace, $entityClass);
         if (!class_exists($entityClass)) {
             $entityClass = EntityInterface::class;
