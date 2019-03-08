@@ -562,6 +562,7 @@ class ModelTask extends BakeTask
                 'kind' => 'column',
                 'type' => $columnSchema['type'],
                 'null' => $columnSchema['null'],
+                'comment' => $columnSchema['comment']
             ];
         }
 

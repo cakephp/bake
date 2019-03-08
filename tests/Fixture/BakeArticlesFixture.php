@@ -28,15 +28,15 @@ class BakeArticlesFixture extends TestFixture
      * @var array
      */
     public $fields = [
-        'id' => ['type' => 'integer'],
+        'id' => ['type' => 'integer', 'comment' => 'ID'],
         'bake_user_id' => ['type' => 'integer', 'null' => false],
-        'title' => ['type' => 'string', 'length' => 50, 'null' => false],
-        'body' => 'text',
-        'rating' => ['type' => 'float', 'unsigned' => true, 'default' => 0.0, 'null' => false],
-        'score' => ['type' => 'decimal', 'unsigned' => true, 'default' => 0.0, 'null' => false],
-        'published' => ['type' => 'boolean', 'length' => 1, 'default' => false, 'null' => false],
-        'created' => 'datetime',
-        'updated' => 'datetime',
+        'title' => ['type' => 'string', 'comment' => 'Title', 'length' => 50, 'null' => false],
+        'body' => ['type' => 'text', 'comment' => 'Contents'],
+        'rating' => ['type' => 'float', 'comment' => 'Rating', 'unsigned' => true, 'default' => 0.0, 'null' => false],
+        'score' => ['type' => 'decimal', 'comment' => 'Score', 'unsigned' => true, 'default' => 0.0, 'null' => false],
+        'published' => ['type' => 'boolean', 'comment' => 'Is Published', 'length' => 1, 'default' => false, 'null' => false],
+        'created' => ['type' => 'datetime', 'comment' => 'Creation date'],
+        'updated' => ['type' => 'datetime', 'comment' => 'Modification date'],
         '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
     ];
 

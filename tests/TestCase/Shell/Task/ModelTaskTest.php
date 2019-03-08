@@ -19,6 +19,7 @@ use Bake\Test\TestCase\TestCase;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Database\Driver;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
@@ -1674,8 +1675,50 @@ class ModelTaskTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityWithPropertyTypeHints()
+    public function testBakeEntityWithPropertyTypeHintsNoComments()
     {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Mysql, 'Incompatible with Mysql');
+        $this->skipIf($driver instanceof Postgres, 'Incompatible with Postgres');
+
+        $model = TableRegistry::getTableLocator()->get('BakeArticles');
+        $model->belongsTo('BakeUsers');
+        $model->hasMany('BakeTest.Authors');
+        $model->getSchema()->addColumn('array_type', [
+            'type' => 'array'
+        ]);
+        $model->getSchema()->addColumn('json_type', [
+            'type' => 'json'
+        ]);
+        $model->getSchema()->addColumn('unknown_type', [
+            'type' => 'unknownType'
+        ]);
+
+        $config = [
+            'fields' => false,
+            'propertySchema' => $this->Task->getEntityPropertySchema($model)
+        ];
+
+        $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields bake_articles');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an entity with DocBlock property type hints.
+     *
+     * @return void
+     */
+    public function testBakeEntityWithPropertyTypeHintsComments()
+    {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
+        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with Sqlserver');
+
         $model = TableRegistry::getTableLocator()->get('BakeArticles');
         $model->belongsTo('BakeUsers');
         $model->hasMany('BakeTest.Authors');
@@ -1724,8 +1767,32 @@ class ModelTaskTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityNoFields()
+    public function testBakeEntityNoFieldsNoComments()
     {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Mysql, 'Incompatible with Mysql');
+        $this->skipIf($driver instanceof Postgres, 'Incompatible with Postgres');
+
+        $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields bake_articles');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an entity class with no accessible fields.
+     *
+     * @return void
+     */
+    public function testBakeEntityNoFieldsComments()
+    {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
+        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with Sqlserver');
+
         $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields bake_articles');
 
@@ -1740,8 +1807,32 @@ class ModelTaskTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityFieldsWhiteList()
+    public function testBakeEntityFieldsWhiteListNoComments()
     {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Mysql, 'Incompatible with Mysql');
+        $this->skipIf($driver instanceof Postgres, 'Incompatible with Postgres');
+
+        $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --fields id,title,body,created bake_articles');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an entity class with a whitelist of accessible fields.
+     *
+     * @return void
+     */
+    public function testBakeEntityFieldsWhiteListComments()
+    {
+        $driver = ConnectionManager::get('test')->getDriver();
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
+        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with Sqlserver');
+
         $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
         $this->exec('bake model --no-test --no-fixture --no-table --fields id,title,body,created bake_articles');
 
