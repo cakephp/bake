@@ -31,7 +31,6 @@ use Cake\ORM\TableRegistry;
  */
 class ModelTaskTest extends TestCase
 {
-
     /**
      * Fixtures should be dropped after each tests
      *

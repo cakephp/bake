@@ -22,7 +22,6 @@ use Cake\Validation\Validator;
  */
 class ProductVersionsTable extends Table
 {
-
     /**
      * Initialize method
      *

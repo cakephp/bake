@@ -20,7 +20,6 @@ use Cake\Controller\Controller;
  */
 class AuthorsController extends Controller
 {
-
     /**
      * Testing public controller action
      *

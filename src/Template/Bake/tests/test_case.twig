@@ -43,31 +43,40 @@ class {{ className }}Test extends TestCase
 {
 {% if traitName %}
     use {{ traitName }};
+{% if properties or fixtures or construction or methods %}
+
+{% endif %}
 {% endif %}
 {% if properties %}
 {% for propertyInfo in properties %}
+{% if loop.index > 1 %}
 
+{% endif %}
     /**
      * {{ propertyInfo.description }}
      *
      * @var {{ propertyInfo.type }}
      */
     public ${{ propertyInfo.name }}{% if propertyInfo.value is defined and propertyInfo.value %} = {{ propertyInfo.value }}{% endif %};
+{% if loop.last and (fixtures or construction or methods) %}
+
+{% endif %}
 {% endfor %}
 {% endif %}
 
 {%- if fixtures %}
-
     /**
      * Fixtures
      *
      * @var array
      */
     public $fixtures = [{{ Bake.stringifyList(fixtures|values)|raw }}];
+{% if construction or methods %}
+
+{% endif %}
 {% endif %}
 
 {%- if construction %}
-
     /**
      * setUp method
      *
@@ -101,11 +110,16 @@ class {{ className }}Test extends TestCase
 
         parent::tearDown();
     }
+{% if methods %}
+
+{% endif %}
 {% endif %}
 {% endif %}
 
 {%- for method in methods %}
+{% if loop.index > 1 %}
 
+{% endif %}
     /**
      * Test {{ method }} method
      *
@@ -118,7 +132,9 @@ class {{ className }}Test extends TestCase
 {% endfor %}
 
 {%- if not methods %}
+{%- if traitName or properties or fixtures or construction or methods %}
 
+{% endif %}
     /**
      * Test initial setup
      *

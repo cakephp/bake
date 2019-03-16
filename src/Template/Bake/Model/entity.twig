@@ -32,7 +32,6 @@ use Cake\ORM\Entity;
 class {{ name }} extends Entity
 {
 {% if accessible %}
-
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -44,18 +43,15 @@ class {{ name }} extends Entity
      */
     protected $_accessible = [{{ Bake.stringifyList(accessible, {'quotes': false})|raw }}];
 {% endif %}
+{% if accessible and hidden %}
 
+{% endif %}
 {%- if hidden %}
-
     /**
      * Fields that are excluded from JSON versions of the entity.
      *
      * @var array
      */
     protected $_hidden = [{{ Bake.stringifyList(hidden)|raw }}];
-{% endif %}
-
-{%- if not accessible and not hidden %}
-
 {% endif %}
 }

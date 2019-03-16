@@ -10,7 +10,6 @@ use Cake\TestSuite\TestCase;
  */
 class AppleComponentTest extends TestCase
 {
-
     /**
      * Test subject
      *

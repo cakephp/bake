@@ -22,7 +22,6 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class BakeTemplateAuthorsFixture extends TestFixture
 {
-
     /**
      * Avoid overriding core.authors
      * @var string

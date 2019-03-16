@@ -11,7 +11,6 @@ use Cake\Console\ConsoleOptionParser;
  */
 class ExampleCommand extends Command
 {
-
     /**
      * Hook method for defining this command's option parser.
      *

@@ -8,7 +8,6 @@ use Cake\Mailer\Mailer;
  */
 class ExampleMailer extends Mailer
 {
-
     /**
      * Mailer's name.
      *

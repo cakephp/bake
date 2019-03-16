@@ -26,7 +26,6 @@ use Cake\TestSuite\TestCase;
  */
 class BakeHelperTest extends TestCase
 {
-
     /**
      * fixtures
      *

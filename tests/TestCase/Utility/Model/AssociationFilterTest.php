@@ -23,7 +23,6 @@ use Cake\TestSuite\TestCase;
  */
 class AssociationFilterTest extends TestCase
 {
-
     /**
      * fixtures
      *

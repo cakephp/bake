@@ -19,7 +19,6 @@ use Cake\Core\Plugin;
 
 trait CommonOptionsTrait
 {
-
     /**
      * Set common options used by all bake tasks.
      *

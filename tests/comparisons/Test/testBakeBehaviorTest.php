@@ -9,7 +9,6 @@ use Cake\TestSuite\TestCase;
  */
 class ExampleBehaviorTest extends TestCase
 {
-
     /**
      * Test subject
      *

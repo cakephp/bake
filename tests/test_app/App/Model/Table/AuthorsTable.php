@@ -20,7 +20,6 @@ use Cake\ORM\Table;
  */
 class AuthorsTable extends Table
 {
-
     /**
      * @param array $config
      * @return void

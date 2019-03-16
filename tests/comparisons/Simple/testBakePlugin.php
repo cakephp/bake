@@ -9,7 +9,6 @@ use Cake\ORM\Table;
  */
 class ExampleBehavior extends Behavior
 {
-
     /**
      * Default configuration.
      *

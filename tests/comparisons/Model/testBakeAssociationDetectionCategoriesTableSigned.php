@@ -24,7 +24,6 @@ use Cake\Validation\Validator;
  */
 class CategoriesTable extends Table
 {
-
     /**
      * Initialize method
      *
