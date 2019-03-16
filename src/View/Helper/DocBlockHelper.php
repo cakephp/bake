@@ -29,6 +29,9 @@ class DocBlockHelper extends Helper
         $lines = [];
         if ($className && $classType) {
             $lines[] = "{$className} {$classType}";
+        }
+
+        if ($annotations) {
             $lines[] = "";
         }
 
