@@ -18,7 +18,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * ProductVersionsFixture
- *
  */
 class ProductVersionsFixture extends TestFixture
 {

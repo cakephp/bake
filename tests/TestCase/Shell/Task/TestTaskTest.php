@@ -27,7 +27,6 @@ use Cake\ORM\TableRegistry;
 
 /**
  * TestTaskTest class
- *
  */
 class TestTaskTest extends TestCase
 {

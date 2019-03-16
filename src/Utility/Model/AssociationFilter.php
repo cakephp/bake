@@ -20,7 +20,6 @@ use Exception;
 
 /**
  * Utility class to filter Model Table associations
- *
  */
 class AssociationFilter
 {

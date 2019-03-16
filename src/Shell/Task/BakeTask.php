@@ -23,7 +23,6 @@ use Cake\Filesystem\File;
 
 /**
  * Base class for Bake Tasks.
- *
  */
 class BakeTask extends Shell
 {
