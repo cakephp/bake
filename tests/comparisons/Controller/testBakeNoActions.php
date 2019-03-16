@@ -11,7 +11,6 @@ use App\Controller\AppController;
  */
 class BakeArticlesController extends AppController
 {
-
     /**
      * Helpers
      *

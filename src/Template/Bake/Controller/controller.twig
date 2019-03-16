@@ -44,14 +44,21 @@ class {{ name }}Controller extends AppController
 {% set helpers = Bake.arrayProperty('helpers', helpers, {'indent': false})|raw %}
 {% if helpers|trim %}
     {{- helpers|raw }}
-{% endif %}
+{% if components %}
 
+{% endif %}
+{% endif %}
 {%- set components = Bake.arrayProperty('components', components, {'indent': false})|raw %}
 {% if components|trim %}
     {{- components|raw }}
-{% endif %}
+{% if actions %}
 
+{% endif %}
+{% endif %}
 {%- for action in actions %}
+{% if loop.index > 1 %}
+
+{% endif %}
     {%- element 'Controller/' ~ action %}
 {% endfor %}
 }
