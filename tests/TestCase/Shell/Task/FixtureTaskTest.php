@@ -24,7 +24,6 @@ use Cake\ORM\TableRegistry;
 
 /**
  * FixtureTaskTest class
- *
  */
 class FixtureTaskTest extends TestCase
 {

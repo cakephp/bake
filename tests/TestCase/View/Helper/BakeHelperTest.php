@@ -23,7 +23,6 @@ use Cake\TestSuite\TestCase;
 
 /**
  * BakeViewTest class
- *
  */
 class BakeHelperTest extends TestCase
 {

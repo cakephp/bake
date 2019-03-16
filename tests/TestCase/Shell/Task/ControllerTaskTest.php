@@ -23,7 +23,6 @@ use Cake\ORM\TableRegistry;
 
 /**
  * ControllerTaskTest class
- *
  */
 class ControllerTaskTest extends TestCase
 {

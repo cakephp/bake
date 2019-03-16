@@ -25,7 +25,6 @@ use Cake\TestSuite\TestCase;
 
 /**
  * BakeViewTest class
- *
  */
 class BakeViewTest extends TestCase
 {

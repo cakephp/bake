@@ -18,7 +18,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * BakeCommentFixture fixture for testing bake
- *
  */
 class BakeCommentsFixture extends TestFixture
 {
