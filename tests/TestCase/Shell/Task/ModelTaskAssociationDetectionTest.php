@@ -30,7 +30,6 @@ use Cake\ORM\TableRegistry;
  */
 class ModelTaskAssociationDetectionTest extends TestCase
 {
-
     /**
      * fixtures
      *

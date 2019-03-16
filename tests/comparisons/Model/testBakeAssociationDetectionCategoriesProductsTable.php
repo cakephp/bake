@@ -23,7 +23,6 @@ use Cake\Validation\Validator;
  */
 class CategoriesProductsTable extends Table
 {
-
     /**
      * Initialize method
      *

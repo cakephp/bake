@@ -11,7 +11,6 @@ use Cake\TestSuite\TestCase;
  */
 class ExampleHelperTest extends TestCase
 {
-
     /**
      * ConsoleOutput stub
      *

@@ -12,7 +12,6 @@ use BakeTest\Controller\AppController;
  */
 class BakeArticlesController extends AppController
 {
-
     /**
      * Index method
      *

@@ -9,7 +9,6 @@ use Cake\TestSuite\TestCase;
  */
 class ArticlesTaskTest extends TestCase
 {
-
     /**
      * ConsoleIo mock
      *

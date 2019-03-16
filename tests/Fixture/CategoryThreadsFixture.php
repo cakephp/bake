@@ -21,7 +21,6 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class CategoryThreadsFixture extends TestFixture
 {
-
     /**
      * fields property
      *

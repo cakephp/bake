@@ -24,7 +24,6 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class BakeTemplateProfilesFixture extends TestFixture
 {
-
     /**
      * @var string
      */

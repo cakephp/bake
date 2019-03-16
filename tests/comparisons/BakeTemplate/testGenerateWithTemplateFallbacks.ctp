@@ -8,7 +8,6 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class ArticlesFixture extends TestFixture
 {
-
     /**
      * Table name
      *

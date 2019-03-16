@@ -10,7 +10,6 @@ use Cake\View\View;
  */
 class ExampleHelperTest extends TestCase
 {
-
     /**
      * Test subject
      *

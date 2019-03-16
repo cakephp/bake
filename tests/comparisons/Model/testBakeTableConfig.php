@@ -22,7 +22,6 @@ use Cake\Validation\Validator;
  */
 class BakeArticlesTable extends Table
 {
-
     /**
      * Initialize method
      *

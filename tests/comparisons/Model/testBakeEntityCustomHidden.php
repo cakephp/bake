@@ -17,7 +17,6 @@ use Cake\ORM\Entity;
  */
 class User extends Entity
 {
-
     /**
      * Fields that are excluded from JSON versions of the entity.
      *

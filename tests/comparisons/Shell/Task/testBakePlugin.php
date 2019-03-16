@@ -8,7 +8,6 @@ use Cake\Console\Shell;
  */
 class ExampleTask extends Shell
 {
-
     /**
      * Manage the available sub-commands along with their arguments and help
      *

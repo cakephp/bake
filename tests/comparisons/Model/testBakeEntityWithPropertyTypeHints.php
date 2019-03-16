@@ -26,5 +26,4 @@ use Cake\ORM\Entity;
  */
 class BakeArticle extends Entity
 {
-
 }
