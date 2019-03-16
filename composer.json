@@ -40,5 +40,15 @@
             "Bake\\Test\\App\\": "tests/test_app/App",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
+    },
+    "scripts": {
+        "check": [
+            "@test",
+            "@cs-check"
+        ],
+        "cs-check": "phpcs --parallel=16 -p src/ tests/",
+        "cs-fix": "phpcbf --parallel=16 -p src/ tests/",
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-clover=clover.xml"
     }
 }
