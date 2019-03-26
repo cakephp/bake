@@ -110,8 +110,8 @@ class PluginTask extends BakeTask
 
         $this->_generateFiles($plugin, $this->path);
 
-        $hasAutoloader = $this->_modifyAutoloader($plugin, $this->path);
-        $this->_modifyApplication($plugin, $hasAutoloader);
+        $this->_modifyAutoloader($plugin, $this->path);
+        $this->_modifyApplication($plugin);
 
         $this->hr();
         $this->out(sprintf('<success>Created:</success> %s in %s', $plugin, $this->path . $plugin), 2);
@@ -126,11 +126,10 @@ class PluginTask extends BakeTask
      * Modify the application class
      *
      * @param string $plugin Name of plugin
-     * @param bool $hasAutoloader Whether or not there is an autoloader configured for
      * the plugin
      * @return void
      */
-    protected function _modifyApplication($plugin, $hasAutoloader)
+    protected function _modifyApplication($plugin)
     {
         $application = new File(ROOT . DS . 'src' . DS . 'Application.php', false);
         if (!$application->exists()) {
@@ -140,9 +139,6 @@ class PluginTask extends BakeTask
         }
 
         $cmd = ['cake', 'plugin', 'load', $plugin];
-        if ($hasAutoloader) {
-            $cmd[] = '--autoload';
-        }
         ShellDispatcher::run($cmd);
     }
 
