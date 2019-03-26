@@ -132,12 +132,18 @@ class PluginTask extends BakeTask
      */
     protected function _modifyApplication($plugin, $hasAutoloader)
     {
-        $shell = new ShellDispatcher();
+        $application = new File(ROOT . DS . 'src' . DS . 'Application.php', false);
+        if (!$application->exists()) {
+            $this->err('<warning>Could not update application Application.php file, as it could not be found.</warning>');
+
+            return;
+        }
+
         $cmd = ['cake', 'plugin', 'load', $plugin];
         if ($hasAutoloader) {
             $cmd[] = '--autoload';
         }
-        $shell->run($cmd);
+        ShellDispatcher::run($cmd);
     }
 
     /**
