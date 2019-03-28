@@ -152,7 +152,7 @@ class DocBlockHelperTest extends TestCase
      * Tests the columnTypeToHintType method
      *
      * @return void
-     * @cvoers ::columnTypeToHintType
+     * @covers ::columnTypeToHintType
      */
     public function testColumnTypeToHintType()
     {
@@ -174,7 +174,7 @@ class DocBlockHelperTest extends TestCase
      * Tests the buildTableAnnotations method
      *
      * @return void
-     * @cvoers ::buildTableAnnotations
+     * @covers ::buildTableAnnotations
      */
     public function testBuildTableAnnotations()
     {
