@@ -32,7 +32,7 @@ class DocBlockHelper extends Helper
         }
 
         if ($annotations && $lines) {
-            $lines[] = "";
+            $lines[] = '';
         }
 
         $previous = false;
