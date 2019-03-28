@@ -13,6 +13,9 @@ use Cake\View\Helper;
  */
 class DocBlockHelper extends Helper
 {
+    /**
+     * @var bool Whether to add a blank line between different class annotations
+     */
     protected $_annotationSpacing = true;
 
     /**
