@@ -69,8 +69,9 @@ class DocBlockHelper extends Helper
      */
     public function associatedEntityTypeToHintType($type, Association $association)
     {
-        if ($association->type() === Association::MANY_TO_MANY ||
-            $association->type() === Association::ONE_TO_MANY
+        $annotationType = $association->type();
+        if ($annotationType === Association::MANY_TO_MANY ||
+            $annotationType === Association::ONE_TO_MANY
         ) {
             return $type . '[]';
         }
