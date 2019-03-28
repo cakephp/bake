@@ -36,9 +36,9 @@ class DocBlockHelper extends Helper
         }
 
         $previous = false;
-        foreach ($annotations as $ann) {
-            if (strlen($ann) > 1 && $ann[0] === '@' && strpos($ann, ' ') > 0) {
-                $type = substr($ann, 0, strpos($ann, ' '));
+        foreach ($annotations as $annotation) {
+            if (strlen($annotation) > 1 && $annotation[0] === '@' && strpos($annotation, ' ') > 0) {
+                $type = substr($annotation, 0, strpos($annotation, ' '));
                 if ($this->_annotationSpacing &&
                     $previous !== false &&
                     $previous !== $type
@@ -47,7 +47,7 @@ class DocBlockHelper extends Helper
                 }
                 $previous = $type;
             }
-            $lines[] = $ann;
+            $lines[] = $annotation;
         }
 
         $lines = array_merge(["/**"], (new Collection($lines))->map(function ($line) {
