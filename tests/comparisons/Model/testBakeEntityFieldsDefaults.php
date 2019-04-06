@@ -43,6 +43,6 @@ class TodoItem extends Entity
         'updated' => true,
         'user' => true,
         'todo_tasks' => true,
-        'todo_labels' => true
+        'todo_labels' => true,
     ];
 }

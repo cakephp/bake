@@ -33,7 +33,7 @@ class User extends Entity
         'created' => true,
         'updated' => true,
         'comments' => true,
-        'todo_items' => true
+        'todo_items' => true,
     ];
 
     /**
@@ -42,6 +42,6 @@ class User extends Entity
      * @var array
      */
     protected $_hidden = [
-        'password'
+        'password',
     ];
 }

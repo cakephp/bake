@@ -43,10 +43,10 @@ class UsersTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->hasMany('Comments', [
-            'foreignKey' => 'user_id'
+            'foreignKey' => 'user_id',
         ]);
         $this->hasMany('TodoItems', [
-            'foreignKey' => 'user_id'
+            'foreignKey' => 'user_id',
         ]);
     }
 

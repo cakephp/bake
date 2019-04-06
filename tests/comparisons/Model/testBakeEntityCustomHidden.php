@@ -25,6 +25,6 @@ class User extends Entity
      */
     protected $_hidden = [
         'foo',
-        'bar'
+        'bar',
     ];
 }

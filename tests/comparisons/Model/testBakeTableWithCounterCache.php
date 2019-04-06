@@ -42,12 +42,12 @@ class TodoTasksTable extends Table
 
         $this->addBehavior('Timestamp');
         $this->addBehavior('CounterCache', [
-            'TodoItems' => ['todo_task_count']
+            'TodoItems' => ['todo_task_count'],
         ]);
 
         $this->belongsTo('TodoItems', [
             'foreignKey' => 'todo_item_id',
-            'joinType' => 'INNER'
+            'joinType' => 'INNER',
         ]);
     }
 

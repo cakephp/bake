@@ -40,11 +40,11 @@ class CategoriesProductsTable extends Table
 
         $this->belongsTo('Categories', [
             'foreignKey' => 'category_id',
-            'joinType' => 'INNER'
+            'joinType' => 'INNER',
         ]);
         $this->belongsTo('Products', [
             'foreignKey' => 'product_id',
-            'joinType' => 'INNER'
+            'joinType' => 'INNER',
         ]);
     }
 

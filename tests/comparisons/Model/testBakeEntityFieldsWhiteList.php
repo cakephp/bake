@@ -36,6 +36,6 @@ class TodoItem extends Entity
         'id' => true,
         'title' => true,
         'body' => true,
-        'completed' => true
+        'completed' => true,
     ];
 }
