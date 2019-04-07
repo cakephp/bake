@@ -22,7 +22,6 @@ use Cake\Event\EventManager;
 use Cake\View\Exception\MissingTemplateException;
 use Cake\View\View;
 use Cake\View\ViewVarsTrait;
-use RuntimeException;
 
 /**
  * Used by other tasks to generate templated output, Acts as an interface to BakeView
@@ -100,7 +99,8 @@ class TemplateRenderer
         try {
             return $view->render($template);
         } catch (MissingTemplateException $e) {
-            throw new RuntimeException(sprintf('No bake template found for "%s"', $template));
+            $message = sprintf('No bake template found for "%s" skipping file generation.', $template);
+            throw new MissingTemplateException($message);
         }
     }
 }

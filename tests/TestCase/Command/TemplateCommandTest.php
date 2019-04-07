@@ -24,7 +24,7 @@ use Cake\Console\Exception\StopException;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
-use RuntimeException;
+use Cake\View\Exception\MissingTemplateException;
 
 /**
  * TemplateCommand test
@@ -580,7 +580,7 @@ class TemplateCommandTest extends TestCase
      */
     public function testBakeWithNoTemplate()
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(MissingTemplateException::class);
         $this->expectExceptionMessage('No bake template found for "Template/delete"');
         $this->exec('bake template template_task_comments delete');
     }
@@ -696,6 +696,8 @@ class TemplateCommandTest extends TestCase
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
+        $this->assertOutputNotContains('No bake template found');
+        $this->assertErrorEmpty();
     }
 
     /**
