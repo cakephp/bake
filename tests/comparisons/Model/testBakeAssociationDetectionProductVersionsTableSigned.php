@@ -39,7 +39,7 @@ class ProductVersionsTable extends Table
 
         $this->belongsTo('Products', [
             'foreignKey' => 'product_id',
-            'joinType' => 'INNER'
+            'joinType' => 'INNER',
         ]);
     }
 
