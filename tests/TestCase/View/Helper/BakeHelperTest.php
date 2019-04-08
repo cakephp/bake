@@ -155,7 +155,7 @@ class BakeHelperTest extends TestCase
         $expected = "\n" .
             $spaces . $spaces . "'one' => 'foo',\n" .
             $spaces . $spaces . "'two' => 'bar',\n" .
-            $spaces . $spaces . "'three'\n" .
+            $spaces . $spaces . "'three',\n" .
             $spaces;
         $this->assertSame($expected, $result);
     }
@@ -186,7 +186,7 @@ class BakeHelperTest extends TestCase
         $expected = "\n" .
             $spaces . $spaces . $spaces . "'one' => 'foo',\n" .
             $spaces . $spaces . $spaces . "'two' => 'bar',\n" .
-            $spaces . $spaces . $spaces . "'three'\n" .
+            $spaces . $spaces . $spaces . "'three',\n" .
             $spaces . $spaces;
         $this->assertSame($expected, $result);
     }
@@ -204,7 +204,7 @@ class BakeHelperTest extends TestCase
         $expected = "\n" .
             $spaces . $spaces . $spaces . "'one' => 'foo',\n" .
             $spaces . $spaces . $spaces . "'two' => 'bar',\n" .
-            $spaces . $spaces . $spaces . "'three'\n" .
+            $spaces . $spaces . $spaces . "'three',\n" .
             $spaces . $spaces;
         $this->assertSame($expected, $result);
     }
@@ -214,19 +214,19 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function testStringifyListWithCommaAtEnd()
+    public function testStringifyListWithNoCommaAtEnd()
     {
         $list = ['one' => 'foo', 'two' => 'bar', 'three'];
         $result = $this->BakeHelper->stringifyList($list, [
             'indent' => 3,
             'tab' => "\t",
-            'trailingComma' => true,
+            'trailingComma' => false,
         ]);
         $spaces = "\t";
         $expected = "\n" .
             $spaces . $spaces . $spaces . "'one' => 'foo',\n" .
             $spaces . $spaces . $spaces . "'two' => 'bar',\n" .
-            $spaces . $spaces . $spaces . "'three',\n" .
+            $spaces . $spaces . $spaces . "'three'\n" .
             $spaces . $spaces;
         $this->assertSame($expected, $result);
     }

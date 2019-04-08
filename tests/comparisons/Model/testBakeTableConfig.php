@@ -45,15 +45,15 @@ class ItemsTable extends Table
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
-            'joinType' => 'INNER'
+            'joinType' => 'INNER',
         ]);
         $this->hasMany('TodoTasks', [
-            'foreignKey' => 'todo_item_id'
+            'foreignKey' => 'todo_item_id',
         ]);
         $this->belongsToMany('TodoLabels', [
             'foreignKey' => 'todo_item_id',
             'targetForeignKey' => 'todo_label_id',
-            'joinTable' => 'todo_items_todo_labels'
+            'joinTable' => 'todo_items_todo_labels',
         ]);
     }
 

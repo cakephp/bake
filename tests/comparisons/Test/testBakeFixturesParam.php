@@ -26,7 +26,7 @@ class AuthorsTableTest extends TestCase
     public $fixtures = [
         'app.Posts',
         'app.Comments',
-        'app.Users'
+        'app.Users',
     ];
 
     /**

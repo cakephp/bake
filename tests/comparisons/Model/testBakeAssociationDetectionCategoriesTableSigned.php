@@ -44,7 +44,7 @@ class CategoriesTable extends Table
         $this->belongsToMany('Products', [
             'foreignKey' => 'category_id',
             'targetForeignKey' => 'product_id',
-            'joinTable' => 'categories_products'
+            'joinTable' => 'categories_products',
         ]);
     }
 

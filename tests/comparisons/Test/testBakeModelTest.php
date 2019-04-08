@@ -27,7 +27,7 @@ class ArticlesTableTest extends TestCase
         'app.Articles',
         'app.Authors',
         'app.Tags',
-        'app.ArticlesTags'
+        'app.ArticlesTags',
     ];
 
     /**
