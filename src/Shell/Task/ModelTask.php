@@ -759,12 +759,12 @@ class ModelTask extends BakeTask
 
         if (in_array($fieldName, $primaryKey)) {
             $validation['allowEmpty'] = [
-                'rule' => $this->getAllowEmptyMethod($fieldName, $metaData),
+                'rule' => $this->getEmptyMethod($fieldName, $metaData),
                 'args' => ["'create'"],
             ];
         } elseif ($metaData['null'] === true) {
             $validation['allowEmpty'] = [
-                'rule' => $this->getAllowEmptyMethod($fieldName, $metaData),
+                'rule' => $this->getEmptyMethod($fieldName, $metaData),
                 'args' => [],
             ];
         } else {
@@ -772,9 +772,9 @@ class ModelTask extends BakeTask
                 'rule' => 'requirePresence',
                 'args' => ["'create'"],
             ];
-            $validation['allowEmpty'] = [
-                'rule' => $this->getAllowEmptyMethod($fieldName, $metaData),
-                'args' => ['false'],
+            $validation['notEmpty'] = [
+                'rule' => $this->getEmptyMethod($fieldName, $metaData, 'not'),
+                'args' => [],
             ];
         }
 
@@ -798,27 +798,28 @@ class ModelTask extends BakeTask
      *
      * @param string $fieldName Field name.
      * @param array $metaData Field meta data.
+     * @param string $prefix Method name prefix.
      * @return string
      */
-    protected function getAllowEmptyMethod($fieldName, $metaData)
+    protected function getEmptyMethod($fieldName, array $metaData, $prefix = 'allow')
     {
         switch ($metaData['type']) {
             case 'date':
-                return 'allowEmptyDate';
+                return $prefix . 'EmptyDate';
 
             case 'time':
-                return 'allowEmptyTime';
+                return $prefix . 'EmptyTime';
 
             case 'datetime':
             case 'timestamp':
-                return 'allowEmptyDateTime';
+                return $prefix . 'EmptyDateTime';
         }
 
         if (preg_match('/file|image/', $fieldName)) {
-            return 'allowEmptyFile';
+            return $prefix . 'EmptyFile';
         }
 
-        return 'allowEmptyString';
+        return $prefix . 'EmptyString';
     }
 
     /**
