@@ -57,7 +57,7 @@ class ProductVersionsTable extends Table
         $validator
             ->dateTime('version')
             ->requirePresence('version', 'create')
-            ->allowEmptyDateTime('version', false);
+            ->notEmptyDateTime('version');
 
         return $validator;
     }
