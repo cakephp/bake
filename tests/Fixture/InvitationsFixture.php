@@ -18,7 +18,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * InvitationsFixture
- *
  */
 class InvitationsFixture extends TestFixture
 {

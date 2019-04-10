@@ -21,7 +21,6 @@ use Cake\TestSuite\TestCase;
 
 /**
  * BakeViewTest class
- *
  */
 class AssociationFilterTest extends TestCase
 {

@@ -25,5 +25,4 @@ use Cake\ORM\Entity;
  */
 class TodoItem extends Entity
 {
-
 }

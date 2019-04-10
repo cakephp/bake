@@ -17,7 +17,7 @@ use Cake\Validation\Validator;
  * @method \Bake\Test\App\Model\Entity\Item newEntity($data = null, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Item[] newEntities(array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Item|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\Item|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\Item saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\Item patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Item[] patchEntities($entities, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Item findOrCreate($search, callable $callback = null, $options = [])
@@ -26,7 +26,6 @@ use Cake\Validation\Validator;
  */
 class ItemsTable extends Table
 {
-
     /**
      * Initialize method
      *
@@ -73,7 +72,7 @@ class ItemsTable extends Table
             ->scalar('title')
             ->maxLength('title', 50)
             ->requirePresence('title', 'create')
-            ->allowEmptyString('title', false);
+            ->notEmptyString('title');
 
         $validator
             ->scalar('body')
@@ -82,17 +81,17 @@ class ItemsTable extends Table
         $validator
             ->decimal('effort')
             ->requirePresence('effort', 'create')
-            ->allowEmptyString('effort', false);
+            ->notEmptyString('effort');
 
         $validator
             ->boolean('completed')
             ->requirePresence('completed', 'create')
-            ->allowEmptyString('completed', false);
+            ->notEmptyString('completed');
 
         $validator
             ->integer('todo_task_count')
             ->requirePresence('todo_task_count', 'create')
-            ->allowEmptyString('todo_task_count', false);
+            ->notEmptyString('todo_task_count');
 
         return $validator;
     }

@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class ExampleMiddleware
 {
-
     /**
      * Invoke method.
      *

@@ -9,7 +9,6 @@ use Cake\TestSuite\TestCase;
  */
 class ArticlesCellTest extends TestCase
 {
-
     /**
      * Request mock
      *

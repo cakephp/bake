@@ -22,7 +22,6 @@ use Cake\Routing\RouteCollection;
 
 /**
  * PluginTest class
- *
  */
 class PluginTest extends TestCase
 {

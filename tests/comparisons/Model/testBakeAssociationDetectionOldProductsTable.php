@@ -13,7 +13,7 @@ use Cake\Validation\Validator;
  * @method \Bake\Test\App\Model\Entity\OldProduct newEntity($data = null, array $options = [])
  * @method \Bake\Test\App\Model\Entity\OldProduct[] newEntities(array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\OldProduct|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\OldProduct|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\OldProduct saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\OldProduct patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\OldProduct[] patchEntities($entities, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\OldProduct findOrCreate($search, callable $callback = null, $options = [])
@@ -22,7 +22,6 @@ use Cake\Validation\Validator;
  */
 class OldProductsTable extends Table
 {
-
     /**
      * Initialize method
      *
@@ -56,7 +55,7 @@ class OldProductsTable extends Table
             ->scalar('name')
             ->maxLength('name', 100)
             ->requirePresence('name', 'create')
-            ->allowEmptyString('name', false);
+            ->notEmptyString('name');
 
         return $validator;
     }

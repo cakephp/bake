@@ -25,7 +25,6 @@ use Cake\Validation\Validator;
  */
 class ProductsTable extends Table
 {
-
     /**
      * Initialize method
      *
@@ -68,7 +67,7 @@ class ProductsTable extends Table
             ->scalar('name')
             ->maxLength('name', 100)
             ->requirePresence('name', 'create')
-            ->allowEmptyString('name', false);
+            ->notEmptyString('name');
 
         return $validator;
     }

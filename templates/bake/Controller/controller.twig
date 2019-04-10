@@ -58,8 +58,10 @@ class {{ name }}Controller extends AppController
         $this->viewBuilder()->setHelpers([{{ Bake.stringifyList(helpers, {'indent': false})|raw }}]);
 {% endif %}
     }
+{% if actions|length %}{{ "\n" }}{% endif %}
 {% endif %}
 {%- for action in actions %}
+{% if loop.index > 1 %}{{ "\n" }}{% endif %}
     {%- element 'Controller/' ~ action %}
 {% endfor %}
 }

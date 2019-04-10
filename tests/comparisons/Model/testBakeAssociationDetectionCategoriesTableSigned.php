@@ -24,7 +24,6 @@ use Cake\Validation\Validator;
  */
 class CategoriesTable extends Table
 {
-
     /**
      * Initialize method
      *
@@ -64,7 +63,7 @@ class CategoriesTable extends Table
             ->scalar('name')
             ->maxLength('name', 100)
             ->requirePresence('name', 'create')
-            ->allowEmptyString('name', false);
+            ->notEmptyString('name');
 
         return $validator;
     }

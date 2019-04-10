@@ -22,7 +22,6 @@ use Cake\Validation\Validator;
  */
 class ProductVersionsTable extends Table
 {
-
     /**
      * Initialize method
      *
@@ -58,7 +57,7 @@ class ProductVersionsTable extends Table
         $validator
             ->dateTime('version')
             ->requirePresence('version', 'create')
-            ->allowEmptyDateTime('version', false);
+            ->notEmptyDateTime('version');
 
         return $validator;
     }

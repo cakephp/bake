@@ -24,12 +24,10 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 /**
  * {{ name }}Fixture
- *
  */
 class {{ name }}Fixture extends TestFixture
 {
 {% if table %}
-
     /**
      * Table name
      *
@@ -39,17 +37,16 @@ class {{ name }}Fixture extends TestFixture
 {% endif %}
 
 {%- if import %}
-
     /**
      * Import
      *
      * @var array
      */
     public $import = {{ import|raw }};
+
 {% endif %}
 
 {%- if schema %}
-
     /**
      * Fields
      *
@@ -61,7 +58,6 @@ class {{ name }}Fixture extends TestFixture
 {% endif %}
 
 {%- if records %}
-
     /**
      * Init method
      *

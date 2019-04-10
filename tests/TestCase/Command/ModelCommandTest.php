@@ -863,18 +863,12 @@ class ModelCommandTest extends TestCase
             'user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => [
-                    'rule' => 'allowEmptyString',
-                    'args' => ['false'],
-                ],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => [
-                    'rule' => 'allowEmptyString',
-                    'args' => ['false'],
-                ],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'body' => [
@@ -884,10 +878,7 @@ class ModelCommandTest extends TestCase
             'effort' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => [
-                    'rule' => 'allowEmptyString',
-                    'args' => ['false'],
-                ],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'completed' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
@@ -895,15 +886,12 @@ class ModelCommandTest extends TestCase
                     'rule' => 'requirePresence',
                     'args' => ["'create'" ],
                 ],
-                'allowEmpty' => [
-                    'rule' => 'allowEmptyString',
-                    'args' => ['false'],
-                ],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'todo_task_count' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -932,12 +920,12 @@ class ModelCommandTest extends TestCase
             'todo_item_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'body' => [
@@ -945,13 +933,13 @@ class ModelCommandTest extends TestCase
                 'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'effort' => [
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'decimal' => ['rule' => 'decimal', 'args' => []],
             ],
             'completed' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'uid' => [
@@ -985,10 +973,7 @@ class ModelCommandTest extends TestCase
         $expected = [
             'dateTime' => ['rule' => 'dateTime', 'args' => []],
             'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-            'allowEmpty' => [
-                'rule' => 'allowEmptyDateTime',
-                'args' => ['false'],
-            ],
+            'notEmpty' => ['rule' => 'notEmptyDateTime', 'args' => []],
         ];
         $this->assertEquals($expected, $result['release_date']);
     }
@@ -1016,10 +1001,7 @@ class ModelCommandTest extends TestCase
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => [
-                    'rule' => 'allowEmptyString',
-                    'args' => ['false'],
-                ],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'parent_id' => [
@@ -1057,7 +1039,7 @@ class ModelCommandTest extends TestCase
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'parent_id' => [
@@ -1119,7 +1101,7 @@ class ModelCommandTest extends TestCase
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'body' => [
@@ -1129,16 +1111,16 @@ class ModelCommandTest extends TestCase
             'effort' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'completed' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'" ]],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'todo_task_count' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'id' => [

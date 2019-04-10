@@ -15,7 +15,7 @@ use Cake\Validation\Validator;
  * @method \Bake\Test\App\Model\Entity\TodoTask newEntity($data = null, array $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask[] newEntities(array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\TodoTask|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoTask saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask[] patchEntities($entities, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask findOrCreate($search, callable $callback = null, $options = [])
@@ -25,7 +25,6 @@ use Cake\Validation\Validator;
  */
 class TodoTasksTable extends Table
 {
-
     /**
      * Initialize method
      *
