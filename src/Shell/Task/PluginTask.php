@@ -138,8 +138,7 @@ class PluginTask extends BakeTask
             return;
         }
 
-        $cmd = ['cake', 'plugin', 'load', $plugin];
-        ShellDispatcher::run($cmd);
+        $this->dispatchShell('plugin', 'load', $plugin);
     }
 
     /**
