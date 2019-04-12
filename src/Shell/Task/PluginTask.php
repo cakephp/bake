@@ -14,7 +14,6 @@
  */
 namespace Bake\Shell\Task;
 
-use Cake\Console\ShellDispatcher;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
