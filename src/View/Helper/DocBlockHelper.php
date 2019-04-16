@@ -16,7 +16,7 @@ class DocBlockHelper extends Helper
     /**
      * @var bool Whether to add a blank line between different class annotations
      */
-    protected $_classAnnotationSpacing = true;
+    protected $_annotationSpacing = true;
 
     /**
      * Writes the DocBlock header for a class which includes the property and method declarations. Annotations are
@@ -42,7 +42,7 @@ class DocBlockHelper extends Helper
         foreach ($annotations as $annotation) {
             if (strlen($annotation) > 1 && $annotation[0] === '@' && strpos($annotation, ' ') > 0) {
                 $type = substr($annotation, 0, strpos($annotation, ' '));
-                if ($this->_classAnnotationSpacing &&
+                if ($this->_annotationSpacing &&
                     $previous !== false &&
                     $previous !== $type
                 ) {
