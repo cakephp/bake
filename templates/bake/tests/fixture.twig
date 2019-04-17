@@ -63,7 +63,7 @@ class {{ name }}Fixture extends TestFixture
      *
      * @return void
      */
-    public function init()
+    public function init(): void
     {
         $this->records = {{ records|raw }};
         parent::init();
