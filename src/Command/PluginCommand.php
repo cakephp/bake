@@ -24,8 +24,8 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
+use Cake\Shell\PluginShell;
 use Cake\Utility\Inflector;
 
 /**
@@ -34,13 +34,6 @@ use Cake\Utility\Inflector;
  */
 class PluginCommand extends BakeCommand
 {
-    /**
-     * Path to the bootstrap file. Changed in tests.
-     *
-     * @var string
-     */
-    public $bootstrap = null;
-
     /**
      * Plugin path.
      *
@@ -57,7 +50,6 @@ class PluginCommand extends BakeCommand
     {
         parent::initialize();
         $this->path = current(App::path('Plugin'));
-        $this->bootstrap = ROOT . DS . 'config' . DS . 'bootstrap.php';
     }
 
     /**
@@ -122,8 +114,8 @@ class PluginCommand extends BakeCommand
 
         $this->_generateFiles($plugin, $this->path, $args, $io);
 
-        $hasAutoloader = $this->_modifyAutoloader($plugin, $this->path, $args, $io);
-        $this->_modifyBootstrap($plugin, $hasAutoloader, $io);
+        $this->_modifyAutoloader($plugin, $this->path, $args, $io);
+        $this->_modifyApplication($plugin);
 
         $io->hr();
         $io->out(sprintf('<success>Created:</success> %s in %s', $plugin, $this->path . $plugin), 2);
@@ -135,33 +127,17 @@ class PluginCommand extends BakeCommand
     }
 
     /**
-     * Update the app's bootstrap.php file.
+     * Modify the application class
      *
-     * @param string $plugin Name of plugin
-     * @param bool $hasAutoloader Whether or not there is an autoloader configured for
-     * the plugin
-     * @param \Cake\Console\ConsoleIo $io The io instance.
+     * @param string $plugin Name of plugin the plugin.
      * @return void
      */
-    protected function _modifyBootstrap(string $plugin, bool $hasAutoloader, ConsoleIo $io): void
+    protected function _modifyApplication(string $plugin): void
     {
-        $bootstrap = new File($this->bootstrap, false);
-        if (!$bootstrap->exists()) {
-            $io->err('<warning>Could not update application bootstrap.php file, as it could not be found.</warning>');
-
-            return;
-        }
-        $contents = $bootstrap->read();
-        if (!preg_match("@\n\s*Plugin::loadAll@", $contents)) {
-            $autoload = $hasAutoloader ? null : "'autoload' => true, ";
-            $bootstrap->append(sprintf(
-                "\nPlugin::load('%s', [%s'bootstrap' => false, 'routes' => true]);\n",
-                $plugin,
-                $autoload
-            ));
-            $io->out('');
-            $io->out(sprintf('%s modified', $this->bootstrap));
-        }
+        $io = new ConsoleIo();
+        $pluginShell = new PluginShell();
+        $pluginShell->initialize();
+        $pluginShell->runCommand(['load', $plugin], true);
     }
 
     /**
