@@ -50,7 +50,7 @@ class BakeArticlesController extends AppController
      */
     public function add()
     {
-        $bakeArticle = $this->BakeArticles->newEntity();
+        $bakeArticle = $this->BakeArticles->newEmptyEntity();
         if ($this->request->is('post')) {
             $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
             if ($this->BakeArticles->save($bakeArticle)) {
