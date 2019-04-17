@@ -30,6 +30,8 @@ use Cake\Filesystem\Folder;
  */
 class PluginCommandTest extends TestCase
 {
+    protected $testAppFile = APP . 'Application.php';
+
     /**
      * setUp method
      *
@@ -48,6 +50,12 @@ class PluginCommandTest extends TestCase
 
         // Create the test output path
         mkdir($path, 0777, true);
+
+        if (file_exists(APP . 'Application.php.bak')) {
+            rename(APP . 'Application.php.bak', APP . 'Application.php');
+        } else {
+            copy(APP . 'Application.php', APP . 'Application.php.bak');
+        }
     }
 
     /**
@@ -59,6 +67,10 @@ class PluginCommandTest extends TestCase
     {
         $folder = new Folder(TMP . 'plugin_task');
         $folder->delete();
+
+        if (file_exists(APP . 'Application.php.bak')) {
+            rename(APP . 'Application.php.bak', APP . 'Application.php');
+        }
 
         parent::tearDown();
     }
