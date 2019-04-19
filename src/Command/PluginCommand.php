@@ -170,6 +170,11 @@ class PluginCommand extends BakeCommand
         }
         $package = $vendor . '/' . $name;
 
+        $composerConfig = json_decode(
+            file_get_contents(APP . '../composer.json'),
+            true
+        );
+
         $renderer = new TemplateRenderer($args->getOption('theme'));
         $renderer->set([
             'package' => $package,
@@ -179,6 +184,7 @@ class PluginCommand extends BakeCommand
             'routePath' => Inflector::dasherize($pluginName),
             'path' => $path,
             'root' => ROOT,
+            'cakeVersion' => $composerConfig['require']['cakephp/cakephp'],
         ]);
 
         $root = $path . $pluginName . DS;
