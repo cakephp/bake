@@ -159,9 +159,7 @@ class PluginCommandTest extends TestCase
         $this->skipIf(!file_exists($composerPath), 'Cannot find composer.phar.');
 
         $composerConfig = ROOT . 'composer.json';
-
-        // Seed the composer.json with valid JSON
-        file_put_contents($composerConfig, '{}');
+        copy($composerConfig, ROOT . 'composer.json.bak');
 
         $this->exec("bake plugin --composer '{$composerPath}' composer_example", ['y', 'y']);
 
@@ -186,8 +184,9 @@ class PluginCommandTest extends TestCase
             $result['autoload-dev']['psr-4']['ComposerExample\\Test\\']
         );
 
-        // Cleanup
-        unlink(ROOT . 'composer.json');
+        // Restore
+        copy(ROOT . 'composer.json.bak', $composerConfig);
+        unlink(ROOT . 'composer.json.bak');
 
         $folder = new Folder(ROOT . 'vendor');
         $folder->delete();
