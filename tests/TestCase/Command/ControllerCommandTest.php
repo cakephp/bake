@@ -205,7 +205,6 @@ class ControllerCommandTest extends TestCase
         $this->exec('bake controller --connection test --no-test --prefix admin BakeArticles');
 
         $this->assertFileContains('namespace Bake\Test\App\Controller\Admin;', $this->generatedFile);
-        $this->assertFileContains('use Bake\Test\App\Controller\AppController;', $this->generatedFile);
         $this->assertFileContains('class BakeArticlesController extends', $this->generatedFile);
     }
 
@@ -220,7 +219,6 @@ class ControllerCommandTest extends TestCase
         $this->exec('bake controller --connection test --no-test --prefix admin/management BakeArticles');
 
         $this->assertFileContains('namespace Bake\Test\App\Controller\Admin\Management;', $this->generatedFile);
-        $this->assertFileContains('use Bake\Test\App\Controller\AppController;', $this->generatedFile);
         $this->assertFileContains('class BakeArticlesController extends', $this->generatedFile);
     }
 

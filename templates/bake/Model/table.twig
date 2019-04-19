@@ -15,6 +15,7 @@
 #}
 {% set annotations = DocBlock.buildTableAnnotations(associations, associationInfo, behaviors, entity, namespace) %}
 <?php
+declare(strict_types=1);
 namespace {{ namespace }}\Model\Table;
 
 {% set uses = ['use Cake\\ORM\\Query;', 'use Cake\\ORM\\RulesChecker;', 'use Cake\\ORM\\Table;', 'use Cake\\Validation\\Validator;'] %}

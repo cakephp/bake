@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Bake\Test\App\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
@@ -28,14 +29,14 @@ class UsersFixture extends TestFixture
                 'username' => 'mariano',
                 'password' => '$2a$10$u05j8FjsvLBNdfhBhc21LOuVMpzpabVXQ9OpC2wO3pSO0q6t7HHMO',
                 'created' => '2007-03-17 01:16:23',
-                'updated' => '2007-03-17 01:18:31'
+                'updated' => '2007-03-17 01:18:31',
             ],
             [
                 'id' => 2,
                 'username' => 'nate',
                 'password' => '$2a$10$u05j8FjsvLBNdfhBhc21LOuVMpzpabVXQ9OpC2wO3pSO0q6t7HHMO',
                 'created' => '2008-03-17 01:18:23',
-                'updated' => '2008-03-17 01:20:31'
+                'updated' => '2008-03-17 01:20:31',
             ],
         ];
         parent::init();

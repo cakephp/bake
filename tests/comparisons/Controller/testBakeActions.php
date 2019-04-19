@@ -1,7 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Bake\Test\App\Controller;
-
-use Bake\Test\App\Controller\AppController;
 
 /**
  * BakeArticles Controller
@@ -36,7 +35,7 @@ class BakeArticlesController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['BakeUsers']
+            'contain' => ['BakeUsers'],
         ];
         $bakeArticles = $this->paginate($this->BakeArticles);
 
@@ -53,7 +52,7 @@ class BakeArticlesController extends AppController
     public function view($id = null)
     {
         $bakeArticle = $this->BakeArticles->get($id, [
-            'contain' => ['BakeUsers', 'BakeTags', 'BakeComments']
+            'contain' => ['BakeUsers', 'BakeTags', 'BakeComments'],
         ]);
 
         $this->set('bakeArticle', $bakeArticle);
@@ -91,7 +90,7 @@ class BakeArticlesController extends AppController
     public function edit($id = null)
     {
         $bakeArticle = $this->BakeArticles->get($id, [
-            'contain' => ['BakeTags']
+            'contain' => ['BakeTags'],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());

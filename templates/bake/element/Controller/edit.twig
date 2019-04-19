@@ -26,7 +26,7 @@
     public function edit($id = null)
     {
         ${{ singularName }} = $this->{{ currentModelName }}->get($id, [
-            'contain' => [{{ Bake.stringifyList(belongsToMany, {'indent': false})|raw }}]
+            'contain' => [{{ Bake.stringifyList(belongsToMany, {'indent': false})|raw }}],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             ${{ singularName }} = $this->{{ currentModelName }}->patchEntity(${{ singularName }}, $this->request->getData());
