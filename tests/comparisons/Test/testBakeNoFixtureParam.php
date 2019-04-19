@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Bake\Test\App\Test\TestCase\Model\Table;
 
 use Bake\Test\App\Model\Table\AuthorsTable;

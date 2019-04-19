@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace BakeTest\Model\Table;
 
 use Cake\ORM\Query;

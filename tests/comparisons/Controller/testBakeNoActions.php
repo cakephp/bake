@@ -1,7 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Bake\Test\App\Controller;
-
-use Bake\Test\App\Controller\AppController;
 
 /**
  * BakeArticles Controller

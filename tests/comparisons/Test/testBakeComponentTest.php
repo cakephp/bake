@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Bake\Test\App\Test\TestCase\Controller\Component;
 
 use Bake\Test\App\Controller\Component\AppleComponent;
