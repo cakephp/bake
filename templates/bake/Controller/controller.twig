@@ -21,6 +21,9 @@
 declare(strict_types=1);
 namespace {{ namespace }}\Controller{{ prefix }};
 
+{% if prefix %}
+use {{ namespace }}\Controller\AppController;
+{% endif %}
 /**
  * {{ name }} Controller
  *
