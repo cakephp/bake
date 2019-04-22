@@ -852,7 +852,7 @@ class ModelTaskTest extends TestCase
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
             ],
-           'bake_user_id' => [
+            'bake_user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'allowEmpty' => [
