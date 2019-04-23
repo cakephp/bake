@@ -976,18 +976,15 @@ class ModelTaskTest extends TestCase
             ],
             'rating' => [
                 'numeric' => ['rule' => 'numeric', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
             ],
             'score' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']]
             ],
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -1047,9 +1044,9 @@ class ModelTaskTest extends TestCase
             'dateTime' => ['rule' => 'dateTime', 'args' => []],
             'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             'allowEmpty' => [
-                    'rule' => 'allowEmptyDateTime',
-                    'args' => ['false'],
-                ],
+                'rule' => 'allowEmptyDateTime',
+                'args' => ['false'],
+            ],
         ];
         $this->assertEquals($expected, $result['release_date']);
     }
@@ -1237,7 +1234,6 @@ class ModelTaskTest extends TestCase
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -1246,12 +1242,10 @@ class ModelTaskTest extends TestCase
             'rating' => [
                 'numeric' => ['rule' => 'numeric', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'score' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
                 'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['false']],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ]
         ];
         $this->assertEquals($expected, $result);
