@@ -177,6 +177,7 @@ class DocBlockHelper extends Helper
             case 'string':
             case 'text':
             case 'uuid':
+            case 'decimal':
                 return 'string';
 
             case 'integer':
@@ -186,7 +187,6 @@ class DocBlockHelper extends Helper
                 return 'int';
 
             case 'float':
-            case 'decimal':
                 return 'float';
 
             case 'boolean':
