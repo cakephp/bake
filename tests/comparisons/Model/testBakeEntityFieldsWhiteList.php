@@ -11,7 +11,7 @@ use Cake\ORM\Entity;
  * @property int $user_id
  * @property string $title
  * @property string|null $body
- * @property float $effort
+ * @property string $effort
  * @property bool $completed
  * @property int $todo_task_count
  * @property \Cake\I18n\FrozenTime|null $created
