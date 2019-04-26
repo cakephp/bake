@@ -81,17 +81,14 @@ class ItemsTable extends Table
 
         $validator
             ->decimal('effort')
-            ->requirePresence('effort', 'create')
             ->notEmptyString('effort');
 
         $validator
             ->boolean('completed')
-            ->requirePresence('completed', 'create')
             ->notEmptyString('completed');
 
         $validator
             ->integer('todo_task_count')
-            ->requirePresence('todo_task_count', 'create')
             ->notEmptyString('todo_task_count');
 
         return $validator;

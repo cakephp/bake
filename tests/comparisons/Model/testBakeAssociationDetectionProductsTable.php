@@ -67,7 +67,6 @@ class ProductsTable extends Table
         $validator
             ->scalar('name')
             ->maxLength('name', 100)
-            ->requirePresence('name', 'create')
             ->notEmptyString('name');
 
         return $validator;

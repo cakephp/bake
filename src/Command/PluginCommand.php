@@ -115,7 +115,7 @@ class PluginCommand extends BakeCommand
         $this->_generateFiles($plugin, $this->path, $args, $io);
 
         $this->_modifyAutoloader($plugin, $this->path, $args, $io);
-        $this->_modifyApplication($plugin);
+        $this->_modifyApplication($plugin, $io);
 
         $io->hr();
         $io->out(sprintf('<success>Created:</success> %s in %s', $plugin, $this->path . $plugin), 2);
@@ -130,12 +130,12 @@ class PluginCommand extends BakeCommand
      * Modify the application class
      *
      * @param string $plugin Name of plugin the plugin.
+     * @param \Bake\Command\Cake\Console\ConsoleIo $io ConsoleIo
      * @return void
      */
-    protected function _modifyApplication(string $plugin): void
+    protected function _modifyApplication(string $plugin, ConsoleIo $io): void
     {
-        $io = new ConsoleIo();
-        $pluginShell = new PluginShell();
+        $pluginShell = new PluginShell($io);
         $pluginShell->initialize();
         $pluginShell->runCommand(['load', $plugin], true);
     }

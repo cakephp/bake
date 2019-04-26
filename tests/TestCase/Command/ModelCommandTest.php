@@ -877,20 +877,14 @@ class ModelCommandTest extends TestCase
             ],
             'effort' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'completed' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'requirePresence' => [
-                    'rule' => 'requirePresence',
-                    'args' => ["'create'" ],
-                ],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'todo_task_count' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'id' => [
@@ -934,13 +928,11 @@ class ModelCommandTest extends TestCase
             ],
             'effort' => [
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'decimal' => ['rule' => 'decimal', 'args' => []],
             ],
             'completed' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'uid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -1110,18 +1102,15 @@ class ModelCommandTest extends TestCase
             ],
             'effort' => [
                 'decimal' => ['rule' => 'decimal', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'completed' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'" ]],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'todo_task_count' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
