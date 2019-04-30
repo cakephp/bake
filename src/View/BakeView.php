@@ -89,12 +89,12 @@ class BakeView extends TwigView
      *
      * View can also be a template string, rather than the name of a view file
      *
-     * @param string|false|null $view Name of view file to use, or a template string to render
+     * @param string|null $view Name of view file to use, or a template string to render
      * @param string|false|null $layout Layout to use. Not used, for consistency with other views only
      * @return string Rendered content.
      * @throws \Cake\Core\Exception\Exception If there is an error in the view.
      */
-    public function render($view = null, $layout = null): string
+    public function render(?string $view = null, $layout = null): string
     {
         $viewFileName = $this->_getTemplateFileName($view);
         $templateEventName = str_replace(
