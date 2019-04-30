@@ -130,7 +130,7 @@ class PluginCommand extends BakeCommand
      * Modify the application class
      *
      * @param string $plugin Name of plugin the plugin.
-     * @param \Bake\Command\Cake\Console\ConsoleIo $io ConsoleIo
+     * @param \Cake\Console\ConsoleIo $io ConsoleIo
      * @return void
      */
     protected function _modifyApplication(string $plugin, ConsoleIo $io): void
