@@ -96,7 +96,7 @@ class BakeView extends TwigView
      */
     public function render($view = null, $layout = null): string
     {
-        $viewFileName = $this->_getViewFileName($view);
+        $viewFileName = $this->_getTemplateFileName($view);
         $templateEventName = str_replace(
             ['.twig', DS],
             ['', '.'],
