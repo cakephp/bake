@@ -29,7 +29,7 @@ class SimpleBakeCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Simple' . DS;
@@ -141,8 +141,8 @@ class SimpleBakeCommandTest extends TestCase
     public function testImplementations($class)
     {
         $task = new $class();
-        $this->assertInternalType('string', $task->name());
-        $this->assertInternalType('string', $task->fileName('Example'));
-        $this->assertInternalType('string', $task->template());
+        $this->assertIsString($task->name());
+        $this->assertIsString($task->fileName('Example'));
+        $this->assertIsString($task->template());
     }
 }

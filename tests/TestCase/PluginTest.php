@@ -25,7 +25,7 @@ use Cake\Routing\RouteCollection;
  */
 class PluginTest extends TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->removePlugins(['BakeTest']);

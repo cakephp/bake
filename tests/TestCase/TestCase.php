@@ -35,7 +35,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected $generatedFiles = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +43,7 @@ abstract class TestCase extends BaseTestCase
         $this->loadPlugins(['WyriHaximus/TwigView']);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -106,7 +106,7 @@ abstract class TestCase extends BaseTestCase
         $this->assertFileExists($path, 'Cannot test contents, file does not exist.');
 
         $contents = file_get_contents($path);
-        $this->assertContains($expected, $contents, $message);
+        $this->assertStringContainsString($expected, $contents, $message);
     }
 
     /**
@@ -122,6 +122,6 @@ abstract class TestCase extends BaseTestCase
         $this->assertFileExists($path, 'Cannot test contents, file does not exist.');
 
         $contents = file_get_contents($path);
-        $this->assertNotContains($expected, $contents, $message);
+        $this->assertStringNotContainsString($expected, $contents, $message);
     }
 }

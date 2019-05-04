@@ -25,7 +25,7 @@ use Cake\Core\Plugin;
 class TemplateRendererTest extends TestCase
 {
     /**
-     * @var \Bake\Utility\TemplateRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Bake\Utility\TemplateRenderer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $renderer;
 
@@ -34,7 +34,7 @@ class TemplateRendererTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'TemplateRenderer' . DS;
@@ -46,7 +46,7 @@ class TemplateRendererTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->renderer);
