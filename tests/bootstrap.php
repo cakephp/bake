@@ -45,6 +45,9 @@ define('CONFIG', APP);
 define('TMP', sys_get_temp_dir() . DS);
 define('CACHE', TMP . 'cache' . DS);
 
+//used by Cake\Command\HelpCommand
+define('CORE_PATH', $root . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS);
+
 Configure::write('debug', true);
 Configure::write('App', [
     'debug' => true,
