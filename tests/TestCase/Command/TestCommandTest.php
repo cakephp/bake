@@ -50,7 +50,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->setAppNamespace('Bake\Test\App');
@@ -58,7 +58,7 @@ class TestCommandTest extends TestCase
         $this->useCommandRunner();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         TableRegistry::getTableLocator()->clear();

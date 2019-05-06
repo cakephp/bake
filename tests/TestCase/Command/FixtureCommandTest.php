@@ -47,7 +47,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -84,7 +84,7 @@ class FixtureCommandTest extends TestCase
         $this->exec('bake fixture --connection test --schema Article');
         $this->assertExitCode(Shell::CODE_SUCCESS);
 
-        $this->assertContains("'connection' => 'test'", file_get_contents($this->generatedFile));
+        $this->assertStringContainsString("'connection' => 'test'", file_get_contents($this->generatedFile));
     }
 
     /**
@@ -211,16 +211,16 @@ class FixtureCommandTest extends TestCase
 
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
-        $this->assertContains("'float_field' => 1", $result);
-        $this->assertContains("'decimal_field' => 1.5", $result);
-        $this->assertContains("'huge_int' => 1", $result);
-        $this->assertContains("'small_int' => 1", $result);
-        $this->assertContains("'tiny_int' => 1", $result);
-        $this->assertContains("'bool' => 1", $result);
-        $this->assertContains("_constraints", $result);
-        $this->assertContains("'primary' => ['type' => 'primary'", $result);
-        $this->assertContains("'columns' => ['id']", $result);
-        $this->assertContains("'uuid' => ['type' => 'uuid'", $result);
+        $this->assertStringContainsString("'float_field' => 1", $result);
+        $this->assertStringContainsString("'decimal_field' => 1.5", $result);
+        $this->assertStringContainsString("'huge_int' => 1", $result);
+        $this->assertStringContainsString("'small_int' => 1", $result);
+        $this->assertStringContainsString("'tiny_int' => 1", $result);
+        $this->assertStringContainsString("'bool' => 1", $result);
+        $this->assertStringContainsString("_constraints", $result);
+        $this->assertStringContainsString("'primary' => ['type' => 'primary'", $result);
+        $this->assertStringContainsString("'columns' => ['id']", $result);
+        $this->assertStringContainsString("'uuid' => ['type' => 'uuid'", $result);
         $this->assertRegExp("/(\s+)('uuid' => ')([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})(')/", $result);
     }
 

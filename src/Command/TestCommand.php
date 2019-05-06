@@ -475,7 +475,7 @@ class TestCommand extends BakeCommand
      */
     protected function _processController(Controller $subject): void
     {
-        $models = [$subject->modelClass];
+        $models = [$subject->loadModel()->getAlias()];
         foreach ($models as $model) {
             [, $model] = pluginSplit($model);
             $this->_processModel($subject->{$model});

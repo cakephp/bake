@@ -61,7 +61,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
@@ -76,7 +76,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         TableRegistry::getTableLocator()->clear();
@@ -1500,7 +1500,7 @@ class ModelCommandTest extends TestCase
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
-        $this->assertContains('CounterCache', $result);
+        $this->assertStringContainsString('CounterCache', $result);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
