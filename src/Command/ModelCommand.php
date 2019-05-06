@@ -261,7 +261,7 @@ class ModelCommand extends BakeCommand
         $appNamespace = Configure::read('App.namespace');
 
         foreach ($table->associations() as $association) {
-            /* @var $association \Cake\ORM\Association */
+            /** @var \Cake\ORM\Association $association */
 
             $tableClass = get_class($association->getTarget());
             if ($tableClass === 'Cake\ORM\Table') {
