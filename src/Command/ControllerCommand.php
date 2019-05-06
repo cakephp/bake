@@ -263,8 +263,6 @@ class ControllerCommand extends BakeCommand
         ])->addOption('no-actions', [
             'boolean' => true,
             'help' => 'Do not generate basic CRUD action methods.',
-        ])->addSubcommand('all', [
-            'help' => 'Bake all controllers with CRUD methods.',
         ]);
 
         return $parser;
