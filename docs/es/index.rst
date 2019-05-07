@@ -24,14 +24,7 @@ Bake está incluido como un plugin que puedes instalar con Composer::
     composer require --dev cakephp/bake:~1.0
 
 La instrucción anterior instalará bake como una dependencia de desarrollo. Esto
-significa que no será instalado cuando hagas despliegues en producción. Las
-siguientes secciones hablan de bake con más detalle:
-
-.. toctree::
-    :maxdepth: 1
-
-    /usage
-    /development
+significa que no será instalado cuando hagas despliegues en producción.
 
 .. meta::
     :title lang=es: Consola Bake

@@ -23,14 +23,6 @@ Twig テンプレートを使用する場合、 ``WyriHaximus/TwigView`` プラ�
 読み込んでいることを確認してください。それを完全に省略して、
 Bake プラグインにこのプラグインを読み込ませることもできます。
 
-bake の詳細を、下の各項目で説明します。
-
-.. toctree::
-    :maxdepth: 1
-
-    /usage
-    /development
-
 .. meta::
     :title lang=ja: Bakeコンソール
     :keywords lang=ja: コマンドライン,CLI,development,bake view, bake template syntax,erb tags,asp tags,percent tags

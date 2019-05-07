@@ -18,14 +18,7 @@ Composer::
     composer require --dev cakephp/bake:~1.0
 
 Isto irá instalar o bake como uma dependência de desenvolvimento, sendo assim,
-não instalado quando em um ambiente de produção. As seções a seguir cobrem o uso
-do bake com mais detalhes:
-
-.. toctree::
-    :maxdepth: 1
-
-    /usage
-    /development
+não instalado quando em um ambiente de produção.
 
 .. meta::
     :title lang=pt: Bake Console

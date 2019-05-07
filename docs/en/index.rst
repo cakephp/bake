@@ -23,15 +23,6 @@ When using the Twig templates make sure you are loading the
 ``WyriHaximus/TwigView`` plugin with its bootstrap.  You can also omit it
 completely which then makes Bake plugin load this plugin on demand.
 
-The following sections
-cover bake in more detail:
-
-.. toctree::
-    :maxdepth: 1
-
-    /usage
-    /development
-
 .. meta::
     :title lang=en: Bake Console
     :keywords lang=en: command line interface,development,bake view, bake template syntax,erb tags,asp tags,percent tags
