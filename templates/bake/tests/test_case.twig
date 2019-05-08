@@ -31,6 +31,7 @@
 {%- set uses = uses|sort %}
 <?php
 declare(strict_types=1);
+
 namespace {{ baseNamespace }}\Test\TestCase\{{ subNamespace }};
 
 {% for dependency in uses %}

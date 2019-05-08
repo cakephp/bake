@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Bake\Test\App\Test\TestCase\Shell\Task;
 
 use Bake\Test\App\Shell\Task\ArticlesTask;

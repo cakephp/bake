@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Bake\Test\App\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;

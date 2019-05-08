@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Bake\Test\App\Test\TestCase\Shell;
 
 use Bake\Test\App\Shell\ArticlesShell;
