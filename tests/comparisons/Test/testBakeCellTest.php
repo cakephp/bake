@@ -14,14 +14,14 @@ class ArticlesCellTest extends TestCase
     /**
      * Request mock
      *
-     * @var \Cake\Http\ServerRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Cake\Http\ServerRequest|\PHPUnit\Framework\MockObject\MockObject
      */
     public $request;
 
     /**
      * Response mock
      *
-     * @var \Cake\Http\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Cake\Http\Response|\PHPUnit\Framework\MockObject\MockObject
      */
     public $response;
 
