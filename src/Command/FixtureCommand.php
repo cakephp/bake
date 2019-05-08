@@ -84,8 +84,6 @@ class FixtureCommand extends BakeCommand
         ])->addOption('conditions', [
             'help' => 'The SQL snippet to use when importing records.',
             'default' => '1=1',
-        ])->addSubcommand('all', [
-            'help' => 'Bake all fixture files for tables in the chosen connection.',
         ]);
 
         return $parser;

@@ -78,7 +78,6 @@ class ControllerAllCommand extends BakeCommand
         $parser = $this->controllerCommand->buildOptionParser($parser);
         $parser
             ->setDescription('Bake all controller files with tests.')
-            ->removeSubcommand('all')
             ->setEpilog('');
 
         return $parser;

@@ -403,9 +403,6 @@ class TemplateCommand extends BakeCommand
         ])->addOption('index-columns', [
             'help' => 'Limit for the number of index columns',
             'default' => 0,
-        ])->addSubcommand('all', [
-            'help' => 'Bake all CRUD action views for all controllers.' .
-                'Requires models and controllers to exist.',
         ]);
 
         return $parser;

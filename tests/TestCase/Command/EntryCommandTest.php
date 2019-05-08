@@ -57,12 +57,11 @@ class EntryCommandTest extends TestCase
         $this->exec('bake --help');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
-        $this->assertOutputContains('Bake generates code');
-        $this->assertOutputContains('Subcommands:');
-        $this->assertOutputContains('controller');
-        $this->assertOutputContains('Generate controller files.');
+        $this->assertOutputContains('Available Commands');
+        $this->assertOutputContains('bake controller');
+        $this->assertOutputContains('bake controller all');
+        $this->assertOutputContains('bake command');
         $this->assertOutputContains('shell_helper');
-        $this->assertOutputContains('Generate shell helper files.');
     }
 
     /**

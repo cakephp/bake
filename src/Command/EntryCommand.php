@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Bake\Shell\Task\BakeTask;
+use Cake\Command\HelpCommand;
 use Cake\Console\Arguments;
 use Cake\Console\Command;
 use Cake\Console\CommandCollection;
@@ -39,6 +40,13 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
      * @var \Cake\Console\CommandCollection
      */
     protected $commands;
+
+    /**
+     * The HelpCommand to get help.
+     *
+     * @var \Cake\Command\HelpCommand
+     */
+    protected $help;
 
     /**
      * {@inheritDoc}
@@ -79,7 +87,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
 
         // This is the variance from Command::run()
         if (!$args->getArgumentAt(0) && $args->getOption('help')) {
-            $this->displayHelp($parser, $args, $io);
+            $this->executeCommand($this->help, [], $io);
 
             return static::CODE_SUCCESS;
         }
@@ -174,6 +182,8 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
+        $this->help = new HelpCommand();
+        $parser = $this->help->buildOptionParser($parser);
         $parser
             ->setDescription(
                 'Bake generates code for your application. Different types of classes can be generated' .
@@ -181,6 +191,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
                 ' to learn more about generating a controller.'
             )
             ->setEpilog('Older Shell based tasks will not be listed here, but can still be run.');
+        $commands = [];
         foreach ($this->commands as $command => $class) {
             if (substr($command, 0, 4) === 'bake') {
                 $parts = explode(' ', $command);
@@ -190,12 +201,12 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
                 if (count($parts) === 0) {
                     continue;
                 }
-                $type = str_replace('_', ' ', $parts[0]);
-                $parser->addSubcommand(implode($parts, ' '), [
-                    'help' => "Generate {$type} files.",
-                ]);
+                $commands[$command] = $class;
             }
         }
+
+        $CommandCollection = new CommandCollection($commands);
+        $this->help->setCommandCollection($CommandCollection);
 
         return $parser;
     }

@@ -56,7 +56,6 @@ class ModelAllCommand extends BakeCommand
         $parser = $this->modelCommand->buildOptionParser($parser);
         $parser
             ->setDescription('Bake all model files with associations and validation.')
-            ->removeSubcommand('all')
             ->setEpilog('');
 
         return $parser;
