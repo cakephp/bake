@@ -45,7 +45,7 @@ class BakeArticlesController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Bake Article id.
+     * @param int|string|null $id Bake Article id.
      * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -83,7 +83,7 @@ class BakeArticlesController extends AppController
     /**
      * Edit method
      *
-     * @param string|null $id Bake Article id.
+     * @param int|string|null $id Bake Article id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -109,7 +109,7 @@ class BakeArticlesController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Bake Article id.
+     * @param int|string|null $id Bake Article id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
