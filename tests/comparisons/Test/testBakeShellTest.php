@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Bake\Test\App\Test\TestCase\Shell;
 
 use Bake\Test\App\Shell\ArticlesShell;
@@ -16,7 +17,7 @@ class ArticlesShellTest extends TestCase
     /**
      * ConsoleIo mock
      *
-     * @var \Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Cake\Console\ConsoleIo|\PHPUnit\Framework\MockObject\MockObject
      */
     public $io;
 

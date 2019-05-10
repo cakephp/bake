@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Bake\Test\App\Test\TestCase\View\Helper;
 
 use Bake\Test\App\View\Helper\ExampleHelper;

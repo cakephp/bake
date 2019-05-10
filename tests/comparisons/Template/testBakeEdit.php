@@ -8,11 +8,10 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $author->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $author->id)]
-            )
-        ?></li>
+            __('Delete'),
+            ['action' => 'delete', $author->id],
+            ['confirm' => __('Are you sure you want to delete # {0}?', $author->id)]
+        ) ?></li>
         <li><?= $this->Html->link(__('List Authors'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('List Roles'), ['controller' => 'Roles', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Role'), ['controller' => 'Roles', 'action' => 'add']) ?></li>

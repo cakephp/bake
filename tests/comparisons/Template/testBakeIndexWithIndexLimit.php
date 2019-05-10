@@ -24,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($templateTaskComments as $templateTaskComment): ?>
+            <?php foreach ($templateTaskComments as $templateTaskComment) : ?>
             <tr>
                 <td><?= $this->Number->format($templateTaskComment->id) ?></td>
                 <td><?= $templateTaskComment->has('article') ? $this->Html->link($templateTaskComment->article->title, ['controller' => 'Articles', 'action' => 'view', $templateTaskComment->article->id]) : '' ?></td>

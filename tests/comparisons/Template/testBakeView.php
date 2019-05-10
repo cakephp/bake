@@ -65,7 +65,7 @@
     </div>
     <div class="related">
         <h4><?= __('Related Articles') ?></h4>
-        <?php if (!empty($author->articles)): ?>
+        <?php if (!empty($author->articles)) : ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th scope="col"><?= __('Id') ?></th>
@@ -75,7 +75,7 @@
                 <th scope="col"><?= __('Published') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
-            <?php foreach ($author->articles as $articles): ?>
+            <?php foreach ($author->articles as $articles) : ?>
             <tr>
                 <td><?= h($articles->id) ?></td>
                 <td><?= h($articles->author_id) ?></td>

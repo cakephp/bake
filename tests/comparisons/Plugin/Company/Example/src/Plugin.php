@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace Company\Example;
 
 use Cake\Core\BasePlugin;

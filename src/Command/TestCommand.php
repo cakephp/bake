@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -587,12 +588,12 @@ class TestCommand extends BakeCommand
             case 'Cell':
                 $properties[] = [
                     'description' => 'Request mock',
-                    'type' => '\Cake\Http\ServerRequest|\PHPUnit_Framework_MockObject_MockObject',
+                    'type' => '\Cake\Http\ServerRequest|\PHPUnit\Framework\MockObject\MockObject',
                     'name' => 'request',
                 ];
                 $properties[] = [
                     'description' => 'Response mock',
-                    'type' => '\Cake\Http\Response|\PHPUnit_Framework_MockObject_MockObject',
+                    'type' => '\Cake\Http\Response|\PHPUnit\Framework\MockObject\MockObject',
                     'name' => 'response',
                 ];
                 break;
@@ -601,7 +602,7 @@ class TestCommand extends BakeCommand
             case 'Task':
                 $properties[] = [
                     'description' => 'ConsoleIo mock',
-                    'type' => '\Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject',
+                    'type' => '\Cake\Console\ConsoleIo|\PHPUnit\Framework\MockObject\MockObject',
                     'name' => 'io',
                 ];
                 break;
