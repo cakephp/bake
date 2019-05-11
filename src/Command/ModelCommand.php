@@ -477,13 +477,13 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @return string
      */
-    public function getDisplayField(\Cake\ORM\Table $model, \Cake\Console\Arguments $args): string
+    public function getDisplayField(\Cake\ORM\Table $model, \Cake\Console\Arguments $args): ?string
     {
         if ($args->getOption('display-field')) {
             return $args->getOption('display-field');
         }
 
-        return (string)$model->getDisplayField();
+        return $model->getDisplayField();
     }
 
     /**
