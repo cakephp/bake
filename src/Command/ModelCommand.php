@@ -483,7 +483,7 @@ class ModelCommand extends BakeCommand
             return $args->getOption('display-field');
         }
 
-        return $model->getDisplayField();
+        return (string)$model->getDisplayField();
     }
 
     /**
