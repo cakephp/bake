@@ -18,6 +18,7 @@
         "source": "https://github.com/cakephp/bake"
     },
     "require": {
+        "php": ">=7.2",
         "cakephp/cakephp": "4.x-dev as 4.0.0",
         "cakephp/plugin-installer": "^1.0",
         "wyrihaximus/twig-view": "dev-master"
@@ -28,16 +29,16 @@
     },
     "autoload": {
         "psr-4": {
-            "Bake\\": "src"
+            "Bake\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "BakeTest\\": "tests/test_app/Plugin/BakeTest/src",
-            "Pastry\\PastryTest\\": "tests/test_app/Plugin/PastryTest/src",
-            "Bake\\Test\\": "tests",
-            "Bake\\Test\\App\\": "tests/test_app/App",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+            "BakeTest\\": "tests/test_app/Plugin/BakeTest/src/",
+            "Pastry\\PastryTest\\": "tests/test_app/Plugin/PastryTest/src/",
+            "Bake\\Test\\": "tests/",
+            "Bake\\Test\\App\\": "tests/test_app/App/",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests/"
         }
     },
     "scripts": {
