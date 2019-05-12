@@ -155,7 +155,7 @@ class ModelCommand extends BakeCommand
      * @param string $table Table name
      * @return \Cake\ORM\Table Table instance
      */
-    public function getTableObject(string $className, string $table): \Cake\ORM\Table
+    public function getTableObject(string $className, string $table): Table
     {
         if (!empty($this->plugin)) {
             $className = $this->plugin . '.' . $className;
@@ -180,7 +180,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io CLI io
      * @return array
      */
-    public function getAssociations(Table $table, \Cake\Console\Arguments $args, \Cake\Console\ConsoleIo $io): array
+    public function getAssociations(Table $table, Arguments $args, ConsoleIo $io): array
     {
         if ($args->getOption('no-associations')) {
             return [];
@@ -477,7 +477,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @return string
      */
-    public function getDisplayField(\Cake\ORM\Table $model, \Cake\Console\Arguments $args): string
+    public function getDisplayField(Table $model, Arguments $args): string
     {
         if ($args->getOption('display-field')) {
             return $args->getOption('display-field');
@@ -493,7 +493,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @return array The columns in the primary key
      */
-    public function getPrimaryKey(\Cake\ORM\Table $model, \Cake\Console\Arguments $args): array
+    public function getPrimaryKey(Table $model, Arguments $args): array
     {
         if ($args->getOption('primary-key')) {
             $fields = explode(',', $args->getOption('primary-key'));
@@ -584,7 +584,7 @@ class ModelCommand extends BakeCommand
      *   case the no-fields option is used, or `null` if none of the
      *   field options is used.
      */
-    public function getFields(\Cake\ORM\Table $table, \Cake\Console\Arguments $args)
+    public function getFields(Table $table, Arguments $args)
     {
         if ($args->getOption('no-fields')) {
             return false;
@@ -613,7 +613,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @return array The columns to make accessible
      */
-    public function getHiddenFields(\Cake\ORM\Table $model, \Cake\Console\Arguments $args): array
+    public function getHiddenFields(Table $model, Arguments $args): array
     {
         if ($args->getOption('no-hidden')) {
             return [];
@@ -638,7 +638,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @return array|false The validation rules.
      */
-    public function getValidation(\Cake\ORM\Table $model, array $associations, \Cake\Console\Arguments $args)
+    public function getValidation(Table $model, array $associations, Arguments $args)
     {
         if ($args->getOption('no-validation')) {
             return [];
@@ -818,7 +818,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @return array The rules to be applied.
      */
-    public function getRules(\Cake\ORM\Table $model, array $associations, \Cake\Console\Arguments $args): array
+    public function getRules(Table $model, array $associations, Arguments $args): array
     {
         if ($args->getOption('no-rules')) {
             return [];
