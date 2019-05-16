@@ -46,7 +46,7 @@ class BakeView extends TwigView
     /**
      * Templates extensions to search for.
      *
-     * @var array
+     * @var string[]
      */
     protected $extensions = [
         '.twig',

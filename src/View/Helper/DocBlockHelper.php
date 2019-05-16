@@ -170,7 +170,7 @@ class DocBlockHelper extends Helper
      * @see \Cake\Database\Type
      *
      * @param string $type The column type.
-     * @return null|string The DocBlock type, or `null` for unsupported column types.
+     * @return string|null The DocBlock type, or `null` for unsupported column types.
      */
     public function columnTypeToHintType(string $type): ?string
     {
@@ -219,7 +219,7 @@ class DocBlockHelper extends Helper
      * Renders a map of DocBlock property types as an array of
      * `@property` hints.
      *
-     * @param array $properties A key value pair where key is the name of a property and the value is the type.
+     * @param string[] $properties A key value pair where key is the name of a property and the value is the type.
      * @return array
      */
     public function propertyHints(array $properties): array
@@ -241,7 +241,7 @@ class DocBlockHelper extends Helper
      * @param array $behaviors Behaviors list.
      * @param string $entity Entity name.
      * @param string $namespace Namespace.
-     * @return array
+     * @return string[]
      */
     public function buildTableAnnotations(
         array $associations,

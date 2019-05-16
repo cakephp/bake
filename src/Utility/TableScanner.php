@@ -35,7 +35,7 @@ class TableScanner
     protected $connection;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $ignore;
 
@@ -43,7 +43,7 @@ class TableScanner
      * Constructor
      *
      * @param \Cake\Database\Connection $connection The connection name in ConnectionManager
-     * @param array|null $ignore List of tables to ignore. If null, the default ignore
+     * @param string[]|null $ignore List of tables to ignore. If null, the default ignore
      *   list will be used.
      */
     public function __construct(Connection $connection, ?array $ignore = null)
@@ -58,7 +58,7 @@ class TableScanner
     /**
      * Get all tables in the connection without applying ignores.
      *
-     * @return array
+     * @return string[]
      */
     public function listAll(): array
     {
@@ -75,7 +75,7 @@ class TableScanner
     /**
      * Get all tables in the connection that aren't ignored.
      *
-     * @return array
+     * @return string[]
      */
     public function listUnskipped(): array
     {

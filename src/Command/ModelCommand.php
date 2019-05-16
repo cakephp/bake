@@ -52,7 +52,7 @@ class ModelCommand extends BakeCommand
     /**
      * Holds tables found on connection.
      *
-     * @var array
+     * @var string[]
      */
     protected $_tables = [];
 
@@ -314,7 +314,7 @@ class ModelCommand extends BakeCommand
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
-                if (!in_array(Inflector::tableize($tmpModelName), $this->_tables)) {
+                if (!in_array(Inflector::tableize($tmpModelName), $this->_tables, true)) {
                     $found = $this->findTableReferencedBy($schema, $fieldName);
                     if ($found) {
                         $tmpModelName = Inflector::camelize($found);
@@ -1027,7 +1027,7 @@ class ModelCommand extends BakeCommand
     /**
      * Outputs the a list of possible models or controllers from database
      *
-     * @return array
+     * @return string[]
      */
     public function listAll(): array
     {
@@ -1045,7 +1045,7 @@ class ModelCommand extends BakeCommand
     /**
      * Outputs the a list of unskipped models or controllers from database
      *
-     * @return array
+     * @return string[]
      */
     public function listUnskipped(): array
     {

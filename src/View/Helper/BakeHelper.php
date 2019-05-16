@@ -130,7 +130,7 @@ class BakeHelper extends Helper
      *
      * @param \Cake\ORM\Table $table object to find associations on
      * @param string $assoc association to extract
-     * @return array
+     * @return string[]
      */
     public function aliasExtractor(Table $table, string $assoc): array
     {
@@ -356,9 +356,9 @@ class BakeHelper extends Helper
     /**
      * Get field accessibility data.
      *
-     * @param mixed $fields Fields list.
-     * @param mixed $primaryKey Primary key.
-     * @return array
+     * @param string[]|false|null $fields Fields list.
+     * @param string[]|null $primaryKey Primary key.
+     * @return string[]
      */
     public function getFieldAccessibility($fields = null, $primaryKey = null): array
     {
@@ -402,8 +402,8 @@ class BakeHelper extends Helper
      * To be mocked elsewhere...
      *
      * @param \Cake\ORM\Table $table Table
-     * @param array $aliases array of aliases
-     * @return array
+     * @param string[] $aliases array of aliases
+     * @return string[]
      */
     protected function _filterHasManyAssociationsAliases(Table $table, array $aliases): array
     {
