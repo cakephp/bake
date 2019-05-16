@@ -171,7 +171,7 @@ class FixtureCommand extends BakeCommand
         } else {
             $recordCount = 1;
             if ($args->hasOption('count')) {
-                $recordCount = $args->getOption('count');
+                $recordCount = (int)$args->getOption('count');
             }
             $records = $this->_makeRecordString($this->_generateRecords($data, $recordCount));
         }

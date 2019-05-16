@@ -41,7 +41,7 @@ class TestCommand extends BakeCommand
     /**
      * class types that methods can be generated for
      *
-     * @var array
+     * @var string[]
      */
     public $classTypes = [
         'Entity' => 'Model\Entity',
@@ -62,7 +62,7 @@ class TestCommand extends BakeCommand
     /**
      * class types that methods can be generated for
      *
-     * @var array
+     * @var string[]
      */
     public $classSuffixes = [
         'Entity' => '',
@@ -83,7 +83,7 @@ class TestCommand extends BakeCommand
     /**
      * Internal list of fixtures that have been added so far.
      *
-     * @var array
+     * @var string[]
      */
     protected $_fixtures = [];
 
@@ -391,7 +391,7 @@ class TestCommand extends BakeCommand
     public function mapType(string $type): string
     {
         if (empty($this->classTypes[$type])) {
-            throw new Exception('Invalid object type.');
+            throw new Exception('Invalid object type: ' . $type);
         }
 
         return $this->classTypes[$type];

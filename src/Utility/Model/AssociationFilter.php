@@ -30,8 +30,8 @@ class AssociationFilter
      * belongsToMany associations provided
      *
      * @param \Cake\ORM\Table $table Table
-     * @param array $aliases array of aliases
-     * @return array $aliases
+     * @param string[] $aliases array of aliases
+     * @return string[] $aliases
      */
     public function filterHasManyAssociationsAliases(Table $table, array $aliases): array
     {

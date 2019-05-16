@@ -67,7 +67,7 @@ class TemplateCommand extends BakeCommand
     /**
      * Actions to use for scaffolding
      *
-     * @var array
+     * @var string[]
      */
     public $scaffoldActions = ['index', 'view', 'add', 'edit'];
 
@@ -208,7 +208,7 @@ class TemplateCommand extends BakeCommand
     /**
      * Get a list of actions that can / should have view templates baked for them.
      *
-     * @return array Array of action names that should be baked
+     * @return string[] Array of action names that should be baked
      */
     protected function _methodsToBake(): array
     {
@@ -418,7 +418,7 @@ class TemplateCommand extends BakeCommand
      */
     protected function _filteredAssociations(Table $model): array
     {
-        if (is_null($this->_associationFilter)) {
+        if ($this->_associationFilter === null) {
             $this->_associationFilter = new AssociationFilter();
         }
 
