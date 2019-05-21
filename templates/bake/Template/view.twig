@@ -110,7 +110,7 @@
 {% for field in details.fields %}
                         <th><?= __('{{ field|humanize }}') ?></th>
 {% endfor %}
-                        <th><?= __('Actions') ?></th>
+                        <th class="actions"><?= __('Actions') ?></th>
                     </tr>
                     <?php foreach (${{ singularVar }}->{{ details.property }} as ${{ otherSingularVar }}) : ?>
                     <tr>
@@ -130,3 +130,5 @@
             </div>
 {% endfor %}
         </div>
+    </div>
+</div>
