@@ -30,7 +30,7 @@
 {% for field in fields %}
                 <th><?= $this->Paginator->sort('{{ field }}') ?></th>
 {% endfor %}
-                <th><?= __('Actions') ?></th>
+                <th class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
