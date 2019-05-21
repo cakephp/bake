@@ -14,66 +14,59 @@
  */
 #}
 {% set fields = Bake.filterFields(fields, schema, modelObject) %}
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
+<div class="row">
+    <aside class="column">
+        <div class="side-nav">
+            <h4 class="heading"><?= __('Actions') ?></h4>
 {% if 'add' not in action %}
-        <li><?= $this->Form->postLink(
-            __('Delete'),
-            ['action' => 'delete', ${{ singularVar }}->{{ primaryKey[0] }}],
-            ['confirm' => __('Are you sure you want to delete # {0}?', ${{ singularVar }}->{{ primaryKey[0] }})]
-        ) ?></li>
+            <?= $this->Form->postLink(
+                __('Delete'),
+                ['action' => 'delete', ${{ singularVar }}->{{ primaryKey[0] }}],
+                ['confirm' => __('Are you sure you want to delete # {0}?', ${{ singularVar }}->{{ primaryKey[0] }}, 'class' => 'side-nav-item')]
+            ) ?>
 {% endif %}
-        <li><?= $this->Html->link(__('List {{ pluralHumanName }}'), ['action' => 'index']) ?></li>
-        {{- "\n" }}
+            <?= $this->Html->link(__('List {{ pluralHumanName }}'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+            {{- "\n" }}
 {%- set done = [] %}
-{% for type, data in associations %}
-    {%- for alias, details in data %}
-        {%- if details.controller is not same as(_view.name) and details.controller not in done %}
-        <li><?= $this->Html->link(__('List {{ alias|underscore|humanize }}'), ['controller' => '{{ details.controller }}', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New {{ alias|singularize|underscore|humanize }}'), ['controller' => '{{ details.controller }}', 'action' => 'add']) ?></li>
-        {{- "\n" }}
-        {%- set done = done|merge([details.controller]) %}
-        {%- endif %}
-    {%- endfor %}
-{% endfor %}
-    </ul>
-</nav>
-<div class="{{ pluralVar }} form large-9 medium-8 columns content">
-    <?= $this->Form->create(${{ singularVar }}) ?>
-    <fieldset>
-        <legend><?= __('{{ action|humanize }} {{ singularHumanName }}') ?></legend>
-        <?php
+        </div>
+    </aside>
+    <div class="column-responsive column-80">
+        <div class="{{ pluralVar }} form content">
+        <?= $this->Form->create(${{ singularVar }}) ?>
+        <fieldset>
+            <legend><?= __('{{ action|humanize }} {{ singularHumanName }}') ?></legend>
+            <?php
 {% for field in fields if field not in primaryKey %}
-    {%- if keyFields[field] %}
-        {%- set fieldData = Bake.columnData(field, schema) %}
-        {%- if fieldData.null %}
-            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'empty' => true]);
-            {{- "\n" }}
-        {%- else %}
-            echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]);
-            {{- "\n" }}
-        {%- endif %}
-    {%- elseif field not in ['created', 'modified', 'updated'] %}
-        {%- set fieldData = Bake.columnData(field, schema) %}
-        {%- if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
-            echo $this->Form->control('{{ field }}', ['empty' => true]);
-            {{- "\n" }}
-        {%- else %}
-            echo $this->Form->control('{{ field }}');
-    {{- "\n" }}
-        {%- endif %}
-    {%- endif %}
+{%- if keyFields[field] %}
+{%- set fieldData = Bake.columnData(field, schema) %}
+{%- if fieldData.null %}
+                echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'empty' => true]);
+                {{- "\n" }}
+{%- else %}
+                echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]);
+                {{- "\n" }}
+{%- endif %}
+{%- elseif field not in ['created', 'modified', 'updated'] %}
+{%- set fieldData = Bake.columnData(field, schema) %}
+{%- if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
+                echo $this->Form->control('{{ field }}', ['empty' => true]);
+                {{- "\n" }}
+{%- else %}
+                echo $this->Form->control('{{ field }}');
+        {{- "\n" }}
+{%- endif %}
+{%- endif %}
 {%- endfor %}
 
 {%- if associations.BelongsToMany %}
-    {%- for assocName, assocData in associations.BelongsToMany %}
-            echo $this->Form->control('{{ assocData.property }}._ids', ['options' => ${{ assocData.variable }}]);
-    {{- "\n" }}
-    {%- endfor %}
+{%- for assocName, assocData in associations.BelongsToMany %}
+                echo $this->Form->control('{{ assocData.property }}._ids', ['options' => ${{ assocData.variable }}]);
+                {{- "\n" }}
+{%- endfor %}
 {% endif %}
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
+            ?>
+        </fieldset>
+        <?= $this->Form->button(__('Submit')) ?>
+        <?= $this->Form->end() ?>
+    </div>
 </div>
