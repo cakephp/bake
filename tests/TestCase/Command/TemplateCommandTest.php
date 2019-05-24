@@ -571,7 +571,7 @@ class TemplateCommandTest extends TestCase
         $this->assertFileExists($this->generatedFile);
 
         $this->assertFileContains('Related Category Threads', $this->generatedFile);
-        $this->assertFileContains('Parent Category Threads', $this->generatedFile);
+        $this->assertFileContains('Parent Category Thread', $this->generatedFile);
     }
 
     /**
