@@ -270,13 +270,18 @@ class TemplateCommand extends BakeCommand
 
         $namespace = Configure::read('App.namespace');
 
-        $primaryKey = (array)$modelObject->getPrimaryKey();
-        $displayField = $modelObject->getDisplayField();
-        $singularVar = $this->_singularName($this->controllerName);
-        $singularHumanName = $this->_singularHumanName($this->controllerName);
-        $schema = $modelObject->getSchema();
-        $fields = $schema->columns();
-        $modelClass = $this->modelName;
+        try {
+            $primaryKey = (array)$modelObject->getPrimaryKey();
+            $displayField = $modelObject->getDisplayField();
+            $singularVar = $this->_singularName($this->controllerName);
+            $singularHumanName = $this->_singularHumanName($this->controllerName);
+            $schema = $modelObject->getSchema();
+            $fields = $schema->columns();
+            $modelClass = $this->modelName;
+        } catch (\Exception $exception) {
+            echo $exception->getMessage() . "\n";
+            exit;
+        }
 
         [, $entityClass] = namespaceSplit($this->_entityName($this->modelName));
         $entityClass = sprintf('%s\Model\Entity\%s', $namespace, $entityClass);
