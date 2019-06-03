@@ -365,7 +365,7 @@ class TemplateCommand extends BakeCommand
     public function getContent(Arguments $args, ConsoleIo $io, string $action, ?array $vars = null)
     {
         if (!$vars) {
-            $vars = $this->_loadController();
+            $vars = $this->_loadController($io);
         }
 
         if (empty($vars['primaryKey'])) {
