@@ -133,7 +133,7 @@ class TemplateCommand extends BakeCommand
             return static::CODE_SUCCESS;
         }
 
-        $vars = $this->_loadController();
+        $vars = $this->_loadController($io);
         $methods = $this->_methodsToBake();
 
         foreach ($methods as $method) {
@@ -256,9 +256,10 @@ class TemplateCommand extends BakeCommand
      * - 'keyFields'
      * - 'schema'
      *
+     * @param \Cake\Console\ConsoleIo Instance of the ConsoleIO
      * @return array Returns variables to be made available to a view template
      */
-    protected function _loadController(): array
+    protected function _loadController(ConsoleIo $io): array
     {
         if (TableRegistry::getTableLocator()->exists($this->modelName)) {
             $modelObject = TableRegistry::getTableLocator()->get($this->modelName);
@@ -279,8 +280,8 @@ class TemplateCommand extends BakeCommand
             $fields = $schema->columns();
             $modelClass = $this->modelName;
         } catch (\Exception $exception) {
-            echo $exception->getMessage() . "\n";
-            exit;
+            $io->error($exception->getMessage());
+            $this->abort();
         }
 
         [, $entityClass] = namespaceSplit($this->_entityName($this->modelName));
