@@ -256,7 +256,7 @@ class TemplateCommand extends BakeCommand
      * - 'keyFields'
      * - 'schema'
      *
-     * @param \Cake\Console\ConsoleIo Instance of the ConsoleIO
+     * @param \Cake\Console\ConsoleIo $io Instance of the ConsoleIO
      * @return array Returns variables to be made available to a view template
      */
     protected function _loadController(ConsoleIo $io): array
