@@ -133,7 +133,7 @@ class TemplateCommand extends BakeCommand
             return static::CODE_SUCCESS;
         }
 
-        $vars = $this->_loadController();
+        $vars = $this->_loadController($io);
         $methods = $this->_methodsToBake();
 
         foreach ($methods as $method) {
@@ -256,9 +256,10 @@ class TemplateCommand extends BakeCommand
      * - 'keyFields'
      * - 'schema'
      *
+     * @param \Cake\Console\ConsoleIo $io Instance of the ConsoleIO
      * @return array Returns variables to be made available to a view template
      */
-    protected function _loadController(): array
+    protected function _loadController(ConsoleIo $io): array
     {
         if (TableRegistry::getTableLocator()->exists($this->modelName)) {
             $modelObject = TableRegistry::getTableLocator()->get($this->modelName);
@@ -270,13 +271,18 @@ class TemplateCommand extends BakeCommand
 
         $namespace = Configure::read('App.namespace');
 
-        $primaryKey = (array)$modelObject->getPrimaryKey();
-        $displayField = $modelObject->getDisplayField();
-        $singularVar = $this->_singularName($this->controllerName);
-        $singularHumanName = $this->_singularHumanName($this->controllerName);
-        $schema = $modelObject->getSchema();
-        $fields = $schema->columns();
-        $modelClass = $this->modelName;
+        try {
+            $primaryKey = (array)$modelObject->getPrimaryKey();
+            $displayField = $modelObject->getDisplayField();
+            $singularVar = $this->_singularName($this->controllerName);
+            $singularHumanName = $this->_singularHumanName($this->controllerName);
+            $schema = $modelObject->getSchema();
+            $fields = $schema->columns();
+            $modelClass = $this->modelName;
+        } catch (\Exception $exception) {
+            $io->error($exception->getMessage());
+            $this->abort();
+        }
 
         [, $entityClass] = namespaceSplit($this->_entityName($this->modelName));
         $entityClass = sprintf('%s\Model\Entity\%s', $namespace, $entityClass);
@@ -359,7 +365,7 @@ class TemplateCommand extends BakeCommand
     public function getContent(Arguments $args, ConsoleIo $io, string $action, ?array $vars = null)
     {
         if (!$vars) {
-            $vars = $this->_loadController();
+            $vars = $this->_loadController($io);
         }
 
         if (empty($vars['primaryKey'])) {
