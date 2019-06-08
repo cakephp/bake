@@ -81,7 +81,7 @@ abstract class SimpleBakeTask extends BakeTask
         $name = Inflector::camelize($name);
         $this->bake($name);
 
-        return null;
+        return static::CODE_SUCCESS;
     }
 
     /**
