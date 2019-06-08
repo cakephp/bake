@@ -133,6 +133,8 @@ class BakeTask extends Shell
         if (isset($this->params['connection'])) {
             $this->connection = $this->params['connection'];
         }
+
+        return static::CODE_SUCCESS;
     }
 
     /**
