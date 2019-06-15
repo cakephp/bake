@@ -29,8 +29,8 @@
         ${{ singularName }} = $this->{{ currentModelName }}->get($id, [
             'contain' => [{{ Bake.stringifyList(belongsToMany, {'indent': false})|raw }}]
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            ${{ singularName }} = $this->{{ currentModelName }}->patchEntity(${{ singularName }}, $this->request->getData());
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            ${{ singularName }} = $this->{{ currentModelName }}->patchEntity(${{ singularName }}, $this->getRequest()->getData());
             if ($this->{{ currentModelName }}->save(${{ singularName }})) {
                 $this->Flash->success(__('The {{ singularHumanName|lower }} has been saved.'));
 

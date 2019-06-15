@@ -33,7 +33,7 @@ class BakeArticlesController extends AppController
      */
     public function login()
     {
-        if ($this->request->is('post')) {
+        if ($this->getRequest()->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);

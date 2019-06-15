@@ -51,8 +51,8 @@ class BakeArticlesController extends AppController
     public function add()
     {
         $bakeArticle = $this->BakeArticles->newEntity();
-        if ($this->request->is('post')) {
-            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
+        if ($this->getRequest()->is('post')) {
+            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->getRequest()->getData());
             if ($this->BakeArticles->save($bakeArticle)) {
                 $this->Flash->success(__('The bake article has been saved.'));
 
@@ -77,8 +77,8 @@ class BakeArticlesController extends AppController
         $bakeArticle = $this->BakeArticles->get($id, [
             'contain' => ['BakeTags']
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
+        if ($this->getRequest()->is(['patch', 'post', 'put'])) {
+            $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->getRequest()->getData());
             if ($this->BakeArticles->save($bakeArticle)) {
                 $this->Flash->success(__('The bake article has been saved.'));
 
@@ -100,7 +100,7 @@ class BakeArticlesController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
+        $this->getRequest()->allowMethod(['post', 'delete']);
         $bakeArticle = $this->BakeArticles->get($id);
         if ($this->BakeArticles->delete($bakeArticle)) {
             $this->Flash->success(__('The bake article has been deleted.'));
