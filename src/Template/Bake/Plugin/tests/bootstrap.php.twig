@@ -39,6 +39,9 @@ unset($findRoot);
 
 chdir($root);
 
+require_once $root . '/vendor/cakephp/cakephp/src/basics.php';
+require_once $root . '/vendor/autoload.php';
+
 if (file_exists($root . '/config/bootstrap.php')) {
     require $root . '/config/bootstrap.php';
 
