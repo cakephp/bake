@@ -768,10 +768,12 @@ class ModelTask extends BakeTask
                 'args' => [],
             ];
         } else {
-            $validation['requirePresence'] = [
-                'rule' => 'requirePresence',
-                'args' => ["'create'"],
-            ];
+            if ($metaData['default'] === null || $metaData['default'] === false) {
+                $validation['requirePresence'] = [
+                    'rule' => 'requirePresence',
+                    'args' => ["'create'"],
+                ];
+            }
             $validation['notEmpty'] = [
                 'rule' => $this->getEmptyMethod($fieldName, $metaData, 'not'),
                 'args' => [],
