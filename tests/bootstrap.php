@@ -57,5 +57,3 @@ if (!getenv('db_dsn')) {
 ConnectionManager::setConfig('test', ['url' => getenv('db_dsn')]);
 
 Plugin::getCollection()->add(new \Bake\Plugin());
-
-class_alias('PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase');
