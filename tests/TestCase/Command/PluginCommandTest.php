@@ -83,7 +83,7 @@ class PluginCommandTest extends TestCase
      */
     public function testMainBakePluginContents()
     {
-        $this->exec('bake plugin SimpleExample', ['y']);
+        $this->exec('bake plugin SimpleExample', ['y', 'n']);
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertPluginContents('SimpleExample');
     }
@@ -95,7 +95,7 @@ class PluginCommandTest extends TestCase
      */
     public function testMainCustomAppNamespace()
     {
-        $this->exec('bake plugin Simple', ['y']);
+        $this->exec('bake plugin Simple', ['y', 'n']);
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertPluginContents('Simple');
 
@@ -111,7 +111,7 @@ class PluginCommandTest extends TestCase
      */
     public function testMainVendorName()
     {
-        $this->exec('bake plugin Company/Example', ['y']);
+        $this->exec('bake plugin Company/Example', ['y', 'n']);
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertPluginContents('Company/Example');
     }
@@ -123,7 +123,7 @@ class PluginCommandTest extends TestCase
      */
     public function testMainVendorNameCasingFix()
     {
-        $this->exec('bake plugin company/example', ['y']);
+        $this->exec('bake plugin company/example', ['y', 'n']);
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertPluginContents('Company/Example');
     }
