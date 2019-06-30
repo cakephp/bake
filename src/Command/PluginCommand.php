@@ -19,6 +19,7 @@ namespace Bake\Command;
 use Bake\Utility\Process;
 use Bake\Utility\TemplateRenderer;
 use Bake\View\BakeView;
+use Cake\Command\PluginLoadCommand;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
@@ -31,7 +32,6 @@ use Cake\Utility\Inflector;
 
 /**
  * The Plugin Command handles creating an empty plugin, ready to be used
- *
  */
 class PluginCommand extends BakeCommand
 {
@@ -136,9 +136,13 @@ class PluginCommand extends BakeCommand
      */
     protected function _modifyApplication(string $plugin, ConsoleIo $io): void
     {
-        $pluginShell = new PluginShell($io);
-        $pluginShell->initialize();
-        $pluginShell->runCommand(['load', $plugin], true);
+        if (class_exists(PluginShell::class)) {
+            $pluginShell = new PluginShell($io);
+            $pluginShell->initialize();
+            $pluginShell->runCommand(['load', $plugin], true);
+        } elseif (class_exists(PluginLoadCommand::class)) {
+            $this->executeCommand(PluginLoadCommand::class, [$plugin], $io);
+        }
     }
 
     /**
