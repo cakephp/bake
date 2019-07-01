@@ -955,7 +955,6 @@ class ModelTaskTest extends TestCase
             ],
             'rating' => [
                 'numeric' => ['rule' => 'numeric', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'score' => [
