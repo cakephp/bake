@@ -80,6 +80,7 @@ class TemplateRendererTest extends TestCase
         $result = $renderer->generate('config/routes');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
+
     /**
      * test generate with a missing template in the chosen template.
      * ensure fallback to default works.
