@@ -3,4 +3,4 @@ parameters:
     autoload_files:
         - tests/bootstrap.php
     ignoreErrors:
-        - '#Class Cake\\Command\\PluginCommand not found#'
+        - '#Class Cake\\Command\\PluginLoadCommand not found#'
