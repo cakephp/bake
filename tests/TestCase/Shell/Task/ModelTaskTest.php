@@ -850,7 +850,7 @@ class ModelTaskTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
             ],
             'bake_user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -918,7 +918,7 @@ class ModelTaskTest extends TestCase
             ],
             'otherid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
             ]
         ];
         $this->assertEquals($expected, $result);
@@ -967,7 +967,7 @@ class ModelTaskTest extends TestCase
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
             ]
         ];
         $this->assertEquals($expected, $result);
@@ -996,7 +996,7 @@ class ModelTaskTest extends TestCase
             ],
             'otherid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
             ]
         ];
         $this->assertEquals($expected, $result);
@@ -1043,7 +1043,7 @@ class ModelTaskTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
@@ -1079,7 +1079,7 @@ class ModelTaskTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
@@ -1120,7 +1120,7 @@ class ModelTaskTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
             ],
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
@@ -1198,7 +1198,7 @@ class ModelTaskTest extends TestCase
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
             ],
             'rating' => [
                 'numeric' => ['rule' => 'numeric', 'args' => []],
