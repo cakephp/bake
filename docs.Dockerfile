@@ -5,9 +5,9 @@ COPY docs /data/docs
 
 RUN cd /data/docs-builder && \
   # Build 1.x docs
-  make website LANGS="en es fr ja pt ru" SOURCE=/data/docs DEST=/data/website/1.x
+  make website LANGS="en es fr ja pt ru" SOURCE=/data/docs DEST=/data/website/1.x && \
   # Build 2.x docs
-  git checkout 4.x
+  git checkout 4.x && \
   make website LANGS="en es fr ja pt ru" SOURCE=/data/docs DEST=/data/website/2.x
 
 # Build a small nginx container with just the static site in it.
