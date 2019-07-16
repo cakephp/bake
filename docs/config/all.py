@@ -24,7 +24,7 @@ project = 'CakePHP Bake'
 # Other versions that display in the version picker menu.
 version_list = [
     {'name': '1.x', 'number': '/bake/1.x', 'title': '1.x', 'current': True},
-    {'name': '2.x', 'number': '/bake/2.x', 'title': '2.x'},
+    # {'name': '2.x', 'number': '/bake/2.x', 'title': '2.x'},
 ]
 
 # Languages available.
