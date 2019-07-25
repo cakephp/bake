@@ -22,8 +22,8 @@ use Cake\Routing\RouteBuilder;
 $routes->plugin(
     '{{ plugin }}',
     ['path' => '/{{ routePath }}'],
-    function (RouteBuilder $scopedRoutes) {
-        $scopedRoutes
+    function (RouteBuilder $builder) {
+        $builder
             ->setRouteClass(DashedRoute::class)
             ->fallbacks();
     }

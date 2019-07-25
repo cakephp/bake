@@ -7,8 +7,8 @@ use Cake\Routing\RouteBuilder;
 $routes->plugin(
     'SimpleExample',
     ['path' => '/simple-example'],
-    function (RouteBuilder $scopedRoutes) {
-        $scopedRoutes
+    function (RouteBuilder $builder) {
+        $builder
             ->setRouteClass(DashedRoute::class)
             ->fallbacks();
     }
