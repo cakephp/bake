@@ -27,7 +27,6 @@ use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Folder;
-use Cake\Shell\PluginShell;
 use Cake\Utility\Inflector;
 
 /**
@@ -136,13 +135,7 @@ class PluginCommand extends BakeCommand
      */
     protected function _modifyApplication(string $plugin, ConsoleIo $io): void
     {
-        if (class_exists(PluginShell::class)) {
-            $pluginShell = new PluginShell($io);
-            $pluginShell->initialize();
-            $pluginShell->runCommand(['load', $plugin], true);
-        } elseif (class_exists(PluginLoadCommand::class)) {
-            $this->executeCommand(PluginLoadCommand::class, [$plugin], $io);
-        }
+        $this->executeCommand(PluginLoadCommand::class, [$plugin], $io);
     }
 
     /**
