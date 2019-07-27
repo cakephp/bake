@@ -23,7 +23,7 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Database\Exception;
-use Cake\Database\Schema\TableSchema;
+use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
@@ -171,7 +171,7 @@ class FixtureCommand extends BakeCommand
         } else {
             $recordCount = 1;
             if ($args->hasOption('count')) {
-                $recordCount = $args->getOption('count');
+                $recordCount = (int)$args->getOption('count');
             }
             $records = $this->_makeRecordString($this->_generateRecords($data, $recordCount));
         }
@@ -184,9 +184,9 @@ class FixtureCommand extends BakeCommand
      *
      * @param string $name The model alias to use
      * @param string $table The table name to get schema metadata for.
-     * @return \Cake\Database\Schema\TableSchema
+     * @return \Cake\Database\Schema\TableSchemaInterface
      */
-    public function readSchema(string $name, string $table): TableSchema
+    public function readSchema(string $name, string $table): TableSchemaInterface
     {
         $connection = ConnectionManager::get($this->connection);
 
@@ -244,10 +244,10 @@ class FixtureCommand extends BakeCommand
     /**
      * Generates a string representation of a schema.
      *
-     * @param \Cake\Database\Schema\TableSchema $table Table schema
+     * @param \Cake\Database\Schema\TableSchemaInterface $table Table schema
      * @return string fields definitions
      */
-    protected function _generateSchema(TableSchema $table): string
+    protected function _generateSchema(TableSchemaInterface $table): string
     {
         $cols = $indexes = $constraints = [];
         foreach ($table->columns() as $field) {
@@ -318,11 +318,11 @@ class FixtureCommand extends BakeCommand
     /**
      * Generate String representation of Records
      *
-     * @param \Cake\Database\Schema\TableSchema $table Table schema array
+     * @param \Cake\Database\Schema\TableSchemaInterface $table Table schema array
      * @param int $recordCount The number of records to generate.
      * @return array Array of records to use in the fixture.
      */
-    protected function _generateRecords(TableSchema $table, int $recordCount = 1): array
+    protected function _generateRecords(TableSchemaInterface $table, int $recordCount = 1): array
     {
         $records = [];
         for ($i = 0; $i < $recordCount; $i++) {

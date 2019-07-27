@@ -46,7 +46,7 @@ class BakeView extends TwigView
     /**
      * Templates extensions to search for.
      *
-     * @var array
+     * @var string[]
      */
     protected $extensions = [
         '.twig',
@@ -71,6 +71,10 @@ class BakeView extends TwigView
         if (!file_exists($this->_tmpLocation)) {
             mkdir($this->_tmpLocation);
         }
+
+        Configure::write(TwigView::ENV_CONFIG, [
+            'cache' => false,
+        ]);
 
         parent::initialize();
     }

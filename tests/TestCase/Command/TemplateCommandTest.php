@@ -571,7 +571,7 @@ class TemplateCommandTest extends TestCase
         $this->assertFileExists($this->generatedFile);
 
         $this->assertFileContains('Related Category Threads', $this->generatedFile);
-        $this->assertFileContains('Parent Category Threads', $this->generatedFile);
+        $this->assertFileContains('Parent Category Thread', $this->generatedFile);
     }
 
     /**
@@ -731,5 +731,17 @@ class TemplateCommandTest extends TestCase
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $this->assertFileContains('Template Task Comments', $this->generatedFile);
+    }
+
+    /**
+     * test `cake bake template MissingTableClass`
+     *
+     * @return void
+     */
+    public function testMainWithMissingTable()
+    {
+        $this->exec('bake template MissingTableClass');
+
+        $this->assertExitCode(Command::CODE_ERROR);
     }
 }
