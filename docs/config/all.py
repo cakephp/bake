@@ -45,3 +45,5 @@ show_root_link = True
 repository = 'cakephp/bake'
 
 source_path = 'docs/'
+
+hide_page_contents = ('search', '404', 'contents')
