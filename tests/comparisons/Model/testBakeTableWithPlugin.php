@@ -15,7 +15,7 @@ use Cake\Validation\Validator;
  * @method \BakeTest\Model\Entity\User get($primaryKey, $options = [])
  * @method \BakeTest\Model\Entity\User newEntity($data = null, array $options = [])
  * @method \BakeTest\Model\Entity\User[] newEntities(array $data, array $options = [])
- * @method \BakeTest\Model\Entity\User|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \BakeTest\Model\Entity\User|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \BakeTest\Model\Entity\User saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \BakeTest\Model\Entity\User patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \BakeTest\Model\Entity\User[] patchEntities($entities, array $data, array $options = [])

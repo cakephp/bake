@@ -14,7 +14,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\ProductVersion get($primaryKey, $options = [])
  * @method \App\Model\Entity\ProductVersion newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\ProductVersion[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\ProductVersion|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\ProductVersion|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\ProductVersion saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\ProductVersion patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\ProductVersion[] patchEntities($entities, array $data, array $options = [])
