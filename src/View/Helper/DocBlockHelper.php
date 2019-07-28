@@ -248,7 +248,7 @@ class DocBlockHelper extends Helper
             foreach ($assocs as $assoc) {
                 $typeStr = Inflector::camelize($type);
                 $tableFqn = $associationInfo[$assoc['alias']]['targetFqn'];
-                $annotations[] = "@property {$tableFqn}|\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
+                $annotations[] = "@property {$tableFqn}&\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
             }
         }
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} get(\$primaryKey, \$options = [])";

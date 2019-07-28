@@ -9,8 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Users Model
  *
- * @property \BakeTest\Model\Table\CommentsTable|\Cake\ORM\Association\HasMany $Comments
- * @property \BakeTest\Model\Table\CounterCachePostsTable|\Cake\ORM\Association\HasMany $CounterCachePosts
+ * @property \BakeTest\Model\Table\CommentsTable&\Cake\ORM\Association\HasMany $Comments
+ * @property \BakeTest\Model\Table\CounterCachePostsTable&\Cake\ORM\Association\HasMany $CounterCachePosts
  *
  * @method \BakeTest\Model\Entity\User get($primaryKey, $options = [])
  * @method \BakeTest\Model\Entity\User newEntity($data = null, array $options = [])
