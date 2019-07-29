@@ -7,6 +7,8 @@ use Cake\TestSuite\TestCase;
 
 /**
  * Bake\Test\App\Controller\PostsController Test Case
+ *
+ * @uses \Bake\Test\App\Controller\PostsController
  */
 class PostsControllerTest extends TestCase
 {
