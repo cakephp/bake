@@ -9,13 +9,13 @@ use Cake\Validation\Validator;
 /**
  * Products Model
  *
- * @property \App\Model\Table\ProductVersionsTable|\Cake\ORM\Association\HasMany $ProductVersions
- * @property \App\Model\Table\CategoriesTable|\Cake\ORM\Association\BelongsToMany $Categories
+ * @property \App\Model\Table\ProductVersionsTable&\Cake\ORM\Association\HasMany $ProductVersions
+ * @property \App\Model\Table\CategoriesTable&\Cake\ORM\Association\BelongsToMany $Categories
  *
  * @method \App\Model\Entity\Product get($primaryKey, $options = [])
  * @method \App\Model\Entity\Product newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Product[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Product|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Product|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\Product saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\Product patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Product[] patchEntities($entities, array $data, array $options = [])
