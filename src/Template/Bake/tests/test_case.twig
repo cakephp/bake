@@ -38,6 +38,10 @@ use {{ dependency }};
 
 /**
  * {{ fullClassName }} Test Case
+{% if isController or isCommand %}
+ *
+ * @uses \{{ fullClassName }}
+{% endif %}
  */
 class {{ className }}Test extends TestCase
 {

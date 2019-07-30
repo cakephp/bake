@@ -7,6 +7,8 @@ use Cake\TestSuite\TestCase;
 
 /**
  * App\Command\ExampleCommand Test Case
+ *
+ * @uses \App\Command\ExampleCommand
  */
 class ExampleCommandTest extends TestCase
 {
