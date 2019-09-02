@@ -13,7 +13,7 @@
     ],
     "support": {
         "issues": "https://github.com/cakephp/bake/issues",
-        "forum": "http://stackoverflow.com/tags/cakephp",
+        "forum": "https://stackoverflow.com/tags/cakephp",
         "irc": "irc://irc.freenode.org/cakephp",
         "source": "https://github.com/cakephp/bake"
     },
@@ -29,16 +29,16 @@
     },
     "autoload": {
         "psr-4": {
-            "Bake\\": "src"
+            "Bake\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "BakeTest\\": "tests/test_app/Plugin/BakeTest/src",
-            "Pastry\\PastryTest\\": "tests/test_app/Plugin/PastryTest/src",
-            "Bake\\Test\\": "tests",
-            "Bake\\Test\\App\\": "tests/test_app/App",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+            "BakeTest\\": "tests/test_app/Plugin/BakeTest/src/",
+            "Pastry\\PastryTest\\": "tests/test_app/Plugin/PastryTest/src/",
+            "Bake\\Test\\": "tests/",
+            "Bake\\Test\\App\\": "tests/test_app/App/",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests/"
         }
     },
     "scripts": {
