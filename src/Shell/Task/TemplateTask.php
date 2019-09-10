@@ -92,7 +92,7 @@ class TemplateTask extends BakeTask
      */
     public function initialize(): void
     {
-        $this->path = current(App::path('Template'));
+        $this->path = current(App::path('templates'));
     }
 
     /**

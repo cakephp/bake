@@ -49,7 +49,7 @@ class PluginCommand extends BakeCommand
     public function initialize(): void
     {
         parent::initialize();
-        $this->path = current(App::path('Plugin'));
+        $this->path = current(App::path('plugins'));
     }
 
     /**
@@ -98,7 +98,7 @@ class PluginCommand extends BakeCommand
      */
     public function bake(string $plugin, Arguments $args, ConsoleIo $io): ?bool
     {
-        $pathOptions = App::path('Plugin');
+        $pathOptions = App::path('plugins');
         if (count($pathOptions) > 1) {
             $this->findPath($io, $pathOptions);
         }
