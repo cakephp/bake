@@ -99,7 +99,7 @@ class PluginCommandTest extends TestCase
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertPluginContents('Simple');
 
-        $bakedRoot = App::path('Plugin')[0];
+        $bakedRoot = App::path('plugins')[0];
         $appController = $bakedRoot . 'Simple/src/Controller/AppController.php';
         $this->assertFileContains('use Bake\Test\App\Controller\AppController', $appController);
     }
@@ -175,7 +175,7 @@ class PluginCommandTest extends TestCase
         $this->assertArrayHasKey('psr-4', $result['autoload-dev']);
         $this->assertArrayHasKey('ComposerExample\\Test\\', $result['autoload-dev']['psr-4']);
 
-        $pluginPath = App::path('Plugin')[0];
+        $pluginPath = App::path('plugins')[0];
         $this->assertEquals(
             $pluginPath . 'ComposerExample' . DS . 'src' . DS,
             $result['autoload']['psr-4']['ComposerExample\\']
@@ -201,7 +201,7 @@ class PluginCommandTest extends TestCase
     public function testFindPathNonExistent()
     {
         $io = $this->createMock(ConsoleIo::class);
-        $paths = App::path('Plugin');
+        $paths = App::path('plugins');
 
         array_unshift($paths, '/fake/path');
         $paths[] = '/fake/path2';
@@ -247,7 +247,7 @@ class PluginCommandTest extends TestCase
         $comparisonDir = new Folder($comparisonRoot);
         $comparisonFiles = $comparisonDir->findRecursive();
 
-        $bakedRoot = App::path('Plugin')[0] . $pluginName . DS;
+        $bakedRoot = App::path('plugins')[0] . $pluginName . DS;
         $bakedDir = new Folder($bakedRoot);
         $bakedFiles = $comparisonDir->findRecursive();
 
