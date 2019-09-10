@@ -333,14 +333,14 @@ class PluginCommand extends BakeCommand
             return;
         }
 
-        $choice = null;
+        $choice = 0;
         while (!$valid) {
             foreach ($pathOptions as $i => $option) {
                 $io->out($i + 1 . '. ' . $option);
             }
             $prompt = 'Choose a plugin path from the paths above.';
-            $choice = $io->ask($prompt);
-            if ((int)$choice > 0 && (int)$choice <= $max) {
+            $choice = (int)$io->ask($prompt);
+            if ($choice > 0 && $choice <= $max) {
                 $valid = true;
             }
         }
