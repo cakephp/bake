@@ -22,6 +22,7 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
+use Cake\Database\Exception;
 use Cake\Database\Schema\TableSchema;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
@@ -223,9 +224,9 @@ class ModelCommand extends BakeCommand
      * @param array $associations The associations to append.
      * @return void
      */
-    public function applyAssociations(\Cake\ORM\Table $model, array $associations): void
+    public function applyAssociations(Table $model, array $associations): void
     {
-        if (get_class($model) !== 'Cake\ORM\Table') {
+        if (get_class($model) !== Table::class) {
             return;
         }
         foreach ($associations as $type => $assocs) {
@@ -297,7 +298,7 @@ class ModelCommand extends BakeCommand
      * @param array $associations Array of in progress associations
      * @return array Associations with belongsTo added in.
      */
-    public function findBelongsTo(\Cake\ORM\Table $model, array $associations): array
+    public function findBelongsTo(Table $model, array $associations): array
     {
         $schema = $model->getSchema();
         foreach ($schema->columns() as $fieldName) {
@@ -347,7 +348,7 @@ class ModelCommand extends BakeCommand
      * @param string $keyField The field to check for a constraint.
      * @return string|null Either the referenced table or null if the field has no constraints.
      */
-    public function findTableReferencedBy(\Cake\Database\Schema\TableSchema $schema, string $keyField): ?string
+    public function findTableReferencedBy(TableSchema $schema, string $keyField): ?string
     {
         if (!$schema->getColumn($keyField)) {
             return null;
@@ -380,7 +381,7 @@ class ModelCommand extends BakeCommand
      * @param array $associations Array of in progress associations
      * @return array Associations with hasMany added in.
      */
-    public function findHasMany(\Cake\ORM\Table $model, array $associations): array
+    public function findHasMany(Table $model, array $associations): array
     {
         $schema = $model->getSchema();
         $primaryKey = $schema->primaryKey();
@@ -435,7 +436,7 @@ class ModelCommand extends BakeCommand
      * @param array $associations Array of in-progress associations
      * @return array Associations with belongsToMany added in.
      */
-    public function findBelongsToMany(\Cake\ORM\Table $model, array $associations): array
+    public function findBelongsToMany(Table $model, array $associations): array
     {
         $schema = $model->getSchema();
         $tableName = $schema->name();
@@ -863,7 +864,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\ORM\Table $model The model to generate behaviors for.
      * @return array Behaviors
      */
-    public function getBehaviors(\Cake\ORM\Table $model): array
+    public function getBehaviors(Table $model): array
     {
         $behaviors = [];
         $schema = $model->getSchema();
@@ -896,7 +897,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\ORM\Table $model The table to get counter cache fields for.
      * @return array CounterCache configurations
      */
-    public function getCounterCache(\Cake\ORM\Table $model): array
+    public function getCounterCache(Table $model): array
     {
         $belongsTo = $this->findBelongsTo($model, ['belongsTo' => []]);
         $counterCache = [];
@@ -906,7 +907,7 @@ class ModelCommand extends BakeCommand
 
             try {
                 $otherSchema = $otherModel->getSchema();
-            } catch (\Cake\Database\Exception $e) {
+            } catch (Exception $e) {
                 continue;
             }
 
