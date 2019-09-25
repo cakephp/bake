@@ -11,12 +11,12 @@ use Cake\Validation\Validator;
 /**
  * ProductVersions Model
  *
- * @property \Bake\Test\App\Model\Table\ProductsTable|\Cake\ORM\Association\BelongsTo $Products
+ * @property \Bake\Test\App\Model\Table\ProductsTable&\Cake\ORM\Association\BelongsTo $Products
  *
  * @method \Bake\Test\App\Model\Entity\ProductVersion get($primaryKey, $options = [])
  * @method \Bake\Test\App\Model\Entity\ProductVersion newEntity($data = null, array $options = [])
  * @method \Bake\Test\App\Model\Entity\ProductVersion[] newEntities(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\ProductVersion|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\ProductVersion|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\ProductVersion saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\ProductVersion patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\ProductVersion[] patchEntities($entities, array $data, array $options = [])
@@ -54,7 +54,7 @@ class ProductVersionsTable extends Table
     {
         $validator
             ->nonNegativeInteger('id')
-            ->allowEmptyString('id', 'create');
+            ->allowEmptyString('id', null, 'create');
 
         $validator
             ->dateTime('version')

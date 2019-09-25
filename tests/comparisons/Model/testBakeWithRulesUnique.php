@@ -11,13 +11,13 @@ use Cake\Validation\Validator;
 /**
  * Users Model
  *
- * @property \Bake\Test\App\Model\Table\CommentsTable|\Cake\ORM\Association\HasMany $Comments
- * @property \Bake\Test\App\Model\Table\TodoItemsTable|\Cake\ORM\Association\HasMany $TodoItems
+ * @property \Bake\Test\App\Model\Table\CommentsTable&\Cake\ORM\Association\HasMany $Comments
+ * @property \Bake\Test\App\Model\Table\TodoItemsTable&\Cake\ORM\Association\HasMany $TodoItems
  *
  * @method \Bake\Test\App\Model\Entity\User get($primaryKey, $options = [])
  * @method \Bake\Test\App\Model\Entity\User newEntity($data = null, array $options = [])
  * @method \Bake\Test\App\Model\Entity\User[] newEntities(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\User|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\User|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\User saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\User patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\User[] patchEntities($entities, array $data, array $options = [])
@@ -61,7 +61,7 @@ class UsersTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmptyString('id', 'create');
+            ->allowEmptyString('id', null, 'create');
 
         $validator
             ->scalar('username')

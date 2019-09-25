@@ -890,7 +890,7 @@ class ModelCommandTest extends TestCase
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -937,7 +937,7 @@ class ModelCommandTest extends TestCase
             ],
             'uid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -989,7 +989,7 @@ class ModelCommandTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
@@ -1027,7 +1027,7 @@ class ModelCommandTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
@@ -1115,7 +1115,7 @@ class ModelCommandTest extends TestCase
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ["'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
             ],
         ];
         $this->assertEquals($expected, $result);

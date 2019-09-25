@@ -11,14 +11,14 @@ use Cake\Validation\Validator;
 /**
  * Items Model
  *
- * @property \Bake\Test\App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
- * @property \Bake\Test\App\Model\Table\TodoTasksTable|\Cake\ORM\Association\HasMany $TodoTasks
- * @property \Bake\Test\App\Model\Table\TodoLabelsTable|\Cake\ORM\Association\BelongsToMany $TodoLabels
+ * @property \Bake\Test\App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \Bake\Test\App\Model\Table\TodoTasksTable&\Cake\ORM\Association\HasMany $TodoTasks
+ * @property \Bake\Test\App\Model\Table\TodoLabelsTable&\Cake\ORM\Association\BelongsToMany $TodoLabels
  *
  * @method \Bake\Test\App\Model\Entity\Item get($primaryKey, $options = [])
  * @method \Bake\Test\App\Model\Entity\Item newEntity($data = null, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Item[] newEntities(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\Item|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\Item|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\Item saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\Item patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Item[] patchEntities($entities, array $data, array $options = [])
@@ -68,7 +68,7 @@ class ItemsTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmptyString('id', 'create');
+            ->allowEmptyString('id', null, 'create');
 
         $validator
             ->scalar('title')

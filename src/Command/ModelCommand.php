@@ -747,7 +747,7 @@ class ModelCommand extends BakeCommand
         if (in_array($fieldName, $primaryKey)) {
             $validation['allowEmpty'] = [
                 'rule' => $this->getEmptyMethod($fieldName, $metaData),
-                'args' => ["'create'"],
+                'args' => ['null', "'create'"],
             ];
         } elseif ($metaData['null'] === true) {
             $validation['allowEmpty'] = [

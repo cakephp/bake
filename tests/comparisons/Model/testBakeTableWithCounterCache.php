@@ -11,12 +11,12 @@ use Cake\Validation\Validator;
 /**
  * TodoTasks Model
  *
- * @property \Bake\Test\App\Model\Table\TodoItemsTable|\Cake\ORM\Association\BelongsTo $TodoItems
+ * @property \Bake\Test\App\Model\Table\TodoItemsTable&\Cake\ORM\Association\BelongsTo $TodoItems
  *
  * @method \Bake\Test\App\Model\Entity\TodoTask get($primaryKey, $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask newEntity($data = null, array $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask[] newEntities(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\TodoTask|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoTask|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask[] patchEntities($entities, array $data, array $options = [])

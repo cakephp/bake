@@ -11,13 +11,13 @@ use Cake\Validation\Validator;
 /**
  * Products Model
  *
- * @property \Bake\Test\App\Model\Table\ProductVersionsTable|\Cake\ORM\Association\HasMany $ProductVersions
- * @property \Bake\Test\App\Model\Table\CategoriesTable|\Cake\ORM\Association\BelongsToMany $Categories
+ * @property \Bake\Test\App\Model\Table\ProductVersionsTable&\Cake\ORM\Association\HasMany $ProductVersions
+ * @property \Bake\Test\App\Model\Table\CategoriesTable&\Cake\ORM\Association\BelongsToMany $Categories
  *
  * @method \Bake\Test\App\Model\Entity\Product get($primaryKey, $options = [])
  * @method \Bake\Test\App\Model\Entity\Product newEntity($data = null, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Product[] newEntities(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\Product|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\Product|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\Product saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\Product patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Product[] patchEntities($entities, array $data, array $options = [])
@@ -63,21 +63,12 @@ class ProductsTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmptyString('id', 'create');
+            ->allowEmptyString('id', null, 'create');
 
         $validator
             ->scalar('name')
             ->maxLength('name', 100)
-<<<<<<< HEAD
             ->notEmptyString('name');
-=======
-<<<<<<< HEAD
-            ->requirePresence('name', 'create')
-            ->notEmptyString('name');
-=======
-            ->allowEmptyString('name', false);
->>>>>>> master
->>>>>>> 3.next
 
         return $validator;
     }

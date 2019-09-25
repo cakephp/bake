@@ -256,7 +256,7 @@ class DocBlockHelper extends Helper
                 $typeStr = Inflector::camelize($type);
                 if (isset($associationInfo[$assoc['alias']])) {
                     $tableFqn = $associationInfo[$assoc['alias']]['targetFqn'];
-                    $annotations[] = "@property {$tableFqn}|\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
+                    $annotations[] = "@property {$tableFqn}&\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
                 }
             }
         }
@@ -264,7 +264,7 @@ class DocBlockHelper extends Helper
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} get(\$primaryKey, \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} newEntity(\$data = null, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] newEntities(array \$data, array \$options = [])";
-        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}|bool save(\\Cake\\Datasource\\EntityInterface \$entity, \$options = [])";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}|false save(\\Cake\\Datasource\\EntityInterface \$entity, \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} saveOrFail(\\Cake\\Datasource\\EntityInterface \$entity, \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} patchEntity(\\Cake\\Datasource\\EntityInterface \$entity, array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] patchEntities(\$entities, array \$data, array \$options = [])";

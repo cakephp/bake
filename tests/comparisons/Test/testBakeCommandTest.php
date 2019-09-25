@@ -9,6 +9,8 @@ use Cake\TestSuite\TestCase;
 
 /**
  * Bake\Test\App\Command\OtherExampleCommand Test Case
+ *
+ * @uses \Bake\Test\App\Command\OtherExampleCommand
  */
 class OtherExampleCommandTest extends TestCase
 {
