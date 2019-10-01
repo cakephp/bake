@@ -105,27 +105,29 @@
             <div class="related">
                 <h4><?= __('Related {{ otherPluralHumanName }}') ?></h4>
                 <?php if (!empty(${{ singularVar }}->{{ details.property }})) : ?>
-                <table>
-                    <tr>
-{% for field in details.fields %}
-                        <th><?= __('{{ field|humanize }}') ?></th>
-{% endfor %}
-                        <th class="actions"><?= __('Actions') ?></th>
-                    </tr>
-                    <?php foreach (${{ singularVar }}->{{ details.property }} as ${{ otherSingularVar }}) : ?>
-                    <tr>
-{% for field in details.fields %}
-                        <td><?= h(${{ otherSingularVar }}->{{ field }}) ?></td>
-{% endfor %}
-{% set otherPk = '$' ~ otherSingularVar ~ '->' ~ details.primaryKey[0] %}
-                        <td class="actions">
-                            <?= $this->Html->link(__('View'), ['controller' => '{{ details.controller }}', 'action' => 'view', {{ otherPk|raw }}]) ?>
-                            <?= $this->Html->link(__('Edit'), ['controller' => '{{ details.controller }}', 'action' => 'edit', {{ otherPk|raw }}]) ?>
-                            <?= $this->Form->postLink(__('Delete'), ['controller' => '{{ details.controller }}', 'action' => 'delete', {{ otherPk|raw }}], ['confirm' => __('Are you sure you want to delete # {0}?', {{ otherPk|raw }})]) ?>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </table>
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+    {% for field in details.fields %}
+                            <th><?= __('{{ field|humanize }}') ?></th>
+    {% endfor %}
+                            <th class="actions"><?= __('Actions') ?></th>
+                        </tr>
+                        <?php foreach (${{ singularVar }}->{{ details.property }} as ${{ otherSingularVar }}) : ?>
+                        <tr>
+    {% for field in details.fields %}
+                            <td><?= h(${{ otherSingularVar }}->{{ field }}) ?></td>
+    {% endfor %}
+    {% set otherPk = '$' ~ otherSingularVar ~ '->' ~ details.primaryKey[0] %}
+                            <td class="actions">
+                                <?= $this->Html->link(__('View'), ['controller' => '{{ details.controller }}', 'action' => 'view', {{ otherPk|raw }}]) ?>
+                                <?= $this->Html->link(__('Edit'), ['controller' => '{{ details.controller }}', 'action' => 'edit', {{ otherPk|raw }}]) ?>
+                                <?= $this->Form->postLink(__('Delete'), ['controller' => '{{ details.controller }}', 'action' => 'delete', {{ otherPk|raw }}], ['confirm' => __('Are you sure you want to delete # {0}?', {{ otherPk|raw }})]) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
                 <?php endif; ?>
             </div>
 {% endfor %}
