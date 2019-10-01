@@ -108,17 +108,17 @@
                 <div class="table-responsive">
                     <table>
                         <tr>
-    {% for field in details.fields %}
+{% for field in details.fields %}
                             <th><?= __('{{ field|humanize }}') ?></th>
-    {% endfor %}
+{% endfor %}
                             <th class="actions"><?= __('Actions') ?></th>
                         </tr>
                         <?php foreach (${{ singularVar }}->{{ details.property }} as ${{ otherSingularVar }}) : ?>
                         <tr>
-    {% for field in details.fields %}
+{% for field in details.fields %}
                             <td><?= h(${{ otherSingularVar }}->{{ field }}) ?></td>
-    {% endfor %}
-    {% set otherPk = '$' ~ otherSingularVar ~ '->' ~ details.primaryKey[0] %}
+{% endfor %}
+{% set otherPk = '$' ~ otherSingularVar ~ '->' ~ details.primaryKey[0] %}
                             <td class="actions">
                                 <?= $this->Html->link(__('View'), ['controller' => '{{ details.controller }}', 'action' => 'view', {{ otherPk|raw }}]) ?>
                                 <?= $this->Html->link(__('Edit'), ['controller' => '{{ details.controller }}', 'action' => 'edit', {{ otherPk|raw }}]) ?>
