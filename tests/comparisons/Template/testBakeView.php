@@ -64,30 +64,32 @@
             <div class="related">
                 <h4><?= __('Related Articles') ?></h4>
                 <?php if (!empty($author->articles)) : ?>
-                <table>
-                    <tr>
-                        <th><?= __('Id') ?></th>
-                        <th><?= __('Author Id') ?></th>
-                        <th><?= __('Title') ?></th>
-                        <th><?= __('Body') ?></th>
-                        <th><?= __('Published') ?></th>
-                        <th class="actions"><?= __('Actions') ?></th>
-                    </tr>
-                    <?php foreach ($author->articles as $articles) : ?>
-                    <tr>
-                        <td><?= h($articles->id) ?></td>
-                        <td><?= h($articles->author_id) ?></td>
-                        <td><?= h($articles->title) ?></td>
-                        <td><?= h($articles->body) ?></td>
-                        <td><?= h($articles->published) ?></td>
-                        <td class="actions">
-                            <?= $this->Html->link(__('View'), ['controller' => 'Articles', 'action' => 'view', $articles->id]) ?>
-                            <?= $this->Html->link(__('Edit'), ['controller' => 'Articles', 'action' => 'edit', $articles->id]) ?>
-                            <?= $this->Form->postLink(__('Delete'), ['controller' => 'Articles', 'action' => 'delete', $articles->id], ['confirm' => __('Are you sure you want to delete # {0}?', $articles->id)]) ?>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </table>
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th><?= __('Id') ?></th>
+                            <th><?= __('Author Id') ?></th>
+                            <th><?= __('Title') ?></th>
+                            <th><?= __('Body') ?></th>
+                            <th><?= __('Published') ?></th>
+                            <th class="actions"><?= __('Actions') ?></th>
+                        </tr>
+                        <?php foreach ($author->articles as $articles) : ?>
+                        <tr>
+                            <td><?= h($articles->id) ?></td>
+                            <td><?= h($articles->author_id) ?></td>
+                            <td><?= h($articles->title) ?></td>
+                            <td><?= h($articles->body) ?></td>
+                            <td><?= h($articles->published) ?></td>
+                            <td class="actions">
+                                <?= $this->Html->link(__('View'), ['controller' => 'Articles', 'action' => 'view', $articles->id]) ?>
+                                <?= $this->Html->link(__('Edit'), ['controller' => 'Articles', 'action' => 'edit', $articles->id]) ?>
+                                <?= $this->Form->postLink(__('Delete'), ['controller' => 'Articles', 'action' => 'delete', $articles->id], ['confirm' => __('Are you sure you want to delete # {0}?', $articles->id)]) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
                 <?php endif; ?>
             </div>
         </div>
