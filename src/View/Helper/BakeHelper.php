@@ -256,14 +256,16 @@ class BakeHelper extends Helper
                 if (isset($associationFields[$field])) {
                     return 'string';
                 }
-                if (in_array($type, [
+                if (
+                    in_array($type, [
                     'decimal',
                     'biginteger',
                     'integer',
                     'float',
                     'smallinteger',
                     'tinyinteger',
-                ])) {
+                    ])
+                ) {
                     return 'number';
                 }
                 if (in_array($type, ['date', 'time', 'datetime', 'timestamp'])) {
