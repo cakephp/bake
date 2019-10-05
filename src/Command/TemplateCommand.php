@@ -29,6 +29,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
+use Cake\View\Exception\MissingTemplateException;
 use RuntimeException;
 
 /**
@@ -140,6 +141,8 @@ class TemplateCommand extends BakeCommand
             try {
                 $content = $this->getContent($args, $io, $method, $vars);
                 $this->bake($args, $io, $method, $content);
+            } catch (MissingTemplateException $e) {
+                $io->verbose($e->getMessage());
             } catch (RuntimeException $e) {
                 $io->error($e->getMessage());
             }
