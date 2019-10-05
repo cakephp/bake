@@ -51,7 +51,7 @@ class SimpleBakeTaskTest extends TestCase
         $this->generatedFiles = [
             APP . 'Controller/ExampleCustomController.php',
         ];
-        $this->exec('bake custom_controller Example');
+        $this->exec('bake custom_controller --no-test Example');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -71,7 +71,7 @@ class SimpleBakeTaskTest extends TestCase
         $this->generatedFiles = [
             $path . 'src/Controller/ExampleCustomController.php',
         ];
-        $this->exec('bake custom_controller TestBake.Example');
+        $this->exec('bake custom_controller --no-test TestBake.Example');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
