@@ -17,7 +17,7 @@
 <?php
 namespace {{ namespace }}\Model\Table;
 
-{% set uses = ['use Cake\\ORM\\Query;', 'use Cake\\ORM\\RulesChecker;', 'use Cake\\ORM\\Table;', 'use Cake\\Validation\\Validator;'] %}
+{% set uses = ['use Cake\\ORM\\RulesChecker;', 'use Cake\\ORM\\Table;', 'use Cake\\Validation\\Validator;'] %}
 {{ uses|join('\n')|raw }}
 
 {{ DocBlock.classDescription(name, 'Model', annotations)|raw }}
