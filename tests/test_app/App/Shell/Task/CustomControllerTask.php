@@ -12,10 +12,12 @@ class CustomControllerTask extends SimpleBakeTask
     {
         return 'CustomController';
     }
+
     public function fileName($name)
     {
         return $name . 'CustomController.php';
     }
+
     public function template()
     {
         return 'CustomController';

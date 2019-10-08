@@ -88,6 +88,7 @@ class BakeTemplateTaskTest extends TestCase
         $result = $this->Task->generate('config/routes');
         $this->assertSameAsFile(__FUNCTION__ . '.ctp', $result);
     }
+
     /**
      * test generate with a missing template in the chosen template.
      * ensure fallback to default works.
