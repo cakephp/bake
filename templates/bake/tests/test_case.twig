@@ -88,7 +88,7 @@ class {{ className }}Test extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 {% if preConstruct %}
@@ -110,7 +110,7 @@ class {{ className }}Test extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->{{ subject }});
 
@@ -131,7 +131,7 @@ class {{ className }}Test extends TestCase
      *
      * @return void
      */
-    public function test{{ method|camelize }}()
+    public function test{{ method|camelize }}(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -146,7 +146,7 @@ class {{ className }}Test extends TestCase
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialization(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
