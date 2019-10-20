@@ -49,7 +49,7 @@ class CellCommandTest extends TestCase
         $this->generatedFiles = [
             APP . 'View/Cell/ExampleCell.php',
             ROOT . 'tests/TestCase/View/Cell/ExampleCellTest.php',
-            APP . 'Template/Cell/Example/display.ctp',
+            ROOT . 'templates/cell/Example/display.php',
         ];
         $this->exec('bake cell Example');
 
@@ -71,7 +71,7 @@ class CellCommandTest extends TestCase
         $this->generatedFiles = [
             $path . 'src/View/Cell/ExampleCell.php',
             $path . 'tests/TestCase/View/Cell/ExampleCellTest.php',
-            $path . 'src/Template/Cell/Example/display.ctp',
+            $path . 'templates/cell/Example/display.php',
         ];
         $this->exec('bake cell TestBake.Example');
 
@@ -93,7 +93,7 @@ class CellCommandTest extends TestCase
         $this->generatedFiles = [
             $path . 'src/View/Cell/ExampleCell.php',
             $path . 'tests/TestCase/View/Cell/ExampleCellTest.php',
-            $path . 'src/Template/Cell/Example/display.ctp',
+            $path . 'templates/cell/Example/display.php',
         ];
         $this->exec('bake cell --plugin TestBake Example');
 
@@ -111,7 +111,7 @@ class CellCommandTest extends TestCase
         $this->generatedFiles = [
             APP . 'View/Cell/Admin/ExampleCell.php',
             ROOT . 'tests/TestCase/View/Cell/Admin/ExampleCellTest.php',
-            APP . 'Template/Cell/Admin/Example/display.ctp',
+            ROOT . 'templates/cell/Admin/Example/display.php',
         ];
         $this->exec('bake cell --prefix Admin Example');
 
@@ -134,7 +134,7 @@ class CellCommandTest extends TestCase
         $this->generatedFiles = [
             $path . 'src/View/Cell/Admin/ExampleCell.php',
             $path . 'tests/TestCase/View/Cell/Admin/ExampleCellTest.php',
-            $path . 'src/Template/Cell/Admin/Example/display.ctp',
+            $path . 'templates/cell/Admin/Example/display.php',
         ];
         $this->exec('bake cell --prefix Admin TestBake.Example');
 

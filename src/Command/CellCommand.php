@@ -105,9 +105,9 @@ class CellCommand extends SimpleBakeCommand
     {
         $restore = $this->pathFragment;
 
-        $this->pathFragment = 'Template/Cell/';
+        $this->pathFragment = '../templates/cell/';
         $path = $this->getPath($args);
-        $path .= implode(DS, [$name, 'display.ctp']);
+        $path .= implode(DS, [$name, 'display.php']);
 
         $this->pathFragment = $restore;
 
