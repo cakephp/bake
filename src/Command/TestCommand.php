@@ -288,7 +288,7 @@ class TestCommand extends BakeCommand
         $out = $renderer->generate('tests/test_case');
 
         $filename = $this->testCaseFileName($type, $fullClassName);
-        $emptyFile = dirname($filename) . DS . 'empty';
+        $emptyFile = dirname($filename) . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
         if ($io->createFile($filename, $out)) {
             return $out;
