@@ -120,7 +120,7 @@ class PluginCommand extends BakeCommand
         $io->hr();
         $io->out(sprintf('<success>Created:</success> %s in %s', $plugin, $this->path . $plugin), 2);
 
-        $emptyFile = $this->path . 'empty';
+        $emptyFile = $this->path . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
 
         return true;

@@ -237,7 +237,7 @@ class FixtureCommand extends BakeCommand
 
         $io->out("\n" . sprintf('Baking test fixture for %s...', $model), 1, ConsoleIo::QUIET);
         $io->createFile($path . $filename, $content);
-        $emptyFile = $path . 'empty';
+        $emptyFile = $path . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
     }
 

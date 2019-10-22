@@ -965,7 +965,7 @@ class ModelCommand extends BakeCommand
         $io->out("\n" . sprintf('Baking entity class for %s...', $name), 1, ConsoleIo::QUIET);
         $io->createFile($filename, $out);
 
-        $emptyFile = $path . 'Entity' . DS . 'empty';
+        $emptyFile = $path . 'Entity' . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
     }
 

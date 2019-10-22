@@ -99,7 +99,7 @@ abstract class SimpleBakeTask extends BakeTask
 
         $filename = $this->getPath() . $this->fileName($name);
         $this->createFile($filename, $contents);
-        $emptyFile = $this->getPath() . 'empty';
+        $emptyFile = $this->getPath() . '.gitkeep';
         $this->_deleteEmptyFile($emptyFile);
 
         return $contents;
