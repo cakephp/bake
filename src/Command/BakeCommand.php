@@ -17,10 +17,10 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Bake\Utility\CommonOptionsTrait;
-use Cake\Core\Configure;
 use Cake\Console\Arguments;
 use Cake\Console\Command;
 use Cake\Console\ConsoleIo;
+use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use InvalidArgumentException;
 
