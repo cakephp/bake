@@ -103,13 +103,9 @@ class CellCommand extends SimpleBakeCommand
      */
     protected function bakeTemplate(string $name, Arguments $args, ConsoleIo $io): void
     {
-        $restore = $this->pathFragment;
 
-        $this->pathFragment = '../templates/cell/';
-        $path = $this->getPath($args);
+        $path = $this->getTemplatePath($args, 'cell');
         $path .= implode(DS, [$name, 'display.php']);
-
-        $this->pathFragment = $restore;
 
         $io->createFile($path, '');
     }

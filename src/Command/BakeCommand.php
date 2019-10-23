@@ -17,10 +17,12 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Bake\Utility\CommonOptionsTrait;
+use Cake\Core\Configure;
 use Cake\Console\Arguments;
 use Cake\Console\Command;
 use Cake\Console\ConsoleIo;
 use Cake\Core\ConventionsTrait;
+use InvalidArgumentException;
 
 /**
  * Base class for commands that bake can use.
@@ -92,10 +94,41 @@ abstract class BakeCommand extends Command
         }
         $prefix = $this->getPrefix($args);
         if ($prefix) {
-            $path .= $prefix . DS;
+            $path .= $prefix . DIRECTORY_SEPARATOR;
         }
 
-        return str_replace('/', DS, $path);
+        return str_replace('/', DIRECTORY_SEPARATOR, $path);
+    }
+
+    /**
+     * Gets the path to the template path for the application or plugin.
+     *
+     * @param \Cake\Console\Arguments $args Arguments instance to read the prefix option from.
+     * @param string|null $container The container directory in the templates directory.
+     * @return string Path to output.
+     */
+    public function getTemplatePath(Arguments $args, ?string $container = null): string
+    {
+        $paths = (array)Configure::read('App.paths.templates');
+        if (empty($paths)) {
+            throw new InvalidArgumentException(
+                'Could not read template paths. ' .
+                'Ensure `App.paths.templates` is defined in your application configuration.'
+            );
+        }
+        $path = $paths[0];
+        if ($this->plugin) {
+            $path = $this->_pluginPath($this->plugin) . 'templates' . DIRECTORY_SEPARATOR;
+        }
+        if ($container) {
+            $path .= $container . DIRECTORY_SEPARATOR;
+        }
+        $prefix = $this->getPrefix($args);
+        if ($prefix) {
+            $path .= $prefix . DIRECTORY_SEPARATOR;
+        }
+
+        return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 
     /**
