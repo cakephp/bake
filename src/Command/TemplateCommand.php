@@ -38,13 +38,6 @@ use RuntimeException;
 class TemplateCommand extends BakeCommand
 {
     /**
-     * path to Template directory
-     *
-     * @var string
-     */
-    public $pathFragment = '../templates/';
-
-    /**
      * Name of the controller being used
      *
      * @var string
@@ -198,11 +191,12 @@ class TemplateCommand extends BakeCommand
      * Get the path base for view templates.
      *
      * @param \Cake\Console\Arguments $args The arguments
+     * @param string|null $container Unused.
      * @return string
      */
-    public function getPath(Arguments $args): string
+    public function getTemplatePath(Arguments $args, ?string $container = null): string
     {
-        $path = parent::getPath($args);
+        $path = parent::getTemplatePath($args, $container);
         $path .= $this->controllerName . DS;
 
         return $path;
@@ -349,7 +343,7 @@ class TemplateCommand extends BakeCommand
 
             return;
         }
-        $path = $this->getPath($args);
+        $path = $this->getTemplatePath($args);
         $filename = $path . Inflector::underscore($outputFile) . '.php';
 
         $io->out("\n" . sprintf('Baking `%s` view template file...', $outputFile), 1, ConsoleIo::QUIET);

@@ -226,30 +226,30 @@ class TemplateCommandTest extends TestCase
     }
 
     /**
-     * Test getPath()
+     * Test getTemplatePath()
      *
      * @return void
      */
-    public function testGetPath()
+    public function testGetTemplatePath()
     {
         $command = new TemplateCommand();
         $command->controllerName = 'Posts';
         $args = new Arguments([], [], []);
 
-        $result = $command->getPath($args);
-        $this->assertPathEquals(APP . '../templates/Posts/', $result);
+        $result = $command->getTemplatePath($args);
+        $this->assertPathEquals(ROOT . 'templates/Posts/', $result);
 
         $args = new Arguments([], ['prefix' => 'admin'], []);
-        $result = $command->getPath($args);
-        $this->assertPathEquals(APP . '../templates/Admin/Posts/', $result);
+        $result = $command->getTemplatePath($args);
+        $this->assertPathEquals(ROOT . 'templates/Admin/Posts/', $result);
 
         $args = new Arguments([], ['prefix' => 'admin/management'], []);
-        $result = $command->getPath($args);
-        $this->assertPathEquals(APP . '../templates/Admin/Management/Posts/', $result);
+        $result = $command->getTemplatePath($args);
+        $this->assertPathEquals(ROOT . 'templates/Admin/Management/Posts/', $result);
 
         $args = new Arguments([], ['prefix' => 'Admin/management'], []);
-        $result = $command->getPath($args);
-        $this->assertPathEquals(APP . '../templates/Admin/Management/Posts/', $result);
+        $result = $command->getTemplatePath($args);
+        $this->assertPathEquals(ROOT . 'templates/Admin/Management/Posts/', $result);
     }
 
     /**
@@ -257,7 +257,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetPathPlugin()
+    public function testGetTemplatePathPlugin()
     {
         $pluginPath = APP . 'Plugin/TestTemplate/';
         $this->loadPlugins(['TestTemplate' => ['path' => $pluginPath]]);
@@ -268,13 +268,13 @@ class TemplateCommandTest extends TestCase
 
         // Use this->plugin as plugin could be in the name arg
         $args = new Arguments([], [], []);
-        $result = $command->getPath($args);
-        $this->assertPathEquals($pluginPath . 'src/../templates/Posts/', $result);
+        $result = $command->getTemplatePath($args);
+        $this->assertPathEquals($pluginPath . 'templates/Posts/', $result);
 
         // Use this->plugin as plugin could be in the name arg
         $args = new Arguments([], ['prefix' => 'admin'], []);
-        $result = $command->getPath($args);
-        $this->assertPathEquals($pluginPath . 'src/../templates/Admin/Posts/', $result);
+        $result = $command->getTemplatePath($args);
+        $this->assertPathEquals($pluginPath . 'templates/Admin/Posts/', $result);
 
         $this->removePlugins(['TestTemplate']);
     }

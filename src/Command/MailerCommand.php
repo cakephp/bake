@@ -81,15 +81,10 @@ class MailerCommand extends SimpleBakeCommand
      */
     protected function bakeLayouts(string $name, Arguments $args, ConsoleIo $io): void
     {
-        $restore = $this->pathFragment;
-        $layoutsPath = implode(DS, ['..', 'templates', 'layout', 'email']);
-
         foreach (['html', 'text'] as $type) {
-            $this->pathFragment = implode(DS, [$layoutsPath, $type, Inflector::underscore($name) . '.php']);
-            $path = $this->getPath($args);
+            $pathFragment = implode(DS, ['layout', 'email', $type, Inflector::underscore($name) . '.php']);
+            $path = $this->getTemplatePath($args) . $pathFragment;
             $io->createFile($path, '');
         }
-
-        $this->pathFragment = $restore;
     }
 }
