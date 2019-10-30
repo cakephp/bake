@@ -16,14 +16,14 @@ class ArticlesTaskTest extends TestCase
      *
      * @var \Cake\Console\ConsoleIo|\PHPUnit\Framework\MockObject\MockObject
      */
-    public $io;
+    protected $io;
 
     /**
      * Test subject
      *
      * @var \Bake\Test\App\Shell\Task\ArticlesTask
      */
-    public $Articles;
+    protected $Articles;
 
     /**
      * setUp method

@@ -17,7 +17,7 @@ class ExampleHelperTest extends TestCase
      *
      * @var \Bake\Test\App\View\Helper\ExampleHelper
      */
-    public $Example;
+    protected $Example;
 
     /**
      * setUp method

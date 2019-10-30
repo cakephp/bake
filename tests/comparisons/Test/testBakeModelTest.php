@@ -17,14 +17,14 @@ class ArticlesTableTest extends TestCase
      *
      * @var \Bake\Test\App\Model\Table\ArticlesTable
      */
-    public $Articles;
+    protected $Articles;
 
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    protected $fixtures = [
         'app.Articles',
         'app.Authors',
         'app.Tags',

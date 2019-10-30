@@ -16,7 +16,7 @@ class ExampleBehaviorTest extends TestCase
      *
      * @var \Bake\Test\App\Model\Behavior\ExampleBehavior
      */
-    public $Example;
+    protected $Example;
 
     /**
      * setUp method

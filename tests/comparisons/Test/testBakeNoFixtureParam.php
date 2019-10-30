@@ -17,7 +17,7 @@ class AuthorsTableTest extends TestCase
      *
      * @var \Bake\Test\App\Model\Table\AuthorsTable
      */
-    public $Authors;
+    protected $Authors;
 
     /**
      * setUp method

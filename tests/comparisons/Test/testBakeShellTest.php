@@ -19,14 +19,14 @@ class ArticlesShellTest extends TestCase
      *
      * @var \Cake\Console\ConsoleIo|\PHPUnit\Framework\MockObject\MockObject
      */
-    public $io;
+    protected $io;
 
     /**
      * Test subject
      *
      * @var \Bake\Test\App\Shell\ArticlesShell
      */
-    public $Articles;
+    protected $Articles;
 
     /**
      * setUp method

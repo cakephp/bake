@@ -63,7 +63,7 @@ class {{ className }}Test extends TestCase
      *
      * @var {{ propertyInfo.type }}
      */
-    public ${{ propertyInfo.name }}{% if propertyInfo.value is defined and propertyInfo.value %} = {{ propertyInfo.value }}{% endif %};
+    protected ${{ propertyInfo.name }}{% if propertyInfo.value is defined and propertyInfo.value %} = {{ propertyInfo.value }}{% endif %};
 {% if loop.last and (fixtures or construction or methods) %}
 
 {% endif %}
@@ -76,7 +76,7 @@ class {{ className }}Test extends TestCase
      *
      * @var array
      */
-    public $fixtures = [{{ Bake.stringifyList(fixtures|values)|raw }}];
+    protected $fixtures = [{{ Bake.stringifyList(fixtures|values)|raw }}];
 {% if construction or methods %}
 
 {% endif %}
