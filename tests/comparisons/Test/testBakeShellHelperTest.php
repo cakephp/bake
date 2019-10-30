@@ -39,7 +39,7 @@ class ExampleHelperTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->stub = new ConsoleOutput();
@@ -52,7 +52,7 @@ class ExampleHelperTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Example);
 
@@ -64,7 +64,7 @@ class ExampleHelperTest extends TestCase
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialization(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

@@ -21,7 +21,7 @@ class OtherExampleCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->useCommandRunner();
@@ -32,7 +32,7 @@ class OtherExampleCommandTest extends TestCase
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialization(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

@@ -36,7 +36,7 @@ class ArticlesTableTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $config = TableRegistry::getTableLocator()->exists('Articles') ? [] : ['className' => ArticlesTable::class];
@@ -48,7 +48,7 @@ class ArticlesTableTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Articles);
 
@@ -60,7 +60,7 @@ class ArticlesTableTest extends TestCase
      *
      * @return void
      */
-    public function testInitialize()
+    public function testInitialize(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -70,7 +70,7 @@ class ArticlesTableTest extends TestCase
      *
      * @return void
      */
-    public function testFindPublished()
+    public function testFindPublished(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -80,7 +80,7 @@ class ArticlesTableTest extends TestCase
      *
      * @return void
      */
-    public function testDoSomething()
+    public function testDoSomething(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -90,7 +90,7 @@ class ArticlesTableTest extends TestCase
      *
      * @return void
      */
-    public function testDoSomethingElse()
+    public function testDoSomethingElse(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

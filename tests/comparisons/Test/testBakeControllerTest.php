@@ -30,7 +30,7 @@ class PostsControllerTest extends TestCase
      *
      * @return void
      */
-    public function testInitialize()
+    public function testInitialize(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
@@ -40,7 +40,7 @@ class PostsControllerTest extends TestCase
      *
      * @return void
      */
-    public function testIndex()
+    public function testIndex(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
