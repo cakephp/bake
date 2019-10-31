@@ -19,21 +19,21 @@ class ArticlesShellTest extends TestCase
      *
      * @var \Cake\Console\ConsoleIo|\PHPUnit\Framework\MockObject\MockObject
      */
-    public $io;
+    protected $io;
 
     /**
      * Test subject
      *
      * @var \Bake\Test\App\Shell\ArticlesShell
      */
-    public $Articles;
+    protected $Articles;
 
     /**
      * setUp method
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
@@ -45,7 +45,7 @@ class ArticlesShellTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Articles);
 
@@ -57,7 +57,7 @@ class ArticlesShellTest extends TestCase
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialization(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
