@@ -13,7 +13,7 @@ use App\Controller\AppController;
  * @property \App\Controller\Component\AppleComponent $Apple
  * @property \App\Controller\Component\NonExistentComponent $NonExistent
  */
-class BakeArticlesController extends AppController
+final class BakeArticlesController extends AppController
 {
     /**
      * Components

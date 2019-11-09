@@ -9,7 +9,7 @@ use App\Controller\AppController;
  * @property \Cake\Controller\Component\CsrfComponent $Csrf
  * @property \Cake\Controller\Component\AuthComponent $Auth
  */
-class BakeArticlesController extends AppController
+final class BakeArticlesController extends AppController
 {
     /**
      * Helpers

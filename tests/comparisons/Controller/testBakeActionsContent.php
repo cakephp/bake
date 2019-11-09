@@ -9,7 +9,7 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class BakeArticlesController extends AppController
+final class BakeArticlesController extends AppController
 {
     /**
      * Index method
