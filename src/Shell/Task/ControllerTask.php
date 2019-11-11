@@ -199,12 +199,12 @@ class ControllerTask extends BakeTask
      * Assembles and writes a unit test file
      *
      * @param string $className Controller class name
-     * @return string|bool Baked test
+     * @return string|false Baked test
      */
     public function bakeTest($className)
     {
         if (!empty($this->params['no-test'])) {
-            return null;
+            return false;
         }
         $this->Test->plugin = $this->plugin;
         $this->Test->connection = $this->connection;
