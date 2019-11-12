@@ -36,7 +36,7 @@ class BakeTemplateTask extends Shell
     /**
      * BakeView instance
      *
-     * @var \Bake\View\BakeView
+     * @var \Bake\View\BakeView|null
      */
     public $View;
 

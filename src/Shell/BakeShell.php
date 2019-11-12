@@ -136,7 +136,7 @@ class BakeShell extends Shell
      * - Shell/Task for each loaded plugin
      * - App/Shell/Task/
      *
-     * @return void
+     * @return bool
      */
     public function loadTasks()
     {
@@ -153,7 +153,8 @@ class BakeShell extends Shell
         $tasks = $this->_findTasks($tasks, APP, Configure::read('App.namespace'));
 
         $this->tasks = array_values($tasks);
-        parent::loadTasks();
+
+        return parent::loadTasks();
     }
 
     /**
