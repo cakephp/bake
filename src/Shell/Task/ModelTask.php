@@ -888,7 +888,8 @@ class ModelTask extends BakeTask
             $behaviors['Timestamp'] = [];
         }
 
-        if (in_array('lft', $fields) && $schema->getColumnType('lft') === 'integer' &&
+        if (
+            in_array('lft', $fields) && $schema->getColumnType('lft') === 'integer' &&
             in_array('rght', $fields) && $schema->getColumnType('rght') === 'integer' &&
             in_array('parent_id', $fields)
         ) {

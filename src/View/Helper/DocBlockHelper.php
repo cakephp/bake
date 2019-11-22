@@ -42,7 +42,8 @@ class DocBlockHelper extends Helper
         foreach ($annotations as $annotation) {
             if (strlen($annotation) > 1 && $annotation[0] === '@' && strpos($annotation, ' ') > 0) {
                 $type = substr($annotation, 0, strpos($annotation, ' '));
-                if ($this->_annotationSpacing &&
+                if (
+                    $this->_annotationSpacing &&
                     $previous !== false &&
                     $previous !== $type
                 ) {
@@ -70,7 +71,8 @@ class DocBlockHelper extends Helper
     public function associatedEntityTypeToHintType($type, Association $association)
     {
         $annotationType = $association->type();
-        if ($annotationType === Association::MANY_TO_MANY ||
+        if (
+            $annotationType === Association::MANY_TO_MANY ||
             $annotationType === Association::ONE_TO_MANY
         ) {
             return $type . '[]';
