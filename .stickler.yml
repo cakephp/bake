@@ -1,3 +1,6 @@
 linters:
   phpcs:
     standard: ./phpcs.xml.dist
+
+branches:
+  ignore: ['2.x']
