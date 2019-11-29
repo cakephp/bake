@@ -17,9 +17,9 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Bake\Shell\Task\BakeTask;
-use Cake\Command\HelpCommand;
 use Cake\Console\Arguments;
 use Cake\Console\Command;
+use Cake\Console\Command\HelpCommand;
 use Cake\Console\CommandCollection;
 use Cake\Console\CommandCollectionAwareInterface;
 use Cake\Console\ConsoleIo;
@@ -45,7 +45,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
     /**
      * The HelpCommand to get help.
      *
-     * @var \Cake\Command\HelpCommand
+     * @var \Cake\Console\Command\HelpCommand
      */
     protected $help;
 

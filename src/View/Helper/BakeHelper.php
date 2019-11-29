@@ -256,19 +256,12 @@ class BakeHelper extends Helper
                 if (isset($associationFields[$field])) {
                     return 'string';
                 }
-                if (
-                    in_array($type, [
-                    'decimal',
-                    'biginteger',
-                    'integer',
-                    'float',
-                    'smallinteger',
-                    'tinyinteger',
-                    ])
-                ) {
+                $numberTypes = ['decimal', 'biginteger', 'integer', 'float', 'smallinteger', 'tinyinteger'];
+                if (in_array($type, $numberTypes)) {
                     return 'number';
                 }
-                if (in_array($type, ['date', 'time', 'datetime', 'timestamp'])) {
+                $dateTypes = ['date', 'time', 'datetime', 'datetimefractional', 'timestamp', 'timestampfractional'];
+                if (in_array($type, $dateTypes)) {
                     return 'date';
                 }
 

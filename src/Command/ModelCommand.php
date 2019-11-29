@@ -723,9 +723,9 @@ class ModelCommand extends BakeCommand
             $rules['date'] = [];
         } elseif ($metaData['type'] === 'time') {
             $rules['time'] = [];
-        } elseif ($metaData['type'] === 'datetime') {
+        } elseif (strpos($metaData['type'], 'datetime') === 0) {
             $rules['dateTime'] = [];
-        } elseif ($metaData['type'] === 'timestamp') {
+        } elseif (strpos($metaData['type'], 'timestamp') === 0) {
             $rules['dateTime'] = [];
         } elseif ($metaData['type'] === 'inet') {
             $rules['ip'] = [];
@@ -773,7 +773,8 @@ class ModelCommand extends BakeCommand
                 continue;
             }
 
-            $notDatetime = !in_array($metaData['type'], ['datetime', 'timestamp', 'date', 'time']);
+            $timeTypes = ['datetime', 'timestamp', 'datetimefractional', 'timestampfractional', 'date', 'time'];
+            $notDatetime = !in_array($metaData['type'], $timeTypes);
             if ($constraint['type'] === TableSchema::CONSTRAINT_UNIQUE && $notDatetime) {
                 $validation['unique'] = ['rule' => 'validateUnique', 'provider' => 'table'];
             }
@@ -800,7 +801,9 @@ class ModelCommand extends BakeCommand
                 return $prefix . 'EmptyTime';
 
             case 'datetime':
+            case 'datetimefractional':
             case 'timestamp':
+            case 'timestampfractional':
                 return $prefix . 'EmptyDateTime';
         }
 
@@ -830,9 +833,14 @@ class ModelCommand extends BakeCommand
             return [];
         }
 
+        $uniqueColumns = ['username', 'login'];
+        if (in_array($model->getAlias(), ['Users', 'Accounts'])) {
+            $uniqueColumns[] = 'email';
+        }
+
         $rules = [];
         foreach ($fields as $fieldName) {
-            if (in_array($fieldName, ['username', 'email', 'login'])) {
+            if (in_array($fieldName, $uniqueColumns)) {
                 $rules[$fieldName] = ['name' => 'isUnique'];
             }
         }
