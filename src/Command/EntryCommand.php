@@ -45,7 +45,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
     /**
      * The HelpCommand to get help.
      *
-     * @var \Cake\Command\HelpCommand
+     * @var \Cake\Console\Command\HelpCommand
      */
     protected $help;
 
