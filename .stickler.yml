@@ -3,4 +3,4 @@ linters:
     standard: ./phpcs.xml.dist
 
 branches:
-  ignore: ['2.x']
+  ignore: ['4.x']
