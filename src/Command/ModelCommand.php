@@ -773,7 +773,16 @@ class ModelCommand extends BakeCommand
                 continue;
             }
 
-            $timeTypes = ['datetime', 'timestamp', 'datetimefractional', 'timestampfractional', 'date', 'time'];
+            $timeTypes = [
+                'datetime',
+                'timestamp',
+                'datetimefractional',
+                'timestampfractional',
+                'datetimetimezone',
+                'timestamptimezone',
+                'date',
+                'time',
+            ];
             $notDatetime = !in_array($metaData['type'], $timeTypes);
             if ($constraint['type'] === TableSchema::CONSTRAINT_UNIQUE && $notDatetime) {
                 $validation['unique'] = ['rule' => 'validateUnique', 'provider' => 'table'];
@@ -802,8 +811,10 @@ class ModelCommand extends BakeCommand
 
             case 'datetime':
             case 'datetimefractional':
+            case 'datetimetimezone':
             case 'timestamp':
             case 'timestampfractional':
+            case 'timestamptimezone':
                 return $prefix . 'EmptyDateTime';
         }
 

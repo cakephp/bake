@@ -260,7 +260,16 @@ class BakeHelper extends Helper
                 if (in_array($type, $numberTypes)) {
                     return 'number';
                 }
-                $dateTypes = ['date', 'time', 'datetime', 'datetimefractional', 'timestamp', 'timestampfractional'];
+                $dateTypes = [
+                    'date',
+                    'time',
+                    'datetime',
+                    'datetimefractional',
+                    'datetimetimezone',
+                    'timestamp',
+                    'timestampfractional',
+                    'timestamptimezone',
+                ];
                 if (in_array($type, $dateTypes)) {
                     return 'date';
                 }
