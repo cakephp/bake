@@ -729,7 +729,7 @@ class ModelCommand extends BakeCommand
             $rules['dateTime'] = [];
         } elseif ($metaData['type'] === 'inet') {
             $rules['ip'] = [];
-        } elseif ($metaData['type'] === 'string' || $metaData['type'] === 'text') {
+        } elseif (in_array($metaData['type'], ['char', 'string', 'text'], true)) {
             $rules['scalar'] = [];
             if ($metaData['length'] > 0) {
                 $rules['maxLength'] = [$metaData['length']];
