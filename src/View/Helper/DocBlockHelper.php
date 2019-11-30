@@ -177,6 +177,7 @@ class DocBlockHelper extends Helper
     public function columnTypeToHintType(string $type): ?string
     {
         switch ($type) {
+            case 'char':
             case 'string':
             case 'text':
             case 'uuid':
