@@ -265,7 +265,6 @@ class BakeHelper extends Helper
                     'time',
                     'datetime',
                     'datetimefractional',
-                    'datetimetimezone',
                     'timestamp',
                     'timestampfractional',
                     'timestamptimezone',

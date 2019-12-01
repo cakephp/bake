@@ -778,7 +778,6 @@ class ModelCommand extends BakeCommand
                 'timestamp',
                 'datetimefractional',
                 'timestampfractional',
-                'datetimetimezone',
                 'timestamptimezone',
                 'date',
                 'time',
@@ -811,7 +810,6 @@ class ModelCommand extends BakeCommand
 
             case 'datetime':
             case 'datetimefractional':
-            case 'datetimetimezone':
             case 'timestamp':
             case 'timestampfractional':
             case 'timestamptimezone':

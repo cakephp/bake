@@ -205,7 +205,6 @@ class DocBlockHelper extends Helper
             case 'date':
             case 'datetime':
             case 'datetimefractional':
-            case 'datetimetimezone':
             case 'time':
             case 'timestamp':
             case 'timestampfractional':
