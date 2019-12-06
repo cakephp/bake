@@ -209,6 +209,7 @@ class DocBlockHelper extends Helper
             case 'time':
             case 'timestamp':
             case 'timestampfractional':
+            case 'timestamptimezone':
                 $dbType = Type::build($type);
                 if (method_exists($dbType, 'getDateTimeClassName')) {
                     return '\\' . $dbType->getDateTimeClassName();
