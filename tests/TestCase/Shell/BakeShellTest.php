@@ -116,7 +116,7 @@ class BakeShellTest extends TestCase
         $expected = [
             'Bake All',
             '---------------------------------------------------------------',
-            '<success>Bake All complete.</success>'
+            '<success>Bake All complete.</success>',
         ];
         $this->assertSame($expected, $output);
     }
@@ -145,7 +145,7 @@ class BakeShellTest extends TestCase
         $expected = [
             'Bake All',
             '---------------------------------------------------------------',
-            '<success>Bake All complete.</success>'
+            '<success>Bake All complete.</success>',
         ];
         $this->assertSame($expected, $output);
     }
@@ -222,7 +222,7 @@ class BakeShellTest extends TestCase
             '- test',
             '- twig_template',
             '',
-            'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.'
+            'By using <info>`cake bake [name]`</info> you can invoke a specific bake task.',
         ];
 
         $this->assertOutputContains(implode(PHP_EOL, $expected));

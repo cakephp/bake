@@ -47,7 +47,7 @@ class ModelTask extends BakeTask
     public $tasks = [
         'Bake.Fixture',
         'Bake.BakeTemplate',
-        'Bake.Test'
+        'Bake.Test',
     ];
 
     /**
@@ -193,7 +193,7 @@ class ModelTask extends BakeTask
         return TableRegistry::getTableLocator()->get($className, [
             'name' => $className,
             'table' => $this->tablePrefix . $table,
-            'connection' => ConnectionManager::get($this->connection)
+            'connection' => ConnectionManager::get($this->connection),
         ]);
     }
 
@@ -215,7 +215,7 @@ class ModelTask extends BakeTask
         $associations = [
             'belongsTo' => [],
             'hasMany' => [],
-            'belongsToMany' => []
+            'belongsToMany' => [],
         ];
 
         $primary = $table->getPrimaryKey();
@@ -306,7 +306,7 @@ class ModelTask extends BakeTask
             }
 
             $info[$association->getName()] = [
-                'targetFqn' => '\\' . $tableClass
+                'targetFqn' => '\\' . $tableClass,
             ];
         }
 
@@ -333,7 +333,7 @@ class ModelTask extends BakeTask
                 $assoc = [
                     'alias' => 'Parent' . $model->getAlias(),
                     'className' => $className,
-                    'foreignKey' => $fieldName
+                    'foreignKey' => $fieldName,
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
@@ -345,7 +345,7 @@ class ModelTask extends BakeTask
                 }
                 $assoc = [
                     'alias' => $tmpModelName,
-                    'foreignKey' => $fieldName
+                    'foreignKey' => $fieldName,
                 ];
                 if ($schema->getColumn($fieldName)['null'] === false) {
                     $assoc['joinType'] = 'INNER';
@@ -429,14 +429,14 @@ class ModelTask extends BakeTask
                 if (!in_array($fieldName, $primaryKey) && $fieldName === $foreignKey) {
                     $assoc = [
                         'alias' => $otherModel->getAlias(),
-                        'foreignKey' => $fieldName
+                        'foreignKey' => $fieldName,
                     ];
                 } elseif ($otherTableName === $tableName && $fieldName === 'parent_id') {
                     $className = ($this->plugin) ? $this->plugin . '.' . $model->getAlias() : $model->getAlias();
                     $assoc = [
                         'alias' => 'Child' . $model->getAlias(),
                         'className' => $className,
-                        'foreignKey' => $fieldName
+                        'foreignKey' => $fieldName,
                     ];
                 }
                 if ($assoc && $this->plugin && empty($assoc['className'])) {
@@ -481,7 +481,7 @@ class ModelTask extends BakeTask
                     'alias' => $habtmName,
                     'foreignKey' => $foreignKey,
                     'targetForeignKey' => $this->_modelKey($habtmName),
-                    'joinTable' => $otherTableName
+                    'joinTable' => $otherTableName,
                 ];
                 if ($this->plugin) {
                     $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
@@ -584,7 +584,7 @@ class ModelTask extends BakeTask
             $properties[$association->getProperty()] = [
                 'kind' => 'association',
                 'association' => $association,
-                'type' => $entityClass
+                'type' => $entityClass,
             ];
         }
 
@@ -720,14 +720,14 @@ class ModelTask extends BakeTask
             $rules['numeric'] = [];
             if ($metaData['unsigned']) {
                 $rules['greaterThanOrEqual'] = [
-                    0
+                    0,
                 ];
             }
         } elseif ($metaData['type'] === 'decimal') {
             $rules['decimal'] = [];
             if ($metaData['unsigned']) {
                 $rules['greaterThanOrEqual'] = [
-                    0
+                    0,
                 ];
             }
         } elseif ($metaData['type'] === 'boolean') {
@@ -753,7 +753,7 @@ class ModelTask extends BakeTask
         foreach ($rules as $rule => $args) {
             $validation[$rule] = [
                 'rule' => $rule,
-                'args' => $args
+                'args' => $args,
             ];
         }
 
@@ -961,7 +961,7 @@ class ModelTask extends BakeTask
             'namespace' => $namespace,
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
-            'primaryKey' => []
+            'primaryKey' => [],
         ];
 
         $this->BakeTemplate->set($data);
@@ -1133,47 +1133,47 @@ class ModelTask extends BakeTask
             'Bake table and entity classes.'
         )->addArgument('name', [
             'help' => 'Name of the model to bake (without the Table suffix). ' .
-                'You can use Plugin.name to bake plugin models.'
+                'You can use Plugin.name to bake plugin models.',
         ])->addSubcommand('all', [
-            'help' => 'Bake all model files with associations and validation.'
+            'help' => 'Bake all model files with associations and validation.',
         ])->addOption('table', [
-            'help' => 'The table name to use if you have non-conventional table names.'
+            'help' => 'The table name to use if you have non-conventional table names.',
         ])->addOption('no-entity', [
             'boolean' => true,
-            'help' => 'Disable generating an entity class.'
+            'help' => 'Disable generating an entity class.',
         ])->addOption('no-table', [
             'boolean' => true,
-            'help' => 'Disable generating a table class.'
+            'help' => 'Disable generating a table class.',
         ])->addOption('no-validation', [
             'boolean' => true,
-            'help' => 'Disable generating validation rules.'
+            'help' => 'Disable generating validation rules.',
         ])->addOption('no-rules', [
             'boolean' => true,
-            'help' => 'Disable generating a rules checker.'
+            'help' => 'Disable generating a rules checker.',
         ])->addOption('no-associations', [
             'boolean' => true,
-            'help' => 'Disable generating associations.'
+            'help' => 'Disable generating associations.',
         ])->addOption('no-fields', [
             'boolean' => true,
-            'help' => 'Disable generating accessible fields in the entity.'
+            'help' => 'Disable generating accessible fields in the entity.',
         ])->addOption('fields', [
-            'help' => 'A comma separated list of fields to make accessible.'
+            'help' => 'A comma separated list of fields to make accessible.',
         ])->addOption('no-hidden', [
             'boolean' => true,
-            'help' => 'Disable generating hidden fields in the entity.'
+            'help' => 'Disable generating hidden fields in the entity.',
         ])->addOption('hidden', [
-            'help' => 'A comma separated list of fields to hide.'
+            'help' => 'A comma separated list of fields to hide.',
         ])->addOption('primary-key', [
             'help' => 'The primary key if you would like to manually set one.' .
-                ' Can be a comma separated list if you are using a composite primary key.'
+                ' Can be a comma separated list if you are using a composite primary key.',
         ])->addOption('display-field', [
-            'help' => 'The displayField if you would like to choose one.'
+            'help' => 'The displayField if you would like to choose one.',
         ])->addOption('no-test', [
             'boolean' => true,
-            'help' => 'Do not generate a test case skeleton.'
+            'help' => 'Do not generate a test case skeleton.',
         ])->addOption('no-fixture', [
             'boolean' => true,
-            'help' => 'Do not generate a test fixture skeleton.'
+            'help' => 'Do not generate a test fixture skeleton.',
         ])->setEpilog(
             'Omitting all arguments and options will list the table names you can generate models for'
         );

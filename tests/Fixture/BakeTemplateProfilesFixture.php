@@ -39,7 +39,7 @@ class BakeTemplateProfilesFixture extends TestFixture
         'author_id' => ['type' => 'integer', 'null' => false],
         'nick' => ['type' => 'string', 'null' => false],
         'avatar' => ['type' => 'string', 'default' => null],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ];
 
     /**

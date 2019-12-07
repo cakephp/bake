@@ -38,7 +38,7 @@ class FixtureTaskTest extends TestCase
         'plugin.Bake.Datatypes',
         'plugin.Bake.BinaryTests',
         'plugin.Bake.BakeCar',
-        'core.Users'
+        'core.Users',
     ];
 
     /**

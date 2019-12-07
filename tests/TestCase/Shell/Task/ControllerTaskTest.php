@@ -35,7 +35,7 @@ class ControllerTaskTest extends TestCase
         'plugin.Bake.BakeArticles',
         'plugin.Bake.BakeArticlesBakeTags',
         'plugin.Bake.BakeComments',
-        'plugin.Bake.BakeTags'
+        'plugin.Bake.BakeTags',
     ];
 
     /**
@@ -76,7 +76,7 @@ class ControllerTaskTest extends TestCase
             ->getMock();
 
         TableRegistry::getTableLocator()->get('BakeArticles', [
-            'className' => BakeArticlesTable::class
+            'className' => BakeArticlesTable::class,
         ]);
     }
 
@@ -285,7 +285,7 @@ class ControllerTaskTest extends TestCase
     {
         $this->generatedFiles = [
             APP . 'Controller/BakeArticlesController.php',
-            ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php'
+            ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php',
         ];
         $this->exec('bake controller --connection test BakeArticles');
 
@@ -367,7 +367,7 @@ class ControllerTaskTest extends TestCase
     public static function nameVariations()
     {
         return [
-            ['BakeArticles'], ['bake_articles']
+            ['BakeArticles'], ['bake_articles'],
         ];
     }
 

@@ -34,7 +34,7 @@ class BakeCommentsFixture extends TestFixture
         'published' => ['type' => 'string', 'length' => 1, 'default' => 'N'],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'updated' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['otherid']]]
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['otherid']]],
     ];
 
     /**

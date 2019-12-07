@@ -35,6 +35,6 @@ class BakeArticle extends Entity
         'id' => true,
         'title' => true,
         'body' => true,
-        'created' => true
+        'created' => true,
     ];
 }

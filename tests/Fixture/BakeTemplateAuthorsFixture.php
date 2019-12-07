@@ -43,7 +43,7 @@ class BakeTemplateAuthorsFixture extends TestFixture
         'account_balance' => ['type' => 'decimal', 'null' => true, 'precision' => 2, 'length' => 12],
         'created' => 'datetime',
         'modified' => 'datetime',
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ];
 
     /**

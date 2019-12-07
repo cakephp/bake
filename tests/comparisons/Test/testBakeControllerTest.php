@@ -20,7 +20,7 @@ class PostsControllerTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.Posts'
+        'app.Posts',
     ];
 
     /**

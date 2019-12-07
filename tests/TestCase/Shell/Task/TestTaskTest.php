@@ -195,23 +195,23 @@ class TestTaskTest extends TestCase
             ->withConsecutive(
                 [
                     $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'ArticlesTableTest.php'),
-                    $this->stringContains('class ArticlesTableTest extends TestCase')
+                    $this->stringContains('class ArticlesTableTest extends TestCase'),
                 ],
                 [
                     $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'AuthorsTableTest.php'),
-                    $this->stringContains('class AuthorsTableTest extends TestCase')
+                    $this->stringContains('class AuthorsTableTest extends TestCase'),
                 ],
                 [
                     $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'BakeArticlesTableTest.php'),
-                    $this->stringContains('class BakeArticlesTableTest extends TestCase')
+                    $this->stringContains('class BakeArticlesTableTest extends TestCase'),
                 ],
                 [
                     $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'CategoryThreadsTableTest.php'),
-                    $this->stringContains('class CategoryThreadsTableTest extends TestCase')
+                    $this->stringContains('class CategoryThreadsTableTest extends TestCase'),
                 ],
                 [
                     $this->stringContains('TestCase' . DS . 'Model' . DS . 'Table' . DS . 'TemplateTaskCommentsTableTest.php'),
-                    $this->stringContains('class TemplateTaskCommentsTableTest extends TestCase')
+                    $this->stringContains('class TemplateTaskCommentsTableTest extends TestCase'),
                 ]
             );
         $this->Task->params['all'] = true;
@@ -230,7 +230,7 @@ class TestTaskTest extends TestCase
             'AuthorsTable',
             'BakeArticlesTable',
             'CategoryThreadsTable',
-            'TemplateTaskCommentsTable'
+            'TemplateTaskCommentsTable',
         ];
 
         $this->io->expects($this->exactly(8))
@@ -263,7 +263,7 @@ class TestTaskTest extends TestCase
             'AuthorsTable',
             'BakeArticlesTable',
             'BakeTestCommentsTable',
-            'CommentsTable'
+            'CommentsTable',
         ];
 
         $choices = $this->Task->outputClassChoices('Table');
@@ -296,7 +296,7 @@ class TestTaskTest extends TestCase
             'app.Articles',
             'app.Authors',
             'app.Tags',
-            'app.ArticlesTags'
+            'app.ArticlesTags',
         ];
         $this->assertEquals($expected, $result);
     }
@@ -663,7 +663,7 @@ class TestTaskTest extends TestCase
         $expected = [
             "\$config = TableRegistry::getTableLocator()->exists('Posts') ? [] : ['className' => PostsTable::class];",
             "TableRegistry::getTableLocator()->get('Posts', \$config);",
-            ''
+            '',
         ];
         $this->assertEquals($expected, $result);
 
@@ -679,7 +679,7 @@ class TestTaskTest extends TestCase
         $expected = [
             "\$this->stub = new ConsoleOutput();\n        \$this->io = new ConsoleIo(\$this->stub);",
             "new ExampleHelper(\$this->io);",
-            ''
+            '',
         ];
         $this->assertEquals($expected, $result);
 
@@ -687,7 +687,7 @@ class TestTaskTest extends TestCase
         $expected = [
             '',
             "new ExampleForm();",
-            ''
+            '',
         ];
         $this->assertEquals($expected, $result);
     }
@@ -781,7 +781,7 @@ class TestTaskTest extends TestCase
             [
                 'Component',
                 'App\Controller\Component\AuthComponent',
-                'TestCase/Controller/Component/AuthComponentTest.php'
+                'TestCase/Controller/Component/AuthComponentTest.php',
             ],
             ['entity', 'App\Model\Entity\Article', 'TestCase/Model/Entity/ArticleTest.php'],
             ['table', 'App\Model\Table\PostsTable', 'TestCase/Model/Table/PostsTableTest.php'],
@@ -791,7 +791,7 @@ class TestTaskTest extends TestCase
             [
                 'component',
                 'App\Controller\Component\AuthComponent',
-                'TestCase/Controller/Component/AuthComponentTest.php'
+                'TestCase/Controller/Component/AuthComponentTest.php',
             ],
             ['Shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
             ['shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
@@ -820,7 +820,7 @@ class TestTaskTest extends TestCase
         $this->Task->path = DS . 'my/path/tests/';
 
         $this->loadPlugins([
-            'TestTest' => ['path' => APP . 'Plugin' . DS . 'TestTest' . DS]
+            'TestTest' => ['path' => APP . 'Plugin' . DS . 'TestTest' . DS],
         ]);
         $this->Task->plugin = 'TestTest';
         $class = 'TestBake\Model\Entity\Post';

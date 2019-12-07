@@ -49,7 +49,7 @@ class InvitationsFixture extends TestFixture
                 'update' => 'noAction',
                 'delete' => 'noAction',
             ],
-        ]
+        ],
     ];
 
     /**
@@ -62,6 +62,6 @@ class InvitationsFixture extends TestFixture
             'sender_id' => 1,
             'receiver_id' => 1,
             'body' => 'Try it out!',
-        ]
+        ],
     ];
 }

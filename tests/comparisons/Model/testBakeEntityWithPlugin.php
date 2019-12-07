@@ -43,11 +43,11 @@ class UsersTable extends Table
 
         $this->hasMany('Comments', [
             'foreignKey' => 'user_id',
-            'className' => 'BakeTest.Comments'
+            'className' => 'BakeTest.Comments',
         ]);
         $this->hasMany('CounterCachePosts', [
             'foreignKey' => 'user_id',
-            'className' => 'BakeTest.CounterCachePosts'
+            'className' => 'BakeTest.CounterCachePosts',
         ]);
     }
 

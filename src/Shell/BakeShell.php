@@ -310,10 +310,10 @@ class BakeShell extends Shell
             'default' => false,
             'boolean' => true,
         ])->addOption('prefix', [
-            'help' => 'Prefix to bake controllers and templates into.'
+            'help' => 'Prefix to bake controllers and templates into.',
         ])->addOption('tablePrefix', [
             'help' => 'Table prefix to be used in models.',
-            'default' => null
+            'default' => null,
         ]);
 
         $parser = $this->_setCommonOptions($parser);
@@ -323,7 +323,7 @@ class BakeShell extends Shell
             $this->{$task}->interactive = $this->interactive;
             $parser->addSubcommand(Inflector::underscore($task), [
                 'help' => $taskParser->getDescription(),
-                'parser' => $taskParser
+                'parser' => $taskParser,
             ]);
         }
 

@@ -42,12 +42,12 @@ class ProductsTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->hasMany('ProductVersions', [
-            'foreignKey' => 'product_id'
+            'foreignKey' => 'product_id',
         ]);
         $this->belongsToMany('Categories', [
             'foreignKey' => 'product_id',
             'targetForeignKey' => 'category_id',
-            'joinTable' => 'categories_products'
+            'joinTable' => 'categories_products',
         ]);
     }
 

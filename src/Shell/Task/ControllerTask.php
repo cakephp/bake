@@ -35,7 +35,7 @@ class ControllerTask extends BakeTask
     public $tasks = [
         'Bake.Model',
         'Bake.BakeTemplate',
-        'Bake.Test'
+        'Bake.Test',
     ];
 
     /**
@@ -125,7 +125,7 @@ class ControllerTask extends BakeTask
             $modelObj = TableRegistry::getTableLocator()->get($plugin . $currentModelName);
         } else {
             $modelObj = TableRegistry::getTableLocator()->get($plugin . $currentModelName, [
-                'connectionName' => $this->connection
+                'connectionName' => $this->connection,
             ]);
         }
 
@@ -269,24 +269,24 @@ class ControllerTask extends BakeTask
             'Bake a controller skeleton.'
         )->addArgument('name', [
             'help' => 'Name of the controller to bake (without the `Controller` suffix). ' .
-                'You can use Plugin.name to bake controllers into plugins.'
+                'You can use Plugin.name to bake controllers into plugins.',
         ])->addOption('components', [
-            'help' => 'The comma separated list of components to use.'
+            'help' => 'The comma separated list of components to use.',
         ])->addOption('helpers', [
-            'help' => 'The comma separated list of helpers to use.'
+            'help' => 'The comma separated list of helpers to use.',
         ])->addOption('prefix', [
-            'help' => 'The namespace/routing prefix to use.'
+            'help' => 'The namespace/routing prefix to use.',
         ])->addOption('actions', [
             'help' => 'The comma separated list of actions to generate. ' .
-                      'You can include custom methods provided by your template set here.'
+                      'You can include custom methods provided by your template set here.',
         ])->addOption('no-test', [
             'boolean' => true,
-            'help' => 'Do not generate a test skeleton.'
+            'help' => 'Do not generate a test skeleton.',
         ])->addOption('no-actions', [
             'boolean' => true,
-            'help' => 'Do not generate basic CRUD action methods.'
+            'help' => 'Do not generate basic CRUD action methods.',
         ])->addSubcommand('all', [
-            'help' => 'Bake all controllers with CRUD methods.'
+            'help' => 'Bake all controllers with CRUD methods.',
         ]);
 
         return $parser;

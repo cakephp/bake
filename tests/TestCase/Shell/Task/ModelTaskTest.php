@@ -316,7 +316,7 @@ class ModelTaskTest extends TestCase
                 [
                     'alias' => 'BakeUsers',
                     'foreignKey' => 'bake_user_id',
-                    'joinType' => 'INNER'
+                    'joinType' => 'INNER',
                 ],
             ],
             'hasMany' => [
@@ -354,7 +354,7 @@ class ModelTaskTest extends TestCase
                     'alias' => 'BakeUsers',
                     'className' => 'TestBake.BakeUsers',
                     'foreignKey' => 'bake_user_id',
-                    'joinType' => 'INNER'
+                    'joinType' => 'INNER',
                 ],
             ],
             'hasMany' => [
@@ -412,14 +412,14 @@ class ModelTaskTest extends TestCase
                 [
                     'alias' => 'BakeArticles',
                     'foreignKey' => 'bake_article_id',
-                    'joinType' => 'INNER'
+                    'joinType' => 'INNER',
                 ],
                 [
                     'alias' => 'BakeUsers',
                     'foreignKey' => 'bake_user_id',
-                    'joinType' => 'INNER'
+                    'joinType' => 'INNER',
                 ],
-            ]
+            ],
         ];
         $this->assertEquals($expected, $result);
 
@@ -430,9 +430,9 @@ class ModelTaskTest extends TestCase
                 [
                     'alias' => 'ParentCategoryThreads',
                     'className' => 'CategoryThreads',
-                    'foreignKey' => 'parent_id'
+                    'foreignKey' => 'parent_id',
                 ],
-            ]
+            ],
         ];
         $this->assertEquals($expected, $result);
 
@@ -443,9 +443,9 @@ class ModelTaskTest extends TestCase
                 [
                     'alias' => 'ParentCategoryThreads',
                     'className' => 'Blog.CategoryThreads',
-                    'foreignKey' => 'parent_id'
+                    'foreignKey' => 'parent_id',
                 ],
-            ]
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -471,7 +471,7 @@ class ModelTaskTest extends TestCase
                     'foreignKey' => 'receiver_id',
                     'joinType' => 'INNER',
                 ],
-            ]
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -491,14 +491,14 @@ class ModelTaskTest extends TestCase
                 [
                     'alias' => 'Articles',
                     'foreignKey' => 'article_id',
-                    'joinType' => 'INNER'
+                    'joinType' => 'INNER',
                 ],
                 [
                     'alias' => 'Tags',
                     'foreignKey' => 'tag_id',
-                    'joinType' => 'INNER'
-                ]
-            ]
+                    'joinType' => 'INNER',
+                ],
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -531,8 +531,8 @@ class ModelTaskTest extends TestCase
             'usr_id' => ['type' => 'integer'],
             'name' => ['type' => 'string'],
             '_constraints' => [
-                'primary' => ['type' => 'primary', 'columns' => ['usr_id']]
-            ]
+                'primary' => ['type' => 'primary', 'columns' => ['usr_id']],
+            ],
         ]);
         $result = $this->Task->findBelongsTo($model, []);
         $this->assertEquals([], $result);
@@ -567,7 +567,7 @@ class ModelTaskTest extends TestCase
                     'className' => 'CategoryThreads',
                     'foreignKey' => 'parent_id',
                 ],
-            ]
+            ],
         ];
         $this->assertEquals($expected, $result);
 
@@ -578,9 +578,9 @@ class ModelTaskTest extends TestCase
                 [
                     'alias' => 'ChildCategoryThreads',
                     'className' => 'Blog.CategoryThreads',
-                    'foreignKey' => 'parent_id'
+                    'foreignKey' => 'parent_id',
                 ],
-            ]
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -666,8 +666,8 @@ class ModelTaskTest extends TestCase
             'updated' => [
                 'kind' => 'column',
                 'type' => 'timestamp',
-                'null' => true
-            ]
+                'null' => true,
+            ],
         ];
         foreach ($expected as $key => $value) {
             $this->assertArrayHasKey($key, $result);
@@ -686,13 +686,13 @@ class ModelTaskTest extends TestCase
             'bake_user' => [
                 'kind' => 'association',
                 'association' => $model->getAssociation('BakeUsers'),
-                'type' => '\App\Model\Entity\BakeUser'
+                'type' => '\App\Model\Entity\BakeUser',
             ],
             'authors' => [
                 'kind' => 'association',
                 'association' => $model->getAssociation('Authors'),
-                'type' => '\BakeTest\Model\Entity\Author'
-            ]
+                'type' => '\BakeTest\Model\Entity\Author',
+            ],
         ];
         foreach ($expectedAssociations as $key => $expected) {
             $this->assertEquals($expected, $result[$key]);
@@ -850,7 +850,7 @@ class ModelTaskTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
             ],
             'bake_user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -861,11 +861,11 @@ class ModelTaskTest extends TestCase
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
-                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'body' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'rating' => [
                 'numeric' => ['rule' => 'numeric', 'args' => []],
@@ -909,17 +909,17 @@ class ModelTaskTest extends TestCase
             ],
             'comment' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'published' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [1]],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'otherid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
-            ]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -947,11 +947,11 @@ class ModelTaskTest extends TestCase
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
-                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'body' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'rating' => [
                 'numeric' => ['rule' => 'numeric', 'args' => []],
@@ -967,8 +967,8 @@ class ModelTaskTest extends TestCase
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
-            ]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
+            ],
         ];
         $this->assertEquals($expected, $result);
 
@@ -987,17 +987,17 @@ class ModelTaskTest extends TestCase
             ],
             'comment' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'published' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [1]],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'otherid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
-            ]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -1015,7 +1015,7 @@ class ModelTaskTest extends TestCase
             ->addColumn('release_date', ['type' => 'datetime'])
             ->addConstraint('unique_date', [
                 'columns' => ['release_date'],
-                'type' => 'unique'
+                'type' => 'unique',
             ]);
         $result = $this->Task->getValidation($model);
         $this->assertArrayHasKey('release_date', $result);
@@ -1043,21 +1043,21 @@ class ModelTaskTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
-                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'parent_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'depth' => [
                 'nonNegativeInteger' => ['rule' => 'nonNegativeInteger', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1079,21 +1079,21 @@ class ModelTaskTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
-                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'parent_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'depth' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1114,23 +1114,23 @@ class ModelTaskTest extends TestCase
         $associations = [
             'belongsTo' => [
                 'BakeUsers' => ['foreignKey' => 'bake_user_id'],
-            ]
+            ],
         ];
         $result = $this->Task->getValidation($model, $associations);
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
             ],
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
-                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'body' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'rating' => [
                 'numeric' => ['rule' => 'numeric', 'args' => []],
@@ -1178,7 +1178,7 @@ class ModelTaskTest extends TestCase
         $associations = [
             'belongsTo' => [
                 'BakeUsers' => ['foreignKey' => 'bake_user_id'],
-            ]
+            ],
         ];
         $result = $this->Task->getValidation($model, $associations);
         $expected = [
@@ -1186,11 +1186,11 @@ class ModelTaskTest extends TestCase
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
-                'maxLength' => ['rule' => 'maxLength', 'args' => [50]]
+                'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
             'body' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
             ],
             'published' => [
                 'boolean' => ['rule' => 'boolean', 'args' => []],
@@ -1198,7 +1198,7 @@ class ModelTaskTest extends TestCase
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]]
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
             ],
             'rating' => [
                 'numeric' => ['rule' => 'numeric', 'args' => []],
@@ -1237,33 +1237,33 @@ class ModelTaskTest extends TestCase
             'belongsTo' => [
                 [
                     'alias' => 'Countries',
-                    'foreignKey' => 'country_id'
+                    'foreignKey' => 'country_id',
                 ],
                 [
                     'alias' => 'Sites',
-                    'foreignKey' => 'site_id'
-                ]
+                    'foreignKey' => 'site_id',
+                ],
             ],
             'hasMany' => [
                 [
                     'alias' => 'BakeComments',
                     'foreignKey' => 'bake_user_id',
                 ],
-            ]
+            ],
         ];
         $result = $this->Task->getRules($model, $associations);
         $expected = [
             'username' => [
-                'name' => 'isUnique'
+                'name' => 'isUnique',
             ],
             'country_id' => [
                 'name' => 'existsIn',
-                'extra' => 'Countries'
+                'extra' => 'Countries',
             ],
             'site_id' => [
                 'name' => 'existsIn',
-                'extra' => 'Sites'
-            ]
+                'extra' => 'Sites',
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -1281,17 +1281,17 @@ class ModelTaskTest extends TestCase
         $model = TableRegistry::getTableLocator()->get('BakeArticles');
         $model->getSchema()->addConstraint('unique_title', [
             'type' => 'unique',
-            'columns' => ['title']
+            'columns' => ['title'],
         ]);
         $model->getSchema()->addConstraint('ignored_constraint', [
             'type' => 'unique',
-            'columns' => ['title', 'bake_user_id']
+            'columns' => ['title', 'bake_user_id'],
         ]);
 
         $result = $this->Task->getRules($model, []);
         $expected = [
             'title' => [
-                'name' => 'isUnique'
+                'name' => 'isUnique',
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1314,10 +1314,10 @@ class ModelTaskTest extends TestCase
 
         TableRegistry::getTableLocator()->clear();
         TableRegistry::getTableLocator()->get('Users', [
-            'table' => 'counter_cache_users'
+            'table' => 'counter_cache_users',
         ]);
         $model = TableRegistry::getTableLocator()->get('Posts', [
-            'table' => 'counter_cache_posts'
+            'table' => 'counter_cache_posts',
         ]);
         $behaviors = $this->Task->getBehaviors($model);
 
@@ -1393,7 +1393,7 @@ class ModelTaskTest extends TestCase
         $this->generatedFiles = [
             APP . 'Model/Table/BakeTagsTable.php',
             APP . 'Model/Entity/BakeTag.php',
-            ROOT . 'tests/TestCase/Model/Table/BakeTagsTableTest.php'
+            ROOT . 'tests/TestCase/Model/Table/BakeTagsTableTest.php',
         ];
         $this->exec('bake model --no-fixture bake_tags');
 
@@ -1429,8 +1429,8 @@ class ModelTaskTest extends TestCase
                     'rule' => 'maxLength',
                     'args' => [
                         100,
-                        "'Name must be shorter than 100 characters.'"
-                    ]
+                        "'Name must be shorter than 100 characters.'",
+                    ],
                 ],
                 'requirePresense' => [
                     'rule' => 'requirePresence',
@@ -1459,7 +1459,7 @@ class ModelTaskTest extends TestCase
                 'valid' => [
                     'rule' => 'greaterThanOrEqual',
                     'args' => [
-                        0
+                        0,
                     ],
                 ],
                 'requirePresense' => [
@@ -1478,7 +1478,7 @@ class ModelTaskTest extends TestCase
                 ],
                 'unique' => [
                     'rule' => 'validateUnique',
-                    'provider' => 'table'
+                    'provider' => 'table',
                 ],
                 'allowEmpty' => [
                     'rule' => 'allowEmptyString',
@@ -1495,15 +1495,15 @@ class ModelTaskTest extends TestCase
                     'args' => [
                         [
                             'optional' => 'true',
-                            'types' => ["'image/jpeg'"]
-                        ]
-                    ]
+                            'types' => ["'image/jpeg'"],
+                        ],
+                    ],
                 ],
                 'allowEmpty' => [
                     'rule' => 'allowEmptyFile',
                     'args' => [],
-                ]
-            ]
+                ],
+            ],
         ];
         $model = TableRegistry::getTableLocator()->get('BakeArticles');
         $result = $this->Task->bakeTable($model, compact('validation'));
@@ -1566,7 +1566,7 @@ class ModelTaskTest extends TestCase
                     'joinTable' => 'bake_articles_bake_tags',
                     'targetForeignKey' => 'bake_tag_id',
                 ],
-            ]
+            ],
         ];
         $associationInfo = [
             'SomethingElse' => ['targetFqn' => '\App\Model\Table\SomethingElseTable'],
@@ -1622,18 +1622,18 @@ class ModelTaskTest extends TestCase
         $model->belongsTo('BakeUsers');
         $model->hasMany('BakeTest.Authors');
         $model->getSchema()->addColumn('array_type', [
-            'type' => 'array'
+            'type' => 'array',
         ]);
         $model->getSchema()->addColumn('json_type', [
-            'type' => 'json'
+            'type' => 'json',
         ]);
         $model->getSchema()->addColumn('unknown_type', [
-            'type' => 'unknownType'
+            'type' => 'unknownType',
         ]);
 
         $config = [
             'fields' => false,
-            'propertySchema' => $this->Task->getEntityPropertySchema($model)
+            'propertySchema' => $this->Task->getEntityPropertySchema($model),
         ];
 
         $this->generatedFile = APP . 'Model/Entity/BakeArticle.php';
@@ -1654,7 +1654,7 @@ class ModelTaskTest extends TestCase
     {
         $config = [
             'primaryKey' => ['id'],
-            'fields' => null
+            'fields' => null,
         ];
         $model = TableRegistry::getTableLocator()->get('BakeArticles');
         $result = $this->Task->bakeEntity($model, $config);
@@ -1777,19 +1777,19 @@ class ModelTaskTest extends TestCase
             'belongsTo' => [
                 [
                     'alias' => 'Countries',
-                    'foreignKey' => 'country_id'
+                    'foreignKey' => 'country_id',
                 ],
                 [
                     'alias' => 'Sites',
-                    'foreignKey' => 'site_id'
-                ]
+                    'foreignKey' => 'site_id',
+                ],
             ],
             'hasMany' => [
                 [
                     'alias' => 'BakeComments',
                     'foreignKey' => 'bake_user_id',
                 ],
-            ]
+            ],
         ];
         $rulesChecker = $this->Task->getRules($model, $associations);
         $result = $this->Task->bakeTable($model, compact('rulesChecker'));
@@ -1836,7 +1836,7 @@ class ModelTaskTest extends TestCase
     public static function nameVariations()
     {
         return [
-            ['BakeComments'], ['bake_comments']
+            ['BakeComments'], ['bake_comments'],
         ];
     }
 
@@ -2044,14 +2044,14 @@ class ModelTaskTest extends TestCase
 
         $expected = [
             'BakeUsers' => [
-                'targetFqn' => '\App\Model\Table\BakeUsersTable'
+                'targetFqn' => '\App\Model\Table\BakeUsersTable',
             ],
             'Authors' => [
-                'targetFqn' => '\BakeTest\Model\Table\AuthorsTable'
+                'targetFqn' => '\BakeTest\Model\Table\AuthorsTable',
             ],
             'Publishers' => [
-                'targetFqn' => '\BakeTest\Model\Table\PublishersTable'
-            ]
+                'targetFqn' => '\BakeTest\Model\Table\PublishersTable',
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -2065,33 +2065,33 @@ class ModelTaskTest extends TestCase
     {
         $model = TableRegistry::getTableLocator()->get('Authors');
         $model->belongsTo('BakeUsersAlias', [
-            'className' => 'BakeTest.BakeUsers'
+            'className' => 'BakeTest.BakeUsers',
         ]);
         $model->hasMany('ArticlesAlias', [
-            'className' => 'Articles'
+            'className' => 'Articles',
         ]);
         $model->hasMany('BakeTestArticlesAlias', [
-            'className' => 'BakeTest.BakeTestArticles'
+            'className' => 'BakeTest.BakeTestArticles',
         ]);
         $model->hasMany('PublishersAlias', [
-            'className' => 'BakeTest.Publishers'
+            'className' => 'BakeTest.Publishers',
         ]);
 
         $result = $this->Task->getAssociationInfo($model);
 
         $expected = [
             'BakeUsersAlias' => [
-                'targetFqn' => '\BakeTest\Model\Table\BakeUsersTable'
+                'targetFqn' => '\BakeTest\Model\Table\BakeUsersTable',
             ],
             'ArticlesAlias' => [
-                'targetFqn' => '\App\Model\Table\ArticlesTable'
+                'targetFqn' => '\App\Model\Table\ArticlesTable',
             ],
             'BakeTestArticlesAlias' => [
-                'targetFqn' => '\BakeTest\Model\Table\BakeTestArticlesTable'
+                'targetFqn' => '\BakeTest\Model\Table\BakeTestArticlesTable',
             ],
             'PublishersAlias' => [
-                'targetFqn' => '\BakeTest\Model\Table\PublishersTable'
-            ]
+                'targetFqn' => '\BakeTest\Model\Table\PublishersTable',
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -2107,24 +2107,24 @@ class ModelTaskTest extends TestCase
 
         $model = TableRegistry::getTableLocator()->get('Authors');
         $model->hasMany('ArticlesAlias', [
-            'className' => 'Articles'
+            'className' => 'Articles',
         ]);
 
         $result = $this->Task->getAssociationInfo($model);
 
         $expected = [
             'Articles' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable'
+                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable',
             ],
             'ArticlesAlias' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable'
+                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable',
             ],
             'Roles' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\RolesTable'
+                'targetFqn' => '\Bake\Test\App\Model\Table\RolesTable',
             ],
             'Profiles' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ProfilesTable'
-            ]
+                'targetFqn' => '\Bake\Test\App\Model\Table\ProfilesTable',
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -2138,15 +2138,15 @@ class ModelTaskTest extends TestCase
     {
         $model = TableRegistry::getTableLocator()->get('Authors');
         $model->hasMany('ArticlesAlias', [
-            'className' => 'Bake\Test\App\Model\Table\ArticlesTable'
+            'className' => 'Bake\Test\App\Model\Table\ArticlesTable',
         ]);
 
         $result = $this->Task->getAssociationInfo($model);
 
         $expected = [
             'ArticlesAlias' => [
-                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable'
-            ]
+                'targetFqn' => '\Bake\Test\App\Model\Table\ArticlesTable',
+            ],
         ];
         $this->assertEquals($expected, $result);
     }

@@ -36,13 +36,13 @@ class PostsTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('CounterCache', [
-            'Users' => ['post_count']
+            'Users' => ['post_count'],
         ]);
         $this->addBehavior('Translate', [
             'defaultLocale' => 'fr_FR',
             'implementedFinders' => [
-                'translations' => 'findTranslations'
-            ]
+                'translations' => 'findTranslations',
+            ],
         ]);
     }
 

@@ -51,7 +51,7 @@ class ProductsFixture extends TestFixture
         [
             'created' => '2015-12-30 18:11:37',
             'modified' => '2015-12-30 18:11:37',
-            'name' => 'Lorem ipsum dolor sit amet'
+            'name' => 'Lorem ipsum dolor sit amet',
         ],
     ];
 }

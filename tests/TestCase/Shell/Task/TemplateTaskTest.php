@@ -335,8 +335,8 @@ class TemplateTaskTest extends TestCase
                         'alias' => 'Authors',
                         'controller' => 'TemplateTaskAuthors',
                         'fields' => ['name'],
-                    ]
-                ]
+                    ],
+                ],
             ],
             'keyFields' => [],
             'namespace' => $namespace,
@@ -740,7 +740,7 @@ class TemplateTaskTest extends TestCase
     {
         $this->generatedFiles = [
             APP . 'Template/Admin/Posts/index.ctp',
-            APP . 'Template/Admin/Posts/add.ctp'
+            APP . 'Template/Admin/Posts/add.ctp',
         ];
         $this->exec('bake template --prefix Admin Posts');
 

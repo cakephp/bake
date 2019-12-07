@@ -38,18 +38,18 @@ class BakeArticlesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('SomethingElse', [
-            'foreignKey' => 'something_else_id'
+            'foreignKey' => 'something_else_id',
         ]);
         $this->belongsTo('BakeUser', [
-            'foreignKey' => 'bake_user_id'
+            'foreignKey' => 'bake_user_id',
         ]);
         $this->hasMany('BakeComment', [
-            'foreignKey' => 'parent_id'
+            'foreignKey' => 'parent_id',
         ]);
         $this->belongsToMany('BakeTag', [
             'foreignKey' => 'bake_article_id',
             'joinTable' => 'bake_articles_bake_tags',
-            'targetForeignKey' => 'bake_tag_id'
+            'targetForeignKey' => 'bake_tag_id',
         ]);
     }
 

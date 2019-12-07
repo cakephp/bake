@@ -77,7 +77,7 @@ class AssociationFilterTest extends TestCase
     public function testFilterHasManyAssociationsAliases()
     {
         $table = TableRegistry::getTableLocator()->get('Articles', [
-            'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
+            'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
         ]);
         $result = $this->associationFilter->filterHasManyAssociationsAliases($table, ['ArticlesTags']);
         $expected = [];
@@ -96,15 +96,15 @@ class AssociationFilterTest extends TestCase
     public function testFilterHasManyAssociationsAliasesExtra()
     {
         $table = TableRegistry::getTableLocator()->get('Articles', [
-            'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
+            'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
         ]);
         $table->hasMany('ExtraArticles', [
-            'className' => 'Articles'
+            'className' => 'Articles',
         ]);
         $result = $this->associationFilter->filterHasManyAssociationsAliases($table, [
             'ExtraArticles',
             'ArticlesTags',
-            'AnotherHasMany'
+            'AnotherHasMany',
         ]);
         $expected = ['ExtraArticles', 'AnotherHasMany'];
         $this->assertSame(
@@ -123,7 +123,7 @@ class AssociationFilterTest extends TestCase
     public function testFilterAssociations()
     {
         $table = TableRegistry::getTableLocator()->get('Articles', [
-            'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
+            'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
         ]);
         $resultAssociations = $this->associationFilter->filterAssociations($table);
         $result = [];
@@ -145,7 +145,7 @@ class AssociationFilterTest extends TestCase
     public function testFilterAssociationsSelf()
     {
         $table = TableRegistry::getTableLocator()->get('CategoryThreads', [
-            'className' => '\Bake\Test\App\Model\Table\CategoryThreadsTable'
+            'className' => '\Bake\Test\App\Model\Table\CategoryThreadsTable',
         ]);
         $result = $this->associationFilter->filterAssociations($table);
         $this->assertArrayHasKey('HasMany', $result);
@@ -162,7 +162,7 @@ class AssociationFilterTest extends TestCase
     public function testFilterAssociationsMissingTable()
     {
         $table = TableRegistry::getTableLocator()->get('Articles', [
-            'className' => '\Bake\Test\App\Model\Table\ArticlesTable'
+            'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
         ]);
         $table->hasMany('Nopes');
 

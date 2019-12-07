@@ -45,7 +45,7 @@ class SimpleBakeTaskTest extends TestCase
     {
         $this->generatedFiles = [
             APP . 'Model/Behavior/ExampleBehavior.php',
-            ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php'
+            ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
         ];
         $this->exec('bake behavior Example');
 
@@ -65,7 +65,7 @@ class SimpleBakeTaskTest extends TestCase
 
         $this->generatedFiles = [
             APP . 'Model/Behavior/ExampleBehavior.php',
-            ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php'
+            ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
         ];
         $this->exec('bake behavior Example');
 
@@ -103,7 +103,7 @@ class SimpleBakeTaskTest extends TestCase
 
         $this->generatedFiles = [
             $path . 'src/Model/Behavior/ExampleBehavior.php',
-            $path . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php'
+            $path . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
         ];
         $this->exec('bake behavior TestBake.Example');
 

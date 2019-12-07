@@ -34,7 +34,7 @@ class CategoryThreadsFixture extends TestFixture
         'rght' => ['type' => 'integer', 'unsigned' => true],
         'created' => 'datetime',
         'updated' => 'datetime',
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ];
 
     /**
@@ -49,6 +49,6 @@ class CategoryThreadsFixture extends TestFixture
         ['parent_id' => 3, 'name' => 'Category 1.1.2', 'lft' => 4, 'rght' => 7, 'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'],
         ['parent_id' => 4, 'name' => 'Category 1.1.1.1', 'lft' => 5, 'rght' => 6, 'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'],
         ['parent_id' => 5, 'name' => 'Category 2', 'lft' => 10, 'rght' => 13, 'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'],
-        ['parent_id' => 6, 'name' => 'Category 2.1', 'lft' => 11, 'rght' => 12, 'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31']
+        ['parent_id' => 6, 'name' => 'Category 2.1', 'lft' => 11, 'rght' => 12, 'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'],
     ];
 }

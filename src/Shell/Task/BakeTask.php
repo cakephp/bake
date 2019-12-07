@@ -155,7 +155,7 @@ class BakeTask extends Shell
         $descriptorSpec = [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
-            2 => ['pipe', 'w']
+            2 => ['pipe', 'w'],
         ];
         $this->_io->verbose('Running ' . $command);
         $process = proc_open(

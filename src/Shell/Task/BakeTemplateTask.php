@@ -57,9 +57,9 @@ class BakeTemplateTask extends Shell
         $viewOptions = [
             'helpers' => [
                 'Bake.Bake',
-                'Bake.DocBlock'
+                'Bake.DocBlock',
             ],
-            'theme' => $theme
+            'theme' => $theme,
         ];
 
         $view = new BakeView(new Request(), new Response(), null, $viewOptions);

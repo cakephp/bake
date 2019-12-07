@@ -32,7 +32,7 @@ abstract class SimpleBakeTask extends BakeTask
      */
     public $tasks = [
         'Bake.BakeTemplate',
-        'Bake.Test'
+        'Bake.Test',
     ];
 
     /**
@@ -144,10 +144,10 @@ abstract class SimpleBakeTask extends BakeTask
                 'Name of the %s to bake. Can use Plugin.name to bake %s files into plugins.',
                 $name,
                 $name
-            )
+            ),
         ])->addOption('no-test', [
             'boolean' => true,
-            'help' => 'Do not generate a test skeleton.'
+            'help' => 'Do not generate a test skeleton.',
         ]);
 
         return $parser;

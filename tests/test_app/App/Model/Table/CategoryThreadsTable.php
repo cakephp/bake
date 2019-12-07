@@ -28,14 +28,14 @@ class CategoryThreadsTable extends Table
             'ParentCategoryThreads',
             [
             'className' => __CLASS__,
-            'foreignKey' => 'parent_id'
+            'foreignKey' => 'parent_id',
             ]
         );
         $this->hasMany(
             'ChildCategoryThreads',
             [
             'className' => __CLASS__,
-            'foreignKey' => 'parent_id'
+            'foreignKey' => 'parent_id',
             ]
         );
         $this->addBehavior('Tree');

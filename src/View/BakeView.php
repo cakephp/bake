@@ -51,7 +51,7 @@ class BakeView extends TwigView
     protected $_defaultConfig = [
         'phpTagReplacements' => [
             '<?' => "<CakePHPBakeOpenTag",
-            '?>' => "CakePHPBakeCloseTag>"
+            '?>' => "CakePHPBakeCloseTag>",
         ],
         'replacements' => [
             '/\n[ \t]+<%-( |$)/' => "\n<% ",
@@ -59,8 +59,8 @@ class BakeView extends TwigView
             '/<%=(.*)\%>\n(.)/' => "<%=$1%>\n\n$2",
             '<%=' => '<?=',
             '<%' => '<?php',
-            '%>' => '?>'
-        ]
+            '%>' => '?>',
+        ],
     ];
 
     /**
