@@ -429,7 +429,7 @@ class FixtureTask extends BakeTask
             }
             $out .= "            [\n";
             $out .= implode(",\n", $values);
-            $out .= "\n            ],\n";
+            $out .= ",\n            ],\n";
         }
         $out .= "        ]";
 

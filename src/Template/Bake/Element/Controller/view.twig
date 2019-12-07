@@ -27,7 +27,7 @@
     public function view($id = null)
     {
         ${{ singularName }} = $this->{{ currentModelName }}->get($id, [
-            'contain' => [{{ Bake.stringifyList(allAssociations, {'indent': false})|raw }}]
+            'contain' => [{{ Bake.stringifyList(allAssociations, {'indent': false})|raw }}],
         ]);
 
         $this->set('{{ singularName }}', ${{ singularName }});
