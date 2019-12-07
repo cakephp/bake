@@ -62,12 +62,13 @@ class BakeHelper extends Helper
      */
     public function stringifyList(array $list, array $options = [])
     {
-        $options += [
+        $defaults = [
             'indent' => 2,
             'tab' => '    ',
-            'trailingComma' => false,
+            'trailingComma' => (!isset($options['indent']) || $options['indent']) ? true : false,
             'quotes' => true,
         ];
+        $options += $defaults;
 
         if (!$list) {
             return '';

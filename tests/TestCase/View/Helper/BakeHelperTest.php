@@ -153,7 +153,7 @@ class BakeHelperTest extends TestCase
         $expected = "\n" .
             $spaces . $spaces . "'one' => 'foo',\n" .
             $spaces . $spaces . "'two' => 'bar',\n" .
-            $spaces . $spaces . "'three'\n" .
+            $spaces . $spaces . "'three',\n" .
             $spaces;
         $this->assertSame($expected, $result);
     }
@@ -184,7 +184,7 @@ class BakeHelperTest extends TestCase
         $expected = "\n" .
             $spaces . $spaces . $spaces . "'one' => 'foo',\n" .
             $spaces . $spaces . $spaces . "'two' => 'bar',\n" .
-            $spaces . $spaces . $spaces . "'three'\n" .
+            $spaces . $spaces . $spaces . "'three',\n" .
             $spaces . $spaces;
         $this->assertSame($expected, $result);
     }
@@ -202,7 +202,7 @@ class BakeHelperTest extends TestCase
         $expected = "\n" .
             $spaces . $spaces . $spaces . "'one' => 'foo',\n" .
             $spaces . $spaces . $spaces . "'two' => 'bar',\n" .
-            $spaces . $spaces . $spaces . "'three'\n" .
+            $spaces . $spaces . $spaces . "'three',\n" .
             $spaces . $spaces;
         $this->assertSame($expected, $result);
     }
