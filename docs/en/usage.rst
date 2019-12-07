@@ -1,7 +1,7 @@
 Code Generation with Bake
 #########################
 
-The cake console is run using the PHP CLI (command line interface).
+The Bake console is run using the PHP CLI (command line interface).
 If you have problems running the script, ensure that:
 
 #. You have the PHP CLI installed and that it has the proper modules enabled
