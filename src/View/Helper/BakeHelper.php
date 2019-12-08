@@ -67,12 +67,13 @@ class BakeHelper extends Helper
      */
     public function stringifyList(array $list, array $options = []): string
     {
-        $options += [
+        $defaults = [
             'indent' => 2,
             'tab' => '    ',
-            'trailingComma' => true,
+            'trailingComma' => (!isset($options['indent']) || $options['indent']) ? true : false,
             'quotes' => true,
         ];
+        $options += $defaults;
 
         if (!$list) {
             return '';
@@ -257,7 +258,7 @@ class BakeHelper extends Helper
                     return 'string';
                 }
                 $numberTypes = ['decimal', 'biginteger', 'integer', 'float', 'smallinteger', 'tinyinteger'];
-                if (in_array($type, $numberTypes)) {
+                if (in_array($type, $numberTypes, true)) {
                     return 'number';
                 }
                 $dateTypes = [
