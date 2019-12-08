@@ -70,7 +70,7 @@ class BakeHelper extends Helper
         $defaults = [
             'indent' => 2,
             'tab' => '    ',
-            'trailingComma' => (!isset($options['indent']) || $options['indent']) ? true : false,
+            'trailingComma' => !isset($options['indent']) || $options['indent'] ? true : false,
             'quotes' => true,
         ];
         $options += $defaults;
