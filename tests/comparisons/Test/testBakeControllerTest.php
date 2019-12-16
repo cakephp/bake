@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Bake\Test\App\Test\TestCase\Controller;
 
 use Bake\Test\App\Controller\PostsController;
@@ -19,16 +21,26 @@ class PostsControllerTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    protected $fixtures = [
         'app.Posts',
     ];
+
+    /**
+     * Test initialize method
+     *
+     * @return void
+     */
+    public function testInitialize(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 
     /**
      * Test index method
      *
      * @return void
      */
-    public function testIndex()
+    public function testIndex(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

@@ -1,12 +1,28 @@
 <?php
-namespace App\Model\Entity;
+declare(strict_types=1);
+
+namespace Bake\Test\App\Model\Entity;
 
 use Cake\ORM\Entity;
 
 /**
- * BakeArticle Entity
+ * TodoItem Entity
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $title
+ * @property string|null $body
+ * @property string $effort
+ * @property bool $completed
+ * @property int $todo_task_count
+ * @property \Cake\I18n\FrozenTime|null $created
+ * @property \Cake\I18n\FrozenTime|null $updated
+ *
+ * @property \Bake\Test\App\Model\Entity\User $user
+ * @property \Bake\Test\App\Model\Entity\TodoTask[] $todo_tasks
+ * @property \Bake\Test\App\Model\Entity\TodoLabel[] $todo_labels
  */
-class BakeArticle extends Entity
+class TodoItem extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -18,7 +34,16 @@ class BakeArticle extends Entity
      * @var array
      */
     protected $_accessible = [
-        '*' => true,
-        'id' => false,
+        'user_id' => true,
+        'title' => true,
+        'body' => true,
+        'effort' => true,
+        'completed' => true,
+        'todo_task_count' => true,
+        'created' => true,
+        'updated' => true,
+        'user' => true,
+        'todo_tasks' => true,
+        'todo_labels' => true,
     ];
 }

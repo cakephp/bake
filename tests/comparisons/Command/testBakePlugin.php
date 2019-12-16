@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace TestBake\Command;
 
 use Cake\Console\Arguments;
@@ -19,7 +21,7 @@ class ExampleCommand extends Command
      * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
      * @return \Cake\Console\ConsoleOptionParser The built parser.
      */
-    public function buildOptionParser(ConsoleOptionParser $parser)
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = parent::buildOptionParser($parser);
 
@@ -31,7 +33,7 @@ class ExampleCommand extends Command
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return null|int The exit code or null for success
+     * @return null|void|int The exit code or null for success
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {

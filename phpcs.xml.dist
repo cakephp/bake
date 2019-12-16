@@ -1,11 +1,8 @@
 <?xml version="1.0"?>
-<ruleset name="CakePHP Core">
- <rule ref="./vendor/cakephp/cakephp-codesniffer/CakePHP/ruleset.xml">
-    <!-- Exclude unwanted sniffs -->
- </rule>
+<ruleset name="CakePHP Bake">
+    <config name="installed_paths" value="../../cakephp/cakephp-codesniffer" />
 
- <!-- Necessary for class aliases used for backwards compat -->
- <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
-  <severity>0</severity>
- </rule>
+    <rule ref="CakePHP" />
+
+    <exclude-pattern>*/comparisons/*</exclude-pattern>
 </ruleset>

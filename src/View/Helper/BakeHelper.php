@@ -1,9 +1,14 @@
 <?php
+declare(strict_types=1);
+
 namespace Bake\View\Helper;
 
 use Bake\Utility\Model\AssociationFilter;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
+use Cake\Database\Schema\TableSchema;
+use Cake\Datasource\SchemaInterface;
+use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
 
@@ -36,7 +41,7 @@ class BakeHelper extends Helper
      * @param array $options extra options to be passed to the element
      * @return string
      */
-    public function arrayProperty($name, array $value = [], array $options = [])
+    public function arrayProperty(string $name, array $value = [], array $options = []): string
     {
         if (!$value) {
             return '';
@@ -60,12 +65,12 @@ class BakeHelper extends Helper
      * @param array $options options to use
      * @return string
      */
-    public function stringifyList(array $list, array $options = [])
+    public function stringifyList(array $list, array $options = []): string
     {
         $defaults = [
             'indent' => 2,
             'tab' => '    ',
-            'trailingComma' => (!isset($options['indent']) || $options['indent']) ? true : false,
+            'trailingComma' => !isset($options['indent']) || $options['indent'] ? true : false,
             'quotes' => true,
         ];
         $options += $defaults;
@@ -113,7 +118,7 @@ class BakeHelper extends Helper
             $end = "\n" . str_repeat($options['tab'], $options['indent'] - 1);
         }
 
-        if ($options['trailingComma']) {
+        if ($options['trailingComma'] && $options['indent'] > 0) {
             $end = "," . $end;
         }
 
@@ -126,9 +131,9 @@ class BakeHelper extends Helper
      *
      * @param \Cake\ORM\Table $table object to find associations on
      * @param string $assoc association to extract
-     * @return array
+     * @return string[]
      */
-    public function aliasExtractor($table, $assoc)
+    public function aliasExtractor(Table $table, string $assoc): array
     {
         $extractor = function ($val) {
             return $val->getTarget()->getAlias();
@@ -158,9 +163,9 @@ class BakeHelper extends Helper
      * @param string $suffix Class name suffix
      * @return array Class info
      */
-    public function classInfo($class, $type, $suffix)
+    public function classInfo(string $class, string $type, string $suffix): array
     {
-        list($plugin, $name) = \pluginSplit($class);
+        [$plugin, $name] = \pluginSplit($class);
 
         $base = Configure::read('App.namespace');
         if ($plugin !== null) {
@@ -190,12 +195,17 @@ class BakeHelper extends Helper
      * @param array $fields Fields list.
      * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
      * @param \Cake\ORM\Table|null $modelObject Model object.
-     * @param array $takeFields Take fields.
+     * @param string|int $takeFields Take fields.
      * @param array $filterTypes Filter field types.
      * @return array
      */
-    public function filterFields($fields, $schema, $modelObject = null, $takeFields = [], $filterTypes = ['binary'])
-    {
+    public function filterFields(
+        array $fields,
+        SchemaInterface $schema,
+        ?Table $modelObject = null,
+        $takeFields = 0,
+        $filterTypes = ['binary']
+    ): array {
         $fields = collection($fields)
             ->filter(function ($field) use ($schema, $filterTypes) {
                 return !in_array($schema->getColumnType($field), $filterTypes);
@@ -208,7 +218,7 @@ class BakeHelper extends Helper
         }
 
         if (!empty($takeFields)) {
-            $fields = $fields->take($takeFields);
+            $fields = $fields->take((int)$takeFields);
         }
 
         return $fields->toArray();
@@ -222,7 +232,7 @@ class BakeHelper extends Helper
      * @param array $associations Associations data.
      * @return array
      */
-    public function getViewFieldsData($fields, $schema, $associations)
+    public function getViewFieldsData(array $fields, SchemaInterface $schema, array $associations): array
     {
         $immediateAssociations = $associations['BelongsTo'];
         $associationFields = collection($fields)
@@ -247,19 +257,20 @@ class BakeHelper extends Helper
                 if (isset($associationFields[$field])) {
                     return 'string';
                 }
-                if (
-                    in_array($type, [
-                    'decimal',
-                    'biginteger',
-                    'integer',
-                    'float',
-                    'smallinteger',
-                    'tinyinteger',
-                    ])
-                ) {
+                $numberTypes = ['decimal', 'biginteger', 'integer', 'float', 'smallinteger', 'tinyinteger'];
+                if (in_array($type, $numberTypes, true)) {
                     return 'number';
                 }
-                if (in_array($type, ['date', 'time', 'datetime', 'timestamp'])) {
+                $dateTypes = [
+                    'date',
+                    'time',
+                    'datetime',
+                    'datetimefractional',
+                    'timestamp',
+                    'timestampfractional',
+                    'timestamptimezone',
+                ];
+                if (in_array($type, $dateTypes)) {
                     return 'date';
                 }
 
@@ -283,9 +294,9 @@ class BakeHelper extends Helper
      *
      * @param string $field Field name.
      * @param \Cake\Database\Schema\TableSchema $schema Schema.
-     * @return array
+     * @return array|null
      */
-    public function columnData($field, $schema)
+    public function columnData(string $field, TableSchema $schema): ?array
     {
         return $schema->getColumn($field);
     }
@@ -297,7 +308,7 @@ class BakeHelper extends Helper
      * @param string $assoc Association name.
      * @return string
      */
-    public function getAssociatedTableAlias($modelObj, $assoc)
+    public function getAssociatedTableAlias(Table $modelObj, string $assoc): string
     {
         $association = $modelObj->getAssociation($assoc);
 
@@ -311,7 +322,7 @@ class BakeHelper extends Helper
      * @param array $rules Validation rules list.
      * @return array
      */
-    public function getValidationMethods($field, $rules)
+    public function getValidationMethods(string $field, array $rules): array
     {
         $validationMethods = [];
 
@@ -349,11 +360,11 @@ class BakeHelper extends Helper
     /**
      * Get field accessibility data.
      *
-     * @param mixed $fields Fields list.
-     * @param mixed $primaryKey Primary key.
-     * @return array
+     * @param string[]|false|null $fields Fields list.
+     * @param string[]|null $primaryKey Primary key.
+     * @return string[]
      */
-    public function getFieldAccessibility($fields = null, $primaryKey = null)
+    public function getFieldAccessibility($fields = null, $primaryKey = null): array
     {
         $accessible = [];
 
@@ -379,7 +390,7 @@ class BakeHelper extends Helper
      * @param array $args array of arguments
      * @return array
      */
-    public function escapeArguments($args)
+    public function escapeArguments(array $args): array
     {
         return array_map(function ($v) {
             if (is_string($v)) {
@@ -395,10 +406,10 @@ class BakeHelper extends Helper
      * To be mocked elsewhere...
      *
      * @param \Cake\ORM\Table $table Table
-     * @param array $aliases array of aliases
-     * @return array
+     * @param string[] $aliases array of aliases
+     * @return string[]
      */
-    protected function _filterHasManyAssociationsAliases($table, $aliases)
+    protected function _filterHasManyAssociationsAliases(Table $table, array $aliases): array
     {
         if (is_null($this->_associationFilter)) {
             $this->_associationFilter = new AssociationFilter();

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -28,10 +30,10 @@ class AssociationFilter
      * belongsToMany associations provided
      *
      * @param \Cake\ORM\Table $table Table
-     * @param array $aliases array of aliases
-     * @return array $aliases
+     * @param string[] $aliases array of aliases
+     * @return string[] $aliases
      */
-    public function filterHasManyAssociationsAliases(Table $table, array $aliases)
+    public function filterHasManyAssociationsAliases(Table $table, array $aliases): array
     {
         $belongsToManyJunctionsAliases = $this->belongsToManyJunctionAliases($table);
 
@@ -41,10 +43,10 @@ class AssociationFilter
     /**
      * Get the array of junction aliases for all the BelongsToMany associations
      *
-     * @param Table $table Table
+     * @param \Cake\ORM\Table $table Table
      * @return array junction aliases of all the BelongsToMany associations
      */
-    public function belongsToManyJunctionAliases(Table $table)
+    public function belongsToManyJunctionAliases(Table $table): array
     {
         $extractor = function ($val) {
             return $val->junction()->getAlias();
@@ -57,10 +59,10 @@ class AssociationFilter
      * Returns filtered associations for controllers models. HasMany association are filtered if
      * already existing in BelongsToMany
      *
-     * @param Table $model The model to build associations for.
+     * @param \Cake\ORM\Table $model The model to build associations for.
      * @return array associations
      */
-    public function filterAssociations(Table $model)
+    public function filterAssociations(Table $model): array
     {
         $belongsToManyJunctionsAliases = $this->belongsToManyJunctionAliases($model);
         $keys = ['BelongsTo', 'HasOne', 'HasMany', 'BelongsToMany'];
@@ -76,7 +78,7 @@ class AssociationFilter
                     continue;
                 }
                 $targetClass = get_class($target);
-                list(, $className) = namespaceSplit($targetClass);
+                [, $className] = namespaceSplit($targetClass);
 
                 $navLink = true;
                 $modelClass = get_class($model);
@@ -102,6 +104,9 @@ class AssociationFilter
                         'navLink' => $navLink,
                     ];
                 } catch (Exception $e) {
+                    if ($assocName === 'Authors') {
+                        dd($e);
+                    }
                     // Do nothing it could be a bogus association name.
                 }
             }

@@ -1,41 +1,43 @@
 <?php
-namespace App\Test\TestCase\View\Cell;
+declare(strict_types=1);
 
-use App\View\Cell\ArticlesCell;
+namespace Bake\Test\App\Test\TestCase\View\Cell;
+
+use Bake\Test\App\View\Cell\ArticlesCell;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\View\Cell\ArticlesCell Test Case
+ * Bake\Test\App\View\Cell\ArticlesCell Test Case
  */
 class ArticlesCellTest extends TestCase
 {
     /**
      * Request mock
      *
-     * @var \Cake\Http\ServerRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Cake\Http\ServerRequest|\PHPUnit\Framework\MockObject\MockObject
      */
-    public $request;
+    protected $request;
 
     /**
      * Response mock
      *
-     * @var \Cake\Http\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Cake\Http\Response|\PHPUnit\Framework\MockObject\MockObject
      */
-    public $response;
+    protected $response;
 
     /**
      * Test subject
      *
-     * @var \App\View\Cell\ArticlesCell
+     * @var \Bake\Test\App\View\Cell\ArticlesCell
      */
-    public $Articles;
+    protected $Articles;
 
     /**
      * setUp method
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->request = $this->getMockBuilder('Cake\Http\ServerRequest')->getMock();
@@ -48,7 +50,7 @@ class ArticlesCellTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Articles);
 
@@ -60,7 +62,7 @@ class ArticlesCellTest extends TestCase
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialization(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

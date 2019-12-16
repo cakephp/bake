@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace TestBake\Shell\Task;
 
 use Cake\Console\Shell;

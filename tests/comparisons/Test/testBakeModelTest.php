@@ -1,28 +1,42 @@
 <?php
-namespace App\Test\TestCase\Model\Table;
+declare(strict_types=1);
 
-use App\Model\Table\ArticlesTable;
+namespace Bake\Test\App\Test\TestCase\Model\Table;
+
+use Bake\Test\App\Model\Table\ArticlesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\ArticlesTable Test Case
+ * Bake\Test\App\Model\Table\ArticlesTable Test Case
  */
 class ArticlesTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\ArticlesTable
+     * @var \Bake\Test\App\Model\Table\ArticlesTable
      */
-    public $Articles;
+    protected $Articles;
+
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    protected $fixtures = [
+        'app.Articles',
+        'app.Authors',
+        'app.Tags',
+        'app.ArticlesTags',
+    ];
 
     /**
      * setUp method
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $config = TableRegistry::getTableLocator()->exists('Articles') ? [] : ['className' => ArticlesTable::class];
@@ -34,7 +48,7 @@ class ArticlesTableTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Articles);
 
@@ -42,11 +56,41 @@ class ArticlesTableTest extends TestCase
     }
 
     /**
-     * Test initial setup
+     * Test initialize method
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialize(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test findPublished method
+     *
+     * @return void
+     */
+    public function testFindPublished(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test doSomething method
+     *
+     * @return void
+     */
+    public function testDoSomething(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test doSomethingElse method
+     *
+     * @return void
+     */
+    public function testDoSomethingElse(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

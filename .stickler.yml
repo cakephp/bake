@@ -1,3 +1,6 @@
 linters:
   phpcs:
-    standard: CakePHP
+    standard: ./phpcs.xml.dist
+
+branches:
+  ignore: ['4.x']

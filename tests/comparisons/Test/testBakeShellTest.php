@@ -1,12 +1,14 @@
 <?php
-namespace App\Test\TestCase\Shell;
+declare(strict_types=1);
 
-use App\Shell\ArticlesShell;
+namespace Bake\Test\App\Test\TestCase\Shell;
+
+use Bake\Test\App\Shell\ArticlesShell;
 use Cake\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Shell\ArticlesShell Test Case
+ * Bake\Test\App\Shell\ArticlesShell Test Case
  */
 class ArticlesShellTest extends TestCase
 {
@@ -15,23 +17,23 @@ class ArticlesShellTest extends TestCase
     /**
      * ConsoleIo mock
      *
-     * @var \Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Cake\Console\ConsoleIo|\PHPUnit\Framework\MockObject\MockObject
      */
-    public $io;
+    protected $io;
 
     /**
      * Test subject
      *
-     * @var \App\Shell\ArticlesShell
+     * @var \Bake\Test\App\Shell\ArticlesShell
      */
-    public $Articles;
+    protected $Articles;
 
     /**
      * setUp method
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
@@ -43,7 +45,7 @@ class ArticlesShellTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Articles);
 
@@ -55,7 +57,7 @@ class ArticlesShellTest extends TestCase
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialization(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

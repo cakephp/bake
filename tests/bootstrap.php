@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -15,6 +16,7 @@
 
 // @codingStandardsIgnoreFile
 
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
@@ -38,17 +40,31 @@ require_once 'vendor/autoload.php';
 
 define('ROOT', $root . DS . 'tests' . DS . 'test_app' . DS);
 define('APP', ROOT . 'App' . DS);
+define('CONFIG', APP);
 define('TMP', sys_get_temp_dir() . DS);
 define('CACHE', TMP . 'cache' . DS);
 
+//used by Cake\Command\HelpCommand
+define('CORE_PATH', $root . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS);
+
 Configure::write('debug', true);
 Configure::write('App', [
+    'debug' => true,
     'namespace' => 'App',
     'paths' => [
         'plugins' => [ROOT . 'Plugin' . DS],
-        'templates' => [ROOT . 'App' . DS . 'Template' . DS]
+        'templates' => [ROOT . 'templates' . DS]
     ],
     'encoding' => 'UTF-8'
+]);
+
+Cache::setConfig([
+    '_cake_core_' => [
+        'engine' => 'File',
+        'prefix' => 'cake_core_',
+        'serialize' => true,
+        'path' => CACHE,
+    ],
 ]);
 
 if (!getenv('db_dsn')) {

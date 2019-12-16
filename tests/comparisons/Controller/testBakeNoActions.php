@@ -1,27 +1,28 @@
 <?php
-namespace App\Controller;
+declare(strict_types=1);
 
-use App\Controller\AppController;
+namespace Bake\Test\App\Controller;
 
 /**
  * BakeArticles Controller
  *
- * @property \Cake\Controller\Component\CsrfComponent $Csrf
+ * @property \Bake\Test\App\Model\Table\BakeArticlesTable $BakeArticles
+ * @property \Cake\Controller\Component\RequestHandlerComponent $RequestHandler
  * @property \Cake\Controller\Component\AuthComponent $Auth
  */
 class BakeArticlesController extends AppController
 {
     /**
-     * Helpers
+     * Initialize controller
      *
-     * @var array
+     * @return void
      */
-    public $helpers = ['Html', 'Time'];
+    public function initialize(): void
+    {
+        parent::initialize();
 
-    /**
-     * Components
-     *
-     * @var array
-     */
-    public $components = ['Csrf', 'Auth'];
+        $this->loadComponent('RequestHandler');
+        $this->loadComponent('Auth');
+        $this->viewBuilder()->setHelpers(['Html', 'Time']);
+    }
 }

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -14,33 +16,22 @@
  */
 namespace Bake\Shell\Task;
 
+use Bake\Utility\TemplateRenderer;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
 
 /**
  * Base class for simple bake tasks code generator.
- *
- * @property \Bake\Shell\Task\BakeTemplateTask $BakeTemplate
- * @property \Bake\Shell\Task\TestTask $Test
  */
 abstract class SimpleBakeTask extends BakeTask
 {
-    /**
-     * Tasks to be loaded by this Task
-     *
-     * @var array
-     */
-    public $tasks = [
-        'Bake.BakeTemplate',
-        'Bake.Test',
-    ];
-
     /**
      * Get the generated object's name.
      *
      * @return string
      */
-    abstract public function name();
+    abstract public function name(): string;
 
     /**
      * Get the generated object's filename without the leading path.
@@ -48,21 +39,21 @@ abstract class SimpleBakeTask extends BakeTask
      * @param string $name The name of the object being generated
      * @return string
      */
-    abstract public function fileName($name);
+    abstract public function fileName(string $name): string;
 
     /**
      * Get the template name.
      *
      * @return string
      */
-    abstract public function template();
+    abstract public function template(): string;
 
     /**
      * Get template data.
      *
      * @return array
      */
-    public function templateData()
+    public function templateData(): array
     {
         $namespace = Configure::read('App.namespace');
         if ($this->plugin) {
@@ -78,7 +69,7 @@ abstract class SimpleBakeTask extends BakeTask
      * @param string|null $name The name of the object to bake.
      * @return int|null
      */
-    public function main($name = null)
+    public function main(?string $name = null): ?int
     {
         parent::main();
         if (empty($name)) {
@@ -89,7 +80,8 @@ abstract class SimpleBakeTask extends BakeTask
         $name = $this->_getName($name);
         $name = Inflector::camelize($name);
         $this->bake($name);
-        $this->bakeTest($name);
+
+        return static::CODE_SUCCESS;
     }
 
     /**
@@ -98,34 +90,19 @@ abstract class SimpleBakeTask extends BakeTask
      * @param string $name The classname to generate.
      * @return string
      */
-    public function bake($name)
+    public function bake(string $name): string
     {
-        $this->BakeTemplate->set('name', $name);
-        $this->BakeTemplate->set($this->templateData());
-        $contents = $this->BakeTemplate->generate($this->template());
+        $renderer = new TemplateRenderer($this->param('theme'));
+        $renderer->set('name', $name);
+        $renderer->set($this->templateData());
+        $contents = $renderer->generate($this->template());
 
         $filename = $this->getPath() . $this->fileName($name);
         $this->createFile($filename, $contents);
-        $emptyFile = $this->getPath() . 'empty';
+        $emptyFile = $this->getPath() . '.gitkeep';
         $this->_deleteEmptyFile($emptyFile);
 
         return $contents;
-    }
-
-    /**
-     * Generate a test case.
-     *
-     * @param string $className The class to bake a test for.
-     * @return string|bool|null
-     */
-    public function bakeTest($className)
-    {
-        if (!empty($this->params['no-test'])) {
-            return null;
-        }
-        $this->Test->plugin = $this->plugin;
-
-        return $this->Test->bake($this->name(), $className);
     }
 
     /**
@@ -133,7 +110,7 @@ abstract class SimpleBakeTask extends BakeTask
      *
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
         $name = $this->name();
@@ -145,9 +122,6 @@ abstract class SimpleBakeTask extends BakeTask
                 $name,
                 $name
             ),
-        ])->addOption('no-test', [
-            'boolean' => true,
-            'help' => 'Do not generate a test skeleton.',
         ]);
 
         return $parser;

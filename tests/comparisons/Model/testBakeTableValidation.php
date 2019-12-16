@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -26,7 +28,7 @@ class BakeArticlesTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
 
@@ -39,7 +41,7 @@ class BakeArticlesTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): Validator
     {
         $validator
             ->numeric('id')
@@ -79,7 +81,7 @@ class BakeArticlesTable extends Table
      *
      * @return string
      */
-    public static function defaultConnectionName()
+    public static function defaultConnectionName(): string
     {
         return 'test';
     }

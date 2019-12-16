@@ -1,27 +1,29 @@
 <?php
-namespace App\Test\TestCase\Model\Behavior;
+declare(strict_types=1);
 
-use App\Model\Behavior\ExampleBehavior;
+namespace Bake\Test\App\Test\TestCase\Model\Behavior;
+
+use Bake\Test\App\Model\Behavior\ExampleBehavior;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Behavior\ExampleBehavior Test Case
+ * Bake\Test\App\Model\Behavior\ExampleBehavior Test Case
  */
 class ExampleBehaviorTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Behavior\ExampleBehavior
+     * @var \Bake\Test\App\Model\Behavior\ExampleBehavior
      */
-    public $Example;
+    protected $Example;
 
     /**
      * setUp method
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->Example = new ExampleBehavior();
@@ -32,7 +34,7 @@ class ExampleBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Example);
 
@@ -44,7 +46,7 @@ class ExampleBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialization(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

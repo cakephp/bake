@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Bake\Test\App\Shell\Task;
 
 use Bake\Shell\Task\SimpleBakeTask;
@@ -8,17 +10,19 @@ use Bake\Shell\Task\SimpleBakeTask;
  */
 class CustomControllerTask extends SimpleBakeTask
 {
-    public function name()
+    public $pathFragment = 'Controller/';
+
+    public function name(): string
     {
-        return 'CustomController';
+        return 'Controller';
     }
 
-    public function fileName($name)
+    public function fileName($name): string
     {
         return $name . 'CustomController.php';
     }
 
-    public function template()
+    public function template(): string
     {
         return 'CustomController';
     }

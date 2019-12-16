@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace TestBake\View\Cell;
 
 use Cake\View\Cell;
@@ -21,7 +23,7 @@ class ExampleCell extends Cell
      *
      * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
     }
 

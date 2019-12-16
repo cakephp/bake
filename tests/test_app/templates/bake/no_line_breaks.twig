@@ -1,0 +1,20 @@
+<?php // Dummy php code whatever ?>
+{% for number in [1,2,3] %}
+    {{ number }}
+{% endfor %}
+
+{% for number in [1,2,3] %}
+    number
+{% endfor %}
+
+This is all going to be squashed on one line:
+{% for number in [1,2,3] -%}
+{{ " " }}{{ number }}
+{%- endfor -%}
+. This bit of text too
+
+This will not be on one line though
+{% for number in [1,2,3] %}
+    number
+{% endfor -%}
+And neither this text because "number" ends with a newline

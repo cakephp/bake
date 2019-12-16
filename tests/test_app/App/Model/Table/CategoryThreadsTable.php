@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -21,20 +23,20 @@ use Cake\ORM\Table;
  */
 class CategoryThreadsTable extends Table
 {
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->setTable('category_threads');
         $this->belongsTo(
             'ParentCategoryThreads',
             [
-            'className' => __CLASS__,
+            'className' => self::class,
             'foreignKey' => 'parent_id',
             ]
         );
         $this->hasMany(
             'ChildCategoryThreads',
             [
-            'className' => __CLASS__,
+            'className' => self::class,
             'foreignKey' => 'parent_id',
             ]
         );

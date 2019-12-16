@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace BakeTest\Model\Table;
 
 use Cake\ORM\Query;
@@ -10,7 +12,7 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \BakeTest\Model\Table\CommentsTable&\Cake\ORM\Association\HasMany $Comments
- * @property \BakeTest\Model\Table\CounterCachePostsTable&\Cake\ORM\Association\HasMany $CounterCachePosts
+ * @property \BakeTest\Model\Table\TodoItemsTable&\Cake\ORM\Association\HasMany $TodoItems
  *
  * @method \BakeTest\Model\Entity\User get($primaryKey, $options = [])
  * @method \BakeTest\Model\Entity\User newEntity($data = null, array $options = [])
@@ -31,7 +33,7 @@ class UsersTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
 
@@ -45,9 +47,9 @@ class UsersTable extends Table
             'foreignKey' => 'user_id',
             'className' => 'BakeTest.Comments',
         ]);
-        $this->hasMany('CounterCachePosts', [
+        $this->hasMany('TodoItems', [
             'foreignKey' => 'user_id',
-            'className' => 'BakeTest.CounterCachePosts',
+            'className' => 'BakeTest.TodoItems',
         ]);
     }
 
@@ -58,7 +60,7 @@ class UsersTable extends Table
      * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
      * @return \Cake\ORM\RulesChecker
      */
-    public function buildRules(RulesChecker $rules)
+    public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['username']));
 

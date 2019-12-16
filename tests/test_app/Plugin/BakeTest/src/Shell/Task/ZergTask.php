@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -21,4 +23,9 @@ use Bake\Shell\Task\BakeTask;
  */
 class ZergTask extends BakeTask
 {
+    public function main(): void
+    {
+        $this->out('Zerg generated.');
+        $this->verbose('Loud noises');
+    }
 }

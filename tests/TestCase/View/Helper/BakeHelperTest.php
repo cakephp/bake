@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -16,9 +18,9 @@ namespace Bake\Test\TestCase\View\Helper;
 
 use Bake\View\BakeView;
 use Bake\View\Helper\BakeHelper;
+use Cake\Http\Response;
 use Cake\Http\ServerRequest as Request;
 use Cake\ORM\TableRegistry;
-use Cake\TestSuite\Stub\Response;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -56,7 +58,7 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -71,7 +73,7 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->BakeHelper);
@@ -212,19 +214,19 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function testStringifyListWithCommaAtEnd()
+    public function testStringifyListWithNoCommaAtEnd()
     {
         $list = ['one' => 'foo', 'two' => 'bar', 'three'];
         $result = $this->BakeHelper->stringifyList($list, [
             'indent' => 3,
             'tab' => "\t",
-            'trailingComma' => true,
+            'trailingComma' => false,
         ]);
         $spaces = "\t";
         $expected = "\n" .
             $spaces . $spaces . $spaces . "'one' => 'foo',\n" .
             $spaces . $spaces . $spaces . "'two' => 'bar',\n" .
-            $spaces . $spaces . $spaces . "'three',\n" .
+            $spaces . $spaces . $spaces . "'three'\n" .
             $spaces . $spaces;
         $this->assertSame($expected, $result);
     }

@@ -1,16 +1,18 @@
 <?php
-namespace App\Test\TestCase\Command;
+declare(strict_types=1);
 
-use App\Command\ExampleCommand;
+namespace Bake\Test\App\Test\TestCase\Command;
+
+use Bake\Test\App\Command\OtherExampleCommand;
 use Cake\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Command\ExampleCommand Test Case
+ * Bake\Test\App\Command\OtherExampleCommand Test Case
  *
- * @uses \App\Command\ExampleCommand
+ * @uses \Bake\Test\App\Command\OtherExampleCommand
  */
-class ExampleCommandTest extends TestCase
+class OtherExampleCommandTest extends TestCase
 {
     use ConsoleIntegrationTestTrait;
 
@@ -19,7 +21,7 @@ class ExampleCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->useCommandRunner();
@@ -30,7 +32,7 @@ class ExampleCommandTest extends TestCase
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialization(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

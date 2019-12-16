@@ -1,14 +1,11 @@
 language: php
 
 php:
-  - 5.6
-  - 7.0
   - 7.2
-  - 7.3
+  - 7.4
 
 cache:
   directories:
-    - vendor
     - $HOME/.composer/cache
 
 env:
@@ -28,18 +25,15 @@ matrix:
   fast_finish: true
 
   include:
-    - php: 5.6
-      env: PREFER_LOWEST=1
 
-    - php: 7.2
+    - php: 7.3
       env: CHECKS=1 RUN_TESTS=0
 
-    - php: 7.2
+    - php: 7.3
       env: CODECOVERAGE=1 RUN_TESTS=0
 
 before_install:
-  - if [[ $TRAVIS_PHP_VERSION != 7.3 ]]; then phpenv config-rm xdebug.ini; fi
-  - if [[ -n "$GH_TOKEN" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
+  - phpenv config-rm xdebug.ini
   - if [[ $DB = 'mysql' ]]; then mysql -e 'CREATE DATABASE cakephp_test;'; fi
   - if [[ $DB = 'pgsql' ]]; then psql -c 'CREATE DATABASE cakephp_test;' -U postgres; fi
 
@@ -49,10 +43,11 @@ before_script:
 
 script:
   - if [[ $RUN_TESTS = 1 ]]; then vendor/bin/phpunit; fi
+
   - if [[ $CODECOVERAGE = 1 ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=clover.xml; fi
 
   - if [[ $CHECKS = 1 ]]; then composer cs-check; fi
-  - if [[ $CHECKS = 1 ]]; then composer phpstan-setup &&  composer phpstan; fi
+  - if [[ $CHECKS = 1 ]]; then composer phpstan-setup && composer phpstan; fi
 
 after_success:
   - if [[ $CODECOVERAGE = 1 ]]; then bash <(curl -s https://codecov.io/bash); fi

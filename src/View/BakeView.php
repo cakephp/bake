@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -17,7 +19,8 @@ namespace Bake\View;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Core\InstanceConfigTrait;
-use Cake\Utility\Text;
+use Cake\Core\Plugin;
+use Cake\Event\EventInterface;
 use WyriHaximus\TwigView\View\TwigView;
 
 class BakeView extends TwigView
@@ -26,42 +29,11 @@ class BakeView extends TwigView
     use InstanceConfigTrait;
 
     /**
-     * Default class config
+     * Folder containing bake templates.
      *
-     * This config is read when evaluating a template file.
-     *
-     * - `phpTagReplacements` are applied to the contents of a bake template, to allow php tags
-     *   to be treated as plain text
-     * - `replacements` are applied in order on the template contents before the template is evaluated.
-     *
-     * The default replacements are (in the following order):
-     *
-     * - swallow leading whitespace for <%- tags
-     * - swallow trailing whitespace for -%> tags
-     * - Add an extra newline to <%=, to counteract php automatically removing a newline
-     * - Replace remaining <=% with php short echo tags
-     * - Replace <% with php open tags
-     * - Replace %> with php close tags
-     *
-     * Replacements that start with `/` will be treated as regex replacements.
-     * All other values will be treated used with str_replace()
-     *
-     * @var array
+     * @var string
      */
-    protected $_defaultConfig = [
-        'phpTagReplacements' => [
-            '<?' => "<CakePHPBakeOpenTag",
-            '?>' => "CakePHPBakeCloseTag>",
-        ],
-        'replacements' => [
-            '/\n[ \t]+<%-( |$)/' => "\n<% ",
-            '/-%>/' => "?>",
-            '/<%=(.*)\%>\n(.)/' => "<%=$1%>\n\n$2",
-            '<%=' => '<?=',
-            '<%' => '<?php',
-            '%>' => '?>',
-        ],
-    ];
+    public const BAKE_TEMPLATE_FOLDER = 'bake';
 
     /**
      * Path where bake's intermediary files are written.
@@ -74,28 +46,20 @@ class BakeView extends TwigView
     /**
      * Templates extensions to search for.
      *
-     * @var array
+     * @var string[]
      */
     protected $extensions = [
         '.twig',
-        '.ctp',
     ];
-
-    /**
-     * View file being evaluated.
-     *
-     * @var string
-     */
-    protected $__viewFile;
 
     /**
      * Initialize view
      *
      * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
-        $bakeTemplates = dirname(dirname(__FILE__)) . DS . 'Template' . DS;
+        $bakeTemplates = Plugin::templatePath('Bake');
         $paths = (array)Configure::read('App.paths.templates');
 
         if (!in_array($bakeTemplates, $paths)) {
@@ -107,6 +71,10 @@ class BakeView extends TwigView
         if (!file_exists($this->_tmpLocation)) {
             mkdir($this->_tmpLocation);
         }
+
+        Configure::write(TwigView::ENV_CONFIG, [
+            'cache' => false,
+        ]);
 
         parent::initialize();
     }
@@ -127,25 +95,25 @@ class BakeView extends TwigView
      * View can also be a template string, rather than the name of a view file
      *
      * @param string|null $view Name of view file to use, or a template string to render
-     * @param string|null $layout Layout to use. Not used, for consistency with other views only
-     * @return string|null Rendered content.
+     * @param string|false|null $layout Layout to use. Not used, for consistency with other views only
+     * @return string Rendered content.
      * @throws \Cake\Core\Exception\Exception If there is an error in the view.
      */
-    public function render($view = null, $layout = null)
+    public function render(?string $view = null, $layout = null): string
     {
-        $viewFileName = $this->_getViewFileName($view);
+        $viewFileName = $this->_getTemplateFileName($view);
         $templateEventName = str_replace(
-            ['.ctp', '.twig', DS],
-            ['', '', '.'],
-            explode('Template' . DS . 'Bake' . DS, $viewFileName)[1]
+            ['.twig', DS],
+            ['', '.'],
+            explode('templates' . DS . static::BAKE_TEMPLATE_FOLDER . DS, $viewFileName)[1]
         );
 
         $this->_currentType = static::TYPE_TEMPLATE;
         $this->dispatchEvent('View.beforeRender', [$viewFileName]);
-        $this->dispatchEvent('View.beforeRender' . $templateEventName, [$viewFileName]);
+        $this->dispatchEvent('View.beforeRender.' . $templateEventName, [$viewFileName]);
         $this->Blocks->set('content', $this->_render($viewFileName));
         $this->dispatchEvent('View.afterRender', [$viewFileName]);
-        $this->dispatchEvent('View.afterRender' . $templateEventName, [$viewFileName]);
+        $this->dispatchEvent('View.afterRender.' . $templateEventName, [$viewFileName]);
 
         if ($layout === null) {
             $layout = $this->layout;
@@ -163,72 +131,19 @@ class BakeView extends TwigView
      * Use the Bake prefix for bake related view events
      *
      * @param string $name Name of the event.
-     * @param array|null $data Any value you wish to be transported with this event to
+     * @param mixed $data Any value you wish to be transported with this event to
      * it can be read by listeners.
      *
-     * @param object|null $subject The object that this event applies to
+     * @param mixed $subject The object that this event applies to
      * ($this by default).
      *
-     * @return \Cake\Event\Event
+     * @return \Cake\Event\EventInterface
      */
-    public function dispatchEvent($name, $data = null, $subject = null)
+    public function dispatchEvent(string $name, $data = null, $subject = null): EventInterface
     {
         $name = preg_replace('/^View\./', 'Bake.', $name);
 
         return parent::dispatchEvent($name, $data, $subject);
-    }
-
-    /**
-     * Sandbox method to evaluate a template / view script in.
-     *
-     * @param string $viewFile Filename of the view
-     * @param array $dataForView Data to include in rendered view.
-     *    If empty the current View::$viewVars will be used.
-     * @return string Rendered output
-     */
-    protected function _evaluate($viewFile, $dataForView)
-    {
-        if (substr($viewFile, -4) === 'twig') {
-            return parent::_evaluate($viewFile, $dataForView);
-        }
-
-        $viewString = $this->_getViewFileContents($viewFile);
-
-        $replacements = $this->getConfig('phpTagReplacements') + $this->getConfig('replacements');
-
-        foreach ($replacements as $find => $replace) {
-            if ($this->_isRegex($find)) {
-                $viewString = preg_replace($find, $replace, $viewString);
-            } else {
-                $viewString = str_replace($find, $replace, $viewString);
-            }
-        }
-
-        $this->__viewFile = $this->_tmpLocation . Text::slug(preg_replace('@.*Template[/\\\\]@', '', $viewFile)) . '.php';
-        file_put_contents($this->__viewFile, $viewString);
-
-        unset($viewFile, $viewString, $replacements, $find, $replace);
-        extract($dataForView);
-        ob_start();
-
-        include $this->__viewFile;
-
-        $content = ob_get_clean();
-
-        $unPhp = $this->getConfig('phpTagReplacements');
-
-        return str_replace(array_values($unPhp), array_keys($unPhp), $content);
-    }
-
-    /**
-     * Get the contents of the template file
-     *
-     * @param string $filename A template filename
-     * @return string Bake template to evaluate
-     */
-    protected function _getViewFileContents($filename)
-    {
-        return file_get_contents($filename);
     }
 
     /**
@@ -238,26 +153,13 @@ class BakeView extends TwigView
      * @param bool $cached Set to false to force a refresh of view paths. Default true.
      * @return array paths
      */
-    protected function _paths($plugin = null, $cached = true)
+    protected function _paths(?string $plugin = null, bool $cached = true): array
     {
         $paths = parent::_paths($plugin, false);
         foreach ($paths as &$path) {
-            $path .= 'Bake' . DS;
+            $path .= static::BAKE_TEMPLATE_FOLDER . DS;
         }
 
         return $paths;
-    }
-
-    /**
-     * Check if a replacement pattern is a regex
-     *
-     * Use preg_match to detect invalid regexes
-     *
-     * @param string $maybeRegex a fixed string or a regex
-     * @return bool
-     */
-    protected function _isRegex($maybeRegex)
-    {
-        return substr($maybeRegex, 0, 1) === '/';
     }
 }

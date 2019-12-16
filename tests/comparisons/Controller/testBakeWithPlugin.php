@@ -1,7 +1,7 @@
 <?php
-namespace BakeTest\Controller;
+declare(strict_types=1);
 
-use BakeTest\Controller\AppController;
+namespace BakeTest\Controller;
 
 /**
  * BakeArticles Controller
@@ -50,7 +50,7 @@ class BakeArticlesController extends AppController
      */
     public function add()
     {
-        $bakeArticle = $this->BakeArticles->newEntity();
+        $bakeArticle = $this->BakeArticles->newEmptyEntity();
         if ($this->request->is('post')) {
             $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
             if ($this->BakeArticles->save($bakeArticle)) {

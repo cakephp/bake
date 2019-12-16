@@ -1,13 +1,15 @@
 <?php
-namespace App\Test\TestCase\Shell\Helper;
+declare(strict_types=1);
 
-use App\Shell\Helper\ExampleHelper;
+namespace Bake\Test\App\Test\TestCase\Shell\Helper;
+
+use Bake\Test\App\Shell\Helper\ExampleHelper;
 use Cake\Console\ConsoleIo;
 use Cake\TestSuite\Stub\ConsoleOutput;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Shell\Helper\ExampleHelper Test Case
+ * Bake\Test\App\Shell\Helper\ExampleHelper Test Case
  */
 class ExampleHelperTest extends TestCase
 {
@@ -16,28 +18,28 @@ class ExampleHelperTest extends TestCase
      *
      * @var \Cake\TestSuite\Stub\ConsoleOutput
      */
-    public $stub;
+    protected $stub;
 
     /**
      * ConsoleIo mock
      *
      * @var \Cake\Console\ConsoleIo
      */
-    public $io;
+    protected $io;
 
     /**
      * Test subject
      *
-     * @var \App\Shell\Helper\ExampleHelper
+     * @var \Bake\Test\App\Shell\Helper\ExampleHelper
      */
-    public $Example;
+    protected $Example;
 
     /**
      * setUp method
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->stub = new ConsoleOutput();
@@ -50,7 +52,7 @@ class ExampleHelperTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Example);
 
@@ -62,7 +64,7 @@ class ExampleHelperTest extends TestCase
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialization(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

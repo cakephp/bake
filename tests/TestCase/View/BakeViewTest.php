@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -40,7 +42,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'BakeView' . DS;
@@ -60,7 +62,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->View);
@@ -160,7 +162,7 @@ class BakeViewTest extends TestCase
         $this->View->set('test', 'success');
         $result = $this->View->render('Custom' . DS . 'file');
         $this->assertSame(
-            'success',
+            'success' . "\n",
             $result
         );
 
@@ -170,7 +172,7 @@ class BakeViewTest extends TestCase
         });
         $result = $this->View->render('Custom' . DS . 'file');
         $this->assertSame(
-            'pass',
+            'pass' . "\n",
             $result
         );
     }

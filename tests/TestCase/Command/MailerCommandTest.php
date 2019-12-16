@@ -1,0 +1,108 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @since         1.1.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+namespace Bake\Test\TestCase\Command;
+
+use Bake\Test\TestCase\TestCase;
+use Cake\Console\Command;
+use Cake\Core\Plugin;
+
+/**
+ * MailerCommandTest class
+ */
+class MailerCommandTest extends TestCase
+{
+    /**
+     * setup method
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Mailer' . DS;
+        $this->setAppNamespace('Bake\Test\App');
+        $this->useCommandRunner();
+    }
+
+    /**
+     * Test the excute method.
+     *
+     * @return void
+     */
+    public function testMain()
+    {
+        $this->generatedFiles = [
+            APP . 'Mailer/ExampleMailer.php',
+            ROOT . 'tests/TestCase/Mailer/ExampleMailerTest.php',
+            ROOT . 'templates/layout/email/html/example.php',
+            ROOT . 'templates/layout/email/text/example.php',
+        ];
+        $this->exec('bake mailer Example');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles, 'files should be created');
+        $this->assertFileContains('class ExampleMailer extends Mailer', $this->generatedFiles[0]);
+    }
+
+    /**
+     * Test main within a plugin.
+     *
+     * @return void
+     */
+    public function testMainPlugin()
+    {
+        $this->_loadTestPlugin('TestBake');
+        $path = Plugin::path('TestBake');
+        $templatePath = Plugin::templatePath('TestBake');
+
+        $this->generatedFiles = [
+            $path . 'src/Mailer/ExampleMailer.php',
+            $path . 'tests/TestCase/Mailer/ExampleMailerTest.php',
+            $templatePath . 'layout/email/html/example.php',
+            $templatePath . 'layout/email/text/example.php',
+        ];
+        $this->exec('bake mailer TestBake.Example');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles, 'files should be created');
+        $this->assertFileContains('namespace TestBake\Mailer;', $this->generatedFiles[0]);
+        $this->assertFileContains('class ExampleMailer extends Mailer', $this->generatedFiles[0]);
+    }
+
+    /**
+     * Test baking within a plugin.
+     *
+     * @return void
+     */
+    public function testBakePlugin()
+    {
+        $this->_loadTestPlugin('TestBake');
+        $path = Plugin::path('TestBake');
+        $templatePath = Plugin::templatePath('TestBake');
+
+        $this->generatedFiles = [
+            $path . 'src/Mailer/ExampleMailer.php',
+            $path . 'tests/TestCase/Mailer/ExampleMailerTest.php',
+            $templatePath . 'layout/email/html/example.php',
+            $templatePath . 'layout/email/text/example.php',
+        ];
+        $this->exec('bake mailer TestBake.Example');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
+    }
+}

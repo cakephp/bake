@@ -1,6 +1,6 @@
 {
     "name": "cakephp/bake",
-    "description": "Bake plugin for CakePHP 3",
+    "description": "Bake plugin for CakePHP",
     "type": "cakephp-plugin",
     "keywords": ["cakephp", "bake"],
     "homepage": "https://github.com/cakephp/bake",
@@ -18,14 +18,14 @@
         "source": "https://github.com/cakephp/bake"
     },
     "require": {
-        "php": ">=5.6.0",
-        "cakephp/cakephp": "^3.8.0",
+        "php": ">=7.2",
+        "cakephp/cakephp": "4.x-dev as 4.0.0",
         "cakephp/plugin-installer": "^1.0",
-        "wyrihaximus/twig-view": "^4.3.7"
+        "wyrihaximus/twig-view": "dev-master"
     },
     "require-dev": {
-        "cakephp/cakephp-codesniffer": "^3.0",
-        "phpunit/phpunit": "^5.7.14|^6.0"
+        "cakephp/cakephp-codesniffer": "dev-next",
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "psr-4": {
@@ -51,6 +51,10 @@
         "phpstan": "phpstan analyse src/",
         "phpstan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan-shim:^0.11 && mv composer.backup composer.json",
         "test": "phpunit",
-        "test-coverage": "phpunit --coverage-clover=clover.xml"
-    }
+        "test-coverage": "phpunit --coverage-clover=clover.xml",
+        "phpstan": "phpstan analyse src/",
+        "phpstan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan-shim:^0.11 && mv composer.backup composer.json"
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }

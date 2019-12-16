@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Bake\View\Helper;
 
 use Cake\Collection\Collection;
@@ -27,7 +29,7 @@ class DocBlockHelper extends Helper
      * @param array $annotations An array of PHP comment block annotations.
      * @return string The DocBlock for a class header.
      */
-    public function classDescription($className, $classType, array $annotations)
+    public function classDescription(string $className, string $classType, array $annotations): string
     {
         $lines = [];
         if ($className && $classType) {
@@ -68,7 +70,7 @@ class DocBlockHelper extends Helper
      * @param \Cake\ORM\Association $association The association related to the entity class.
      * @return string The DocBlock type
      */
-    public function associatedEntityTypeToHintType($type, Association $association)
+    public function associatedEntityTypeToHintType(string $type, Association $association): string
     {
         $annotationType = $association->type();
         if (
@@ -102,7 +104,7 @@ class DocBlockHelper extends Helper
      * @param array $propertySchema The property schema to use for generating the type map.
      * @return array The property DocType map.
      */
-    public function buildEntityPropertyHintTypeMap(array $propertySchema)
+    public function buildEntityPropertyHintTypeMap(array $propertySchema): array
     {
         $properties = [];
         foreach ($propertySchema as $property => $info) {
@@ -140,7 +142,7 @@ class DocBlockHelper extends Helper
      * @param array $propertySchema The property schema to use for generating the type map.
      * @return array The property DocType map.
      */
-    public function buildEntityAssociationHintTypeMap(array $propertySchema)
+    public function buildEntityAssociationHintTypeMap(array $propertySchema): array
     {
         $properties = [];
         foreach ($propertySchema as $property => $info) {
@@ -170,14 +172,16 @@ class DocBlockHelper extends Helper
      * @see \Cake\Database\Type
      *
      * @param string $type The column type.
-     * @return null|string The DocBlock type, or `null` for unsupported column types.
+     * @return string|null The DocBlock type, or `null` for unsupported column types.
      */
-    public function columnTypeToHintType($type)
+    public function columnTypeToHintType(string $type): ?string
     {
         switch ($type) {
+            case 'char':
             case 'string':
             case 'text':
             case 'uuid':
+            case 'decimal':
                 return 'string';
 
             case 'integer':
@@ -187,7 +191,6 @@ class DocBlockHelper extends Helper
                 return 'int';
 
             case 'float':
-            case 'decimal':
                 return 'float';
 
             case 'boolean':
@@ -202,11 +205,14 @@ class DocBlockHelper extends Helper
 
             case 'date':
             case 'datetime':
+            case 'datetimefractional':
             case 'time':
             case 'timestamp':
+            case 'timestampfractional':
+            case 'timestamptimezone':
                 $dbType = Type::build($type);
                 if (method_exists($dbType, 'getDateTimeClassName')) {
-                    return '\\' . Type::build($type)->getDateTimeClassName();
+                    return '\\' . $dbType->getDateTimeClassName();
                 }
 
                 return '\Cake\I18n\Time';
@@ -219,10 +225,10 @@ class DocBlockHelper extends Helper
      * Renders a map of DocBlock property types as an array of
      * `@property` hints.
      *
-     * @param array $properties A key value pair where key is the name of a property and the value is the type.
+     * @param string[] $properties A key value pair where key is the name of a property and the value is the type.
      * @return array
      */
-    public function propertyHints(array $properties)
+    public function propertyHints(array $properties): array
     {
         $lines = [];
         foreach ($properties as $property => $type) {
@@ -241,18 +247,26 @@ class DocBlockHelper extends Helper
      * @param array $behaviors Behaviors list.
      * @param string $entity Entity name.
      * @param string $namespace Namespace.
-     * @return array
+     * @return string[]
      */
-    public function buildTableAnnotations($associations, $associationInfo, $behaviors, $entity, $namespace)
-    {
+    public function buildTableAnnotations(
+        array $associations,
+        array $associationInfo,
+        array $behaviors,
+        string $entity,
+        string $namespace
+    ): array {
         $annotations = [];
         foreach ($associations as $type => $assocs) {
             foreach ($assocs as $assoc) {
                 $typeStr = Inflector::camelize($type);
-                $tableFqn = $associationInfo[$assoc['alias']]['targetFqn'];
-                $annotations[] = "@property {$tableFqn}&\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
+                if (isset($associationInfo[$assoc['alias']])) {
+                    $tableFqn = $associationInfo[$assoc['alias']]['targetFqn'];
+                    $annotations[] = "@property {$tableFqn}&\Cake\ORM\Association\\{$typeStr} \${$assoc['alias']}";
+                }
             }
         }
+        // phpcs:disable
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} get(\$primaryKey, \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} newEntity(\$data = null, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] newEntities(array \$data, array \$options = [])";
@@ -261,9 +275,10 @@ class DocBlockHelper extends Helper
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} patchEntity(\\Cake\\Datasource\\EntityInterface \$entity, array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] patchEntities(\$entities, array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} findOrCreate(\$search, callable \$callback = null, \$options = [])";
+        // phpcs:enable
         foreach ($behaviors as $behavior => $behaviorData) {
             $className = App::className($behavior, 'Model/Behavior', 'Behavior');
-            if ($className === false) {
+            if (!$className) {
                 $className = "Cake\ORM\Behavior\\{$behavior}Behavior";
             }
 
@@ -283,7 +298,7 @@ class DocBlockHelper extends Helper
      * @param mixed $value The entry to insert.
      * @return array The array with the new value inserted.
      */
-    protected function _insertAfter(array $target, $key, $value)
+    protected function _insertAfter(array $target, string $key, $value): array
     {
         $index = array_search($key, array_keys($target));
         if ($index !== false) {

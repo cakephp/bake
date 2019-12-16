@@ -1,13 +1,14 @@
 <?php
-namespace App\Controller;
+declare(strict_types=1);
 
-use App\Controller\AppController;
+namespace Bake\Test\App\Controller;
 
 /**
  * BakeArticles Controller
  *
+ * @property \Bake\Test\App\Model\Table\BakeArticlesTable $BakeArticles
  *
- * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \Bake\Test\App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class BakeArticlesController extends AppController
 {
@@ -49,7 +50,7 @@ class BakeArticlesController extends AppController
      */
     public function add()
     {
-        $bakeArticle = $this->BakeArticles->newEntity();
+        $bakeArticle = $this->BakeArticles->newEmptyEntity();
         if ($this->request->is('post')) {
             $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
             if ($this->BakeArticles->save($bakeArticle)) {

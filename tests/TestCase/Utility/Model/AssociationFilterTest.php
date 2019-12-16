@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -34,6 +36,7 @@ class AssociationFilterTest extends TestCase
     public $fixtures = [
         'core.Authors',
         'core.Tags',
+        'core.Articles',
         'plugin.Bake.BakeArticles',
         'plugin.Bake.BakeComments',
         'plugin.Bake.BakeArticlesBakeTags',
@@ -51,7 +54,7 @@ class AssociationFilterTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->associationFilter = new AssociationFilter();
@@ -62,7 +65,7 @@ class AssociationFilterTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         TableRegistry::getTableLocator()->clear();
         unset($this->associationFilter);

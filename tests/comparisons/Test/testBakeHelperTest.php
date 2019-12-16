@@ -1,28 +1,30 @@
 <?php
-namespace App\Test\TestCase\View\Helper;
+declare(strict_types=1);
 
-use App\View\Helper\ExampleHelper;
+namespace Bake\Test\App\Test\TestCase\View\Helper;
+
+use Bake\Test\App\View\Helper\ExampleHelper;
 use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
 /**
- * App\View\Helper\ExampleHelper Test Case
+ * Bake\Test\App\View\Helper\ExampleHelper Test Case
  */
 class ExampleHelperTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\View\Helper\ExampleHelper
+     * @var \Bake\Test\App\View\Helper\ExampleHelper
      */
-    public $Example;
+    protected $Example;
 
     /**
      * setUp method
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $view = new View();
@@ -34,7 +36,7 @@ class ExampleHelperTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Example);
 
@@ -46,7 +48,7 @@ class ExampleHelperTest extends TestCase
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialization(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

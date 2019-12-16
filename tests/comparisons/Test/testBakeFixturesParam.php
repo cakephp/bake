@@ -1,28 +1,30 @@
 <?php
-namespace App\Test\TestCase\Model\Table;
+declare(strict_types=1);
 
-use App\Model\Table\ArticlesTable;
+namespace Bake\Test\App\Test\TestCase\Model\Table;
+
+use Bake\Test\App\Model\Table\AuthorsTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\ArticlesTable Test Case
+ * Bake\Test\App\Model\Table\AuthorsTable Test Case
  */
-class ArticlesTableTest extends TestCase
+class AuthorsTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\ArticlesTable
+     * @var \Bake\Test\App\Model\Table\AuthorsTable
      */
-    public $Articles;
+    protected $Authors;
 
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = [
+    protected $fixtures = [
         'app.Posts',
         'app.Comments',
         'app.Users',
@@ -33,11 +35,11 @@ class ArticlesTableTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Articles') ? [] : ['className' => ArticlesTable::class];
-        $this->Articles = TableRegistry::getTableLocator()->get('Articles', $config);
+        $config = TableRegistry::getTableLocator()->exists('Authors') ? [] : ['className' => AuthorsTable::class];
+        $this->Authors = TableRegistry::getTableLocator()->get('Authors', $config);
     }
 
     /**
@@ -45,19 +47,19 @@ class ArticlesTableTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
-        unset($this->Articles);
+        unset($this->Authors);
 
         parent::tearDown();
     }
 
     /**
-     * Test initial setup
+     * Test initialize method
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialize(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -20,14 +22,15 @@ namespace Bake\Test\App\Controller;
 class PostsController extends AppController
 {
     /**
-     * Components array
+     * Initialize controller
      *
-     * @var array
+     * @return void
      */
-    public $components = [
-        'Flash',
-        'RequestHandler',
-    ];
+    public function initialize(): void
+    {
+        $this->loadComponent('Flash');
+        $this->loadComponent('RequestHandler');
+    }
 
     /**
      * Index method.
@@ -37,12 +40,10 @@ class PostsController extends AppController
     public function index()
     {
         $this->Flash->error('An error message');
-        $this->response->cookie(
-            [
+        $this->response = $this->response->withCookie([
             'name' => 'remember_me',
             'value' => 1,
-            ]
-        );
+        ]);
         $this->set('test', 'value');
     }
 }

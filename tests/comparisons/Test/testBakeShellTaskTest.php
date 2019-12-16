@@ -1,34 +1,36 @@
 <?php
-namespace App\Test\TestCase\Shell\Task;
+declare(strict_types=1);
 
-use App\Shell\Task\ArticlesTask;
+namespace Bake\Test\App\Test\TestCase\Shell\Task;
+
+use Bake\Test\App\Shell\Task\ArticlesTask;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Shell\Task\ArticlesTask Test Case
+ * Bake\Test\App\Shell\Task\ArticlesTask Test Case
  */
 class ArticlesTaskTest extends TestCase
 {
     /**
      * ConsoleIo mock
      *
-     * @var \Cake\Console\ConsoleIo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Cake\Console\ConsoleIo|\PHPUnit\Framework\MockObject\MockObject
      */
-    public $io;
+    protected $io;
 
     /**
      * Test subject
      *
-     * @var \App\Shell\Task\ArticlesTask
+     * @var \Bake\Test\App\Shell\Task\ArticlesTask
      */
-    public $Articles;
+    protected $Articles;
 
     /**
      * setUp method
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->io = $this->getMockBuilder('Cake\Console\ConsoleIo')->getMock();
@@ -40,7 +42,7 @@ class ArticlesTaskTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Articles);
 
@@ -52,7 +54,7 @@ class ArticlesTaskTest extends TestCase
      *
      * @return void
      */
-    public function testInitialization()
+    public function testInitialization(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

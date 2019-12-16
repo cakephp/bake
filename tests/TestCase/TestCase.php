@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -14,7 +16,6 @@
  */
 namespace Bake\Test\TestCase;
 
-use Cake\Core\Plugin;
 use Cake\Routing\Router;
 use Cake\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
@@ -35,27 +36,28 @@ abstract class TestCase extends BaseTestCase
      */
     protected $generatedFiles = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         Router::reload();
-
-        $this->loadPlugins(['WyriHaximus/TwigView' => ['bootstrap' => true]]);
+        $this->loadPlugins(['WyriHaximus/TwigView']);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
-        if ($this->generatedFile) {
+        if ($this->generatedFile && file_exists($this->generatedFile)) {
             unlink($this->generatedFile);
             $this->generatedFile = '';
         }
 
         if (count($this->generatedFiles)) {
             foreach ($this->generatedFiles as $file) {
-                unlink($file);
+                if (file_exists($file)) {
+                    unlink($file);
+                }
             }
             $this->generatedFiles = [];
         }
@@ -73,7 +75,9 @@ abstract class TestCase extends BaseTestCase
         $path = $root . 'test_app' . DS . 'Plugin' . DS . $name . DS;
 
         $this->loadPlugins([
-            $name => ['path' => $path, 'autoload' => true],
+            $name => [
+                'path' => $path,
+            ],
         ]);
     }
 
@@ -103,7 +107,7 @@ abstract class TestCase extends BaseTestCase
         $this->assertFileExists($path, 'Cannot test contents, file does not exist.');
 
         $contents = file_get_contents($path);
-        $this->assertContains($expected, $contents, $message);
+        $this->assertStringContainsString($expected, $contents, $message);
     }
 
     /**
@@ -119,6 +123,6 @@ abstract class TestCase extends BaseTestCase
         $this->assertFileExists($path, 'Cannot test contents, file does not exist.');
 
         $contents = file_get_contents($path);
-        $this->assertNotContains($expected, $contents, $message);
+        $this->assertStringNotContainsString($expected, $contents, $message);
     }
 }

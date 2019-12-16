@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Bake\Test\App\Test\TestCase\Controller\Component;
 
 use Bake\Test\App\Controller\Component\AppleComponent;
@@ -15,14 +17,14 @@ class AppleComponentTest extends TestCase
      *
      * @var \Bake\Test\App\Controller\Component\AppleComponent
      */
-    public $Apple;
+    protected $Apple;
 
     /**
      * setUp method
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $registry = new ComponentRegistry();
@@ -34,7 +36,7 @@ class AppleComponentTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Apple);
 
@@ -46,7 +48,7 @@ class AppleComponentTest extends TestCase
      *
      * @return void
      */
-    public function testStartup()
+    public function testStartup(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

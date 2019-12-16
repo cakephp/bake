@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -25,7 +27,7 @@ class BakeArticlesTable extends Table
      * @param array $config
      * @return void
      */
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         $this->belongsTo('BakeUsers');
         $this->hasMany('BakeComments');

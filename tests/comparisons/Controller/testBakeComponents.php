@@ -1,24 +1,35 @@
 <?php
-namespace App\Controller;
+declare(strict_types=1);
 
-use App\Controller\AppController;
+namespace Bake\Test\App\Controller;
 
 /**
  * BakeArticles Controller
  *
- * @property \Cake\Controller\Component\CsrfComponent $Csrf
+ * @property \Bake\Test\App\Model\Table\BakeArticlesTable $BakeArticles
+ * @property \Cake\Controller\Component\RequestHandlerComponent $RequestHandler
  * @property \Cake\Controller\Component\AuthComponent $Auth
  * @property \Company\TestBakeThree\Controller\Component\SomethingComponent $Something
  * @property \TestBake\Controller\Component\OtherComponent $Other
- * @property \App\Controller\Component\AppleComponent $Apple
- * @property \App\Controller\Component\NonExistentComponent $NonExistent
+ * @property \Bake\Test\App\Controller\Component\AppleComponent $Apple
+ * @property \Bake\Test\App\Controller\Component\NonExistentComponent $NonExistent
  */
 class BakeArticlesController extends AppController
 {
     /**
-     * Components
+     * Initialize controller
      *
-     * @var array
+     * @return void
      */
-    public $components = ['Csrf', 'Auth', 'Company/TestBakeThree.Something', 'TestBake.Other', 'Apple', 'NonExistent'];
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->loadComponent('RequestHandler');
+        $this->loadComponent('Auth');
+        $this->loadComponent('Company/TestBakeThree.Something');
+        $this->loadComponent('TestBake.Other');
+        $this->loadComponent('Apple');
+        $this->loadComponent('NonExistent');
+    }
 }
