@@ -188,8 +188,8 @@ templates that bake uses. The best way to do this is:
 
 #. Bake a new plugin. The name of the plugin is the bake 'theme' name
 #. Create a new directory **plugins/[name]/src/Template/Bake/Template/**.
-#. Copy any templates you want to override from
-   **vendor/cakephp/bake/src/Template/Bake/Template** to matching files in your
+#. Copy any templates you want to override from 
+   **vendor/cakephp/bake/templates/bake/Template** to matching files in your
    plugin.
 #. When running bake use the ``--theme`` option to specify the bake-theme you
    want to use. To avoid having to specify this option in each call, you can also
@@ -208,7 +208,7 @@ create your own bake templates in your application. This way does not use the
 
 #. Create a new directory **/src/Template/Bake/**.
 #. Copy any templates you want to override from
-   **vendor/cakephp/bake/src/Template/Bake/** to matching files in your
+   **vendor/cakephp/bake/templates/bake/Template** to matching files in your
    application.
 
 Creating New Bake Command Options
