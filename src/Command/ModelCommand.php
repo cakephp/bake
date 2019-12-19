@@ -302,7 +302,7 @@ class ModelCommand extends BakeCommand
     {
         $schema = $model->getSchema();
         foreach ($schema->columns() as $fieldName) {
-            if (!preg_match('/^.+_id$/', $fieldName) || ($schema->primaryKey() === [$fieldName])) {
+            if (!preg_match('/^.+_id$/', $fieldName) || ($schema->getPrimaryKey() === [$fieldName])) {
                 continue;
             }
 
@@ -384,7 +384,7 @@ class ModelCommand extends BakeCommand
     public function findHasMany(Table $model, array $associations): array
     {
         $schema = $model->getSchema();
-        $primaryKey = $schema->primaryKey();
+        $primaryKey = $schema->getPrimaryKey();
         $tableName = $schema->name();
         $foreignKey = $this->_modelKey($tableName);
 
@@ -600,7 +600,7 @@ class ModelCommand extends BakeCommand
         foreach ($table->associations() as $assoc) {
             $fields[] = $assoc->getProperty();
         }
-        $primaryKey = $schema->primaryKey();
+        $primaryKey = $schema->getPrimaryKey();
 
         return array_values(array_diff($fields, $primaryKey));
     }
@@ -651,7 +651,7 @@ class ModelCommand extends BakeCommand
         }
 
         $validate = [];
-        $primaryKey = $schema->primaryKey();
+        $primaryKey = $schema->getPrimaryKey();
         $foreignKeys = [];
         if (isset($associations['belongsTo'])) {
             foreach ($associations['belongsTo'] as $assoc) {

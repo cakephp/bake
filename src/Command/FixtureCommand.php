@@ -343,7 +343,7 @@ class FixtureCommand extends BakeCommand
                         break;
                     case 'string':
                     case 'binary':
-                        $isPrimary = in_array($field, $table->primaryKey());
+                        $isPrimary = in_array($field, $table->getPrimaryKey());
                         if ($isPrimary) {
                             $insert = Text::uuid();
                         } else {
