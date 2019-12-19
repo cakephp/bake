@@ -24,7 +24,7 @@
         "wyrihaximus/twig-view": "dev-master"
     },
     "require-dev": {
-        "cakephp/cakephp-codesniffer": "dev-next",
+        "cakephp/cakephp-codesniffer": "^4.0",
         "phpunit/phpunit": "^8.0"
     },
     "autoload": {
