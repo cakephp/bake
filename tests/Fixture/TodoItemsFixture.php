@@ -30,7 +30,7 @@ class TodoItemsFixture extends TestFixture
      * @var array
      */
     public $fields = [
-        'id' => ['type' => 'integer'],
+        'id' => ['type' => 'integer', 'null' => false],
         'user_id' => ['type' => 'integer', 'null' => false],
         'title' => ['type' => 'string', 'length' => 50, 'null' => false],
         'body' => ['type' => 'text'],
