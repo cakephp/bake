@@ -51,9 +51,7 @@
         "phpstan": "phpstan analyse src/",
         "phpstan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan-shim:^0.11 && mv composer.backup composer.json",
         "test": "phpunit",
-        "test-coverage": "phpunit --coverage-clover=clover.xml",
-        "phpstan": "phpstan analyse src/",
-        "phpstan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan-shim:^0.11 && mv composer.backup composer.json"
+        "test-coverage": "phpunit --coverage-clover=clover.xml"
     },
     "prefer-stable": true,
     "minimum-stability": "dev"
