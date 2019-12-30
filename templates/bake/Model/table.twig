@@ -68,8 +68,10 @@ class {{ name }}Table extends Table
 {%- for type, assocs in associations %}
     {%- for assoc in assocs %}
         {%- set assocData = [] %}
-        {%- for key, val in assoc if key is not same as('alias') %}
-            {%- set assocData = assocData|merge({(key): val}) %}
+        {%- for key, val in assoc %}
+            {%- if key is not same as('alias') %}
+                {%- set assocData = assocData|merge({(key): val}) %}
+            {%- endif %}
         {%- endfor %}
         $this->{{ type }}('{{ assoc.alias }}', [{{ Bake.stringifyList(assocData, {'indent': 3})|raw }}]);
         {{- "\n" }}
