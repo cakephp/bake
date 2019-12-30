@@ -36,25 +36,27 @@
             <fieldset>
                 <legend><?= __('{{ action|humanize }} {{ singularHumanName }}') ?></legend>
                 <?php
-{% for field in fields if field not in primaryKey %}
-{%- if keyFields[field] %}
-{%- set fieldData = Bake.columnData(field, schema) %}
-{%- if fieldData.null %}
+{% for field in fields %}
+{%- if field not in primaryKey %}
+    {%- if keyFields[field] %}
+        {%- set fieldData = Bake.columnData(field, schema) %}
+        {%- if fieldData.null %}
                     echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'empty' => true]);
                     {{- "\n" }}
-{%- else %}
+        {%- else %}
                     echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]);
                     {{- "\n" }}
-{%- endif %}
-{%- elseif field not in ['created', 'modified', 'updated'] %}
-{%- set fieldData = Bake.columnData(field, schema) %}
-{%- if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
+        {%- endif %}
+    {%- elseif field not in ['created', 'modified', 'updated'] %}
+        {%- set fieldData = Bake.columnData(field, schema) %}
+        {%- if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
                     echo $this->Form->control('{{ field }}', ['empty' => true]);
                     {{- "\n" }}
-{%- else %}
+        {%- else %}
                     echo $this->Form->control('{{ field }}');
-            {{- "\n" }}
-{%- endif %}
+                    {{- "\n" }}
+        {%- endif %}
+    {%- endif %}
 {%- endif %}
 {%- endfor %}
 
