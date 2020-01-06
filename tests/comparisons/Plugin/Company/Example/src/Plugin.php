@@ -46,6 +46,7 @@ class Plugin extends BasePlugin
                 $builder->fallbacks();
             }
         );
+        parent::routes($routes);
     }
 
     /**
