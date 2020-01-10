@@ -14,14 +14,19 @@ use Cake\Validation\Validator;
  * @property \Bake\Test\App\Model\Table\CategoriesTable&\Cake\ORM\Association\BelongsTo $Categories
  * @property \Bake\Test\App\Model\Table\ProductsTable&\Cake\ORM\Association\BelongsTo $Products
  *
- * @method \Bake\Test\App\Model\Entity\CategoriesProduct get($primaryKey, $options = [])
- * @method \Bake\Test\App\Model\Entity\CategoriesProduct newEntity($data = null, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\CategoriesProduct newEmptyEntity()
+ * @method \Bake\Test\App\Model\Entity\CategoriesProduct newEntity(array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\CategoriesProduct[] newEntities(array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\CategoriesProduct get($primaryKey, $options = [])
+ * @method \Bake\Test\App\Model\Entity\CategoriesProduct findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \Bake\Test\App\Model\Entity\CategoriesProduct patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\CategoriesProduct[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\CategoriesProduct|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \Bake\Test\App\Model\Entity\CategoriesProduct saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\CategoriesProduct patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\CategoriesProduct[] patchEntities($entities, array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\CategoriesProduct findOrCreate($search, callable $callback = null, $options = [])
+ * @method \Bake\Test\App\Model\Entity\CategoriesProduct[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \Bake\Test\App\Model\Entity\CategoriesProduct[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \Bake\Test\App\Model\Entity\CategoriesProduct[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \Bake\Test\App\Model\Entity\CategoriesProduct[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  */
 class CategoriesProductsTable extends Table
 {
