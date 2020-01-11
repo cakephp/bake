@@ -11,14 +11,19 @@ use Cake\Validation\Validator;
 /**
  * BakeArticles Model
  *
- * @method \App\Model\Entity\BakeArticle get($primaryKey, $options = [])
- * @method \App\Model\Entity\BakeArticle newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\BakeArticle newEmptyEntity()
+ * @method \App\Model\Entity\BakeArticle newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\BakeArticle[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\BakeArticle get($primaryKey, $options = [])
+ * @method \App\Model\Entity\BakeArticle findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \App\Model\Entity\BakeArticle patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\BakeArticle[] patchEntities(iterable $entities, array $data, array $options = [])
  * @method \App\Model\Entity\BakeArticle|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\BakeArticle saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\BakeArticle patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\BakeArticle[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\BakeArticle findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  */
 class BakeArticlesTable extends Table
 {
