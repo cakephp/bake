@@ -267,14 +267,19 @@ class DocBlockHelper extends Helper
             }
         }
         // phpcs:disable
-        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} get(\$primaryKey, \$options = [])";
-        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} newEntity(\$data = null, array \$options = [])";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} newEmptyEntity()";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} newEntity(array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] newEntities(array \$data, array \$options = [])";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} get(\$primaryKey, \$options = [])";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} findOrCreate(\$search, ?callable \$callback = null, \$options = [])";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} patchEntity(\\Cake\\Datasource\\EntityInterface \$entity, array \$data, array \$options = [])";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] patchEntities(iterable \$entities, array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}|false save(\\Cake\\Datasource\\EntityInterface \$entity, \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} saveOrFail(\\Cake\\Datasource\\EntityInterface \$entity, \$options = [])";
-        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} patchEntity(\\Cake\\Datasource\\EntityInterface \$entity, array \$data, array \$options = [])";
-        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[] patchEntities(\$entities, array \$data, array \$options = [])";
-        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} findOrCreate(\$search, callable \$callback = null, \$options = [])";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable \$entities, \$options = [])";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable \$entities, \$options = [])";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable \$entities, \$options = [])";
+        $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable \$entities, \$options = [])";
         // phpcs:enable
         foreach ($behaviors as $behavior => $behaviorData) {
             $className = App::className($behavior, 'Model/Behavior', 'Behavior');
