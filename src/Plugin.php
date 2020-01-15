@@ -91,8 +91,7 @@ class Plugin extends BasePlugin
      */
     protected function discoverCommands(CommandCollection $commands): CommandCollection
     {
-        $plugins = CorePlugin::getCollection();
-        foreach ($plugins as $plugin) {
+        foreach (CorePlugin::getCollection()->with('console') as $plugin) {
             $namespace = str_replace('/', '\\', $plugin->getName());
             $pluginPath = $plugin->getClassPath();
 
