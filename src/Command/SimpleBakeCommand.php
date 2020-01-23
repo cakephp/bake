@@ -76,7 +76,7 @@ abstract class SimpleBakeCommand extends BakeCommand
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $this->extractCommonProperties($args);
-        $name = $args->getArgument('name');
+        $name = $args->getArgumentAt(0);
         if (empty($name)) {
             $io->err('You must provide a name to bake a ' . $this->name());
             $this->abort();
