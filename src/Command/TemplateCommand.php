@@ -268,6 +268,8 @@ class TemplateCommand extends BakeCommand
 
         $namespace = Configure::read('App.namespace');
 
+        $primaryKey = $displayField = $singularVar = $singularHumanName = null;
+        $schema = $fields = $modelClass = null;
         try {
             $primaryKey = (array)$modelObject->getPrimaryKey();
             $displayField = $modelObject->getDisplayField();
