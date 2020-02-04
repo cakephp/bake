@@ -360,6 +360,7 @@ class FixtureCommand extends BakeCommand
                         }
                         break;
                     case 'timestamp':
+                    case 'timestampfractional':
                         $insert = time();
                         break;
                     case 'datetime':
