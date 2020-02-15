@@ -100,7 +100,7 @@ class PluginCommand extends BakeCommand
     {
         $pathOptions = App::path('plugins');
         if (count($pathOptions) > 1) {
-            $this->findPath($io, $pathOptions);
+            $this->findPath($pathOptions, $io);
         }
         $io->out(sprintf("<info>Plugin Name:</info> %s", $plugin));
         $io->out(sprintf("<info>Plugin Directory:</info> %s", $this->path . $plugin));
