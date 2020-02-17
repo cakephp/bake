@@ -26,7 +26,7 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
+use Cake\Filesystem\Filesystem;
 use Cake\Utility\Inflector;
 
 /**
@@ -195,10 +195,15 @@ class PluginCommand extends BakeCommand
         $paths = array_merge($paths, Configure::read('App.paths.templates'));
         $paths[] = Plugin::templatePath('Bake');
 
+        $fs = new Filesystem();
+        $templates = [];
         do {
             $templatesPath = array_shift($paths) . BakeView::BAKE_TEMPLATE_FOLDER . '/Plugin';
-            $templatesDir = new Folder($templatesPath);
-            $templates = $templatesDir->findRecursive('.*\.(twig|php)');
+            if (is_dir($templatesPath)) {
+                $templates = array_keys(iterator_to_array(
+                    $fs->findRecursive($templatesPath, '/.*\.(twig|php)/')
+                ));
+            }
         } while (!$templates);
 
         sort($templates);

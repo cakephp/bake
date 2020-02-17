@@ -181,9 +181,8 @@ class BakeTask extends Shell
      */
     protected function _deleteEmptyFile(string $path): void
     {
-        $File = new File($path);
-        if ($File->exists()) {
-            $File->delete();
+        if (file_exists($path)) {
+            unlink($path);
             $this->out(sprintf('<success>Deleted</success> `%s`', $path), 1, Shell::QUIET);
         }
     }

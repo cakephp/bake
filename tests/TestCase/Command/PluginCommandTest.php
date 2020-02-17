@@ -24,7 +24,7 @@ use Cake\Console\Exception\StopException;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
+use Cake\Filesystem\Filesystem;
 
 /**
  * PluginCommand Test
@@ -66,8 +66,8 @@ class PluginCommandTest extends TestCase
      */
     public function tearDown(): void
     {
-        $folder = new Folder(TMP . 'plugin_task');
-        $folder->delete();
+        $fs = new Filesystem();
+        $fs->deleteDir(TMP . 'plugin_task');
 
         if (file_exists(APP . 'Application.php.bak')) {
             rename(APP . 'Application.php.bak', APP . 'Application.php');
@@ -189,8 +189,8 @@ class PluginCommandTest extends TestCase
         copy(ROOT . 'composer.json.bak', $composerConfig);
         unlink(ROOT . 'composer.json.bak');
 
-        $folder = new Folder(ROOT . 'vendor');
-        $folder->delete();
+        $fs = new Filesystem();
+        $fs->deleteDir(ROOT . 'vendor');
     }
 
     /**
@@ -242,14 +242,20 @@ class PluginCommandTest extends TestCase
      */
     public function assertPluginContents($pluginName)
     {
+        $fs = new Filesystem();
+
         $pluginName = str_replace('/', DS, $pluginName);
         $comparisonRoot = $this->_compareBasePath . $pluginName . DS;
-        $comparisonDir = new Folder($comparisonRoot);
-        $comparisonFiles = $comparisonDir->findRecursive();
+        $comparisonFiles = [];
+        if (is_dir($comparisonRoot)) {
+            $comparisonFiles = array_keys(iterator_to_array($fs->findRecursive($comparisonRoot)));
+        }
 
         $bakedRoot = App::path('plugins')[0] . $pluginName . DS;
-        $bakedDir = new Folder($bakedRoot);
-        $bakedFiles = $comparisonDir->findRecursive();
+        $bakedFiles = [];
+        if (is_dir($bakedRoot)) {
+            $bakedFiles = $comparisonFiles = array_keys(iterator_to_array($fs->findRecursive($bakedRoot)));
+        }
 
         $this->assertSame(
             count($comparisonFiles),

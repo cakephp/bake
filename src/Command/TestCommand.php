@@ -25,7 +25,7 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Exception\Exception;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
+use Cake\Filesystem\Filesystem;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest as Request;
 use Cake\ORM\Table;
@@ -204,12 +204,15 @@ class TestCommand extends BakeCommand
         if ($this->plugin) {
             $base = Plugin::classPath($this->plugin);
         }
+
         $path = $base . str_replace('\\', DS, $namespace);
-        $folder = new Folder($path);
-        [, $files] = $folder->read();
-        foreach ($files as $file) {
-            $classes[] = str_replace('.php', '', $file);
+        $files = (new Filesystem())->find($path);
+        foreach ($files as $fileObj) {
+            if ($fileObj->isFile()) {
+                $classes[] = substr($fileObj->getFileName(), 0, -4);
+            }
         }
+        sort($classes);
 
         return $classes;
     }
