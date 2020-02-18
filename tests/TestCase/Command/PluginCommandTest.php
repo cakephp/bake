@@ -25,6 +25,7 @@ use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Filesystem\Filesystem;
+use SplFileInfo;
 
 /**
  * PluginCommand Test
@@ -97,7 +98,6 @@ class PluginCommandTest extends TestCase
     {
         $this->exec('bake plugin Simple', ['y', 'n']);
         $this->assertExitCode(Command::CODE_SUCCESS);
-        $this->assertPluginContents('Simple');
 
         $bakedRoot = App::path('plugins')[0];
         $appController = $bakedRoot . 'Simple/src/Controller/AppController.php';
@@ -242,20 +242,12 @@ class PluginCommandTest extends TestCase
      */
     public function assertPluginContents($pluginName)
     {
-        $fs = new Filesystem();
-
         $pluginName = str_replace('/', DS, $pluginName);
         $comparisonRoot = $this->_compareBasePath . $pluginName . DS;
-        $comparisonFiles = [];
-        if (is_dir($comparisonRoot)) {
-            $comparisonFiles = array_keys(iterator_to_array($fs->findRecursive($comparisonRoot)));
-        }
+        $comparisonFiles = $this->getFiles($comparisonRoot);
 
         $bakedRoot = App::path('plugins')[0] . $pluginName . DS;
-        $bakedFiles = [];
-        if (is_dir($bakedRoot)) {
-            $bakedFiles = $comparisonFiles = array_keys(iterator_to_array($fs->findRecursive($bakedRoot)));
-        }
+        $bakedFiles = $this->getFiles($bakedRoot);
 
         $this->assertSame(
             count($comparisonFiles),
@@ -263,10 +255,36 @@ class PluginCommandTest extends TestCase
             'A different number of files were created than expected'
         );
 
-        foreach ($comparisonFiles as $file) {
-            $file = substr($file, strlen($comparisonRoot));
-            $result = file_get_contents($bakedRoot . $file);
-            $this->assertSameAsFile($pluginName . DS . $file, $result);
+        foreach ($comparisonFiles as $key => $file) {
+            $result = file_get_contents($file);
+            $this->assertSameAsFile($bakedFiles[$key], $result);
         }
+    }
+
+    /**
+     * Get recursive files list for given path.
+     *
+     * @param string $path
+     * @return array
+     */
+    protected function getFiles(string $path): array
+    {
+        if (!is_dir($path)) {
+            return [];
+        }
+
+        $fs = new Filesystem();
+
+        $iterator = $fs->findRecursive(
+            $path,
+            function (SplFileInfo $fileInfo) {
+                return $fileInfo->isFile();
+            }
+        );
+
+        $files = array_keys(iterator_to_array($iterator));
+        sort($files);
+
+        return $files;
     }
 }
