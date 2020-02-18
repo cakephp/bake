@@ -23,7 +23,6 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
-use Cake\Filesystem\File;
 
 /**
  * Base class for Bake Tasks.
