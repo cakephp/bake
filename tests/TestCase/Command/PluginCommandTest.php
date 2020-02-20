@@ -24,7 +24,8 @@ use Cake\Console\Exception\StopException;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Folder;
+use Cake\Filesystem\Filesystem;
+use SplFileInfo;
 
 /**
  * PluginCommand Test
@@ -66,8 +67,8 @@ class PluginCommandTest extends TestCase
      */
     public function tearDown(): void
     {
-        $folder = new Folder(TMP . 'plugin_task');
-        $folder->delete();
+        $fs = new Filesystem();
+        $fs->deleteDir(TMP . 'plugin_task');
 
         if (file_exists(APP . 'Application.php.bak')) {
             rename(APP . 'Application.php.bak', APP . 'Application.php');
@@ -97,7 +98,6 @@ class PluginCommandTest extends TestCase
     {
         $this->exec('bake plugin Simple', ['y', 'n']);
         $this->assertExitCode(Command::CODE_SUCCESS);
-        $this->assertPluginContents('Simple');
 
         $bakedRoot = App::path('plugins')[0];
         $appController = $bakedRoot . 'Simple/src/Controller/AppController.php';
@@ -189,8 +189,8 @@ class PluginCommandTest extends TestCase
         copy(ROOT . 'composer.json.bak', $composerConfig);
         unlink(ROOT . 'composer.json.bak');
 
-        $folder = new Folder(ROOT . 'vendor');
-        $folder->delete();
+        $fs = new Filesystem();
+        $fs->deleteDir(ROOT . 'vendor');
     }
 
     /**
@@ -244,12 +244,10 @@ class PluginCommandTest extends TestCase
     {
         $pluginName = str_replace('/', DS, $pluginName);
         $comparisonRoot = $this->_compareBasePath . $pluginName . DS;
-        $comparisonDir = new Folder($comparisonRoot);
-        $comparisonFiles = $comparisonDir->findRecursive();
+        $comparisonFiles = $this->getFiles($comparisonRoot);
 
         $bakedRoot = App::path('plugins')[0] . $pluginName . DS;
-        $bakedDir = new Folder($bakedRoot);
-        $bakedFiles = $comparisonDir->findRecursive();
+        $bakedFiles = $this->getFiles($bakedRoot);
 
         $this->assertSame(
             count($comparisonFiles),
@@ -257,10 +255,36 @@ class PluginCommandTest extends TestCase
             'A different number of files were created than expected'
         );
 
-        foreach ($comparisonFiles as $file) {
-            $file = substr($file, strlen($comparisonRoot));
-            $result = file_get_contents($bakedRoot . $file);
-            $this->assertSameAsFile($pluginName . DS . $file, $result);
+        foreach ($comparisonFiles as $key => $file) {
+            $result = file_get_contents($file);
+            $this->assertSameAsFile($bakedFiles[$key], $result);
         }
+    }
+
+    /**
+     * Get recursive files list for given path.
+     *
+     * @param string $path
+     * @return array
+     */
+    protected function getFiles(string $path): array
+    {
+        if (!is_dir($path)) {
+            return [];
+        }
+
+        $fs = new Filesystem();
+
+        $iterator = $fs->findRecursive(
+            $path,
+            function (SplFileInfo $fileInfo) {
+                return $fileInfo->isFile();
+            }
+        );
+
+        $files = array_keys(iterator_to_array($iterator));
+        sort($files);
+
+        return $files;
     }
 }
