@@ -21,8 +21,8 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
-use Bake\Command\ModelCommand;
 use Bake\Command\ControllerCommand;
+use Bake\Command\ModelCommand;
 use Bake\Command\TemplateCommand;
 
 /**
