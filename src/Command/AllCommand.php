@@ -37,6 +37,7 @@ class AllCommand extends BakeCommand
         ControllerCommand::class,
         TemplateCommand::class,
     ];
+
     /**
      * Gets the option parser instance and configures it.
      *
