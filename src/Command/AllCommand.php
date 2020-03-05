@@ -30,12 +30,12 @@ class AllCommand extends BakeCommand
     /**
      * All commands to call.
      *
-     * @var string[]
+     * @var array
      */
-    protected $commands = [
-        'Bake\Command\ModelCommand',
-        'Bake\Command\ControllerCommand',
-        'Bake\Command\TemplateCommand',
+    public $commands = [
+        'ModelCommand',
+        'ControllerCommand',
+        'TemplateCommand',
     ];
     /**
      * Gets the option parser instance and configures it.
@@ -93,7 +93,6 @@ class AllCommand extends BakeCommand
         }
 
         foreach ($this->commands as $commandName) {
-            /** @var \Cake\Comand\Command $command */
             $command = new $commandName();
             foreach ($tables as $table) {
                 $subArgs = new Arguments([$table], $args->getOptions(), ['name']);
