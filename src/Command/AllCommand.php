@@ -21,12 +21,25 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
+use Bake\Command\ModelCommand;
+use Bake\Command\ControllerCommand;
+use Bake\Command\TemplateCommand;
 
 /**
  * Command for `bake all`
  */
 class AllCommand extends BakeCommand
 {
+    /**
+     * All commands to call.
+     *
+     * @var string[]
+     */
+    protected $commands = [
+        ModelCommand::class,
+        ControllerCommand::class,
+        TemplateCommand::class,
+    ];
     /**
      * Gets the option parser instance and configures it.
      *
@@ -82,13 +95,10 @@ class AllCommand extends BakeCommand
             $tables = [$name];
         }
 
-        $commands = [
-            new ModelCommand(),
-            new ControllerCommand(),
-            new TemplateCommand(),
-        ];
-        foreach ($tables as $table) {
-            foreach ($commands as $command) {
+        foreach ($this->commands as $commandName) {
+            /** @var \Cake\Comand\Command $command */
+            $command = new $commandName();
+            foreach ($tables as $table) {
                 $subArgs = new Arguments([$table], $args->getOptions(), ['name']);
                 $command->execute($subArgs, $io);
             }
