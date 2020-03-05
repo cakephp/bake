@@ -16,9 +16,6 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Bake\Command\ControllerCommand;
-use Bake\Command\ModelCommand;
-use Bake\Command\TemplateCommand;
 use Bake\Utility\TableScanner;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -36,9 +33,9 @@ class AllCommand extends BakeCommand
      * @var string[]
      */
     protected $commands = [
-        ModelCommand::class,
-        ControllerCommand::class,
-        TemplateCommand::class,
+        'Bake\Command\ControllerCommand',
+        'Bake\Command\ModelCommand',
+        'Bake\Command\TemplateCommand',
     ];
     /**
      * Gets the option parser instance and configures it.
