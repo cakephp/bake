@@ -28,14 +28,14 @@ use Cake\Datasource\ConnectionManager;
 class AllCommand extends BakeCommand
 {
     /**
-     * All commands to call. 
+     * All commands to call.
      *
      * @var array
      */
     public $commands = [
         'ModelCommand',
         'ControllerCommand',
-        'TemplateCommand'
+        'TemplateCommand',
     ];
     /**
      * Gets the option parser instance and configures it.
