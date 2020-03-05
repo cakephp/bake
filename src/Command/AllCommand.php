@@ -93,7 +93,7 @@ class AllCommand extends BakeCommand
         }
 
         foreach ($this->commands as $commandName) {
-            /** @var \Cake\Comand\Command $command */
+            /** @var \Cake\Command\Command $command */
             $command = new $commandName();
             foreach ($tables as $table) {
                 $subArgs = new Arguments([$table], $args->getOptions(), ['name']);
