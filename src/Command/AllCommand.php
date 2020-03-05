@@ -21,9 +21,6 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
-use Bake\Command\ModelCommand;
-use Bake\Command\ControllerCommand;
-use Bake\Command\TemplateCommand;
 
 /**
  * Command for `bake all`
@@ -36,9 +33,9 @@ class AllCommand extends BakeCommand
      * @var string[]
      */
     protected $commands = [
-        ModelCommand::class,
-        ControllerCommand::class,
-        TemplateCommand::class,
+        'Bake\Command\ModelCommand',
+        'Bake\Command\ControllerCommand',
+        'Bake\Command\TemplateCommand',
     ];
     /**
      * Gets the option parser instance and configures it.
