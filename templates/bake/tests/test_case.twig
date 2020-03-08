@@ -24,7 +24,7 @@
     {%- set traitName = 'ConsoleIntegrationTestTrait' %}
 {% endif %}
 {%- set uses = uses|merge(["Cake\\TestSuite\\TestCase"]) %}
-{% if traitName %}
+{% if traitName is defined %}
     {%- set uses = uses|merge(["Cake\\TestSuite\\#{traitName}"]) %}
 {% endif %}
 
@@ -47,7 +47,7 @@ use {{ dependency }};
  */
 class {{ className }}Test extends TestCase
 {
-{% if traitName %}
+{% if traitName is defined %}
     use {{ traitName }};
 {% if properties or fixtures or construction or methods %}
 

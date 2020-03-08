@@ -39,7 +39,6 @@ use {{ baseNamespace }}\Controller\AppController;
 {% endfor %}
 
 {%- if 'index' in actions %}
- *
  * @method \{{ namespace }}\Model\Entity\{{ entityClassName }}[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
 {% endif %}
  */
@@ -66,6 +65,6 @@ class {{ name }}Controller extends AppController
 {% endif %}
 {%- for action in actions %}
 {% if loop.index > 1 %}{{ "\n" }}{% endif %}
-    {%- element 'Controller/' ~ action %}
+    {{- element('Controller/' ~ action) -}}
 {% endfor %}
 }

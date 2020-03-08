@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \Bake\Test\App\View\AppView $this
- * @var \Bake\Test\App\Model\Entity\TestTemplateModel $testTemplateModel
+ * @var \Bake\Test\App\Model\Entity\BakeArticle $testTemplateModel
  */
 ?>
 <div class="row">
@@ -17,7 +17,7 @@
             <fieldset>
                 <legend><?= __('Add Test Template Model') ?></legend>
                 <?php
-                    echo $this->Form->control('name');
+                    echo $this->Form->control('title');
                     echo $this->Form->control('body');
                 ?>
             </fieldset>

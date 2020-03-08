@@ -1,4 +1,4 @@
-Console Bake 
+Console Bake
 ############
 
 O console do **Bake** é outra ferramenta disponível para você sair trabalhando
@@ -22,7 +22,7 @@ Isto irá instalar o Bake como uma dependência de desenvolvimento, sendo assim,
 não será instalado no ambiente de produção.
 
 Ao usar os modelos Twig, verifique se você está carregando o plugin
-WyriHaximus/TwigView com seu bootstrap. Você também pode omiti-lo completamente,
+Cake/TwigView com seu bootstrap. Você também pode omiti-lo completamente,
 o que faz com que o plugin Bake carregue esse plugin sob demanda.
 
 .. meta::

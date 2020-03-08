@@ -9,7 +9,6 @@ namespace Bake\Test\App\Controller;
  * @property \Bake\Test\App\Model\Table\BakeArticlesTable $BakeArticles
  * @property \Cake\Controller\Component\RequestHandlerComponent $RequestHandler
  * @property \Cake\Controller\Component\AuthComponent $Auth
- *
  * @method \Bake\Test\App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class BakeArticlesController extends AppController

@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \Bake\Test\App\View\AppView $this
- * @var \Bake\Test\App\Model\Entity\TestTemplateModel $testTemplateModel
+ * @var \Bake\Test\App\Model\Entity\BakeArticle $testTemplateModel
  */
 ?>
 <div class="row">
@@ -16,21 +16,23 @@
     </aside>
     <div class="column-responsive column-80">
         <div class="testTemplateModels view content">
-            <h3><?= h($testTemplateModel->name) ?></h3>
+            <h3><?= h($testTemplateModel->title) ?></h3>
             <table>
                 <tr>
-                    <th><?= __('Name') ?></th>
-                    <td><?= h($testTemplateModel->name) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Body') ?></th>
-                    <td><?= h($testTemplateModel->body) ?></td>
+                    <th><?= __('Title') ?></th>
+                    <td><?= h($testTemplateModel->title) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Id') ?></th>
                     <td><?= $this->Number->format($testTemplateModel->id) ?></td>
                 </tr>
             </table>
+            <div class="text">
+                <strong><?= __('Body') ?></strong>
+                <blockquote>
+                    <?= $this->Text->autoParagraph(h($testTemplateModel->body)); ?>
+                </blockquote>
+            </div>
         </div>
     </div>
 </div>

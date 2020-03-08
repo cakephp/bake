@@ -375,13 +375,15 @@ class TemplateCommand extends BakeCommand
         }
 
         $renderer = new TemplateRenderer($args->getOption('theme'));
-        if ($action === "index" && $args->getOption('index-columns')) {
-            $renderer->set('indexColumns', $args->getOption('index-columns'));
-        }
-
         $renderer->set('action', $action);
         $renderer->set('plugin', $this->plugin);
         $renderer->set($vars);
+
+        $indexColumns = 0;
+        if ($action === "index" && $args->getOption('index-columns') !== null) {
+            $indexColumns = $args->getOption('index-columns');
+        }
+        $renderer->set('indexColumns', $indexColumns);
 
         return $renderer->generate("Template/$action");
     }

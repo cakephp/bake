@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\Command;
 
 use Bake\Command\TemplateCommand;
+use Bake\Test\App\Model\Table\BakeArticlesTable;
 use Bake\Test\TestCase\TestCase;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
@@ -44,6 +45,7 @@ class TemplateCommandTest extends TestCase
         'core.Posts',
         'core.Comments',
         'core.TestPluginComments',
+        'plugin.Bake.BakeArticles',
         'plugin.Bake.BakeTemplateAuthors',
         'plugin.Bake.BakeTemplateRoles',
         'plugin.Bake.BakeTemplateProfiles',
@@ -396,17 +398,23 @@ class TemplateCommandTest extends TestCase
     public function testGetContentWithRoutingPrefix()
     {
         $namespace = Configure::read('App.namespace');
+
+        $modelObject = TableRegistry::getTableLocator()->get('BakeArticles', [
+            'className' => BakeArticlesTable::class,
+        ]);
+
         $vars = [
-            'modelClass' => 'TestTemplateModel',
-            'entityClass' => $namespace . '\Model\Entity\TestTemplateModel',
-            'schema' => TableRegistry::getTableLocator()->get('TemplateTaskComments')->getSchema(),
+            'modelClass' => 'BakeArticles',
+            'entityClass' => $namespace . '\Model\Entity\BakeArticle',
+            'modelObject' => $modelObject,
+            'schema' => $modelObject->getSchema(),
             'primaryKey' => ['id'],
-            'displayField' => 'name',
+            'displayField' => 'title',
             'singularVar' => 'testTemplateModel',
             'pluralVar' => 'testTemplateModels',
             'singularHumanName' => 'Test Template Model',
             'pluralHumanName' => 'Test Template Models',
-            'fields' => ['id', 'name', 'body'],
+            'fields' => ['id', 'title', 'body'],
             'keyFields' => [],
             'associations' => [],
             'namespace' => $namespace,
