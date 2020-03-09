@@ -29,7 +29,7 @@ class BakeArticlesController extends AppController
     /**
      * Login method
      *
-     * @return \Cake\Http\Response|null
+     * @return \Cake\Http\Response|null|void Renders view
      */
     public function login()
     {
@@ -47,7 +47,7 @@ class BakeArticlesController extends AppController
     /**
      * Logout method
      *
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null|void Redirects to logout URL
      */
     public function logout()
     {
