@@ -18,7 +18,7 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
 use Bake\Utility\SubsetSchemaCollection;
-use Cake\Console\Command;
+use Cake\Command\Command;
 use Cake\Datasource\ConnectionManager;
 
 /**
@@ -93,7 +93,7 @@ class AllCommandTest extends TestCase
             $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
             $testsPath . 'TestCase/Controller/ProductsControllerTest.php',
         ];
-        $this->exec('bake all --connection test Products');
+        $this->exec('bake all --connection test Products', ['y']);
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
@@ -134,7 +134,7 @@ class AllCommandTest extends TestCase
             $testsPath . 'TestCase/Model/Table/ProductVersionsTableTest.php',
             $testsPath . 'TestCase/Controller/ProductVersionsControllerTest.php',
         ];
-        $this->exec('bake all --connection test --everything');
+        $this->exec('bake all --connection test --everything', ['y']);
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);

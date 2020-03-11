@@ -106,7 +106,7 @@ class CellCommand extends SimpleBakeCommand
         $path = $this->getTemplatePath($args, 'cell');
         $path .= implode(DS, [$name, 'display.php']);
 
-        $io->createFile($path, '');
+        $io->createFile($path, '', $args->getOption('force'));
     }
 
     /**

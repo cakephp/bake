@@ -18,7 +18,7 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Command\PluginCommand;
 use Bake\Test\TestCase\TestCase;
-use Cake\Console\Command;
+use Cake\Command\Command;
 use Cake\Console\ConsoleIo;
 use Cake\Console\Exception\StopException;
 use Cake\Core\App;

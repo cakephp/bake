@@ -107,7 +107,7 @@ abstract class SimpleBakeCommand extends BakeCommand
         $contents = $renderer->generate($this->template());
 
         $filename = $this->getPath($args) . $this->fileName($name);
-        $io->createFile($filename, $contents);
+        $io->createFile($filename, $contents, (bool)$args->getOption('force'));
 
         $emptyFile = $this->getPath($args) . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);

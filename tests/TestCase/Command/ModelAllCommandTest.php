@@ -18,7 +18,7 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
 use Bake\Utility\SubsetSchemaCollection;
-use Cake\Console\Command;
+use Cake\Command\Command;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;

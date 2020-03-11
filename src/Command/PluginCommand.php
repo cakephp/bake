@@ -269,7 +269,7 @@ class PluginCommand extends BakeCommand
         $io->out('<info>Modifying composer autoloader</info>');
 
         $out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
-        $io->createFile($file, $out);
+        $io->createFile($file, $out, (bool)$args->getOption('force'));
 
         $composer = $this->findComposer($args, $io);
 
