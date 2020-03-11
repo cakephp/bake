@@ -20,7 +20,7 @@ use Bake\Command\ControllerCommand;
 use Bake\Test\App\Model\Table\BakeArticlesTable;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Arguments;
-use Cake\Console\Command;
+use Cake\Command\Command;
 use Cake\Core\Plugin;
 use Cake\ORM\TableRegistry;
 

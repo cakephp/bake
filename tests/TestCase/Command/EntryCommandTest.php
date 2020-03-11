@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Console\Command;
+use Cake\Command\Command;
 
 /**
  * EntryCommand Test

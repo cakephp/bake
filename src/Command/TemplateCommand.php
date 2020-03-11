@@ -349,7 +349,7 @@ class TemplateCommand extends BakeCommand
         $filename = $path . Inflector::underscore($outputFile) . '.php';
 
         $io->out("\n" . sprintf('Baking `%s` view template file...', $outputFile), 1, ConsoleIo::QUIET);
-        $io->createFile($filename, $content);
+        $io->createFile($filename, $content, $args->getOption('force'));
     }
 
     /**

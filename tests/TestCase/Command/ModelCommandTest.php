@@ -19,7 +19,7 @@ namespace Bake\Test\TestCase\Command;
 use Bake\Command\ModelCommand;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Arguments;
-use Cake\Console\Command;
+use Cake\Command\Command;
 use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;

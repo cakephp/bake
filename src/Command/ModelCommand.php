@@ -980,7 +980,7 @@ class ModelCommand extends BakeCommand
         $path = $this->getPath($args);
         $filename = $path . 'Entity' . DS . $name . '.php';
         $io->out("\n" . sprintf('Baking entity class for %s...', $name), 1, ConsoleIo::QUIET);
-        $io->createFile($filename, $out);
+        $io->createFile($filename, $out, $args->getOption('force'));
 
         $emptyFile = $path . 'Entity' . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
@@ -1032,7 +1032,7 @@ class ModelCommand extends BakeCommand
         $path = $this->getPath($args);
         $filename = $path . 'Table' . DS . $name . 'Table.php';
         $io->out("\n" . sprintf('Baking table class for %s...', $name), 1, ConsoleIo::QUIET);
-        $io->createFile($filename, $out);
+        $io->createFile($filename, $out, $args->getOption('force'));
 
         // Work around composer caching that classes/files do not exist.
         // Check for the file as it might not exist in tests.
