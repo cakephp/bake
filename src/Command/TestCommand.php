@@ -32,6 +32,7 @@ use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use ReflectionClass;
+use UnexpectedValueException;
 
 /**
  * Command class for generating test files.
@@ -479,7 +480,14 @@ class TestCommand extends BakeCommand
      */
     protected function _processController(Controller $subject): void
     {
-        $models = [$subject->loadModel()->getAlias()];
+        try {
+            $model = $subject->loadModel();
+        } catch (UnexpectedValueException $exception) {
+            // No fixtures needed or possible
+            return;
+        }
+
+        $models = [$model->getAlias()];
         foreach ($models as $model) {
             [, $model] = pluginSplit($model);
             $this->_processModel($subject->{$model});
