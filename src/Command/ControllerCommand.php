@@ -95,7 +95,7 @@ class ControllerCommand extends BakeCommand
             $prefix = '\\' . str_replace('/', '\\', $prefix);
         }
 
-        $namespace = Configure::read('App.namespace');
+        $appNamespace = $namespace = Configure::read('App.namespace');
         if ($this->plugin) {
             $namespace = $this->_pluginNamespace($this->plugin);
         }
@@ -134,6 +134,7 @@ class ControllerCommand extends BakeCommand
             'helpers',
             'modelObj',
             'namespace',
+            'appNamespace',
             'plugin',
             'pluralHumanName',
             'pluralName',

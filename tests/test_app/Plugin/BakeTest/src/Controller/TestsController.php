@@ -16,10 +16,12 @@ declare(strict_types=1);
  */
 namespace BakeTest\Controller;
 
+use Bake\Test\App\Controller\AppController;
+
 /**
  * Class TestsController
  */
-class TestsController extends BakeTestAppController
+class TestsController extends AppController
 {
     public function initialize(): void
     {
