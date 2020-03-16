@@ -26,16 +26,6 @@ class PostsControllerTest extends TestCase
     ];
 
     /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
      * Test index method
      *
      * @return void

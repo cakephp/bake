@@ -209,7 +209,7 @@ class TestCommandTest extends TestCase
     {
         $command = new TestCommand();
         $result = $command->getTestableMethods('Bake\Test\App\Model\Table\ArticlesTable');
-        $expected = ['initialize', 'findpublished', 'dosomething', 'dosomethingelse'];
+        $expected = ['findpublished', 'dosomething', 'dosomethingelse'];
         $this->assertEquals($expected, array_map('strtolower', $result));
     }
 

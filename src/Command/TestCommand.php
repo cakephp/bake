@@ -81,6 +81,15 @@ class TestCommand extends BakeCommand
     ];
 
     /**
+     * Blacklisted methods for controller test cases.
+     *
+     * @var string[]
+     */
+    protected $blacklistedMethods = [
+        'initialize',
+    ];
+
+    /**
      * Internal list of fixtures that have been added so far.
      *
      * @var string[]
@@ -415,7 +424,7 @@ class TestCommand extends BakeCommand
             if ($method->getDeclaringClass()->getName() !== $className) {
                 continue;
             }
-            if (!$method->isPublic()) {
+            if (!$method->isPublic() || in_array($method->getName(), $this->blacklistedMethods, true)) {
                 continue;
             }
             $out[] = $method->getName();
