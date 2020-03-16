@@ -26,7 +26,7 @@ class CategoriesProductsFixture extends TestFixture
      *
      * @var array
      */
-    // @codingStandardsIgnoreStart
+    // phpcs:disable
     public $fields = [
         'category_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => true, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'product_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => true, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
@@ -38,7 +38,7 @@ class CategoriesProductsFixture extends TestFixture
             'collation' => 'utf8_general_ci'
         ],
     ];
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
 
     /**
      * Records

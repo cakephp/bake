@@ -14,7 +14,7 @@ declare(strict_types=1);
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:ignoreFile
 
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
