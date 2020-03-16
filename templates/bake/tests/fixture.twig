@@ -54,9 +54,9 @@ class {{ name }}Fixture extends TestFixture
      *
      * @var array
      */
-    // @codingStandardsIgnoreStart
+    // phpcs:disable
     public $fields = {{ schema|raw }};
-    // @codingStandardsIgnoreEnd
+    // phpcs:enable
 {% endif %}
 
 {%- if records %}
