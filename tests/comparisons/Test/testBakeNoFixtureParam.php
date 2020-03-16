@@ -42,14 +42,4 @@ class AuthorsTableTest extends TestCase
 
         parent::tearDown();
     }
-
-    /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
 }

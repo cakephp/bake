@@ -48,14 +48,4 @@ class ArticlesTaskTest extends TestCase
 
         parent::tearDown();
     }
-
-    /**
-     * Test initial setup
-     *
-     * @return void
-     */
-    public function testInitialization(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
 }

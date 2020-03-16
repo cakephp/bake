@@ -136,19 +136,4 @@ class {{ className }}Test extends TestCase
         $this->markTestIncomplete('Not implemented yet.');
     }
 {% endfor %}
-
-{%- if not methods %}
-{%- if traitName or properties or fixtures or construction or methods %}
-
-{% endif %}
-    /**
-     * Test initial setup
-     *
-     * @return void
-     */
-    public function testInitialization(): void
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-{% endif %}
 }
