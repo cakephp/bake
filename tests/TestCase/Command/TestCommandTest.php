@@ -446,6 +446,23 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
+    public function testBakeControllerWithoutModelTest()
+    {
+        $this->generatedFiles = [
+            ROOT . 'tests/TestCase/Controller/NoModelControllerTest.php',
+        ];
+        $this->exec('bake test controller NoModelController');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
+    }
+
+    /**
+     * test baking controller test files
+     *
+     * @return void
+     */
     public function testBakePrefixControllerTest()
     {
         $this->generatedFiles = [
