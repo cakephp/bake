@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace BakeTest\Controller;
 
+use Bake\Test\App\Controller\AppController;
+
 /**
  * BakeArticles Controller
  *
