@@ -355,6 +355,7 @@ class ControllerCommandTest extends TestCase
 
         $this->assertFileExists($this->generatedFile);
         $this->assertFileContains('namespace Company\Pastry\Controller;', $this->generatedFile);
+        $this->assertFileContains('use Company\Pastry\Controller\AppController;', $this->generatedFile);
         $this->assertFileContains('BakeArticlesController extends AppController', $this->generatedFile);
     }
 
@@ -375,6 +376,7 @@ class ControllerCommandTest extends TestCase
 
         $this->assertFileExists($this->generatedFile);
         $this->assertFileContains('namespace Company\Pastry\Controller;', $this->generatedFile);
+        $this->assertFileContains('use Company\Pastry\Controller\AppController;', $this->generatedFile);
         $this->assertFileContains('BakeArticlesController extends AppController', $this->generatedFile);
     }
 }

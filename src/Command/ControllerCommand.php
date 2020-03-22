@@ -95,9 +95,15 @@ class ControllerCommand extends BakeCommand
             $prefix = '\\' . str_replace('/', '\\', $prefix);
         }
 
-        $appNamespace = $namespace = Configure::read('App.namespace');
+        // Controllers default to importing AppController from `App`
+        $baseNamespace = $namespace = Configure::read('App.namespace');
         if ($this->plugin) {
             $namespace = $this->_pluginNamespace($this->plugin);
+        }
+        // If the plugin has an AppController other plugin controllers
+        // should inherit from it.
+        if ($this->plugin && class_exists("{$namespace}\Controller\AppController")) {
+            $baseNamespace = $namespace;
         }
 
         $currentModelName = $controllerName;
@@ -134,7 +140,7 @@ class ControllerCommand extends BakeCommand
             'helpers',
             'modelObj',
             'namespace',
-            'appNamespace',
+            'baseNamespace',
             'plugin',
             'pluralHumanName',
             'pluralName',
