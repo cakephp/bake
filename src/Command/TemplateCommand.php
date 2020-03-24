@@ -42,14 +42,14 @@ class TemplateCommand extends BakeCommand
      *
      * @var string
      */
-    public $controllerName = null;
+    public $controllerName;
 
     /**
      * Classname of the controller being used
      *
      * @var string
      */
-    public $controllerClass = null;
+    public $controllerClass;
 
     /**
      * Name with plugin of the model being used
@@ -70,7 +70,7 @@ class TemplateCommand extends BakeCommand
      *
      * @var \Bake\Utility\Model\AssociationFilter|null
      */
-    protected $_associationFilter = null;
+    protected $_associationFilter;
 
     /**
      * Template path.
@@ -94,7 +94,7 @@ class TemplateCommand extends BakeCommand
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return null|int The exit code or null for success
+     * @return int|null The exit code or null for success
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
@@ -104,7 +104,9 @@ class TemplateCommand extends BakeCommand
 
         if (empty($name)) {
             $io->out('Possible tables to bake view templates for based on your current database:');
-            $scanner = new TableScanner(ConnectionManager::get($this->connection));
+            /** @var \Cake\Database\Connection $connection */
+            $connection = ConnectionManager::get($this->connection);
+            $scanner = new TableScanner($connection);
             foreach ($scanner->listUnskipped() as $table) {
                 $io->out('- ' . $this->_camelize($table));
             }

@@ -74,6 +74,7 @@ class FixtureAllCommand extends BakeCommand
     {
         $this->extractCommonProperties($args);
 
+        /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($args->getOption('connection') ?? 'default');
         $scanner = new TableScanner($connection);
         $fixture = new FixtureCommand();

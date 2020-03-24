@@ -24,6 +24,7 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Database\Exception;
 use Cake\Database\Schema\TableSchema;
+use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -62,7 +63,7 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return null|int The exit code or null for success
+     * @return int|null The exit code or null for success
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
@@ -344,11 +345,11 @@ class ModelCommand extends BakeCommand
      * Search tables in db for keyField; if found search key constraints
      * for the table to which it refers.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table schema to find a constraint for.
+     * @param \Cake\Database\Schema\TableSchemaInterface $schema The table schema to find a constraint for.
      * @param string $keyField The field to check for a constraint.
      * @return string|null Either the referenced table or null if the field has no constraints.
      */
-    public function findTableReferencedBy(TableSchema $schema, string $keyField): ?string
+    public function findTableReferencedBy(TableSchemaInterface $schema, string $keyField): ?string
     {
         if (!$schema->getColumn($keyField)) {
             return null;
@@ -646,7 +647,7 @@ class ModelCommand extends BakeCommand
         }
         $schema = $model->getSchema();
         $fields = $schema->columns();
-        if (empty($fields)) {
+        if (!$fields) {
             return false;
         }
 
@@ -659,12 +660,12 @@ class ModelCommand extends BakeCommand
             }
         }
         foreach ($fields as $fieldName) {
-            if (in_array($fieldName, $foreignKeys)) {
+            if (in_array($fieldName, $foreignKeys, true)) {
                 continue;
             }
             $field = $schema->getColumn($fieldName);
             $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
-            if (!empty($validation)) {
+            if ($validation) {
                 $validate[$fieldName] = $validation;
             }
         }
@@ -675,20 +676,20 @@ class ModelCommand extends BakeCommand
     /**
      * Does individual field validation handling.
      *
-     * @param \Cake\Database\Schema\TableSchema $schema The table schema for the current field.
+     * @param \Cake\Database\Schema\TableSchemaInterface $schema The table schema for the current field.
      * @param string $fieldName Name of field to be validated.
      * @param array $metaData metadata for field
      * @param array $primaryKey The primary key field
      * @return array Array of validation for the field.
      */
     public function fieldValidation(
-        TableSchema $schema,
+        TableSchemaInterface $schema,
         string $fieldName,
         array $metaData,
         array $primaryKey
     ): array {
         $ignoreFields = ['lft', 'rght', 'created', 'modified', 'updated'];
-        if (in_array($fieldName, $ignoreFields)) {
+        if (in_array($fieldName, $ignoreFields, true)) {
             return [];
         }
 
@@ -744,7 +745,7 @@ class ModelCommand extends BakeCommand
             ];
         }
 
-        if (in_array($fieldName, $primaryKey)) {
+        if (in_array($fieldName, $primaryKey, true)) {
             $validation['allowEmpty'] = [
                 'rule' => $this->getEmptyMethod($fieldName, $metaData),
                 'args' => ['null', "'create'"],
@@ -769,7 +770,7 @@ class ModelCommand extends BakeCommand
 
         foreach ($schema->constraints() as $constraint) {
             $constraint = $schema->getConstraint($constraint);
-            if (!in_array($fieldName, $constraint['columns']) || count($constraint['columns']) > 1) {
+            if (!in_array($fieldName, $constraint['columns'], true) || count($constraint['columns']) > 1) {
                 continue;
             }
 
@@ -782,7 +783,7 @@ class ModelCommand extends BakeCommand
                 'date',
                 'time',
             ];
-            $notDatetime = !in_array($metaData['type'], $timeTypes);
+            $notDatetime = !in_array($metaData['type'], $timeTypes, true);
             if ($constraint['type'] === TableSchema::CONSTRAINT_UNIQUE && $notDatetime) {
                 $validation['unique'] = ['rule' => 'validateUnique', 'provider' => 'table'];
             }
@@ -849,7 +850,7 @@ class ModelCommand extends BakeCommand
 
         $rules = [];
         foreach ($fields as $fieldName) {
-            if (in_array($fieldName, $uniqueColumns)) {
+            if (in_array($fieldName, $uniqueColumns, true)) {
                 $rules[$fieldName] = ['name' => 'isUnique'];
             }
         }
@@ -889,16 +890,16 @@ class ModelCommand extends BakeCommand
         if (empty($fields)) {
             return [];
         }
-        if (in_array('created', $fields) || in_array('modified', $fields)) {
+        if (in_array('created', $fields, true) || in_array('modified', $fields, true)) {
             $behaviors['Timestamp'] = [];
         }
 
         if (
-            in_array('lft', $fields)
+            in_array('lft', $fields, true)
             && $schema->getColumnType('lft') === 'integer'
-            && in_array('rght', $fields)
+            && in_array('rght', $fields, true)
             && $schema->getColumnType('rght') === 'integer'
-            && in_array('parent_id', $fields)
+            && in_array('parent_id', $fields, true)
         ) {
             $behaviors['Tree'] = [];
         }
@@ -1055,8 +1056,9 @@ class ModelCommand extends BakeCommand
         if (!empty($this->_tables)) {
             return $this->_tables;
         }
-        $connection = ConnectionManager::get($this->connection);
 
+        /** @var \Cake\Database\Connection $connection */
+        $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
         $this->_tables = $scanner->listAll();
 
@@ -1070,6 +1072,7 @@ class ModelCommand extends BakeCommand
      */
     public function listUnskipped(): array
     {
+        /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
 
