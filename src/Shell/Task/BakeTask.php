@@ -116,7 +116,7 @@ class BakeTask extends Shell
      * Base execute method parses some parameters and sets some properties on the bake tasks.
      * call when overriding execute()
      *
-     * @return null|int
+     * @return int|null
      */
     public function main()
     {

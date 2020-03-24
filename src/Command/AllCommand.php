@@ -55,7 +55,7 @@ class AllCommand extends BakeCommand
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return null|int The exit code or null for success
+     * @return int|null The exit code or null for success
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
@@ -66,6 +66,7 @@ class AllCommand extends BakeCommand
         $io->out('Bake All');
         $io->hr();
 
+        /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
         if (empty($name) && !$args->getOption('everything')) {

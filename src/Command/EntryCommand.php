@@ -104,7 +104,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return null|int The exit code or null for success
+     * @return int|null The exit code or null for success
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
@@ -127,7 +127,15 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
                     }
                 }
 
-                return $task->runCommand($argList);
+                $result = $task->runCommand($argList);
+                if ($result === false) {
+                    return static::CODE_ERROR;
+                }
+                if ($result === true) {
+                    return static::CODE_SUCCESS;
+                }
+
+                return $result;
             }
             $io->err("<error>Could not find a task named `{$name}`.</error>");
 

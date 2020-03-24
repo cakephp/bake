@@ -53,7 +53,9 @@ class TemplateAllCommand extends BakeCommand
     public function execute(Arguments $args, ConsoleIo $io): int
     {
         $this->extractCommonProperties($args);
-        $scanner = new TableScanner(ConnectionManager::get($this->connection));
+        /** @var \Cake\Database\Connection $connection */
+        $connection = ConnectionManager::get($this->connection);
+        $scanner = new TableScanner($connection);
 
         foreach ($scanner->listUnskipped() as $table) {
             $templateArgs = new Arguments([$table], $args->getOptions(), ['name']);

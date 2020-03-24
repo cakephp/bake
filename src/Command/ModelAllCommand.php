@@ -67,11 +67,12 @@ class ModelAllCommand extends BakeCommand
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return null|int The exit code or null for success
+     * @return int|null The exit code or null for success
      */
     public function execute(Arguments $args, ConsoleIo $io): ?int
     {
         $this->extractCommonProperties($args);
+        /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
         foreach ($scanner->listUnskipped() as $table) {
