@@ -32,7 +32,7 @@ class MailerCommand extends SimpleBakeCommand
     public $pathFragment = 'Mailer/';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function name(): string
     {
@@ -40,7 +40,7 @@ class MailerCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function fileName(string $name): string
     {
@@ -48,7 +48,7 @@ class MailerCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function template(): string
     {

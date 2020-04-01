@@ -136,7 +136,6 @@ class BakeView extends TwigView
      *
      * @param mixed $subject The object that this event applies to
      * ($this by default).
-     *
      * @return \Cake\Event\EventInterface
      */
     public function dispatchEvent(string $name, $data = null, $subject = null): EventInterface

@@ -29,7 +29,7 @@ class CommandCommand extends SimpleBakeCommand
     public $pathFragment = 'Command/';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function name(): string
     {
@@ -37,7 +37,7 @@ class CommandCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function fileName(string $name): string
     {
@@ -45,7 +45,7 @@ class CommandCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function template(): string
     {

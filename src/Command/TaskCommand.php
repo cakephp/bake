@@ -29,7 +29,7 @@ class TaskCommand extends SimpleBakeCommand
     public $pathFragment = 'Shell/Task/';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function name(): string
     {
@@ -37,7 +37,7 @@ class TaskCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function fileName(string $name): string
     {
@@ -45,7 +45,7 @@ class TaskCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function template(): string
     {

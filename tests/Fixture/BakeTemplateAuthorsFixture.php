@@ -24,6 +24,7 @@ class BakeTemplateAuthorsFixture extends TestFixture
 {
     /**
      * Avoid overriding core.authors
+     *
      * @var string
      */
     public $table = 'bake_authors';

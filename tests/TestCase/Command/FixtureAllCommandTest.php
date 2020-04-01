@@ -24,7 +24,6 @@ use Cake\Datasource\ConnectionManager;
 
 /**
  * FixtureAllCommand Test
- *
  */
 class FixtureAllCommandTest extends TestCase
 {

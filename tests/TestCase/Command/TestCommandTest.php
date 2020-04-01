@@ -29,7 +29,6 @@ use Cake\ORM\TableRegistry;
 
 /**
  * TestCommandTest class
- *
  */
 class TestCommandTest extends TestCase
 {

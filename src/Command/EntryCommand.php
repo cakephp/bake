@@ -50,7 +50,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
     protected $help;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setCommandCollection(CommandCollection $commands): void
     {

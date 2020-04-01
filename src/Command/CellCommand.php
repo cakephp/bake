@@ -34,7 +34,7 @@ class CellCommand extends SimpleBakeCommand
     public $pathFragment = 'View/Cell/';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function name(): string
     {
@@ -42,7 +42,7 @@ class CellCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function fileName(string $name): string
     {
@@ -50,7 +50,7 @@ class CellCommand extends SimpleBakeCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function template(): string
     {

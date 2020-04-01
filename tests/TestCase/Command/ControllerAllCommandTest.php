@@ -25,7 +25,6 @@ use Cake\Utility\Inflector;
 
 /**
  * ControllerAllCommand test
- *
  */
 class ControllerAllCommandTest extends TestCase
 {

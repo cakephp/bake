@@ -100,7 +100,6 @@ class DocBlockHelper extends Helper
      * ```
      *
      * @see \Bake\Shell\Task\ModelTask::getEntityPropertySchema
-     *
      * @param array $propertySchema The property schema to use for generating the type map.
      * @return array The property DocType map.
      */
@@ -138,7 +137,6 @@ class DocBlockHelper extends Helper
      * ```
      *
      * @see \Bake\Shell\Task\ModelTask::getEntityPropertySchema
-     *
      * @param array $propertySchema The property schema to use for generating the type map.
      * @return array The property DocType map.
      */
@@ -170,7 +168,6 @@ class DocBlockHelper extends Helper
      * custom column/database types will be ignored.
      *
      * @see \Cake\Database\Type
-     *
      * @param string $type The column type.
      * @return string|null The DocBlock type, or `null` for unsupported column types.
      */

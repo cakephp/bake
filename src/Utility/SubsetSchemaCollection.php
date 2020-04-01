@@ -38,7 +38,6 @@ class SubsetSchemaCollection implements CollectionInterface
     protected $tables = [];
 
     /**
-     *
      * @param \Cake\Database\Schema\CollectionInterface $collection The wrapped collection
      * @param string[] $tables The subset of tables.
      */
@@ -69,7 +68,7 @@ class SubsetSchemaCollection implements CollectionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function describe(string $name, array $options = []): TableSchemaInterface
     {
