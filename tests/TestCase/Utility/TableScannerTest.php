@@ -18,7 +18,6 @@ namespace Bake\Test\TestCase\Utility;
 
 use Bake\Test\TestCase\TestCase;
 use Bake\Utility\TableScanner;
-use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 
 class TableScannerTest extends TestCase

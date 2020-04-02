@@ -91,7 +91,7 @@ class TableScanner
     }
 
     /**
-     * @param string $table
+     * @param string $table Table name.
      *
      * @return bool
      */
