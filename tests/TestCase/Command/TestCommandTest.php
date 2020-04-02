@@ -37,7 +37,7 @@ class TestCommandTest extends TestCase
      *
      * @var string
      */
-    public $fixtures = [
+    protected $fixtures = [
         'plugin.Bake.BakeArticles',
         'plugin.Bake.BakeArticlesBakeTags',
         'plugin.Bake.BakeComments',

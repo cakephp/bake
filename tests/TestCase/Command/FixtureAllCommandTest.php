@@ -32,7 +32,7 @@ class FixtureAllCommandTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    protected $fixtures = [
         'core.Articles',
         'core.Comments',
     ];

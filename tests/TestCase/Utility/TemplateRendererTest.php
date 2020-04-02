@@ -26,7 +26,7 @@ use Cake\Core\Plugin;
 class TemplateRendererTest extends TestCase
 {
     /**
-     * @var \Bake\Utility\TemplateRenderer|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Bake\Utility\TemplateRenderer
      */
     protected $renderer;
 

@@ -33,7 +33,7 @@ class ModelAllCommandTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    protected $fixtures = [
         'plugin.Bake.TodoTasks',
         'plugin.Bake.TodoItems',
     ];
