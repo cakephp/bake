@@ -43,7 +43,7 @@ class ModelCommandTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    protected $fixtures = [
         'core.Comments',
         'core.Tags',
         'core.ArticlesTags',

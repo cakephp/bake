@@ -39,7 +39,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    protected $fixtures = [
         'plugin.Bake.Categories',
         'plugin.Bake.CategoriesProducts',
         'plugin.Bake.OldProducts',

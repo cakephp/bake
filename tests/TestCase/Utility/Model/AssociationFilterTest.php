@@ -33,7 +33,7 @@ class AssociationFilterTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    protected $fixtures = [
         'core.Authors',
         'core.Tags',
         'core.Articles',

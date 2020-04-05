@@ -43,14 +43,14 @@ class TableScanner
      * Constructor
      *
      * @param \Cake\Database\Connection $connection The connection name in ConnectionManager
-     * @param string[]|null $ignore List of tables to ignore. If null, the default ignore
+     * @param string[]|null $ignore List of tables or regex pattern to ignore. If null, the default ignore
      *   list will be used.
      */
     public function __construct(Connection $connection, ?array $ignore = null)
     {
         $this->connection = $connection;
         if ($ignore === null) {
-            $ignore = ['i18n', 'cake_sessions', 'phinxlog', 'users_phinxlog'];
+            $ignore = ['i18n', 'cake_sessions', 'sessions', '/phinxlog/'];
         }
         $this->ignore = $ignore;
     }
@@ -69,7 +69,7 @@ class TableScanner
         }
         sort($tables);
 
-        return $tables;
+        return array_combine($tables, $tables);
     }
 
     /**
@@ -81,6 +81,34 @@ class TableScanner
     {
         $tables = $this->listAll();
 
-        return array_diff($tables, $this->ignore);
+        foreach ($tables as $key => $table) {
+            if ($this->shouldSkip($table)) {
+                unset($tables[$key]);
+            }
+        }
+
+        return $tables;
+    }
+
+    /**
+     * @param string $table Table name.
+     *
+     * @return bool
+     */
+    protected function shouldSkip(string $table): bool
+    {
+        foreach ($this->ignore as $ignore) {
+            if (strpos($ignore, '/') === 0) {
+                if ((bool)preg_match($ignore, $table)) {
+                    return true;
+                }
+            }
+
+            if ($ignore === $table) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

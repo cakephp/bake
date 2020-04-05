@@ -31,7 +31,7 @@ class AllCommandTest extends TestCase
      *
      * @var array
      */
-    public $fixtures = [
+    protected $fixtures = [
         'plugin.Bake.Products',
         'plugin.Bake.ProductVersions',
     ];
