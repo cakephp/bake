@@ -92,7 +92,6 @@ class TableScanner
 
     /**
      * @param string $table Table name.
-     *
      * @return bool
      */
     protected function shouldSkip(string $table): bool
