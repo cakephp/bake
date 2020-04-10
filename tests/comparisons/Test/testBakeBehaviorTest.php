@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Bake\Test\App\Test\TestCase\Model\Behavior;
 
 use Bake\Test\App\Model\Behavior\ExampleBehavior;
+use Cake\ORM\Table;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -26,7 +27,8 @@ class ExampleBehaviorTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Example = new ExampleBehavior();
+        $table = new Table();
+        $this->Example = new ExampleBehavior($table);
     }
 
     /**
