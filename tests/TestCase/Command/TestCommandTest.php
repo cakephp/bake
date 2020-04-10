@@ -648,6 +648,14 @@ class TestCommandTest extends TestCase
             '',
         ];
         $this->assertEquals($expected, $result);
+
+        $result = $command->generateConstructor('Behavior', 'App\Model\Behavior\PostsBehavior');
+        $expected = [
+            '$table = new Table();',
+            'new PostsBehavior($table);',
+            '',
+        ];
+        $this->assertEquals($expected, $result);
     }
 
     /**

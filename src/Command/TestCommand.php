@@ -550,7 +550,11 @@ class TestCommand extends BakeCommand
                 "? [] : ['className' => {$className}::class];";
             $construct = "TableRegistry::getTableLocator()->get('{$tableName}', \$config);";
         }
-        if ($type === 'Behavior' || $type === 'Entity' || $type === 'Form') {
+        if ($type === 'Behavior') {
+            $pre = "\$table = new Table();";
+            $construct = "new {$className}(\$table);";
+        }
+        if ($type === 'Entity' || $type === 'Form') {
             $construct = "new {$className}();";
         }
         if ($type === 'Helper') {
@@ -674,6 +678,9 @@ class TestCommand extends BakeCommand
         if ($type === 'ShellHelper') {
             $uses[] = 'Cake\TestSuite\Stub\ConsoleOutput';
             $uses[] = 'Cake\Console\ConsoleIo';
+        }
+        if ($type === 'Behavior') {
+            $uses[] = 'Cake\ORM\Table';
         }
         $uses[] = $fullClassName;
 
