@@ -14,6 +14,7 @@ declare(strict_types=1);
  * @since         1.4.3
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Bake\Utility;
 
 use Cake\Console\Arguments;
@@ -80,9 +81,10 @@ trait CommonOptionsTrait
     protected function _setCommonOptions(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $bakeThemes = [];
+        $templates = 'templates' . DS . 'bake';
         foreach (Plugin::loaded() as $plugin) {
-            $path = Plugin::classPath($plugin);
-            if (is_dir($path . 'Template' . DS . 'Bake')) {
+            $path = Plugin::path($plugin);
+            if (is_dir($path . $templates)) {
                 $bakeThemes[] = $plugin;
             }
         }
