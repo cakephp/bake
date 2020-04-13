@@ -81,6 +81,11 @@ trait CommonOptionsTrait
     {
         $bakeThemes = [];
         foreach (Plugin::loaded() as $plugin) {
+            print_r([
+                'plugin'=>$plugin,
+                'path'=>Plugin::path($plugin),
+                'classPath'=>Plugin::classPath($plugin),
+            ]);
             $path = Plugin::classPath($plugin);
             if (is_dir($path . 'Template' . DS . 'Bake')) {
                 $bakeThemes[] = $plugin;
