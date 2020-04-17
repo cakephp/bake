@@ -34,9 +34,7 @@ class TodoItem extends Entity
      * @var array
      */
     protected $_accessible = [
-        'id' => true,
-        'title' => true,
-        'body' => true,
-        'completed' => true,
+        '*' => true,
+        'id' => false,
     ];
 }

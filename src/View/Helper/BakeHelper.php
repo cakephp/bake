@@ -369,14 +369,14 @@ class BakeHelper extends Helper
         $accessible = [];
 
         if (!isset($fields) || $fields !== false) {
-            if (!empty($fields)) {
-                foreach ($fields as $field) {
-                    $accessible[$field] = 'true';
-                }
-            } elseif (!empty($primaryKey)) {
+            if (!empty($primaryKey)) {
                 $accessible['*'] = 'true';
                 foreach ($primaryKey as $field) {
                     $accessible[$field] = 'false';
+                }
+            } elseif (!empty($fields)) {
+                foreach ($fields as $field) {
+                    $accessible[$field] = 'true';
                 }
             }
         }
