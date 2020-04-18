@@ -9,7 +9,6 @@ use Bake\Test\App\Controller\AppController;
  * BakeArticles Controller
  *
  * @property \BakeTest\Model\Table\BakeArticlesTable $BakeArticles
- *
  * @method \BakeTest\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class BakeArticlesController extends AppController

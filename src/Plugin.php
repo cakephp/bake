@@ -52,14 +52,14 @@ class Plugin extends BasePlugin
     }
 
     /**
-     * load WyriHaximus/TwigView plugin.
+     * Load the TwigView plugin.
      *
      * @param \Cake\Core\PluginApplicationInterface $app The host application
      * @return void
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
-        $app->addPlugin('WyriHaximus/TwigView');
+        $app->addPlugin('Cake/TwigView');
     }
 
     /**

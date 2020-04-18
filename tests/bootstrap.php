@@ -47,6 +47,9 @@ define('CACHE', TMP . 'cache' . DS);
 //used by Cake\Command\HelpCommand
 define('CORE_PATH', $root . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS);
 
+// Enable strict_variables Twig configuration
+Configure::write('Bake.twigStrictVariables', true);
+
 Configure::write('debug', true);
 Configure::write('App', [
     'debug' => true,

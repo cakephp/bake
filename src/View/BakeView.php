@@ -18,15 +18,13 @@ namespace Bake\View;
 
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
-use Cake\Core\InstanceConfigTrait;
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
-use WyriHaximus\TwigView\View\TwigView;
+use Cake\TwigView\View\TwigView;
 
 class BakeView extends TwigView
 {
     use ConventionsTrait;
-    use InstanceConfigTrait;
 
     /**
      * Folder containing bake templates.
@@ -42,15 +40,6 @@ class BakeView extends TwigView
      * @var string
      */
     protected $_tmpLocation;
-
-    /**
-     * Templates extensions to search for.
-     *
-     * @var string[]
-     */
-    protected $extensions = [
-        '.twig',
-    ];
 
     /**
      * Initialize view
@@ -72,8 +61,9 @@ class BakeView extends TwigView
             mkdir($this->_tmpLocation);
         }
 
-        Configure::write(TwigView::ENV_CONFIG, [
-            'cache' => false,
+        $this->setConfig('environment', [
+          'cache' => false,
+          'strict_variables' => Configure::read('Bake.twigStrictVariables', false),
         ]);
 
         parent::initialize();
