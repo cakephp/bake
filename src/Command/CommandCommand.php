@@ -49,6 +49,6 @@ class CommandCommand extends SimpleBakeCommand
      */
     public function template(): string
     {
-        return 'Command/command';
+        return 'Bake.Command/command';
     }
 }

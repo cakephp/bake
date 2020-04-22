@@ -976,7 +976,7 @@ class ModelCommand extends BakeCommand
 
         $renderer = new TemplateRenderer($this->theme);
         $renderer->set($data);
-        $out = $renderer->generate('Model/entity');
+        $out = $renderer->generate('Bake.Model/entity');
 
         $path = $this->getPath($args);
         $filename = $path . 'Entity' . DS . $name . '.php';
@@ -1028,7 +1028,7 @@ class ModelCommand extends BakeCommand
 
         $renderer = new TemplateRenderer($this->theme);
         $renderer->set($data);
-        $out = $renderer->generate('Model/table');
+        $out = $renderer->generate('Bake.Model/table');
 
         $path = $this->getPath($args);
         $filename = $path . 'Table' . DS . $name . 'Table.php';

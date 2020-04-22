@@ -54,7 +54,7 @@ class CellCommand extends SimpleBakeCommand
      */
     public function template(): string
     {
-        return 'View/cell';
+        return 'Bake.View/cell';
     }
 
     /**

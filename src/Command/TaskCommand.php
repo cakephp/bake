@@ -49,6 +49,6 @@ class TaskCommand extends SimpleBakeCommand
      */
     public function template(): string
     {
-        return 'Shell/task';
+        return 'Bake.Shell/task';
     }
 }

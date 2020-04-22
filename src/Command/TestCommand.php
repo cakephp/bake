@@ -298,7 +298,7 @@ class TestCommand extends BakeCommand
             'subNamespace',
             'namespace'
         ));
-        $out = $renderer->generate('tests/test_case');
+        $out = $renderer->generate('Bake.tests/test_case');
 
         $filename = $this->testCaseFileName($type, $fullClassName);
         $emptyFile = dirname($filename) . DS . '.gitkeep';

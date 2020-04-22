@@ -385,7 +385,7 @@ class TemplateCommand extends BakeCommand
         }
         $renderer->set('indexColumns', $indexColumns);
 
-        return $renderer->generate("Template/$action");
+        return $renderer->generate("Bake.Template/$action");
     }
 
     /**

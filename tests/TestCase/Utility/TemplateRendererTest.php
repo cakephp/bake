@@ -99,7 +99,7 @@ class TemplateRendererTest extends TestCase
             'schema' => '',
             'namespace' => '',
         ]);
-        $result = $renderer->generate('tests/fixture');
+        $result = $renderer->generate('Bake.tests/fixture');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 }

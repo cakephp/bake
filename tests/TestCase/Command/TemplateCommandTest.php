@@ -590,7 +590,7 @@ class TemplateCommandTest extends TestCase
     public function testBakeWithNoTemplate()
     {
         $this->expectException(MissingTemplateException::class);
-        $this->expectExceptionMessage('No bake template found for "Template/delete"');
+        $this->expectExceptionMessage('No bake template found for "Bake.Template/delete"');
         $this->exec('bake template template_task_comments delete');
     }
 

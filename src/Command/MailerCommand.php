@@ -52,7 +52,7 @@ class MailerCommand extends SimpleBakeCommand
      */
     public function template(): string
     {
-        return 'Mailer/mailer';
+        return 'Bake.Mailer/mailer';
     }
 
     /**

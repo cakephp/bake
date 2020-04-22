@@ -49,6 +49,6 @@ class FormCommand extends SimpleBakeCommand
      */
     public function template(): string
     {
-        return 'Form/form';
+        return 'Bake.Form/form';
     }
 }

@@ -181,7 +181,7 @@ class ControllerCommand extends BakeCommand
         $renderer = new TemplateRenderer($this->theme);
         $renderer->set($data);
 
-        $contents = $renderer->generate('Controller/controller');
+        $contents = $renderer->generate('Bake.Controller/controller');
 
         $path = $this->getPath($args);
         $filename = $path . $controllerName . 'Controller.php';

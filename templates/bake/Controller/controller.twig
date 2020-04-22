@@ -65,6 +65,6 @@ class {{ name }}Controller extends AppController
 {% endif %}
 {%- for action in actions %}
 {% if loop.index > 1 %}{{ "\n" }}{% endif %}
-    {{- element('Controller/' ~ action) -}}
+    {{- element('Bake.Controller/' ~ action) -}}
 {% endfor %}
 }

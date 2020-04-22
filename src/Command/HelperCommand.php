@@ -49,6 +49,6 @@ class HelperCommand extends SimpleBakeCommand
      */
     public function template(): string
     {
-        return 'View/helper';
+        return 'Bake.View/helper';
     }
 }
