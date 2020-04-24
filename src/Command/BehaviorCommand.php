@@ -49,6 +49,6 @@ class BehaviorCommand extends SimpleBakeCommand
      */
     public function template(): string
     {
-        return 'Model/behavior';
+        return 'Bake.Model/behavior';
     }
 }

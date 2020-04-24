@@ -230,7 +230,7 @@ class PluginCommand extends BakeCommand
         ConsoleIo $io
     ): void {
         $io->out(sprintf('Generating %s file...', $template));
-        $out = $renderer->generate('Plugin/' . $template);
+        $out = $renderer->generate('Bake.Plugin/' . $template);
         $io->createFile($root . $template, $out);
     }
 

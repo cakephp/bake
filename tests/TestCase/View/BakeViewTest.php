@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\View;
 
 use Bake\View\BakeView;
-use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Http\Response;
@@ -50,11 +49,6 @@ class BakeViewTest extends TestCase
         $request = new Request();
         $response = new Response();
         $this->View = new BakeView($request, $response);
-
-        Configure::write(
-            'App.paths.templates.x',
-            Plugin::path('Bake') . 'tests' . DS . 'test_app' . DS . 'App' . DS . 'Template' . DS
-        );
     }
 
     /**

@@ -234,7 +234,7 @@ class FixtureCommand extends BakeCommand
         $renderer = new TemplateRenderer($args->getOption('theme'));
         $renderer->set('model', $model);
         $renderer->set($vars);
-        $content = $renderer->generate('tests/fixture');
+        $content = $renderer->generate('Bake.tests/fixture');
 
         $io->out("\n" . sprintf('Baking test fixture for %s...', $model), 1, ConsoleIo::QUIET);
         $io->createFile($path . $filename, $content, $args->getOption('force'));

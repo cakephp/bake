@@ -49,6 +49,6 @@ class MiddlewareCommand extends SimpleBakeCommand
      */
     public function template(): string
     {
-        return 'Middleware/middleware';
+        return 'Bake.Middleware/middleware';
     }
 }

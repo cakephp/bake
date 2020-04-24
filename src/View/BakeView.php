@@ -18,7 +18,6 @@ namespace Bake\View;
 
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
-use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\TwigView\View\TwigView;
 
@@ -42,20 +41,17 @@ class BakeView extends TwigView
     protected $_tmpLocation;
 
     /**
+     * @inheritDoc
+     */
+    protected $layout = 'Bake.default';
+
+    /**
      * Initialize view
      *
      * @return void
      */
     public function initialize(): void
     {
-        $bakeTemplates = Plugin::templatePath('Bake');
-        $paths = (array)Configure::read('App.paths.templates');
-
-        if (!in_array($bakeTemplates, $paths)) {
-            $paths[] = $bakeTemplates;
-            Configure::write('App.paths.templates', $paths);
-        }
-
         $this->_tmpLocation = TMP . 'bake' . DS;
         if (!file_exists($this->_tmpLocation)) {
             mkdir($this->_tmpLocation);

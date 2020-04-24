@@ -49,6 +49,6 @@ class ShellHelperCommand extends SimpleBakeCommand
      */
     public function template(): string
     {
-        return 'Shell/helper';
+        return 'Bake.Shell/helper';
     }
 }

@@ -49,6 +49,6 @@ class ComponentCommand extends SimpleBakeCommand
      */
     public function template(): string
     {
-        return 'Controller/component';
+        return 'Bake.Controller/component';
     }
 }
