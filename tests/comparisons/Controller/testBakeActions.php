@@ -55,7 +55,7 @@ class BakeArticlesController extends AppController
             'contain' => ['BakeUsers', 'BakeTags', 'BakeComments'],
         ]);
 
-        $this->set('bakeArticle', $bakeArticle);
+        $this->set(compact('bakeArticle'));
     }
 
     /**
