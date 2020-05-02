@@ -30,5 +30,5 @@
             'contain' => [{{ Bake.stringifyList(allAssociations, {'indent': false})|raw }}],
         ]);
 
-        $this->set('{{ singularName }}', ${{ singularName }});
+        $this->set(compact('{{ singularName }}'));
     }
