@@ -267,17 +267,13 @@ class ModelCommand extends BakeCommand
             /** @var \Cake\ORM\Association $association */
 
             $tableClass = get_class($association->getTarget());
-            if ($tableClass === 'Cake\ORM\Table') {
+            if ($tableClass === Table::class) {
                 $namespace = $appNamespace;
 
                 $className = $association->getClassName();
-                if ($className !== null && strlen($className)) {
-                    [$plugin, $className] = pluginSplit($className);
-                    if ($plugin !== null) {
-                        $namespace = $plugin;
-                    }
-                } else {
-                    $className = $association->getTarget()->getAlias();
+                [$plugin, $className] = pluginSplit($className);
+                if ($plugin !== null) {
+                    $namespace = $plugin;
                 }
 
                 $namespace = str_replace('/', '\\', trim($namespace, '\\'));
@@ -478,13 +474,15 @@ class ModelCommand extends BakeCommand
      * @param \Cake\ORM\Table $model The model to introspect.
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @return string|null
+     * @psalm-suppress InvalidReturnType
      */
     public function getDisplayField(Table $model, Arguments $args): ?string
     {
         if ($args->getOption('display-field')) {
-            return $args->getOption('display-field');
+            return (string)$args->getOption('display-field');
         }
 
+        /** @psalm-suppress InvalidReturnStatement */
         return $model->getDisplayField();
     }
 
@@ -1091,7 +1089,7 @@ class ModelCommand extends BakeCommand
     public function getTable(string $name, Arguments $args): string
     {
         if ($args->getOption('table')) {
-            return $args->getOption('table');
+            return (string)$args->getOption('table');
         }
 
         return Inflector::underscore($name);

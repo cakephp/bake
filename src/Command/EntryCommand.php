@@ -17,8 +17,8 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Bake\Shell\Task\BakeTask;
+use Cake\Command\Command;
 use Cake\Console\Arguments;
-use Cake\Console\Command;
 use Cake\Console\Command\HelpCommand;
 use Cake\Console\CommandCollection;
 use Cake\Console\CommandCollectionAwareInterface;
@@ -192,6 +192,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $this->help = new HelpCommand();
+        /** @psalm-suppress InaccessibleMethod Protected methods as class based */
         $parser = $this->help->buildOptionParser($parser);
         $parser
             ->setDescription(
