@@ -136,7 +136,7 @@ class BakeView extends TwigView
      *
      * @param string $plugin Optional plugin name to scan for view files.
      * @param bool $cached Set to false to force a refresh of view paths. Default true.
-     * @return array paths
+     * @return string[] paths
      */
     protected function _paths(?string $plugin = null, bool $cached = true): array
     {

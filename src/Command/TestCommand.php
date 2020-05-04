@@ -461,9 +461,6 @@ class TestCommand extends BakeCommand
      */
     protected function _processModel(Table $subject): void
     {
-        if (!$subject instanceof Table) {
-            return;
-        }
         $this->_addFixture($subject->getAlias());
         foreach ($subject->associations()->keys() as $alias) {
             $assoc = $subject->getAssociation($alias);
@@ -471,7 +468,7 @@ class TestCommand extends BakeCommand
             $name = $target->getAlias();
             $subjectClass = get_class($subject);
 
-            if ($subjectClass !== 'Cake\ORM\Table' && $subjectClass === get_class($target)) {
+            if ($subjectClass !== Table::class && $subjectClass === get_class($target)) {
                 continue;
             }
             if (!isset($this->_fixtures[$name])) {

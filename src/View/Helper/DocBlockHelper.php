@@ -5,7 +5,7 @@ namespace Bake\View\Helper;
 
 use Cake\Collection\Collection;
 use Cake\Core\App;
-use Cake\Database\Type;
+use Cake\Database\TypeFactory;
 use Cake\ORM\Association;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -207,7 +207,7 @@ class DocBlockHelper extends Helper
             case 'timestamp':
             case 'timestampfractional':
             case 'timestamptimezone':
-                $dbType = Type::build($type);
+                $dbType = TypeFactory::build($type);
                 if (method_exists($dbType, 'getDateTimeClassName')) {
                     return '\\' . $dbType->getDateTimeClassName();
                 }

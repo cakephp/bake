@@ -294,9 +294,7 @@ class FixtureCommand extends BakeCommand
     protected function _values(array $values): array
     {
         $vals = [];
-        if (!is_array($values)) {
-            return $vals;
-        }
+
         foreach ($values as $key => $val) {
             if (is_array($val)) {
                 $vals[] = "'{$key}' => [" . implode(", ", $this->_values($val)) . "]";
@@ -439,6 +437,7 @@ class FixtureCommand extends BakeCommand
     protected function _getRecordsFromTable(Arguments $args, string $modelName, ?string $useTable = null): array
     {
         $recordCount = ($args->getOption('count') ?? 10);
+        /** @var string $conditions */
         $conditions = ($args->getOption('conditions') ?? '1=1');
         if (TableRegistry::getTableLocator()->exists($modelName)) {
             $model = TableRegistry::getTableLocator()->get($modelName);
@@ -450,7 +449,7 @@ class FixtureCommand extends BakeCommand
         }
         $records = $model->find('all')
             ->where($conditions)
-            ->limit($recordCount)
+            ->limit((int)$recordCount)
             ->enableHydration(false);
 
         return $records->toArray();

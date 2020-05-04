@@ -41,7 +41,7 @@ trait CommonOptionsTrait
     public $theme;
 
     /**
-     * @var string|null
+     * @var string
      */
     public $connection;
 

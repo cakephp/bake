@@ -168,6 +168,7 @@ class PluginCommand extends BakeCommand
         }
         $package = $vendor . '/' . $name;
 
+        /** @psalm-suppress UndefinedConstant */
         $composerConfig = json_decode(
             file_get_contents(APP . '../composer.json'),
             true
@@ -383,6 +384,7 @@ class PluginCommand extends BakeCommand
     public function findComposer(Arguments $args, ConsoleIo $io)
     {
         if ($args->hasOption('composer')) {
+            /** @var string $path */
             $path = $args->getOption('composer');
             if (file_exists($path)) {
                 return $path;
