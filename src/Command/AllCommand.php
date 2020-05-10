@@ -28,6 +28,17 @@ use Cake\Datasource\ConnectionManager;
 class AllCommand extends BakeCommand
 {
     /**
+     * All commands to call.
+     *
+     * @var string[]
+     */
+    protected $commands = [
+        ModelCommand::class,
+        ControllerCommand::class,
+        TemplateCommand::class,
+    ];
+
+    /**
      * Gets the option parser instance and configures it.
      *
      * @param \Cake\Console\ConsoleOptionParser $parser Option parser to update.
@@ -83,13 +94,10 @@ class AllCommand extends BakeCommand
             $tables = [$name];
         }
 
-        $commands = [
-            new ModelCommand(),
-            new ControllerCommand(),
-            new TemplateCommand(),
-        ];
-        foreach ($tables as $table) {
-            foreach ($commands as $command) {
+        foreach ($this->commands as $commandName) {
+            /** @var \Cake\Command\Command $command */
+            $command = new $commandName();
+            foreach ($tables as $table) {
                 $subArgs = new Arguments([$table], $args->getOptions(), ['name']);
                 $command->execute($subArgs, $io);
             }
