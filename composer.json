@@ -39,7 +39,7 @@
             "Pastry\\PastryTest\\": "tests/test_app/Plugin/PastryTest/src/",
             "Bake\\Test\\": "tests/",
             "Bake\\Test\\App\\": "tests/test_app/App/",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests/"
+            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
         }
     },
     "scripts": {
