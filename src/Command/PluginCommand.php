@@ -166,11 +166,11 @@ class PluginCommand extends BakeCommand
         if (strpos($pluginName, '/') !== false) {
             [$vendor, $name] = explode('/', $pluginName);
         }
-        $package = $vendor . '/' . $name;
+        $package = Inflector::dasherize($vendor) . '/' . Inflector::dasherize($name);
 
         /** @psalm-suppress UndefinedConstant */
         $composerConfig = json_decode(
-            file_get_contents(APP . '../composer.json'),
+            file_get_contents(ROOT . DS . 'composer.json'),
             true
         );
 

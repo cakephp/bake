@@ -1,5 +1,5 @@
 {
-    "name": "your-name-here/SimpleExample",
+    "name": "your-name-here/simple-example",
     "description": "SimpleExample plugin for CakePHP",
     "type": "cakephp-plugin",
     "license": "MIT",
