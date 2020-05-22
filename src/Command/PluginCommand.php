@@ -259,7 +259,7 @@ class PluginCommand extends BakeCommand
             return false;
         }
 
-        $autoloadPath = str_replace(ROOT, '.', $this->path);
+        $autoloadPath = str_replace(ROOT . DS, '', $this->path);
         $autoloadPath = str_replace('\\', '/', $autoloadPath);
         $namespace = str_replace('/', '\\', $plugin);
 
