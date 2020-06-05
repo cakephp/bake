@@ -548,21 +548,21 @@ class TestCommand extends BakeCommand
             $construct = "TableRegistry::getTableLocator()->get('{$tableName}', \$config);";
         }
         if ($type === 'Behavior') {
-            $pre = "\$table = new Table();";
+            $pre = '$table = new Table();';
             $construct = "new {$className}(\$table);";
         }
         if ($type === 'Entity' || $type === 'Form') {
             $construct = "new {$className}();";
         }
         if ($type === 'Helper') {
-            $pre = "\$view = new View();";
+            $pre = '$view = new View();';
             $construct = "new {$className}(\$view);";
         }
         if ($type === 'Command') {
-            $construct = "\$this->useCommandRunner();";
+            $construct = '$this->useCommandRunner();';
         }
         if ($type === 'Component') {
-            $pre = "\$registry = new ComponentRegistry();";
+            $pre = '$registry = new ComponentRegistry();';
             $construct = "new {$className}(\$registry);";
         }
         if ($type === 'Shell') {
@@ -580,7 +580,7 @@ class TestCommand extends BakeCommand
         }
         if ($type === 'ShellHelper') {
             $pre = "\$this->stub = new ConsoleOutput();\n";
-            $pre .= "        \$this->io = new ConsoleIo(\$this->stub);";
+            $pre .= '        $this->io = new ConsoleIo($this->stub);';
             $construct = "new {$className}(\$this->io);";
         }
 

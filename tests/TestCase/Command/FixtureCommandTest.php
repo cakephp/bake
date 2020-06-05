@@ -95,7 +95,7 @@ class FixtureCommandTest extends TestCase
     public function testImportRecordsNoEscaping()
     {
         $articles = TableRegistry::getTableLocator()->get('Articles');
-        $articles->updateAll(['body' => "Body \"value\""], []);
+        $articles->updateAll(['body' => 'Body "value"'], []);
 
         $this->generatedFile = ROOT . 'tests/Fixture/ArticleFixture.php';
         $this->exec('bake fixture --connection test --schema --records Article');
@@ -149,7 +149,7 @@ class FixtureCommandTest extends TestCase
         $this->exec('bake fixture --connection test FixtureTest.Articles');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
-        $this->assertFileContains("class ArticlesFixture", $this->generatedFile);
+        $this->assertFileContains('class ArticlesFixture', $this->generatedFile);
     }
 
     /**
@@ -217,7 +217,7 @@ class FixtureCommandTest extends TestCase
         $this->assertStringContainsString("'small_int' => 1", $result);
         $this->assertStringContainsString("'tiny_int' => 1", $result);
         $this->assertStringContainsString("'bool' => 1", $result);
-        $this->assertStringContainsString("_constraints", $result);
+        $this->assertStringContainsString('_constraints', $result);
         $this->assertStringContainsString("'primary' => ['type' => 'primary'", $result);
         $this->assertStringContainsString("'columns' => ['id']", $result);
         $this->assertStringContainsString("'uuid' => ['type' => 'uuid'", $result);

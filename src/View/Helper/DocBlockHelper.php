@@ -56,9 +56,9 @@ class DocBlockHelper extends Helper
             $lines[] = $annotation;
         }
 
-        $lines = array_merge(["/**"], (new Collection($lines))->map(function ($line) {
+        $lines = array_merge(['/**'], (new Collection($lines))->map(function ($line) {
             return rtrim(" * {$line}");
-        })->toArray(), [" */"]);
+        })->toArray(), [' */']);
 
         return implode("\n", $lines);
     }

@@ -115,7 +115,7 @@ class BakeViewTest extends TestCase
         $expected = "There should be a newline about here: \n";
         $expected .= "And this should be on the next line.\n";
         $expected .= "\n";
-        $expected .= "There should be no new line after this";
+        $expected .= 'There should be no new line after this';
 
         $this->assertSame(
             $expected,

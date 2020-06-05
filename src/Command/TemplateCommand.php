@@ -380,7 +380,7 @@ class TemplateCommand extends BakeCommand
         $renderer->set($vars);
 
         $indexColumns = 0;
-        if ($action === "index" && $args->getOption('index-columns') !== null) {
+        if ($action === 'index' && $args->getOption('index-columns') !== null) {
             $indexColumns = $args->getOption('index-columns');
         }
         $renderer->set('indexColumns', $indexColumns);
