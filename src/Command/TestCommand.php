@@ -29,7 +29,6 @@ use Cake\Filesystem\Filesystem;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest as Request;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use ReflectionClass;
 use UnexpectedValueException;
@@ -338,10 +337,10 @@ class TestCommand extends BakeCommand
             if ($this->plugin) {
                 $name = $this->plugin . '.' . $name;
             }
-            if (TableRegistry::getTableLocator()->exists($name)) {
-                $instance = TableRegistry::getTableLocator()->get($name);
+            if ($this->getTableLocator()->exists($name)) {
+                $instance = $this->getTableLocator()->get($name);
             } else {
-                $instance = TableRegistry::getTableLocator()->get($name, [
+                $instance = $this->getTableLocator()->get($name, [
                     'connectionName' => $this->connection,
                 ]);
             }
@@ -543,9 +542,9 @@ class TestCommand extends BakeCommand
         $pre = $construct = $post = '';
         if ($type === 'Table') {
             $tableName = str_replace('Table', '', $className);
-            $pre = "\$config = TableRegistry::getTableLocator()->exists('{$tableName}') " .
+            $pre = "\$config = \$this->getTableLocator()->exists('{$tableName}') " .
                 "? [] : ['className' => {$className}::class];";
-            $construct = "TableRegistry::getTableLocator()->get('{$tableName}', \$config);";
+            $construct = "\$this->getTableLocator()->get('{$tableName}', \$config);";
         }
         if ($type === 'Behavior') {
             $pre = '$table = new Table();';
@@ -665,9 +664,6 @@ class TestCommand extends BakeCommand
         $uses = [];
         if ($type === 'Component') {
             $uses[] = 'Cake\Controller\ComponentRegistry';
-        }
-        if ($type === 'Table') {
-            $uses[] = 'Cake\ORM\TableRegistry';
         }
         if ($type === 'Helper') {
             $uses[] = 'Cake\View\View';

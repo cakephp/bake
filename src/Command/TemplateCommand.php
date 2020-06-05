@@ -27,7 +27,6 @@ use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\View\Exception\MissingTemplateException;
 use RuntimeException;
@@ -260,10 +259,10 @@ class TemplateCommand extends BakeCommand
      */
     protected function _loadController(ConsoleIo $io): array
     {
-        if (TableRegistry::getTableLocator()->exists($this->modelName)) {
-            $modelObject = TableRegistry::getTableLocator()->get($this->modelName);
+        if ($this->getTableLocator()->exists($this->modelName)) {
+            $modelObject = $this->getTableLocator()->get($this->modelName);
         } else {
-            $modelObject = TableRegistry::getTableLocator()->get($this->modelName, [
+            $modelObject = $this->getTableLocator()->get($this->modelName, [
                 'connectionName' => $this->connection,
             ]);
         }

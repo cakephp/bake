@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Bake\Test\App\Test\TestCase\Model\Table;
 
 use Bake\Test\App\Model\Table\AuthorsTable;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -38,8 +37,8 @@ class AuthorsTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Authors') ? [] : ['className' => AuthorsTable::class];
-        $this->Authors = TableRegistry::getTableLocator()->get('Authors', $config);
+        $config = $this->getTableLocator()->exists('Authors') ? [] : ['className' => AuthorsTable::class];
+        $this->Authors = $this->getTableLocator()->get('Authors', $config);
     }
 
     /**

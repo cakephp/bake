@@ -25,7 +25,6 @@ use Cake\Core\Configure;
 use Cake\Database\Exception;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 use DateTimeInterface;
@@ -157,7 +156,7 @@ class FixtureCommand extends BakeCommand
         try {
             $data = $this->readSchema($model, $useTable);
         } catch (Exception $e) {
-            TableRegistry::getTableLocator()->remove($model);
+            $this->getTableLocator()->remove($model);
             $useTable = Inflector::underscore($model);
             $table = $useTable;
             $data = $this->readSchema($model, $useTable);
@@ -191,10 +190,10 @@ class FixtureCommand extends BakeCommand
     {
         $connection = ConnectionManager::get($this->connection);
 
-        if (TableRegistry::getTableLocator()->exists($name)) {
-            $model = TableRegistry::getTableLocator()->get($name);
+        if ($this->getTableLocator()->exists($name)) {
+            $model = $this->getTableLocator()->get($name);
         } else {
-            $model = TableRegistry::getTableLocator()->get($name, [
+            $model = $this->getTableLocator()->get($name, [
                 'table' => $table,
                 'connection' => $connection,
             ]);
@@ -439,10 +438,10 @@ class FixtureCommand extends BakeCommand
         $recordCount = ($args->getOption('count') ?? 10);
         /** @var string $conditions */
         $conditions = ($args->getOption('conditions') ?? '1=1');
-        if (TableRegistry::getTableLocator()->exists($modelName)) {
-            $model = TableRegistry::getTableLocator()->get($modelName);
+        if ($this->getTableLocator()->exists($modelName)) {
+            $model = $this->getTableLocator()->get($modelName);
         } else {
-            $model = TableRegistry::getTableLocator()->get($modelName, [
+            $model = $this->getTableLocator()->get($modelName, [
                 'table' => $useTable,
                 'connection' => ConnectionManager::get($this->connection),
             ]);

@@ -20,7 +20,6 @@ use Bake\Test\TestCase\TestCase;
 use Bake\Utility\SubsetSchemaCollection;
 use Cake\Command\Command;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 
 /**
@@ -70,7 +69,7 @@ class ModelAllCommandTest extends TestCase
         $connection = ConnectionManager::get('test');
         $connection->setSchemaCollection($connection->getSchemaCollection()->getInnerCollection());
 
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
     }
 
     /**

@@ -21,7 +21,6 @@ use Bake\Utility\SubsetSchemaCollection;
 use Cake\Command\Command;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
 
 /**
  * TemplateAllCommand test
@@ -74,7 +73,7 @@ class TemplateAllCommandTest extends TestCase
         $connection = ConnectionManager::get('test');
         $connection->setSchemaCollection($connection->getSchemaCollection()->getInnerCollection());
 
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
     }
 
     /**

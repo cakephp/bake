@@ -22,7 +22,6 @@ use Bake\Test\TestCase\TestCase;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Core\Plugin;
-use Cake\ORM\TableRegistry;
 
 /**
  * ControllerCommand Test
@@ -53,7 +52,7 @@ class ControllerCommandTest extends TestCase
         $this->useCommandRunner();
         $this->setAppNamespace('Bake\Test\App');
 
-        TableRegistry::getTableLocator()->get('BakeArticles', [
+        $this->getTableLocator()->get('BakeArticles', [
             'className' => BakeArticlesTable::class,
         ]);
     }
@@ -66,7 +65,7 @@ class ControllerCommandTest extends TestCase
     public function tearDown(): void
     {
         parent::tearDown();
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
 
         $this->removePlugins(['ControllerTest', 'Company/Pastry']);
     }

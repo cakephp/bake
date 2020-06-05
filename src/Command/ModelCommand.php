@@ -27,7 +27,6 @@ use Cake\Database\Schema\TableSchema;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 
 /**
@@ -163,11 +162,11 @@ class ModelCommand extends BakeCommand
             $className = $this->plugin . '.' . $className;
         }
 
-        if (TableRegistry::getTableLocator()->exists($className)) {
-            return TableRegistry::getTableLocator()->get($className);
+        if ($this->getTableLocator()->exists($className)) {
+            return $this->getTableLocator()->get($className);
         }
 
-        return TableRegistry::getTableLocator()->get($className, [
+        return $this->getTableLocator()->get($className, [
             'name' => $className,
             'table' => $this->tablePrefix . $table,
             'connection' => ConnectionManager::get($this->connection),
@@ -1038,7 +1037,7 @@ class ModelCommand extends BakeCommand
         if (file_exists($filename)) {
             require_once $filename;
         }
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
 
         $emptyFile = $path . 'Table' . DS . 'empty';
         $this->deleteEmptyFile($emptyFile, $io);
