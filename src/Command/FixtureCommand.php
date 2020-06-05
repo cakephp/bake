@@ -151,7 +151,7 @@ class FixtureCommand extends BakeCommand
             $importBits[] = "'connection' => '{$this->connection}'";
         }
         if (!empty($importBits)) {
-            $import = sprintf("[%s]", implode(', ', $importBits));
+            $import = sprintf('[%s]', implode(', ', $importBits));
         }
 
         try {
@@ -297,7 +297,7 @@ class FixtureCommand extends BakeCommand
 
         foreach ($values as $key => $val) {
             if (is_array($val)) {
-                $vals[] = "'{$key}' => [" . implode(", ", $this->_values($val)) . "]";
+                $vals[] = "'{$key}' => [" . implode(', ', $this->_values($val)) . ']';
             } else {
                 $val = var_export($val, true);
                 if ($val === 'NULL') {
@@ -346,7 +346,7 @@ class FixtureCommand extends BakeCommand
                         if ($isPrimary) {
                             $insert = Text::uuid();
                         } else {
-                            $insert = "Lorem ipsum dolor sit amet";
+                            $insert = 'Lorem ipsum dolor sit amet';
                             if (!empty($fieldInfo['length'])) {
                                 $insert = substr(
                                     $insert,
@@ -375,13 +375,13 @@ class FixtureCommand extends BakeCommand
                         $insert = 1;
                         break;
                     case 'text':
-                        $insert = "Lorem ipsum dolor sit amet, aliquet feugiat.";
-                        $insert .= " Convallis morbi fringilla gravida,";
-                        $insert .= " phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin";
-                        $insert .= " venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla";
-                        $insert .= " vestibulum massa neque ut et, id hendrerit sit,";
-                        $insert .= " feugiat in taciti enim proin nibh, tempor dignissim, rhoncus";
-                        $insert .= " duis vestibulum nunc mattis convallis.";
+                        $insert = 'Lorem ipsum dolor sit amet, aliquet feugiat.';
+                        $insert .= ' Convallis morbi fringilla gravida,';
+                        $insert .= ' phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin';
+                        $insert .= ' venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla';
+                        $insert .= ' vestibulum massa neque ut et, id hendrerit sit,';
+                        $insert .= ' feugiat in taciti enim proin nibh, tempor dignissim, rhoncus';
+                        $insert .= ' duis vestibulum nunc mattis convallis.';
                         break;
                     case 'uuid':
                         $insert = Text::uuid();
@@ -420,7 +420,7 @@ class FixtureCommand extends BakeCommand
             $out .= implode(",\n", $values);
             $out .= ",\n            ],\n";
         }
-        $out .= "        ]";
+        $out .= '        ]';
 
         return $out;
     }

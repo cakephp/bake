@@ -103,7 +103,7 @@ class BakeHelper extends Helper
                     $nestedOptions['indent'] += 1;
                 }
                 $v = sprintf(
-                    "[%s]",
+                    '[%s]',
                     $this->stringifyList($v, $nestedOptions)
                 );
             }
@@ -119,7 +119,7 @@ class BakeHelper extends Helper
         }
 
         if ($options['trailingComma'] && $options['indent'] > 0) {
-            $end = "," . $end;
+            $end = ',' . $end;
         }
 
         return $start . implode($join, $list) . $end;

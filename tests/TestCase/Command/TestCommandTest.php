@@ -626,17 +626,17 @@ class TestCommandTest extends TestCase
         $this->assertEquals($expected, $result);
 
         $result = $command->generateConstructor('Helper', 'FormHelper');
-        $expected = ["\$view = new View();", "new FormHelper(\$view);", ''];
+        $expected = ['$view = new View();', 'new FormHelper($view);', ''];
         $this->assertEquals($expected, $result);
 
         $result = $command->generateConstructor('Entity', 'TestBake\Model\Entity\Article');
-        $expected = ["", "new Article();", ''];
+        $expected = ['', 'new Article();', ''];
         $this->assertEquals($expected, $result);
 
         $result = $command->generateConstructor('ShellHelper', 'TestBake\Shell\Helper\ExampleHelper');
         $expected = [
             "\$this->stub = new ConsoleOutput();\n        \$this->io = new ConsoleIo(\$this->stub);",
-            "new ExampleHelper(\$this->io);",
+            'new ExampleHelper($this->io);',
             '',
         ];
         $this->assertEquals($expected, $result);
@@ -644,7 +644,7 @@ class TestCommandTest extends TestCase
         $result = $command->generateConstructor('Form', 'TestBake\Form\ExampleForm');
         $expected = [
             '',
-            "new ExampleForm();",
+            'new ExampleForm();',
             '',
         ];
         $this->assertEquals($expected, $result);

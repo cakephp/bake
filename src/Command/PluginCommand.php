@@ -79,7 +79,7 @@ class PluginCommand extends BakeCommand
             return static::CODE_ERROR;
         }
         if (!$this->bake($plugin, $args, $io)) {
-            $io->error(sprintf("An error occurred trying to bake: %s in %s", $plugin, $this->path . $plugin));
+            $io->error(sprintf('An error occurred trying to bake: %s in %s', $plugin, $this->path . $plugin));
             $this->abort();
         }
 
@@ -102,8 +102,8 @@ class PluginCommand extends BakeCommand
         if (count($pathOptions) > 1) {
             $this->findPath($pathOptions, $io);
         }
-        $io->out(sprintf("<info>Plugin Name:</info> %s", $plugin));
-        $io->out(sprintf("<info>Plugin Directory:</info> %s", $this->path . $plugin));
+        $io->out(sprintf('<info>Plugin Name:</info> %s', $plugin));
+        $io->out(sprintf('<info>Plugin Directory:</info> %s', $this->path . $plugin));
         $io->hr();
 
         $looksGood = $io->askChoice('Look okay?', ['y', 'n', 'q'], 'y');
@@ -264,8 +264,8 @@ class PluginCommand extends BakeCommand
         $namespace = str_replace('/', '\\', $plugin);
 
         $config = json_decode(file_get_contents($file), true);
-        $config['autoload']['psr-4'][$namespace . '\\'] = $autoloadPath . $plugin . "/src/";
-        $config['autoload-dev']['psr-4'][$namespace . '\\Test\\'] = $autoloadPath . $plugin . "/tests/";
+        $config['autoload']['psr-4'][$namespace . '\\'] = $autoloadPath . $plugin . '/src/';
+        $config['autoload-dev']['psr-4'][$namespace . '\\Test\\'] = $autoloadPath . $plugin . '/tests/';
 
         $io->out('<info>Modifying composer autoloader</info>');
 
