@@ -28,7 +28,6 @@ use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
 use Cake\Database\Driver\Sqlserver;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
 
 /**
  * ModelCommand test class
@@ -69,7 +68,7 @@ class ModelCommandTest extends TestCase
         $this->setAppNamespace('Bake\Test\App');
         $this->useCommandRunner();
 
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
     }
 
     /**
@@ -80,7 +79,7 @@ class ModelCommandTest extends TestCase
     public function tearDown(): void
     {
         parent::tearDown();
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
     }
 
     /**
@@ -166,7 +165,7 @@ class ModelCommandTest extends TestCase
      */
     public function testApplyAssociations()
     {
-        $articles = TableRegistry::getTableLocator()->get('TodoItems');
+        $articles = $this->getTableLocator()->get('TodoItems');
         $assocs = [
             'belongsTo' => [
                 [
@@ -209,7 +208,7 @@ class ModelCommandTest extends TestCase
     public function testApplyAssociationsConcreteClass()
     {
         Configure::write('App.namespace', 'Bake\Test\App');
-        $articles = TableRegistry::getTableLocator()->get('Articles');
+        $articles = $this->getTableLocator()->get('Articles');
         $assocs = [
             'belongsTo' => [
                 [
@@ -247,7 +246,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetAssociations()
     {
-        $items = TableRegistry::getTableLocator()->get('TodoItems');
+        $items = $this->getTableLocator()->get('TodoItems');
 
         $command = new ModelCommand();
         $command->connection = 'test';
@@ -294,7 +293,7 @@ class ModelCommandTest extends TestCase
 
         $arguments = new Arguments([], ['no-associations' => true], []);
         $io = $this->createMock(ConsoleIo::class);
-        $articles = TableRegistry::getTableLocator()->get('BakeArticle');
+        $articles = $this->getTableLocator()->get('BakeArticle');
         $this->assertEquals([], $command->getAssociations($articles, $arguments, $io));
     }
 
@@ -305,7 +304,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetAssociationsPlugin()
     {
-        $items = TableRegistry::getTableLocator()->get('TodoItems');
+        $items = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
         $command->plugin = 'TestBake';
         $command->connection = 'test';
@@ -349,7 +348,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetAssociationsIgnoreUnderscoreId()
     {
-        $model = TableRegistry::getTableLocator()->get('BakeComments');
+        $model = $this->getTableLocator()->get('BakeComments');
         $model->setSchema([
             'id' => ['type' => 'integer'],
             '_id' => ['type' => 'integer'],
@@ -376,7 +375,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetAssociationsConstraints()
     {
-        $model = TableRegistry::getTableLocator()->get('Invitations');
+        $model = $this->getTableLocator()->get('Invitations');
         $command = new ModelCommand();
         $command->connection = 'test';
 
@@ -406,7 +405,7 @@ class ModelCommandTest extends TestCase
      */
     public function testBelongsToGeneration()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
         $command->connection = 'test';
 
@@ -422,7 +421,7 @@ class ModelCommandTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        $model = TableRegistry::getTableLocator()->get('CategoryThreads');
+        $model = $this->getTableLocator()->get('CategoryThreads');
         $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
@@ -456,7 +455,7 @@ class ModelCommandTest extends TestCase
      */
     public function testBelongsToGenerationConstraints()
     {
-        $model = TableRegistry::getTableLocator()->get('Invitations');
+        $model = $this->getTableLocator()->get('Invitations');
         $command = new ModelCommand();
         $result = $command->findBelongsTo($model, []);
         $expected = [
@@ -484,7 +483,7 @@ class ModelCommandTest extends TestCase
      */
     public function testBelongsToGenerationCompositeKey()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItemsTodoLabels');
+        $model = $this->getTableLocator()->get('TodoItemsTodoLabels');
         $command = new ModelCommand();
         $result = $command->findBelongsTo($model, []);
         $expected = [
@@ -511,7 +510,7 @@ class ModelCommandTest extends TestCase
      */
     public function testBelongsToGenerationIdMidColumn()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $model->setSchema([
             'id' => ['type' => 'integer'],
             'thing_id_field' => ['type' => 'integer'],
@@ -528,7 +527,7 @@ class ModelCommandTest extends TestCase
      */
     public function testBelongsToGenerationPrimaryKey()
     {
-        $model = TableRegistry::getTableLocator()->get('Articles');
+        $model = $this->getTableLocator()->get('Articles');
         $model->setSchema([
             'usr_id' => ['type' => 'integer'],
             'name' => ['type' => 'string'],
@@ -551,7 +550,7 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $command->connection = 'test';
 
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $result = $command->findHasMany($model, []);
         $expected = [
             'hasMany' => [
@@ -563,7 +562,7 @@ class ModelCommandTest extends TestCase
         ];
         $this->assertEquals($expected, $result);
 
-        $model = TableRegistry::getTableLocator()->get('CategoryThreads');
+        $model = $this->getTableLocator()->get('CategoryThreads');
         $result = $command->findHasMany($model, []);
         $expected = [
             'hasMany' => [
@@ -599,7 +598,7 @@ class ModelCommandTest extends TestCase
     {
         $command = new ModelCommand();
         $command->connection = 'test';
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $result = $command->findBelongsToMany($model, []);
         $expected = [
             'belongsToMany' => [
@@ -621,7 +620,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetEntityPropertySchema()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $model->belongsTo('BakeUsers');
         $model->hasMany('BakeTest.Authors');
         $model->getSchema()->setColumnType('created', 'timestamp');
@@ -703,7 +702,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetFields()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
 
         $command = new ModelCommand();
         $result = $command->getFields($model, new Arguments([], [], []));
@@ -727,7 +726,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetFieldsDisabled()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $args = new Arguments([], ['no-fields' => true], []);
         $command = new ModelCommand();
         $result = $command->getFields($model, $args);
@@ -741,7 +740,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetFieldsWhiteList()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
 
         $args = new Arguments([], ['fields' => 'id, title  , , body ,  created'], []);
         $command = new ModelCommand();
@@ -762,7 +761,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetHiddenFields()
     {
-        $model = TableRegistry::getTableLocator()->get('Users');
+        $model = $this->getTableLocator()->get('Users');
 
         $args = new Arguments([], [], []);
         $command = new ModelCommand();
@@ -780,7 +779,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetHiddenFieldsDisabled()
     {
-        $model = TableRegistry::getTableLocator()->get('Users');
+        $model = $this->getTableLocator()->get('Users');
 
         $args = new Arguments([], ['no-hidden' => true], []);
         $command = new ModelCommand();
@@ -795,7 +794,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetHiddenFieldsWhiteList()
     {
-        $model = TableRegistry::getTableLocator()->get('Users');
+        $model = $this->getTableLocator()->get('Users');
 
         $args = new Arguments([], ['hidden' => 'id, title  , , body ,  created'], []);
         $command = new ModelCommand();
@@ -816,7 +815,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetPrimaryKey()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
 
@@ -837,7 +836,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetValidationDisabled()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
         $args = new Arguments([], ['no-validation' => true], []);
         $result = $command->getValidation($model, [], $args);
@@ -855,7 +854,7 @@ class ModelCommandTest extends TestCase
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
         $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
 
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
 
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
@@ -907,7 +906,7 @@ class ModelCommandTest extends TestCase
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
 
-        $model = TableRegistry::getTableLocator()->get('TodoTasks');
+        $model = $this->getTableLocator()->get('TodoTasks');
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
         $result = $command->getValidation($model, [], $args);
@@ -950,7 +949,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetValidationUniqueDateField()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $schema = $model->getSchema();
         $schema
             ->addColumn('release_date', ['type' => 'datetime'])
@@ -982,7 +981,7 @@ class ModelCommandTest extends TestCase
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
         $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
 
-        $model = TableRegistry::getTableLocator()->get('NumberTrees');
+        $model = $this->getTableLocator()->get('NumberTrees');
         $args = new Arguments([], [], []);
         $command = new ModelCommand();
         $result = $command->getValidation($model, [], $args);
@@ -1020,7 +1019,7 @@ class ModelCommandTest extends TestCase
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
 
-        $model = TableRegistry::getTableLocator()->get('NumberTrees');
+        $model = $this->getTableLocator()->get('NumberTrees');
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
         $result = $command->getValidation($model, [], $args);
@@ -1058,7 +1057,7 @@ class ModelCommandTest extends TestCase
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
         $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
 
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $associations = [
             'belongsTo' => [
                 'Users' => ['foreignKey' => 'user_id'],
@@ -1081,7 +1080,7 @@ class ModelCommandTest extends TestCase
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
 
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $associations = [
             'belongsTo' => [
                 'Users' => ['foreignKey' => 'user_id'],
@@ -1128,7 +1127,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetRulesDisabled()
     {
-        $model = TableRegistry::getTableLocator()->get('Users');
+        $model = $this->getTableLocator()->get('Users');
         $command = new ModelCommand();
         $args = new Arguments([], ['no-rules' => true], []);
         $result = $command->getRules($model, [], $args);
@@ -1142,7 +1141,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetRules()
     {
-        $model = TableRegistry::getTableLocator()->get('Users');
+        $model = $this->getTableLocator()->get('Users');
         $associations = [
             'belongsTo' => [
                 [
@@ -1190,7 +1189,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetRulesUniqueKeys()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $model->getSchema()->addConstraint('unique_title', [
             'type' => 'unique',
             'columns' => ['title'],
@@ -1221,11 +1220,11 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $command->connection = 'test';
 
-        $model = TableRegistry::getTableLocator()->get('NumberTrees');
+        $model = $this->getTableLocator()->get('NumberTrees');
         $result = $command->getBehaviors($model);
         $this->assertEquals(['Tree' => []], $result);
 
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $result = $command->getBehaviors($model);
         $this->assertEquals(['Timestamp' => []], $result);
     }
@@ -1237,7 +1236,7 @@ class ModelCommandTest extends TestCase
      */
     public function testGetDisplayField()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
         $result = $command->getDisplayField($model, $args);
@@ -1363,7 +1362,7 @@ class ModelCommandTest extends TestCase
      */
     public function testBakeEntityWithPropertyTypeHints()
     {
-        $model = TableRegistry::getTableLocator()->get('TodoItems');
+        $model = $this->getTableLocator()->get('TodoItems');
         $model->belongsTo('Users');
         $model->hasMany('BakeTest.TodoTasks');
         $model->getSchema()->addColumn('array_type', [

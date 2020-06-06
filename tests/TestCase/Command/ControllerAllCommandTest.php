@@ -20,7 +20,6 @@ use Bake\Test\App\Model\Table\BakeArticlesTable;
 use Bake\Test\TestCase\TestCase;
 use Cake\Command\Command;
 use Cake\Core\Plugin;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 
 /**
@@ -55,7 +54,7 @@ class ControllerAllCommandTest extends TestCase
         $this->useCommandRunner();
         $this->setAppNamespace('Bake\Test\App');
 
-        TableRegistry::getTableLocator()->get('BakeArticles', [
+        $this->getTableLocator()->get('BakeArticles', [
             'className' => BakeArticlesTable::class,
         ]);
     }
@@ -68,7 +67,7 @@ class ControllerAllCommandTest extends TestCase
     public function tearDown(): void
     {
         parent::tearDown();
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
     }
 
     /**

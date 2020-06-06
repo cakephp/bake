@@ -25,7 +25,6 @@ use Cake\Command\Command;
 use Cake\Core\Plugin;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest as Request;
-use Cake\ORM\TableRegistry;
 
 /**
  * TestCommandTest class
@@ -61,7 +60,7 @@ class TestCommandTest extends TestCase
     public function tearDown(): void
     {
         parent::tearDown();
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
     }
 
     /**
@@ -238,7 +237,7 @@ class TestCommandTest extends TestCase
      */
     public function testFixtureArrayGenerationIgnoreSelfAssociation()
     {
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
         $subject = new CategoryThreadsTable();
         $command = new TestCommand();
         $result = $command->generateFixtureList($subject);
@@ -619,8 +618,8 @@ class TestCommandTest extends TestCase
 
         $result = $command->generateConstructor('Table', 'App\Model\\Table\PostsTable');
         $expected = [
-            "\$config = TableRegistry::getTableLocator()->exists('Posts') ? [] : ['className' => PostsTable::class];",
-            "TableRegistry::getTableLocator()->get('Posts', \$config);",
+            "\$config = \$this->getTableLocator()->exists('Posts') ? [] : ['className' => PostsTable::class];",
+            "\$this->getTableLocator()->get('Posts', \$config);",
             '',
         ];
         $this->assertEquals($expected, $result);
@@ -668,7 +667,6 @@ class TestCommandTest extends TestCase
         $command = new TestCommand();
         $result = $command->generateUses('Table', 'App\Model\Table\PostsTable');
         $expected = [
-            'Cake\ORM\TableRegistry',
             'App\Model\Table\PostsTable',
         ];
         $this->assertEquals($expected, $result);

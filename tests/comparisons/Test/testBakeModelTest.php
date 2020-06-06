@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Bake\Test\App\Test\TestCase\Model\Table;
 
 use Bake\Test\App\Model\Table\ArticlesTable;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -39,8 +38,8 @@ class ArticlesTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Articles') ? [] : ['className' => ArticlesTable::class];
-        $this->Articles = TableRegistry::getTableLocator()->get('Articles', $config);
+        $config = $this->getTableLocator()->exists('Articles') ? [] : ['className' => ArticlesTable::class];
+        $this->Articles = $this->getTableLocator()->get('Articles', $config);
     }
 
     /**

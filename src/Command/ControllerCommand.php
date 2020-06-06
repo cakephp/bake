@@ -23,7 +23,6 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
 
 /**
  * Task class for creating and updating controller files.
@@ -114,10 +113,10 @@ class ControllerCommand extends BakeCommand
             $plugin .= '.';
         }
 
-        if (TableRegistry::getTableLocator()->exists($plugin . $currentModelName)) {
-            $modelObj = TableRegistry::getTableLocator()->get($plugin . $currentModelName);
+        if ($this->getTableLocator()->exists($plugin . $currentModelName)) {
+            $modelObj = $this->getTableLocator()->get($plugin . $currentModelName);
         } else {
-            $modelObj = TableRegistry::getTableLocator()->get($plugin . $currentModelName, [
+            $modelObj = $this->getTableLocator()->get($plugin . $currentModelName, [
                 'connectionName' => $this->connection,
             ]);
         }

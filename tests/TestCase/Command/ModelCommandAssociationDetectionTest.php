@@ -24,7 +24,6 @@ use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
 use Cake\Database\Driver\Sqlserver;
 use Cake\Datasource\ConnectionManager;
-use Cake\ORM\TableRegistry;
 
 /**
  * ModelCommand Association detection test
@@ -59,7 +58,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
         $this->setAppNamespace('Bake\Test\App');
         $this->useCommandRunner();
 
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
     }
 
     /**
@@ -70,7 +69,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
     public function tearDown(): void
     {
         parent::tearDown();
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
     }
 
     /**
