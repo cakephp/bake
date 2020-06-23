@@ -101,7 +101,7 @@ abstract class SimpleBakeCommand extends BakeCommand
      */
     protected function bake(string $name, Arguments $args, ConsoleIo $io): void
     {
-        $renderer = new TemplateRenderer();
+        $renderer = new TemplateRenderer($args->getOption('theme'));
         $renderer->set('name', $name);
         $renderer->set($this->templateData($args));
         $contents = $renderer->generate($this->template());

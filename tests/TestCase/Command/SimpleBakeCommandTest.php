@@ -92,6 +92,17 @@ class SimpleBakeCommandTest extends TestCase
         $this->assertFileContains('class ExampleBehavior extends Behavior', $this->generatedFile);
     }
 
+    public function testBakeWithTheme()
+    {
+        $this->_loadTestPlugin('TestBakeTheme');
+
+        $this->generatedFile = APP . 'Model/Behavior/FooBarBehavior.php';
+        $this->exec('bake behavior --no-test --theme TestBakeTheme FooBar');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileContains('This file was generated using TestBakeTheme theme', $this->generatedFile);
+    }
+
     /**
      * Test baking within a plugin.
      *
