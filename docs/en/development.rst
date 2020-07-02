@@ -203,66 +203,67 @@ Creating New Bake Command Options
 =================================
 
 It's possible to add new bake command options, or override the ones provided by
-CakePHP by creating tasks in your application or plugins. By extending
-``Bake\Shell\Task\BakeTask``, bake will find your new task and include it as
+CakePHP by creating command in your application or plugins. By extending
+``Bake\Command\BakeCommand``, bake will find your new command and include it as
 part of bake.
 
-As an example, we'll make a task that creates an arbitrary foo class. First,
-create the task file **src/Shell/Task/FooTask.php**. We'll extend the
-``SimpleBakeTask`` for now as our shell task will be simple. ``SimpleBakeTask``
+As an example, we'll make a command that creates an arbitrary foo class. First,
+create the command file **src/Command/FooCommand.php**. We'll extend the
+``SimpleBakeCommand`` for now as our shell task will be simple. ``SimpleBakeCommand``
 is abstract and requires us to define 3 methods that tell bake what the task is
 called, where the files it generates should go, and what template to use. Our
-FooTask.php file should look like::
+FooCommand.php file should look like::
 
     <?php
-    namespace App\Shell\Task;
+    declare(strict_types=1);
+    
+    namespace App\Command;
 
-    use Bake\Shell\Task\SimpleBakeTask;
+    use Bake\Command\SimpleBakeCommand;
 
-    class FooTask extends SimpleBakeTask
+    class FooCommand extends SimpleBakeCommand
     {
-        public $pathFragment = 'Foo/';
+        public $pathFragment = 'FooPath/';
 
-        public function name()
+        public function name(): string
         {
-            return 'foo';
+            return 'fooName';
         }
 
-        public function fileName($name)
+        public function template(): string
         {
-            return $name . 'Foo.php';
+            return 'fooTemplate';
         }
 
-        public function template()
+        public function fileName(string $name): string
         {
-            return 'foo';
+            return $name . 'FooOut.php';
         }
-
     }
 
 Once this file has been created, we need to create a template that bake can use
-when generating code. Create **templates/bake/Foo/foo.twig**. In this file we'll
+when generating code. Create **templates/bake/foo_template.twig**. In this file we'll
 add the following content::
 
     <?php
-    namespace {{ namespace }}\Foo;
+    namespace {{ namespace }}\FooPath;
 
     /**
-     * {{ name }} foo
+     * {{ name }} fooOut
      */
-    class {{ name }}Foo
+    class {{ name }}FooOut
     {
         // Add code.
     }
 
-You should now see your new task in the output of ``bin/cake bake``. You can
+You should now see your new command in the output of ``bin/cake bake``. You can
 run your new task by running ``bin/cake bake foo Example``.
-This will generate a new ``ExampleFoo`` class in **src/Foo/ExampleFoo.php**
+This will generate a new ``ExampleFooOut`` class in **src/FooPath/ExampleFooOut.php**
 for your application to use.
 
 If you want the ``bake`` call to also create a test file for your
-``ExampleFoo`` class, you need to overwrite the ``bakeTest()`` method in the
-``FooTask`` class to register the class suffix and namespace for your custom
+``ExampleFooOut`` class, you need to overwrite the ``bakeTest()`` method in the
+``FooCommand`` class to register the class suffix and namespace for your custom
 command name::
 
     public function bakeTest($className)
@@ -288,5 +289,5 @@ command name::
 
 .. meta::
     :title lang=en: Extending Bake
-    :keywords lang=en: command line interface,development,bake view, bake template syntax,twig,erb tags,percent tags
+    :keywords lang=en: command line interface, development, bake view, bake template syntax, twig, erb tags, percent tags
 
