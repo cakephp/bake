@@ -196,7 +196,7 @@ class ModelCommandTest extends TestCase
 
         $command->applyAssociations($articles, $assocs);
         $new = $articles->associations()->keys();
-        $expected = ['users', 'todotasks', 'todolabels'];
+        $expected = ['Users', 'TodoTasks', 'TodoLabels'];
         $this->assertEquals($expected, $new);
     }
 
