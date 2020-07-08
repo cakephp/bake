@@ -1039,7 +1039,7 @@ class ModelCommand extends BakeCommand
         }
         $this->getTableLocator()->clear();
 
-        $emptyFile = $path . 'Table' . DS . 'empty';
+        $emptyFile = $path . 'Table' . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
     }
 
