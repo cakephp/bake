@@ -170,4 +170,15 @@ class BakeViewTest extends TestCase
             $result
         );
     }
+
+    /**
+     * Ensure that application override templates don't have a double path in them.
+     *
+     * @return void
+     */
+    public function testApplicationOverride()
+    {
+        $result = $this->View->render('Bake.override');
+        $this->assertSame("Application override.\n", $result);
+    }
 }
