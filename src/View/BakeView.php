@@ -88,11 +88,7 @@ class BakeView extends TwigView
     public function render(?string $view = null, $layout = null): string
     {
         $viewFileName = $this->_getTemplateFileName($view);
-        $templateEventName = str_replace(
-            ['.twig', DS],
-            ['', '.'],
-            explode('templates' . DS . static::BAKE_TEMPLATE_FOLDER . DS, $viewFileName)[1]
-        );
+        $templateEventName = str_replace(DS, '.', $view);
 
         $this->_currentType = static::TYPE_TEMPLATE;
         $this->dispatchEvent('View.beforeRender', [$viewFileName]);
@@ -142,7 +138,10 @@ class BakeView extends TwigView
     {
         $paths = parent::_paths($plugin, false);
         foreach ($paths as &$path) {
-            $path .= static::BAKE_TEMPLATE_FOLDER . DS;
+            // Append 'bake' to all directories that aren't the application override directory.
+            if (strpos($path, 'plugin' . DS . 'Bake') === false) {
+                $path .= static::BAKE_TEMPLATE_FOLDER . DS;
+            }
         }
 
         return $paths;
