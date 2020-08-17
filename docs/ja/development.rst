@@ -207,8 +207,8 @@ Bake テンプレートのカスタマイズ
 bake テンプレートを作成することができます。この方法では、bake する際、コマンドラインで
 ``--theme`` オプションを使用していません。これを行うための最善の方法は、次のとおりです。
 
-#. 新しいディレクトリー **/src/Template/Bake/** を作成します。
-#. **vendor/cakephp/bake/src/Template/Bake/** から上書きしたいテンプレートを
+#. 新しいディレクトリー **/templates/plugin/Bake/** を作成します。
+#. **vendor/cakephp/bake/templates/bake/** から上書きしたいテンプレートを
    あなたのアプリケーションの中の適切なファイルにコピーします。
 
 Bake コマンドオプションの新規作成
