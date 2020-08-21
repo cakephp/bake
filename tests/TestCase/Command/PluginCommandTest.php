@@ -176,11 +176,11 @@ class PluginCommandTest extends TestCase
         $this->assertArrayHasKey('ComposerExample\\Test\\', $result['autoload-dev']['psr-4']);
 
         $pluginPath = App::path('plugins')[0];
-        $this->assertEquals(
+        $this->assertSame(
             $pluginPath . 'ComposerExample' . DS . 'src' . DS,
             $result['autoload']['psr-4']['ComposerExample\\']
         );
-        $this->assertEquals(
+        $this->assertSame(
             $pluginPath . 'ComposerExample' . DS . 'tests' . DS,
             $result['autoload-dev']['psr-4']['ComposerExample\\Test\\']
         );
@@ -211,7 +211,7 @@ class PluginCommandTest extends TestCase
         $result = $command->findPath($paths, $io);
 
         $this->assertNull($result, 'no return');
-        $this->assertEquals(TMP . 'plugin_task' . DS, $command->path);
+        $this->assertSame(TMP . 'plugin_task' . DS, $command->path);
     }
 
     /**
@@ -249,9 +249,9 @@ class PluginCommandTest extends TestCase
         $bakedRoot = App::path('plugins')[0] . $pluginName . DS;
         $bakedFiles = $this->getFiles($bakedRoot);
 
-        $this->assertSame(
+        $this->assertCount(
             count($comparisonFiles),
-            count($bakedFiles),
+            $bakedFiles,
             'A different number of files were created than expected'
         );
 

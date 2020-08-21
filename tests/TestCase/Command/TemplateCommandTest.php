@@ -92,8 +92,8 @@ class TemplateCommandTest extends TestCase
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
         $command->controller($args, 'Comments');
-        $this->assertEquals('Comments', $command->controllerName);
-        $this->assertEquals(
+        $this->assertSame('Comments', $command->controllerName);
+        $this->assertSame(
             'Bake\Test\App\Controller\CommentsController',
             $command->controllerClass
         );
@@ -111,7 +111,7 @@ class TemplateCommandTest extends TestCase
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
         $command->controller($args, $name);
-        $this->assertEquals('TemplateTaskComments', $command->controllerName);
+        $this->assertSame('TemplateTaskComments', $command->controllerName);
     }
 
     /**
@@ -126,8 +126,8 @@ class TemplateCommandTest extends TestCase
         $args = new Arguments([], [], []);
         $command->controller($args, 'Tests');
 
-        $this->assertEquals('Tests', $command->controllerName);
-        $this->assertEquals(
+        $this->assertSame('Tests', $command->controllerName);
+        $this->assertSame(
             'BakeTest\Controller\TestsController',
             $command->controllerClass
         );
@@ -144,16 +144,16 @@ class TemplateCommandTest extends TestCase
 
         $args = new Arguments([], ['prefix' => 'Admin'], []);
         $command->controller($args, 'Posts');
-        $this->assertEquals('Posts', $command->controllerName);
-        $this->assertEquals(
+        $this->assertSame('Posts', $command->controllerName);
+        $this->assertSame(
             'Bake\Test\App\Controller\Admin\PostsController',
             $command->controllerClass
         );
 
         $command->plugin = 'BakeTest';
         $command->controller($args, 'Comments');
-        $this->assertEquals('Comments', $command->controllerName);
-        $this->assertEquals(
+        $this->assertSame('Comments', $command->controllerName);
+        $this->assertSame(
             'BakeTest\Controller\Admin\CommentsController',
             $command->controllerClass
         );
@@ -170,8 +170,8 @@ class TemplateCommandTest extends TestCase
         $args = new Arguments([], ['prefix' => 'Admin/Management'], []);
 
         $command->controller($args, 'Posts');
-        $this->assertEquals('Posts', $command->controllerName);
-        $this->assertEquals(
+        $this->assertSame('Posts', $command->controllerName);
+        $this->assertSame(
             'Bake\Test\App\Controller\Admin\Management\PostsController',
             $command->controllerClass
         );
@@ -188,8 +188,8 @@ class TemplateCommandTest extends TestCase
         $args = new Arguments([], [], []);
 
         $command->controller($args, 'Comments', 'Posts');
-        $this->assertEquals('Posts', $command->controllerName);
-        $this->assertEquals(
+        $this->assertSame('Posts', $command->controllerName);
+        $this->assertSame(
             'Bake\Test\App\Controller\PostsController',
             $command->controllerClass
         );
@@ -204,10 +204,10 @@ class TemplateCommandTest extends TestCase
     {
         $command = new TemplateCommand();
         $command->model('Articles');
-        $this->assertEquals('Articles', $command->modelName);
+        $this->assertSame('Articles', $command->modelName);
 
         $command->model('NotThere');
-        $this->assertEquals('NotThere', $command->modelName);
+        $this->assertSame('NotThere', $command->modelName);
     }
 
     /**
@@ -220,7 +220,7 @@ class TemplateCommandTest extends TestCase
         $command = new TemplateCommand();
         $command->plugin = 'BakeTest';
         $command->model('BakeTestComments');
-        $this->assertEquals(
+        $this->assertSame(
             'BakeTest.BakeTestComments',
             $command->modelName
         );
