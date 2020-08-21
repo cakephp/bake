@@ -320,7 +320,7 @@ class TestCommandTest extends TestCase
 
         $result = $command->getRealClassname('Helper', 'Asset');
         $expected = 'TestBake\View\Helper\AssetHelper';
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -334,7 +334,7 @@ class TestCommandTest extends TestCase
         $result = $command->getRealClassname('Controller', 'Posts', 'Api/Public');
 
         $expected = 'Bake\Test\App\Controller\Api\Public\PostsController';
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**

@@ -109,11 +109,11 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
         $result = $command->getTable('TodoItems', $args);
-        $this->assertEquals('todo_items', $result);
+        $this->assertSame('todo_items', $result);
 
         $args = new Arguments([], ['table' => 'items'], []);
         $result = $command->getTable('TodoItems', $args);
-        $this->assertEquals('items', $result);
+        $this->assertSame('items', $result);
     }
 
     /**
@@ -128,8 +128,8 @@ class ModelCommandTest extends TestCase
 
         $result = $command->getTableObject('TodoItems', 'todo_items');
         $this->assertInstanceOf('Cake\ORM\Table', $result);
-        $this->assertEquals('todo_items', $result->getTable());
-        $this->assertEquals('TodoItems', $result->getAlias());
+        $this->assertSame('todo_items', $result->getTable());
+        $this->assertSame('TodoItems', $result->getAlias());
 
         $command->plugin = 'BakeTest';
         $result = $command->getTableObject('Authors', 'todo_items');
@@ -148,13 +148,13 @@ class ModelCommandTest extends TestCase
         $command->tablePrefix = 'my_prefix_';
 
         $result = $command->getTableObject('TodoItems', 'todo_items');
-        $this->assertEquals('my_prefix_todo_items', $result->getTable());
+        $this->assertSame('my_prefix_todo_items', $result->getTable());
         $this->assertInstanceOf('Cake\ORM\Table', $result);
-        $this->assertEquals('TodoItems', $result->getAlias());
+        $this->assertSame('TodoItems', $result->getAlias());
 
         $command->plugin = 'BakeTest';
         $result = $command->getTableObject('Authors', 'todo_items');
-        $this->assertEquals('my_prefix_todo_items', $result->getTable());
+        $this->assertSame('my_prefix_todo_items', $result->getTable());
         $this->assertInstanceOf('BakeTest\Model\Table\AuthorsTable', $result);
     }
 
@@ -1240,11 +1240,11 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
         $result = $command->getDisplayField($model, $args);
-        $this->assertEquals('title', $result);
+        $this->assertSame('title', $result);
 
         $args = new Arguments([], ['display-field' => 'custom'], []);
         $result = $command->getDisplayField($model, $args);
-        $this->assertEquals('custom', $result);
+        $this->assertSame('custom', $result);
     }
 
     /**
