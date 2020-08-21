@@ -284,8 +284,22 @@ command name::
   call. In the previous example, it would create a ``ExampleFooTest.php`` file.
 * The **class type** will be the sub-namespace used that will lead to your
   file (relative to the app or the plugin you are baking into). In the previous
-  example, it would create your test with the namespace ``App\Test\TestCase\Foo``
-  .
+  example, it would create your test with the namespace ``App\Test\TestCase\Foo``.
+
+Configuring the BakeView class
+==============================
+
+The bake commands use the ``BakeView`` class to render the templates. You can
+access it's instance by listening to the `Bake.initialize` event. For e.g. here's
+how you can load your own helper so that it can be used in bake templates.
+
+    <?php
+    \Cake\Event\EventManager::instance()->on(
+        'Bake.initialize', 
+        function ($event, $view) {
+            $view->loadHelper('Foo');
+        }
+    );
 
 .. meta::
     :title lang=en: Extending Bake
