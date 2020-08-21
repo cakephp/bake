@@ -290,7 +290,7 @@ Configuring the BakeView class
 ==============================
 
 The bake commands use the ``BakeView`` class to render the templates. You can
-access it's instance by listening to the `Bake.initialize` event. For e.g. here's
+access the instance by listening to the `Bake.initialize` event. For example, here's
 how you can load your own helper so that it can be used in bake templates.
 
     <?php
@@ -304,4 +304,3 @@ how you can load your own helper so that it can be used in bake templates.
 .. meta::
     :title lang=en: Extending Bake
     :keywords lang=en: command line interface, development, bake view, bake template syntax, twig, erb tags, percent tags
-
