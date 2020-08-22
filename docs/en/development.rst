@@ -290,8 +290,8 @@ Configuring the BakeView class
 ==============================
 
 The bake commands use the ``BakeView`` class to render the templates. You can
-access the instance by listening to the `Bake.initialize` event. For example, here's
-how you can load your own helper so that it can be used in bake templates.
+access the instance by listening to the ``Bake.initialize`` event. For example, here's
+how you can load your own helper so that it can be used in bake templates::
 
     <?php
     \Cake\Event\EventManager::instance()->on(
