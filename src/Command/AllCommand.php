@@ -56,6 +56,9 @@ class AllCommand extends BakeCommand
             'help' => 'Generate code for all tables.',
             'default' => false,
             'boolean' => true,
+        ])->addOption('prefix', [
+            'help' => 'The namespace prefix to use.',
+            'default' => false,
         ]);
 
         return $parser;

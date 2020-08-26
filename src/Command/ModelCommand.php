@@ -976,6 +976,7 @@ class ModelCommand extends BakeCommand
         $out = $renderer->generate('Bake.Model/entity');
 
         $path = $this->getPath($args);
+        $path = str_replace($this->getPrefix($args) . DIRECTORY_SEPARATOR, '', $path);
         $filename = $path . 'Entity' . DS . $name . '.php';
         $io->out("\n" . sprintf('Baking entity class for %s...', $name), 1, ConsoleIo::QUIET);
         $io->createFile($filename, $out, $args->getOption('force'));
@@ -1028,6 +1029,7 @@ class ModelCommand extends BakeCommand
         $out = $renderer->generate('Bake.Model/table');
 
         $path = $this->getPath($args);
+        $path = str_replace($this->getPrefix($args) . DIRECTORY_SEPARATOR, '', $path);
         $filename = $path . 'Table' . DS . $name . 'Table.php';
         $io->out("\n" . sprintf('Baking table class for %s...', $name), 1, ConsoleIo::QUIET);
         $io->createFile($filename, $out, $args->getOption('force'));
