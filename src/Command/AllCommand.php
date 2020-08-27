@@ -101,7 +101,13 @@ class AllCommand extends BakeCommand
             /** @var \Cake\Command\Command $command */
             $command = new $commandName();
             foreach ($tables as $table) {
-                $subArgs = new Arguments([$table], $args->getOptions(), ['name']);
+                $options = $args->getOptions();
+                if ($command instanceof ModelCommand) {
+                    if ($args->hasOption('prefix')) {
+                        unset($options['prefix']);
+                    }
+                }
+                $subArgs = new Arguments([$table], $options, ['name']);
                 $command->execute($subArgs, $io);
             }
         }
