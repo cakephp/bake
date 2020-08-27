@@ -100,13 +100,17 @@ class AllCommand extends BakeCommand
         foreach ($this->commands as $commandName) {
             /** @var \Cake\Command\Command $command */
             $command = new $commandName();
+
+            $options = $args->getOptions();
+            if (
+                $args->hasOption('prefix') &&
+                !($command instanceof ControllerCommand) &&
+                !($command instanceof TemplateCommand)
+            ) {
+                unset($options['prefix']);
+            }
+
             foreach ($tables as $table) {
-                $options = $args->getOptions();
-                if ($command instanceof ModelCommand) {
-                    if ($args->hasOption('prefix')) {
-                        unset($options['prefix']);
-                    }
-                }
                 $subArgs = new Arguments([$table], $options, ['name']);
                 $command->execute($subArgs, $io);
             }
