@@ -19,7 +19,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $updated
  * @property array $array_type
  * @property array $json_type
- * @property $unknown_type
+ * @property string $unknown_type
  *
  * @property \Bake\Test\App\Model\Entity\User $user
  * @property \BakeTest\Model\Entity\TodoTask[] $todo_tasks
