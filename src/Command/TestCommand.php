@@ -288,7 +288,6 @@ class TestCommand extends BakeCommand
             'type',
             'fullClassName',
             'mock',
-            'type',
             'preConstruct',
             'postConstruct',
             'construction',
