@@ -56,6 +56,9 @@ class AllCommand extends BakeCommand
             'help' => 'Generate code for all tables.',
             'default' => false,
             'boolean' => true,
+        ])->addOption('prefix', [
+            'help' => 'The namespace prefix to use.',
+            'default' => false,
         ]);
 
         return $parser;
@@ -97,8 +100,18 @@ class AllCommand extends BakeCommand
         foreach ($this->commands as $commandName) {
             /** @var \Cake\Command\Command $command */
             $command = new $commandName();
+
+            $options = $args->getOptions();
+            if (
+                $args->hasOption('prefix') &&
+                !($command instanceof ControllerCommand) &&
+                !($command instanceof TemplateCommand)
+            ) {
+                unset($options['prefix']);
+            }
+
             foreach ($tables as $table) {
-                $subArgs = new Arguments([$table], $args->getOptions(), ['name']);
+                $subArgs = new Arguments([$table], $options, ['name']);
                 $command->execute($subArgs, $io);
             }
         }
