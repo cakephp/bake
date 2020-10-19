@@ -218,7 +218,7 @@ class TestCommand extends BakeCommand
         $files = (new Filesystem())->find($path);
         foreach ($files as $fileObj) {
             if ($fileObj->isFile()) {
-                $classes[] = substr($fileObj->getFileName(), 0, -4);
+                $classes[] = substr($fileObj->getFileName(), 0, -4) ?: '';
             }
         }
         sort($classes);

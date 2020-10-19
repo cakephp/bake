@@ -61,7 +61,7 @@ class CellCommand extends SimpleBakeCommand
      * Get template data.
      *
      * @param \Cake\Console\Arguments $arguments Arguments object.
-     * @return array
+     * @return string[]
      */
     public function templateData(Arguments $arguments): array
     {
