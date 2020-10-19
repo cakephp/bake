@@ -140,4 +140,50 @@ class AllCommandTest extends TestCase
         $this->assertFilesExist($this->generatedFiles);
         $this->assertOutputContains('Bake All complete');
     }
+
+    /**
+     * Tests execute() generating a full stack with prefixes
+     *
+     * @return void
+     */
+    public function testExecuteWithPrefix()
+    {
+        $path = APP;
+        $testsPath = ROOT . 'tests' . DS;
+        $templatesPath = ROOT . 'templates' . DS;
+
+        $this->generatedFiles = [
+            $templatesPath . 'Admin/Products/add.php',
+            $templatesPath . 'Admin/Products/edit.php',
+            $templatesPath . 'Admin/Products/index.php',
+            $templatesPath . 'Admin/Products/view.php',
+            $path . 'Controller/Admin/ProductsController.php',
+            $path . 'Model/Table/ProductsTable.php',
+            $path . 'Model/Entity/Product.php',
+            $testsPath . 'Fixture/ProductsFixture.php',
+            $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
+            $testsPath . 'TestCase/Controller/Admin/ProductsControllerTest.php',
+        ];
+        $this->exec('bake all --connection test --prefix admin Products', ['y']);
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileContains(
+            'namespace Bake\Test\App\Controller\Admin;',
+            $path . 'Controller/Admin/ProductsController.php'
+        );
+        $this->assertFileContains(
+            'use Bake\Test\App\Controller\AppController;',
+            $path . 'Controller/Admin/ProductsController.php'
+        );
+        $this->assertFileContains(
+            'class ProductsController extends AppController',
+            $path . 'Controller/Admin/ProductsController.php'
+        );
+        $this->assertFileContains(
+            'use Bake\Test\App\Controller\Admin\ProductsController;',
+            $testsPath . 'TestCase/Controller/Admin/ProductsControllerTest.php'
+        );
+        $this->assertOutputContains('Bake All complete');
+    }
 }
