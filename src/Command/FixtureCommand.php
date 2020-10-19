@@ -288,7 +288,7 @@ class FixtureCommand extends BakeCommand
      * Formats Schema columns from Model Object
      *
      * @param array $values options keys(type, null, default, key, length, extra)
-     * @return array Formatted values
+     * @return string[] Formatted values
      */
     protected function _values(array $values): array
     {

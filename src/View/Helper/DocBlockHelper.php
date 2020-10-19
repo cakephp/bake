@@ -224,7 +224,7 @@ class DocBlockHelper extends Helper
      * `@property` hints.
      *
      * @param string[] $properties A key value pair where key is the name of a property and the value is the type.
-     * @return array
+     * @return string[]
      */
     public function propertyHints(array $properties): array
     {

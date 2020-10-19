@@ -320,7 +320,7 @@ class BakeHelper extends Helper
      *
      * @param string $field Field name.
      * @param array $rules Validation rules list.
-     * @return array
+     * @return string[]
      */
     public function getValidationMethods(string $field, array $rules): array
     {

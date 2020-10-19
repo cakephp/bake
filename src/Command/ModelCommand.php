@@ -490,7 +490,7 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model The model to introspect.
      * @param \Cake\Console\Arguments $args CLI Arguments
-     * @return array The columns in the primary key
+     * @return string[] The columns in the primary key
      */
     public function getPrimaryKey(Table $model, Arguments $args): array
     {
@@ -579,7 +579,7 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $table The table instance to get fields for.
      * @param \Cake\Console\Arguments $args CLI Arguments
-     * @return array|bool|null Either an array of fields, `false` in
+     * @return string[]|false|null Either an array of fields, `false` in
      *   case the no-fields option is used, or `null` if none of the
      *   field options is used.
      */
@@ -610,7 +610,7 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model The model to introspect.
      * @param \Cake\Console\Arguments $args CLI Arguments
-     * @return array The columns to make accessible
+     * @return string[] The columns to make accessible
      */
     public function getHiddenFields(Table $model, Arguments $args): array
     {
@@ -913,7 +913,7 @@ class ModelCommand extends BakeCommand
      * Get CounterCaches
      *
      * @param \Cake\ORM\Table $model The table to get counter cache fields for.
-     * @return array CounterCache configurations
+     * @return string[] CounterCache configurations
      */
     public function getCounterCache(Table $model): array
     {
