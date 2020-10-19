@@ -51,7 +51,7 @@ abstract class SimpleBakeTask extends BakeTask
     /**
      * Get template data.
      *
-     * @return array
+     * @return string[]
      */
     public function templateData(): array
     {

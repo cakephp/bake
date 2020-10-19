@@ -129,7 +129,7 @@ class SimpleBakeCommandTest extends TestCase
     /**
      * Provider for subclasses.
      *
-     * @return array
+     * @return string[][]
      */
     public function subclassProvider()
     {

@@ -44,7 +44,7 @@ class AssociationFilter
      * Get the array of junction aliases for all the BelongsToMany associations
      *
      * @param \Cake\ORM\Table $table Table
-     * @return array junction aliases of all the BelongsToMany associations
+     * @return string[] Junction aliases of all the BelongsToMany associations
      */
     public function belongsToManyJunctionAliases(Table $table): array
     {
@@ -104,9 +104,6 @@ class AssociationFilter
                         'navLink' => $navLink,
                     ];
                 } catch (Exception $e) {
-                    if ($assocName === 'Authors') {
-                        dd($e);
-                    }
                     // Do nothing it could be a bogus association name.
                 }
             }

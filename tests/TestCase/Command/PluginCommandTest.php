@@ -265,7 +265,7 @@ class PluginCommandTest extends TestCase
      * Get recursive files list for given path.
      *
      * @param string $path
-     * @return array
+     * @return string[]
      */
     protected function getFiles(string $path): array
     {
