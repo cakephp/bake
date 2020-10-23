@@ -88,7 +88,8 @@ class BakeView extends TwigView
     public function render(?string $template = null, $layout = null): string
     {
         $viewFileName = $this->_getTemplateFileName($template);
-        $templateEventName = str_replace(DS, '.', $template);
+        [, $templateEventName] = pluginSplit($template);
+        $templateEventName = str_replace(['/', '\\'], '.', $templateEventName);
 
         $this->_currentType = static::TYPE_TEMPLATE;
         $this->dispatchEvent('View.beforeRender', [$viewFileName]);

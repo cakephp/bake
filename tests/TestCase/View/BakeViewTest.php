@@ -147,7 +147,80 @@ class BakeViewTest extends TestCase
     }
 
     /**
-     * Verify that the proper events are dispatched on template render
+     * Verify that the proper events are dispatched when rendering a template,
+     * irrespective of the used directory separator.
+     *
+     * @return void
+     */
+    public function testSeparatorRenderEvents()
+    {
+        $this->View->set('test', 'success');
+        $result = $this->View->render('Custom' . DS . 'file');
+        $this->assertSame(
+            'success' . "\n",
+            $result
+        );
+
+        $this->View->set('test', 'success');
+        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
+            $event->getSubject()->set('test', 'separator constant beforeRender');
+        });
+        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event) {
+            $event->getSubject()->set('test', 'separator constant afterRender');
+        });
+        $result = $this->View->render('Custom' . DS . 'file');
+        $this->assertSame(
+            'separator constant beforeRender' . "\n",
+            $result
+        );
+        $this->assertSame($this->View->get('test'), 'separator constant afterRender');
+
+        $this->View->set('test', 'success');
+        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
+            $event->getSubject()->set('test', 'fixed separator beforeRender');
+        });
+        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event) {
+            $event->getSubject()->set('test', 'fixed separator afterRender');
+        });
+        $result = $this->View->render('Custom/file');
+        $this->assertSame(
+            'fixed separator beforeRender' . "\n",
+            $result
+        );
+        $this->assertSame($this->View->get('test'), 'fixed separator afterRender');
+    }
+
+    /**
+     * Verify that the proper events are dispatched when rendering a plugin template.
+     *
+     * @return void
+     */
+    public function testPluginRenderEvents()
+    {
+        $this->View->set('test', 'success');
+        $result = $this->View->render('Bake.Custom' . DS . 'file');
+        $this->assertSame(
+            'success' . "\n",
+            $result
+        );
+
+        $this->View->set('test', 'success');
+        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
+            $event->getSubject()->set('test', 'plugin template beforeRender');
+        });
+        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event) {
+            $event->getSubject()->set('test', 'plugin template afterRender');
+        });
+        $result = $this->View->render('Bake.Custom' . DS . 'file');
+        $this->assertSame(
+            'plugin template beforeRender' . "\n",
+            $result
+        );
+        $this->assertSame($this->View->get('test'), 'plugin template afterRender');
+    }
+
+    /**
+     * Verify that the proper events are dispatched when rendering a template.
      *
      * @return void
      */
@@ -162,13 +235,17 @@ class BakeViewTest extends TestCase
 
         $this->View->set('test', 'success');
         $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
-            $event->getSubject()->set('test', 'pass');
+            $event->getSubject()->set('test', 'custom template beforeRender');
+        });
+        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event) {
+            $event->getSubject()->set('test', 'custom template afterRender');
         });
         $result = $this->View->render('Custom' . DS . 'file');
         $this->assertSame(
-            'pass' . "\n",
+            'custom template beforeRender' . "\n",
             $result
         );
+        $this->assertSame($this->View->get('test'), 'custom template afterRender');
     }
 
     /**
