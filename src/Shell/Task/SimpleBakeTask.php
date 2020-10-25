@@ -51,7 +51,8 @@ abstract class SimpleBakeTask extends BakeTask
     /**
      * Get template data.
      *
-     * @return string[]
+     * @return array
+     * @phpstan-return array<string, mixed>
      */
     public function templateData(): array
     {

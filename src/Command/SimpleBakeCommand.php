@@ -54,7 +54,8 @@ abstract class SimpleBakeCommand extends BakeCommand
      * Get template data.
      *
      * @param \Cake\Console\Arguments $arguments The arguments for the command
-     * @return string[]
+     * @return array
+     * @phpstan-return array<string, mixed>
      */
     public function templateData(Arguments $arguments): array
     {
