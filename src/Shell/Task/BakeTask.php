@@ -125,8 +125,6 @@ class BakeTask extends Shell
             $this->plugin = implode('/', array_map([$this, '_camelize'], $parts));
             if (strpos($this->plugin, '\\')) {
                 $this->abort('Invalid plugin namespace separator, please use / instead of \ for plugins.');
-
-                return static::CODE_ERROR;
             }
         }
         if (isset($this->params['connection'])) {

@@ -70,9 +70,9 @@ Cache::setConfig([
     ],
 ]);
 
-if (!getenv('db_dsn')) {
-    putenv('db_dsn=sqlite:///:memory:');
+if (!getenv('DB_URL')) {
+    putenv('DB_URL=sqlite:///:memory:');
 }
-ConnectionManager::setConfig('test', ['url' => getenv('db_dsn')]);
+ConnectionManager::setConfig('test', ['url' => getenv('DB_URL')]);
 
 Plugin::getCollection()->add(new \Bake\Plugin());
