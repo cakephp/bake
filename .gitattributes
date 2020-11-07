@@ -23,6 +23,7 @@ CONTRIBUTING.md export-ignore
 .gitignore export-ignore
 .stickler.yml export-ignore
 .travis.yml export-ignore
+.github export-ignore
 Makefile export-ignore
 phpunit.xml.dist export-ignore
 tests/test_app export-ignore
