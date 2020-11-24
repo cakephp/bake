@@ -24,7 +24,6 @@ use Cake\Core\Configure;
 use Cake\Core\Plugin as CorePlugin;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Routing\RouteBuilder;
-use Cake\Utility\Inflector;
 use DirectoryIterator;
 use ReflectionClass;
 use ReflectionException;
@@ -140,15 +139,7 @@ class Plugin extends BasePlugin
                 continue;
             }
 
-            // Trim off 'Command' from the name.
-            [$ns, $className] = namespaceSplit($class);
-            $name = Inflector::underscore(substr($className, 0, -7));
-
-            // Commands ending with `_all` should be ` all` instead.
-            if (substr($name, -4) === '_all') {
-                $name = substr($name, 0, -4) . ' all';
-            }
-            $candidates["bake {$name}"] = $class;
+            $candidates[$class::defaultName()] = $class;
         }
 
         return $candidates;

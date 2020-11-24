@@ -33,6 +33,14 @@ class TemplateAllCommand extends BakeCommand
     protected $templateCommand;
 
     /**
+     * @inheritDoc
+     */
+    public static function defaultName(): string
+    {
+        return 'bake template all';
+    }
+
+    /**
      * initialize
      *
      * @return void
