@@ -73,7 +73,7 @@ class Plugin extends BasePlugin
         $commands = $this->discoverCommands($commands);
 
         // Add entry command to handle entry point and backwards compat.
-        $commands->add('bake', EntryCommand::class);
+        $commands->add(EntryCommand::defaultName(), EntryCommand::class);
 
         return $commands;
     }

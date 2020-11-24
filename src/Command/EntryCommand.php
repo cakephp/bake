@@ -52,6 +52,14 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
     /**
      * @inheritDoc
      */
+    public static function defaultName(): string
+    {
+        return 'bake';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function setCommandCollection(CommandCollection $commands): void
     {
         $this->commands = $commands;
