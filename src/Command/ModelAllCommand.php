@@ -36,6 +36,14 @@ class ModelAllCommand extends BakeCommand
     protected $modelCommand;
 
     /**
+     * @inheritDoc
+     */
+    public static function defaultName(): string
+    {
+        return 'bake model all';
+    }
+
+    /**
      * initialize
      *
      * @return void

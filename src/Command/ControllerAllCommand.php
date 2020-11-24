@@ -36,6 +36,14 @@ class ControllerAllCommand extends BakeCommand
     protected $controllerCommand;
 
     /**
+     * @inheritDoc
+     */
+    public static function defaultName(): string
+    {
+        return 'bake controller all';
+    }
+
+    /**
      * initialize
      *
      * @return void

@@ -31,6 +31,14 @@ class FixtureAllCommand extends BakeCommand
     use CommonOptionsTrait;
 
     /**
+     * @inheritDoc
+     */
+    public static function defaultName(): string
+    {
+        return 'bake fixture all';
+    }
+
+    /**
      * Gets the option parser instance and configures it.
      *
      * @param \Cake\Console\ConsoleOptionParser $parser The parser to update

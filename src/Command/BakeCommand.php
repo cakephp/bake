@@ -43,6 +43,25 @@ abstract class BakeCommand extends Command
     protected $pathFragment;
 
     /**
+     * Get the command name.
+     *
+     * Returns the command name based on class name.
+     * For e.g. for a command with class name `UpdateTableCommand` or `BakeUpdateTableCommand`
+     * the default name returned would be `'bake update_table'`.
+     *
+     * @return string
+     */
+    public static function defaultName(): string
+    {
+        $name = parent::defaultName();
+        if (strpos($name, 'bake_') === 0) {
+            $name = substr($name, 5);
+        }
+
+        return 'bake ' . $name;
+    }
+
+    /**
      * Handles splitting up the plugin prefix and classname.
      *
      * Sets the plugin parameter and plugin property.
