@@ -38,6 +38,7 @@
             "BakeTest\\": "tests/test_app/Plugin/BakeTest/src/",
             "Company\\Pastry\\": "tests/test_app/Plugin/Company/Pastry/src/",
             "Pastry\\PastryTest\\": "tests/test_app/Plugin/PastryTest/src/",
+            "WithBakeSubFolder\\": "tests/test_app/Plugin/WithBakeSubFolder/src/",
             "Bake\\Test\\": "tests/",
             "Bake\\Test\\App\\": "tests/test_app/App/",
             "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"

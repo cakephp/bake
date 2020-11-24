@@ -118,25 +118,35 @@ class Plugin extends BasePlugin
      */
     protected function findInPath(string $namespace, string $path): array
     {
+        $hasSubfolder = false;
         $path .= 'Command/';
-        if (!file_exists($path)) {
+        $namespace .= '\Command\\';
+
+        if (file_exists($path . 'Bake/')) {
+            $hasSubfolder = true;
+            $path .= 'Bake/';
+            $namespace .= 'Bake\\';
+        } elseif (!file_exists($path)) {
             return [];
         }
+
         $iterator = new DirectoryIterator($path);
         $candidates = [];
         foreach ($iterator as $item) {
             if ($item->isDot() || $item->isDir()) {
                 continue;
             }
-            $class = $namespace . '\Command\\' . $item->getBasename('.php');
+            $class = $namespace . $item->getBasename('.php');
 
-            try {
-                $reflection = new ReflectionClass($class);
-            } catch (ReflectionException $e) {
-                continue;
-            }
-            if (!$reflection->isInstantiable() || !$reflection->isSubclassOf(BakeCommand::class)) {
-                continue;
+            if (!$hasSubfolder) {
+                try {
+                    $reflection = new ReflectionClass($class);
+                } catch (ReflectionException $e) {
+                    continue;
+                }
+                if (!$reflection->isInstantiable() || !$reflection->isSubclassOf(BakeCommand::class)) {
+                    continue;
+                }
             }
 
             $candidates[$class::defaultName()] = $class;
