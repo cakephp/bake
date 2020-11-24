@@ -17,12 +17,12 @@ output, for example to add another helper to the bake view class this event can
 be used::
 
     <?php
-    // config/bootstrap_cli.php
-
-    use Cake\Event\Event;
+    use Cake\Event\EventInterface;
     use Cake\Event\EventManager;
 
-    EventManager::instance()->on('Bake.initialize', function (Event $event) {
+    // in src/Application::bootstrapCli()
+
+    EventManager::instance()->on('Bake.initialize', function (EventInterface $event) {
         $view = $event->getSubject();
 
         // In my bake templates, allow the use of the MySpecial helper
@@ -30,11 +30,7 @@ be used::
 
         // And add an $author variable so it's always available
         $view->set('author', 'Andy');
-
     });
-
-If you want to modify bake from within another plugin, putting your plugin's
-bake events in the plugin ``config/bootstrap.php`` file is a good idea.
 
 Bake events can be handy for making small changes to existing templates.
 For example, to change the variable names used when baking controller/template
@@ -42,12 +38,12 @@ files one can use a function listening for ``Bake.beforeRender`` to modify the
 variables used in the bake templates::
 
     <?php
-    // config/bootstrap_cli.php
-
-    use Cake\Event\Event;
+    use Cake\Event\EventInterface;
     use Cake\Event\EventManager;
 
-    EventManager::instance()->on('Bake.beforeRender', function (Event $event) {
+    // in src/Application::bootstrapCli()
+
+    EventManager::instance()->on('Bake.beforeRender', function (EventInterface $event) {
         $view = $event->getSubject();
 
         // Use $rows for the main data variable in indexes
@@ -65,7 +61,6 @@ variables used in the bake templates::
         if ($view->get('singularVar')) {
             $view->set('singularVar', 'theOne');
         }
-
     });
 
 You may also scope the ``Bake.beforeRender`` and ``Bake.afterRender`` events to
@@ -74,17 +69,17 @@ your UsersController when generating from a **Controller/controller.twig** file,
 you can use the following event::
 
     <?php
-    // config/bootstrap_cli.php
-
-    use Cake\Event\Event;
+    use Cake\Event\EventInterface;
     use Cake\Event\EventManager;
     use Cake\Utility\Hash;
 
+    // in src/Application::bootstrapCli()
+
     EventManager::instance()->on(
         'Bake.beforeRender.Controller.controller',
-        function (Event $event) {
+        function (EventInterface $event) {
             $view = $event->getSubject();
-            if ($view->viewVars['name'] == 'Users') {
+            if ($view->get('name') === 'Users') {
                 // add the login and logout actions to the Users controller
                 $view->set('actions', [
                     'login',
@@ -112,57 +107,97 @@ to modify bake template files, is to bake a class and compare the template used
 with the pre-processed template file which is left in the application's
 **tmp/bake** folder.
 
-So, for example, when baking a shell like so:
+So, for example, when baking a command like so:
 
 .. code-block:: bash
 
-    bin/cake bake shell Foo
+    bin/cake bake command Foo
 
-The template used (**vendor/cakephp/bake/templates/bake/Shell/shell.twig**)
+The template used (**vendor/cakephp/bake/templates/bake/Command/command.twig**)
 looks like this::
 
     <?php
-    namespace {{ namespace }}\Shell;
+    declare(strict_types=1);
 
-    use Cake\Console\Shell;
+    namespace {{ namespace }}\Command;
+
+    use Cake\Command\Command;
+    use Cake\Console\Arguments;
+    use Cake\Console\ConsoleIo;
+    use Cake\Console\ConsoleOptionParser;
 
     /**
-     * {{ name }} shell command.
-     */
-    class {{ name }}Shell extends Shell
+    * {{ name }} command.
+    */
+    class {{ name }}Command extends Command
     {
         /**
-         * main() method.
-         *
-         * @return bool|int Success or error code.
-         */
-        public function main()
+        * Hook method for defining this command's option parser.
+        *
+        * @see https://book.cakephp.org/4/en/console-commands/commands.html#defining-arguments-and-options
+        * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+        * @return \Cake\Console\ConsoleOptionParser The built parser.
+        */
+        public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
         {
+            $parser = parent::buildOptionParser($parser);
+
+            return $parser;
         }
 
+        /**
+        * Implement this method with your command's logic.
+        *
+        * @param \Cake\Console\Arguments $args The command arguments.
+        * @param \Cake\Console\ConsoleIo $io The console io
+        * @return null|void|int The exit code or null for success
+        */
+        public function execute(Arguments $args, ConsoleIo $io)
+        {
+        }
     }
 
-And the resultant baked class (**src/Shell/FooShell.php**) looks like this::
+And the resultant baked class (**src/Command/FooCommand.php**) looks like this::
 
     <?php
-    namespace App\Shell;
+    declare(strict_types=1);
 
-    use Cake\Console\Shell;
+    namespace App\Command;
+
+    use Cake\Command\Command;
+    use Cake\Console\Arguments;
+    use Cake\Console\ConsoleIo;
+    use Cake\Console\ConsoleOptionParser;
 
     /**
-     * Foo shell command.
-     */
-    class FooShell extends Shell
+    * Foo command.
+    */
+    class FooCommand extends Command
     {
         /**
-         * main() method.
-         *
-         * @return bool|int Success or error code.
-         */
-        public function main()
+        * Hook method for defining this command's option parser.
+        *
+        * @see https://book.cakephp.org/4/en/console-commands/commands.html#defining-arguments-and-options
+        * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+        * @return \Cake\Console\ConsoleOptionParser The built parser.
+        */
+        public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
         {
+            $parser = parent::buildOptionParser($parser);
+
+            return $parser;
         }
 
+        /**
+        * Implement this method with your command's logic.
+        *
+        * @param \Cake\Console\Arguments $args The command arguments.
+        * @param \Cake\Console\ConsoleIo $io The console io
+        * @return null|void|int The exit code or null for success
+        */
+        public function execute(Arguments $args, ConsoleIo $io)
+        {
+        }
     }
 
 .. _creating-a-bake-theme:
@@ -184,7 +219,7 @@ templates that bake uses. The best way to do this is:
    set your custom theme to be used as default theme::
 
         <?php
-        // in config/bootstrap.php or config/bootstrap_cli.php
+        // in src/Application::bootstrapCli() before loading the 'Bake' plugin.
         Configure::write('Bake.theme', 'MyTheme');
 
 Customizing the Bake Templates
@@ -194,7 +229,7 @@ If you wish to modify the default output produced by the "bake" command, you can
 create your own bake templates in your application. This way does not use the
 ``--theme`` option in the command line when baking. The best way to do this is:
 
-#. Create a new directory **/templates/plugin/Bake/**.
+#. Create a new directory **/templates/plugin/bake/**.
 #. Copy any templates you want to override from
    **vendor/cakephp/bake/templates/bake/** to matching files in your
    application.
@@ -208,16 +243,16 @@ CakePHP by creating command in your application or plugins. By extending
 part of bake.
 
 As an example, we'll make a command that creates an arbitrary foo class. First,
-create the command file **src/Command/FooCommand.php**. We'll extend the
-``SimpleBakeCommand`` for now as our shell task will be simple. ``SimpleBakeCommand``
-is abstract and requires us to define 3 methods that tell bake what the task is
+create the command file **src/Command/Bake/FooCommand.php**. We'll extend the
+``SimpleBakeCommand`` for now as our command will be simple. ``SimpleBakeCommand``
+is abstract and requires us to define 3 methods that tell bake what the command is
 called, where the files it generates should go, and what template to use. Our
 FooCommand.php file should look like::
 
     <?php
     declare(strict_types=1);
-    
-    namespace App\Command;
+
+    namespace App\Command\Bake;
 
     use Bake\Command\SimpleBakeCommand;
 
@@ -227,7 +262,7 @@ FooCommand.php file should look like::
 
         public function name(): string
         {
-            return 'fooName';
+            return 'foo';
         }
 
         public function template(): string
@@ -266,15 +301,18 @@ If you want the ``bake`` call to also create a test file for your
 ``FooCommand`` class to register the class suffix and namespace for your custom
 command name::
 
-    public function bakeTest($className)
+    use Cake\Console\Arguments;
+    use Cake\Console\ConsoleIo;
+
+    public function bakeTest(string $className, Arguments $args, ConsoleIo $io): void
     {
         if (!isset($this->Test->classSuffixes[$this->name()])) {
-          $this->Test->classSuffixes[$this->name()] = 'Foo';
+            $this->Test->classSuffixes[$this->name()] = 'Foo';
         }
 
         $name = ucfirst($this->name());
         if (!isset($this->Test->classTypes[$name])) {
-          $this->Test->classTypes[$name] = 'Foo';
+            $this->Test->classTypes[$name] = 'Foo';
         }
 
         return parent::bakeTest($className);
@@ -295,7 +333,7 @@ how you can load your own helper so that it can be used in bake templates::
 
     <?php
     \Cake\Event\EventManager::instance()->on(
-        'Bake.initialize', 
+        'Bake.initialize',
         function ($event, $view) {
             $view->loadHelper('Foo');
         }
