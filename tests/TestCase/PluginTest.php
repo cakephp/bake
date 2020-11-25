@@ -29,7 +29,7 @@ class PluginTest extends TestCase
     public function tearDown(): void
     {
         parent::tearDown();
-        $this->removePlugins(['BakeTest']);
+        $this->removePlugins(['BakeTest', 'WithBakeSubFolder']);
     }
 
     public function testRoutes()
@@ -71,6 +71,21 @@ class PluginTest extends TestCase
         $this->assertTrue($commands->has('bake zergling'));
         $this->assertFalse($commands->has('bake bake_test.zergling'));
         $this->assertFalse($commands->has('bake BakeTest.zergling'));
+    }
+
+    public function testConsoleDiscoverPluginCommandsInSubFolder()
+    {
+        $this->_loadTestPlugin('WithBakeSubFolder');
+
+        $commands = new CommandCollection();
+        $plugin = new Plugin();
+        $commands = $plugin->console($commands);
+
+        $this->assertTrue($commands->has('bake led_zepplin'));
+        $this->assertFalse(
+            $commands->has('bake the_who'),
+            'Only commands from "Bake" subfolder should be loaded'
+        );
     }
 
     public function testConsoleDiscoverAppCommands()
