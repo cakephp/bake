@@ -229,7 +229,7 @@ If you wish to modify the default output produced by the "bake" command, you can
 create your own bake templates in your application. This way does not use the
 ``--theme`` option in the command line when baking. The best way to do this is:
 
-#. Create a new directory **/templates/plugin/Bake/**.
+#. Create a new directory **/templates/bake/**.
 #. Copy any templates you want to override from
    **vendor/cakephp/bake/templates/bake/** to matching files in your
    application.
