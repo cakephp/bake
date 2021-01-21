@@ -1000,7 +1000,7 @@ class ModelCommand extends BakeCommand
             if (!$persistentClassExists) {
                 $persistentOut = $renderer->generate('Bake.Model/persistent_entity');
                 $io->out("\n" . sprintf('Baking persistent entity class for %s...', $name), 1, ConsoleIo::QUIET);
-                $io->createFile($persistentEntityFilePath, $persistentOut, $args->getOption('force'));
+                $io->createFile($persistentEntityFilePath, $persistentOut);
 
                 if (file_exists($persistentEntityFilePath)) {
                     require_once $persistentEntityFilePath;
@@ -1087,7 +1087,7 @@ class ModelCommand extends BakeCommand
             if (!$persistentClassExists) {
                 $persistentOut = $renderer->generate('Bake.Model/persistent_table');
                 $io->out("\n" . sprintf('Baking persistent table class for %s...', $name), 1, ConsoleIo::QUIET);
-                $io->createFile($persistentTableFilePath, $persistentOut, $args->getOption('force'));
+                $io->createFile($persistentTableFilePath, $persistentOut);
 
                 if (file_exists($persistentTableFilePath)) {
                     require_once $persistentTableFilePath;
