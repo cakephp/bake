@@ -997,14 +997,22 @@ class ModelCommand extends BakeCommand
         if ($usePersistentEntity && !$removePersistentEntity) {
             if (!$persistentClassExists) {
                 $persistentOut = $renderer->generate('Bake.Model/persistent_entity');
-                $io->out("\n" . sprintf('Baking persistent entity class for %s...', $name), 1, ConsoleIo::QUIET);
+                $io->out(
+                    "\n" . sprintf('Baking persistent entity class for %s...', $name),
+                    1,
+                    ConsoleIo::QUIET
+                );
                 $io->createFile($persistentEntityFilePath, $persistentOut);
 
                 if (file_exists($persistentEntityFilePath)) {
                     require_once $persistentEntityFilePath;
                 }
             } else {
-                $io->out("\n" . sprintf('Skipping creating persistent entity class for %s...', $name), 1, ConsoleIo::QUIET);
+                $io->out(
+                    "\n" . sprintf('Skipping creating persistent entity class for %s...', $name),
+                    1,
+                    ConsoleIo::QUIET
+                );
             }
         } elseif ($removePersistentEntity) {
             $io->out("Removing file {$persistentEntityFilePath}");
@@ -1012,7 +1020,9 @@ class ModelCommand extends BakeCommand
                 $io->success("\n" . sprintf('Removed persistent entity class for %s...', $name), 1, ConsoleIo::QUIET);
             } else {
                 $io->error(
-                    "\n" . sprintf('Removing persistent entity class failed for %s...', $name), 1, ConsoleIo::QUIET
+                    "\n" . sprintf('Removing persistent entity class failed for %s...', $name),
+                    1,
+                    ConsoleIo::QUIET
                 );
             }
         }
@@ -1094,7 +1104,9 @@ class ModelCommand extends BakeCommand
                 }
             } else {
                 $io->out(
-                    "\n" . sprintf('Skipping creating persistent table class for %s...', $name), 1, ConsoleIo::QUIET
+                    "\n" . sprintf('Skipping creating persistent table class for %s...', $name),
+                    1,
+                    ConsoleIo::QUIET
                 );
             }
         } elseif ($removePersistentTable) {
@@ -1103,7 +1115,9 @@ class ModelCommand extends BakeCommand
                 $io->success("\n" . sprintf('Removed persistent table class for %s...', $name), 1, ConsoleIo::QUIET);
             } else {
                 $io->error(
-                    "\n" . sprintf('Removing persistent table class failed for %s...', $name), 1, ConsoleIo::QUIET
+                    "\n" . sprintf('Removing persistent table class failed for %s...', $name),
+                    1,
+                    ConsoleIo::QUIET
                 );
             }
         }
