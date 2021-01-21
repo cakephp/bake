@@ -19,11 +19,14 @@ declare(strict_types=1);
 
 namespace {{ namespace }}\Model\Table;
 
-{% set uses = ['use Cake\\ORM\\Query;', 'use Cake\\ORM\\RulesChecker;', 'use Cake\\ORM\\Table;', 'use Cake\\Validation\\Validator;'] %}
+{% set uses = ['use Cake\\ORM\\Query;', 'use Cake\\ORM\\RulesChecker;', 'use Cake\\Validation\\Validator;'] %}
+{% if not persistentTable %}
+{% set uses = uses|merge(['use Cake\\ORM\\Table;']) %}
+{% endif %}
 {{ uses|join('\n')|raw }}
 
 {{ DocBlock.classDescription(name, 'Model', annotations)|raw }}
-class {{ name }}Table extends Table
+class {{ name }}Table extends {% if persistentTable %}{{ name }}Persistent{% endif %}Table
 {
     /**
      * Initialize method
@@ -33,8 +36,6 @@ class {{ name }}Table extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
 {% if table %}
         $this->setTable('{{ table }}');
 {% endif %}
@@ -77,6 +78,8 @@ class {{ name }}Table extends Table
         {{- "\n" }}
     {%- endfor %}
 {% endfor %}
+
+        parent::initialize($config);
     }
 {{- "\n" }}
 
@@ -103,7 +106,7 @@ class {{ name }}Table extends Table
 
 {% endif %}
 {% endfor %}
-        return $validator;
+        return parent::validationDefault($validator);
     }
 {% endif %}
 
@@ -122,7 +125,7 @@ class {{ name }}Table extends Table
         $rules->add($rules->{{ rule.name }}(['{{ field }}']{{ (rule.extra is defined and rule.extra ? (", '#{rule.extra}'") : '')|raw }}), ['errorField' => '{{ field }}']);
 {% endfor %}
 
-        return $rules;
+        return parent::buildRules($rules);
     }
 {% endif %}
 
