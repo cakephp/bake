@@ -119,8 +119,7 @@ class ModelCommand extends BakeCommand
         string $name,
         Arguments $args,
         ConsoleIo $io
-    ): array
-    {
+    ): array {
         $associations = $this->getAssociations($tableObject, $args, $io);
         $this->applyAssociations($tableObject, $associations);
         $associationInfo = $this->getAssociationInfo($tableObject);
@@ -686,8 +685,7 @@ class ModelCommand extends BakeCommand
         string $fieldName,
         array $metaData,
         array $primaryKey
-    ): array
-    {
+    ): array {
         $ignoreFields = ['lft', 'rght', 'created', 'modified', 'updated'];
         if (in_array($fieldName, $ignoreFields, true)) {
             return [];
@@ -1013,7 +1011,9 @@ class ModelCommand extends BakeCommand
             if (unlink($persistentEntityFilePath)) {
                 $io->success("\n" . sprintf('Removed persistent entity class for %s...', $name), 1, ConsoleIo::QUIET);
             } else {
-                $io->error("\n" . sprintf('Removing persistent entity class failed for %s...', $name), 1, ConsoleIo::QUIET);
+                $io->error(
+                    "\n" . sprintf('Removing persistent entity class failed for %s...', $name), 1, ConsoleIo::QUIET
+                );
             }
         }
 
@@ -1093,14 +1093,18 @@ class ModelCommand extends BakeCommand
                     require_once $persistentTableFilePath;
                 }
             } else {
-                $io->out("\n" . sprintf('Skipping creating persistent table class for %s...', $name), 1, ConsoleIo::QUIET);
+                $io->out(
+                    "\n" . sprintf('Skipping creating persistent table class for %s...', $name), 1, ConsoleIo::QUIET
+                );
             }
         } elseif ($removePersistentTable) {
             $io->out("Removing file {$persistentTableFilePath}");
             if (unlink($persistentTableFilePath)) {
                 $io->success("\n" . sprintf('Removed persistent table class for %s...', $name), 1, ConsoleIo::QUIET);
             } else {
-                $io->error("\n" . sprintf('Removing persistent table class failed for %s...', $name), 1, ConsoleIo::QUIET);
+                $io->error(
+                    "\n" . sprintf('Removing persistent table class failed for %s...', $name), 1, ConsoleIo::QUIET
+                );
             }
         }
 
@@ -1246,8 +1250,7 @@ class ModelCommand extends BakeCommand
         string $useTable,
         Arguments $args,
         ConsoleIo $io
-    ): void
-    {
+    ): void {
         if ($args->getOption('no-fixture')) {
             return;
         }
