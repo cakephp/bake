@@ -1019,11 +1019,7 @@ class ModelCommand extends BakeCommand
             if (unlink($persistentEntityFilePath)) {
                 $io->success("\n" . sprintf('Removed persistent entity class for %s...', $name), 1, ConsoleIo::QUIET);
             } else {
-                $io->error(
-                    "\n" . sprintf('Removing persistent entity class failed for %s...', $name),
-                    1,
-                    ConsoleIo::QUIET
-                );
+                $io->error("\n" . sprintf('Removing persistent entity class failed for %s...', $name));
             }
         }
 
@@ -1114,11 +1110,7 @@ class ModelCommand extends BakeCommand
             if (unlink($persistentTableFilePath)) {
                 $io->success("\n" . sprintf('Removed persistent table class for %s...', $name), 1, ConsoleIo::QUIET);
             } else {
-                $io->error(
-                    "\n" . sprintf('Removing persistent table class failed for %s...', $name),
-                    1,
-                    ConsoleIo::QUIET
-                );
+                $io->error("\n" . sprintf('Removing persistent table class failed for %s...', $name));
             }
         }
 
