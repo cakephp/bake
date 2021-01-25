@@ -1324,6 +1324,103 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * test baking persistent class with table config and connection option
+     *
+     * @return void
+     */
+    public function testBakeTablePersistent()
+    {
+        $this->generatedFiles = [
+            APP . 'Model/Table/ItemsTable.php',
+            APP . 'Model/Table/ItemsPersistentTable.php',
+            APP . 'Model/Entity/Item.php',
+        ];
+        $this->exec('bake model --no-test --no-fixture --persistent --connection test --table todo_items Items');
+        $this->assertExitCode(Command::CODE_SUCCESS);
+
+        $this->assertFilesExist($this->generatedFiles);
+        $result = file_get_contents($this->generatedFiles[0]);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+
+        $result = file_get_contents($this->generatedFiles[1]);
+        $this->assertSameAsFile(__FUNCTION__ . 'Persistent.php', $result);
+    }
+
+    /**
+     * test deleting persistent class with table config and connection option
+     *
+     * @return void
+     */
+    public function testBakeTablePersistentDelete()
+    {
+        $this->generatedFiles = [
+            APP . 'Model/Table/ItemsTable.php',
+            APP . 'Model/Table/ItemsPersistentTable.php',
+            APP . 'Model/Entity/Item.php',
+        ];
+        $this->exec('bake model --no-test --no-fixture --persistent --connection test --table todo_items Items');
+        $this->assertExitCode(Command::CODE_SUCCESS);
+
+        $this->assertFilesExist($this->generatedFiles);
+
+        $this->exec('bake model --no-test --force --no-fixture --remove-persistent --connection test --table todo_items Items');
+        $this->assertExitCode(Command::CODE_SUCCESS);
+
+        $this->assertFileNotExists($this->generatedFiles[1]);
+        $result = file_get_contents($this->generatedFiles[0]);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an persistent entity class
+     *
+     * @return void
+     */
+    public function testBakeEntityPersistent()
+    {
+        $this->generatedFiles = [
+            APP . 'Model/Entity/User.php',
+            APP . 'Model/Entity/UserPersistent.php'
+        ];
+
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden --persistent users');
+        $this->assertExitCode(Command::CODE_SUCCESS);
+
+        $this->assertFileExists($this->generatedFiles[0]);
+        $result = file_get_contents($this->generatedFiles[0]);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+
+        $this->assertFileExists($this->generatedFiles[1]);
+        $result = file_get_contents($this->generatedFiles[1]);
+        $this->assertSameAsFile(__FUNCTION__ . 'Persistent.php', $result);
+    }
+
+    /**
+     * test deleting an persistent entity class
+     *
+     * @return void
+     */
+    public function testBakeEntityPersistentDelete()
+    {
+        $this->generatedFiles = [
+            APP . 'Model/Entity/User.php',
+            APP . 'Model/Entity/UserPersistent.php'
+        ];
+
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden --persistent users');
+        $this->assertExitCode(Command::CODE_SUCCESS);
+
+        $this->assertFilesExist($this->generatedFiles);
+
+        $this->exec('bake model --no-test --force --no-fixture --no-table --no-fields --no-hidden --remove-persistent users');
+        $this->assertExitCode(Command::CODE_SUCCESS);
+
+        $this->assertFileNotExists($this->generatedFiles[1]);
+        $result = file_get_contents($this->generatedFiles[0]);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
      * test baking an entity class
      *
      * @return void
