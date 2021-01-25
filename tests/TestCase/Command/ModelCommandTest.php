@@ -1380,7 +1380,7 @@ class ModelCommandTest extends TestCase
     {
         $this->generatedFiles = [
             APP . 'Model/Entity/User.php',
-            APP . 'Model/Entity/UserPersistent.php'
+            APP . 'Model/Entity/UserPersistent.php',
         ];
 
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden --persistent users');
@@ -1404,7 +1404,7 @@ class ModelCommandTest extends TestCase
     {
         $this->generatedFiles = [
             APP . 'Model/Entity/User.php',
-            APP . 'Model/Entity/UserPersistent.php'
+            APP . 'Model/Entity/UserPersistent.php',
         ];
 
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden --persistent users');
