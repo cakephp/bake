@@ -5,8 +5,8 @@ namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Table;
 
 /**
  * Categories Model
@@ -39,8 +39,6 @@ class CategoriesTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('categories');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
@@ -52,6 +50,8 @@ class CategoriesTable extends Table
             'targetForeignKey' => 'product_id',
             'joinTable' => 'categories_products',
         ]);
+
+        parent::initialize($config);
     }
 
     /**
@@ -71,7 +71,7 @@ class CategoriesTable extends Table
             ->maxLength('name', 100)
             ->notEmptyString('name');
 
-        return $validator;
+        return parent::validationDefault($validator);
     }
 
     /**

@@ -5,8 +5,8 @@ namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Table;
 
 /**
  * Items Model
@@ -41,8 +41,6 @@ class ItemsTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('todo_items');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
@@ -61,6 +59,8 @@ class ItemsTable extends Table
             'targetForeignKey' => 'todo_label_id',
             'joinTable' => 'todo_items_todo_labels',
         ]);
+
+        parent::initialize($config);
     }
 
     /**
@@ -97,7 +97,7 @@ class ItemsTable extends Table
             ->integer('todo_task_count')
             ->notEmptyString('todo_task_count');
 
-        return $validator;
+        return parent::validationDefault($validator);
     }
 
     /**
@@ -111,7 +111,7 @@ class ItemsTable extends Table
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
 
-        return $rules;
+        return parent::buildRules($rules);
     }
 
     /**

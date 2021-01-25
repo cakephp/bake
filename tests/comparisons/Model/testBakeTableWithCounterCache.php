@@ -5,8 +5,8 @@ namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Table;
 
 /**
  * TodoTasks Model
@@ -40,8 +40,6 @@ class TodoTasksTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('todo_tasks');
         $this->setDisplayField('title');
         $this->setPrimaryKey('uid');
@@ -55,6 +53,8 @@ class TodoTasksTable extends Table
             'foreignKey' => 'todo_item_id',
             'joinType' => 'INNER',
         ]);
+
+        parent::initialize($config);
     }
 
     /**
@@ -68,6 +68,6 @@ class TodoTasksTable extends Table
     {
         $rules->add($rules->existsIn(['todo_item_id'], 'TodoItems'), ['errorField' => 'todo_item_id']);
 
-        return $rules;
+        return parent::buildRules($rules);
     }
 }

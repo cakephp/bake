@@ -5,8 +5,8 @@ namespace App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Table;
 
 /**
  * BakeArticles Model
@@ -35,9 +35,9 @@ class BakeArticlesTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setPrimaryKey('id');
+
+        parent::initialize($config);
     }
 
     /**
@@ -78,7 +78,7 @@ class BakeArticlesTable extends Table
             ->uploadedFile('image', ['optional' => true, 'types' => ['image/jpeg']])
             ->allowEmptyFile('image');
 
-        return $validator;
+        return parent::validationDefault($validator);
     }
 
     /**

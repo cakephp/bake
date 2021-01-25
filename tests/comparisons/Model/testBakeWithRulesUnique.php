@@ -5,8 +5,8 @@ namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Table;
 
 /**
  * Users Model
@@ -40,8 +40,6 @@ class UsersTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('users');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
@@ -54,6 +52,8 @@ class UsersTable extends Table
         $this->hasMany('TodoItems', [
             'foreignKey' => 'user_id',
         ]);
+
+        parent::initialize($config);
     }
 
     /**
@@ -78,7 +78,7 @@ class UsersTable extends Table
             ->maxLength('password', 255)
             ->allowEmptyString('password');
 
-        return $validator;
+        return parent::validationDefault($validator);
     }
 
     /**
@@ -92,6 +92,6 @@ class UsersTable extends Table
     {
         $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
 
-        return $rules;
+        return parent::buildRules($rules);
     }
 }
