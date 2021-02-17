@@ -207,32 +207,36 @@ Creating a Bake Theme
 
 If you wish to modify the output produced by the "bake" command, you can
 create your own bake 'theme' which allows you to replace some or all of the
-templates that bake uses. The best way to do this is:
+templates that bake uses. To create a bake theme do the following:
 
-#. Bake a new plugin. The name of the plugin is the bake 'theme' name
-#. Create a new directory **plugins/[name]/templates/bake**.
+#. Bake a new plugin. The name of the plugin is the bake 'theme' name. For
+   example ``bin/cake bake plugin custom_bake``.
+#. Create a new directory **plugins/CustomBake/templates/bake**.
 #. Copy any templates you want to override from
    **vendor/cakephp/bake/templates/bake** to matching files in your
    plugin.
-#. When running bake use the ``--theme`` option to specify the bake-theme you
-   want to use. To avoid having to specify this option in each call, you can also
+#. When running bake use the ``--theme CustomBake`` option to use your bake
+   theme. To avoid having to specify this option in each call, you can also
    set your custom theme to be used as default theme::
 
         <?php
         // in src/Application::bootstrapCli() before loading the 'Bake' plugin.
         Configure::write('Bake.theme', 'MyTheme');
 
-Customizing the Bake Templates
+Application Bake Templates
 ==============================
 
-If you wish to modify the default output produced by the "bake" command, you can
-create your own bake templates in your application. This way does not use the
-``--theme`` option in the command line when baking. The best way to do this is:
+If you only need to customize a few bake templates, or need to use application
+dependencies in your templates you can include template overrides in your
+application templates. These overrides work similar to overriding other plugin
+templates.
 
-#. Create a new directory **/templates/bake/**.
+#. Create a new directory **/templates/plugins/Bake/**.
 #. Copy any templates you want to override from
    **vendor/cakephp/bake/templates/bake/** to matching files in your
    application.
+
+You do not need to use the ``--theme`` option when using application templates.
 
 Creating New Bake Command Options
 =================================
