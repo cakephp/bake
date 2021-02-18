@@ -231,7 +231,7 @@ dependencies in your templates you can include template overrides in your
 application templates. These overrides work similar to overriding other plugin
 templates.
 
-#. Create a new directory **/templates/plugins/Bake/**.
+#. Create a new directory **/templates/plugin/Bake/**.
 #. Copy any templates you want to override from
    **vendor/cakephp/bake/templates/bake/** to matching files in your
    application.
