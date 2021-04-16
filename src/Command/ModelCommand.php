@@ -200,8 +200,8 @@ class ModelCommand extends BakeCommand
         $associations = $this->findBelongsTo($table, $associations);
 
         if (is_array($primary) && count($primary) > 1) {
-            $io->err(
-                '<warning>Bake cannot generate associations for composite primary keys at this time</warning>.'
+            $io->warning(
+                'Bake cannot generate associations for composite primary keys at this time.'
             );
 
             return $associations;
