@@ -159,16 +159,18 @@ jobs:
         php-version: '7.4'
         extensions: mbstring, intl
         coverage: none
-        tools: psalm:~4.7.0, phpstan:^0.12
+        tools: cs2pr
 
     - name: Composer Install
-      run: composer install
+      run: composer stan-setup
 
     - name: Run phpcs
-      run: vendor/bin/phpcs -p src/ tests/
+      run: vendor/bin/phpcs --report=checkstyle src/ tests/ | cs2pr
 
     - name: Run psalm
-      run: psalm --output-format=github
+      if: success() || failure()
+      run: vendor/bin/psalm.phar --output-format=github
 
     - name: Run phpstan
-      run: phpstan analyse
+      if: success() || failure()
+      run: vendor/bin/phpstan.phar analyse
