@@ -6,7 +6,6 @@ namespace Bake\Test\App\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\Validation\Validator;
-use Cake\ORM\Table;
 
 /**
  * Items Model
@@ -31,7 +30,7 @@ use Cake\ORM\Table;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class ItemsTable extends Table
+class ItemsTable extends ItemsPersistentTable
 {
     /**
      * Initialize method

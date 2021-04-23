@@ -5,8 +5,8 @@ namespace BakeTest\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Table;
 
 /**
  * Users Model
@@ -40,8 +40,6 @@ class UsersTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('users');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
@@ -56,6 +54,8 @@ class UsersTable extends Table
             'foreignKey' => 'user_id',
             'className' => 'BakeTest.TodoItems',
         ]);
+
+        parent::initialize($config);
     }
 
     /**
@@ -69,6 +69,6 @@ class UsersTable extends Table
     {
         $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
 
-        return $rules;
+        return parent::buildRules($rules);
     }
 }

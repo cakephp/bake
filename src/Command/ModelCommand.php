@@ -14,6 +14,7 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
@@ -549,7 +550,7 @@ class ModelCommand extends BakeCommand
             if ($entityClass === '\Cake\ORM\Entity') {
                 $namespace = Configure::read('App.namespace');
 
-                [$plugin, ] = pluginSplit($association->getTarget()->getRegistryAlias());
+                [$plugin,] = pluginSplit($association->getTarget()->getRegistryAlias());
                 if ($plugin !== null) {
                     $namespace = $plugin;
                 }
@@ -963,22 +964,64 @@ class ModelCommand extends BakeCommand
             $pluginPath = $this->plugin . '.';
         }
 
+        $path = $this->getPath($args);
+        $usePersistentEntity = $args->getOption('persistent');
+        $removePersistentEntity = $args->getOption('remove-persistent');
+
+        $persistentEntityFilePath = $path . 'Entity' . DS . $name . 'Persistent.php';
+        $persistentClassExists = false;
+        if (file_exists($persistentEntityFilePath)) {
+            $persistentClassExists = true;
+            $usePersistentEntity = true;
+        } else {
+            $removePersistentEntity = false;
+        }
+
         $data += [
             'name' => $name,
             'namespace' => $namespace,
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
             'primaryKey' => [],
+            'persistentEntity' => $removePersistentEntity ? false : $usePersistentEntity,
         ];
 
         $renderer = new TemplateRenderer($this->theme);
         $renderer->set($data);
         $out = $renderer->generate('Bake.Model/entity');
 
-        $path = $this->getPath($args);
         $filename = $path . 'Entity' . DS . $name . '.php';
         $io->out("\n" . sprintf('Baking entity class for %s...', $name), 1, ConsoleIo::QUIET);
         $io->createFile($filename, $out, $args->getOption('force'));
+
+        if ($usePersistentEntity && !$removePersistentEntity) {
+            if (!$persistentClassExists) {
+                $persistentOut = $renderer->generate('Bake.Model/persistent_entity');
+                $io->out(
+                    "\n" . sprintf('Baking persistent entity class for %s...', $name),
+                    1,
+                    ConsoleIo::QUIET
+                );
+                $io->createFile($persistentEntityFilePath, $persistentOut);
+
+                if (file_exists($persistentEntityFilePath)) {
+                    require_once $persistentEntityFilePath;
+                }
+            } else {
+                $io->out(
+                    "\n" . sprintf('Skipping creating persistent entity class for %s...', $name),
+                    1,
+                    ConsoleIo::QUIET
+                );
+            }
+        } elseif ($removePersistentEntity) {
+            $io->out("Removing file {$persistentEntityFilePath}");
+            if (unlink($persistentEntityFilePath)) {
+                $io->success("\n" . sprintf('Removed persistent entity class for %s...', $name), 1, ConsoleIo::QUIET);
+            } else {
+                $io->error("\n" . sprintf('Removing persistent entity class failed for %s...', $name));
+            }
+        }
 
         $emptyFile = $path . 'Entity' . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
@@ -1007,6 +1050,20 @@ class ModelCommand extends BakeCommand
 
         $name = $model->getAlias();
         $entity = $this->_entityName($model->getAlias());
+        $path = $this->getPath($args);
+
+        $usePersistentTable = $args->getOption('persistent');
+        $removePersistentTable = $args->getOption('remove-persistent');
+
+        $persistentTableFilePath = $path . 'Table' . DS . $name . 'PersistentTable.php';
+        $persistentClassExists = false;
+        if (file_exists($persistentTableFilePath)) {
+            $persistentClassExists = true;
+            $usePersistentTable = true;
+        } else {
+            $removePersistentTable = false;
+        }
+
         $data += [
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
@@ -1021,16 +1078,41 @@ class ModelCommand extends BakeCommand
             'rulesChecker' => [],
             'behaviors' => [],
             'connection' => $this->connection,
+            'persistentTable' => $removePersistentTable ? false : $usePersistentTable,
         ];
 
         $renderer = new TemplateRenderer($this->theme);
         $renderer->set($data);
         $out = $renderer->generate('Bake.Model/table');
 
-        $path = $this->getPath($args);
         $filename = $path . 'Table' . DS . $name . 'Table.php';
         $io->out("\n" . sprintf('Baking table class for %s...', $name), 1, ConsoleIo::QUIET);
         $io->createFile($filename, $out, $args->getOption('force'));
+
+        if ($usePersistentTable && !$removePersistentTable) {
+            if (!$persistentClassExists) {
+                $persistentOut = $renderer->generate('Bake.Model/persistent_table');
+                $io->out("\n" . sprintf('Baking persistent table class for %s...', $name), 1, ConsoleIo::QUIET);
+                $io->createFile($persistentTableFilePath, $persistentOut);
+
+                if (file_exists($persistentTableFilePath)) {
+                    require_once $persistentTableFilePath;
+                }
+            } else {
+                $io->out(
+                    "\n" . sprintf('Skipping creating persistent table class for %s...', $name),
+                    1,
+                    ConsoleIo::QUIET
+                );
+            }
+        } elseif ($removePersistentTable) {
+            $io->out("Removing file {$persistentTableFilePath}");
+            if (unlink($persistentTableFilePath)) {
+                $io->success("\n" . sprintf('Removed persistent table class for %s...', $name), 1, ConsoleIo::QUIET);
+            } else {
+                $io->error("\n" . sprintf('Removing persistent table class failed for %s...', $name));
+            }
+        }
 
         // Work around composer caching that classes/files do not exist.
         // Check for the file as it might not exist in tests.
@@ -1147,6 +1229,12 @@ class ModelCommand extends BakeCommand
         ])->addOption('no-fixture', [
             'boolean' => true,
             'help' => 'Do not generate a test fixture skeleton.',
+        ])->addOption('persistent', [
+            'boolean' => true,
+            'help' => 'Bake persistent table / entity classes',
+        ])->addOption('remove-persistent', [
+            'boolean' => true,
+            'help' => 'Remove persistent table / entity classes',
         ])->setEpilog(
             'Omitting all arguments and options will list the table names you can generate models for.'
         );

@@ -5,8 +5,8 @@ namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Table;
 
 /**
  * CategoriesProducts Model
@@ -38,8 +38,6 @@ class CategoriesProductsTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('categories_products');
         $this->setDisplayField('category_id');
         $this->setPrimaryKey(['category_id', 'product_id']);
@@ -52,6 +50,8 @@ class CategoriesProductsTable extends Table
             'foreignKey' => 'product_id',
             'joinType' => 'INNER',
         ]);
+
+        parent::initialize($config);
     }
 
     /**
@@ -66,7 +66,7 @@ class CategoriesProductsTable extends Table
         $rules->add($rules->existsIn(['category_id'], 'Categories'), ['errorField' => 'category_id']);
         $rules->add($rules->existsIn(['product_id'], 'Products'), ['errorField' => 'product_id']);
 
-        return $rules;
+        return parent::buildRules($rules);
     }
 
     /**

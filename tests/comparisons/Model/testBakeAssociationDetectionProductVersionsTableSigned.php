@@ -5,8 +5,8 @@ namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Table;
 
 /**
  * ProductVersions Model
@@ -37,8 +37,6 @@ class ProductVersionsTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('product_versions');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
@@ -47,6 +45,8 @@ class ProductVersionsTable extends Table
             'foreignKey' => 'product_id',
             'joinType' => 'INNER',
         ]);
+
+        parent::initialize($config);
     }
 
     /**
@@ -66,7 +66,7 @@ class ProductVersionsTable extends Table
             ->requirePresence('version', 'create')
             ->notEmptyDateTime('version');
 
-        return $validator;
+        return parent::validationDefault($validator);
     }
 
     /**
@@ -80,7 +80,7 @@ class ProductVersionsTable extends Table
     {
         $rules->add($rules->existsIn(['product_id'], 'Products'), ['errorField' => 'product_id']);
 
-        return $rules;
+        return parent::buildRules($rules);
     }
 
     /**

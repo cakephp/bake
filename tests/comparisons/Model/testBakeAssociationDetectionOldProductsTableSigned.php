@@ -5,8 +5,8 @@ namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Table;
 
 /**
  * OldProducts Model
@@ -37,13 +37,13 @@ class OldProductsTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('old_products');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        parent::initialize($config);
     }
 
     /**
@@ -63,7 +63,7 @@ class OldProductsTable extends Table
             ->maxLength('name', 100)
             ->notEmptyString('name');
 
-        return $validator;
+        return parent::validationDefault($validator);
     }
 
     /**

@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Model\Table;
 
+use Cake\ORM\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\Validation\Validator;
-use Cake\ORM\Table;
 
 /**
- * Items Model
+ * ItemsPersistent Model
  *
  * @property \Bake\Test\App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \Bake\Test\App\Model\Table\TodoTasksTable&\Cake\ORM\Association\HasMany $TodoTasks
@@ -31,7 +31,7 @@ use Cake\ORM\Table;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class ItemsTable extends Table
+abstract class ItemsPersistentTable extends Table
 {
     /**
      * Initialize method
@@ -39,29 +39,7 @@ class ItemsTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config): void
-    {
-        $this->setTable('todo_items');
-        $this->setDisplayField('title');
-        $this->setPrimaryKey('id');
-
-        $this->addBehavior('Timestamp');
-
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
-        ]);
-        $this->hasMany('TodoTasks', [
-            'foreignKey' => 'todo_item_id',
-        ]);
-        $this->belongsToMany('TodoLabels', [
-            'foreignKey' => 'todo_item_id',
-            'targetForeignKey' => 'todo_label_id',
-            'joinTable' => 'todo_items_todo_labels',
-        ]);
-
-        parent::initialize($config);
-    }
+    public function initialize(array $config): void {}
 
     /**
      * Default validation rules.
@@ -71,33 +49,7 @@ class ItemsTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
-
-        $validator
-            ->scalar('title')
-            ->maxLength('title', 50)
-            ->requirePresence('title', 'create')
-            ->notEmptyString('title');
-
-        $validator
-            ->scalar('body')
-            ->allowEmptyString('body');
-
-        $validator
-            ->decimal('effort')
-            ->notEmptyString('effort');
-
-        $validator
-            ->boolean('completed')
-            ->notEmptyString('completed');
-
-        $validator
-            ->integer('todo_task_count')
-            ->notEmptyString('todo_task_count');
-
-        return parent::validationDefault($validator);
+        return $validator;
     }
 
     /**
@@ -109,18 +61,6 @@ class ItemsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
-
-        return parent::buildRules($rules);
-    }
-
-    /**
-     * Returns the database connection name to use by default.
-     *
-     * @return string
-     */
-    public static function defaultConnectionName(): string
-    {
-        return 'test';
+        return $rules;
     }
 }
