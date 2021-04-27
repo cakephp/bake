@@ -134,7 +134,7 @@ class BakeHelper extends Helper
      *
      * @param mixed $var Variable to export.
      * @param int $indentLevel Identation level.
-     * @param int $options Exporting options.
+     * @param int $options VarExporter option flags
      * @return string
      * @see https://github.com/brick/varexporter#options
      */
@@ -152,7 +152,7 @@ class BakeHelper extends Helper
      *
      * @param array $var Array to export.
      * @param int $indentLevel Identation level.
-     * @param bool $inline Inline numeric scalar array.
+     * @param bool $inline Inline numeric scalar array (adds INLINE_NUMERIC_SCALAR_ARRAY flag)
      * @return string
      */
     public function exportArray(array $var, int $indentLevel = 0, bool $inline = true): string
