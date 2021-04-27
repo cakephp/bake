@@ -913,7 +913,7 @@ class ModelCommand extends BakeCommand
      * Get CounterCaches
      *
      * @param \Cake\ORM\Table $model The table to get counter cache fields for.
-     * @return string[] CounterCache configurations
+     * @return array<string, array> CounterCache configurations
      */
     public function getCounterCache(Table $model): array
     {
@@ -933,7 +933,7 @@ class ModelCommand extends BakeCommand
             $alias = $model->getAlias();
             $field = Inflector::singularize(Inflector::underscore($alias)) . '_count';
             if (in_array($field, $otherFields, true)) {
-                $counterCache[] = "'{$otherAlias}' => ['{$field}']";
+                $counterCache[$otherAlias] = [$field];
             }
         }
 
