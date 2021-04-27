@@ -45,7 +45,7 @@ class {{ name }}Table extends Table
 
 {%- if primaryKey %}
     {%- if primaryKey is iterable and primaryKey|length > 1 %}
-        $this->setPrimaryKey({{ Bake.exportVar(primaryKey, 0, constant('Brick\\VarExporter\\VarExporter::INLINE_NUMERIC_SCALAR_ARRAY'))|raw }});
+        $this->setPrimaryKey({{ Bake.exportArray(primaryKey)|raw }});
         {{- "\n" }}
     {%- else %}
         $this->setPrimaryKey('{{ primaryKey|as_array|first }}');
@@ -58,7 +58,7 @@ class {{ name }}Table extends Table
 {% endif %}
 
 {%- for behavior, behaviorData in behaviors %}
-        $this->addBehavior('{{ behavior }}'{{ (behaviorData ? (", " ~ Bake.exportVar(behaviorData, 2, constant('Brick\\VarExporter\\VarExporter::INLINE_NUMERIC_SCALAR_ARRAY'))|raw ~ '') : '')|raw }});
+        $this->addBehavior('{{ behavior }}'{{ (behaviorData ? (", " ~ Bake.exportArray(behaviorData, 2)|raw ~ '') : '')|raw }});
 {% endfor %}
 
 {%- if associations.belongsTo or associations.hasMany or associations.belongsToMany %}
@@ -73,7 +73,7 @@ class {{ name }}Table extends Table
                 {%- set assocData = assocData|merge({(key): val}) %}
             {%- endif %}
         {%- endfor %}
-        $this->{{ type }}('{{ assoc.alias }}', {{ Bake.exportVar(assocData, 2, constant('Brick\\VarExporter\\VarExporter::INLINE_NUMERIC_SCALAR_ARRAY'))|raw }});
+        $this->{{ type }}('{{ assoc.alias }}', {{ Bake.exportArray(assocData, 2)|raw }});
         {{- "\n" }}
     {%- endfor %}
 {% endfor %}

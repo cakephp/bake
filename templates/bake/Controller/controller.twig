@@ -58,7 +58,7 @@ class {{ name }}Controller extends AppController
         $this->loadComponent('{{ component }}');
 {% endfor %}
 {% if helpers %}
-        $this->viewBuilder()->setHelpers({{ Bake.exportVar(helpers, 0, constant('Brick\\VarExporter\\VarExporter::INLINE_NUMERIC_SCALAR_ARRAY'))|raw }});
+        $this->viewBuilder()->setHelpers({{ Bake.exportArray(helpers)|raw }});
 {% endif %}
     }
 {% if actions|length %}{{ "\n" }}{% endif %}

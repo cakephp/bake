@@ -146,6 +146,26 @@ class BakeHelper extends Helper
     }
 
     /**
+     * Export array to string representation.
+     *
+     * (Similar to `var_export()` but better).
+     *
+     * @param array $var Array to export.
+     * @param int $indentLevel Identation level.
+     * @param bool $inline Inline numeric scalar array.
+     * @return string
+     */
+    public function exportArray(array $var, int $indentLevel = 0, bool $inline = true): string
+    {
+        $options = 0;
+        if ($inline) {
+            $options = VarExporter::INLINE_NUMERIC_SCALAR_ARRAY;
+        }
+
+        return $this->exportVar($var, $indentLevel, $options);
+    }
+
+    /**
      * Extract the aliases for associations, filters hasMany associations already extracted as
      * belongsToMany
      *

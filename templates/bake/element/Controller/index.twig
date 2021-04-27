@@ -23,7 +23,7 @@
 {% set belongsTo = Bake.aliasExtractor(modelObj, 'BelongsTo') %}
 {% if belongsTo %}
         $this->paginate = [
-            'contain' => {{ Bake.exportVar(belongsTo, 0, constant('Brick\\VarExporter\\VarExporter::INLINE_NUMERIC_SCALAR_ARRAY'))|raw }},
+            'contain' => {{ Bake.exportArray(belongsTo)|raw }},
         ];
 {% endif %}
         ${{ pluralName }} = $this->paginate($this->{{ currentModelName }});
