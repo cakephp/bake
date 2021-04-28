@@ -863,12 +863,12 @@ class ModelCommandTest extends TestCase
         $expected = [
             'user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
@@ -890,7 +890,7 @@ class ModelCommandTest extends TestCase
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => [null, 'create']],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -914,12 +914,12 @@ class ModelCommandTest extends TestCase
         $expected = [
             'todo_item_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
@@ -937,7 +937,7 @@ class ModelCommandTest extends TestCase
             ],
             'uid' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => [null, 'create']],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -965,7 +965,7 @@ class ModelCommandTest extends TestCase
         $this->assertArrayHasKey('release_date', $result);
         $expected = [
             'dateTime' => ['rule' => 'dateTime', 'args' => []],
-            'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+            'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
             'notEmpty' => ['rule' => 'notEmptyDateTime', 'args' => []],
         ];
         $this->assertEquals($expected, $result['release_date']);
@@ -989,11 +989,11 @@ class ModelCommandTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => [null, 'create']],
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
@@ -1027,11 +1027,11 @@ class ModelCommandTest extends TestCase
         $expected = [
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => [null, 'create']],
             ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
@@ -1093,7 +1093,7 @@ class ModelCommandTest extends TestCase
         $expected = [
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ["'create'"]],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
                 'maxLength' => ['rule' => 'maxLength', 'args' => [50]],
             ],
@@ -1115,7 +1115,7 @@ class ModelCommandTest extends TestCase
             ],
             'id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => ['null', "'create'"]],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => [null, 'create']],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1324,7 +1324,7 @@ class ModelCommandTest extends TestCase
                 ],
                 'allowEmpty' => [
                     'rule' => 'allowEmptyString',
-                    'args' => ["'create'"],
+                    'args' => ['create'],
                 ],
             ],
             'name' => [
@@ -1336,16 +1336,16 @@ class ModelCommandTest extends TestCase
                     'rule' => 'maxLength',
                     'args' => [
                         100,
-                        "'Name must be shorter than 100 characters.'",
+                        'Name must be shorter than 100 characters.',
                     ],
                 ],
                 'requirePresense' => [
                     'rule' => 'requirePresence',
-                    'args' => ["'create'"],
+                    'args' => ['create'],
                 ],
                 'allowEmpty' => [
                     'rule' => 'allowEmptyString',
-                    'args' => ['null', 'false'],
+                    'args' => [null, false],
                 ],
             ],
             'count' => [
@@ -1355,11 +1355,11 @@ class ModelCommandTest extends TestCase
                 ],
                 'requirePresense' => [
                     'rule' => 'requirePresence',
-                    'args' => ["'create'"],
+                    'args' => ['create'],
                 ],
                 'allowEmpty' => [
                     'rule' => 'allowEmptyString',
-                    'args' => ['null', 'false'],
+                    'args' => [null, false],
                 ],
             ],
             'price' => [
@@ -1371,11 +1371,11 @@ class ModelCommandTest extends TestCase
                 ],
                 'requirePresense' => [
                     'rule' => 'requirePresence',
-                    'args' => ["'create'"],
+                    'args' => ['create'],
                 ],
                 'allowEmpty' => [
                     'rule' => 'allowEmptyString',
-                    'args' => ['null', 'false'],
+                    'args' => [null, false],
                 ],
             ],
             'email' => [
@@ -1397,8 +1397,8 @@ class ModelCommandTest extends TestCase
                     'rule' => 'uploadedFile',
                     'args' => [
                         [
-                            'optional' => 'true',
-                            'types' => ["'image/jpeg'"],
+                            'optional' => true,
+                            'types' => ['image/jpeg'],
                         ],
                     ],
                 ],

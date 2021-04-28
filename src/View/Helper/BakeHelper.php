@@ -369,21 +369,10 @@ class BakeHelper extends Helper
         foreach ($rules as $ruleName => $rule) {
             if ($rule['rule'] && !isset($rule['provider']) && !isset($rule['args'])) {
                 $validationMethods[] = sprintf("->%s('%s')", $rule['rule'], $field);
-            } elseif ($rule['rule'] && !isset($rule['provider'])) {
-                $formatTemplate = "->%s('%s')";
-                if (!empty($rule['args'])) {
-                    $formatTemplate = "->%s('%s', %s)";
-                }
-                $validationMethods[] = sprintf(
-                    $formatTemplate,
-                    $rule['rule'],
-                    $field,
-                    $this->stringifyList(
-                        $rule['args'],
-                        ['indent' => false, 'quotes' => false]
-                    )
-                );
-            } elseif ($rule['rule'] && isset($rule['provider'])) {
+                continue;
+            }
+
+            if ($rule['rule'] && isset($rule['provider'])) {
                 $validationMethods[] = sprintf(
                     "->add('%s', '%s', ['rule' => '%s', 'provider' => '%s'])",
                     $field,
@@ -391,7 +380,31 @@ class BakeHelper extends Helper
                     $rule['rule'],
                     $rule['provider']
                 );
+                continue;
             }
+
+            if (empty($rule['args'])) {
+                $validationMethods[] = sprintf(
+                    "->%s('%s')",
+                    $rule['rule'],
+                    $field
+                );
+                continue;
+            }
+
+            $rule['args'] = array_map(function ($item) {
+                return $this->exportVar(
+                    $item,
+                    is_array($item) ? 3 : 0,
+                    VarExporter::INLINE_NUMERIC_SCALAR_ARRAY
+                );
+            }, $rule['args']);
+            $validationMethods[] = sprintf(
+                "->%s('%s', %s)",
+                $rule['rule'],
+                $field,
+                implode(', ', $rule['args'])
+            );
         }
 
         return $validationMethods;
