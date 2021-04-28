@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Bake\View\Helper;
 
 use Bake\Utility\Model\AssociationFilter;
+use Brick\VarExporter\VarExporter;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Database\Schema\TableSchema;
@@ -64,6 +65,7 @@ class BakeHelper extends Helper
      * @param array $list array of items to be stringified
      * @param array $options options to use
      * @return string
+     * @deprecated 2.5.0 Use BakeHelper::exportVar() instead.
      */
     public function stringifyList(array $list, array $options = []): string
     {
@@ -123,6 +125,44 @@ class BakeHelper extends Helper
         }
 
         return $start . implode($join, $list) . $end;
+    }
+
+    /**
+     * Export variable to string representation.
+     *
+     * (Similar to `var_export()` but better).
+     *
+     * @param mixed $var Variable to export.
+     * @param int $indentLevel Identation level.
+     * @param int $options VarExporter option flags
+     * @return string
+     * @see https://github.com/brick/varexporter#options
+     */
+    public function exportVar($var, int $indentLevel = 0, int $options = 0): string
+    {
+        $options |= VarExporter::TRAILING_COMMA_IN_ARRAY;
+
+        return VarExporter::export($var, $options, $indentLevel);
+    }
+
+    /**
+     * Export array to string representation.
+     *
+     * (Similar to `var_export()` but better).
+     *
+     * @param array $var Array to export.
+     * @param int $indentLevel Identation level.
+     * @param bool $inline Inline numeric scalar array (adds INLINE_NUMERIC_SCALAR_ARRAY flag)
+     * @return string
+     */
+    public function exportArray(array $var, int $indentLevel = 0, bool $inline = true): string
+    {
+        $options = 0;
+        if ($inline) {
+            $options = VarExporter::INLINE_NUMERIC_SCALAR_ARRAY;
+        }
+
+        return $this->exportVar($var, $indentLevel, $options);
     }
 
     /**
@@ -362,7 +402,7 @@ class BakeHelper extends Helper
      *
      * @param string[]|false|null $fields Fields list.
      * @param string[]|null $primaryKey Primary key.
-     * @return string[]
+     * @return array<string, bool>
      */
     public function getFieldAccessibility($fields = null, $primaryKey = null): array
     {
@@ -371,12 +411,12 @@ class BakeHelper extends Helper
         if (!isset($fields) || $fields !== false) {
             if (!empty($fields)) {
                 foreach ($fields as $field) {
-                    $accessible[$field] = 'true';
+                    $accessible[$field] = true;
                 }
             } elseif (!empty($primaryKey)) {
-                $accessible['*'] = 'true';
+                $accessible['*'] = true;
                 foreach ($primaryKey as $field) {
-                    $accessible[$field] = 'false';
+                    $accessible[$field] = false;
                 }
             }
         }
