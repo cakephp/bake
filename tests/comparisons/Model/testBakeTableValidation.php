@@ -80,7 +80,10 @@ class TestBakeArticlesTable extends Table
             ->allowEmptyString('email');
 
         $validator
-            ->uploadedFile('image', ['optional' => true, 'types' => ['image/jpeg']])
+            ->uploadedFile('image', [
+                'optional' => true,
+                'types' => ['image/jpeg'],
+            ])
             ->allowEmptyFile('image');
 
         return $validator;

@@ -745,7 +745,7 @@ class ModelCommand extends BakeCommand
         if (in_array($fieldName, $primaryKey, true)) {
             $validation['allowEmpty'] = [
                 'rule' => $this->getEmptyMethod($fieldName, $metaData),
-                'args' => ['null', "'create'"],
+                'args' => [null, 'create'],
             ];
         } elseif ($metaData['null'] === true) {
             $validation['allowEmpty'] = [
@@ -756,7 +756,7 @@ class ModelCommand extends BakeCommand
             if ($metaData['default'] === null || $metaData['default'] === false) {
                 $validation['requirePresence'] = [
                     'rule' => 'requirePresence',
-                    'args' => ["'create'"],
+                    'args' => ['create'],
                 ];
             }
             $validation['notEmpty'] = [
