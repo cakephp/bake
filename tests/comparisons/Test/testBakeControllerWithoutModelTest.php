@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Test\TestCase\Controller;
 
-use Bake\Test\App\Controller\NoModelController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
@@ -20,6 +19,7 @@ class NoModelControllerTest extends TestCase
      * Test index method
      *
      * @return void
+     * @uses \Bake\Test\App\Controller\NoModelController::index()
      */
     public function testIndex(): void
     {
