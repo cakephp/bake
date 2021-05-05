@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Test\TestCase\Controller;
 
+use Bake\Test\App\Controller\NoModelController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Test\TestCase\Controller\Admin;
 
+use Bake\Test\App\Controller\Admin\PostsController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
