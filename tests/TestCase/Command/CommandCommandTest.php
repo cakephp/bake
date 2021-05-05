@@ -98,7 +98,7 @@ class CommandCommandTest extends TestCase
     }
 
     /**
-     * Test docblock \@\uses generated for test methods
+     * Test docblock @uses generated for test methods
      *
      * @return void
      */
@@ -120,7 +120,7 @@ class CommandCommandTest extends TestCase
     }
 
     /**
-     * Test docblock \@\uses generated for test methods
+     * Test docblock @uses generated for test methods
      * Plugin command
      *
      * @return void
