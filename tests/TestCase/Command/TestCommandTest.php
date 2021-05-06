@@ -811,4 +811,44 @@ class TestCommandTest extends TestCase
         $command = new TestCommand();
         $this->assertEquals($expected, $command->mapType($original));
     }
+
+    /**
+     * Test docblock @uses generated for test methods
+     *
+     * @return void
+     */
+    public function testGenerateUsesDocBlockController()
+    {
+        $testsPath = ROOT . 'tests' . DS;
+
+        $this->exec('bake test --connection test controller Products', ['y']);
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileContains(
+            '@uses \Bake\Test\App\Controller\ProductsController::index()',
+            $testsPath . 'TestCase/Controller/ProductsControllerTest.php'
+        );
+    }
+
+    /**
+     * Test docblock @uses generated for test methods
+     *
+     * @return void
+     */
+    public function testGenerateUsesDocBlockTable()
+    {
+        $testsPath = ROOT . 'tests' . DS;
+
+        $this->generatedFiles = [
+            $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
+            $testsPath . 'TestCase/Controller/ProductsControllerTest.php',
+        ];
+        $this->exec('bake test --connection test table Products', ['y']);
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileContains(
+            '@uses \Bake\Test\App\Model\Table\ProductsTable::validationDefault()',
+            $testsPath . 'TestCase/Model/Table/ProductsTableTest.php'
+        );
+    }
 }

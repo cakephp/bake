@@ -96,4 +96,49 @@ class CommandCommandTest extends TestCase
         $this->assertFilesExist($this->generatedFiles);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
     }
+
+    /**
+     * Test docblock @uses generated for test methods
+     *
+     * @return void
+     */
+    public function testGenerateUsesDocBlock()
+    {
+        $testsPath = ROOT . 'tests' . DS;
+
+        $this->exec('bake command Docblock', ['y', 'y']);
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileContains(
+            '@uses \Bake\Test\App\Command\DocblockCommand::buildOptionParser()',
+            $testsPath . 'TestCase/Command/DocblockCommandTest.php'
+        );
+        $this->assertFileContains(
+            '@uses \Bake\Test\App\Command\DocblockCommand::execute()',
+            $testsPath . 'TestCase/Command/DocblockCommandTest.php'
+        );
+    }
+
+    /**
+     * Test docblock @uses generated for test methods
+     * Plugin command
+     *
+     * @return void
+     */
+    public function testGenerateUsesDocBlockPlugin()
+    {
+        $testsPath = ROOT . 'Plugin' . DS . 'BakeTest' . DS . 'tests' . DS;
+
+        $this->exec('bake command Docblock --plugin BakeTest', ['y', 'y']);
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileContains(
+            '@uses \BakeTest\Command\DocblockCommand::buildOptionParser()',
+            $testsPath . 'TestCase/Command/DocblockCommandTest.php'
+        );
+        $this->assertFileContains(
+            '@uses \BakeTest\Command\DocblockCommand::execute()',
+            $testsPath . 'TestCase/Command/DocblockCommandTest.php'
+        );
+    }
 }
