@@ -106,6 +106,10 @@ class CommandCommandTest extends TestCase
     {
         $testsPath = ROOT . 'tests' . DS;
 
+        $this->generatedFiles = [
+            APP . 'Command/DocblockCommand.php',
+            ROOT . 'tests/TestCase/Command/DocblockCommandTest.php',
+        ];
         $this->exec('bake command Docblock', ['y', 'y']);
 
         $this->assertExitCode(Command::CODE_SUCCESS);
@@ -127,6 +131,12 @@ class CommandCommandTest extends TestCase
      */
     public function testGenerateUsesDocBlockPlugin()
     {
+        $path = Plugin::path('BakeTest');
+
+        $this->generatedFiles = [
+            $path . 'src/Command/DocblockCommand.php',
+            $path . 'tests/TestCase/Command/DocblockCommandTest.php',
+        ];
         $testsPath = ROOT . 'Plugin' . DS . 'BakeTest' . DS . 'tests' . DS;
 
         $this->exec('bake command Docblock --plugin BakeTest', ['y', 'y']);
