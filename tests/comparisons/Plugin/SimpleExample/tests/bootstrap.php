@@ -52,4 +52,4 @@ if (file_exists($root . '/config/bootstrap.php')) {
 use Cake\TestSuite\Schema\SchemaManager;
 
 // Load a schema dump file.
-SchemaManager::create('test', './tests/schema.sql');
+SchemaManager::create('test', 'tests/schema.sql');
