@@ -482,7 +482,12 @@ class ModelCommand extends BakeCommand
         }
 
         /** @psalm-suppress InvalidReturnStatement */
-        return $model->getDisplayField();
+        $display = $model->getDisplayField();
+        if (is_array($display)) {
+            return $display[0];
+        }
+
+        return $display;
     }
 
     /**
