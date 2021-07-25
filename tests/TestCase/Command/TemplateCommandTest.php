@@ -464,6 +464,23 @@ class TemplateCommandTest extends TestCase
     }
 
     /**
+     * test baking an edit file with a BelongsToMany association
+     *
+     * @return void
+     */
+    public function testBakeEditWithBelongsToManyAssociation()
+    {
+        $this->generatedFile = ROOT . 'templates/Articles/edit.php';
+        $this->exec('bake template articles edit');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
      * test baking an index
      *
      * @return void
