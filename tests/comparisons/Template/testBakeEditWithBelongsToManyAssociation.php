@@ -2,8 +2,8 @@
 /**
  * @var \Bake\Test\App\View\AppView $this
  * @var \Cake\Datasource\EntityInterface $article
- * @var array $authors
- * @var array $tags
+ * @var string[]|\Cake\Collection\CollectionInterface $authors
+ * @var string[]|\Cake\Collection\CollectionInterface $tags
  */
 ?>
 <div class="row">
