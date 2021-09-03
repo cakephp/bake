@@ -72,6 +72,10 @@ class FixtureCommand extends BakeCommand
             'help' => 'When using generated data, the number of records to include in the fixture(s).',
             'short' => 'n',
             'default' => 1,
+        ])->addOption('fields', [
+            'help' => 'Create a fixture that includes the deprecated $fields property.',
+            'short' => 'f',
+            'boolean' => true,
         ])->addOption('schema', [
             'help' => 'Create a fixture that imports schema, instead of dumping a schema snapshot into the fixture.',
             'short' => 's',
@@ -226,6 +230,9 @@ class FixtureCommand extends BakeCommand
             $defaults['namespace'] = $this->_pluginNamespace($this->plugin);
         }
         $vars = $otherVars + $defaults;
+        if (!$args->getOption('fields')) {
+            $vars['schema'] = null;
+        }
 
         $path = $this->getPath($args);
         $filename = $vars['name'] . 'Fixture.php';
