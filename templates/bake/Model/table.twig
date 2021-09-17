@@ -40,7 +40,13 @@ class {{ name }}Table extends Table
 {% endif %}
 
 {%- if displayField %}
+    {%- if displayField is iterable %}
+        $this->setDisplayField(['{{ displayField|join("', '")|raw }}']);
+        {{- "\n" }}
+    {%- else %}
         $this->setDisplayField('{{ displayField }}');
+        {{- "\n" }}
+    {%- endif %}
 {% endif %}
 
 {%- if primaryKey %}
