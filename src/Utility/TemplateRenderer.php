@@ -69,7 +69,7 @@ class TemplateRenderer
         }
 
         $this->viewBuilder()
-            ->setHelpers(['Bake.Bake', 'Bake.DocBlock'])
+            ->addhelpers(['Bake.Bake', 'Bake.DocBlock'])
             ->setTheme($this->theme);
 
         $view = $this->createView(BakeView::class);
