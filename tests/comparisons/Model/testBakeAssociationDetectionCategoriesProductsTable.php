@@ -41,7 +41,7 @@ class CategoriesProductsTable extends Table
         parent::initialize($config);
 
         $this->setTable('categories_products');
-        $this->setDisplayField('category_id');
+        $this->setDisplayField(['category_id', 'product_id']);
         $this->setPrimaryKey(['category_id', 'product_id']);
 
         $this->belongsTo('Categories', [
