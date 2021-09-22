@@ -29,6 +29,7 @@ class PostsControllerTest extends TestCase
      * Test index method
      *
      * @return void
+     * @uses \Bake\Test\App\Controller\PostsController::index()
      */
     public function testIndex(): void
     {

@@ -76,7 +76,7 @@ class {{ className }}Test extends TestCase
      *
      * @var array
      */
-    protected $fixtures = [{{ Bake.stringifyList(fixtures|values)|raw }}];
+    protected $fixtures = {{ Bake.exportVar(fixtures|values, 1)|raw }};
 {% if construction or methods %}
 
 {% endif %}
@@ -130,6 +130,7 @@ class {{ className }}Test extends TestCase
      * Test {{ method }} method
      *
      * @return void
+     * @uses \{{ fullClassName }}::{{ method }}()
      */
     public function test{{ method|camelize }}(): void
     {

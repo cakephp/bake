@@ -186,4 +186,46 @@ class AllCommandTest extends TestCase
         );
         $this->assertOutputContains('Bake All complete');
     }
+
+    /**
+     * Test docblock @uses generated for test methods
+     *
+     * @return void
+     */
+    public function testGenerateUsesDocBlockController()
+    {
+        $path = APP;
+        $testsPath = ROOT . 'tests' . DS;
+        $templatesPath = ROOT . 'templates' . DS;
+
+        $this->generatedFiles = [
+            $templatesPath . 'Products/add.php',
+            $templatesPath . 'Products/edit.php',
+            $templatesPath . 'Products/index.php',
+            $templatesPath . 'Products/view.php',
+            $path . 'Controller/ProductsController.php',
+            $path . 'Model/Table/ProductsTable.php',
+            $path . 'Model/Entity/Product.php',
+            $testsPath . 'Fixture/ProductsFixture.php',
+            $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
+            $testsPath . 'TestCase/Controller/ProductsControllerTest.php',
+        ];
+        $this->exec('bake all --connection test Products', ['y', 'y', 'y', 'y']);
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileContains(
+            '@uses \Bake\Test\App\Controller\ProductsController::index()',
+            $testsPath . 'TestCase/Controller/ProductsControllerTest.php'
+        );
+        $this->assertFileContains(
+            '@uses \Bake\Test\App\Model\Table\ProductsTable::validationDefault()',
+            $testsPath . 'TestCase/Model/Table/ProductsTableTest.php'
+        );
+        $this->assertOutputContains('Bake All complete');
+        foreach ($this->generatedFiles as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
+    }
 }

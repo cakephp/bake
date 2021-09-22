@@ -29,6 +29,7 @@ class PostsControllerTest extends TestCase
      * Test index method
      *
      * @return void
+     * @uses \Bake\Test\App\Controller\Admin\PostsController::index()
      */
     public function testIndex(): void
     {
@@ -39,6 +40,7 @@ class PostsControllerTest extends TestCase
      * Test add method
      *
      * @return void
+     * @uses \Bake\Test\App\Controller\Admin\PostsController::add()
      */
     public function testAdd(): void
     {
