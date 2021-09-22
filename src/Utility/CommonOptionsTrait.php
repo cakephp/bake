@@ -73,12 +73,11 @@ trait CommonOptionsTrait
     }
 
     /**
-     * Set common options used by all bake tasks.
+     * Get available bake themes
      *
-     * @param \Cake\Console\ConsoleOptionParser $parser Options parser.
-     * @return \Cake\Console\ConsoleOptionParser
+     * @return array
      */
-    protected function _setCommonOptions(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function _getBakeThemes(): array
     {
         $bakeThemes = [];
         $templates = 'templates' . DS . 'bake';
@@ -89,6 +88,17 @@ trait CommonOptionsTrait
             }
         }
 
+        return $bakeThemes;
+    }
+
+    /**
+     * Set common options used by all bake tasks.
+     *
+     * @param \Cake\Console\ConsoleOptionParser $parser Options parser.
+     * @return \Cake\Console\ConsoleOptionParser
+     */
+    protected function _setCommonOptions(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
         $parser->addOption('plugin', [
             'short' => 'p',
             'help' => 'Plugin to bake into.',
@@ -104,7 +114,7 @@ trait CommonOptionsTrait
             'short' => 't',
             'help' => 'The theme to use when baking code.',
             'default' => Configure::read('Bake.theme') ?? '',
-            'choices' => $bakeThemes,
+            'choices' => $this->_getBakeThemes(),
         ]);
 
         return $parser;

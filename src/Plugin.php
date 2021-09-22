@@ -114,7 +114,7 @@ class Plugin extends BasePlugin
      * @param string $namespace The namespace classes are expected to be in.
      * @param string $path The path to look in.
      * @return string[]
-     * @phpstan-return class-string<\Bake\Command\BakeCommand>[]
+     * @psalm-return array<string, class-string<\Bake\Command\BakeCommand>>
      */
     protected function findInPath(string $namespace, string $path): array
     {
@@ -136,6 +136,7 @@ class Plugin extends BasePlugin
             if ($item->isDot() || $item->isDir()) {
                 continue;
             }
+            /** @psalm-var class-string<\Bake\Command\BakeCommand> $class */
             $class = $namespace . $item->getBasename('.php');
 
             if (!$hasSubfolder) {

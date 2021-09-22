@@ -14,7 +14,7 @@ bake は数分で完全に機能するアプリケーションを作成できま
 bake を使用したり拡張する前に、アプリケーションに bake をインストールしておいてください。
 bake は Composer を使ってインストールするプラグインとして提供されています。 ::
 
-    composer require --dev cakephp/bake:~1.0
+    composer require --dev cakephp/bake:"^2.0"
 
 上記のコマンドは、bake を開発環境で使用するパッケージとしてインストールします。
 この入れ方の場合、本番環境としてデプロイする際には、 bake はインストールされません。

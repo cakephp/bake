@@ -1,31 +1,33 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\Table;
+namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\Validation\Validator;
 use Cake\ORM\Table;
+use Cake\Validation\Validator;
 
 /**
- * BakeArticles Model
+ * TestBakeArticles Model
  *
- * @method \App\Model\Entity\BakeArticle newEmptyEntity()
- * @method \App\Model\Entity\BakeArticle newEntity(array $data, array $options = [])
- * @method \App\Model\Entity\BakeArticle[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\BakeArticle get($primaryKey, $options = [])
- * @method \App\Model\Entity\BakeArticle findOrCreate($search, ?callable $callback = null, $options = [])
- * @method \App\Model\Entity\BakeArticle patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\BakeArticle[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\BakeArticle|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\BakeArticle saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\BakeArticle[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle newEmptyEntity()
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle newEntity(array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle[] newEntities(array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle get($primaryKey, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TestBakeArticle[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class BakeArticlesTable extends Table
+class TestBakeArticlesTable extends Table
 {
     /**
      * Initialize method
@@ -35,9 +37,13 @@ class BakeArticlesTable extends Table
      */
     public function initialize(array $config): void
     {
+        parent::initialize($config);
+
+        $this->setTable('bake_articles');
+        $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
-        parent::initialize($config);
+        $this->addBehavior('Timestamp');
     }
 
     /**
@@ -56,17 +62,17 @@ class BakeArticlesTable extends Table
             ->scalar('name')
             ->maxLength('name', 100, 'Name must be shorter than 100 characters.')
             ->requirePresence('name', 'create')
-            ->allowEmptyString('name', false);
+            ->allowEmptyString('name', null, false);
 
         $validator
             ->nonNegativeInteger('count')
             ->requirePresence('count', 'create')
-            ->allowEmptyString('count', false);
+            ->allowEmptyString('count', null, false);
 
         $validator
             ->greaterThanOrEqual('price', 0)
             ->requirePresence('price', 'create')
-            ->allowEmptyString('price', false);
+            ->allowEmptyString('price', null, false);
 
         $validator
             ->email('email')
@@ -74,11 +80,13 @@ class BakeArticlesTable extends Table
             ->allowEmptyString('email');
 
         $validator
-            ->uploadError('image', true)
-            ->uploadedFile('image', ['optional' => true, 'types' => ['image/jpeg']])
+            ->uploadedFile('image', [
+                'optional' => true,
+                'types' => ['image/jpeg'],
+            ])
             ->allowEmptyFile('image');
 
-        return parent::validationDefault($validator);
+        return $validator;
     }
 
     /**

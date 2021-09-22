@@ -369,6 +369,15 @@ class PluginCommand extends BakeCommand
         ])->addOption('composer', [
             'default' => ROOT . DS . 'composer.phar',
             'help' => 'The path to the composer executable.',
+        ])->addOption('force', [
+            'short' => 'f',
+            'boolean' => true,
+            'help' => 'Force overwriting existing files without prompting.',
+        ])->addOption('theme', [
+            'short' => 't',
+            'help' => 'The theme to use when baking code.',
+            'default' => Configure::read('Bake.theme') ?? '',
+            'choices' => $this->_getBakeThemes(),
         ]);
 
         return $parser;

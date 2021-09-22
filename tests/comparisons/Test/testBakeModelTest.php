@@ -58,6 +58,7 @@ class ArticlesTableTest extends TestCase
      * Test findPublished method
      *
      * @return void
+     * @uses \Bake\Test\App\Model\Table\ArticlesTable::findPublished()
      */
     public function testFindPublished(): void
     {
@@ -68,6 +69,7 @@ class ArticlesTableTest extends TestCase
      * Test doSomething method
      *
      * @return void
+     * @uses \Bake\Test\App\Model\Table\ArticlesTable::doSomething()
      */
     public function testDoSomething(): void
     {
@@ -78,6 +80,7 @@ class ArticlesTableTest extends TestCase
      * Test doSomethingElse method
      *
      * @return void
+     * @uses \Bake\Test\App\Model\Table\ArticlesTable::doSomethingElse()
      */
     public function testDoSomethingElse(): void
     {

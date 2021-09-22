@@ -2,6 +2,7 @@
 /**
  * @var \Bake\Test\App\View\AppView $this
  * @var \Cake\Datasource\EntityInterface $author
+ * @var string[]|\Cake\Collection\CollectionInterface $roles
  */
 ?>
 <div class="row">
