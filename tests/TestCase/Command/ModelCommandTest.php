@@ -1264,7 +1264,7 @@ class ModelCommandTest extends TestCase
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
-        $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
+        $this->assertFileDoesNotExist(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
     }
 
     /**
@@ -1282,8 +1282,8 @@ class ModelCommandTest extends TestCase
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
-        $this->assertFileNotExists(ROOT . 'tests/Fixture/TodoItemsFixture.php');
-        $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
+        $this->assertFileDoesNotExist(ROOT . 'tests/Fixture/TodoItemsFixture.php');
+        $this->assertFileDoesNotExist(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
     }
 
     /**
@@ -1302,7 +1302,7 @@ class ModelCommandTest extends TestCase
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
-        $this->assertFileNotExists(ROOT . 'tests/Fixture/TodoItemsFixture.php');
+        $this->assertFileDoesNotExist(ROOT . 'tests/Fixture/TodoItemsFixture.php');
     }
 
     /**

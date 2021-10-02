@@ -291,7 +291,7 @@ class ControllerCommandTest extends TestCase
         $this->exec('bake controller --connection test --no-test BakeArticles');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
-        $this->assertFileNotExists(ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php');
+        $this->assertFileDoesNotExist(ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php');
         $this->assertFileExists($this->generatedFile);
     }
 

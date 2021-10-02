@@ -91,11 +91,11 @@ class ModelAllCommandTest extends TestCase
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
 
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             APP . 'Model/Table/TodoItemsTable.php',
             'Table should not be created as options should be forwarded'
         );
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php',
             'Table test should not be created as options should be forwarded'
         );

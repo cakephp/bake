@@ -87,7 +87,7 @@ class ControllerAllCommandTest extends TestCase
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
 
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php',
             'Test should not be created as options should be forwarded'
         );
