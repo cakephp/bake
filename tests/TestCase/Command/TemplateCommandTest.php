@@ -637,11 +637,11 @@ class TemplateCommandTest extends TestCase
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             ROOT . 'templates/TemplateTaskComments/edit.php',
             'no extra files'
         );
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             ROOT . 'templates/TemplateTaskComments/add.php',
             'no extra files'
         );
@@ -663,11 +663,11 @@ class TemplateCommandTest extends TestCase
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             ROOT . 'templates/TemplateTaskComments/edit.php',
             'no extra files'
         );
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             ROOT . 'templates/TemplateTaskComments/view.php',
             'no extra files'
         );
@@ -688,7 +688,7 @@ class TemplateCommandTest extends TestCase
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             $path . 'Comments/view.php',
             'No other templates made'
         );
