@@ -16,12 +16,14 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Bake\Utility\SubsetSchemaCollection;
 use Bake\Utility\TableScanner;
 use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
+use Cake\Database\Connection;
 use Cake\Database\Exception;
 use Cake\Database\Schema\TableSchema;
 use Cake\Database\Schema\TableSchemaInterface;
@@ -76,6 +78,16 @@ class ModelCommand extends BakeCommand
             }
 
             return static::CODE_SUCCESS;
+        }
+
+        // Disable caching before baking with connection
+        $connection = ConnectionManager::get($this->connection);
+        if ($connection instanceof Connection) {
+            $collection = $connection->getSchemaCollection();
+            if (!$collection instanceof SubsetSchemaCollection) {
+                $connection->cacheMetadata(false);
+                $connection->getCacher()->clear();
+            }
         }
 
         $this->bake($this->_camelize($name), $args, $io);

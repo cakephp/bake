@@ -101,11 +101,11 @@ class ModelCommandTest extends TestCase
     }
 
     /**
-     * Test getName() method.
+     * Test getNameName() method.
      *
      * @return void
      */
-    public function testGetTable()
+    public function testgetTable()
     {
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
