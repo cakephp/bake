@@ -42,8 +42,8 @@ abstract class TestCase extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-
         Router::reload();
+
         $this->loadPlugins(['Cake/TwigView']);
     }
 
