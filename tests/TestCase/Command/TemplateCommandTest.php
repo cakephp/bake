@@ -49,6 +49,7 @@ class TemplateCommandTest extends TestCase
         'plugin.Bake.BakeTemplateRoles',
         'plugin.Bake.BakeTemplateProfiles',
         'plugin.Bake.CategoryThreads',
+        'plugin.Bake.HiddenFields',
     ];
 
     /**
@@ -299,6 +300,7 @@ class TemplateCommandTest extends TestCase
             'singularHumanName' => 'Test Template Model',
             'pluralHumanName' => 'Test Template Models',
             'fields' => ['id', 'name', 'body'],
+            'hidden' => ['token', 'password', 'passwd'],
             'associations' => [],
             'keyFields' => [],
             'namespace' => $namespace,
@@ -329,6 +331,7 @@ class TemplateCommandTest extends TestCase
             'singularHumanName' => 'Template Task Comment',
             'pluralHumanName' => 'Template Task Comments',
             'fields' => ['id', 'name', 'body'],
+            'hidden' => ['token', 'password', 'passwd'],
             'associations' => [
                 'belongsTo' => [
                     'Authors' => [
@@ -373,6 +376,7 @@ class TemplateCommandTest extends TestCase
             'singularHumanName' => 'Test Template Model',
             'pluralHumanName' => 'Test Template Models',
             'fields' => ['id', 'name', 'body'],
+            'hidden' => ['token', 'password', 'passwd'],
             'associations' => [],
             'keyFields' => [],
             'namespace' => $namespace,
@@ -414,6 +418,7 @@ class TemplateCommandTest extends TestCase
             'singularHumanName' => 'Test Template Model',
             'pluralHumanName' => 'Test Template Models',
             'fields' => ['id', 'title', 'body'],
+            'hidden' => ['token', 'password', 'passwd'],
             'keyFields' => [],
             'associations' => [],
             'namespace' => $namespace,
@@ -438,6 +443,23 @@ class TemplateCommandTest extends TestCase
     {
         $this->generatedFile = ROOT . 'templates/Authors/view.php';
         $this->exec('bake template authors view');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * Test generating view template with hidden fields
+     *
+     * @return void
+     */
+    public function testBakeViewHiddenFields()
+    {
+        $this->generatedFile = ROOT . 'templates/HiddenFields/view.php';
+        $this->exec('bake template HiddenFields view');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
@@ -489,6 +511,23 @@ class TemplateCommandTest extends TestCase
     {
         $this->generatedFile = ROOT . 'templates/TemplateTaskComments/index.php';
         $this->exec('bake template template_task_comments index');
+
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * Test generating index template with hidden fields
+     *
+     * @return void
+     */
+    public function testBakeIndexHiddenFields()
+    {
+        $this->generatedFile = ROOT . 'templates/HiddenFields/index.php';
+        $this->exec('bake template HiddenFields index');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
