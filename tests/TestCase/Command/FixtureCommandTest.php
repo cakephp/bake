@@ -16,7 +16,9 @@ declare(strict_types=1);
  */
 namespace Bake\Test\TestCase\Command;
 
+use Bake\Command\FixtureCommand;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\Exception\StopException;
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Postgres;
@@ -56,15 +58,31 @@ class FixtureCommandTest extends TestCase
     }
 
     /**
-     * test generating a fixture with database rows.
+     * Tests validating supported table and column names.
+     */
+    public function testValidateNames(): void
+    {
+        $command = new FixtureCommand();
+        $command->connection = 'test';
+
+        $schema = $command->readSchema('Car', 'car');
+        $schema->addColumn('0invalid', ['type' => 'string', 'length' => null]);
+
+        $this->expectException(StopException::class);
+        $this->expectExceptionMessage('Unable to bake table with integer column names or names that start with digits. Found `0invalid`');
+        $command->validateNames($schema);
+    }
+
+    /**
+     * Test generating a fixture with database rows.
      *
      * @return void
      */
     public function testImportRecordsFromDatabase()
     {
-        $this->generatedFile = ROOT . 'tests/Fixture/UsersFixture.php';
-        $this->exec('bake fixture --connection test --schema --records --count 2 Users');
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->generatedFile = ROOT . 'tests/Fixture/DatatypesFixture.php';
+        $this->exec('bake fixture --connection test --schema --records --count 2 Datatypes');
+        $this->assertExitSuccess();
 
         $this->assertSameAsFile(
             __FUNCTION__ . '.php',

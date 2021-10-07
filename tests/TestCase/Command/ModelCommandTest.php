@@ -21,6 +21,7 @@ use Bake\Test\TestCase\TestCase;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
+use Cake\Console\Exception\StopException;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
@@ -157,6 +158,22 @@ class ModelCommandTest extends TestCase
         $result = $command->getTableObject('Authors', 'todo_items');
         $this->assertSame('my_prefix_todo_items', $result->getTable());
         $this->assertInstanceOf('BakeTest\Model\Table\AuthorsTable', $result);
+    }
+
+    /**
+     * Tests validating supported table and column names.
+     */
+    public function testValidateNames(): void
+    {
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $schema = $command->getTableObject('TodoItems', 'todo_items')->getSchema();
+        $schema->addColumn('0invalid', ['type' => 'string', 'length' => null]);
+
+        $this->expectException(StopException::class);
+        $this->expectExceptionMessage('Unable to bake table with integer column names or names that start with digits. Found `0invalid`');
+        $command->validateNames($schema);
     }
 
     /**
