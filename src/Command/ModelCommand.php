@@ -16,15 +16,16 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Bake\Utility\SubsetSchemaCollection;
 use Bake\Utility\TableScanner;
 use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Console\Exception\StopException;
 use Cake\Core\Configure;
 use Cake\Database\Connection;
 use Cake\Database\Exception;
+use Cake\Database\Schema\CachedCollection;
 use Cake\Database\Schema\TableSchema;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
@@ -84,9 +85,9 @@ class ModelCommand extends BakeCommand
         $connection = ConnectionManager::get($this->connection);
         if ($connection instanceof Connection) {
             $collection = $connection->getSchemaCollection();
-            if (!$collection instanceof SubsetSchemaCollection) {
-                $connection->cacheMetadata(false);
+            if ($collection instanceof CachedCollection) {
                 $connection->getCacher()->clear();
+                $connection->cacheMetadata(false);
             }
         }
 
@@ -107,11 +108,31 @@ class ModelCommand extends BakeCommand
     {
         $table = $this->getTable($name, $args);
         $tableObject = $this->getTableObject($name, $table);
+        $this->validateNames($tableObject->getSchema());
         $data = $this->getTableContext($tableObject, $table, $name, $args, $io);
         $this->bakeTable($tableObject, $data, $args, $io);
         $this->bakeEntity($tableObject, $data, $args, $io);
         $this->bakeFixture($tableObject->getAlias(), $tableObject->getTable(), $args, $io);
         $this->bakeTest($tableObject->getAlias(), $args, $io);
+    }
+
+    /**
+     * Validates table and column names are supported.
+     *
+     * @param \Cake\Database\Schema\TableSchemaInterface $schema Table schema
+     * @return void
+     * @throws \Cake\Console\Exception\StopException When table or column names are not supported
+     */
+    public function validateNames(TableSchemaInterface $schema): void
+    {
+        foreach ($schema->columns() as $column) {
+            if (!is_string($column) || !ctype_alpha($column[0])) {
+                throw new StopException(sprintf(
+                    'Unable to bake table with integer column names or names that start with digits. Found `%s`.',
+                    (string)$column
+                ));
+            }
+        }
     }
 
     /**

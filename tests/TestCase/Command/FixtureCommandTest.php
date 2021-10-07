@@ -16,7 +16,9 @@ declare(strict_types=1);
  */
 namespace Bake\Test\TestCase\Command;
 
+use Bake\Command\FixtureCommand;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\Exception\StopException;
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Postgres;
@@ -53,6 +55,22 @@ class FixtureCommandTest extends TestCase
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
         $this->setAppNamespace('Bake\Test\App');
         $this->useCommandRunner();
+    }
+
+    /**
+     * Tests validating supported table and column names.
+     */
+    public function testValidateNames(): void
+    {
+        $command = new FixtureCommand();
+        $command->connection = 'test';
+
+        $schema = $command->readSchema('Car', 'car');
+        $schema->addColumn('0invalid', ['type' => 'string', 'length' => null]);
+
+        $this->expectException(StopException::class);
+        $this->expectExceptionMessage('Unable to bake table with integer column names or names that start with digits. Found `0invalid`');
+        $command->validateNames($schema);
     }
 
     /**
