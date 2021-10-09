@@ -110,11 +110,6 @@ Syntaxe de Template de Bake
 Les fichiers de template de Bake utilisent la syntaxe de template de
 `Twig <https://twig.symfony.com/>`__.
 
-Une façon de voir/comprendre la façon dont les templates de Bake fonctionne,
-spécialement quand on essaie de modifier les fichiers de template de bake, est
-de créer une classe avec bake et de comparer le template utilisé avec le
-template déjà présent dans le dossier **tmp/bake** de votre application.
-
 Ainsi, par exemple, pour créer avec bake un shell comme ceci:
 
 .. code-block:: bash
@@ -156,7 +151,7 @@ ressemble à ceci::
         * Implémentez cette méthode avec la logique de votre commande.
         *
         * @param \Cake\Console\Arguments $args Les arguments de la commande.
-        * @param \Cake\Console\ConsoleIo $io La console il 
+        * @param \Cake\Console\ConsoleIo $io La console il
         * @return null|void|int Le code de sortie ou null pour un succès
         */
         public function execute(Arguments $args, ConsoleIo $io)

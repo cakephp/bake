@@ -109,11 +109,6 @@ Sintaxe de Templates do Bake
 
 Os arquivos de templates do Bake usam a sintaxe `Twig <https://twig.symfony.com/doc/2.x/>`__.
 
-Uma forma de ver e entender como o bake funciona, especialmente quando tentamos
-modificar os arquivos de templates, é executar o bake de uma classe que compara
-o template usado com o template pré-processado deixado anteriormente pela
-aplicação na pasta **tmp/bake**.
-
 Então, por exemplo, quando você executar algo como::
 
 .. code-block:: bash

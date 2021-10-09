@@ -102,11 +102,6 @@ Bake Template Syntax
 
 Bake template files use the `Twig <https://twig.symfony.com/>`__ template syntax.
 
-One way to see/understand how bake templates works, especially when attempting
-to modify bake template files, is to bake a class and compare the template used
-with the pre-processed template file which is left in the application's
-**tmp/bake** folder.
-
 So, for example, when baking a command like so:
 
 .. code-block:: bash
