@@ -6,16 +6,16 @@ namespace Bake\Test\App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * UsersFixture
+ * DatatypesFixture
  */
-class UsersFixture extends TestFixture
+class DatatypesFixture extends TestFixture
 {
     /**
      * Import
      *
      * @var array
      */
-    public $import = ['table' => 'users', 'connection' => 'test'];
+    public $import = ['table' => 'datatypes', 'connection' => 'test'];
 
     /**
      * Init method
@@ -27,17 +27,14 @@ class UsersFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'username' => 'mariano',
-                'password' => '$2a$10$u05j8FjsvLBNdfhBhc21LOuVMpzpabVXQ9OpC2wO3pSO0q6t7HHMO',
-                'created' => '2007-03-17 01:16:23',
-                'updated' => '2007-03-17 01:18:31',
-            ],
-            [
-                'id' => 2,
-                'username' => 'nate',
-                'password' => '$2a$10$u05j8FjsvLBNdfhBhc21LOuVMpzpabVXQ9OpC2wO3pSO0q6t7HHMO',
-                'created' => '2008-03-17 01:18:23',
-                'updated' => '2008-03-17 01:20:31',
+                'decimal_field' => '30.123',
+                'float_field' => 42.23,
+                'huge_int' => 1234567891234567891,
+                'small_int' => 1234,
+                'tiny_int' => 12,
+                'bool' => false,
+                'uuid' => null,
+                'timestamp_field' => '2007-03-17 01:16:23',
             ],
         ];
         parent::init();
