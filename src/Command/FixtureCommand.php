@@ -18,6 +18,7 @@ namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
 use Bake\Utility\TemplateRenderer;
+use Brick\VarExporter\VarExporter;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
@@ -432,26 +433,15 @@ class FixtureCommand extends BakeCommand
      */
     protected function _makeRecordString(array $records): string
     {
-        $out = "[\n";
-        foreach ($records as $record) {
-            $values = [];
-            foreach ($record as $field => $value) {
+        foreach ($records as &$record) {
+            array_walk($record, function (&$value) {
                 if ($value instanceof DateTimeInterface) {
                     $value = $value->format('Y-m-d H:i:s');
                 }
-                $val = var_export($value, true);
-                if ($val === 'NULL') {
-                    $val = 'null';
-                }
-                $values[] = "                '$field' => $val";
-            }
-            $out .= "            [\n";
-            $out .= implode(",\n", $values);
-            $out .= ",\n            ],\n";
+            });
         }
-        $out .= '        ]';
 
-        return $out;
+        return VarExporter::export($records, VarExporter::TRAILING_COMMA_IN_ARRAY, 2);
     }
 
     /**
