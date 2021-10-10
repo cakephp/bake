@@ -842,9 +842,14 @@ class ModelTask extends BakeTask
             return [];
         }
 
+        $uniqueColumns = ['username', 'login'];
+        if (in_array($model->getAlias(), ['Users', 'Accounts'])) {
+            $uniqueColumns[] = 'email';
+        }
+
         $rules = [];
         foreach ($fields as $fieldName) {
-            if (in_array($fieldName, ['username', 'email', 'login'])) {
+            if (in_array($fieldName, $uniqueColumns)) {
                 $rules[$fieldName] = ['name' => 'isUnique'];
             }
         }
