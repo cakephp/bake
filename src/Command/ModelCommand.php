@@ -887,10 +887,7 @@ class ModelCommand extends BakeCommand
             if ($constraint['type'] !== TableSchema::CONSTRAINT_UNIQUE) {
                 continue;
             }
-            if (count($constraint['columns']) > 1) {
-                continue;
-            }
-            $rules[$constraint['columns'][0]] = ['name' => 'isUnique'];
+            $rules[$constraint['columns'][0]] = ['name' => 'isUnique', 'fields' => $constraint['columns']];
         }
 
         if (empty($associations['belongsTo'])) {

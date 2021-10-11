@@ -56,6 +56,7 @@ class ModelCommandTest extends TestCase
         'plugin.Bake.Invitations',
         'plugin.Bake.NumberTrees',
         'plugin.Bake.Users',
+        'plugin.Bake.UniqueFields',
     ];
 
     /**
@@ -1223,6 +1224,7 @@ class ModelCommandTest extends TestCase
         $expected = [
             'title' => [
                 'name' => 'isUnique',
+                'fields' => ['title', 'user_id'],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1443,6 +1445,32 @@ class ModelCommandTest extends TestCase
             'belongsToMany' => [],
         ];
         $data['rulesChecker'] = [];
+        $command->bakeTable($tableObject, $data, $args, $io);
+
+        $result = file_get_contents($this->generatedFiles[0]);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * Tests generating table with rules checker.
+     */
+    public function testBakeTableRules(): void
+    {
+        $this->generatedFiles = [
+            APP . 'Model/Table/UniqueFieldsTable.php',
+        ];
+
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $name = 'UniqueFields';
+        $args = new Arguments([$name], ['table' => 'unique_fields', 'force' => true], []);
+        $io = new ConsoleIo($this->_out, $this->_err, $this->_in);
+
+        $table = $command->getTable($name, $args);
+        $tableObject = $command->getTableObject($name, $table);
+        $data = $command->getTableContext($tableObject, $table, $name, $args, $io);
+        $data['validation'] = [];
         $command->bakeTable($tableObject, $data, $args, $io);
 
         $result = file_get_contents($this->generatedFiles[0]);
