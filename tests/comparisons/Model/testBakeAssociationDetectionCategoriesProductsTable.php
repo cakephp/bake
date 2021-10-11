@@ -63,8 +63,8 @@ class CategoriesProductsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['category_id'], 'Categories'), ['errorField' => 'category_id']);
-        $rules->add($rules->existsIn(['product_id'], 'Products'), ['errorField' => 'product_id']);
+        $rules->add($rules->existsIn('category_id', 'Categories'), ['errorField' => 'category_id']);
+        $rules->add($rules->existsIn('product_id', 'Products'), ['errorField' => 'product_id']);
 
         return $rules;
     }

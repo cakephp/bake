@@ -879,7 +879,7 @@ class ModelCommand extends BakeCommand
         $rules = [];
         foreach ($fields as $fieldName) {
             if (in_array($fieldName, $uniqueColumns, true)) {
-                $rules[$fieldName] = ['name' => 'isUnique'];
+                $rules[$fieldName] = ['name' => 'isUnique', 'fields' => [$fieldName]];
             }
         }
         foreach ($schema->constraints() as $name) {

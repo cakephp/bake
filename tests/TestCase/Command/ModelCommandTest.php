@@ -1185,6 +1185,7 @@ class ModelCommandTest extends TestCase
         $expected = [
             'username' => [
                 'name' => 'isUnique',
+                'fields' => ['username'],
             ],
             'country_id' => [
                 'name' => 'existsIn',
