@@ -119,7 +119,7 @@ class {{ name }}Table extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
 {% for field, rule in rulesChecker %}
-{% set fields = Bake.exportArray(rule.fields is defined ? rule.fields : [field]) %}
+{% set fields = rule.fields is defined ? Bake.exportArray(rule.fields) : Bake.exportVar(field) %}
         $rules->add($rules->{{ rule.name }}({{ fields|raw }}{{ (rule.extra is defined and rule.extra ? (", '#{rule.extra}'") : '')|raw }}), ['errorField' => '{{ field }}']);
 {% endfor %}
 

@@ -66,7 +66,7 @@ class TodoTasksTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['todo_item_id'], 'TodoItems'), ['errorField' => 'todo_item_id']);
+        $rules->add($rules->existsIn('todo_item_id', 'TodoItems'), ['errorField' => 'todo_item_id']);
 
         return $rules;
     }
