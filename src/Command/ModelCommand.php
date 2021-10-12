@@ -798,7 +798,7 @@ class ModelCommand extends BakeCommand
 
         foreach ($schema->constraints() as $constraint) {
             $constraint = $schema->getConstraint($constraint);
-            if (!in_array($fieldName, $constraint['columns'], true) || count($constraint['columns']) > 1) {
+            if (!in_array($fieldName, $constraint['columns'], true)) {
                 continue;
             }
 
@@ -813,7 +813,18 @@ class ModelCommand extends BakeCommand
             ];
             $notDatetime = !in_array($metaData['type'], $timeTypes, true);
             if ($constraint['type'] === TableSchema::CONSTRAINT_UNIQUE && $notDatetime) {
-                $validation['unique'] = ['rule' => 'validateUnique', 'provider' => 'table'];
+                $rule = 'validateUnique';
+                if (count($constraint['columns']) > 1) {
+                    $rule = [
+                        'validateUnique', [
+                            'pass' => [
+                                // scope should contain the fields other than the validation field involved in check
+                                'scope' => array_values(array_diff($constraint['columns'], [$fieldName])),
+                            ],
+                        ],
+                    ];
+                }
+                $validation['unique'] = ['rule' => $rule, 'provider' => 'table'];
             }
         }
 

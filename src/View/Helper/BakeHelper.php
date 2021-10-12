@@ -373,13 +373,22 @@ class BakeHelper extends Helper
             }
 
             if ($rule['rule'] && isset($rule['provider'])) {
-                $validationMethods[] = sprintf(
-                    "->add('%s', '%s', ['rule' => '%s', 'provider' => '%s'])",
-                    $field,
-                    $ruleName,
-                    $rule['rule'],
-                    $rule['provider']
-                );
+                if (is_string($rule['rule'])) {
+                    $validationMethods[] = sprintf(
+                        "->add('%s', '%s', ['rule' => '%s', 'provider' => '%s'])",
+                        $field,
+                        $ruleName,
+                        $rule['rule'],
+                        $rule['provider']
+                    );
+                } else {
+                    $validationMethods[] = sprintf(
+                        "->add('%s', '%s', %s)",
+                        $field,
+                        $ruleName,
+                        $this->exportVar($rule, 3, VarExporter::INLINE_NUMERIC_SCALAR_ARRAY)
+                    );
+                }
                 continue;
             }
 

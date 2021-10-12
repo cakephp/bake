@@ -1201,9 +1201,6 @@ class ModelCommandTest extends TestCase
     /**
      * Tests the getRules with unique keys.
      *
-     * Multi-column constraints are ignored as they would
-     * require a break in compatibility.
-     *
      * @return void
      */
     public function testGetRulesUniqueKeys()
@@ -1213,7 +1210,7 @@ class ModelCommandTest extends TestCase
             'type' => 'unique',
             'columns' => ['title'],
         ]);
-        $model->getSchema()->addConstraint('ignored_constraint', [
+        $model->getSchema()->addConstraint('multi_unique', [
             'type' => 'unique',
             'columns' => ['title', 'user_id'],
         ]);
@@ -1444,6 +1441,32 @@ class ModelCommandTest extends TestCase
             'hasMany' => [],
             'belongsToMany' => [],
         ];
+        $data['rulesChecker'] = [];
+        $command->bakeTable($tableObject, $data, $args, $io);
+
+        $result = file_get_contents($this->generatedFiles[0]);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * Tests generating table validation with unique constraints.
+     */
+    public function testBakeTableValidationUnique(): void
+    {
+        $this->generatedFiles = [
+            APP . 'Model/Table/UniqueFieldsTable.php',
+        ];
+
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $name = 'UniqueFields';
+        $args = new Arguments([$name], ['table' => 'unique_fields', 'force' => true], []);
+        $io = new ConsoleIo($this->_out, $this->_err, $this->_in);
+
+        $table = $command->getTable($name, $args);
+        $tableObject = $command->getTableObject($name, $table);
+        $data = $command->getTableContext($tableObject, $table, $name, $args, $io);
         $data['rulesChecker'] = [];
         $command->bakeTable($tableObject, $data, $args, $io);
 
