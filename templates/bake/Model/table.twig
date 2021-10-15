@@ -120,7 +120,11 @@ class {{ name }}Table extends Table
     {
 {% for field, rule in rulesChecker %}
 {% set fields = rule.fields is defined ? Bake.exportArray(rule.fields) : Bake.exportVar(field) %}
-        $rules->add($rules->{{ rule.name }}({{ fields|raw }}{{ (rule.extra is defined and rule.extra ? (", '#{rule.extra}'") : '')|raw }}), ['errorField' => '{{ field }}']);
+{% set options = '' %}
+{% for optionName, optionValue in rule.options %}
+    {%~ set options = (loop.first ? '[' : options) ~ "'#{optionName}' => " ~ Bake.exportVar(optionValue) ~ (loop.last ? ']' : ', ') %}
+{% endfor %}
+        $rules->add($rules->{{ rule.name }}({{ fields|raw }}{{ (rule.extra|default ? ", '#{rule.extra}'" : '')|raw }}{{ (options ? ', ' ~ options : '')|raw }}), ['errorField' => '{{ field }}']);
 {% endfor %}
 
         return $rules;
