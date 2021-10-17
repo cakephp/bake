@@ -24,6 +24,7 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Exception\StopException;
 use Cake\Core\Configure;
 use Cake\Database\Connection;
+use Cake\Database\Driver\Sqlserver;
 use Cake\Database\Exception;
 use Cake\Database\Schema\CachedCollection;
 use Cake\Database\Schema\TableSchema;
@@ -879,7 +880,7 @@ class ModelCommand extends BakeCommand
         $rules = [];
         foreach ($fields as $fieldName) {
             if (in_array($fieldName, $uniqueColumns, true)) {
-                $rules[$fieldName] = ['name' => 'isUnique', 'fields' => [$fieldName]];
+                $rules[$fieldName] = ['name' => 'isUnique', 'fields' => [$fieldName], 'options' => []];
             }
         }
         foreach ($schema->constraints() as $name) {
@@ -887,7 +888,18 @@ class ModelCommand extends BakeCommand
             if ($constraint['type'] !== TableSchema::CONSTRAINT_UNIQUE) {
                 continue;
             }
-            $rules[$constraint['columns'][0]] = ['name' => 'isUnique', 'fields' => $constraint['columns']];
+
+            $options = [];
+            $fields = $constraint['columns'];
+            foreach ($fields as $field) {
+                if ($schema->isNullable($field)) {
+                    $allowMultiple = !ConnectionManager::get($this->connection)->getDriver() instanceof Sqlserver;
+                    $options['allowMultipleNulls'] = $allowMultiple;
+                    break;
+                }
+            }
+
+            $rules[$constraint['columns'][0]] = ['name' => 'isUnique', 'fields' => $fields, 'options' => $options];
         }
 
         if (empty($associations['belongsTo'])) {
@@ -895,7 +907,7 @@ class ModelCommand extends BakeCommand
         }
 
         foreach ($associations['belongsTo'] as $assoc) {
-            $rules[$assoc['foreignKey']] = ['name' => 'existsIn', 'extra' => $assoc['alias']];
+            $rules[$assoc['foreignKey']] = ['name' => 'existsIn', 'extra' => $assoc['alias'], 'options' => []];
         }
 
         return $rules;

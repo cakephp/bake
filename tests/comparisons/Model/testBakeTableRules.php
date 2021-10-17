@@ -52,7 +52,7 @@ class UniqueFieldsTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
-        $rules->add($rules->isUnique(['field_1', 'field_2']), ['errorField' => 'field_1']);
+        $rules->add($rules->isUnique(['field_1', 'field_2'], ['allowMultipleNulls' => true]), ['errorField' => 'field_1']);
 
         return $rules;
     }

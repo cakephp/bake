@@ -1186,14 +1186,17 @@ class ModelCommandTest extends TestCase
             'username' => [
                 'name' => 'isUnique',
                 'fields' => ['username'],
+                'options' => [],
             ],
             'country_id' => [
                 'name' => 'existsIn',
                 'extra' => 'Countries',
+                'options' => [],
             ],
             'site_id' => [
                 'name' => 'existsIn',
                 'extra' => 'Sites',
+                'options' => [],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1226,6 +1229,7 @@ class ModelCommandTest extends TestCase
             'title' => [
                 'name' => 'isUnique',
                 'fields' => ['title', 'user_id'],
+                'options' => [],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1475,7 +1479,11 @@ class ModelCommandTest extends TestCase
         $command->bakeTable($tableObject, $data, $args, $io);
 
         $result = file_get_contents($this->generatedFiles[0]);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+        $expected = file_get_contents($this->_compareBasePath . __FUNCTION__ . '.php');
+        if (ConnectionManager::get('test')->getDriver() instanceof Sqlserver) {
+            $expected = preg_replace("/'allowMultipleNulls' => true/", "'allowMultipleNulls' => false", $expected);
+        }
+        $this->assertTextEquals($expected, $result, 'Content does not match file ' . __FUNCTION__ . '.php');
     }
 
     /**
