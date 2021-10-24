@@ -20,6 +20,9 @@ use Cake\Routing\Router;
 use Cake\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\StringCompareTrait;
 use Cake\TestSuite\TestCase as BaseTestCase;
+use PHPUnit\Framework\Constraint\FileExists;
+use PHPUnit\Framework\Constraint\LogicalNot;
+use PHPUnit\Framework\Constraint\RegularExpression;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -39,8 +42,8 @@ abstract class TestCase extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-
         Router::reload();
+
         $this->loadPlugins(['Cake/TwigView']);
     }
 
@@ -82,6 +85,21 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
+     * Asserts that a string matches a given regular expression.
+     *
+     * @param string $pattern Regex pattern
+     * @param string $string String to test
+     * @param string $message Message
+     * @return void
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @codeCoverageIgnore
+     */
+    public static function assertMatchesRegularExpression(string $pattern, string $string, string $message = ''): void
+    {
+        static::assertThat($string, new RegularExpression($pattern), $message);
+    }
+
+    /**
      * Assert that a list of files exist.
      *
      * @param array $files The list of files to check.
@@ -92,6 +110,20 @@ abstract class TestCase extends BaseTestCase
         foreach ($files as $file) {
             $this->assertFileExists($file, $message);
         }
+    }
+
+    /**
+     * Asserts that a file does not exist.
+     *
+     * @param string $filename Filename
+     * @param string $message Message
+     * @return void
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @codeCoverageIgnore
+     */
+    public static function assertFileDoesNotExist(string $filename, string $message = ''): void
+    {
+        static::assertThat($filename, new LogicalNot(new FileExists()), $message);
     }
 
     /**

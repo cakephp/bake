@@ -21,8 +21,12 @@ use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Console\Exception\StopException;
 use Cake\Core\Configure;
+use Cake\Database\Connection;
+use Cake\Database\Driver\Sqlserver;
 use Cake\Database\Exception;
+use Cake\Database\Schema\CachedCollection;
 use Cake\Database\Schema\TableSchema;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
@@ -78,6 +82,16 @@ class ModelCommand extends BakeCommand
             return static::CODE_SUCCESS;
         }
 
+        // Disable caching before baking with connection
+        $connection = ConnectionManager::get($this->connection);
+        if ($connection instanceof Connection) {
+            $collection = $connection->getSchemaCollection();
+            if ($collection instanceof CachedCollection) {
+                $connection->getCacher()->clear();
+                $connection->cacheMetadata(false);
+            }
+        }
+
         $this->bake($this->_camelize($name), $args, $io);
 
         return static::CODE_SUCCESS;
@@ -95,11 +109,31 @@ class ModelCommand extends BakeCommand
     {
         $table = $this->getTable($name, $args);
         $tableObject = $this->getTableObject($name, $table);
+        $this->validateNames($tableObject->getSchema());
         $data = $this->getTableContext($tableObject, $table, $name, $args, $io);
         $this->bakeTable($tableObject, $data, $args, $io);
         $this->bakeEntity($tableObject, $data, $args, $io);
         $this->bakeFixture($tableObject->getAlias(), $tableObject->getTable(), $args, $io);
         $this->bakeTest($tableObject->getAlias(), $args, $io);
+    }
+
+    /**
+     * Validates table and column names are supported.
+     *
+     * @param \Cake\Database\Schema\TableSchemaInterface $schema Table schema
+     * @return void
+     * @throws \Cake\Console\Exception\StopException When table or column names are not supported
+     */
+    public function validateNames(TableSchemaInterface $schema): void
+    {
+        foreach ($schema->columns() as $column) {
+            if (!is_string($column) || !ctype_alpha($column[0])) {
+                throw new StopException(sprintf(
+                    'Unable to bake table with integer column names or names that start with digits. Found `%s`.',
+                    (string)$column
+                ));
+            }
+        }
     }
 
     /**
@@ -472,16 +506,14 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model The model to introspect.
      * @param \Cake\Console\Arguments $args CLI Arguments
-     * @return string|null
-     * @psalm-suppress InvalidReturnType
+     * @return array<string>|string|null
      */
-    public function getDisplayField(Table $model, Arguments $args): ?string
+    public function getDisplayField(Table $model, Arguments $args)
     {
         if ($args->getOption('display-field')) {
             return (string)$args->getOption('display-field');
         }
 
-        /** @psalm-suppress InvalidReturnStatement */
         return $model->getDisplayField();
     }
 
@@ -848,7 +880,7 @@ class ModelCommand extends BakeCommand
         $rules = [];
         foreach ($fields as $fieldName) {
             if (in_array($fieldName, $uniqueColumns, true)) {
-                $rules[$fieldName] = ['name' => 'isUnique'];
+                $rules[$fieldName] = ['name' => 'isUnique', 'fields' => [$fieldName], 'options' => []];
             }
         }
         foreach ($schema->constraints() as $name) {
@@ -856,10 +888,18 @@ class ModelCommand extends BakeCommand
             if ($constraint['type'] !== TableSchema::CONSTRAINT_UNIQUE) {
                 continue;
             }
-            if (count($constraint['columns']) > 1) {
-                continue;
+
+            $options = [];
+            $fields = $constraint['columns'];
+            foreach ($fields as $field) {
+                if ($schema->isNullable($field)) {
+                    $allowMultiple = !ConnectionManager::get($this->connection)->getDriver() instanceof Sqlserver;
+                    $options['allowMultipleNulls'] = $allowMultiple;
+                    break;
+                }
             }
-            $rules[$constraint['columns'][0]] = ['name' => 'isUnique'];
+
+            $rules[$constraint['columns'][0]] = ['name' => 'isUnique', 'fields' => $fields, 'options' => $options];
         }
 
         if (empty($associations['belongsTo'])) {
@@ -867,7 +907,7 @@ class ModelCommand extends BakeCommand
         }
 
         foreach ($associations['belongsTo'] as $assoc) {
-            $rules[$assoc['foreignKey']] = ['name' => 'existsIn', 'extra' => $assoc['alias']];
+            $rules[$assoc['foreignKey']] = ['name' => 'existsIn', 'extra' => $assoc['alias'], 'options' => []];
         }
 
         return $rules;

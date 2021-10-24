@@ -40,7 +40,7 @@ class {{ name }}Table extends Table
 {% endif %}
 
 {%- if displayField %}
-        $this->setDisplayField('{{ displayField }}');
+        $this->setDisplayField({{ (displayField is iterable ? Bake.exportArray(displayField) : Bake.exportVar(displayField))|raw }});
 {% endif %}
 
 {%- if primaryKey %}
@@ -119,7 +119,12 @@ class {{ name }}Table extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
 {% for field, rule in rulesChecker %}
-        $rules->add($rules->{{ rule.name }}(['{{ field }}']{{ (rule.extra is defined and rule.extra ? (", '#{rule.extra}'") : '')|raw }}), ['errorField' => '{{ field }}']);
+{% set fields = rule.fields is defined ? Bake.exportArray(rule.fields) : Bake.exportVar(field) %}
+{% set options = '' %}
+{% for optionName, optionValue in rule.options %}
+    {%~ set options = (loop.first ? '[' : options) ~ "'#{optionName}' => " ~ Bake.exportVar(optionValue) ~ (loop.last ? ']' : ', ') %}
+{% endfor %}
+        $rules->add($rules->{{ rule.name }}({{ fields|raw }}{{ (rule.extra|default ? ", '#{rule.extra}'" : '')|raw }}{{ (options ? ', ' ~ options : '')|raw }}), ['errorField' => '{{ field }}']);
 {% endfor %}
 
         return $rules;

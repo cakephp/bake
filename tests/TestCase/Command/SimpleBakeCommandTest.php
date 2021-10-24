@@ -88,7 +88,7 @@ class SimpleBakeCommandTest extends TestCase
         $this->exec('bake behavior --no-test Example');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
-        $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php');
+        $this->assertFileDoesNotExist(ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php');
         $this->assertFileContains('class ExampleBehavior extends Behavior', $this->generatedFile);
     }
 

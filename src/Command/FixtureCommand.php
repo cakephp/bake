@@ -18,9 +18,11 @@ namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
 use Bake\Utility\TemplateRenderer;
+use Brick\VarExporter\VarExporter;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Console\Exception\StopException;
 use Cake\Core\Configure;
 use Cake\Database\Exception;
 use Cake\Database\Schema\TableSchemaInterface;
@@ -72,6 +74,10 @@ class FixtureCommand extends BakeCommand
             'help' => 'When using generated data, the number of records to include in the fixture(s).',
             'short' => 'n',
             'default' => 1,
+        ])->addOption('fields', [
+            'help' => 'Create a fixture that includes the deprecated $fields property.',
+            'short' => 'f',
+            'boolean' => true,
         ])->addOption('schema', [
             'help' => 'Create a fixture that imports schema, instead of dumping a schema snapshot into the fixture.',
             'short' => 's',
@@ -162,6 +168,8 @@ class FixtureCommand extends BakeCommand
             $data = $this->readSchema($model, $useTable);
         }
 
+        $this->validateNames($data);
+
         if ($modelImport === null) {
             $schema = $this->_generateSchema($data);
         }
@@ -203,6 +211,25 @@ class FixtureCommand extends BakeCommand
     }
 
     /**
+     * Validates table and column names are supported.
+     *
+     * @param \Cake\Database\Schema\TableSchemaInterface $schema Table schema
+     * @return void
+     * @throws \Cake\Console\Exception\StopException When table or column names are not supported
+     */
+    public function validateNames(TableSchemaInterface $schema): void
+    {
+        foreach ($schema->columns() as $column) {
+            if (!is_string($column) || !ctype_alpha($column[0])) {
+                throw new StopException(sprintf(
+                    'Unable to bake table with integer column names or names that start with digits. Found `%s`.',
+                    (string)$column
+                ));
+            }
+        }
+    }
+
+    /**
      * Generate the fixture file, and write to disk
      *
      * @param \Cake\Console\Arguments $args The CLI arguments.
@@ -226,6 +253,9 @@ class FixtureCommand extends BakeCommand
             $defaults['namespace'] = $this->_pluginNamespace($this->plugin);
         }
         $vars = $otherVars + $defaults;
+        if (!$args->getOption('fields')) {
+            $vars['schema'] = null;
+        }
 
         $path = $this->getPath($args);
         $filename = $vars['name'] . 'Fixture.php';
@@ -403,26 +433,15 @@ class FixtureCommand extends BakeCommand
      */
     protected function _makeRecordString(array $records): string
     {
-        $out = "[\n";
-        foreach ($records as $record) {
-            $values = [];
-            foreach ($record as $field => $value) {
+        foreach ($records as &$record) {
+            array_walk($record, function (&$value) {
                 if ($value instanceof DateTimeInterface) {
                     $value = $value->format('Y-m-d H:i:s');
                 }
-                $val = var_export($value, true);
-                if ($val === 'NULL') {
-                    $val = 'null';
-                }
-                $values[] = "                '$field' => $val";
-            }
-            $out .= "            [\n";
-            $out .= implode(",\n", $values);
-            $out .= ",\n            ],\n";
+            });
         }
-        $out .= '        ]';
 
-        return $out;
+        return VarExporter::export($records, VarExporter::TRAILING_COMMA_IN_ARRAY, 2);
     }
 
     /**

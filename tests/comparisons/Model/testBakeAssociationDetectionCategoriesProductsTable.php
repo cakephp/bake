@@ -41,7 +41,7 @@ class CategoriesProductsTable extends Table
         parent::initialize($config);
 
         $this->setTable('categories_products');
-        $this->setDisplayField('category_id');
+        $this->setDisplayField(['category_id', 'product_id']);
         $this->setPrimaryKey(['category_id', 'product_id']);
 
         $this->belongsTo('Categories', [
@@ -63,8 +63,8 @@ class CategoriesProductsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['category_id'], 'Categories'), ['errorField' => 'category_id']);
-        $rules->add($rules->existsIn(['product_id'], 'Products'), ['errorField' => 'product_id']);
+        $rules->add($rules->existsIn('category_id', 'Categories'), ['errorField' => 'category_id']);
+        $rules->add($rules->existsIn('product_id', 'Products'), ['errorField' => 'product_id']);
 
         return $rules;
     }
