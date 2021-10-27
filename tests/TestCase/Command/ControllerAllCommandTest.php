@@ -82,7 +82,7 @@ class ControllerAllCommandTest extends TestCase
 
             $this->generatedFiles[] = APP . "Controller/{$plural}Controller.php";
         }
-        $this->exec('bake controller all --connection test --no-test');
+        $this->exec('bake controller all --connection test --no-test --quiet');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
