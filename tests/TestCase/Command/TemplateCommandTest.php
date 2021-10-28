@@ -43,7 +43,6 @@ class TemplateCommandTest extends TestCase
         'core.ArticlesTags',
         'core.Posts',
         'core.Comments',
-        'core.TestPluginComments',
         'plugin.Bake.BakeArticles',
         'plugin.Bake.BakeTemplateAuthors',
         'plugin.Bake.BakeTemplateRoles',
