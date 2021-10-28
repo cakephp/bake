@@ -33,8 +33,8 @@ class TemplateAllCommandTest extends TestCase
      * @var array
      */
     protected $fixtures = [
-        'core.Articles',
-        'core.Comments',
+        'plugin.Bake.Articles',
+        'plugin.Bake.Comments',
     ];
 
     /**

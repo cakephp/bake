@@ -41,7 +41,7 @@ class TestCommandTest extends TestCase
         'plugin.Bake.BakeArticlesBakeTags',
         'plugin.Bake.BakeComments',
         'plugin.Bake.BakeTags',
-        'core.Authors',
+        'plugin.Bake.Authors',
     ];
 
     /**
