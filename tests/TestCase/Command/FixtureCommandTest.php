@@ -35,8 +35,8 @@ class FixtureCommandTest extends TestCase
      * @var array
      */
     protected $fixtures = [
-        'core.Articles',
-        'core.Comments',
+        'plugin.Bake.Articles',
+        'plugin.Bake.Comments',
         'plugin.Bake.Datatypes',
         'plugin.Bake.BinaryTests',
         'plugin.Bake.BakeCar',

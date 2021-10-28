@@ -23,7 +23,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 class BakeTemplateAuthorsFixture extends TestFixture
 {
     /**
-     * Avoid overriding core.authors
+     * Avoid overriding AuthorsFixture's table.
      *
      * @var string
      */

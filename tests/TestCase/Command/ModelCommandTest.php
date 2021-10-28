@@ -44,9 +44,9 @@ class ModelCommandTest extends TestCase
      * @var array
      */
     protected $fixtures = [
-        'core.Comments',
-        'core.Tags',
-        'core.ArticlesTags',
+        'plugin.Bake.Comments',
+        'plugin.Bake.Tags',
+        'plugin.Bake.ArticlesTags',
         'plugin.Bake.BakeArticles',
         'plugin.Bake.TodoTasks',
         'plugin.Bake.TodoItems',
