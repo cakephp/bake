@@ -29,6 +29,7 @@ use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
 use Cake\Database\Driver\Sqlserver;
 use Cake\Datasource\ConnectionManager;
+use Exception;
 
 /**
  * ModelCommand test class
@@ -164,17 +165,40 @@ class ModelCommandTest extends TestCase
     /**
      * Tests validating supported table and column names.
      */
-    public function testValidateNames(): void
+    public function testValidateNamesWithValid(): void
     {
         $command = new ModelCommand();
         $command->connection = 'test';
+
+        $io = $this->createMock(ConsoleIo::class);
+
+        $schema = $command->getTableObject('TodoItems', 'todo_items')->getSchema();
+        $schema->addColumn('_valid', ['type' => 'string', 'length' => null]);
+
+        $caught = null;
+        try {
+            $command->validateNames($schema, $io);
+        } catch (Exception $e) {
+            $caught = $e;
+        }
+        $this->assertNull($caught);
+    }
+
+    /**
+     * Tests validating supported table and column names.
+     */
+    public function testValidateNamesWithInvalid(): void
+    {
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $io = $this->createMock(ConsoleIo::class);
 
         $schema = $command->getTableObject('TodoItems', 'todo_items')->getSchema();
         $schema->addColumn('0invalid', ['type' => 'string', 'length' => null]);
 
         $this->expectException(StopException::class);
-        $this->expectExceptionMessage('Unable to bake table with integer column names or names that start with digits. Found `0invalid`');
-        $command->validateNames($schema);
+        $command->validateNames($schema, $this->createMock(ConsoleIo::class));
     }
 
     /**

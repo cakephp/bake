@@ -22,7 +22,6 @@ use Brick\VarExporter\VarExporter;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
-use Cake\Console\Exception\StopException;
 use Cake\Core\Configure;
 use Cake\Database\Exception;
 use Cake\Database\Schema\TableSchemaInterface;
@@ -168,7 +167,7 @@ class FixtureCommand extends BakeCommand
             $data = $this->readSchema($model, $useTable);
         }
 
-        $this->validateNames($data);
+        $this->validateNames($data, $io);
 
         if ($modelImport === null) {
             $schema = $this->_generateSchema($data);
@@ -214,17 +213,19 @@ class FixtureCommand extends BakeCommand
      * Validates table and column names are supported.
      *
      * @param \Cake\Database\Schema\TableSchemaInterface $schema Table schema
+     * @param \Cake\Console\ConsoleIo $io Console io
      * @return void
      * @throws \Cake\Console\Exception\StopException When table or column names are not supported
      */
-    public function validateNames(TableSchemaInterface $schema): void
+    public function validateNames(TableSchemaInterface $schema, ConsoleIo $io): void
     {
         foreach ($schema->columns() as $column) {
-            if (!is_string($column) || !ctype_alpha($column[0])) {
-                throw new StopException(sprintf(
-                    'Unable to bake table with integer column names or names that start with digits. Found `%s`.',
+            if (!is_string($column) || (!ctype_alpha($column[0]) && $column[0] !== '_')) {
+                $io->error(sprintf(
+                    'Unable to bake model. Table column names must start with a letter or underscore. Found `%s`.',
                     (string)$column
                 ));
+                $this->abort();
             }
         }
     }
