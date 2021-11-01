@@ -128,11 +128,10 @@ class ModelCommand extends BakeCommand
     {
         foreach ($schema->columns() as $column) {
             if (!is_string($column) || (!ctype_alpha($column[0]) && $column[0] !== '_')) {
-                $io->error(sprintf(
+                $io->abort(sprintf(
                     'Unable to bake model. Table column names must start with a letter or underscore. Found `%s`.',
                     (string)$column
                 ));
-                $this->abort();
             }
         }
     }

@@ -21,7 +21,6 @@ use Bake\Test\TestCase\TestCase;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
-use Cake\Console\Exception\StopException;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
@@ -29,7 +28,6 @@ use Cake\Database\Driver\Postgres;
 use Cake\Database\Driver\Sqlite;
 use Cake\Database\Driver\Sqlserver;
 use Cake\Datasource\ConnectionManager;
-use Exception;
 
 /**
  * ModelCommand test class
@@ -170,18 +168,12 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $command->connection = 'test';
 
-        $io = $this->createMock(ConsoleIo::class);
-
         $schema = $command->getTableObject('TodoItems', 'todo_items')->getSchema();
         $schema->addColumn('_valid', ['type' => 'string', 'length' => null]);
 
-        $caught = null;
-        try {
-            $command->validateNames($schema, $io);
-        } catch (Exception $e) {
-            $caught = $e;
-        }
-        $this->assertNull($caught);
+        $io = $this->createMock(ConsoleIo::class);
+        $io->expects($this->never())->method('abort');
+        $command->validateNames($schema, $io);
     }
 
     /**
@@ -192,13 +184,12 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $command->connection = 'test';
 
-        $io = $this->createMock(ConsoleIo::class);
-
         $schema = $command->getTableObject('TodoItems', 'todo_items')->getSchema();
         $schema->addColumn('0invalid', ['type' => 'string', 'length' => null]);
 
-        $this->expectException(StopException::class);
-        $command->validateNames($schema, $this->createMock(ConsoleIo::class));
+        $io = $this->createMock(ConsoleIo::class);
+        $io->expects($this->once())->method('abort');
+        $command->validateNames($schema, $io);
     }
 
     /**
