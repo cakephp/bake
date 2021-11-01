@@ -21,7 +21,6 @@ use Bake\Test\TestCase\TestCase;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
-use Cake\Console\Exception\StopException;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
@@ -164,7 +163,23 @@ class ModelCommandTest extends TestCase
     /**
      * Tests validating supported table and column names.
      */
-    public function testValidateNames(): void
+    public function testValidateNamesWithValid(): void
+    {
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $schema = $command->getTableObject('TodoItems', 'todo_items')->getSchema();
+        $schema->addColumn('_valid', ['type' => 'string', 'length' => null]);
+
+        $io = $this->createMock(ConsoleIo::class);
+        $io->expects($this->never())->method('abort');
+        $command->validateNames($schema, $io);
+    }
+
+    /**
+     * Tests validating supported table and column names.
+     */
+    public function testValidateNamesWithInvalid(): void
     {
         $command = new ModelCommand();
         $command->connection = 'test';
@@ -172,9 +187,9 @@ class ModelCommandTest extends TestCase
         $schema = $command->getTableObject('TodoItems', 'todo_items')->getSchema();
         $schema->addColumn('0invalid', ['type' => 'string', 'length' => null]);
 
-        $this->expectException(StopException::class);
-        $this->expectExceptionMessage('Unable to bake table with integer column names or names that start with digits. Found `0invalid`');
-        $command->validateNames($schema);
+        $io = $this->createMock(ConsoleIo::class);
+        $io->expects($this->once())->method('abort');
+        $command->validateNames($schema, $io);
     }
 
     /**
