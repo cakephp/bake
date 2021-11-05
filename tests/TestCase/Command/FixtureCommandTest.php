@@ -32,7 +32,7 @@ class FixtureCommandTest extends TestCase
     /**
      * fixtures
      *
-     * @var array
+     * @var array<string>
      */
     protected $fixtures = [
         'plugin.Bake.Articles',

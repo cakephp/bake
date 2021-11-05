@@ -35,7 +35,7 @@ abstract class TestCase extends BaseTestCase
     protected $generatedFile = '';
 
     /**
-     * @var array
+     * @var array<string>
      */
     protected $generatedFiles = [];
 

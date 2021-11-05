@@ -30,7 +30,7 @@ class ControllerAllCommandTest extends TestCase
     /**
      * fixtures
      *
-     * @var array
+     * @var array<string>
      */
     protected $fixtures = [
         'plugin.Bake.BakeArticles',
@@ -38,7 +38,7 @@ class ControllerAllCommandTest extends TestCase
     ];
 
     /**
-     * @var array
+     * @var array<string>
      */
     protected $tables = ['bake_articles', 'bake_comments'];
 
