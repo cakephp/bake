@@ -27,7 +27,7 @@ class TodoTasksFixture extends TestFixture
     /**
      * fields property
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $fields = [
         'uid' => ['type' => 'integer'],

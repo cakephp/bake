@@ -35,7 +35,7 @@ class TemplateCommandTest extends TestCase
     /**
      * Fixtures
      *
-     * @var array
+     * @var array<string>
      */
     protected $fixtures = [
         'plugin.Bake.Articles',
