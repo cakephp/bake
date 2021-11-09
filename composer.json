@@ -19,13 +19,13 @@
     },
     "require": {
         "php": ">=7.2",
-        "cakephp/cakephp": "^4.1",
+        "cakephp/cakephp": "^4.3.0",
         "cakephp/twig-view": "^1.0.2",
         "brick/varexporter": "^0.3.5"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^4.0",
-        "phpunit/phpunit": "~8.5.0",
+        "phpunit/phpunit": "^8.5 || ^9.3",
         "cakephp/debug_kit": "^4.1",
         "cakephp/plugin-installer": "^1.3"
     },
@@ -41,8 +41,7 @@
             "Pastry\\PastryTest\\": "tests/test_app/Plugin/PastryTest/src/",
             "WithBakeSubFolder\\": "tests/test_app/Plugin/WithBakeSubFolder/src/",
             "Bake\\Test\\": "tests/",
-            "Bake\\Test\\App\\": "tests/test_app/App/",
-            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
+            "Bake\\Test\\App\\": "tests/test_app/App/"
         }
     },
     "scripts": {
@@ -53,7 +52,7 @@
         "cs-check": "phpcs --parallel=16 -p src/ tests/",
         "cs-fix": "phpcbf --parallel=16 -p src/ tests/",
         "stan": "phpstan analyse src/ && psalm.phar",
-        "stan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan:0.12.82 psalm/phar:~4.7.0 && mv composer.backup composer.json",
+        "stan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan:^0.12 psalm/phar:~4.11.0 && mv composer.backup composer.json",
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-clover=clover.xml"
     }

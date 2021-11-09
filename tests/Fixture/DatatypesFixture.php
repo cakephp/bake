@@ -24,7 +24,7 @@ class DatatypesFixture extends TestFixture
     /**
      * Fields property
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $fields = [
         'id' => ['type' => 'integer', 'null' => false],
@@ -35,6 +35,7 @@ class DatatypesFixture extends TestFixture
         'tiny_int' => ['type' => 'tinyinteger'],
         'bool' => ['type' => 'boolean', 'null' => false, 'default' => false],
         'uuid' => ['type' => 'uuid'],
+        'timestamp_field' => ['type' => 'timestamp'],
         '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ];
 
@@ -44,6 +45,6 @@ class DatatypesFixture extends TestFixture
      * @var array
      */
     public $records = [
-        ['float_field' => 42.23, 'huge_int' => '1234567891234567891', 'small_int' => '1234', 'tiny_int' => '12', 'bool' => 0],
+        ['decimal_field' => '30.123', 'float_field' => 42.23, 'huge_int' => '1234567891234567891', 'small_int' => '1234', 'tiny_int' => '12', 'bool' => 0, 'timestamp_field' => '2007-03-17 01:16:23'],
     ];
 }

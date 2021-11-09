@@ -13,19 +13,18 @@
         </testsuite>
     </testsuites>
 
-    <!-- Setup a listener for fixtures -->
-    <listeners>
-        <listener class="Cake\TestSuite\Fixture\FixtureInjector">
-            <arguments>
-                <object class="Cake\TestSuite\Fixture\FixtureManager"/>
-            </arguments>
-        </listener>
-    </listeners>
+    <extensions>
+        <extension class="Cake\TestSuite\Fixture\PHPUnitExtension"/>
+    </extensions>
 
     <filter>
         <whitelist>
             <directory suffix=".php">src/</directory>
         </whitelist>
     </filter>
+
+    <php>
+        <env name="FIXTURE_SCHEMA_METADATA" value="./tests/schema.php"/>
+    </php>
 
 </phpunit>

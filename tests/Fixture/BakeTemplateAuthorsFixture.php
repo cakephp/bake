@@ -23,7 +23,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 class BakeTemplateAuthorsFixture extends TestFixture
 {
     /**
-     * Avoid overriding core.authors
+     * Avoid overriding AuthorsFixture's table.
      *
      * @var string
      */
@@ -32,7 +32,7 @@ class BakeTemplateAuthorsFixture extends TestFixture
     /**
      * fields property
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $fields = [
         'id' => ['type' => 'integer'],

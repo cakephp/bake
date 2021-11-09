@@ -40,12 +40,12 @@ class ModelCommandTest extends TestCase
      * Don't sort this list alphabetically - otherwise there are table constraints
      * which fail when using postgres
      *
-     * @var array
+     * @var array<string>
      */
     protected $fixtures = [
-        'core.Comments',
-        'core.Tags',
-        'core.ArticlesTags',
+        'plugin.Bake.Comments',
+        'plugin.Bake.Tags',
+        'plugin.Bake.ArticlesTags',
         'plugin.Bake.BakeArticles',
         'plugin.Bake.TodoTasks',
         'plugin.Bake.TodoItems',
@@ -55,6 +55,7 @@ class ModelCommandTest extends TestCase
         'plugin.Bake.Invitations',
         'plugin.Bake.NumberTrees',
         'plugin.Bake.Users',
+        'plugin.Bake.UniqueFields',
     ];
 
     /**
@@ -101,11 +102,11 @@ class ModelCommandTest extends TestCase
     }
 
     /**
-     * Test getName() method.
+     * Test getNameName() method.
      *
      * @return void
      */
-    public function testGetTable()
+    public function testgetTable()
     {
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
@@ -157,6 +158,38 @@ class ModelCommandTest extends TestCase
         $result = $command->getTableObject('Authors', 'todo_items');
         $this->assertSame('my_prefix_todo_items', $result->getTable());
         $this->assertInstanceOf('BakeTest\Model\Table\AuthorsTable', $result);
+    }
+
+    /**
+     * Tests validating supported table and column names.
+     */
+    public function testValidateNamesWithValid(): void
+    {
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $schema = $command->getTableObject('TodoItems', 'todo_items')->getSchema();
+        $schema->addColumn('_valid', ['type' => 'string', 'length' => null]);
+
+        $io = $this->createMock(ConsoleIo::class);
+        $io->expects($this->never())->method('abort');
+        $command->validateNames($schema, $io);
+    }
+
+    /**
+     * Tests validating supported table and column names.
+     */
+    public function testValidateNamesWithInvalid(): void
+    {
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $schema = $command->getTableObject('TodoItems', 'todo_items')->getSchema();
+        $schema->addColumn('0invalid', ['type' => 'string', 'length' => null]);
+
+        $io = $this->createMock(ConsoleIo::class);
+        $io->expects($this->once())->method('abort');
+        $command->validateNames($schema, $io);
     }
 
     /**
@@ -1167,14 +1200,18 @@ class ModelCommandTest extends TestCase
         $expected = [
             'username' => [
                 'name' => 'isUnique',
+                'fields' => ['username'],
+                'options' => [],
             ],
             'country_id' => [
                 'name' => 'existsIn',
                 'extra' => 'Countries',
+                'options' => [],
             ],
             'site_id' => [
                 'name' => 'existsIn',
                 'extra' => 'Sites',
+                'options' => [],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1206,6 +1243,8 @@ class ModelCommandTest extends TestCase
         $expected = [
             'title' => [
                 'name' => 'isUnique',
+                'fields' => ['title', 'user_id'],
+                'options' => [],
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1264,7 +1303,7 @@ class ModelCommandTest extends TestCase
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
-        $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
+        $this->assertFileDoesNotExist(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
     }
 
     /**
@@ -1282,8 +1321,8 @@ class ModelCommandTest extends TestCase
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
-        $this->assertFileNotExists(ROOT . 'tests/Fixture/TodoItemsFixture.php');
-        $this->assertFileNotExists(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
+        $this->assertFileDoesNotExist(ROOT . 'tests/Fixture/TodoItemsFixture.php');
+        $this->assertFileDoesNotExist(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
     }
 
     /**
@@ -1302,7 +1341,7 @@ class ModelCommandTest extends TestCase
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
-        $this->assertFileNotExists(ROOT . 'tests/Fixture/TodoItemsFixture.php');
+        $this->assertFileDoesNotExist(ROOT . 'tests/Fixture/TodoItemsFixture.php');
     }
 
     /**
@@ -1430,6 +1469,36 @@ class ModelCommandTest extends TestCase
 
         $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * Tests generating table with rules checker.
+     */
+    public function testBakeTableRules(): void
+    {
+        $this->generatedFiles = [
+            APP . 'Model/Table/UniqueFieldsTable.php',
+        ];
+
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $name = 'UniqueFields';
+        $args = new Arguments([$name], ['table' => 'unique_fields', 'force' => true], []);
+        $io = new ConsoleIo($this->_out, $this->_err, $this->_in);
+
+        $table = $command->getTable($name, $args);
+        $tableObject = $command->getTableObject($name, $table);
+        $data = $command->getTableContext($tableObject, $table, $name, $args, $io);
+        $data['validation'] = [];
+        $command->bakeTable($tableObject, $data, $args, $io);
+
+        $result = file_get_contents($this->generatedFiles[0]);
+        $expected = file_get_contents($this->_compareBasePath . __FUNCTION__ . '.php');
+        if (ConnectionManager::get('test')->getDriver() instanceof Sqlserver) {
+            $expected = preg_replace("/'allowMultipleNulls' => true/", "'allowMultipleNulls' => false", $expected);
+        }
+        $this->assertTextEquals($expected, $result, 'Content does not match file ' . __FUNCTION__ . '.php');
     }
 
     /**

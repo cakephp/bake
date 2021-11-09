@@ -32,19 +32,14 @@
         </testsuite>
     </testsuites>
 
-    <!-- Setup a listener for fixtures -->
-    <listeners>
-        <listener class="Cake\TestSuite\Fixture\FixtureInjector">
-            <arguments>
-                <object class="Cake\TestSuite\Fixture\FixtureManager"/>
-            </arguments>
-        </listener>
-    </listeners>
+    <!-- Setup fixture extension -->
+    <extensions>
+        <extension class="Cake\TestSuite\Fixtures\PHPUnitExtension" />
+    </extensions>
 
     <filter>
         <whitelist>
             <directory suffix=".php">src/</directory>
         </whitelist>
     </filter>
-
 </phpunit>

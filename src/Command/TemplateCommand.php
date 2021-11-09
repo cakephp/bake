@@ -65,6 +65,13 @@ class TemplateCommand extends BakeCommand
     public $scaffoldActions = ['index', 'view', 'add', 'edit'];
 
     /**
+     * Actions that exclude hidden fields
+     *
+     * @var string[]
+     */
+    public $excludeHiddenActions = ['index', 'view'];
+
+    /**
      * AssociationFilter utility
      *
      * @var \Bake\Utility\Model\AssociationFilter|null
@@ -270,7 +277,7 @@ class TemplateCommand extends BakeCommand
         $namespace = Configure::read('App.namespace');
 
         $primaryKey = $displayField = $singularVar = $singularHumanName = null;
-        $schema = $fields = $modelClass = null;
+        $schema = $fields = $hidden = $modelClass = null;
         try {
             $primaryKey = (array)$modelObject->getPrimaryKey();
             $displayField = $modelObject->getDisplayField();
@@ -278,6 +285,7 @@ class TemplateCommand extends BakeCommand
             $singularHumanName = $this->_singularHumanName($this->controllerName);
             $schema = $modelObject->getSchema();
             $fields = $schema->columns();
+            $hidden = $modelObject->newEmptyEntity()->getHidden() ?: ['token', 'password', 'passwd'];
             $modelClass = $this->modelName;
         } catch (\Exception $exception) {
             $io->error($exception->getMessage());
@@ -312,6 +320,7 @@ class TemplateCommand extends BakeCommand
             'singularHumanName',
             'pluralHumanName',
             'fields',
+            'hidden',
             'associations',
             'keyFields',
             'namespace'
@@ -371,6 +380,10 @@ class TemplateCommand extends BakeCommand
         if (empty($vars['primaryKey'])) {
             $io->error('Cannot generate views for models with no primary key');
             $this->abort();
+        }
+
+        if (in_array($action, $this->excludeHiddenActions)) {
+            $vars['fields'] = array_diff($vars['fields'], $vars['hidden']);
         }
 
         $renderer = new TemplateRenderer($args->getOption('theme'));

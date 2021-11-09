@@ -16,7 +16,9 @@ declare(strict_types=1);
  */
 namespace Bake\Test\TestCase\Command;
 
+use Bake\Command\FixtureCommand;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\ConsoleIo;
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Postgres;
@@ -30,11 +32,11 @@ class FixtureCommandTest extends TestCase
     /**
      * fixtures
      *
-     * @var array
+     * @var array<string>
      */
     protected $fixtures = [
-        'core.Articles',
-        'core.Comments',
+        'plugin.Bake.Articles',
+        'plugin.Bake.Comments',
         'plugin.Bake.Datatypes',
         'plugin.Bake.BinaryTests',
         'plugin.Bake.BakeCar',
@@ -56,15 +58,47 @@ class FixtureCommandTest extends TestCase
     }
 
     /**
+     * Tests validating supported table and column names.
+     */
+    public function testValidateNamesWithValid(): void
+    {
+        $command = new FixtureCommand();
+        $command->connection = 'test';
+
+        $schema = $command->readSchema('Car', 'car');
+        $schema->addColumn('_valid', ['type' => 'string', 'length' => null]);
+
+        $io = $this->createMock(ConsoleIo::class);
+        $io->expects($this->never())->method('abort');
+        $command->validateNames($schema, $io);
+    }
+
+    /**
+     * Tests validating supported table and column names.
+     */
+    public function testValidateNamesWithInvalid(): void
+    {
+        $command = new FixtureCommand();
+        $command->connection = 'test';
+
+        $schema = $command->readSchema('Car', 'car');
+        $schema->addColumn('0invalid', ['type' => 'string', 'length' => null]);
+
+        $io = $this->createMock(ConsoleIo::class);
+        $io->expects($this->once())->method('abort');
+        $command->validateNames($schema, $io);
+    }
+
+    /**
      * test generating a fixture with database rows.
      *
      * @return void
      */
     public function testImportRecordsFromDatabase()
     {
-        $this->generatedFile = ROOT . 'tests/Fixture/UsersFixture.php';
-        $this->exec('bake fixture --connection test --schema --records --count 2 Users');
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->generatedFile = ROOT . 'tests/Fixture/DatatypesFixture.php';
+        $this->exec('bake fixture --connection test --schema --records --count 2 Datatypes');
+        $this->assertExitSuccess();
 
         $this->assertSameAsFile(
             __FUNCTION__ . '.php',
@@ -173,13 +207,30 @@ class FixtureCommandTest extends TestCase
     public function testBake()
     {
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
-        $this->exec('bake fixture --connection test Articles');
+        $this->exec('bake fixture --connection test --fields Articles');
 
         $this->assertExitCode(Shell::CODE_SUCCESS);
         $this->assertFileContains('class ArticlesFixture extends TestFixture', $this->generatedFile);
         $this->assertFileContains('public $fields', $this->generatedFile);
         $this->assertFileContains('$this->records =', $this->generatedFile);
         $this->assertFileNotContains('public $import', $this->generatedFile);
+    }
+
+    /**
+     * Test no fields by default
+     *
+     * @return void
+     */
+    public function testBakeNoFields()
+    {
+        $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
+        $this->exec('bake fixture --connection test Articles');
+
+        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertFileContains('class ArticlesFixture extends TestFixture', $this->generatedFile);
+        $this->assertFileNotContains('public $fields', $this->generatedFile);
+        $this->assertFileNotContains('public $import', $this->generatedFile);
+        $this->assertFileContains('$this->records =', $this->generatedFile);
     }
 
     /**
@@ -206,7 +257,7 @@ class FixtureCommandTest extends TestCase
     public function testRecordGenerationForDatatypes()
     {
         $this->generatedFile = ROOT . 'tests/Fixture/DatatypesFixture.php';
-        $this->exec('bake fixture --connection test Datatypes');
+        $this->exec('bake fixture --connection test --fields Datatypes');
 
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
@@ -220,7 +271,10 @@ class FixtureCommandTest extends TestCase
         $this->assertStringContainsString("'primary' => ['type' => 'primary'", $result);
         $this->assertStringContainsString("'columns' => ['id']", $result);
         $this->assertStringContainsString("'uuid' => ['type' => 'uuid'", $result);
-        $this->assertRegExp("/(\s+)('uuid' => ')([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})(')/", $result);
+        $this->assertMatchesRegularExpression(
+            "/(\s+)('uuid' => ')([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})(')/",
+            $result
+        );
     }
 
     /**
@@ -267,7 +321,7 @@ class FixtureCommandTest extends TestCase
         $table = $this->getTableLocator()->get('Articles');
         $table->getSchema()->addColumn('body', ['type' => 'json']);
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
-        $this->exec('bake fixture --connection test Articles');
+        $this->exec('bake fixture --connection test --fields Articles');
 
         $this->assertFileContains('<?php', $this->generatedFile);
         $this->assertFileContains('namespace Bake\Test\App\Test\Fixture;', $this->generatedFile);

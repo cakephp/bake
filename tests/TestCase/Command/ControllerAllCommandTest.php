@@ -30,7 +30,7 @@ class ControllerAllCommandTest extends TestCase
     /**
      * fixtures
      *
-     * @var array
+     * @var array<string>
      */
     protected $fixtures = [
         'plugin.Bake.BakeArticles',
@@ -38,7 +38,7 @@ class ControllerAllCommandTest extends TestCase
     ];
 
     /**
-     * @var array
+     * @var array<string>
      */
     protected $tables = ['bake_articles', 'bake_comments'];
 
@@ -82,12 +82,12 @@ class ControllerAllCommandTest extends TestCase
 
             $this->generatedFiles[] = APP . "Controller/{$plural}Controller.php";
         }
-        $this->exec('bake controller all --connection test --no-test');
+        $this->exec('bake controller all --connection test --no-test --quiet');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
 
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php',
             'Test should not be created as options should be forwarded'
         );

@@ -30,15 +30,15 @@ class FixtureAllCommandTest extends TestCase
     /**
      * fixtures
      *
-     * @var array
+     * @var array<string>
      */
     protected $fixtures = [
-        'core.Articles',
-        'core.Comments',
+        'plugin.Bake.Articles',
+        'plugin.Bake.Comments',
     ];
 
     /**
-     * @var array
+     * @var array<string>
      */
     protected $tables = ['articles', 'comments'];
 

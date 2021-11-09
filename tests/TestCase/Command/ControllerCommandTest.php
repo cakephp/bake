@@ -31,7 +31,7 @@ class ControllerCommandTest extends TestCase
     /**
      * fixtures
      *
-     * @var array
+     * @var array<string>
      */
     protected $fixtures = [
         'plugin.Bake.BakeArticles',
@@ -291,7 +291,7 @@ class ControllerCommandTest extends TestCase
         $this->exec('bake controller --connection test --no-test BakeArticles');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
-        $this->assertFileNotExists(ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php');
+        $this->assertFileDoesNotExist(ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php');
         $this->assertFileExists($this->generatedFile);
     }
 

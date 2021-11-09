@@ -30,12 +30,12 @@ class AssociationFilterTest extends TestCase
      * Don't sort this list alphabetically - otherwise there are table constraints
      * which fail when using postgres
      *
-     * @var array
+     * @var array<string>
      */
     protected $fixtures = [
-        'core.Authors',
-        'core.Tags',
-        'core.Articles',
+        'plugin.Bake.Authors',
+        'plugin.Bake.Tags',
+        'plugin.Bake.Articles',
         'plugin.Bake.BakeArticles',
         'plugin.Bake.BakeComments',
         'plugin.Bake.BakeArticlesBakeTags',
