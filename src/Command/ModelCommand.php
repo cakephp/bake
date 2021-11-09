@@ -1055,7 +1055,7 @@ class ModelCommand extends BakeCommand
                 );
             }
         } elseif ($removePersistentEntity) {
-            $io->out("Removing file {$persistentEntityFilePath}");
+            $io->out("Removing file $persistentEntityFilePath");
             if (unlink($persistentEntityFilePath)) {
                 $io->success("\n" . sprintf('Removed persistent entity class for %s...', $name), 1, ConsoleIo::QUIET);
             } else {
@@ -1146,7 +1146,7 @@ class ModelCommand extends BakeCommand
                 );
             }
         } elseif ($removePersistentTable) {
-            $io->out("Removing file {$persistentTableFilePath}");
+            $io->out("Removing file $persistentTableFilePath");
             if (unlink($persistentTableFilePath)) {
                 $io->success("\n" . sprintf('Removed persistent table class for %s...', $name), 1, ConsoleIo::QUIET);
             } else {

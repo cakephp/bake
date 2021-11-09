@@ -1560,6 +1560,10 @@ class ModelCommandTest extends TestCase
 
         $this->assertFilesExist($this->generatedFiles);
 
+        $this->exec('bake model --no-test --no-fixture --force --persistent --connection test --table todo_items Items');
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertOutputContains('Skipping creating persistent table class for Items...');
+
         $this->exec('bake model --no-test --force --no-fixture --remove-persistent --connection test --table todo_items Items');
         $this->assertExitCode(Command::CODE_SUCCESS);
 
