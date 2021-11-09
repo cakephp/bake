@@ -153,6 +153,7 @@ class TestCommandTest extends TestCase
             ROOT . 'tests/TestCase/Model/Table/BakeArticlesTableTest.php',
             ROOT . 'tests/TestCase/Model/Table/CategoryThreadsTableTest.php',
             ROOT . 'tests/TestCase/Model/Table/TemplateTaskCommentsTableTest.php',
+            ROOT . 'tests/TestCase/Model/Table/HiddenFieldsTableTest.php',
         ];
         $this->exec('bake test table --all');
 
