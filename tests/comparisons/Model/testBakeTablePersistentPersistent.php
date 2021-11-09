@@ -42,7 +42,8 @@ abstract class ItemsPersistentTable extends Table
     public function initialize(array $config): void {}
 
     /**
-     * Default validation rules.
+     * Persistent validation rules. Rules from ItemsTable::validationDefault()
+     * are applied before this.
      *
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
@@ -54,7 +55,8 @@ abstract class ItemsPersistentTable extends Table
 
     /**
      * Returns a rules checker object that will be used for validating
-     * application integrity.
+     * application integrity. Rules from ItemsTable::buildRules()
+     * are applied before this.
      *
      * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
      * @return \Cake\ORM\RulesChecker

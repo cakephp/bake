@@ -5,8 +5,8 @@ namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Table;
 
 /**
  * UniqueFields Model
@@ -35,11 +35,11 @@ class UniqueFieldsTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('unique_fields');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+
+        parent::initialize($config);
     }
 
     /**
@@ -54,7 +54,7 @@ class UniqueFieldsTable extends Table
         $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
         $rules->add($rules->isUnique(['field_1', 'field_2'], ['allowMultipleNulls' => true]), ['errorField' => 'field_1']);
 
-        return $rules;
+        return parent::buildRules($rules);
     }
 
     /**

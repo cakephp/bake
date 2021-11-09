@@ -5,8 +5,8 @@ namespace Bake\Test\App\Model\Table;
 
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Table;
 
 /**
  * TestBakeArticles Model
@@ -37,13 +37,13 @@ class TestBakeArticlesTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('bake_articles');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        parent::initialize($config);
     }
 
     /**
@@ -86,7 +86,7 @@ class TestBakeArticlesTable extends Table
             ])
             ->allowEmptyFile('image');
 
-        return $validator;
+        return parent::validationDefault($validator);
     }
 
     /**

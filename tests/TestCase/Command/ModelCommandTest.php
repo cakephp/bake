@@ -1563,7 +1563,7 @@ class ModelCommandTest extends TestCase
         $this->exec('bake model --no-test --force --no-fixture --remove-persistent --connection test --table todo_items Items');
         $this->assertExitCode(Command::CODE_SUCCESS);
 
-        $this->assertFileNotExists($this->generatedFiles[1]);
+        $this->assertFileDoesNotExist($this->generatedFiles[1]);
         $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
@@ -1612,7 +1612,7 @@ class ModelCommandTest extends TestCase
         $this->exec('bake model --no-test --force --no-fixture --no-table --no-fields --no-hidden --remove-persistent users');
         $this->assertExitCode(Command::CODE_SUCCESS);
 
-        $this->assertFileNotExists($this->generatedFiles[1]);
+        $this->assertFileDoesNotExist($this->generatedFiles[1]);
         $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
