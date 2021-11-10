@@ -19,10 +19,11 @@ declare(strict_types=1);
 
 namespace {{ namespace }}\Model\Table;
 
-{% set uses = ['use Cake\\ORM\\Query;', 'use Cake\\ORM\\RulesChecker;', 'use Cake\\Validation\\Validator;'] %}
+{% set uses = ['use Cake\\ORM\\Query;', 'use Cake\\ORM\\RulesChecker;'] %}
 {% if not persistentTable %}
 {% set uses = uses|merge(['use Cake\\ORM\\Table;']) %}
 {% endif %}
+{% set uses = uses|merge(['use Cake\\Validation\\Validator;']) %}
 {{ uses|join('\n')|raw }}
 
 {{ DocBlock.classDescription(name, 'Model', annotations)|raw }}
