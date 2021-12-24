@@ -161,7 +161,7 @@ abstract class BakeCommand extends Command
     {
         if (file_exists($path)) {
             unlink($path);
-            $io->out(sprintf('<success>Deleted</success> `%s`', $path), 1, ConsoleIo::QUIET);
+            $io->out(sprintf('<success>Deleted</success> `%s`', $path), 1, ConsoleIo::NORMAL);
         }
     }
 }
