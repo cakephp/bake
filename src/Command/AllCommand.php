@@ -116,7 +116,7 @@ class AllCommand extends BakeCommand
             }
         }
 
-        $io->out('<success>Bake All complete.</success>', 1, ConsoleIo::QUIET);
+        $io->out('<success>Bake All complete.</success>', 1, ConsoleIo::NORMAL);
 
         return static::CODE_SUCCESS;
     }
