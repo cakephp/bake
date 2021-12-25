@@ -55,5 +55,11 @@
         "stan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan:^0.12 psalm/phar:~4.11.0 && mv composer.backup composer.json",
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-clover=clover.xml"
+    },
+    "config": {
+        "allow-plugins": {
+            "cakephp/plugin-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
