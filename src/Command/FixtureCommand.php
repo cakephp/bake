@@ -235,7 +235,7 @@ class FixtureCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args The CLI arguments.
      * @param \Cake\Console\ConsoleIo $io The console io instance.
      * @param string $model name of the model being generated
-     * @param array $otherVars Contents of the fixture file.
+     * @param array<string, mixed> $otherVars Contents of the fixture file.
      * @return void
      */
     public function generateFixtureFile(Arguments $args, ConsoleIo $io, string $model, array $otherVars): void

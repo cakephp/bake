@@ -26,7 +26,7 @@ class DocBlockHelper extends Helper
      *
      * @param string $className The class this comment block is for.
      * @param string $classType The type of class (example, Entity)
-     * @param array $annotations An array of PHP comment block annotations.
+     * @param array<string> $annotations An array of PHP comment block annotations.
      * @return string The DocBlock for a class header.
      */
     public function classDescription(string $className, string $classType, array $annotations): string
