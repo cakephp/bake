@@ -313,7 +313,7 @@ class PluginCommand extends BakeCommand
     /**
      * find and change $this->path to the user selection
      *
-     * @param array $pathOptions The list of paths to look in.
+     * @param array<string> $pathOptions The list of paths to look in.
      * @param \Cake\Console\ConsoleIo $io The io object
      * @return void
      */
@@ -412,7 +412,7 @@ class PluginCommand extends BakeCommand
     /**
      * Search the $PATH for composer.
      *
-     * @param array $path The paths to search.
+     * @param array<string> $path The paths to search.
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return string|bool
      */

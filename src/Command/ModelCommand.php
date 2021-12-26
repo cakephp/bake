@@ -708,7 +708,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Database\Schema\TableSchemaInterface $schema The table schema for the current field.
      * @param string $fieldName Name of field to be validated.
      * @param array $metaData metadata for field
-     * @param array $primaryKey The primary key field
+     * @param array<string> $primaryKey The primary key field
      * @return array Array of validation for the field.
      */
     public function fieldValidation(
