@@ -694,7 +694,7 @@ class ModelCommand extends BakeCommand
                 continue;
             }
             $field = $schema->getColumn($fieldName);
-            $validation = $this->fieldValidation($schema, $fieldName, $field);
+            $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
             if ($validation) {
                 $validate[$fieldName] = $validation;
             }
@@ -709,12 +709,14 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Database\Schema\TableSchemaInterface $schema The table schema for the current field.
      * @param string $fieldName Name of field to be validated.
      * @param array $metaData metadata for field
+     * @param array<string> $primaryKey The primary key field. Unused because PK validation is skipped
      * @return array Array of validation for the field.
      */
     public function fieldValidation(
         TableSchemaInterface $schema,
         string $fieldName,
-        array $metaData
+        array $metaData,
+        array $primaryKey
     ): array {
         $ignoreFields = ['lft', 'rght', 'created', 'modified', 'updated'];
         if (in_array($fieldName, $ignoreFields, true)) {
