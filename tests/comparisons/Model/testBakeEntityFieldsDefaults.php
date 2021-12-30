@@ -19,6 +19,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $updated
  *
  * @property \Bake\Test\App\Model\Entity\User $user
+ * @property \Bake\Test\App\Model\Entity\TodoReminder $todo_reminder
  * @property \Bake\Test\App\Model\Entity\TodoTask[] $todo_tasks
  * @property \Bake\Test\App\Model\Entity\TodoLabel[] $todo_labels
  */
@@ -43,6 +44,7 @@ class TodoItem extends Entity
         'created' => true,
         'updated' => true,
         'user' => true,
+        'todo_reminder' => true,
         'todo_tasks' => true,
         'todo_labels' => true,
     ];
