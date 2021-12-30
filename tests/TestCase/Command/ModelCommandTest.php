@@ -1069,29 +1069,6 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetValidationExcludeForeignKeys()
-    {
-        $driver = ConnectionManager::get('test')->getDriver();
-        $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
-        $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
-
-        $model = $this->getTableLocator()->get('TodoItems');
-        $associations = [
-            'belongsTo' => [
-                'Users' => ['foreignKey' => 'user_id'],
-            ],
-        ];
-        $command = new ModelCommand();
-        $args = new Arguments([], [], []);
-        $result = $command->getValidation($model, $associations, $args);
-        $this->assertArrayNotHasKey('user_id', $result);
-    }
-
-    /**
-     * test getting validation rules and exempting foreign keys
-     *
-     * @return void
-     */
     public function testGetValidationExcludeForeignKeysSigned()
     {
         $driver = ConnectionManager::get('test')->getDriver();
@@ -1128,6 +1105,11 @@ class ModelCommandTest extends TestCase
             ],
             'todo_task_count' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
+                'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
+            ],
+            'user_id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
         ];

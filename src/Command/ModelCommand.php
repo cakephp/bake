@@ -682,15 +682,9 @@ class ModelCommand extends BakeCommand
 
         $validate = [];
         $primaryKey = $schema->getPrimaryKey();
-        $foreignKeys = [];
-        if (isset($associations['belongsTo'])) {
-            foreach ($associations['belongsTo'] as $assoc) {
-                $foreignKeys[] = $assoc['foreignKey'];
-            }
-        }
         foreach ($fields as $fieldName) {
-            // Skip primary key and foreign key validations
-            if (in_array($fieldName, $primaryKey, true) || in_array($fieldName, $foreignKeys, true)) {
+            // Skip primary key
+            if (in_array($fieldName, $primaryKey, true)) {
                 continue;
             }
             $field = $schema->getColumn($fieldName);
