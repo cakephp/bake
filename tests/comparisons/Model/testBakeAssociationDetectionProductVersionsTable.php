@@ -58,10 +58,6 @@ class ProductVersionsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
-
-        $validator
             ->dateTime('version')
             ->requirePresence('version', 'create')
             ->notEmptyDateTime('version');

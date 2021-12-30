@@ -72,10 +72,6 @@ class ItemsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
-
-        $validator
             ->scalar('title')
             ->maxLength('title', 50)
             ->requirePresence('title', 'create')

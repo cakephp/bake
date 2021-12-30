@@ -689,11 +689,12 @@ class ModelCommand extends BakeCommand
             }
         }
         foreach ($fields as $fieldName) {
-            if (in_array($fieldName, $foreignKeys, true)) {
+            // Skip primary key and foreign key validations
+            if (in_array($fieldName, $primaryKey, true) || in_array($fieldName, $foreignKeys, true)) {
                 continue;
             }
             $field = $schema->getColumn($fieldName);
-            $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
+            $validation = $this->fieldValidation($schema, $fieldName, $field);
             if ($validation) {
                 $validate[$fieldName] = $validation;
             }
@@ -708,14 +709,12 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Database\Schema\TableSchemaInterface $schema The table schema for the current field.
      * @param string $fieldName Name of field to be validated.
      * @param array $metaData metadata for field
-     * @param array<string> $primaryKey The primary key field
      * @return array Array of validation for the field.
      */
     public function fieldValidation(
         TableSchemaInterface $schema,
         string $fieldName,
-        array $metaData,
-        array $primaryKey
+        array $metaData
     ): array {
         $ignoreFields = ['lft', 'rght', 'created', 'modified', 'updated'];
         if (in_array($fieldName, $ignoreFields, true)) {
@@ -774,12 +773,7 @@ class ModelCommand extends BakeCommand
             ];
         }
 
-        if (in_array($fieldName, $primaryKey, true)) {
-            $validation['allowEmpty'] = [
-                'rule' => $this->getEmptyMethod($fieldName, $metaData),
-                'args' => [null, 'create'],
-            ];
-        } elseif ($metaData['null'] === true) {
+        if ($metaData['null'] === true) {
             $validation['allowEmpty'] = [
                 'rule' => $this->getEmptyMethod($fieldName, $metaData),
                 'args' => [],

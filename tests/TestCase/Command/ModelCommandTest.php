@@ -921,10 +921,6 @@ class ModelCommandTest extends TestCase
                 'integer' => ['rule' => 'integer', 'args' => []],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
-            'id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => [null, 'create']],
-            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -1020,10 +1016,6 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $result = $command->getValidation($model, [], $args);
         $expected = [
-            'id' => [
-                'integer' => ['rule' => 'integer', 'args' => []],
-                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => [null, 'create']],
-            ],
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
                 'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
