@@ -58,7 +58,7 @@ class ProductVersionsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->nonNegativeInteger('product_id')
+            ->integer('product_id')
             ->requirePresence('product_id', 'create')
             ->notEmptyString('product_id');
 

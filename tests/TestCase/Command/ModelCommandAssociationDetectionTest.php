@@ -160,6 +160,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
         $this->_compareBakeTableResult('ProductVersions', __FUNCTION__);
     }
 
@@ -171,7 +172,6 @@ class ModelCommandAssociationDetectionTest extends TestCase
     public function testBakeAssociationDetectionProductVersionsTableSigned()
     {
         $driver = ConnectionManager::get('test')->getDriver();
-        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
         $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
         $this->_compareBakeTableResult('ProductVersions', __FUNCTION__);
