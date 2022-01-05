@@ -166,8 +166,9 @@ abstract class BakeCommand extends Command
     }
 
     /**
-     * The Regex used here basically states that:
+     * Check if a column name is valid
      *
+     * The Regex used here basically states that:
      * the column name has to start with a character (lower or upper case) or an underscore and
      * further characters are allowed to be either lower or upper case characters, numbers or underscores
      *
