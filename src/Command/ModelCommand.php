@@ -127,9 +127,12 @@ class ModelCommand extends BakeCommand
     public function validateNames(TableSchemaInterface $schema, ConsoleIo $io): void
     {
         foreach ($schema->columns() as $column) {
-            if (!is_string($column) || (!ctype_alpha($column[0]) && $column[0] !== '_')) {
+            $re = '/^[a-zA-Z_][a-zA-Z0-9_]*$/m';
+            preg_match_all($re, $column, $matches, PREG_SET_ORDER);
+            if ($matches === []) {
                 $io->abort(sprintf(
-                    'Unable to bake model. Table column names must start with a letter or underscore. Found `%s`.',
+                    'Unable to bake model. Table column name must start with a letter or underscore and
+                    cannot contain special characters. Found `%s`.',
                     (string)$column
                 ));
             }
