@@ -169,23 +169,14 @@ abstract class BakeCommand extends Command
      * Check if a column name is valid
      *
      * The Regex used here basically states that:
-     * the column name has to start with a character (lower or upper case) or an underscore and
-     * further characters are allowed to be either lower or upper case characters, numbers or underscores
-     *
-     * Anything else like
-     * - any other special character
-     * - umlauts
-     * - whatever the user thinks is a good idea to use in a table name (emojis?)
-     *
-     * is prevented with this check.
+     * - the column name has to start with an ASCII character (lower or upper case) or an underscore and
+     * - further characters are allowed to be either lower or upper case ASCII characters, numbers or underscores
      *
      * @param string $name The name of the column
-     * @return bool true, if it is valid, false if not
+     * @return bool
      */
     protected function isValidColumnName(string $name): bool
     {
-        $re = '/^[a-zA-Z_][a-zA-Z0-9_]*$/';
-
-        return (bool)preg_match($re, $name);
+        return (bool)preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $name);
     }
 }
