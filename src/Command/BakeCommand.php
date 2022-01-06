@@ -166,13 +166,13 @@ abstract class BakeCommand extends Command
     }
 
     /**
-     * Check if a column name is valid
+     * Check if a column name is valid.
      *
      * The Regex used here basically states that:
      * - the column name has to start with an ASCII character (lower or upper case) or an underscore and
-     * - further characters are allowed to be either lower or upper case ASCII characters, numbers or underscores
+     * - further characters are allowed to be either lower or upper case ASCII characters, numbers or underscores.
      *
-     * @param string $name The name of the column
+     * @param string $name The name of the column.
      * @return bool
      */
     protected function isValidColumnName(string $name): bool
