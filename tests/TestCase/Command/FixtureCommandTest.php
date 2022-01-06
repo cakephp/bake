@@ -90,6 +90,22 @@ class FixtureCommandTest extends TestCase
     }
 
     /**
+     * Tests validating supported table and column names.
+     */
+    public function testValidateNamesWithInvalidSpecialChars(): void
+    {
+        $command = new FixtureCommand();
+        $command->connection = 'test';
+
+        $schema = $command->readSchema('Car', 'car');
+        $schema->addColumn('invalid:column', ['type' => 'string', 'length' => null]);
+
+        $io = $this->createMock(ConsoleIo::class);
+        $io->expects($this->once())->method('abort');
+        $command->validateNames($schema, $io);
+    }
+
+    /**
      * test generating a fixture with database rows.
      *
      * @return void
