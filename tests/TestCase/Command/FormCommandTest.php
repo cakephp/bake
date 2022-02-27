@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 
 /**
  * FormCommandTest class
@@ -49,7 +49,7 @@ class FormCommandTest extends TestCase
         ];
         $this->exec('bake form Test', ['y']);
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class TestForm extends Form', $this->generatedFiles[0]);
     }

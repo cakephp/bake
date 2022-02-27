@@ -18,8 +18,8 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Command\ModelCommand;
 use Bake\Test\TestCase\TestCase;
-use Cake\Command\Command;
 use Cake\Console\Arguments;
+use Cake\Console\CommandInterface;
 use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -93,7 +93,7 @@ class ModelCommandTest extends TestCase
     {
         $this->exec('bake model --connection test');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertOutputContains('- TodoItems');
         $this->assertOutputContains('- TodoTasks');
         $this->assertOutputContains('- TodoLabels');
@@ -1263,7 +1263,7 @@ class ModelCommandTest extends TestCase
         ];
         $this->exec('bake model --no-test todo_items');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileDoesNotExist(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
     }
@@ -1281,7 +1281,7 @@ class ModelCommandTest extends TestCase
         ];
         $this->exec('bake model --no-test --no-fixture todo_items');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileDoesNotExist(ROOT . 'tests/Fixture/TodoItemsFixture.php');
         $this->assertFileDoesNotExist(ROOT . 'tests/TestCase/Model/Table/TodoItemsTableTest.php');
@@ -1301,7 +1301,7 @@ class ModelCommandTest extends TestCase
         ];
         $this->exec('bake model --no-fixture todo_items');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileDoesNotExist(ROOT . 'tests/Fixture/TodoItemsFixture.php');
     }
@@ -1476,7 +1476,7 @@ class ModelCommandTest extends TestCase
         ];
         $this->exec('bake model --no-test --no-fixture --connection test --table todo_items Items');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1492,7 +1492,7 @@ class ModelCommandTest extends TestCase
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden users');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1508,7 +1508,7 @@ class ModelCommandTest extends TestCase
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table users');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1537,7 +1537,7 @@ class ModelCommandTest extends TestCase
         $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields todo_items');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1555,7 +1555,7 @@ class ModelCommandTest extends TestCase
         ];
         $this->exec('bake model --no-test --no-table --no-fixture TodoItems');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1571,7 +1571,7 @@ class ModelCommandTest extends TestCase
         $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields todo_items');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1587,7 +1587,7 @@ class ModelCommandTest extends TestCase
         $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
         $this->exec('bake model --no-test --no-fixture --no-table --fields id,title,body,completed todo_items');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1603,7 +1603,7 @@ class ModelCommandTest extends TestCase
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --hidden password users');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1619,7 +1619,7 @@ class ModelCommandTest extends TestCase
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --hidden foo,bar users');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1639,7 +1639,7 @@ class ModelCommandTest extends TestCase
 
         $this->exec('bake model --no-validation --no-test --no-fixture --no-entity BakeTest.Users');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1656,7 +1656,7 @@ class ModelCommandTest extends TestCase
 
         $this->exec('bake model --no-validation --no-test --no-fixture --no-entity TodoTasks');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertStringContainsString('CounterCache', $result);
@@ -1677,7 +1677,7 @@ class ModelCommandTest extends TestCase
 
         $this->exec('bake model --no-validation --no-test --no-fixture --no-entity -p BakeTest Users');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1695,7 +1695,7 @@ class ModelCommandTest extends TestCase
         ];
         $this->exec('bake model --no-test --no-fixture --no-entity Users');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
 
         $result = file_get_contents($this->generatedFiles[0]);
@@ -1711,7 +1711,7 @@ class ModelCommandTest extends TestCase
     {
         $this->exec('bake model');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertOutputContains('Choose a model to bake from the following:');
     }
 
@@ -1730,7 +1730,7 @@ class ModelCommandTest extends TestCase
         ];
         $this->exec('bake model --connection test users');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
     }
 
@@ -1762,7 +1762,7 @@ class ModelCommandTest extends TestCase
         ];
         $this->exec("bake model --connection test {$name}");
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
     }
 

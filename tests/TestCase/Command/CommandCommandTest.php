@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 use Cake\Core\Plugin;
 
 /**
@@ -51,7 +51,7 @@ class CommandCommandTest extends TestCase
         ];
         $this->exec('bake command Example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class ExampleCommand extends Command', $this->generatedFiles[0]);
     }
@@ -72,7 +72,7 @@ class CommandCommandTest extends TestCase
         ];
         $this->exec('bake command TestBake.Example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains('namespace TestBake\Command;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleCommand extends Command', $this->generatedFiles[0]);
     }
@@ -112,7 +112,7 @@ class CommandCommandTest extends TestCase
         ];
         $this->exec('bake command Docblock', ['y', 'y']);
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains(
             '@uses \Bake\Test\App\Command\DocblockCommand::buildOptionParser()',
             $testsPath . 'TestCase/Command/DocblockCommandTest.php'
@@ -141,7 +141,7 @@ class CommandCommandTest extends TestCase
 
         $this->exec('bake command Docblock --plugin BakeTest', ['y', 'y']);
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains(
             '@uses \BakeTest\Command\DocblockCommand::buildOptionParser()',
             $testsPath . 'TestCase/Command/DocblockCommandTest.php'

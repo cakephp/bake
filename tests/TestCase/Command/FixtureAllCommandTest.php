@@ -18,7 +18,7 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
 use Bake\Utility\SubsetSchemaCollection;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 
@@ -85,7 +85,7 @@ class FixtureAllCommandTest extends TestCase
         ];
         $this->exec('bake fixture all --connection test');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class ArticlesFixture', $this->generatedFiles[0]);
         $this->assertFileContains('class CommentsFixture', $this->generatedFiles[1]);
@@ -104,7 +104,7 @@ class FixtureAllCommandTest extends TestCase
         ];
         $this->exec('bake fixture all --connection test --count 10 --records');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains("'title' => 'Third Article'", $this->generatedFiles[0]);
         $this->assertFileContains(
@@ -126,7 +126,7 @@ class FixtureAllCommandTest extends TestCase
         ];
         $this->exec('bake fixture all --connection test --schema');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
             "public \$import = ['table' => 'articles'",
