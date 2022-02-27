@@ -451,6 +451,7 @@ class TestCommand extends BakeCommand
             $this->_processController($subject);
         }
 
+        /** @psalm-suppress RedundantFunctionCall */
         return array_values($this->_fixtures);
     }
 
