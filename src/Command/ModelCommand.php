@@ -131,7 +131,7 @@ class ModelCommand extends BakeCommand
                 $io->abort(sprintf(
                     'Unable to bake model. Table column name must start with a letter or underscore and
                     cannot contain special characters. Found `%s`.',
-                    (string)$column
+                    $column
                 ));
             }
         }

@@ -136,6 +136,7 @@ class BakeHelper extends Helper
      * @param int $indentLevel Identation level.
      * @param int $options VarExporter option flags
      * @return string
+     * @throws \Brick\VarExporter\ExportException
      * @see https://github.com/brick/varexporter#options
      */
     public function exportVar($var, int $indentLevel = 0, int $options = 0): string
@@ -244,7 +245,7 @@ class BakeHelper extends Helper
         SchemaInterface $schema,
         ?Table $modelObject = null,
         $takeFields = 0,
-        $filterTypes = ['binary']
+        array $filterTypes = ['binary']
     ): array {
         $fields = collection($fields)
             ->filter(function ($field) use ($schema, $filterTypes) {
