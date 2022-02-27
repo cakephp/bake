@@ -35,7 +35,7 @@ class ArticlesTableTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $config = $this->getTableLocator()->exists('Articles') ? [] : ['className' => ArticlesTable::class];
@@ -47,7 +47,7 @@ class ArticlesTableTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->Articles);
 
