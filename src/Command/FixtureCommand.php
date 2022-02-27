@@ -224,7 +224,7 @@ class FixtureCommand extends BakeCommand
                 $io->abort(sprintf(
                     'Unable to bake model. Table column name must start with a letter or underscore and
                     cannot contain special characters. Found `%s`.',
-                    (string)$column
+                    $column
                 ));
             }
         }
@@ -431,6 +431,7 @@ class FixtureCommand extends BakeCommand
      *
      * @param array $records Array of records to be converted to string
      * @return string A string value of the $records array.
+     * @throws \Brick\VarExporter\ExportException
      */
     protected function _makeRecordString(array $records): string
     {
