@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 use Cake\Core\Plugin;
 
 /**
@@ -48,7 +48,7 @@ class MiddlewareCommandTest extends TestCase
         $this->generatedFile = APP . 'Middleware/ExampleMiddleware.php';
         $this->exec('bake middleware example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains('class ExampleMiddleware', $this->generatedFile);
     }
 
@@ -65,7 +65,7 @@ class MiddlewareCommandTest extends TestCase
         $this->generatedFile = $path . 'src/Middleware/ExampleMiddleware.php';
         $this->exec('bake middleware TestBake.example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains('class ExampleMiddleware', $this->generatedFile);
     }
 
@@ -82,7 +82,7 @@ class MiddlewareCommandTest extends TestCase
         $this->generatedFile = $path . 'src/Middleware/ExampleMiddleware.php';
         $this->exec('bake middleware TestBake.example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));
     }
 }

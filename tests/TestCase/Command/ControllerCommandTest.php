@@ -19,8 +19,8 @@ namespace Bake\Test\TestCase\Command;
 use Bake\Command\ControllerCommand;
 use Bake\Test\App\Model\Table\BakeArticlesTable;
 use Bake\Test\TestCase\TestCase;
-use Cake\Command\Command;
 use Cake\Console\Arguments;
+use Cake\Console\CommandInterface;
 use Cake\Core\Plugin;
 
 /**
@@ -79,7 +79,7 @@ class ControllerCommandTest extends TestCase
     {
         $this->exec('bake controller');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertOutputContains('- BakeArticles');
         $this->assertOutputContains('- BakeArticlesBakeTags');
         $this->assertOutputContains('- BakeComments');
@@ -134,7 +134,7 @@ class ControllerCommandTest extends TestCase
             'BakeArticles'
         );
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
@@ -153,7 +153,7 @@ class ControllerCommandTest extends TestCase
             '--actions login,logout BakeArticles'
         );
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
@@ -171,7 +171,7 @@ class ControllerCommandTest extends TestCase
             '--helpers Html,Time --components RequestHandler,Auth --no-actions BakeArticles'
         );
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
@@ -189,7 +189,7 @@ class ControllerCommandTest extends TestCase
             '--helpers Html,Time --components "RequestHandler, Auth" BakeArticles'
         );
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
@@ -268,7 +268,7 @@ class ControllerCommandTest extends TestCase
         ];
         $this->exec('bake controller --connection test BakeArticles');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
             'class BakeArticlesControllerTest extends TestCase',
@@ -290,7 +290,7 @@ class ControllerCommandTest extends TestCase
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec('bake controller --connection test --no-test BakeArticles');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileDoesNotExist(ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php');
         $this->assertFileExists($this->generatedFile);
     }
@@ -304,7 +304,7 @@ class ControllerCommandTest extends TestCase
     {
         $this->exec('bake controller');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertOutputContains('Possible controllers based on your current database');
         $this->assertOutputContains('- BakeArticles');
     }
@@ -331,7 +331,7 @@ class ControllerCommandTest extends TestCase
     {
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec("bake controller --connection test --no-test {$name}");
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
 
         $this->assertFileExists($this->generatedFile);
         $this->assertFileContains('BakeArticlesController extends AppController', $this->generatedFile);
@@ -350,7 +350,7 @@ class ControllerCommandTest extends TestCase
         $this->generatedFile = $path . 'src/Controller/BakeArticlesController.php';
 
         $this->exec('bake controller --connection test --no-test Company/Pastry.BakeArticles');
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
 
         $this->assertFileExists($this->generatedFile);
         $this->assertFileContains('namespace Company\Pastry\Controller;', $this->generatedFile);
@@ -371,7 +371,7 @@ class ControllerCommandTest extends TestCase
         $this->generatedFile = $path . 'src/Controller/BakeArticlesController.php';
 
         $this->exec('bake controller --connection test --no-test --plugin Company/Pastry bake_articles');
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
 
         $this->assertFileExists($this->generatedFile);
         $this->assertFileContains('namespace Company\Pastry\Controller;', $this->generatedFile);

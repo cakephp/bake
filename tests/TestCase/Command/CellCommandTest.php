@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 use Cake\Core\Plugin;
 
 /**
@@ -53,7 +53,7 @@ class CellCommandTest extends TestCase
         ];
         $this->exec('bake cell Example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
     }
@@ -75,7 +75,7 @@ class CellCommandTest extends TestCase
         ];
         $this->exec('bake cell TestBake.Example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains('namespace TestBake\View\Cell;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
     }
@@ -115,7 +115,7 @@ class CellCommandTest extends TestCase
         ];
         $this->exec('bake cell --prefix Admin Example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('namespace Bake\Test\App\View\Cell\Admin;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
@@ -138,7 +138,7 @@ class CellCommandTest extends TestCase
         ];
         $this->exec('bake cell --prefix Admin TestBake.Example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains('namespace TestBake\View\Cell\Admin;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleCell extends Cell', $this->generatedFiles[0]);
     }

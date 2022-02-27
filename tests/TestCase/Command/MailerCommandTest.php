@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 use Cake\Core\Plugin;
 
 /**
@@ -51,7 +51,7 @@ class MailerCommandTest extends TestCase
         ];
         $this->exec('bake mailer Example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles, 'files should be created');
         $this->assertFileContains('class ExampleMailer extends Mailer', $this->generatedFiles[0]);
     }
@@ -73,7 +73,7 @@ class MailerCommandTest extends TestCase
         ];
         $this->exec('bake mailer TestBake.Example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles, 'files should be created');
         $this->assertFileContains('namespace TestBake\Mailer;', $this->generatedFiles[0]);
         $this->assertFileContains('class ExampleMailer extends Mailer', $this->generatedFiles[0]);
@@ -98,7 +98,7 @@ class MailerCommandTest extends TestCase
         ];
         $this->exec('bake mailer TestBake.Example');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
     }
 }

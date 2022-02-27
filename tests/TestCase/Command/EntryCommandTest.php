@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 
 /**
  * EntryCommand Test
@@ -57,7 +57,7 @@ class EntryCommandTest extends TestCase
     {
         $this->exec('bake --help');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertOutputContains('Available Commands');
         $this->assertOutputContains('bake controller');
         $this->assertOutputContains('bake controller all');
@@ -73,7 +73,7 @@ class EntryCommandTest extends TestCase
     public function testExecuteAppTask()
     {
         $this->exec('bake app_policy');
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertOutputContains('App Policy Generated');
     }
 
@@ -86,7 +86,7 @@ class EntryCommandTest extends TestCase
     {
         $this->exec('bake app_policy --help');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertOutputContains('bake app_policy');
         $this->assertOutputContains('Options');
     }
@@ -102,7 +102,7 @@ class EntryCommandTest extends TestCase
 
         $this->exec('bake zerg --verbose');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertOutputContains('Zerg generated');
         $this->assertOutputContains('Loud noises');
     }
@@ -116,7 +116,7 @@ class EntryCommandTest extends TestCase
     {
         $this->exec('bake nope');
 
-        $this->assertExitCode(Command::CODE_ERROR);
+        $this->assertExitCode(CommandInterface::CODE_ERROR);
         $this->assertErrorContains('Could not find');
     }
 }
