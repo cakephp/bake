@@ -1765,4 +1765,131 @@ class ModelCommandTest extends TestCase
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
     }
+
+    /**
+     * test baking nullable foreign keys
+     *
+     * @return void
+     */
+    public function testBakeTableNullableForeignKey()
+    {
+        $this->generatedFiles = [
+            APP . 'Model/Table/TestBakeArticlesTable.php',
+        ];
+
+        $validation = [
+            'id' => [
+                'valid' => [
+                    'rule' => 'numeric',
+                    'args' => [],
+                ],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => ['create'],
+                ],
+            ],
+            'name' => [
+                'valid' => [
+                    'rule' => 'scalar',
+                    'args' => [],
+                ],
+                'maxLength' => [
+                    'rule' => 'maxLength',
+                    'args' => [
+                        100,
+                        'Name must be shorter than 100 characters.',
+                    ],
+                ],
+                'requirePresense' => [
+                    'rule' => 'requirePresence',
+                    'args' => ['create'],
+                ],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => [null, false],
+                ],
+            ],
+            'count' => [
+                'valid' => [
+                    'rule' => 'nonNegativeInteger',
+                    'args' => [],
+                ],
+                'requirePresense' => [
+                    'rule' => 'requirePresence',
+                    'args' => ['create'],
+                ],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => [null, false],
+                ],
+            ],
+            'price' => [
+                'valid' => [
+                    'rule' => 'greaterThanOrEqual',
+                    'args' => [
+                        0,
+                    ],
+                ],
+                'requirePresense' => [
+                    'rule' => 'requirePresence',
+                    'args' => ['create'],
+                ],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => [null, false],
+                ],
+            ],
+            'email' => [
+                'valid' => [
+                    'rule' => 'email',
+                    'args' => [],
+                ],
+                'unique' => [
+                    'rule' => 'validateUnique',
+                    'provider' => 'table',
+                ],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyString',
+                    'args' => [],
+                ],
+            ],
+            'image' => [
+                'uploadedFile' => [
+                    'rule' => 'uploadedFile',
+                    'args' => [
+                        [
+                            'optional' => true,
+                            'types' => ['image/jpeg'],
+                        ],
+                    ],
+                ],
+                'allowEmpty' => [
+                    'rule' => 'allowEmptyFile',
+                    'args' => [],
+                ],
+            ],
+        ];
+
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $name = 'TestBakeArticles';
+        $args = new Arguments([$name], ['table' => 'bake_articles', 'force' => true], []);
+        $io = new ConsoleIo($this->_out, $this->_err, $this->_in);
+
+        $table = $command->getTable($name, $args);
+        $tableObject = $command->getTableObject($name, $table);
+        $data = $command->getTableContext($tableObject, $table, $name, $args, $io);
+        $data['validation'] = $validation;
+        $data['associations'] = [
+            'belongsTo' => [],
+            'hasMany' => [],
+            'belongsToMany' => [],
+        ];
+        $data['rulesChecker'] = [];
+        $command->bakeTable($tableObject, $data, $args, $io);
+
+        $result = file_get_contents($this->generatedFiles[0]);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
 }
