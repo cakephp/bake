@@ -49,7 +49,7 @@
 {% endif %}
 {% if isKey is not same as(true) %}
 {% set columnData = Bake.columnData(field, schema) %}
-{% if columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
+{% if columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] or columnData.null is same as(true)  %}
                     <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
 {% else %}
                     <td><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>

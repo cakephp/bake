@@ -67,7 +67,12 @@
 {% for field in groupedFields.number %}
                 <tr>
                     <th><?= __('{{ field|humanize }}') ?></th>
+{% set columnData = Bake.columnData(field, schema) %}
+{% if columnData.null is same as(true) %}
+                    <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
+{% else %}
                     <td><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
+{% endif %}
                 </tr>
 {% endfor %}
 {% endif %}
