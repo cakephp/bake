@@ -226,6 +226,7 @@ class ModelCommand extends BakeCommand
 
         $associations = [
             'belongsTo' => [],
+            'hasOne' => [],
             'hasMany' => [],
             'belongsToMany' => [],
         ];
@@ -241,6 +242,7 @@ class ModelCommand extends BakeCommand
             return $associations;
         }
 
+        $associations = $this->findHasOne($table, $associations);
         $associations = $this->findHasMany($table, $associations);
         $associations = $this->findBelongsToMany($table, $associations);
 
@@ -405,6 +407,105 @@ class ModelCommand extends BakeCommand
     }
 
     /**
+     * Checks whether the given source and target table names are sides
+     * of a possible many-to-many relation.
+     *
+     * @param string $sourceTable The source table name.
+     * @param string $targetTable The target table name.
+     * @return bool
+     */
+    public function isPossibleBelongsToManyRelation(string $sourceTable, string $targetTable): bool
+    {
+        $tables = $this->listAll();
+
+        $pregTableName = preg_quote($sourceTable, '/');
+        $pregPattern = "/^{$pregTableName}_|_{$pregTableName}$/";
+
+        if (preg_match($pregPattern, $targetTable) === 1) {
+            $possibleBTMTargetTable = preg_replace($pregPattern, '', $targetTable);
+            if (in_array($possibleBTMTargetTable, $tables, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks whether the given table schema has a unique constraint for
+     * the given field.
+     *
+     * The check is only going to be satisfied if the constraint has
+     * only this one specific field. Multi-column constraints will not
+     * match, as they cannot guarantee uniqueness on the given field.
+     *
+     * @param \Cake\Database\Schema\TableSchemaInterface $schema The schema to check for the constraint.
+     * @param string $keyField The field of the constraint.
+     * @return bool
+     */
+    public function hasUniqueConstraintFor(TableSchemaInterface $schema, string $keyField): bool
+    {
+        foreach ($schema->constraints() as $constraint) {
+            $constraintInfo = $schema->getConstraint($constraint);
+            if (
+                $constraintInfo['type'] === TableSchema::CONSTRAINT_UNIQUE &&
+                $constraintInfo['columns'] === [$keyField]
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Find the hasOne relations and add them to associations list
+     *
+     * @param \Cake\ORM\Table $model Model instance being generated
+     * @param array $associations Array of in progress associations
+     * @return array Associations with hasOne added in.
+     */
+    public function findHasOne(Table $model, array $associations): array
+    {
+        $schema = $model->getSchema();
+        $primaryKey = $schema->getPrimaryKey();
+        $tableName = $schema->name();
+        $foreignKey = $this->_modelKey($tableName);
+
+        $tables = $this->listAll();
+        foreach ($tables as $otherTableName) {
+            if ($this->isPossibleBelongsToManyRelation($tableName, $otherTableName)) {
+                continue;
+            }
+
+            $otherModel = $this->getTableObject($this->_camelize($otherTableName), $otherTableName);
+            $otherSchema = $otherModel->getSchema();
+
+            foreach ($otherSchema->columns() as $fieldName) {
+                if (!$this->hasUniqueConstraintFor($otherSchema, $fieldName)) {
+                    continue;
+                }
+
+                $assoc = false;
+                if (!in_array($fieldName, $primaryKey) && $fieldName === $foreignKey) {
+                    $assoc = [
+                        'alias' => $otherModel->getAlias(),
+                        'foreignKey' => $fieldName,
+                    ];
+                }
+                if ($assoc && $this->plugin && empty($assoc['className'])) {
+                    $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
+                }
+                if ($assoc) {
+                    $associations['hasOne'][] = $assoc;
+                }
+            }
+        }
+
+        return $associations;
+    }
+
+    /**
      * Find the hasMany relations and add them to associations list
      *
      * @param \Cake\ORM\Table $model Model instance being generated
@@ -420,21 +521,20 @@ class ModelCommand extends BakeCommand
 
         $tables = $this->listAll();
         foreach ($tables as $otherTableName) {
+            if ($this->isPossibleBelongsToManyRelation($tableName, $otherTableName)) {
+                continue;
+            }
+
             $otherModel = $this->getTableObject($this->_camelize($otherTableName), $otherTableName);
             $otherSchema = $otherModel->getSchema();
 
-            $pregTableName = preg_quote($tableName, '/');
-            $pregPattern = "/^{$pregTableName}_|_{$pregTableName}$/";
-            if (preg_match($pregPattern, $otherTableName) === 1) {
-                $possibleHABTMTargetTable = preg_replace($pregPattern, '', $otherTableName);
-                if (in_array($possibleHABTMTargetTable, $tables)) {
-                    continue;
-                }
-            }
-
             foreach ($otherSchema->columns() as $fieldName) {
                 $assoc = false;
-                if (!in_array($fieldName, $primaryKey) && $fieldName === $foreignKey) {
+                if (
+                    !in_array($fieldName, $primaryKey) &&
+                    $fieldName === $foreignKey &&
+                    !$this->hasUniqueConstraintFor($otherSchema, $fieldName)
+                ) {
                     $assoc = [
                         'alias' => $otherModel->getAlias(),
                         'foreignKey' => $fieldName,

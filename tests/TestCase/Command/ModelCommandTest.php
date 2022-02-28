@@ -297,6 +297,12 @@ class ModelCommandTest extends TestCase
                     'joinType' => 'INNER',
                 ],
             ],
+            'hasOne' => [
+                [
+                    'alias' => 'TodoReminders',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
             'hasMany' => [
                 [
                     'alias' => 'TodoTasks',
@@ -355,6 +361,13 @@ class ModelCommandTest extends TestCase
                     'joinType' => 'INNER',
                 ],
             ],
+            'hasOne' => [
+                [
+                    'alias' => 'TodoReminders',
+                    'className' => 'TestBake.TodoReminders',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
             'hasMany' => [
                 [
                     'alias' => 'TodoTasks',
@@ -395,6 +408,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
         $result = $command->getAssociations($model, $args, $io);
         $expected = [
+            'hasOne' => [],
             'hasMany' => [],
             'belongsTo' => [],
             'belongsToMany' => [],
@@ -575,7 +589,34 @@ class ModelCommandTest extends TestCase
     }
 
     /**
-     * test that hasOne and/or hasMany relations are generated properly.
+     * test that hasOne relations are generated properly.
+     *
+     * @return void
+     */
+    public function testHasOneGeneration()
+    {
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $model = $this->getTableLocator()->get('TodoItems');
+        $result = $command->findHasOne($model, []);
+        $expected = [
+            'hasOne' => [
+                [
+                    'alias' => 'TodoReminders',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+
+        $model = $this->getTableLocator()->get('SelfReferencingUniqueKeys');
+        $result = $command->findHasOne($model, []);
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * test that hasMany relations are generated properly.
      *
      * @return void
      */
@@ -616,6 +657,23 @@ class ModelCommandTest extends TestCase
                 [
                     'alias' => 'ChildCategoryThreads',
                     'className' => 'Blog.CategoryThreads',
+                    'foreignKey' => 'parent_id',
+                ],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+
+        // self-reference foreign keys with a unique constraint will
+        // generate hasMany instead of hasOne, until someone can come
+        // up with a proper use case for the latter.
+        $model = $this->getTableLocator()->get('SelfReferencingUniqueKeys');
+        $command->plugin = null;
+        $result = $command->findHasMany($model, []);
+        $expected = [
+            'hasMany' => [
+                [
+                    'alias' => 'ChildSelfReferencingUniqueKeys',
+                    'className' => 'SelfReferencingUniqueKeys',
                     'foreignKey' => 'parent_id',
                 ],
             ],
