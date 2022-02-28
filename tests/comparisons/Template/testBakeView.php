@@ -36,11 +36,11 @@
                 </tr>
                 <tr>
                     <th><?= __('Member Number') ?></th>
-                    <td><?= $this->Number->format($author->member_number) ?></td>
+                    <td><?= $author->member_number === null ? '' : $this->Number->format($author->member_number) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Account Balance') ?></th>
-                    <td><?= $this->Number->format($author->account_balance) ?></td>
+                    <td><?= $author->account_balance === null ? '' : $this->Number->format($author->account_balance) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Created') ?></th>
