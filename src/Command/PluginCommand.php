@@ -176,6 +176,7 @@ class PluginCommand extends BakeCommand
 
         $renderer = new TemplateRenderer($args->getOption('theme'));
         $renderer->set([
+            'name' => $name,
             'package' => $package,
             'namespace' => $namespace,
             'baseNamespace' => $baseNamespace,
@@ -211,7 +212,11 @@ class PluginCommand extends BakeCommand
         foreach ($templates as $template) {
             $template = substr($template, strrpos($template, 'Plugin' . DIRECTORY_SEPARATOR) + 7, -4);
             $template = rtrim($template, '.');
-            $this->_generateFile($renderer, $template, $root, $io);
+            $filename = $template;
+            if ($filename === 'src/Plugin.php') {
+                $filename = 'src/' . $name . 'Plugin.php';
+            }
+            $this->_generateFile($renderer, $template, $root, $filename, $io);
         }
     }
 
@@ -221,6 +226,7 @@ class PluginCommand extends BakeCommand
      * @param \Bake\Utility\TemplateRenderer $renderer The renderer to use.
      * @param string $template The template to render
      * @param string $root The path to the plugin's root
+     * @param string $filename Filename to generate.
      * @param \Cake\Console\ConsoleIo $io The io instance.
      * @return void
      */
@@ -228,11 +234,12 @@ class PluginCommand extends BakeCommand
         TemplateRenderer $renderer,
         string $template,
         string $root,
+        string $filename,
         ConsoleIo $io
     ): void {
         $io->out(sprintf('Generating %s file...', $template));
         $out = $renderer->generate('Bake.Plugin/' . $template);
-        $io->createFile($root . $template, $out);
+        $io->createFile($root . $filename, $out);
     }
 
     /**

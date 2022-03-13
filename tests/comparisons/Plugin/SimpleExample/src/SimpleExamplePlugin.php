@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace SimpleExample;
 
+use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Http\MiddlewareQueue;
 use Cake\Routing\RouteBuilder;
-use Cake\Console\CommandCollection;
 
 /**
  * Plugin for SimpleExample
  */
-class Plugin extends BasePlugin
+class SimpleExamplePlugin extends BasePlugin
 {
     /**
      * Load all the plugin configuration and bootstrap logic.
@@ -69,7 +69,7 @@ class Plugin extends BasePlugin
      * @param \Cake\Console\CommandCollection $commands The command collection to update.
      * @return \Cake\Console\CommandCollection
      */
-    public function console(CommandCollection $commands) : CommandCollection
+    public function console(CommandCollection $commands): CommandCollection
     {
         // Add your commands here
 
