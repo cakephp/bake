@@ -19,7 +19,7 @@
 
     <!-- Setup fixture extension -->
     <extensions>
-        <extension class="Cake\TestSuite\Fixtures\PHPUnitExtension" />
+        <extension class="Cake\TestSuite\Fixture\PHPUnitExtension" />
     </extensions>
 
     <filter>
