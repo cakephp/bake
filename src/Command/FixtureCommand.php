@@ -23,7 +23,7 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
-use Cake\Database\Exception;
+use Cake\Database\Exception\DatabaseException;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
@@ -160,7 +160,7 @@ class FixtureCommand extends BakeCommand
 
         try {
             $data = $this->readSchema($model, $useTable);
-        } catch (Exception $e) {
+        } catch (DatabaseException $e) {
             $this->getTableLocator()->remove($model);
             $useTable = Inflector::underscore($model);
             $table = $useTable;

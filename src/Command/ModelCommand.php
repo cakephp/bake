@@ -24,7 +24,7 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Sqlserver;
-use Cake\Database\Exception;
+use Cake\Database\Exception\DatabaseException;
 use Cake\Database\Schema\CachedCollection;
 use Cake\Database\Schema\TableSchema;
 use Cake\Database\Schema\TableSchemaInterface;
@@ -956,7 +956,7 @@ class ModelCommand extends BakeCommand
 
             try {
                 $otherSchema = $otherModel->getSchema();
-            } catch (Exception $e) {
+            } catch (DatabaseException $e) {
                 continue;
             }
 
