@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Bake;
 
 use Bake\Command\BakeCommand;
-use Bake\Command\EntryCommand;
 use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
 use Cake\Core\Configure;
@@ -71,9 +70,6 @@ class Plugin extends BasePlugin
     {
         // Add commands in plugins and app.
         $commands = $this->discoverCommands($commands);
-
-        // Add entry command to handle entry point and backwards compat.
-        $commands->add(EntryCommand::defaultName(), EntryCommand::class);
 
         return $commands;
     }
