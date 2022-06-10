@@ -494,7 +494,7 @@ class ModelCommand extends BakeCommand
                         'foreignKey' => $fieldName,
                     ];
                 }
-                if ($assoc && $this->plugin && empty($assoc['className'])) {
+                if ($assoc && $this->plugin) {
                     $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
                 }
                 if ($assoc) {
