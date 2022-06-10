@@ -39,7 +39,7 @@ class ExampleHelperTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->stub = new ConsoleOutput();
@@ -52,7 +52,7 @@ class ExampleHelperTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->Example);
 

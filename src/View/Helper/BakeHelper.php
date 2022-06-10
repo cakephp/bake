@@ -23,7 +23,7 @@ class BakeHelper extends Helper
     /**
      * Default configuration.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $_defaultConfig = [];
 
@@ -39,7 +39,7 @@ class BakeHelper extends Helper
      *
      * @param string $name the name of the property
      * @param array $value the array of values
-     * @param array $options extra options to be passed to the element
+     * @param array<string,mixed> $options extra options to be passed to the element
      * @return string
      */
     public function arrayProperty(string $name, array $value = [], array $options = []): string
@@ -63,7 +63,7 @@ class BakeHelper extends Helper
      * Returns an array converted into a formatted multiline string
      *
      * @param array $list array of items to be stringified
-     * @param array $options options to use
+     * @param array<string, mixed> $options options to use
      * @return string
      * @deprecated 2.5.0 Use BakeHelper::exportVar() instead.
      */
@@ -136,6 +136,7 @@ class BakeHelper extends Helper
      * @param int $indentLevel Identation level.
      * @param int $options VarExporter option flags
      * @return string
+     * @throws \Brick\VarExporter\ExportException
      * @see https://github.com/brick/varexporter#options
      */
     public function exportVar($var, int $indentLevel = 0, int $options = 0): string
@@ -236,7 +237,7 @@ class BakeHelper extends Helper
      * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
      * @param \Cake\ORM\Table|null $modelObject Model object.
      * @param string|int $takeFields Take fields.
-     * @param array $filterTypes Filter field types.
+     * @param array<string> $filterTypes Filter field types.
      * @return array
      */
     public function filterFields(
@@ -244,7 +245,7 @@ class BakeHelper extends Helper
         SchemaInterface $schema,
         ?Table $modelObject = null,
         $takeFields = 0,
-        $filterTypes = ['binary']
+        array $filterTypes = ['binary']
     ): array {
         $fields = collection($fields)
             ->filter(function ($field) use ($schema, $filterTypes) {

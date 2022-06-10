@@ -81,8 +81,6 @@ abstract class SimpleBakeCommand extends BakeCommand
         if (empty($name)) {
             $io->err('You must provide a name to bake a ' . $this->name());
             $this->abort();
-
-            return null;
         }
         $name = $this->_getName($name);
         $name = Inflector::camelize($name);

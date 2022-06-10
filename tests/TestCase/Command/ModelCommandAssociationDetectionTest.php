@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
 use Cake\Database\Driver\Postgres;
@@ -84,7 +84,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
         ];
         $this->exec("bake model --no-entity --no-fixture --no-test --connection test {$name}");
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $contents = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile($comparisonFile . '.php', $contents);
     }
@@ -160,6 +160,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
+        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
         $this->_compareBakeTableResult('ProductVersions', __FUNCTION__);
     }
 
@@ -171,7 +172,6 @@ class ModelCommandAssociationDetectionTest extends TestCase
     public function testBakeAssociationDetectionProductVersionsTableSigned()
     {
         $driver = ConnectionManager::get('test')->getDriver();
-        $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
         $this->skipIf($driver instanceof Sqlserver, 'Incompatible with sqlserver');
         $this->_compareBakeTableResult('ProductVersions', __FUNCTION__);

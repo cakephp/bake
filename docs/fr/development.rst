@@ -119,6 +119,7 @@ Ainsi, par exemple, pour créer avec bake un shell comme ceci:
 Le template utilisé
 (***vendor/cakephp/bake/templates/bake/Command/command.twig**)
 ressemble à ceci::
+
     declare(strict_types=1);
 
     namespace {{ namespace }}\Command;

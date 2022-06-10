@@ -31,7 +31,7 @@ use InvalidArgumentException;
 trait CommonOptionsTrait
 {
     /**
-     * @var string|null
+     * @var string
      */
     public $plugin;
 

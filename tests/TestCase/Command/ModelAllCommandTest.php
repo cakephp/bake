@@ -18,7 +18,7 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
 use Bake\Utility\SubsetSchemaCollection;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
 
@@ -88,7 +88,7 @@ class ModelAllCommandTest extends TestCase
         }
         $this->exec('bake model all --connection test --no-table --no-test');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
 
         $this->assertFileDoesNotExist(

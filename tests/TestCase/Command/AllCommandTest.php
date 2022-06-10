@@ -18,7 +18,7 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
 use Bake\Utility\SubsetSchemaCollection;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 use Cake\Datasource\ConnectionManager;
 
 /**
@@ -95,7 +95,7 @@ class AllCommandTest extends TestCase
         ];
         $this->exec('bake all --connection test Products', ['y']);
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertOutputContains('Bake All complete');
     }
@@ -136,7 +136,7 @@ class AllCommandTest extends TestCase
         ];
         $this->exec('bake all --connection test --everything', ['y']);
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertOutputContains('Bake All complete');
     }
@@ -166,7 +166,7 @@ class AllCommandTest extends TestCase
         ];
         $this->exec('bake all --connection test --prefix admin Products', ['y']);
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
             'namespace Bake\Test\App\Controller\Admin;',
@@ -212,7 +212,7 @@ class AllCommandTest extends TestCase
         ];
         $this->exec('bake all --connection test Products', ['y', 'y', 'y', 'y']);
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains(
             '@uses \Bake\Test\App\Controller\ProductsController::index()',
             $testsPath . 'TestCase/Controller/ProductsControllerTest.php'

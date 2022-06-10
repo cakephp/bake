@@ -23,7 +23,7 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
-use Cake\Database\Exception;
+use Cake\Database\Exception\DatabaseException;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
@@ -160,7 +160,7 @@ class FixtureCommand extends BakeCommand
 
         try {
             $data = $this->readSchema($model, $useTable);
-        } catch (Exception $e) {
+        } catch (DatabaseException $e) {
             $this->getTableLocator()->remove($model);
             $useTable = Inflector::underscore($model);
             $table = $useTable;
@@ -220,10 +220,11 @@ class FixtureCommand extends BakeCommand
     public function validateNames(TableSchemaInterface $schema, ConsoleIo $io): void
     {
         foreach ($schema->columns() as $column) {
-            if (!is_string($column) || (!ctype_alpha($column[0]) && $column[0] !== '_')) {
+            if (!$this->isValidColumnName($column)) {
                 $io->abort(sprintf(
-                    'Unable to bake model. Table column names must start with a letter or underscore. Found `%s`.',
-                    (string)$column
+                    'Unable to bake model. Table column name must start with a letter or underscore and
+                    cannot contain special characters. Found `%s`.',
+                    $column
                 ));
             }
         }
@@ -235,7 +236,7 @@ class FixtureCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args The CLI arguments.
      * @param \Cake\Console\ConsoleIo $io The console io instance.
      * @param string $model name of the model being generated
-     * @param array $otherVars Contents of the fixture file.
+     * @param array<string, mixed> $otherVars Contents of the fixture file.
      * @return void
      */
     public function generateFixtureFile(Arguments $args, ConsoleIo $io, string $model, array $otherVars): void
@@ -430,6 +431,7 @@ class FixtureCommand extends BakeCommand
      *
      * @param array $records Array of records to be converted to string
      * @return string A string value of the $records array.
+     * @throws \Brick\VarExporter\ExportException
      */
     protected function _makeRecordString(array $records): string
     {

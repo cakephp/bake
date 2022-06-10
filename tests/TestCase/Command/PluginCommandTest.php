@@ -18,7 +18,7 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Command\PluginCommand;
 use Bake\Test\TestCase\TestCase;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 use Cake\Console\ConsoleIo;
 use Cake\Console\Exception\StopException;
 use Cake\Core\App;
@@ -85,7 +85,7 @@ class PluginCommandTest extends TestCase
     public function testMainBakePluginContents()
     {
         $this->exec('bake plugin SimpleExample', ['y', 'n']);
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertPluginContents('SimpleExample');
     }
 
@@ -97,7 +97,7 @@ class PluginCommandTest extends TestCase
     public function testMainCustomAppNamespace()
     {
         $this->exec('bake plugin Simple', ['y', 'n']);
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
 
         $bakedRoot = App::path('plugins')[0];
         $appController = $bakedRoot . 'Simple/src/Controller/AppController.php';
@@ -112,7 +112,7 @@ class PluginCommandTest extends TestCase
     public function testMainVendorName()
     {
         $this->exec('bake plugin Company/Example', ['y', 'n']);
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertPluginContents('Company/Example');
     }
 
@@ -124,7 +124,7 @@ class PluginCommandTest extends TestCase
     public function testMainVendorNameCasingFix()
     {
         $this->exec('bake plugin company/example', ['y', 'n']);
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertPluginContents('Company/Example');
     }
 
@@ -137,7 +137,7 @@ class PluginCommandTest extends TestCase
     {
         $this->exec('bake plugin');
 
-        $this->assertExitCode(Command::CODE_ERROR);
+        $this->assertExitCode(CommandInterface::CODE_ERROR);
         $this->assertErrorContains('You must');
     }
 
@@ -164,7 +164,7 @@ class PluginCommandTest extends TestCase
 
         $this->exec("bake plugin --composer '{$composerPath}' composer_example", ['y', 'y']);
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
 
         $result = json_decode(file_get_contents(ROOT . 'composer.json'), true);
         $this->assertArrayHasKey('autoload', $result);

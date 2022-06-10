@@ -18,7 +18,7 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Test\TestCase\TestCase;
 use Bake\Utility\SubsetSchemaCollection;
-use Cake\Command\Command;
+use Cake\Console\CommandInterface;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 
@@ -95,7 +95,7 @@ class TemplateAllCommandTest extends TestCase
         ];
         $this->exec('bake template all');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
     }
 
@@ -118,7 +118,7 @@ class TemplateAllCommandTest extends TestCase
         ];
         $this->exec('bake template all --index-columns 3');
 
-        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('title', $this->generatedFiles[0]);
         $this->assertFileNotContains('published', $this->generatedFiles[0]);

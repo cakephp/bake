@@ -49,7 +49,7 @@ class TemplateRenderer
     /**
      * Constructor
      *
-     * @param string $theme The template theme/plugin to use.
+     * @param ?string $theme The template theme/plugin to use.
      */
     public function __construct(?string $theme = '')
     {
