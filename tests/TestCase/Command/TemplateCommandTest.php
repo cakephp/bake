@@ -102,7 +102,6 @@ class TemplateCommandTest extends TestCase
     /**
      * Test the controller() method.
      *
-     * @param $name
      * @dataProvider nameVariations
      * @return void
      */
