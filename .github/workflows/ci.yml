@@ -3,23 +3,24 @@ name: CI
 on:
   push:
     branches:
-      - '2.x'
-      - '2.next'
+      - 2.x
+      - 2.next
+      - 3.x
   pull_request:
     branches:
       - '*'
 
 jobs:
   testsuite:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['7.2', '7.4', '8.0', '8.1']
+        php-version: ['7.4', '8.0', '8.2']
         db-type: [mysql, pgsql]
         prefer-lowest: ['']
         include:
-          - php-version: '7.2'
+          - php-version: '7.4'
             db-type: 'sqlite'
             prefer-lowest: 'prefer-lowest'
 
@@ -65,8 +66,8 @@ jobs:
       run: |
         if ${{ matrix.prefer-lowest == 'prefer-lowest' }}; then
           composer update --prefer-lowest --prefer-stable
-        elif ${{ matrix.php-version == '8.1' }}; then
-          composer update --ignore-platform-reqs          
+        elif ${{ matrix.php-version == '8.2' }}; then
+          composer update --ignore-platform-reqs
         else
           composer update
         fi
@@ -151,7 +152,7 @@ jobs:
 
   cs-stan:
     name: Coding Standard & Static Analysis
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v3
@@ -171,9 +172,9 @@ jobs:
       run: vendor/bin/phpcs --report=checkstyle src/ tests/ | cs2pr
 
     - name: Run psalm
-      if: success() || failure()
+      if: always()
       run: vendor/bin/psalm.phar --output-format=github
 
     - name: Run phpstan
-      if: success() || failure()
+      if: always()
       run: vendor/bin/phpstan.phar analyse
