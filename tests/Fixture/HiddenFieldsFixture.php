@@ -22,25 +22,11 @@ use Cake\TestSuite\Fixture\TestFixture;
 class HiddenFieldsFixture extends TestFixture
 {
     /**
-     * fields property
-     *
-     * @var array<string, mixed>
-     */
-    public $fields = [
-        'id' => ['type' => 'integer'],
-        'password' => ['type' => 'string', 'null' => true, 'length' => 255],
-        'auth_token' => ['type' => 'string', 'null' => true, 'length' => 255],
-        '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id']],
-        ],
-    ];
-
-    /**
      * records property
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         ['password' => '$2a$10$u05j8FjsvLBNdfhBhc21LOuVMpzpabVXQ9OpC2wO3pSO0q6t7HHMO', 'auth_token' => '12345'],
         ['password' => '$2a$10$u05j8FjsvLBNdfhBhc21LOuVMpzpabVXQ9OpC2wO3pSO0q6t7HHMO', 'auth_token' => '23456'],
     ];

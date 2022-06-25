@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 // phpcs:ignoreFile
 
+use Bake\BakePlugin;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -85,4 +86,4 @@ if (env('FIXTURE_SCHEMA_METADATA')) {
 
 Configure::write('Debugger.exportFormatter', TextFormatter::class);
 
-Plugin::getCollection()->add(new \Bake\Plugin());
+Plugin::getCollection()->add(new BakePlugin());

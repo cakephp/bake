@@ -11,15 +11,15 @@ on:
 
 jobs:
   testsuite:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['7.2', '7.4', '8.0', '8.1']
+        php-version: ['8.1', '8.2']
         db-type: [mysql, pgsql]
         prefer-lowest: ['']
         include:
-          - php-version: '7.2'
+          - php-version: '8.1'
             db-type: 'sqlite'
             prefer-lowest: 'prefer-lowest'
 
@@ -65,8 +65,8 @@ jobs:
       run: |
         if ${{ matrix.prefer-lowest == 'prefer-lowest' }}; then
           composer update --prefer-lowest --prefer-stable
-        elif ${{ matrix.php-version == '8.1' }}; then
-          composer update --ignore-platform-reqs          
+        elif ${{ matrix.php-version == '8.2' }}; then
+          composer update --ignore-platform-reqs
         else
           composer update
         fi
@@ -77,23 +77,23 @@ jobs:
         if [[ ${{ matrix.db-type }} == 'mysql' ]]; then export DB_URL='mysql://root:root@127.0.0.1/cakephp'; fi
         if [[ ${{ matrix.db-type }} == 'pgsql' ]]; then export DB_URL='postgres://postgres:postgres@127.0.0.1/postgres'; fi
 
-        if [[ ${{ matrix.php-version }} == '7.4' && ${{ matrix.db-type }} == 'mysql' ]]; then
+        if [[ ${{ matrix.php-version }} == '8.1' && ${{ matrix.db-type }} == 'mysql' ]]; then
           vendor/bin/phpunit --coverage-clover=coverage.xml
         else
           vendor/bin/phpunit
         fi
 
     - name: Code Coverage Report
-      if: success() && matrix.php-version == '7.4' && matrix.db-type == 'mysql'
+      if: success() && matrix.php-version == '8.1' && matrix.db-type == 'mysql'
       uses: codecov/codecov-action@v3
 
   testsuite-windows:
     runs-on: windows-2019
-    name: Windows - PHP 7.4 & SQL Server
+    name: Windows - PHP 8.1 & SQL Server
 
     env:
       EXTENSIONS: mbstring, intl, pdo_sqlsrv
-      PHP_VERSION: '7.4'
+      PHP_VERSION: '8.1'
 
     steps:
     - uses: actions/checkout@v3
@@ -151,7 +151,7 @@ jobs:
 
   cs-stan:
     name: Coding Standard & Static Analysis
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v3
@@ -159,7 +159,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.4'
+        php-version: '8.1'
         extensions: mbstring, intl
         coverage: none
         tools: cs2pr
@@ -171,9 +171,9 @@ jobs:
       run: vendor/bin/phpcs --report=checkstyle src/ tests/ | cs2pr
 
     - name: Run psalm
-      if: success() || failure()
+      if: always()
       run: vendor/bin/psalm.phar --output-format=github
 
     - name: Run phpstan
-      if: success() || failure()
+      if: always()
       run: vendor/bin/phpstan.phar analyse

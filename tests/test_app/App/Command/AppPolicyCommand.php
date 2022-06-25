@@ -11,16 +11,21 @@ declare(strict_types=1);
  *
  * @copyright Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link      http://cakephp.org CakePHP(tm) Project
- * @since     0.1.0
+ * @since     2.0.0
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace BakeTest\Shell\Task;
+namespace Bake\Test\App\Command;
 
-use Bake\Shell\Task\BakeTask;
+use Bake\Command\BakeCommand;
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
 
-/**
- * Test stub for BakeShell.
- */
-class WidgetTask extends BakeTask
+class AppPolicyCommand extends BakeCommand
 {
+    public function execute(Arguments $args, ConsoleIo $io)
+    {
+        $io->out('App Policy Generated');
+
+        return static::CODE_SUCCESS;
+    }
 }

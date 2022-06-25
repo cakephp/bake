@@ -34,7 +34,7 @@ class ControllerCommand extends BakeCommand
      *
      * @var string
      */
-    public $pathFragment = 'Controller/';
+    public string $pathFragment = 'Controller/';
 
     /**
      * Execute the command.
@@ -213,7 +213,7 @@ class ControllerCommand extends BakeCommand
      * Get the list of components for the controller.
      *
      * @param \Cake\Console\Arguments $args The console arguments
-     * @return string[]
+     * @return array<string>
      */
     public function getComponents(Arguments $args): array
     {
@@ -230,7 +230,7 @@ class ControllerCommand extends BakeCommand
      * Get the list of helpers for the controller.
      *
      * @param \Cake\Console\Arguments $args The console arguments
-     * @return string[]
+     * @return array<string>
      */
     public function getHelpers(Arguments $args): array
     {

@@ -24,7 +24,7 @@ use Cake\Console\Exception\StopException;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Filesystem;
+use Cake\Utility\Filesystem;
 use SplFileInfo;
 
 /**
@@ -44,14 +44,15 @@ class PluginCommandTest extends TestCase
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Plugin' . DS;
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
 
         // Output into a safe place.
         $path = TMP . 'plugin_task' . DS;
         Configure::write('App.paths.plugins', [$path]);
 
         // Create the test output path
-        mkdir($path, 0777, true);
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
 
         if (file_exists(APP . 'Application.php.bak')) {
             rename(APP . 'Application.php.bak', APP . 'Application.php');

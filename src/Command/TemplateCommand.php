@@ -29,6 +29,7 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 use Cake\View\Exception\MissingTemplateException;
+use Exception;
 use RuntimeException;
 
 /**
@@ -41,49 +42,49 @@ class TemplateCommand extends BakeCommand
      *
      * @var string
      */
-    public $controllerName;
+    public string $controllerName;
 
     /**
      * Classname of the controller being used
      *
      * @var string
      */
-    public $controllerClass;
+    public string $controllerClass;
 
     /**
      * Name with plugin of the model being used
      *
      * @var string
      */
-    public $modelName = null;
+    public string $modelName;
 
     /**
      * Actions to use for scaffolding
      *
-     * @var string[]
+     * @var array<string>
      */
-    public $scaffoldActions = ['index', 'view', 'add', 'edit'];
+    public array $scaffoldActions = ['index', 'view', 'add', 'edit'];
 
     /**
      * Actions that exclude hidden fields
      *
-     * @var string[]
+     * @var array<string>
      */
-    public $excludeHiddenActions = ['index', 'view'];
+    public array $excludeHiddenActions = ['index', 'view'];
 
     /**
      * AssociationFilter utility
      *
      * @var \Bake\Utility\Model\AssociationFilter|null
      */
-    protected $_associationFilter;
+    protected ?AssociationFilter $_associationFilter = null;
 
     /**
      * Template path.
      *
      * @var string
      */
-    public $path;
+    public string $path;
 
     /**
      * Override initialize
@@ -213,7 +214,7 @@ class TemplateCommand extends BakeCommand
     /**
      * Get a list of actions that can / should have view templates baked for them.
      *
-     * @return string[] Array of action names that should be baked
+     * @return array<string> Array of action names that should be baked
      */
     protected function _methodsToBake(): array
     {
@@ -287,7 +288,7 @@ class TemplateCommand extends BakeCommand
             $fields = $schema->columns();
             $hidden = $modelObject->newEmptyEntity()->getHidden() ?: ['token', 'password', 'passwd'];
             $modelClass = $this->modelName;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $io->error($exception->getMessage());
             $this->abort();
         }
@@ -341,7 +342,7 @@ class TemplateCommand extends BakeCommand
         Arguments $args,
         ConsoleIo $io,
         string $template,
-        $content = '',
+        string|bool $content = '',
         ?string $outputFile = null
     ): void {
         if ($outputFile === null) {
@@ -424,7 +425,7 @@ class TemplateCommand extends BakeCommand
             'help' => 'The routing prefix to generate views for.',
         ])->addOption('index-columns', [
             'help' => 'Limit for the number of index columns',
-            'default' => 0,
+            'default' => '0',
         ]);
 
         return $parser;

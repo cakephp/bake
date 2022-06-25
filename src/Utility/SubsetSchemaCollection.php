@@ -30,16 +30,16 @@ class SubsetSchemaCollection implements CollectionInterface
     /**
      * @var \Cake\Database\Schema\CollectionInterface
      */
-    protected $collection;
+    protected CollectionInterface $collection;
 
     /**
-     * @var string[]
+     * @var array<string>
      */
-    protected $tables = [];
+    protected array $tables = [];
 
     /**
      * @param \Cake\Database\Schema\CollectionInterface $collection The wrapped collection
-     * @param string[] $tables The subset of tables.
+     * @param array<string> $tables The subset of tables.
      */
     public function __construct(CollectionInterface $collection, array $tables)
     {
@@ -60,7 +60,7 @@ class SubsetSchemaCollection implements CollectionInterface
     /**
      * Get the list of tables in this schema collection.
      *
-     * @return string[]
+     * @return array<string>
      */
     public function listTables(): array
     {

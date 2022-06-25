@@ -30,7 +30,7 @@ class TemplateAllCommand extends BakeCommand
     /**
      * @var \Bake\Command\TemplateCommand
      */
-    protected $templateCommand;
+    protected TemplateCommand $templateCommand;
 
     /**
      * @inheritDoc
@@ -88,7 +88,7 @@ class TemplateAllCommand extends BakeCommand
                 'help' => 'The routing prefix to generate views for.',
             ])->addOption('index-columns', [
                 'help' => 'Limit for the number of index columns',
-                'default' => 0,
+                'default' => '0',
             ]);
 
         return $parser;

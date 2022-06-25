@@ -32,7 +32,7 @@ class TemplateAllCommandTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.Articles',
         'plugin.Bake.Comments',
     ];
@@ -40,7 +40,7 @@ class TemplateAllCommandTest extends TestCase
     /**
      * @var array<string>
      */
-    protected $tables = ['articles', 'comments'];
+    protected array $tables = ['articles', 'comments'];
 
     /**
      * setUp method
@@ -55,7 +55,6 @@ class TemplateAllCommandTest extends TestCase
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
 
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
 
         $connection = ConnectionManager::get('test');
         $subsetCollection = new SubsetSchemaCollection($connection->getSchemaCollection(), $this->tables);

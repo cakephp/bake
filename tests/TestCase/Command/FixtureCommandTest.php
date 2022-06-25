@@ -18,8 +18,8 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Command\FixtureCommand;
 use Bake\Test\TestCase\TestCase;
+use Cake\Command\Command;
 use Cake\Console\ConsoleIo;
-use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Postgres;
 use Cake\Datasource\ConnectionManager;
@@ -34,7 +34,7 @@ class FixtureCommandTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.Articles',
         'plugin.Bake.Comments',
         'plugin.Bake.Datatypes',
@@ -54,7 +54,6 @@ class FixtureCommandTest extends TestCase
 
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
     }
 
     /**
@@ -131,7 +130,7 @@ class FixtureCommandTest extends TestCase
     {
         $this->generatedFile = ROOT . 'tests/Fixture/ArticleFixture.php';
         $this->exec('bake fixture --connection test --schema Article');
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
 
         $this->assertStringContainsString("'connection' => 'test'", file_get_contents($this->generatedFile));
     }
@@ -149,7 +148,7 @@ class FixtureCommandTest extends TestCase
         $this->generatedFile = ROOT . 'tests/Fixture/ArticleFixture.php';
         $this->exec('bake fixture --connection test --schema --records Article');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileContains(
             "'body' => 'Body \"value\"'",
             $this->generatedFile,
@@ -167,8 +166,8 @@ class FixtureCommandTest extends TestCase
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test --table comments Articles');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
-        $this->assertFileContains("public \$table = 'comments';", $this->generatedFile);
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileContains("public string \$table = 'comments';", $this->generatedFile);
     }
 
     /**
@@ -181,8 +180,9 @@ class FixtureCommandTest extends TestCase
         $this->generatedFile = ROOT . 'tests/Fixture/CarFixture.php';
         $this->exec('bake fixture --connection test car');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
-        $this->assertFileContains("public \$table = 'car';", $this->generatedFile);
+        $this->assertExitCode(Command::CODE_SUCCESS);
+        $this->assertFileContains('class CarFixture ', $this->generatedFile);
+        $this->assertFileContains('$this->records', $this->generatedFile);
     }
 
     /**
@@ -197,7 +197,7 @@ class FixtureCommandTest extends TestCase
         $this->generatedFile = APP . 'Plugin/FixtureTest/tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test FixtureTest.Articles');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileContains('class ArticlesFixture', $this->generatedFile);
     }
 
@@ -210,7 +210,7 @@ class FixtureCommandTest extends TestCase
     {
         $this->exec('bake fixture --connection test');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('- Articles');
         $this->assertOutputContains('- Comments');
     }
@@ -225,11 +225,10 @@ class FixtureCommandTest extends TestCase
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test --fields Articles');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileContains('class ArticlesFixture extends TestFixture', $this->generatedFile);
-        $this->assertFileContains('public $fields', $this->generatedFile);
         $this->assertFileContains('$this->records =', $this->generatedFile);
-        $this->assertFileNotContains('public $import', $this->generatedFile);
+        $this->assertFileNotContains('public array $import', $this->generatedFile);
     }
 
     /**
@@ -242,7 +241,7 @@ class FixtureCommandTest extends TestCase
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test Articles');
 
-        $this->assertExitCode(Shell::CODE_SUCCESS);
+        $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileContains('class ArticlesFixture extends TestFixture', $this->generatedFile);
         $this->assertFileNotContains('public $fields', $this->generatedFile);
         $this->assertFileNotContains('public $import', $this->generatedFile);
@@ -259,7 +258,7 @@ class FixtureCommandTest extends TestCase
         $this->generatedFile = ROOT . 'tests/Fixture/CommentsFixture.php';
         $this->exec('bake fixture --connection test --schema Comments');
 
-        $importString = "public \$import = ['table' => 'comments', 'connection' => 'test'];";
+        $importString = "public array \$import = ['table' => 'comments', 'connection' => 'test'];";
         $this->assertFileContains($importString, $this->generatedFile);
         $this->assertFileContains('$this->records =', $this->generatedFile);
         $this->assertFileNotContains('public $fields', $this->generatedFile);

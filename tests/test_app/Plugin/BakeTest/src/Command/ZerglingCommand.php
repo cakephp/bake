@@ -17,10 +17,17 @@ declare(strict_types=1);
 namespace BakeTest\Command;
 
 use Bake\Command\BakeCommand;
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
 
 /**
  * Test stub for command discovery
  */
 class ZerglingCommand extends BakeCommand
 {
+    public function execute(Arguments $args, ConsoleIo $io)
+    {
+        $io->out('Zerg generated.');
+        $io->verbose('Loud noises');
+    }
 }

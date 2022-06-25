@@ -38,7 +38,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.Categories',
         'plugin.Bake.CategoriesProducts',
         'plugin.Bake.OldProducts',
@@ -56,7 +56,6 @@ class ModelCommandAssociationDetectionTest extends TestCase
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
 
         $this->getTableLocator()->clear();
     }

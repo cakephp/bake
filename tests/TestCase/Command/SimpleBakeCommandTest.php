@@ -35,7 +35,6 @@ class SimpleBakeCommandTest extends TestCase
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS
             . 'Plugin' . DS . 'Simple' . DS;
-        $this->useCommandRunner();
         $this->setAppNamespace('Bake\Test\App');
     }
 
@@ -139,7 +138,7 @@ class SimpleBakeCommandTest extends TestCase
             ['Bake\Command\FormCommand'],
             ['Bake\Command\HelperCommand'],
             ['Bake\Command\MiddlewareCommand'],
-            ['Bake\Command\ShellHelperCommand'],
+            ['Bake\Command\CommandHelperCommand'],
         ];
     }
 

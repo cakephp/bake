@@ -22,37 +22,11 @@ use Cake\TestSuite\Fixture\TestFixture;
 class UniqueFieldsFixture extends TestFixture
 {
     /**
-     * fields property
-     *
-     * @var array<string, mixed>
-     */
-    public $fields = [
-        'id' => ['type' => 'integer'],
-        'username' => ['type' => 'string', 'null' => true, 'length' => 255],
-        'email' => ['type' => 'string', 'null' => true, 'length' => 255],
-        'field_1' => ['type' => 'string', 'null' => true, 'length' => 255],
-        'field_2' => ['type' => 'string', 'null' => true,'length' => 255],
-        '_constraints' => [
-            'primary' => [
-                'type' => 'primary',
-                'columns' => ['id'],
-            ],
-            'multiple_fields_unique' => [
-                'type' => 'unique',
-                'columns' => [
-                    'field_1',
-                    'field_2',
-                ],
-            ],
-        ],
-    ];
-
-    /**
      * records property
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         ['field_1' => 'unique_value_1', 'field_2' => 'unique_value_2'],
         ['field_1' => 'unique_value_2', 'field_2' => 'unique_value_3'],
     ];

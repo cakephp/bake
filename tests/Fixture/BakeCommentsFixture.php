@@ -21,26 +21,4 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class BakeCommentsFixture extends TestFixture
 {
-    /**
-     * fields property
-     *
-     * @var array<string, mixed>
-     */
-    public $fields = [
-        'otherid' => ['type' => 'integer'],
-        'bake_article_id' => ['type' => 'integer', 'null' => false],
-        'bake_user_id' => ['type' => 'integer', 'null' => false],
-        'comment' => 'text',
-        'published' => ['type' => 'string', 'length' => 1, 'default' => 'N'],
-        'created' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'updated' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['otherid']]],
-    ];
-
-    /**
-     * records property
-     *
-     * @var array
-     */
-    public $records = [];
 }

@@ -32,7 +32,7 @@ class ModelAllCommandTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.TodoTasks',
         'plugin.Bake.TodoItems',
     ];
@@ -40,7 +40,7 @@ class ModelAllCommandTest extends TestCase
     /**
      * @var array<string>
      */
-    protected $tables = ['todo_tasks', 'todo_items'];
+    protected array $tables = ['todo_tasks', 'todo_items'];
 
     /**
      * setUp method
@@ -51,7 +51,6 @@ class ModelAllCommandTest extends TestCase
     {
         parent::setUp();
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
 
         $connection = ConnectionManager::get('test');
         $subsetCollection = new SubsetSchemaCollection($connection->getSchemaCollection(), $this->tables);

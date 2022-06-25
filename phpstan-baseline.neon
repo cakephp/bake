@@ -1,0 +1,6 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Dead catch \\- UnexpectedValueException is never thrown in the try block\\.$#"
+			count: 1
+			path: src/Command/TestCommand.php

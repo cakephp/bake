@@ -10,7 +10,7 @@ use Bake\Command\SimpleBakeCommand;
  */
 class CustomControllerCommand extends SimpleBakeCommand
 {
-    public $pathFragment = 'Controller/';
+    protected string $pathFragment = 'Controller/';
 
     public function name(): string
     {

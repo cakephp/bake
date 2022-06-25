@@ -42,7 +42,7 @@ class ModelCommandTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.Comments',
         'plugin.Bake.Tags',
         'plugin.Bake.ArticlesTags',
@@ -68,7 +68,6 @@ class ModelCommandTest extends TestCase
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
 
         $this->getTableLocator()->clear();
     }

@@ -21,9 +21,8 @@ use Bake\Command\EntryCommand;
 use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
 use Cake\Core\Configure;
-use Cake\Core\Plugin as CorePlugin;
+use Cake\Core\Plugin;
 use Cake\Core\PluginApplicationInterface;
-use Cake\Routing\RouteBuilder;
 use DirectoryIterator;
 use ReflectionClass;
 use ReflectionException;
@@ -31,24 +30,21 @@ use ReflectionException;
 /**
  * Plugin class for bake
  */
-class Plugin extends BasePlugin
+class BakePlugin extends BasePlugin
 {
     /**
      * Plugin name.
      *
-     * @var string
+     * @var string|null
      */
-    protected $name = 'Bake';
+    protected ?string $name = 'Bake';
 
     /**
-     * Override to do nothing.
+     * Load routes or not
      *
-     * @param \Cake\Routing\RouteBuilder $routes The route builder to update.
-     * @return void
+     * @var bool
      */
-    public function routes(RouteBuilder $routes): void
-    {
-    }
+    protected bool $routesEnabled = false;
 
     /**
      * Load the TwigView plugin.
@@ -90,7 +86,7 @@ class Plugin extends BasePlugin
      */
     protected function discoverCommands(CommandCollection $commands): CommandCollection
     {
-        foreach (CorePlugin::getCollection()->with('console') as $plugin) {
+        foreach (Plugin::getCollection()->with('console') as $plugin) {
             $namespace = str_replace('/', '\\', $plugin->getName());
             $pluginPath = $plugin->getClassPath();
 
@@ -113,7 +109,7 @@ class Plugin extends BasePlugin
      *
      * @param string $namespace The namespace classes are expected to be in.
      * @param string $path The path to look in.
-     * @return string[]
+     * @return array<string>
      * @psalm-return array<string, class-string<\Bake\Command\BakeCommand>>
      */
     protected function findInPath(string $namespace, string $path): array

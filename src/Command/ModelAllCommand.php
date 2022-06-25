@@ -33,7 +33,7 @@ class ModelAllCommand extends BakeCommand
     /**
      * @var \Bake\Command\ModelCommand
      */
-    protected $modelCommand;
+    protected ModelCommand $modelCommand;
 
     /**
      * @inheritDoc
