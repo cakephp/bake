@@ -23,7 +23,6 @@ use Bake\Test\App\Model\Table\CategoryThreadsTable;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\CommandInterface;
 use Cake\Core\Plugin;
-use Cake\Http\Response;
 use Cake\Http\ServerRequest as Request;
 
 /**
@@ -36,7 +35,7 @@ class TestCommandTest extends TestCase
      *
      * @var string
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.BakeArticles',
         'plugin.Bake.BakeArticlesBakeTags',
         'plugin.Bake.BakeComments',
@@ -54,7 +53,6 @@ class TestCommandTest extends TestCase
         parent::setUp();
         $this->setAppNamespace('Bake\Test\App');
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Test' . DS;
-        $this->useCommandRunner();
     }
 
     public function tearDown(): void
@@ -256,7 +254,7 @@ class TestCommandTest extends TestCase
      */
     public function testFixtureGenerationFromController()
     {
-        $subject = new PostsController(new Request(), new Response());
+        $subject = new PostsController(new Request());
         $command = new TestCommand();
         $result = $command->generateFixtureList($subject);
         $expected = [
@@ -285,10 +283,6 @@ class TestCommandTest extends TestCase
             ['Helper', 'FormHelper', 'App\View\Helper\FormHelper'],
             ['Component', 'Auth', 'App\Controller\Component\AuthComponent'],
             ['Component', 'AuthComponent', 'App\Controller\Component\AuthComponent'],
-            ['Shell', 'Example', 'App\Shell\ExampleShell'],
-            ['Shell', 'ExampleShell', 'App\Shell\ExampleShell'],
-            ['Task', 'Example', 'App\Shell\Task\ExampleTask'],
-            ['Task', 'ExampleTask', 'App\Shell\Task\ExampleTask'],
             ['Cell', 'Example', 'App\View\Cell\ExampleCell'],
             ['Cell', 'ExampleCell', 'App\View\Cell\ExampleCell'],
         ];
@@ -544,57 +538,6 @@ class TestCommandTest extends TestCase
     }
 
     /**
-     * Test baking a test for a shell.
-     *
-     * @return void
-     */
-    public function testBakeShellTest()
-    {
-        $this->generatedFiles = [
-            ROOT . 'tests/TestCase/Shell/ArticlesShellTest.php',
-        ];
-        $this->exec('bake test shell Articles');
-
-        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
-        $this->assertFilesExist($this->generatedFiles);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
-    }
-
-    /**
-     * Test baking a test for a shell task.
-     *
-     * @return void
-     */
-    public function testBakeShellTaskTest()
-    {
-        $this->generatedFiles = [
-            ROOT . 'tests/TestCase/Shell/Task/ArticlesTaskTest.php',
-        ];
-        $this->exec('bake test task Articles');
-
-        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
-        $this->assertFilesExist($this->generatedFiles);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
-    }
-
-    /**
-     * Test baking a test for a shell helper.
-     *
-     * @return void
-     */
-    public function testBakeShellHelperTest()
-    {
-        $this->generatedFiles = [
-            ROOT . 'tests/TestCase/Shell/Helper/ExampleHelperTest.php',
-        ];
-        $this->exec('bake test shell_helper Example');
-
-        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
-        $this->assertFilesExist($this->generatedFiles);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
-    }
-
-    /**
      * Test baking an unknown class type.
      *
      * @return void
@@ -632,14 +575,6 @@ class TestCommandTest extends TestCase
 
         $result = $command->generateConstructor('Entity', 'TestBake\Model\Entity\Article');
         $expected = ['', 'new Article();', ''];
-        $this->assertEquals($expected, $result);
-
-        $result = $command->generateConstructor('ShellHelper', 'TestBake\Shell\Helper\ExampleHelper');
-        $expected = [
-            "\$this->stub = new ConsoleOutput();\n        \$this->io = new ConsoleIo(\$this->stub);",
-            'new ExampleHelper($this->io);',
-            '',
-        ];
         $this->assertEquals($expected, $result);
 
         $result = $command->generateConstructor('Form', 'TestBake\Form\ExampleForm');
@@ -692,14 +627,6 @@ class TestCommandTest extends TestCase
             'App\Controller\Component\AuthComponent',
         ];
         $this->assertEquals($expected, $result);
-
-        $result = $command->generateUses('ShellHelper', 'App\Shell\Helper\ExampleHelper');
-        $expected = [
-            'Cake\TestSuite\Stub\ConsoleOutput',
-            'Cake\Console\ConsoleIo',
-            'App\Shell\Helper\ExampleHelper',
-        ];
-        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -743,8 +670,6 @@ class TestCommandTest extends TestCase
                 'App\Controller\Component\AuthComponent',
                 'TestCase/Controller/Component/AuthComponentTest.php',
             ],
-            ['Shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
-            ['shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
         ];
     }
 
@@ -798,7 +723,6 @@ class TestCommandTest extends TestCase
             ['Entity', 'Model\Entity'],
             ['Behavior', 'Model\Behavior'],
             ['Helper', 'View\Helper'],
-            ['ShellHelper', 'Shell\Helper'],
         ];
     }
 

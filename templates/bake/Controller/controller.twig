@@ -37,10 +37,6 @@ use {{ baseNamespace }}\Controller\AppController;
 {% set classInfo = Bake.classInfo(component, 'Controller/Component', 'Component') %}
  * @property {{ classInfo.fqn }} ${{ classInfo.name }}
 {% endfor %}
-
-{%- if 'index' in actions %}
- * @method \{{ namespace }}\Model\Entity\{{ entityClassName }}[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
-{% endif %}
  */
 class {{ name }}Controller extends AppController
 {

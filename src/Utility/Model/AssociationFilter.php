@@ -30,8 +30,8 @@ class AssociationFilter
      * belongsToMany associations provided
      *
      * @param \Cake\ORM\Table $table Table
-     * @param string[] $aliases array of aliases
-     * @return string[] $aliases
+     * @param array<string> $aliases array of aliases
+     * @return array<string> $aliases
      */
     public function filterHasManyAssociationsAliases(Table $table, array $aliases): array
     {
@@ -44,7 +44,7 @@ class AssociationFilter
      * Get the array of junction aliases for all the BelongsToMany associations
      *
      * @param \Cake\ORM\Table $table Table
-     * @return string[] Junction aliases of all the BelongsToMany associations
+     * @return array<string> Junction aliases of all the BelongsToMany associations
      */
     public function belongsToManyJunctionAliases(Table $table): array
     {

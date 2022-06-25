@@ -27,32 +27,14 @@ class BakeTemplateAuthorsFixture extends TestFixture
      *
      * @var string
      */
-    public $table = 'bake_authors';
-
-    /**
-     * fields property
-     *
-     * @var array<string, mixed>
-     */
-    public $fields = [
-        'id' => ['type' => 'integer'],
-        'role_id' => ['type' => 'integer', 'null' => false],
-        'name' => ['type' => 'string', 'default' => null],
-        'description' => ['type' => 'text', 'default' => null],
-        'member' => ['type' => 'boolean'],
-        'member_number' => ['type' => 'integer', 'null' => true],
-        'account_balance' => ['type' => 'decimal', 'null' => true, 'precision' => 2, 'length' => 12],
-        'created' => 'datetime',
-        'modified' => 'datetime',
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
-    ];
+    public string $table = 'bake_authors';
 
     /**
      * records property
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         ['name' => 'mariano', 'role_id' => 1],
         ['name' => 'nate', 'role_id' => 2],
         ['name' => 'larry', 'role_id' => 2],

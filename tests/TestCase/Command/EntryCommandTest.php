@@ -34,7 +34,6 @@ class EntryCommandTest extends TestCase
         parent::setUp();
 
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
     }
 
     /**
@@ -62,15 +61,15 @@ class EntryCommandTest extends TestCase
         $this->assertOutputContains('bake controller');
         $this->assertOutputContains('bake controller all');
         $this->assertOutputContains('bake command');
-        $this->assertOutputContains('shell_helper');
+        $this->assertOutputContains('command_helper');
     }
 
     /**
-     * Test execute() calling an app task
+     * Test execute() calling an app command
      *
      * @return void
      */
-    public function testExecuteAppTask()
+    public function testExecuteAppCommand()
     {
         $this->exec('bake app_policy');
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
@@ -92,15 +91,15 @@ class EntryCommandTest extends TestCase
     }
 
     /**
-     * Test execute() calling a plugin task
+     * Test execute() calling a plugin command
      *
      * @return void
      */
-    public function testExecutePluginTask()
+    public function testExecutePluginCommand()
     {
         $this->_loadTestPlugin('BakeTest');
 
-        $this->exec('bake zerg --verbose');
+        $this->exec('bake zergling --verbose');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertOutputContains('Zerg generated');
@@ -108,15 +107,15 @@ class EntryCommandTest extends TestCase
     }
 
     /**
-     * Test execute() error on a missing task
+     * Test execute() error on a missing command
      *
      * @return void
      */
-    public function testExecuteMissingTask()
+    public function testExecuteMissingCommand()
     {
         $this->exec('bake nope');
 
         $this->assertExitCode(CommandInterface::CODE_ERROR);
-        $this->assertErrorContains('Could not find');
+        $this->assertErrorContains('Could not find bake command named `nope`');
     }
 }

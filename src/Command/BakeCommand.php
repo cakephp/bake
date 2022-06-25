@@ -40,7 +40,7 @@ abstract class BakeCommand extends Command
      *
      * @var string
      */
-    protected $pathFragment;
+    protected string $pathFragment;
 
     /**
      * Get the command name.

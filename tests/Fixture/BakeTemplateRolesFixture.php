@@ -24,25 +24,14 @@ class BakeTemplateRolesFixture extends TestFixture
     /**
      * @var string
      */
-    public $table = 'roles';
-
-    /**
-     * fields property
-     *
-     * @var array<string, mixed>
-     */
-    public $fields = [
-        'id' => ['type' => 'integer'],
-        'name' => ['type' => 'string', 'null' => false],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
-    ];
+    public string $table = 'roles';
 
     /**
      * records property
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         ['name' => 'admin'],
         ['name' => 'user'],
     ];

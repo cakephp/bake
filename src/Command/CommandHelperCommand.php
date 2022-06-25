@@ -26,7 +26,7 @@ class CommandHelperCommand extends SimpleBakeCommand
      *
      * @var string
      */
-    public $pathFragment = 'Command/Helper/';
+    public string $pathFragment = 'Command/Helper/';
 
     /**
      * @inheritDoc

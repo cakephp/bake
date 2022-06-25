@@ -18,7 +18,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class AuthorsFixture extends TestFixture
 {
-    public $records = [
+    public array $records = [
         ['name' => 'mariano'],
         ['name' => 'nate'],
         ['name' => 'larry'],

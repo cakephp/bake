@@ -37,7 +37,7 @@ class TemplateCommandTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.Articles',
         'plugin.Bake.Tags',
         'plugin.Bake.ArticlesTags',
@@ -64,7 +64,6 @@ class TemplateCommandTest extends TestCase
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
 
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
 
         $this->getTableLocator()->get('TemplateTaskComments', [
             'className' => 'Bake\Test\App\Model\Table\TemplateTaskCommentsTable',
@@ -102,7 +101,7 @@ class TemplateCommandTest extends TestCase
     /**
      * Test the controller() method.
      *
-     * @param $name
+     * @param string $name
      * @dataProvider nameVariations
      * @return void
      */

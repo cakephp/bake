@@ -17,11 +17,11 @@
         <extension class="Cake\TestSuite\Fixture\PHPUnitExtension"/>
     </extensions>
 
-    <filter>
-        <whitelist>
+    <coverage>
+        <include>
             <directory suffix=".php">src/</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </coverage>
 
     <php>
         <env name="FIXTURE_SCHEMA_METADATA" value="./tests/schema.php"/>

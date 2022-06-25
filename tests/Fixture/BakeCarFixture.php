@@ -24,28 +24,5 @@ class BakeCarFixture extends TestFixture
     /**
      * @var string
      */
-    public $table = 'car';
-
-    /**
-     * fields property
-     *
-     * @var array<string, mixed>
-     */
-    public $fields = [
-        'id' => ['type' => 'integer'],
-        'bake_user_id' => ['type' => 'integer', 'null' => false],
-        'title' => ['type' => 'string', 'null' => false],
-        'body' => 'text',
-        'published' => ['type' => 'boolean', 'length' => 1, 'default' => false],
-        'created' => 'datetime',
-        'updated' => 'datetime',
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
-    ];
-
-    /**
-     * records property
-     *
-     * @var array
-     */
-    public $records = [];
+    public string $table = 'car';
 }

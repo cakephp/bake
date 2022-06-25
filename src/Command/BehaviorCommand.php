@@ -26,7 +26,7 @@ class BehaviorCommand extends SimpleBakeCommand
      *
      * @var string
      */
-    public $pathFragment = 'Model/Behavior/';
+    public string $pathFragment = 'Model/Behavior/';
 
     /**
      * @inheritDoc

@@ -24,7 +24,7 @@ class NoModelController extends AppController
     /**
      * @var string
      */
-    protected $modelClass = '';
+    protected ?string $defaultTable = '';
 
     /**
      * Index method.

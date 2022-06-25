@@ -32,7 +32,7 @@ class AssociationFilterTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.Authors',
         'plugin.Bake.Tags',
         'plugin.Bake.Articles',

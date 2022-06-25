@@ -7,8 +7,8 @@ namespace Bake\Test\App\Controller;
  * BakeArticles Controller
  *
  * @property \Bake\Test\App\Model\Table\BakeArticlesTable $BakeArticles
- * @property \Cake\Controller\Component\RequestHandlerComponent $RequestHandler
- * @property \Cake\Controller\Component\AuthComponent $Auth
+ * @property \Cake\Controller\Component\FormProtectionComponent $FormProtection
+ * @property \Cake\Controller\Component\FlashComponent $Flash
  * @property \Company\TestBakeThree\Controller\Component\SomethingComponent $Something
  * @property \TestBake\Controller\Component\OtherComponent $Other
  * @property \Bake\Test\App\Controller\Component\AppleComponent $Apple
@@ -25,8 +25,8 @@ class BakeArticlesController extends AppController
     {
         parent::initialize();
 
-        $this->loadComponent('RequestHandler');
-        $this->loadComponent('Auth');
+        $this->loadComponent('FormProtection');
+        $this->loadComponent('Flash');
         $this->loadComponent('Company/TestBakeThree.Something');
         $this->loadComponent('TestBake.Other');
         $this->loadComponent('Apple');
