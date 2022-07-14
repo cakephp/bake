@@ -59,7 +59,6 @@ class ProductVersionsTable extends Table
     {
         $validator
             ->nonNegativeInteger('product_id')
-            ->requirePresence('product_id', 'create')
             ->notEmptyString('product_id');
 
         $validator
