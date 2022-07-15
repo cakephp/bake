@@ -444,8 +444,8 @@ class ModelCommandTest extends TestCase
                 ],
                 [
                     'alias' => 'TemplateTaskComments',
-                    'foreignKey' => 'template_task_comment_id'
-                ]
+                    'foreignKey' => 'template_task_comment_id',
+                ],
             ],
             'hasMany' => [
                 [

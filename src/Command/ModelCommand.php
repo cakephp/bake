@@ -30,7 +30,6 @@ use Cake\Database\Schema\TableSchema;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 
 /**
@@ -351,7 +350,10 @@ class ModelCommand extends BakeCommand
                 $genericInstances = $this->getTableLocator()->genericInstances();
                 $tables = $this->listAll();
                 /** Check if association model could not be instantiated as a subclass but a generic Table instance instead. */
-                if (isset($genericInstances[$tmpModelName]) && !in_array(Inflector::tableize($tmpModelName), $tables, true)) {
+                if (
+                    isset($genericInstances[$tmpModelName]) &&
+                    !in_array(Inflector::tableize($tmpModelName), $tables, true)
+                ) {
                     $found = $this->findTableReferencedBy($schema, $fieldName);
                     if (!$found) {
                         continue;
