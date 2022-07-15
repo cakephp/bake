@@ -376,6 +376,96 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * Test that association generation ignores `anything_id` fields if
+     * AnythingsTable object nor `anythings` database table exist
+     *
+     * @return void
+     */
+    public function testGetAssociationsIgnoreUnderscoreIdIfNoDbTable()
+    {
+        $items = $this->getTableLocator()->get('TodoItems');
+
+        $items->setSchema($items->getSchema()->addColumn('anything_id', ['type' => 'integer']));
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $args = new Arguments([], [], []);
+        $io = $this->createMock(ConsoleIo::class);
+        $result = $command->getAssociations($items, $args, $io);
+        $expected = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Users',
+                    'foreignKey' => 'user_id',
+                    'joinType' => 'INNER',
+                ],
+            ],
+            'hasMany' => [
+                [
+                    'alias' => 'TodoTasks',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
+            'belongsToMany' => [
+                [
+                    'alias' => 'TodoLabels',
+                    'foreignKey' => 'todo_item_id',
+                    'joinTable' => 'todo_items_todo_labels',
+                    'targetForeignKey' => 'todo_label_id',
+                ],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test that association generation adds association when `anything_id` fields and
+     * AnythingsTable object exist even if no db table
+     *
+     * @return void
+     */
+    public function testGetAssociationsAddAssociationIfTableExist()
+    {
+        $items = $this->getTableLocator()->get('TodoItems');
+
+        $items->setSchema($items->getSchema()->addColumn('template_task_comment_id', ['type' => 'integer']));
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $args = new Arguments([], [], []);
+        $io = $this->createMock(ConsoleIo::class);
+        $result = $command->getAssociations($items, $args, $io);
+        $expected = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Users',
+                    'foreignKey' => 'user_id',
+                    'joinType' => 'INNER',
+                ],
+                [
+                    'alias' => 'TemplateTaskComments',
+                    'foreignKey' => 'template_task_comment_id'
+                ]
+            ],
+            'hasMany' => [
+                [
+                    'alias' => 'TodoTasks',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
+            'belongsToMany' => [
+                [
+                    'alias' => 'TodoLabels',
+                    'foreignKey' => 'todo_item_id',
+                    'joinTable' => 'todo_items_todo_labels',
+                    'targetForeignKey' => 'todo_label_id',
+                ],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Test that association generation ignores `_id` fields
      *
      * @return void
@@ -491,6 +581,7 @@ class ModelCommandTest extends TestCase
     {
         $model = $this->getTableLocator()->get('Invitations');
         $command = new ModelCommand();
+        $command->connection = 'test';
         $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
@@ -519,6 +610,7 @@ class ModelCommandTest extends TestCase
     {
         $model = $this->getTableLocator()->get('TodoItemsTodoLabels');
         $command = new ModelCommand();
+        $command->connection = 'test';
         $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
