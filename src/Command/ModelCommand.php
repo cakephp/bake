@@ -65,7 +65,7 @@ class ModelCommand extends BakeCommand
      *
      * @var bool
      */
-    protected $isForeignKey = false;
+    protected $isCurrentFieldForeignKey = false;
 
     /**
      * Execute the command.
@@ -801,7 +801,7 @@ class ModelCommand extends BakeCommand
             if (in_array($fieldName, $primaryKey, true)) {
                 continue;
             }
-            $this->isForeignKey = in_array($fieldName, $foreignKeys, true);
+            $this->isCurrentFieldForeignKey = in_array($fieldName, $foreignKeys, true);
             $field = $schema->getColumn($fieldName);
             $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
             if ($validation) {
@@ -891,7 +891,7 @@ class ModelCommand extends BakeCommand
             ];
         } else {
             // FKs shouldn't be required on create to allow e.g. save calls with hasMany associations to create entities
-            if (($metaData['default'] === null || $metaData['default'] === false) && !$this->isForeignKey) {
+            if (($metaData['default'] === null || $metaData['default'] === false) && !$this->isCurrentFieldForeignKey) {
                 $validation['requirePresence'] = [
                     'rule' => 'requirePresence',
                     'args' => ['create'],
