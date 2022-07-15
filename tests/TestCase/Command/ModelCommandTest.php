@@ -1765,9 +1765,9 @@ class ModelCommandTest extends TestCase
         $this->_loadTestPlugin('BakeTest');
         $path = Plugin::path('BakeTest');
 
-        $this->generatedFile = $path . 'src/Model/Table/UsersTable.php';
+        $this->generatedFile = $path . 'src/Model/Entity/User.php';
 
-        $this->exec('bake model --no-validation --no-test --no-fixture --no-entity -p BakeTest Users');
+        $this->exec('bake model --no-validation --no-test --no-fixture --no-table BakeTest.Users');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
