@@ -783,13 +783,20 @@ class ModelCommand extends BakeCommand
 
         $validate = [];
         $primaryKey = $schema->getPrimaryKey();
+        $foreignKeys = [];
+        if (isset($associations['belongsTo'])) {
+            foreach ($associations['belongsTo'] as $assoc) {
+                $foreignKeys[] = $assoc['foreignKey'];
+            }
+        }
         foreach ($fields as $fieldName) {
             // Skip primary key
             if (in_array($fieldName, $primaryKey, true)) {
                 continue;
             }
+            $isForeignKey = in_array($fieldName, $foreignKeys, true);
             $field = $schema->getColumn($fieldName);
-            $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
+            $validation = $this->fieldValidation($schema, $fieldName, $field, $isForeignKey);
             if ($validation) {
                 $validate[$fieldName] = $validation;
             }
@@ -804,14 +811,14 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Database\Schema\TableSchemaInterface $schema The table schema for the current field.
      * @param string $fieldName Name of field to be validated.
      * @param array $metaData metadata for field
-     * @param array<string> $primaryKey The primary key field. Unused because PK validation is skipped
+     * @param bool $isForeignKey Indicates if the currently precessed field is a foreign key
      * @return array Array of validation for the field.
      */
     public function fieldValidation(
         TableSchemaInterface $schema,
         string $fieldName,
         array $metaData,
-        array $primaryKey
+        bool $isForeignKey = false
     ): array {
         $ignoreFields = ['lft', 'rght', 'created', 'modified', 'updated'];
         if (in_array($fieldName, $ignoreFields, true)) {
@@ -876,7 +883,8 @@ class ModelCommand extends BakeCommand
                 'args' => [],
             ];
         } else {
-            if ($metaData['default'] === null || $metaData['default'] === false) {
+            // FKs shouldn't be required on create to allow e.g. save calls with hasMany associations to create entities
+            if (($metaData['default'] === null || $metaData['default'] === false) && !$isForeignKey) {
                 $validation['requirePresence'] = [
                     'rule' => 'requirePresence',
                     'args' => ['create'],
