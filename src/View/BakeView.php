@@ -45,8 +45,9 @@ class BakeView extends TwigView
     public function initialize(): void
     {
         $this->setConfig('environment', [
-          'cache' => false,
-          'strict_variables' => Configure::read('Bake.twigStrictVariables', false),
+            'autoescape' => false,
+            'cache' => false,
+            'strict_variables' => Configure::read('Bake.twigStrictVariables', false),
         ]);
 
         parent::initialize();
