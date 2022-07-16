@@ -20,7 +20,8 @@
     "require": {
         "cakephp/cakephp": "5.x-dev",
         "cakephp/twig-view": "dev-cake5",
-        "brick/varexporter": "^0.3.5"
+        "brick/varexporter": "^0.3.5",
+        "nikic/php-parser": "^4.13.2"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "5.x-dev",
