@@ -61,13 +61,6 @@ class ModelCommand extends BakeCommand
     protected $_tables = [];
 
     /**
-     * True if the currently processed field is a foreign key
-     *
-     * @var bool
-     */
-    protected $isCurrentFieldForeignKey = false;
-
-    /**
      * Execute the command.
      *
      * @param \Cake\Console\Arguments $args The command arguments.
@@ -801,9 +794,9 @@ class ModelCommand extends BakeCommand
             if (in_array($fieldName, $primaryKey, true)) {
                 continue;
             }
-            $this->isCurrentFieldForeignKey = in_array($fieldName, $foreignKeys, true);
+            $isForeignKey = in_array($fieldName, $foreignKeys, true);
             $field = $schema->getColumn($fieldName);
-            $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
+            $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey, $isForeignKey);
             if ($validation) {
                 $validate[$fieldName] = $validation;
             }
@@ -819,13 +812,15 @@ class ModelCommand extends BakeCommand
      * @param string $fieldName Name of field to be validated.
      * @param array $metaData metadata for field
      * @param array<string> $primaryKey The primary key field. Unused because PK validation is skipped
+     * @param bool $isForeignKey Indicates if the currently precessed field is a foreign key
      * @return array Array of validation for the field.
      */
     public function fieldValidation(
         TableSchemaInterface $schema,
         string $fieldName,
         array $metaData,
-        array $primaryKey
+        array $primaryKey,
+        bool $isForeignKey = false
     ): array {
         $ignoreFields = ['lft', 'rght', 'created', 'modified', 'updated'];
         if (in_array($fieldName, $ignoreFields, true)) {
@@ -891,7 +886,7 @@ class ModelCommand extends BakeCommand
             ];
         } else {
             // FKs shouldn't be required on create to allow e.g. save calls with hasMany associations to create entities
-            if (($metaData['default'] === null || $metaData['default'] === false) && !$this->isCurrentFieldForeignKey) {
+            if (($metaData['default'] === null || $metaData['default'] === false) && !$isForeignKey) {
                 $validation['requirePresence'] = [
                     'rule' => 'requirePresence',
                     'args' => ['create'],
