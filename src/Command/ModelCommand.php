@@ -783,12 +783,19 @@ class ModelCommand extends BakeCommand
 
         $validate = [];
         $primaryKey = $schema->getPrimaryKey();
+        $foreignKeys = [];
+        if (isset($associations['belongsTo'])) {
+            foreach ($associations['belongsTo'] as $assoc) {
+                $foreignKeys[] = $assoc['foreignKey'];
+            }
+        }
         foreach ($fields as $fieldName) {
             // Skip primary key
             if (in_array($fieldName, $primaryKey, true)) {
                 continue;
             }
             $field = $schema->getColumn($fieldName);
+            $field['isForeignKey'] = in_array($fieldName, $foreignKeys, true);
             $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
             if ($validation) {
                 $validate[$fieldName] = $validation;
@@ -876,7 +883,8 @@ class ModelCommand extends BakeCommand
                 'args' => [],
             ];
         } else {
-            if ($metaData['default'] === null || $metaData['default'] === false) {
+            // FKs shouldn't be required on create to allow e.g. save calls with hasMany associations to create entities
+            if (($metaData['default'] === null || $metaData['default'] === false) && !$metaData['isForeignKey']) {
                 $validation['requirePresence'] = [
                     'rule' => 'requirePresence',
                     'args' => ['create'],

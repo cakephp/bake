@@ -1167,7 +1167,6 @@ class ModelCommandTest extends TestCase
             ],
             'user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
         ];
