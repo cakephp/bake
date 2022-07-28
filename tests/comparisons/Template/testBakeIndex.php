@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \Bake\Test\App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface[]|\Cake\Collection\CollectionInterface $templateTaskComments
+ * @var iterable<\Cake\Datasource\EntityInterface> $templateTaskComments
  */
 ?>
 <div class="templateTaskComments index content">
