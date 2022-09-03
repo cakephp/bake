@@ -22,21 +22,21 @@ use Bake\Test\TestCase\TestCase;
 
 class CodeParserTest extends TestCase
 {
-    public function testParseClass(): void
+    public function testParseFile(): void
     {
         $parser = new CodeParser();
-        $class = $parser->parseClass(file_get_contents(APP . DS . 'Model' . DS . 'Table' . DS . 'ParseTestTable.php'));
+        $file = $parser->parseFile(file_get_contents(APP . DS . 'Model' . DS . 'Table' . DS . 'ParseTestTable.php'));
 
-        $this->assertSame('Bake\Test\App\Model\Table', $class->namespace);
-        $this->assertSame('ParseTestTable', $class->name);
+        $this->assertSame('Bake\Test\App\Model\Table', $file->namespace);
+        $this->assertSame('ParseTestTable', $file->class->name);
         $this->assertSame(
             [
-                'Cake\ORM\Query' => 'Query',
-                'Cake\ORM\RulesChecker' => 'RulesChecker',
-                'Cake\ORM\Table' => 'Table',
-                'Cake\Validation\Validator' => 'Validator',
+                'Query' => 'Cake\ORM\Query',
+                'RulesChecker' => 'Cake\ORM\RulesChecker',
+                'Table' => 'Cake\ORM\Table',
+                'Validator' => 'Cake\Validation\Validator',
             ],
-            $class->uses['classes']
+            $file->uses['classes']
         );
         $this->assertSame(
             [
@@ -46,7 +46,7 @@ class CodeParserTest extends TestCase
                 'defaultConnectionName',
                 'findTest',
             ],
-            array_keys($class->methods)
+            array_keys($file->class->methods)
         );
 
         $code = <<<'CODEMARKER'
@@ -59,7 +59,7 @@ class CodeParserTest extends TestCase
                 $this->setPrimaryKey('id');
             }
         CODEMARKER;
-        $this->assertSame($code, $class->methods['initialize']->code);
+        $this->assertSame($code, $file->class->methods['initialize']->code);
 
         $doc = <<<'DOCMARKER'
             /**
@@ -69,7 +69,7 @@ class CodeParserTest extends TestCase
              * @return void
              */
         DOCMARKER;
-        $this->assertSame($doc, $class->methods['initialize']->docblock);
+        $this->assertSame($doc, $file->class->methods['initialize']->docblock);
     }
 
     public function testParseMissingNamespace(): void
@@ -77,7 +77,7 @@ class CodeParserTest extends TestCase
         $parser = new CodeParser();
 
         $this->expectException(ParseException::class);
-        $class = $parser->parseClass(<<<'PARSE'
+        $parser->parseFile(<<<'PARSE'
         <?php
 
         class TestTable{}
@@ -89,7 +89,7 @@ class CodeParserTest extends TestCase
         $parser = new CodeParser();
 
         $this->expectException(ParseException::class);
-        $class = $parser->parseClass(<<<'PARSE'
+        $parser->parseFile(<<<'PARSE'
         <?php
 
         namespace Bake\Test;
@@ -101,7 +101,7 @@ class CodeParserTest extends TestCase
         $parser = new CodeParser();
 
         $this->expectException(ParseException::class);
-        $class = $parser->parseClass(<<<'PARSE'
+        $parser->parseFile(<<<'PARSE'
         <?php
 
         namespace Bake\Test;
