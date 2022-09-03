@@ -58,16 +58,15 @@ final class CodeParser extends NodeVisitorAbstract
 
     /**
      * @param string $code Code to parse
-     * @param string $className Class name expected in file
-     * @return \Bake\Parse\ParsedClass
+     * @return \Bake\Parse\ParsedFile
      * @throws \Bake\Parse\ParseException
      */
-    public function parseClass(string $code, ?string $className = null): ParsedClass
+    public function parseFile(string $code,): ParsedFile
     {
         $this->code = $code;
         $this->traverser->traverse($this->parser->parse($code));
 
-        return new ParsedClass(...$this->parsed);
+        return new ParsedFile($this->parsed['namespace'], $this->parsed['uses'], $this->parsed['class']);
     }
 
     /**
@@ -76,14 +75,11 @@ final class CodeParser extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes)
     {
         $this->parsed = [
-            'namespace' => null,
-            'name' => null,
             'uses' => [
                 'classes' => [],
                 'funtions' => [],
                 'constants' => [],
             ],
-            'methods' => [],
         ];
 
         return null;
@@ -96,7 +92,7 @@ final class CodeParser extends NodeVisitorAbstract
     {
         if ($node instanceof Namespace_) {
             if (isset($this->parsed['namespace'])) {
-                throw new ParseException('Multiple namespaces in a file is not supported.');
+                throw new ParseException('Multiple namespaces in a file is not supported');
             }
             $this->parsed['namespace'] = (string)$node->name;
 
@@ -105,15 +101,16 @@ final class CodeParser extends NodeVisitorAbstract
 
         if ($node instanceof Use_) {
             foreach ($node->uses as $use) {
+                [$alias, $target] = $this->normalizeUse($use);
                 switch ($node->type) {
                     case Use_::TYPE_NORMAL:
-                        $this->parsed['uses']['classes'] += $this->normalizeUse($use);
+                        $this->parsed['uses']['classes'][$alias] = $target;
                         break;
                     case Use_::TYPE_FUNCTION:
-                        $this->parsed['uses']['functions'] += $this->normalizeUse($use);
+                        $this->parsed['uses']['functions'][$alias] = $target;
                         break;
                     case Use_::TYPE_CONSTANT:
-                        $this->parsed['uses']['constants'] += $this->normalizeUse($use);
+                        $this->parsed['uses']['constants'][$alias] = $target;
                         break;
                 }
             }
@@ -124,15 +121,16 @@ final class CodeParser extends NodeVisitorAbstract
         if ($node instanceof GroupUse) {
             $prefix = (string)$node->prefix;
             foreach ($node->uses as $use) {
+                [$alias, $target] = $this->normalizeUse($use, $prefix);
                 switch ($use->type) {
                     case Use_::TYPE_NORMAL:
-                        $this->parsed['uses']['classes'] += $this->normalizeUse($use, $prefix);
+                        $this->parsed['uses']['classes'][$alias] = $target;
                         break;
                     case Use_::TYPE_FUNCTION:
-                        $this->parsed['uses']['functions'] += $this->normalizeUse($use, $prefix);
+                        $this->parsed['uses']['functions'][$alias] = $target;
                         break;
                     case Use_::TYPE_CONSTANT:
-                        $this->parsed['uses']['constants'] += $this->normalizeUse($use, $prefix);
+                        $this->parsed['uses']['constants'][$alias] = $target;
                         break;
                 }
             }
@@ -141,8 +139,14 @@ final class CodeParser extends NodeVisitorAbstract
         }
 
         if ($node instanceof Class_) {
-            $this->parsed['name'] = (string)$node->name;
+            if (!isset($this->parsed['namespace'])) {
+                throw new ParseException('Classes defined in the global namespace is not supported');
+            }
+            if (isset($this->parsed['class'])) {
+                throw new ParseException('Multiple classes in a file is not supported');
+            }
 
+            $methods = [];
             foreach ($node->getMethods() as $method) {
                 $startPos = $method->getStartFilePos();
                 $endPos = $method->getEndFilePos();
@@ -152,13 +156,15 @@ final class CodeParser extends NodeVisitorAbstract
                 $doc = $doc ? '    ' . $doc : null;
 
                 $name = (string)$method->name;
-                $this->parsed['methods'][$name] = new ParsedMethod(
+                $methods[$name] = new ParsedMethod(
                     $name,
                     $code,
                     $doc,
                     []
                 );
             }
+
+            $this->parsed['class'] = new ParsedClass((string)$node->name, $methods);
 
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
@@ -171,8 +177,8 @@ final class CodeParser extends NodeVisitorAbstract
      */
     public function afterTraverse(array $nodes)
     {
-        if (!isset($this->parsed['namespace'], $this->parsed['name'])) {
-            throw new ParseException('Could not find namespaced class.');
+        if (!isset($this->parsed['namespace'], $this->parsed['class'])) {
+            throw new ParseException('Unable to parse file');
         }
 
         return null;
@@ -181,7 +187,7 @@ final class CodeParser extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node\Stmt\UseUse $use Use node
      * @param string|null $prefix Group use prefix
-     * @return array<string, string>
+     * @return array{string, string}
      */
     protected function normalizeUse(UseUse $use, ?string $prefix = null): array
     {
@@ -200,6 +206,6 @@ final class CodeParser extends NodeVisitorAbstract
             }
         }
 
-        return [$name => (string)$alias];
+        return [(string)$alias, $name];
     }
 }
