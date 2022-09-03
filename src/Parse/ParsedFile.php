@@ -19,15 +19,17 @@ namespace Bake\Parse;
 /**
  * @internal
  */
-final class ParsedClass
+final class ParsedFile
 {
     /**
-     * @param string $name Class name
-     * @param array<string, \Bake\Parse\ParsedMethod> $methods Class methods
+     * @param string $namespace Namespace
+     * @param array $uses Use statements
+     * param \Bake\Parse\ParsedClass $class Class defined in file
      */
     public function __construct(
-        public readonly string $name,
-        public readonly array $methods
+        public readonly string $namespace,
+        public readonly array $uses,
+        public readonly ParsedClass $class
     ) {
     }
 }
