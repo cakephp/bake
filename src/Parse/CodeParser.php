@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace Bake\Parse;
 
+use PhpParser\Error;
 use PhpParser\Lexer\Emulative;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -64,7 +65,11 @@ final class CodeParser extends NodeVisitorAbstract
     public function parseFile(string $code,): ParsedFile
     {
         $this->code = $code;
-        $this->traverser->traverse($this->parser->parse($code));
+        try {
+            $this->traverser->traverse($this->parser->parse($code));
+        } catch (Error $e) {
+            throw new ParseException($e->getMessage(), null, $e);
+        }
 
         return new ParsedFile($this->parsed['namespace'], $this->parsed['uses'], $this->parsed['class']);
     }
@@ -92,7 +97,7 @@ final class CodeParser extends NodeVisitorAbstract
     {
         if ($node instanceof Namespace_) {
             if (isset($this->parsed['namespace'])) {
-                throw new ParseException('Multiple namespaces in a file is not supported');
+                throw new ParseException('Multiple namespaces are not not supported');
             }
             $this->parsed['namespace'] = (string)$node->name;
 
@@ -122,7 +127,7 @@ final class CodeParser extends NodeVisitorAbstract
             $prefix = (string)$node->prefix;
             foreach ($node->uses as $use) {
                 [$alias, $target] = $this->normalizeUse($use, $prefix);
-                switch ($use->type) {
+                switch ($node->type != Use_::TYPE_UNKNOWN ? $node->type : $use->type) {
                     case Use_::TYPE_NORMAL:
                         $this->parsed['uses']['classes'][$alias] = $target;
                         break;
@@ -140,10 +145,10 @@ final class CodeParser extends NodeVisitorAbstract
 
         if ($node instanceof Class_) {
             if (!isset($this->parsed['namespace'])) {
-                throw new ParseException('Classes defined in the global namespace is not supported');
+                throw new ParseException('Classes must be defined in a namespace');
             }
             if (isset($this->parsed['class'])) {
-                throw new ParseException('Multiple classes in a file is not supported');
+                throw new ParseException('Only one class can be defined');
             }
 
             $methods = [];
