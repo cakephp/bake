@@ -14,24 +14,22 @@ declare(strict_types=1);
  * @since         3.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Parse;
+namespace Bake\CodeGen;
 
 /**
  * @internal
  */
-final class ParsedMethod
+final class ParsedFile
 {
     /**
-     * @param string $name name
-     * @param string $code Code block
-     * @param string|null $docblock Docblock
-     * @param array $attributes Attributes
+     * @param string $namespace Namespace
+     * @param array $uses Use statements
+     * param \Bake\CodeGen\ParsedClass $class Class defined in file
      */
     public function __construct(
-        public readonly string $name,
-        public readonly string $code,
-        public readonly ?string $docblock,
-        public readonly array $attributes
+        public readonly string $namespace,
+        public readonly array $uses,
+        public readonly ParsedClass $class
     ) {
     }
 }
