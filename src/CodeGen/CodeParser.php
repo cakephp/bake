@@ -14,7 +14,7 @@ declare(strict_types=1);
  * @since         3.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Parse;
+namespace Bake\CodeGen;
 
 use PhpParser\Error;
 use PhpParser\Lexer\Emulative;
@@ -59,8 +59,8 @@ final class CodeParser extends NodeVisitorAbstract
 
     /**
      * @param string $code Code to parse
-     * @return \Bake\Parse\ParsedFile
-     * @throws \Bake\Parse\ParseException
+     * @return \Bake\CodeGen\ParsedFile
+     * @throws \Bake\CodeGen\ParseException
      */
     public function parseFile(string $code,): ParsedFile
     {

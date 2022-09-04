@@ -14,10 +14,10 @@ declare(strict_types=1);
  * @since         3.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Test\TestCase\Parse;
+namespace Bake\Test\TestCase\CodeGen;
 
-use Bake\Parse\CodeParser;
-use Bake\Parse\ParseException;
+use Bake\CodeGen\CodeParser;
+use Bake\CodeGen\ParseException;
 use Bake\Test\TestCase\TestCase;
 
 class CodeParserTest extends TestCase
