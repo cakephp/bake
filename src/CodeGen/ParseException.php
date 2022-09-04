@@ -14,20 +14,10 @@ declare(strict_types=1);
  * @since         3.0.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Bake\Parse;
+namespace Bake\CodeGen;
 
-/**
- * @internal
- */
-final class ParsedClass
+use Cake\Core\Exception\CakeException;
+
+class ParseException extends CakeException
 {
-    /**
-     * @param string $name Class name
-     * @param array<string, \Bake\Parse\ParsedMethod> $methods Class methods
-     */
-    public function __construct(
-        public readonly string $name,
-        public readonly array $methods
-    ) {
-    }
 }
