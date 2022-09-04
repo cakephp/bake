@@ -72,6 +72,67 @@ class CodeParserTest extends TestCase
         $this->assertSame($doc, $file->class->methods['initialize']->docblock);
     }
 
+    public function testUseStatements(): void
+    {
+        $parser = new CodeParser();
+        $file = $parser->parseFile(<<<'PARSE'
+        <?php
+
+        namespace Test;
+
+        use Test\Another\{ClassA, ClassB as B, const TEST_CONSTANT};
+        use Test\Another\ClassC as C;
+
+        use function Test\Another\{test_func as new_func};
+        use function Test\Another\test_func2 as new_func2;
+
+        use const Test\Another\{TEST_CONSTANT as NEW_CONSTANT};
+        use const Test\Another\TEST_CONSTANT2 as NEW_CONSTANT2;
+
+        class TestTable{}
+        PARSE);
+
+        $this->assertSame(
+            [
+                'ClassA' => 'Test\Another\ClassA',
+                'B' => 'Test\Another\ClassB',
+                'C' => 'Test\Another\ClassC',
+            ],
+            $file->uses['classes']
+        );
+
+        $this->assertSame(
+            [
+                'new_func' => 'Test\Another\test_func',
+                'new_func2' => 'Test\Another\test_func2',
+            ],
+            $file->uses['functions']
+        );
+
+        $this->assertSame(
+            [
+                'TEST_CONSTANT' => 'Test\Another\TEST_CONSTANT',
+                'NEW_CONSTANT' => 'Test\Another\TEST_CONSTANT',
+                'NEW_CONSTANT2' => 'Test\Another\TEST_CONSTANT2',
+            ],
+            $file->uses['constants']
+        );
+    }
+
+    public function testInvalidPhp(): void
+    {
+        $parser = new CodeParser();
+
+        $this->expectException(ParseException::class);
+        $file = $parser->parseFile(<<<'PARSE'
+        <?php
+
+        namespace Test
+
+        use Test\Another\{ClassA, ClassB as B};
+        PARSE);
+    }
+
     public function testParseMissingNamespace(): void
     {
         $parser = new CodeParser();
