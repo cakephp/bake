@@ -62,7 +62,7 @@ final class CodeParser extends NodeVisitorAbstract
      * @return \Bake\CodeGen\ParsedFile
      * @throws \Bake\CodeGen\ParseException
      */
-    public function parseFile(string $code,): ParsedFile
+    public function parseFile(string $code): ParsedFile
     {
         $this->code = $code;
         try {
