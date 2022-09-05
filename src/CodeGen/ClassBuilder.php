@@ -16,9 +16,6 @@ declare(strict_types=1);
  */
 namespace Bake\CodeGen;
 
-/**
- * @internal
- */
 final class ClassBuilder
 {
     /**
@@ -29,9 +26,9 @@ final class ClassBuilder
     }
 
     /**
-     * Returns the list of methods imported from existing file.
+     * Returns the code of methods imported from existing file.
      *
-     * @param array<string> $ignored Ignore imports from existing file
+     * @param array<string> $ignored Ignored methods from existing file
      * @return array<string, \Bake\CodeGen\ParsedMethod>
      */
     public function getExistingMethods(array $ignored = []): array

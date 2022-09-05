@@ -19,9 +19,6 @@ namespace Bake\CodeGen;
 use Cake\Log\Log;
 use InvalidArgumentException;
 
-/**
- * @internal
- */
 final class FileBuilder
 {
     protected ClassBuilder $classBuilder;
@@ -52,55 +49,45 @@ final class FileBuilder
     }
 
     /**
-     * Returns the full, sorted list of class use statements for the generated file.
+     * Returns sorted list of class imports to include in generated file.
      *
      * @param array<string|int, string> $required Required imports for generated code
      * @param array<string> $ignored Ignore imports from existing file
-     * @return array<string>
+     * @return array<string|int, string>
      */
-    public function getClassUses(array $required, array $ignored = []): array
+    public function getClassImports(array $required, array $ignored = []): array
     {
-        $uses = $this->noramlizeImports($required);
+        $imports = $this->noramlizeImports($required);
 
         if ($this->parsedFile) {
-            $uses = $this->mergeImports($uses, $this->parsedFile->uses['classes'], $ignored);
+            $imports = $this->mergeImports($imports, $this->parsedFile->classImports, $ignored);
         }
 
-        asort($uses, SORT_STRING);
+        asort($imports, SORT_STRING);
 
-        $statements = [];
-        foreach ($uses as $alias => $class) {
-            if ($class === $alias || str_ends_with($class, "\\{$alias}")) {
-                $statements[] = "use {$class};";
-            } else {
-                $statements[] = "use {$class} as {$alias};";
-            }
-        }
-
-        return $statements;
+        return $imports;
     }
 
     /**
-     * Returns the full, sorted list of const use statements for the generated file.
+     * Returns sorted list of class imports to include in generated file.
      *
      * @param array<string|int, string> $required Required imports for generated code
      * @param array<string> $ignored Ignore imports from existing file
-     * @return array<string>
-     * @return array<string>
+     * @return array<string|int, string>
      */
-    public function getConstUses(array $required, array $ignored = []): array
+    public function getConstImports(array $required, array $ignored = []): array
     {
         return [];
     }
 
     /**
-     * Returns the full, sorted list of function use statements for the generated file.
+     * Returns sorted list of class imports to include in generated file.
      *
      * @param array<string|int, string> $required Required imports for generated code
      * @param array<string> $ignored Ignore imports from existing file
-     * @return array<string>
+     * @return array<string|int, string>
      */
-    public function getFunctionUses(array $required, array $ignored = []): array
+    public function getFunctionImports(array $required, array $ignored = []): array
     {
         return [];
     }
@@ -144,14 +131,15 @@ final class FileBuilder
     }
 
     /**
-     * @param array<string, string> $uses Existing imports
-     * @param array<string, string> $importUses Imports to merge
+     * @param array<string, string> $existing Existing imports
+     * @param array<string, string> $imports Imports to merge into existing
      * @param array<string> $ignored Ignore imports from existing file
      * @return array<string, string>
      */
-    protected function mergeImports(array $uses, array $importUses, array $ignored): array
+    protected function mergeImports(array $existing, array $imports, array $ignored): array
     {
-        foreach ($importUses as $alias => $class) {
+        $uses = $existing;
+        foreach ($imports as $alias => $class) {
             if (in_array($class, $ignored, true)) {
                 continue;
             }
