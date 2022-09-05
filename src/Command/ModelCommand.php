@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Bake\CodeGen\FileBuilder;
 use Bake\Utility\TableScanner;
 use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
@@ -1145,13 +1146,23 @@ class ModelCommand extends BakeCommand
             return;
         }
 
+        $name = $model->getAlias();
+        $io->out("\n" . sprintf('Baking table class for %s...', $name), 1, ConsoleIo::NORMAL);
+
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
         if ($this->plugin) {
             $namespace = $this->_pluginNamespace($this->plugin);
         }
 
-        $name = $model->getAlias();
+        $path = $this->getPath($args);
+        $filename = $path . 'Table' . DS . $name . 'Table.php';
+
+        $parsedFile = null;
+        if ($args->getOption('update')) {
+            $parsedFile = $this->parseFile($filename);
+        }
+
         $entity = $this->_entityName($model->getAlias());
         $data += [
             'plugin' => $this->plugin,
@@ -1167,15 +1178,13 @@ class ModelCommand extends BakeCommand
             'rulesChecker' => [],
             'behaviors' => [],
             'connection' => $this->connection,
+            'fileBuilder' => new FileBuilder("{$namespace}\Model\Table", $parsedFile),
         ];
 
         $renderer = new TemplateRenderer($this->theme);
         $renderer->set($data);
         $out = $renderer->generate('Bake.Model/table');
 
-        $path = $this->getPath($args);
-        $filename = $path . 'Table' . DS . $name . 'Table.php';
-        $io->out("\n" . sprintf('Baking table class for %s...', $name), 1, ConsoleIo::NORMAL);
         $io->createFile($filename, $out, $args->getOption('force'));
 
         // Work around composer caching that classes/files do not exist.
@@ -1255,6 +1264,9 @@ class ModelCommand extends BakeCommand
         )->addArgument('name', [
             'help' => 'Name of the model to bake (without the Table suffix). ' .
                 'You can use Plugin.name to bake plugin models.',
+        ])->addOption('update', [
+            'boolean' => true,
+            'help' => 'Update generated methods in existing files. If the file doesn\'t exist it will be created.',
         ])->addOption('table', [
             'help' => 'The table name to use if you have non-conventional table names.',
         ])->addOption('no-entity', [
