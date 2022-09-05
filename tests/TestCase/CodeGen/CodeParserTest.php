@@ -36,7 +36,7 @@ class CodeParserTest extends TestCase
                 'Table' => 'Cake\ORM\Table',
                 'Validator' => 'Cake\Validation\Validator',
             ],
-            $file->uses['classes']
+            $file->classImports
         );
         $this->assertSame(
             [
@@ -98,7 +98,7 @@ class CodeParserTest extends TestCase
                 'B' => 'Test\Another\ClassB',
                 'C' => 'Test\Another\ClassC',
             ],
-            $file->uses['classes']
+            $file->classImports
         );
 
         $this->assertSame(
@@ -106,7 +106,7 @@ class CodeParserTest extends TestCase
                 'new_func' => 'Test\Another\test_func',
                 'new_func2' => 'Test\Another\test_func2',
             ],
-            $file->uses['functions']
+            $file->functionImports
         );
 
         $this->assertSame(
@@ -115,7 +115,7 @@ class CodeParserTest extends TestCase
                 'NEW_CONSTANT' => 'Test\Another\TEST_CONSTANT',
                 'NEW_CONSTANT2' => 'Test\Another\TEST_CONSTANT2',
             ],
-            $file->uses['constants']
+            $file->constImports
         );
     }
 

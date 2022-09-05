@@ -250,4 +250,63 @@ class BakeHelperTest extends TestCase
         ];
         $this->assertSame($expected, $result);
     }
+
+    public function testGetUseStatements(): void
+    {
+        $statements = $this->BakeHelper->getClassUseStatements(['Cake\ORM\Query', 'Table' => 'Cake\ORM\Table', 'MyException' => 'RuntimeException']);
+        $this->assertSame(
+            [
+                'use Cake\ORM\Query;',
+                'use Cake\ORM\Table;',
+                'use RuntimeException as MyException;',
+            ],
+            $statements
+        );
+
+        $statements = $this->BakeHelper->getFunctionUseStatements(['MyApp\my_function', 'custom_implode' => 'implode']);
+        $this->assertSame(
+            [
+                'use function MyApp\my_function;',
+                'use function implode as custom_implode;',
+            ],
+            $statements
+        );
+
+        $statements = $this->BakeHelper->getConstUseStatements(['MyApp\MY_CONSTANT', 'CUSTOM_DATE' => 'DATE_ATOM']);
+        $this->assertSame(
+            [
+                'use const MyApp\MY_CONSTANT;',
+                'use const DATE_ATOM as CUSTOM_DATE;',
+            ],
+            $statements
+        );
+    }
+
+    public function testConcatCode(): void
+    {
+        $statements = [
+            'use Cake\ORM\Query;',
+            'use RuntimeException as MyException;',
+            '',
+        ];
+        $code = $this->BakeHelper->concatCode("\n", $statements);
+        $this->assertSame(
+            <<<'CODE'
+            use Cake\ORM\Query;
+            use RuntimeException as MyException;
+            CODE,
+            $code
+        );
+
+        $code = $this->BakeHelper->concatCode("\n", $statements, "\n", "\n");
+        $this->assertSame(
+            <<<'CODE'
+
+            use Cake\ORM\Query;
+            use RuntimeException as MyException;
+
+            CODE,
+            $code
+        );
+    }
 }

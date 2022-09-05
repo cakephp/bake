@@ -57,36 +57,36 @@ class FileBuilderTest extends TestCase
         $builder = new FileBuilder('MyApp\Model', $file);
 
         // Pass required imports out of order
-        $uses = $builder->getClassUses(['Cake\ORM\Table', 'Cake\ORM\Query']);
+        $imports = $builder->getClassImports(['Table' => 'Cake\ORM\Table', 'Cake\ORM\Query']);
         $this->assertSame(
             [
-                'use Cake\ORM\Query;',
-                'use Cake\ORM\Table;',
-                'use MyApp\Expression\MyExpression;',
-                'use RuntimeException as MyException;',
+                'Query' => 'Cake\ORM\Query',
+                'Table' => 'Cake\ORM\Table',
+                'MyExpression' => 'MyApp\Expression\MyExpression',
+                'MyException' => 'RuntimeException',
             ],
-            $uses
+            $imports
         );
 
-        $uses = $builder->getClassUses(['Cake\ORM\Table', 'Cake\ORM\Query'], ['MyApp\Expression\MyExpression']);
+        $imports = $builder->getClassImports(['Cake\ORM\Table', 'Cake\ORM\Query'], ['MyApp\Expression\MyExpression']);
         $this->assertSame(
             [
-                'use Cake\ORM\Query;',
-                'use Cake\ORM\Table;',
-                'use RuntimeException as MyException;',
+                'Query' => 'Cake\ORM\Query',
+                'Table' => 'Cake\ORM\Table',
+                'MyException' => 'RuntimeException',
             ],
-            $uses
+            $imports
         );
 
         // Build without existing file
         $builder = new FileBuilder('MyApp\Model');
-        $uses = $builder->getClassUses(['Cake\ORM\Table', 'Cake\ORM\Query']);
+        $imports = $builder->getClassImports(['Cake\ORM\Table', 'Cake\ORM\Query']);
         $this->assertSame(
             [
-                'use Cake\ORM\Query;',
-                'use Cake\ORM\Table;',
+                'Query' => 'Cake\ORM\Query',
+                'Table' => 'Cake\ORM\Table',
             ],
-            $uses
+            $imports
         );
     }
 }

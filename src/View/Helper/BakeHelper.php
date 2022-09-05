@@ -458,6 +458,91 @@ class BakeHelper extends Helper
     }
 
     /**
+     * Builds array of php use statements from class imports.
+     *
+     * @param array<string|int, string> $imports Class imports
+     * @return array<string>
+     */
+    public function getClassUseStatements(array $imports): array
+    {
+        return $this->getUseStatements('', $imports);
+    }
+
+    /**
+     * Builds array of php use statements from function imports.
+     *
+     * @param array<string|int, string> $imports Class imports
+     * @return array<string>
+     */
+    public function getFunctionUseStatements(array $imports): array
+    {
+        return $this->getUseStatements('function ', $imports);
+    }
+
+    /**
+     * Builds array of php use statements from const imports.
+     *
+     * @param array<string|int, string> $imports Class imports
+     * @return array<string>
+     */
+    public function getConstUseStatements(array $imports): array
+    {
+        return $this->getUseStatements('const ', $imports);
+    }
+
+    /**
+     * Builds array of php use statements from imports.
+     *
+     * @param string $prefix Prefix to put before import (function, const)
+     * @param array<string|int, string> $imports Class imports
+     * @return array<string>
+     */
+    protected function getUseStatements(string $prefix, array $imports): array
+    {
+        $statements = [];
+        foreach ($imports as $alias => $type) {
+            if (is_int($alias)) {
+                $statements[] = "use {$prefix}{$type};";
+                continue;
+            }
+
+            if ($type === $alias || str_ends_with($type, "\\{$alias}")) {
+                $statements[] = "use {$prefix}{$type};";
+            } else {
+                $statements[] = "use {$prefix}{$type} as {$alias};";
+            }
+        }
+
+        return $statements;
+    }
+
+    /**
+     * Concats staements together with newlines between non-empty statements.
+     *
+     * @param string $delimiter Delimiter to separate code blocks
+     * @param array<string> $blocks Code blocks to concatenate
+     * @param string $prefix Code to prepend if final output not empty
+     * @param string $suffix Code to append if final output not empty
+     * @return string
+     */
+    public function concatCode(
+        string $delimiter,
+        array $blocks,
+        string $prefix = '',
+        string $suffix = ''
+    ): string {
+        $output = implode($delimiter, array_filter($blocks));
+        if ($prefix && !empty($output)) {
+            $output = $prefix . $output;
+        }
+        if ($suffix && !empty($output)) {
+            $output .= $suffix;
+        }
+
+        return $output;
+    }
+
+    /**
      * To be mocked elsewhere...
      *
      * @param \Cake\ORM\Table $table Table
