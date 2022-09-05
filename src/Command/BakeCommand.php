@@ -16,6 +16,8 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Bake\CodeGen\CodeParser;
+use Bake\CodeGen\ParsedFile;
 use Bake\Utility\CommonOptionsTrait;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
@@ -178,5 +180,20 @@ abstract class BakeCommand extends Command
     protected function isValidColumnName(string $name): bool
     {
         return (bool)preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $name);
+    }
+
+    /**
+     * Parses a file if it exists.
+     *
+     * @param string $path File path
+     * @return \Bake\CodeGen\ParsedFile|null
+     */
+    protected function parseFile(string $path): ?ParsedFile
+    {
+        if (file_exists($path)) {
+            return (new CodeParser())->parseFile(file_get_contents($path));
+        }
+
+        return null;
     }
 }

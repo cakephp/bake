@@ -14,13 +14,9 @@
  */
 #}
 {% set annotations = DocBlock.buildTableAnnotations(associations, associationInfo, behaviors, entity, namespace) %}
-<?php
-declare(strict_types=1);
-
-namespace {{ namespace }}\Model\Table;
-
-{% set uses = ['use Cake\\ORM\\Query;', 'use Cake\\ORM\\RulesChecker;', 'use Cake\\ORM\\Table;', 'use Cake\\Validation\\Validator;'] %}
-{{ uses|join('\n')|raw }}
+{% set generatedFunctions = ['initialize'] %}
+{% set classImports = fileBuilder.classImports(['Cake\\ORM\\Query', 'Cake\\ORM\\RulesChecker', 'Cake\\ORM\\Table', 'Cake\\Validation\\Validator']) %}
+{{ element('Bake.file_header', {namespace: "#{namespace}\\Model\\Table", imports: {class: classImports}}) }}
 
 {{ DocBlock.classDescription(name, 'Model', annotations)|raw }}
 class {{ name }}Table extends Table
@@ -81,6 +77,7 @@ class {{ name }}Table extends Table
 {{- "\n" }}
 
 {%- if validation %}
+{% set generatedFunctions = generatedFunctions|merge(['validationDefault']) %}
 
     /**
      * Default validation rules.
@@ -108,6 +105,7 @@ class {{ name }}Table extends Table
 {% endif %}
 
 {%- if rulesChecker %}
+{% set generatedFunctions = generatedFunctions|merge(['buildRules']) %}
 
     /**
      * Returns a rules checker object that will be used for validating
@@ -132,6 +130,7 @@ class {{ name }}Table extends Table
 {% endif %}
 
 {%- if connection is not same as('default') %}
+{% set generatedFunctions = generatedFunctions|merge(['defaultConnectionName']) %}
 
     /**
      * Returns the database connection name to use by default.
@@ -142,5 +141,10 @@ class {{ name }}Table extends Table
     {
         return '{{ connection }}';
     }
+{% endif %}
+{% set importedMethods = fileBuilder.classBuilder.importedMethods(generatedFunctions) %}
+{% if importedMethods %}
+
+    {{~ element('Bake.parsed_methods', {methods: importedMethods}) }}
 {% endif %}
 }

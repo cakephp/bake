@@ -31,7 +31,7 @@ final class ClassBuilder
      * @param array<string> $ignored Ignored methods from existing file
      * @return array<string, \Bake\CodeGen\ParsedMethod>
      */
-    public function getExistingMethods(array $ignored = []): array
+    public function getImportedMethods(array $ignored = []): array
     {
         if ($this->parsedClass === null) {
             return [];

@@ -517,21 +517,51 @@ class BakeHelper extends Helper
     }
 
     /**
-     * Concats staements together with newlines between non-empty statements.
+     * Builds an array of php code from method imports.
      *
-     * @param string $delimiter Delimiter to separate code blocks
-     * @param array<string> $blocks Code blocks to concatenate
+     * @param array<\Bake\CodeGen\ParsedMethod> $imports Method imports
+     * @return array<string>
+     */
+    public function getMethodBlocks(array $imports): array
+    {
+        $blocks = [];
+        foreach ($imports as $import) {
+            $statements = [];
+            $statements[] = $import->docblock ?? '';
+            $statements[] = $import->code;
+
+            $blocks[] = implode("\n", $statements);
+        }
+
+        return $blocks;
+    }
+
+    /**
+     * Concats strings together with newlines between non-empty statements.
+     *
+     * @param string $delimiter Delimiter to separate strings
+     * @param array<array<string>|string> $strings Strings to concatenate
      * @param string $prefix Code to prepend if final output not empty
      * @param string $suffix Code to append if final output not empty
      * @return string
      */
-    public function concatCode(
+    public function concat(
         string $delimiter,
-        array $blocks,
+        array $strings,
         string $prefix = '',
         string $suffix = ''
     ): string {
-        $output = implode($delimiter, array_filter($blocks));
+        $output = implode(
+            $delimiter,
+            array_map(function ($string) use ($delimiter) {
+                if (is_string($string)) {
+                    return $string;
+                }
+
+                return implode($delimiter, array_filter($string));
+            }, array_filter($strings))
+        );
+
         if ($prefix && !empty($output)) {
             $output = $prefix . $output;
         }

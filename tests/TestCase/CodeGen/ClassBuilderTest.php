@@ -68,7 +68,7 @@ class ClassBuilderTest extends TestCase
         PARSE);
 
         $builder = new FileBuilder('MyApp\Model', $file);
-        $methods = $builder->classBuilder()->getExistingMethods(['buildRules']);
+        $methods = $builder->classBuilder()->getImportedMethods(['buildRules']);
         $this->assertSame(
             [
                 'findSomething',

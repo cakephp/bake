@@ -282,14 +282,14 @@ class BakeHelperTest extends TestCase
         );
     }
 
-    public function testConcatCode(): void
+    public function testConcat(): void
     {
         $statements = [
             'use Cake\ORM\Query;',
             'use RuntimeException as MyException;',
             '',
         ];
-        $code = $this->BakeHelper->concatCode("\n", $statements);
+        $code = $this->BakeHelper->concat("\n", $statements);
         $this->assertSame(
             <<<'CODE'
             use Cake\ORM\Query;
@@ -298,7 +298,7 @@ class BakeHelperTest extends TestCase
             $code
         );
 
-        $code = $this->BakeHelper->concatCode("\n", $statements, "\n", "\n");
+        $code = $this->BakeHelper->concat("\n", $statements, "\n", "\n");
         $this->assertSame(
             <<<'CODE'
 
