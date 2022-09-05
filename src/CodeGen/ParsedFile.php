@@ -23,12 +23,16 @@ final class ParsedFile
 {
     /**
      * @param string $namespace Namespace
-     * @param array $uses Use statements
+     * @param array<string|int, string> $classImports Class imports
+     * @param array<string|int, string> $functionImports Function imports
+     * @param array<string|int, string> $constImports Const imports
      * param \Bake\CodeGen\ParsedClass $class Class defined in file
      */
     public function __construct(
         public readonly string $namespace,
-        public readonly array $uses,
+        public readonly array $classImports,
+        public readonly array $functionImports,
+        public readonly array $constImports,
         public readonly ParsedClass $class
     ) {
     }

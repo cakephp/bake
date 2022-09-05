@@ -71,7 +71,13 @@ final class CodeParser extends NodeVisitorAbstract
             throw new ParseException($e->getMessage(), null, $e);
         }
 
-        return new ParsedFile($this->parsed['namespace'], $this->parsed['uses'], $this->parsed['class']);
+        return new ParsedFile(
+            $this->parsed['namespace'],
+            $this->parsed['classImports'],
+            $this->parsed['functionImports'],
+            $this->parsed['constImports'],
+            $this->parsed['class']
+        );
     }
 
     /**
@@ -80,11 +86,9 @@ final class CodeParser extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes)
     {
         $this->parsed = [
-            'uses' => [
-                'classes' => [],
-                'funtions' => [],
-                'constants' => [],
-            ],
+            'classImports' => [],
+            'functionImports' => [],
+            'constImports' => [],
         ];
 
         return null;
@@ -109,13 +113,13 @@ final class CodeParser extends NodeVisitorAbstract
                 [$alias, $target] = $this->normalizeUse($use);
                 switch ($node->type) {
                     case Use_::TYPE_NORMAL:
-                        $this->parsed['uses']['classes'][$alias] = $target;
+                        $this->parsed['classImports'][$alias] = $target;
                         break;
                     case Use_::TYPE_FUNCTION:
-                        $this->parsed['uses']['functions'][$alias] = $target;
+                        $this->parsed['functionImports'][$alias] = $target;
                         break;
                     case Use_::TYPE_CONSTANT:
-                        $this->parsed['uses']['constants'][$alias] = $target;
+                        $this->parsed['constImports'][$alias] = $target;
                         break;
                 }
             }
@@ -129,13 +133,13 @@ final class CodeParser extends NodeVisitorAbstract
                 [$alias, $target] = $this->normalizeUse($use, $prefix);
                 switch ($node->type != Use_::TYPE_UNKNOWN ? $node->type : $use->type) {
                     case Use_::TYPE_NORMAL:
-                        $this->parsed['uses']['classes'][$alias] = $target;
+                        $this->parsed['classImports'][$alias] = $target;
                         break;
                     case Use_::TYPE_FUNCTION:
-                        $this->parsed['uses']['functions'][$alias] = $target;
+                        $this->parsed['functionImports'][$alias] = $target;
                         break;
                     case Use_::TYPE_CONSTANT:
-                        $this->parsed['uses']['constants'][$alias] = $target;
+                        $this->parsed['constImports'][$alias] = $target;
                         break;
                 }
             }
