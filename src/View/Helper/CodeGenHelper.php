@@ -64,7 +64,7 @@ class CodeGenHelper extends Helper
                 continue;
             }
 
-            if ($type === $alias || str_ends_with($type, "\\{$alias}")) {
+            if ($type === $alias || substr($type, -strlen("\\{$alias}")) === "\\{$alias}") {
                 $statements[] = "{$prefix} {$type};";
             } else {
                 $statements[] = "{$prefix} {$type} as {$alias};";
@@ -100,7 +100,7 @@ class CodeGenHelper extends Helper
      */
     public function getMethods(array $methods, string $prefix = '', string $suffix = ''): string
     {
-        return $this->concat("\n\n", array_map($this->getMethod(...), $methods), $prefix, $suffix);
+        return $this->concat("\n\n", array_map([$this, 'getMethod'], $methods), $prefix, $suffix);
     }
 
     /**

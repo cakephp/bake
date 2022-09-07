@@ -26,21 +26,32 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
-use PhpParser\Parser;
 use PhpParser\ParserFactory;
 
 /**
  * @internal
  */
-final class CodeParser extends NodeVisitorAbstract
+class CodeParser extends NodeVisitorAbstract
 {
-    protected Parser $parser;
+    /**
+     * @var \PhpParser\Parser
+     */
+    protected $parser;
 
-    protected NodeTraverser $traverser;
+    /**
+     * @var \PhpParser\NodeTraverser
+     */
+    protected $traverser;
 
-    protected string $code = '';
+    /**
+     * @var string
+     */
+    protected $code = '';
 
-    protected array $parsed = [];
+    /**
+     * @var array
+     */
+    protected $parsed = [];
 
     /**
      * Constructor
@@ -51,7 +62,7 @@ final class CodeParser extends NodeVisitorAbstract
             ParserFactory::PREFER_PHP7,
             new Emulative([
                 'usedAttributes' => ['comments', 'startLine', 'endLine', 'startFilePos', 'endFilePos'],
-            ]),
+            ])
         );
         $this->traverser = new NodeTraverser();
         $this->traverser->addVisitor($this);
@@ -161,7 +172,7 @@ final class CodeParser extends NodeVisitorAbstract
                 $endPos = $method->getEndFilePos();
                 $code = '    ' . substr($this->code, $startPos, $endPos - $startPos + 1);
 
-                $doc = $method->getDocComment()?->getText();
+                $doc = $method->getDocComment() ? $method->getDocComment()->getText() : null;
                 $doc = $doc ? '    ' . $doc : null;
 
                 $name = (string)$method->name;

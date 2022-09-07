@@ -19,15 +19,28 @@ namespace Bake\CodeGen;
 use Cake\Log\Log;
 use InvalidArgumentException;
 
-final class FileBuilder
+class FileBuilder
 {
-    protected ClassBuilder $classBuilder;
+    /**
+     * @var string
+     */
+    protected $namespace;
+
+    /**
+     * @var \Bake\CodeGen\ParsedFile|null
+     */
+    protected $parsedFile;
+
+    /**
+     * @var \Bake\CodeGen\ClassBuilder
+     */
+    protected $classBuilder;
 
     /**
      * @param string $namespace File namespace
      * @param \Bake\CodeGen\ParsedFile $parsedFile Parsed file it already exists
      */
-    public function __construct(protected string $namespace, protected ?ParsedFile $parsedFile = null)
+    public function __construct(string $namespace, ?ParsedFile $parsedFile = null)
     {
         if ($parsedFile && $parsedFile->namespace !== $namespace) {
             throw new ParseException(sprintf(
@@ -37,7 +50,9 @@ final class FileBuilder
             ));
         }
 
-        $this->classBuilder = new ClassBuilder($parsedFile?->class);
+        $this->namespace = $namespace;
+        $this->parsedFile = $parsedFile;
+        $this->classBuilder = new ClassBuilder($parsedFile->class ?? null);
     }
 
     /**
@@ -52,48 +67,48 @@ final class FileBuilder
      * Returns sorted list of class imports to include in generated file.
      *
      * @param array<string|int, string> $include Imports to always include
-     * @return array<string|int, string>
+     * @return array<string, string>
      */
-    public function getClassImports(array $include, array $ignored = []): array
+    public function getClassImports(array $include): array
     {
-        return $this->getImports($include, $this->parsedFile?->classImports);
+        return $this->getImports($include, $this->parsedFile->classImports ?? null);
     }
 
     /**
      * Returns sorted list of class imports to include in generated file.
      *
      * @param array<string|int, string> $include Imports to always include
-     * @return array<string|int, string>
+     * @return array<string, string>
      */
     public function getConstImports(array $include): array
     {
-        return $this->getImports($include, $this->parsedFile?->constImports);
+        return $this->getImports($include, $this->parsedFile->constImports ?? null);
     }
 
     /**
      * Returns sorted list of class imports to include in generated file.
      *
      * @param array<string|int, string> $include Imports to always include
-     * @return array<string|int, string>
+     * @return array<string, string>
      */
     public function getFunctionImports(array $include): array
     {
-        return $this->getImports($include, $this->parsedFile?->functionImports);
+        return $this->getImports($include, $this->parsedFile->functionImports ?? null);
     }
 
     /**
      * Returns sorted list of class imports to include in generated file.
      *
      * @param array<string|int, string> $include Imports to always include
-     * @param array<string|int, string>|null $existing Imports from existing file
-     * @return array<string|int, string>
+     * @param array<string, string>|null $parsed Imports from existing file
+     * @return array<string, string>
      */
-    protected function getImports(array $include, ?array $existing): array
+    protected function getImports(array $include, ?array $parsed): array
     {
-        $imports = $this->noramlizeImports($include);
+        $imports = $this->normalizeIncludes($include);
 
-        if ($existing) {
-            $imports = $this->mergeImports($imports, $existing);
+        if ($parsed) {
+            $imports = $this->mergeParsedImports($imports, $parsed);
         }
 
         asort($imports, SORT_STRING);
@@ -102,13 +117,15 @@ final class FileBuilder
     }
 
     /**
-     * @param array<string|int, string> $required Required imports for generated code
+     * Normalizes imports included from generated code into [alias => name] format.
+     *
+     * @param array<string|int, string> $imports Imports
      * @return array<string, string>
      */
-    protected function noramlizeImports(array $required): array
+    protected function normalizeIncludes(array $imports): array
     {
-        $uses = [];
-        foreach ($required as $alias => $class) {
+        $normalized = [];
+        foreach ($imports as $alias => $class) {
             if (is_int($alias)) {
                 $last = strrpos($class, '\\', -1);
                 if ($last !== false) {
@@ -118,60 +135,46 @@ final class FileBuilder
                 }
             }
 
-            if (isset($uses[$alias])) {
+            if (array_search($class, $normalized, true) !== false) {
                 throw new InvalidArgumentException(sprintf(
-                    'Duplicate required import: alias `%s` already defined.',
-                    $alias
+                    'Cannot specify duplicate import for `%s`',
+                    $class
                 ));
             }
 
-            if (in_array($class, $uses, true)) {
-                throw new InvalidArgumentException(sprintf(
-                    'Duplicate required import: class `%s` already defined as `%s`.',
-                    $class,
-                    $alias
-                ));
-            }
-
-            $uses[$alias] = $class;
+            $normalized[$alias] = $class;
         }
 
-        return $uses;
+        return $normalized;
     }
 
     /**
-     * @param array<string, string> $existing Existing imports
-     * @param array<string, string> $imports Imports to merge into existing
+     * @param array<string, string> $imports Generated imports to merge into
+     * @param array<string, string> $parsed Imports User imports to merge
      * @return array<string, string>
      */
-    protected function mergeImports(array $existing, array $imports): array
+    protected function mergeParsedImports(array $imports, array $parsed): array
     {
-        $uses = $existing;
-        foreach ($imports as $alias => $class) {
-            if (isset($uses[$alias])) {
-                if ($uses[$alias] !== $class) {
-                    Log::warning(sprintf(
-                        'Existing import `%s` is already imported as `%s`, discarding',
-                        $class,
-                        $alias
-                    ));
-                }
-                continue;
-            }
-
-            $foundAlias = array_search($class, $uses, true);
-            if ($foundAlias !== false) {
+        foreach ($parsed as $alias => $class) {
+            if (isset($imports[$alias]) && $imports[$alias] !== $class) {
                 Log::warning(sprintf(
-                    'Existing import `%s` is already imported as `%s`, discarding',
-                    $class,
-                    $foundAlias
+                    'Import conflict: alias `%s` is already being used by generated code, discarding',
+                    $alias
                 ));
                 continue;
             }
 
-            $uses[$alias] = $class;
+            if (array_search($class, $imports, true) !== false) {
+                Log::warning(sprintf(
+                    'Import conflict: `%s` in generated code is already imported with a different alias, discarding',
+                    $class
+                ));
+                continue;
+            }
+
+            $imports[$alias] = $class;
         }
 
-        return $uses;
+        return $imports;
     }
 }

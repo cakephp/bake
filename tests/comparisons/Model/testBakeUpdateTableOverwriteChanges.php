@@ -12,6 +12,7 @@ use Cake\Validation\Validator;
  * TodoItems Model
  *
  * @property \Bake\Test\App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \Bake\Test\App\Model\Table\TodoRemindersTable&\Cake\ORM\Association\HasOne $TodoReminders
  * @property \Bake\Test\App\Model\Table\TodoTasksTable&\Cake\ORM\Association\HasMany $TodoTasks
  * @property \Bake\Test\App\Model\Table\TodoLabelsTable&\Cake\ORM\Association\BelongsToMany $TodoLabels
  *
@@ -53,6 +54,9 @@ class TodoItemsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
+        $this->hasOne('TodoReminders', [
+            'foreignKey' => 'todo_item_id',
+        ]);
         $this->hasMany('TodoTasks', [
             'foreignKey' => 'todo_item_id',
         ]);
@@ -73,7 +77,6 @@ class TodoItemsTable extends Table
     {
         $validator
             ->integer('user_id')
-            ->requirePresence('user_id', 'create')
             ->notEmptyString('user_id');
 
         $validator

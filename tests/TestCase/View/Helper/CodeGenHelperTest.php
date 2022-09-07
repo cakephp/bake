@@ -62,20 +62,21 @@ class CodeGenHelperTest extends TestCase
             ['MyApp\my_function', 'custom_implode' => 'implode'],
             ['MyApp\MY_CONSTANT', 'CUSTOM_DATE' => 'DATE_ATOM'],
             "prefix;\n",
-            "\nsuffix;",
+            "\nsuffix;"
         );
         $this->assertSame(
-            <<<'CODE'
-            prefix;
-            use Cake\ORM\Query;
-            use Cake\ORM\Table;
-            use RuntimeException as MyException;
-            use function MyApp\my_function;
-            use function implode as custom_implode;
-            use const MyApp\MY_CONSTANT;
-            use const DATE_ATOM as CUSTOM_DATE;
-            suffix;
-            CODE,
+            <<<'PARSE'
+prefix;
+use Cake\ORM\Query;
+use Cake\ORM\Table;
+use RuntimeException as MyException;
+use function MyApp\my_function;
+use function implode as custom_implode;
+use const MyApp\MY_CONSTANT;
+use const DATE_ATOM as CUSTOM_DATE;
+suffix;
+PARSE
+            ,
             $code
         );
     }
@@ -89,21 +90,23 @@ class CodeGenHelperTest extends TestCase
         ];
         $code = $this->CodeGenHelper->concat("\n", $statements);
         $this->assertSame(
-            <<<'CODE'
-            use Cake\ORM\Query;
-            use RuntimeException as MyException;
-            CODE,
+            <<<'PARSE'
+use Cake\ORM\Query;
+use RuntimeException as MyException;
+PARSE
+            ,
             $code
         );
 
         $code = $this->CodeGenHelper->concat("\n", $statements, "\n", "\n");
         $this->assertSame(
-            <<<'CODE'
+            <<<'PARSE'
 
-            use Cake\ORM\Query;
-            use RuntimeException as MyException;
+use Cake\ORM\Query;
+use RuntimeException as MyException;
 
-            CODE,
+PARSE
+            ,
             $code
         );
     }
