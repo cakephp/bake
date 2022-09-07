@@ -2,4 +2,4 @@
 declare(strict_types=1);
 
 namespace {{ namespace }};
-{{- Bake.concat("\n", [Bake.classUseStatements(imports.class ?? []), Bake.functionUseStatements(imports.function ?? []), Bake.constUseStatements(imports.const ?? [])], '\n\n') }}
+{{- CodeGen.imports(classImports ?? [], functionImports ?? [], constImports ?? [], '\n\n') }}

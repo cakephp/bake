@@ -51,45 +51,54 @@ final class FileBuilder
     /**
      * Returns sorted list of class imports to include in generated file.
      *
-     * @param array<string|int, string> $required Required imports for generated code
-     * @param array<string> $ignored Ignore imports from existing file
+     * @param array<string|int, string> $include Imports to always include
      * @return array<string|int, string>
      */
-    public function getClassImports(array $required, array $ignored = []): array
+    public function getClassImports(array $include, array $ignored = []): array
     {
-        $imports = $this->noramlizeImports($required);
+        return $this->getImports($include, $this->parsedFile?->classImports);
+    }
 
-        if ($this->parsedFile) {
-            $imports = $this->mergeImports($imports, $this->parsedFile->classImports, $ignored);
+    /**
+     * Returns sorted list of class imports to include in generated file.
+     *
+     * @param array<string|int, string> $include Imports to always include
+     * @return array<string|int, string>
+     */
+    public function getConstImports(array $include): array
+    {
+        return $this->getImports($include, $this->parsedFile?->constImports);
+    }
+
+    /**
+     * Returns sorted list of class imports to include in generated file.
+     *
+     * @param array<string|int, string> $include Imports to always include
+     * @return array<string|int, string>
+     */
+    public function getFunctionImports(array $include): array
+    {
+        return $this->getImports($include, $this->parsedFile?->functionImports);
+    }
+
+    /**
+     * Returns sorted list of class imports to include in generated file.
+     *
+     * @param array<string|int, string> $include Imports to always include
+     * @param array<string|int, string>|null $existing Imports from existing file
+     * @return array<string|int, string>
+     */
+    protected function getImports(array $include, ?array $existing): array
+    {
+        $imports = $this->noramlizeImports($include);
+
+        if ($existing) {
+            $imports = $this->mergeImports($imports, $existing);
         }
 
         asort($imports, SORT_STRING);
 
         return $imports;
-    }
-
-    /**
-     * Returns sorted list of class imports to include in generated file.
-     *
-     * @param array<string|int, string> $required Required imports for generated code
-     * @param array<string> $ignored Ignore imports from existing file
-     * @return array<string|int, string>
-     */
-    public function getConstImports(array $required, array $ignored = []): array
-    {
-        return [];
-    }
-
-    /**
-     * Returns sorted list of class imports to include in generated file.
-     *
-     * @param array<string|int, string> $required Required imports for generated code
-     * @param array<string> $ignored Ignore imports from existing file
-     * @return array<string|int, string>
-     */
-    public function getFunctionImports(array $required, array $ignored = []): array
-    {
-        return [];
     }
 
     /**
@@ -133,17 +142,12 @@ final class FileBuilder
     /**
      * @param array<string, string> $existing Existing imports
      * @param array<string, string> $imports Imports to merge into existing
-     * @param array<string> $ignored Ignore imports from existing file
      * @return array<string, string>
      */
-    protected function mergeImports(array $existing, array $imports, array $ignored): array
+    protected function mergeImports(array $existing, array $imports): array
     {
         $uses = $existing;
         foreach ($imports as $alias => $class) {
-            if (in_array($class, $ignored, true)) {
-                continue;
-            }
-
             if (isset($uses[$alias])) {
                 if ($uses[$alias] !== $class) {
                     Log::warning(sprintf(
