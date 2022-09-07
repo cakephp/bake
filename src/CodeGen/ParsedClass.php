@@ -19,15 +19,25 @@ namespace Bake\CodeGen;
 /**
  * @internal
  */
-final class ParsedClass
+class ParsedClass
 {
+    /**
+     * @var string
+     */
+    public $name;
+
+    /**
+     * @var array
+     */
+    public $methods;
+
     /**
      * @param string $name Class name
      * @param array<string, \Bake\CodeGen\ParsedMethod> $methods Class methods
      */
-    public function __construct(
-        public readonly string $name,
-        public readonly array $methods
-    ) {
+    public function __construct(string $name, array $methods)
+    {
+        $this->name = $name;
+        $this->methods = $methods;
     }
 }

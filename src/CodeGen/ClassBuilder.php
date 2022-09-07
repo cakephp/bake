@@ -16,13 +16,19 @@ declare(strict_types=1);
  */
 namespace Bake\CodeGen;
 
-final class ClassBuilder
+class ClassBuilder
 {
+    /**
+     * @var \Bake\CodeGen\ParsedClass|null
+     */
+    protected $parsedClass;
+
     /**
      * @param \Bake\CodeGen\ParsedClass $parsedClass Parsed class it already exists
      */
-    public function __construct(protected ?ParsedClass $parsedClass = null)
+    public function __construct(?ParsedClass $parsedClass = null)
     {
+        $this->parsedClass = $parsedClass;
     }
 
     /**

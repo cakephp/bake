@@ -19,21 +19,51 @@ namespace Bake\CodeGen;
 /**
  * @internal
  */
-final class ParsedFile
+class ParsedFile
 {
     /**
+     * @var string
+     */
+    public $namespace;
+
+    /**
+     * @var array<string, string>
+     */
+    public $classImports;
+
+    /**
+     * @var array<string, string>
+     */
+    public $functionImports;
+
+    /**
+     * @var array<string, string>
+     */
+    public $constImports;
+
+    /**
+     * @var \Bake\CodeGen\ParsedClass
+     */
+    public $class;
+
+    /**
      * @param string $namespace Namespace
-     * @param array<string|int, string> $classImports Class imports
-     * @param array<string|int, string> $functionImports Function imports
-     * @param array<string|int, string> $constImports Const imports
-     * param \Bake\CodeGen\ParsedClass $class Class defined in file
+     * @param array<string, string> $classImports Class imports
+     * @param array<string, string> $functionImports Function imports
+     * @param array<string, string> $constImports Const imports
+     * @param \Bake\CodeGen\ParsedClass $class Class defined in file
      */
     public function __construct(
-        public readonly string $namespace,
-        public readonly array $classImports,
-        public readonly array $functionImports,
-        public readonly array $constImports,
-        public readonly ParsedClass $class
+        string $namespace,
+        array $classImports,
+        array $functionImports,
+        array $constImports,
+        ParsedClass $class
     ) {
+        $this->namespace = $namespace;
+        $this->classImports = $classImports;
+        $this->functionImports = $functionImports;
+        $this->constImports = $constImports;
+        $this->class = $class;
     }
 }

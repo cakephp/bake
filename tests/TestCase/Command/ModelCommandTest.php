@@ -1875,37 +1875,37 @@ class ModelCommandTest extends TestCase
 
     public function testBakeUpdateTableWithGenerationDisabled(): void
     {
-        $existing = <<<'EXISTING'
-        <?php
-        declare(strict_types=1);
+        $existing = <<<'PARSE'
+<?php
+declare(strict_types=1);
 
-        namespace Bake\Test\App\Model\Table;
+namespace Bake\Test\App\Model\Table;
 
-        use Cake\ORM\Query;
-        use Cake\ORM\RulesChecker;
-        use Cake\ORM\Table;
-        use Cake\Validation\Validator;
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
 
-        /**
-         * TodoItems Model
-         */
-        class TodoItemsTable extends Table
-        {
-            /**
-             * Returns a rules checker object that will be used for validating
-             * application integrity.
-             *
-             * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-             * @return \Cake\ORM\RulesChecker
-             */
-            public function buildRules(RulesChecker $rules): RulesChecker
-            {
-                // generation of this function is disabled by --no-rules and should stay
+/**
+ * TodoItems Model
+ */
+class TodoItemsTable extends Table
+{
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        // generation of this function is disabled by --no-rules and should stay
 
-                return $rules;
-            }
-        }
-        EXISTING;
+        return $rules;
+    }
+}
+PARSE;
 
         $this->generatedFile = APP . 'Model/Table/TodoItemsTable.php';
         file_put_contents($this->generatedFile, $existing);
@@ -1918,42 +1918,42 @@ class ModelCommandTest extends TestCase
 
     public function testBakeUpdateTableOverwriteChanges(): void
     {
-        $existing = <<<'EXISTING'
-        <?php
-        declare(strict_types=1);
+        $existing = <<<'PARSE'
+<?php
+declare(strict_types=1);
 
-        namespace Bake\Test\App\Model\Table;
+namespace Bake\Test\App\Model\Table;
 
-        use Cake\ORM\Query;
-        use Cake\ORM\RulesChecker;
-        use Cake\ORM\Table;
-        use Cake\Validation\Validator;
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
 
-        /**
-         * TodoItems Model
-         */
-        class TodoItemsTable extends Table
-        {
-            /**
-             */
-            public function buildRules(RulesChecker $rules): RulesChecker
-            {
-                // should be overwritten
-                return $rules;
-            }
+/**
+ * TodoItems Model
+ */
+class TodoItemsTable extends Table
+{
+    /**
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        // should be overwritten
+        return $rules;
+    }
 
-            public function initialize(array $config): void
-            {
-                // should be overwritten
-            }
+    public function initialize(array $config): void
+    {
+        // should be overwritten
+    }
 
-            public function validationDefault(Validator $validator): Validator
-            {
-                // should be overwritten
-                return $validator;
-            }
-        }
-        EXISTING;
+    public function validationDefault(Validator $validator): Validator
+    {
+        // should be overwritten
+        return $validator;
+    }
+}
+PARSE;
 
         $this->generatedFile = APP . 'Model/Table/TodoItemsTable.php';
         file_put_contents($this->generatedFile, $existing);
@@ -1966,47 +1966,47 @@ class ModelCommandTest extends TestCase
 
     public function testBakeUpdateTableUserFunctions(): void
     {
-        $existing = <<<'EXISTING'
-        <?php
-        declare(strict_types=1);
+        $existing = <<<'PARSE'
+<?php
+declare(strict_types=1);
 
-        namespace Bake\Test\App\Model\Table;
+namespace Bake\Test\App\Model\Table;
 
-        use Cake\ORM\Query;
-        use Cake\ORM\RulesChecker;
-        use Cake\ORM\Table;
-        use Cake\Validation\Validator;
-        use RuntimeException as CustomException; // should be kept
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+use RuntimeException as CustomException; // should be kept
 
-        /**
-         * TodoItems Model
-         */
-        class TodoItemsTable extends Table
-        {
-            /**
-             */
-            public function findByPriority(Query $query): Query
-            {
-                throw new CustomException();
+/**
+ * TodoItems Model
+ */
+class TodoItemsTable extends Table
+{
+    /**
+     */
+    public function findByPriority(Query $query): Query
+    {
+        throw new CustomException();
 
-                return $query;
-            }
+        return $query;
+    }
 
-            /**
-             * Returns a rules checker object that will be used for validating
-             * application integrity.
-             *
-             * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-             * @return \Cake\ORM\RulesChecker
-             */
-            public function buildRules(RulesChecker $rules): RulesChecker
-            {
-                $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
 
-                return $rules;
-            }
-        }
-        EXISTING;
+        return $rules;
+    }
+}
+PARSE;
 
         $this->generatedFile = APP . 'Model/Table/TodoItemsTable.php';
         file_put_contents($this->generatedFile, $existing);

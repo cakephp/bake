@@ -49,26 +49,26 @@ class CodeParserTest extends TestCase
             array_keys($file->class->methods)
         );
 
-        $code = <<<'CODEMARKER'
-            public function initialize(array $config): void
-            {
-                parent::initialize($config);
+        $code = <<<'PARSE'
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
 
-                $this->setTable('test');
-                $this->setDisplayField('id');
-                $this->setPrimaryKey('id');
-            }
-        CODEMARKER;
+        $this->setTable('test');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
+    }
+PARSE;
         $this->assertSame($code, $file->class->methods['initialize']->code);
 
-        $doc = <<<'DOCMARKER'
-            /**
-             * Initialize method
-             *
-             * @param array $config The configuration for the Table.
-             * @return void
-             */
-        DOCMARKER;
+        $doc = <<<'PARSE'
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+PARSE;
         $this->assertSame($doc, $file->class->methods['initialize']->docblock);
     }
 
@@ -76,21 +76,22 @@ class CodeParserTest extends TestCase
     {
         $parser = new CodeParser();
         $file = $parser->parseFile(<<<'PARSE'
-        <?php
+<?php
 
-        namespace Test;
+namespace Test;
 
-        use Test\Another\{ClassA, ClassB as B, const TEST_CONSTANT};
-        use Test\Another\ClassC as C;
+use Test\Another\{ClassA, ClassB as B, const TEST_CONSTANT};
+use Test\Another\ClassC as C;
 
-        use function Test\Another\{test_func as new_func};
-        use function Test\Another\test_func2 as new_func2;
+use function Test\Another\{test_func as new_func};
+use function Test\Another\test_func2 as new_func2;
 
-        use const Test\Another\{TEST_CONSTANT as NEW_CONSTANT};
-        use const Test\Another\TEST_CONSTANT2 as NEW_CONSTANT2;
+use const Test\Another\{TEST_CONSTANT as NEW_CONSTANT};
+use const Test\Another\TEST_CONSTANT2 as NEW_CONSTANT2;
 
-        class TestTable{}
-        PARSE);
+class TestTable{}
+PARSE
+        );
 
         $this->assertSame(
             [
@@ -125,12 +126,13 @@ class CodeParserTest extends TestCase
 
         $this->expectException(ParseException::class);
         $file = $parser->parseFile(<<<'PARSE'
-        <?php
+<?php
 
-        namespace Test
+namespace Test
 
-        use Test\Another\{ClassA, ClassB as B};
-        PARSE);
+use Test\Another\{ClassA, ClassB as B};
+PARSE
+        );
     }
 
     public function testParseMissingNamespace(): void
@@ -139,10 +141,11 @@ class CodeParserTest extends TestCase
 
         $this->expectException(ParseException::class);
         $parser->parseFile(<<<'PARSE'
-        <?php
+<?php
 
-        class TestTable{}
-        PARSE);
+class TestTable{}
+PARSE
+        );
     }
 
     public function testParseMissingClass(): void
@@ -151,10 +154,11 @@ class CodeParserTest extends TestCase
 
         $this->expectException(ParseException::class);
         $parser->parseFile(<<<'PARSE'
-        <?php
+<?php
 
-        namespace Bake\Test;
-        PARSE);
+namespace Bake\Test;
+PARSE
+        );
     }
 
     public function testParseMultipleNamespaces(): void
@@ -163,15 +167,16 @@ class CodeParserTest extends TestCase
 
         $this->expectException(ParseException::class);
         $parser->parseFile(<<<'PARSE'
-        <?php
+<?php
 
-        namespace Bake\Test;
+namespace Bake\Test;
 
-        class TestTable{}
+class TestTable{}
 
-        namespace Bake\Test2;
+namespace Bake\Test2;
 
-        class Test2Table{}
-        PARSE);
+class Test2Table{}
+PARSE
+        );
     }
 }

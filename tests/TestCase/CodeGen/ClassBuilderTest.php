@@ -25,47 +25,49 @@ class ClassBuilderTest extends TestCase
     public function testUserFunctions(): void
     {
         $parser = new CodeParser();
-        $file = $parser->parseFile(<<<'PARSE'
-        <?php
+        $file = $parser->parseFile(
+            <<<'PARSE'
+<?php
 
-        namespace MyApp\Model;
+namespace MyApp\Model;
 
-        use Cake\ORM\Query;
-        use Cake\ORM\Table;
+use Cake\ORM\Query;
+use Cake\ORM\Table;
 
-        class TestTable
-        {
-            /**
-             * Returns a rules checker object that will be used for validating
-             * application integrity.
-             *
-             * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-             * @return \Cake\ORM\RulesChecker
-             */
-            public function buildRules(RulesChecker $rules): RulesChecker
-            {
-                $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
+class TestTable
+{
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
 
-                return $rules;
-            }
+        return $rules;
+    }
 
-            /**
-             * @param \Cake\ORM\Query $query Query
-             * @return \Cake\ORM\Query
-             */
-            public function findSomething(Query $query): Query
-            {
-            }
+    /**
+     * @param \Cake\ORM\Query $query Query
+     * @return \Cake\ORM\Query
+     */
+    public function findSomething(Query $query): Query
+    {
+    }
 
-            /**
-             * @param \Cake\ORM\Query $query Query
-             * @return \Cake\ORM\Query
-             */
-            public function findSomethingElse(Query $query): Query
-            {
-            }
-        }
-        PARSE);
+    /**
+     * @param \Cake\ORM\Query $query Query
+     * @return \Cake\ORM\Query
+     */
+    public function findSomethingElse(Query $query): Query
+    {
+    }
+}
+PARSE
+        );
 
         $builder = new FileBuilder('MyApp\Model', $file);
         $methods = $builder->classBuilder()->getUserFunctions(['buildRules']);

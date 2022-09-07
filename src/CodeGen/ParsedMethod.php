@@ -19,8 +19,28 @@ namespace Bake\CodeGen;
 /**
  * @internal
  */
-final class ParsedMethod
+class ParsedMethod
 {
+    /**
+     * @var string
+     */
+    public $name;
+
+    /**
+     * @var string
+     */
+    public $code;
+
+    /**
+     * @var string|null
+     */
+    public $docblock;
+
+    /**
+     * @var array
+     */
+    public $attributes;
+
     /**
      * @param string $name name
      * @param string $code Code block
@@ -28,10 +48,14 @@ final class ParsedMethod
      * @param array $attributes Attributes
      */
     public function __construct(
-        public readonly string $name,
-        public readonly string $code,
-        public readonly ?string $docblock,
-        public readonly array $attributes
+        string $name,
+        string $code,
+        ?string $docblock,
+        array $attributes
     ) {
+        $this->name = $name;
+        $this->code = $code;
+        $this->docblock = $docblock;
+        $this->attributes = $attributes;
     }
 }
