@@ -68,16 +68,6 @@ class FileBuilderTest extends TestCase
             $imports
         );
 
-        $imports = $builder->getClassImports(['Cake\ORM\Table', 'Cake\ORM\Query'], ['MyApp\Expression\MyExpression']);
-        $this->assertSame(
-            [
-                'Query' => 'Cake\ORM\Query',
-                'Table' => 'Cake\ORM\Table',
-                'MyException' => 'RuntimeException',
-            ],
-            $imports
-        );
-
         // Build without existing file
         $builder = new FileBuilder('MyApp\Model');
         $imports = $builder->getClassImports(['Cake\ORM\Table', 'Cake\ORM\Query']);

@@ -26,12 +26,12 @@ final class ClassBuilder
     }
 
     /**
-     * Returns the code of methods imported from existing file.
+     * Returns the user functions from existing file.
      *
      * @param array<string> $ignored Ignored methods from existing file
      * @return array<string, \Bake\CodeGen\ParsedMethod>
      */
-    public function getImportedMethods(array $ignored = []): array
+    public function getUserFunctions(array $ignored = []): array
     {
         if ($this->parsedClass === null) {
             return [];

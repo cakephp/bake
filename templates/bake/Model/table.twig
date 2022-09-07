@@ -16,7 +16,7 @@
 {% set annotations = DocBlock.buildTableAnnotations(associations, associationInfo, behaviors, entity, namespace) %}
 {% set generatedFunctions = ['initialize'] %}
 {% set classImports = fileBuilder.classImports(['Cake\\ORM\\Query', 'Cake\\ORM\\RulesChecker', 'Cake\\ORM\\Table', 'Cake\\Validation\\Validator']) %}
-{{ element('Bake.file_header', {namespace: "#{namespace}\\Model\\Table", imports: {class: classImports}}) }}
+{{ element('Bake.file_header', {namespace: "#{namespace}\\Model\\Table", classImports: classImports}) }}
 
 {{ DocBlock.classDescription(name, 'Model', annotations)|raw }}
 class {{ name }}Table extends Table
@@ -142,9 +142,9 @@ class {{ name }}Table extends Table
         return '{{ connection }}';
     }
 {% endif %}
-{% set importedMethods = fileBuilder.classBuilder.importedMethods(generatedFunctions) %}
-{% if importedMethods %}
+{% set userFunctions = fileBuilder.classBuilder.userFunctions(generatedFunctions) %}
+{% if userFunctions %}
 
-    {{~ element('Bake.parsed_methods', {methods: importedMethods}) }}
+    {{~ CodeGen.methods(userFunctions) }}
 {% endif %}
 }

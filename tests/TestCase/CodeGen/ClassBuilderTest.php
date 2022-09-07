@@ -22,7 +22,7 @@ use Bake\Test\TestCase\TestCase;
 
 class ClassBuilderTest extends TestCase
 {
-    public function testExistingMethods(): void
+    public function testUserFunctions(): void
     {
         $parser = new CodeParser();
         $file = $parser->parseFile(<<<'PARSE'
@@ -68,7 +68,7 @@ class ClassBuilderTest extends TestCase
         PARSE);
 
         $builder = new FileBuilder('MyApp\Model', $file);
-        $methods = $builder->classBuilder()->getImportedMethods(['buildRules']);
+        $methods = $builder->classBuilder()->getUserFunctions(['buildRules']);
         $this->assertSame(
             [
                 'findSomething',
