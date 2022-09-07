@@ -427,6 +427,12 @@ class ModelCommandTest extends TestCase
                     'targetForeignKey' => 'todo_label_id',
                 ],
             ],
+            'hasOne' => [
+                [
+                    'alias' => 'TodoReminders',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
         ];
         $this->assertEquals($expected, $result);
     }
@@ -472,6 +478,12 @@ class ModelCommandTest extends TestCase
                     'foreignKey' => 'todo_item_id',
                     'joinTable' => 'todo_items_todo_labels',
                     'targetForeignKey' => 'todo_label_id',
+                ],
+            ],
+            'hasOne' => [
+                [
+                    'alias' => 'TodoReminders',
+                    'foreignKey' => 'todo_item_id',
                 ],
             ],
         ];
