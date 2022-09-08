@@ -27,17 +27,31 @@ class ParsedClass
     public $name;
 
     /**
-     * @var array
+     * @var array<string, string>
+     */
+    public $constants;
+
+    /**
+     * @var array<string, string>
+     */
+    public $properties;
+
+    /**
+     * @var array<string, string>
      */
     public $methods;
 
     /**
      * @param string $name Class name
-     * @param array<string, \Bake\CodeGen\ParsedMethod> $methods Class methods
+     * @param array<string, string> $constants Class constants
+     * @param array<string, string> $properties Class properties
+     * @param array<string, string> $methods Class methods
      */
-    public function __construct(string $name, array $methods)
+    public function __construct(string $name, array $constants, array $properties, array $methods)
     {
         $this->name = $name;
+        $this->constants = $constants;
+        $this->properties = $properties;
         $this->methods = $methods;
     }
 }

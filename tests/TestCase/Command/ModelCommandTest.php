@@ -1863,108 +1863,17 @@ class ModelCommandTest extends TestCase
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
-    public function testBakeUpdateTableNoExistingFile(): void
+    public function testBakeUpdateTableNoFile(): void
     {
         $this->generatedFile = APP . 'Model/Table/TodoItemsTable.php';
-        $this->exec('bake model --no-validation --no-entity --no-test --no-fixture --update TodoItems');
+        $this->exec('bake model --no-entity --no-test --no-fixture --connection test --update TodoItems');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));
     }
 
-    public function testBakeUpdateTableWithGenerationDisabled(): void
-    {
-        $existing = <<<'PARSE'
-<?php
-declare(strict_types=1);
-
-namespace Bake\Test\App\Model\Table;
-
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
-use Cake\Validation\Validator;
-
-/**
- * TodoItems Model
- */
-class TodoItemsTable extends Table
-{
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules): RulesChecker
-    {
-        // generation of this function is disabled by --no-rules and should stay
-
-        return $rules;
-    }
-}
-PARSE;
-
-        $this->generatedFile = APP . 'Model/Table/TodoItemsTable.php';
-        file_put_contents($this->generatedFile, $existing);
-        $this->exec('bake model --no-validation --no-rules --no-entity --no-test --no-fixture --update --force TodoItems');
-
-        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
-        $this->assertFileExists($this->generatedFile);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));
-    }
-
-    public function testBakeUpdateTableOverwriteChanges(): void
-    {
-        $existing = <<<'PARSE'
-<?php
-declare(strict_types=1);
-
-namespace Bake\Test\App\Model\Table;
-
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
-use Cake\Validation\Validator;
-
-/**
- * TodoItems Model
- */
-class TodoItemsTable extends Table
-{
-    /**
-     */
-    public function buildRules(RulesChecker $rules): RulesChecker
-    {
-        // should be overwritten
-        return $rules;
-    }
-
-    public function initialize(array $config): void
-    {
-        // should be overwritten
-    }
-
-    public function validationDefault(Validator $validator): Validator
-    {
-        // should be overwritten
-        return $validator;
-    }
-}
-PARSE;
-
-        $this->generatedFile = APP . 'Model/Table/TodoItemsTable.php';
-        file_put_contents($this->generatedFile, $existing);
-        $this->exec('bake model --no-entity --no-test --no-fixture --update --force TodoItems');
-
-        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
-        $this->assertFileExists($this->generatedFile);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));
-    }
-
-    public function testBakeUpdateTableUserFunctions(): void
+    public function testBakeUpdateTable(): void
     {
         $existing = <<<'PARSE'
 <?php
@@ -1984,12 +1893,19 @@ use RuntimeException as CustomException; // should be kept
 class TodoItemsTable extends Table
 {
     /**
+     * @var int
      */
-    public function findByPriority(Query $query): Query
-    {
-        throw new CustomException();
+    protected const MY_CONST = 1;
 
-        return $query;
+    /**
+     * @var string
+     */
+    protected $myProperty = 'string';
+
+    public function validationDefault(Validator $validator): Validator
+    {
+        // should be overwritten
+        return $validator;
     }
 
     /**
@@ -2001,16 +1917,63 @@ class TodoItemsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
+        // generation of this function is disabled by --no-rules and should stay
 
         return $rules;
+    }
+
+    /**
+     */
+    public function findByPriority(Query $query): Query
+    {
+        throw new CustomException();
+
+        return $query;
     }
 }
 PARSE;
 
         $this->generatedFile = APP . 'Model/Table/TodoItemsTable.php';
         file_put_contents($this->generatedFile, $existing);
-        $this->exec('bake model --no-validation --no-entity --no-test --no-fixture --update --force TodoItems');
+        $this->exec('bake model --no-rules --no-entity --no-test --no-fixture --update --force TodoItems');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));
+    }
+
+    public function testBakeUpdateEntity(): void
+    {
+        $existing = <<<'PARSE'
+<?php
+declare(strict_types=1);
+
+namespace Bake\Test\App\Model\Entity;
+
+use MyApp\Test;
+
+class TodoItem
+{
+    /**
+     * @var int
+     */
+    protected const MY_CONST = 1;
+
+    /**
+     * @var string
+     */
+    protected $myProperty = 'string';
+
+    protected function _getName(): string
+    {
+        return 'name';
+    }
+}
+PARSE;
+
+        $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
+        file_put_contents($this->generatedFile, $existing);
+        $this->exec('bake model --no-table --no-test --no-fixture --update --force TodoItems');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);

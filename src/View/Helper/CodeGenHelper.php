@@ -16,7 +16,6 @@ declare(strict_types=1);
  */
 namespace Bake\View\Helper;
 
-use Bake\CodeGen\ParsedMethod;
 use Cake\View\Helper;
 
 /**
@@ -72,35 +71,6 @@ class CodeGenHelper extends Helper
         }
 
         return $statements;
-    }
-
-    /**
-     * Builds php code from a parsed method.
-     *
-     * @param \Bake\CodeGen\ParsedMethod $method Parsed method
-     * @return string
-     */
-    public function getMethod(ParsedMethod $method): string
-    {
-        $blocks = [
-            $method->docblock ?? '',
-            $method->code,
-        ];
-
-        return $this->concat("\n", $blocks);
-    }
-
-    /**
-     * Builds php code from parsed methods, separating methods by a line.
-     *
-     * @param array<\Bake\CodeGen\ParsedMethod> $methods Parsed methods
-     * @param string $prefix Code to prepend if final output not empty
-     * @param string $suffix Code to append if final output not empty
-     * @return string
-     */
-    public function getMethods(array $methods, string $prefix = '', string $suffix = ''): string
-    {
-        return $this->concat("\n\n", array_map([$this, 'getMethod'], $methods), $prefix, $suffix);
     }
 
     /**

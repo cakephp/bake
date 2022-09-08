@@ -36,6 +36,16 @@ use RuntimeException as CustomException;
 class TodoItemsTable extends Table
 {
     /**
+     * @var int
+     */
+    protected const MY_CONST = 1;
+
+    /**
+     * @var string
+     */
+    protected $myProperty = 'string';
+
+    /**
      * Initialize method
      *
      * @param array $config The configuration for the Table.
@@ -69,6 +79,43 @@ class TodoItemsTable extends Table
     }
 
     /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->integer('user_id')
+            ->notEmptyString('user_id');
+
+        $validator
+            ->scalar('title')
+            ->maxLength('title', 50)
+            ->requirePresence('title', 'create')
+            ->notEmptyString('title');
+
+        $validator
+            ->scalar('body')
+            ->allowEmptyString('body');
+
+        $validator
+            ->decimal('effort')
+            ->notEmptyString('effort');
+
+        $validator
+            ->boolean('completed')
+            ->notEmptyString('completed');
+
+        $validator
+            ->integer('todo_task_count')
+            ->notEmptyString('todo_task_count');
+
+        return $validator;
+    }
+
+    /**
      * Returns a rules checker object that will be used for validating
      * application integrity.
      *
@@ -77,7 +124,7 @@ class TodoItemsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
+        // generation of this function is disabled by --no-rules and should stay
 
         return $rules;
     }

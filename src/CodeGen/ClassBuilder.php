@@ -34,15 +34,45 @@ class ClassBuilder
     /**
      * Returns the user functions from existing file.
      *
-     * @param array<string> $ignored Ignored methods from existing file
-     * @return array<string, \Bake\CodeGen\ParsedMethod>
+     * @param array<string> $generated Constants that are generated
+     * @return array<string, string>
      */
-    public function getUserFunctions(array $ignored = []): array
+    public function getUserConstants(array $generated = []): array
     {
         if ($this->parsedClass === null) {
             return [];
         }
 
-        return array_diff_key($this->parsedClass->methods, array_flip($ignored));
+        return array_diff_key($this->parsedClass->constants, array_flip($generated));
+    }
+
+    /**
+     * Returns the user functions from existing file.
+     *
+     * @param array<string> $generated Proeprties that are generated
+     * @return array<string, string>
+     */
+    public function getUserProperties(array $generated = []): array
+    {
+        if ($this->parsedClass === null) {
+            return [];
+        }
+
+        return array_diff_key($this->parsedClass->properties, array_flip($generated));
+    }
+
+    /**
+     * Returns the user functions from existing file.
+     *
+     * @param array<string> $generated Methods that are generated
+     * @return array<string, string>
+     */
+    public function getUserFunctions(array $generated = []): array
+    {
+        if ($this->parsedClass === null) {
+            return [];
+        }
+
+        return array_diff_key($this->parsedClass->methods, array_flip($generated));
     }
 }

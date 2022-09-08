@@ -1101,7 +1101,9 @@ class ModelCommand extends BakeCommand
         if ($args->getOption('no-entity')) {
             return;
         }
+
         $name = $this->_entityName($model->getAlias());
+        $io->out("\n" . sprintf('Baking entity class for %s...', $name), 1, ConsoleIo::NORMAL);
 
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
@@ -1110,21 +1112,27 @@ class ModelCommand extends BakeCommand
             $pluginPath = $this->plugin . '.';
         }
 
+        $path = $this->getPath($args);
+        $filename = $path . 'Entity' . DS . $name . '.php';
+
+        $parsedFile = null;
+        if ($args->getOption('update')) {
+            $parsedFile = $this->parseFile($filename);
+        }
+
         $data += [
             'name' => $name,
             'namespace' => $namespace,
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
             'primaryKey' => [],
+            'fileBuilder' => new FileBuilder("{$namespace}\Model\Entity", $parsedFile),
         ];
 
         $renderer = new TemplateRenderer($this->theme);
         $renderer->set($data);
         $out = $renderer->generate('Bake.Model/entity');
 
-        $path = $this->getPath($args);
-        $filename = $path . 'Entity' . DS . $name . '.php';
-        $io->out("\n" . sprintf('Baking entity class for %s...', $name), 1, ConsoleIo::NORMAL);
         $io->createFile($filename, $out, $args->getOption('force'));
 
         $emptyFile = $path . 'Entity' . DS . '.gitkeep';

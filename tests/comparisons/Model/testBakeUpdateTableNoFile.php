@@ -117,4 +117,14 @@ class TodoItemsTable extends Table
 
         return $rules;
     }
+
+    /**
+     * Returns the database connection name to use by default.
+     *
+     * @return string
+     */
+    public static function defaultConnectionName(): string
+    {
+        return 'test';
+    }
 }
