@@ -71,10 +71,10 @@ class CodeParser extends NodeVisitorAbstract
 
     /**
      * @param string $code Code to parse
-     * @return \Bake\CodeGen\ParsedFile
+     * @return \Bake\CodeGen\ParsedFile|null
      * @throws \Bake\CodeGen\ParseException
      */
-    public function parseFile(string $code): ParsedFile
+    public function parseFile(string $code): ?ParsedFile
     {
         $this->fileText = $code;
         try {
@@ -83,11 +83,13 @@ class CodeParser extends NodeVisitorAbstract
             throw new ParseException($e->getMessage(), null, $e);
         }
 
+        if (!isset($this->parsed['namespace'], $this->parsed['class'])) {
+            return null;
+        }
+
         return new ParsedFile(
             $this->parsed['namespace'],
-            $this->parsed['classImports'],
-            $this->parsed['functionImports'],
-            $this->parsed['constImports'],
+            $this->parsed['imports'],
             $this->parsed['class']
         );
     }
@@ -98,9 +100,11 @@ class CodeParser extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes)
     {
         $this->parsed = [
-            'classImports' => [],
-            'functionImports' => [],
-            'constImports' => [],
+            'imports' => [
+                'class' => [],
+                'function' => [],
+                'const' => [],
+            ],
         ];
 
         return null;
@@ -113,7 +117,7 @@ class CodeParser extends NodeVisitorAbstract
     {
         if ($node instanceof Namespace_) {
             if (isset($this->parsed['namespace'])) {
-                throw new ParseException('Multiple namespaces are not not supported');
+                throw new ParseException('Multiple namespaces are not not supported, update your file');
             }
             $this->parsed['namespace'] = (string)$node->name;
 
@@ -121,50 +125,36 @@ class CodeParser extends NodeVisitorAbstract
         }
 
         if ($node instanceof Use_) {
-            foreach ($node->uses as $use) {
-                [$alias, $target] = $this->normalizeUse($use);
-                switch ($node->type) {
-                    case Use_::TYPE_NORMAL:
-                        $this->parsed['classImports'][$alias] = $target;
-                        break;
-                    case Use_::TYPE_FUNCTION:
-                        $this->parsed['functionImports'][$alias] = $target;
-                        break;
-                    case Use_::TYPE_CONSTANT:
-                        $this->parsed['constImports'][$alias] = $target;
-                        break;
-                }
+            if (count($node->uses) > 1) {
+                throw new ParseException('Multiple use statements per line are not supported, update your file');
+            }
+
+            [$alias, $target] = $this->normalizeUse(current($node->uses));
+            switch ($node->type) {
+                case Use_::TYPE_NORMAL:
+                    $this->parsed['imports']['class'][$alias] = $target;
+                    break;
+                case Use_::TYPE_FUNCTION:
+                    $this->parsed['imports']['function'][$alias] = $target;
+                    break;
+                case Use_::TYPE_CONSTANT:
+                    $this->parsed['imports']['const'][$alias] = $target;
+                    break;
             }
 
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
 
         if ($node instanceof GroupUse) {
-            $prefix = (string)$node->prefix;
-            foreach ($node->uses as $use) {
-                [$alias, $target] = $this->normalizeUse($use, $prefix);
-                switch ($node->type != Use_::TYPE_UNKNOWN ? $node->type : $use->type) {
-                    case Use_::TYPE_NORMAL:
-                        $this->parsed['classImports'][$alias] = $target;
-                        break;
-                    case Use_::TYPE_FUNCTION:
-                        $this->parsed['functionImports'][$alias] = $target;
-                        break;
-                    case Use_::TYPE_CONSTANT:
-                        $this->parsed['constImports'][$alias] = $target;
-                        break;
-                }
-            }
-
-            return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+            throw new ParseException('Group use statements are not supported, update your file');
         }
 
         if ($node instanceof Class_) {
             if (!isset($this->parsed['namespace'])) {
-                throw new ParseException('Classes must be defined in a namespace');
+                throw new ParseException('Classes defined in the global namespace is not supported, update your file');
             }
             if (isset($this->parsed['class'])) {
-                throw new ParseException('Only one class can be defined');
+                throw new ParseException('Multiple classes are not supported, update your file');
             }
 
             $constants = [];
@@ -217,18 +207,6 @@ class CodeParser extends NodeVisitorAbstract
         }
 
         return $code;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function afterTraverse(array $nodes)
-    {
-        if (!isset($this->parsed['namespace'], $this->parsed['class'])) {
-            throw new ParseException('Unable to parse file');
-        }
-
-        return null;
     }
 
     /**

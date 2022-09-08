@@ -36,7 +36,7 @@ class CodeParserTest extends TestCase
                 'Table' => 'Cake\ORM\Table',
                 'Validator' => 'Cake\Validation\Validator',
             ],
-            $file->classImports
+            $file->imports['class']
         );
         $this->assertSame(
             [
@@ -112,14 +112,14 @@ PARSE;
 
 namespace Test;
 
-use Test\Another\{ClassA, ClassB as B, const TEST_CONSTANT};
+use Test\Another\ClassA;
 use Test\Another\ClassC as C;
 
-use function Test\Another\{test_func as new_func};
-use function Test\Another\test_func2 as new_func2;
+use function Test\Another\test_func;
+use function Test\Another\test_func2 as new_func;
 
-use const Test\Another\{TEST_CONSTANT as NEW_CONSTANT};
-use const Test\Another\TEST_CONSTANT2 as NEW_CONSTANT2;
+use const Test\Another\TEST_CONSTANT;
+use const Test\Another\TEST_CONSTANT2 as NEW_CONSTANT;
 
 class TestTable{}
 PARSE
@@ -127,44 +127,35 @@ PARSE
 
         $this->assertSame(
             [
-                'ClassA' => 'Test\Another\ClassA',
-                'B' => 'Test\Another\ClassB',
-                'C' => 'Test\Another\ClassC',
-            ],
-            $file->classImports
-        );
+                'class' => [
+                    'ClassA' => 'Test\Another\ClassA',
+                    'C' => 'Test\Another\ClassC',
+                ],
+                'function' => [
+                    'test_func' => 'Test\Another\test_func',
+                    'new_func' => 'Test\Another\test_func2',
 
-        $this->assertSame(
-            [
-                'new_func' => 'Test\Another\test_func',
-                'new_func2' => 'Test\Another\test_func2',
+                ],
+                'const' => [
+                    'TEST_CONSTANT' => 'Test\Another\TEST_CONSTANT',
+                    'NEW_CONSTANT' => 'Test\Another\TEST_CONSTANT2',
+                ],
             ],
-            $file->functionImports
-        );
-
-        $this->assertSame(
-            [
-                'TEST_CONSTANT' => 'Test\Another\TEST_CONSTANT',
-                'NEW_CONSTANT' => 'Test\Another\TEST_CONSTANT',
-                'NEW_CONSTANT2' => 'Test\Another\TEST_CONSTANT2',
-            ],
-            $file->constImports
+            $file->imports
         );
     }
 
-    public function testInvalidPhp(): void
+    public function testParseMissingClass(): void
     {
         $parser = new CodeParser();
 
-        $this->expectException(ParseException::class);
         $file = $parser->parseFile(<<<'PARSE'
 <?php
 
-namespace Test
-
-use Test\Another\{ClassA, ClassB as B};
+namespace Bake\Test;
 PARSE
         );
+        $this->assertNull($file);
     }
 
     public function testParseMissingNamespace(): void
@@ -176,19 +167,6 @@ PARSE
 <?php
 
 class TestTable{}
-PARSE
-        );
-    }
-
-    public function testParseMissingClass(): void
-    {
-        $parser = new CodeParser();
-
-        $this->expectException(ParseException::class);
-        $parser->parseFile(<<<'PARSE'
-<?php
-
-namespace Bake\Test;
 PARSE
         );
     }
@@ -208,6 +186,40 @@ class TestTable{}
 namespace Bake\Test2;
 
 class Test2Table{}
+PARSE
+        );
+    }
+
+    public function testParseMultipleUses(): void
+    {
+        $parser = new CodeParser();
+
+        $this->expectException(ParseException::class);
+        $parser->parseFile(<<<'PARSE'
+<?php
+
+namespace Bake\Test;
+
+use Cake\ORM\Query, Cake\ORM\Table;
+
+class TestTable{}
+PARSE
+        );
+    }
+
+    public function testParseGroupUses(): void
+    {
+        $parser = new CodeParser();
+
+        $this->expectException(ParseException::class);
+        $parser->parseFile(<<<'PARSE'
+<?php
+
+namespace Bake\Test;
+
+use Cake\ORM\{Query, Table};
+
+class TestTable{}
 PARSE
         );
     }

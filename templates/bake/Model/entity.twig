@@ -25,15 +25,15 @@
 {%- set accessible = Bake.getFieldAccessibility(fields, primaryKey) %}
 
 {%- set generatedProperties = [] %}
-{%- set classImports = fileBuilder.classImports(['Cake\\ORM\\Entity']) %}
-{{ element('Bake.file_header', {namespace: fileBuilder.namespace, classImports: classImports}) }}
+{%- set uses = fileBuilder.uses(['Cake\\ORM\\Entity']) %}
+{{ element('Bake.file_header', {namespace: fileBuilder.namespace, uses: uses}) }}
 
 {{ DocBlock.classDescription(name, 'Entity', annotations)|raw }}
 class {{ name }} extends Entity
 {
 {% set userConstants = fileBuilder.classBuilder.userConstants([]) %}
 {% if userConstants %}
-    {{~ CodeGen.concat('\n\n', userConstants) }}
+    {{~ Bake.concat('\n\n', userConstants) }}
 
 {% endif %}
 {% if accessible %}
@@ -64,11 +64,11 @@ class {{ name }} extends Entity
 {% set userProperties = fileBuilder.classBuilder.userProperties(generatedProperties) %}
 {% if userProperties %}
 
-    {{~ CodeGen.concat('\n\n', userProperties) }}
+    {{~ Bake.concat('\n\n', userProperties) }}
 {% endif %}
 {% set userFunctions = fileBuilder.classBuilder.userFunctions([]) %}
 {% if userFunctions %}
 
-    {{~ CodeGen.concat('\n\n', userFunctions) }}
+    {{~ Bake.concat('\n\n', userFunctions) }}
 {% endif %}
 }

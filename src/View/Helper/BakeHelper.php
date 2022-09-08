@@ -457,6 +457,42 @@ class BakeHelper extends Helper
     }
 
     /**
+     * Concats strings together.
+     *
+     * @param string $delimiter Delimiter to separate strings
+     * @param array<array<string>|string> $strings Strings to concatenate
+     * @param string $prefix Code to prepend if final output is not empty
+     * @param string $suffix Code to append if final output is not empty
+     * @return string
+     */
+    public function concat(
+        string $delimiter,
+        array $strings,
+        string $prefix = '',
+        string $suffix = ''
+    ): string {
+        $output = implode(
+            $delimiter,
+            array_map(function ($string) use ($delimiter) {
+                if (is_string($string)) {
+                    return $string;
+                }
+
+                return implode($delimiter, array_filter($string));
+            }, array_filter($strings))
+        );
+
+        if ($prefix && !empty($output)) {
+            $output = $prefix . $output;
+        }
+        if ($suffix && !empty($output)) {
+            $output .= $suffix;
+        }
+
+        return $output;
+    }
+
+    /**
      * To be mocked elsewhere...
      *
      * @param \Cake\ORM\Table $table Table

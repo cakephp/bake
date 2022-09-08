@@ -21,7 +21,6 @@ use Bake\CodeGen\FileBuilder;
 use Bake\CodeGen\ParseException;
 use Bake\Test\TestCase\TestCase;
 use Cake\Log\Log;
-use InvalidArgumentException;
 
 class FileBuilderTest extends TestCase
 {
@@ -47,7 +46,7 @@ PARSE
         $builder = new FileBuilder('MyOtherApp\Model', $file);
     }
 
-    public function testClassImports(): void
+    public function testUses(): void
     {
         $parser = new CodeParser();
         $file = $parser->parseFile(<<<'PARSE'
@@ -58,6 +57,10 @@ namespace MyApp\Model;
 use Cake\ORM\Table;
 use MyApp\Expression\MyExpression;
 use RuntimeException as MyException;
+use function MyApp\my_function;
+use function implode as custom_implode;
+use const MyApp\MY_CONSTANT;
+use const DATE_ATOM as CUSTOM_DATE;
 
 class TestTable{}
 PARSE
@@ -66,36 +69,45 @@ PARSE
         $builder = new FileBuilder('MyApp\Model', $file);
 
         // Pass required imports out of order
-        $imports = $builder->getClassImports(['Table' => 'Cake\ORM\Table', 'Cake\ORM\Query']);
+        $uses = $builder->getUses(['Table' => 'Cake\ORM\Table', 'Cake\ORM\Query']);
         $this->assertSame(
             [
-                'Query' => 'Cake\ORM\Query',
-                'Table' => 'Cake\ORM\Table',
-                'MyExpression' => 'MyApp\Expression\MyExpression',
-                'MyException' => 'RuntimeException',
+                'class' => [
+                    'use Cake\ORM\Query;',
+                    'use Cake\ORM\Table;',
+                    'use MyApp\Expression\MyExpression;',
+                    'use RuntimeException as MyException;',
+                ],
+                'function' => [
+                    'use function implode as custom_implode;',
+                    'use function MyApp\my_function;',
+                ],
+                'const' => [
+                    'use const DATE_ATOM as CUSTOM_DATE;',
+                    'use const MyApp\MY_CONSTANT;',
+                ],
             ],
-            $imports
+            $uses
         );
 
         // Build without existing file
         $builder = new FileBuilder('MyApp\Model');
-        $imports = $builder->getClassImports(['Cake\ORM\Table', 'Cake\ORM\Query']);
+        $uses = $builder->getUses(['Cake\ORM\Table', 'Cake\ORM\Query'], ['implode'], ['DATE_ATOM']);
         $this->assertSame(
             [
-                'Query' => 'Cake\ORM\Query',
-                'Table' => 'Cake\ORM\Table',
+                'class' => [
+                    'use Cake\ORM\Query;',
+                    'use Cake\ORM\Table;',
+                ],
+                'function' => [
+                    'use function implode;',
+                ],
+                'const' => [
+                    'use const DATE_ATOM;',
+                ],
             ],
-            $imports
+            $uses
         );
-    }
-
-    public function testImportConflictDuplicateGenerated(): void
-    {
-        $builder = new FileBuilder('MyApp\Model', null);
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Cannot specify duplicate import for `Cake\ORM\Query`');
-        $builder->getClassImports(['Cake\ORM\Query', 'MyQuery' => 'Cake\ORM\Query']);
     }
 
     public function testImportConflictUserClass(): void
@@ -119,9 +131,9 @@ PARSE
 
         $builder = new FileBuilder('MyApp\Model', $file);
 
-        $builder->getClassImports(['Cake\ORM\Query']);
+        $builder->getUses(['Cake\ORM\Query']);
         $this->assertSame(
-            ['warning: Import conflict: `Cake\ORM\Query` in generated code is already imported with a different alias, discarding'],
+            ['warning: User import `Cake\ORM\Query` conflicts with generated import, discarding'],
             Log::engine('parser')->read()
         );
     }
@@ -147,9 +159,9 @@ PARSE
 
         $builder = new FileBuilder('MyApp\Model', $file);
 
-        $builder->getClassImports(['Cake\ORM\Query']);
+        $builder->getUses(['Cake\ORM\Query']);
         $this->assertSame(
-            ['warning: Import conflict: alias `Query` is already being used by generated code, discarding'],
+            ['warning: User import `MyApp\Query` conflicts with generated import, discarding'],
             Log::engine('parser')->read()
         );
     }
