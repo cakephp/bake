@@ -32,27 +32,16 @@ class TodoItem extends Entity
     protected const MY_CONST = 1;
 
     /**
-     * Fields that can be mass assigned using newEntity() or patchEntity().
+     * Fields that are excluded from JSON versions of the entity.
      *
-     * Note that when '*' is set to true, this allows all unspecified fields to
-     * be mass assigned. For security purposes, it is advised to set '*' to false
-     * (or remove it), and explicitly make individual fields accessible as needed.
-     *
-     * @var array<string, bool>
+     * @var array<string>
      */
+    protected $_hidden = [
+        'user_id',
+    ];
+
     protected $_accessible = [
-        'user_id' => true,
-        'title' => true,
-        'body' => true,
-        'effort' => true,
-        'completed' => true,
-        'todo_task_count' => true,
-        'created' => true,
-        'updated' => true,
-        'user' => true,
-        'todo_reminder' => true,
-        'todo_tasks' => true,
-        'todo_labels' => true,
+        // should not overwritten
     ];
 
     /**

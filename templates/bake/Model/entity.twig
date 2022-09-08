@@ -24,6 +24,7 @@
 
 {%- set accessible = Bake.getFieldAccessibility(fields, primaryKey) %}
 
+{%- set generatedProperties = [] %}
 {%- set classImports = fileBuilder.classImports(['Cake\\ORM\\Entity']) %}
 {{ element('Bake.file_header', {namespace: fileBuilder.namespace, classImports: classImports}) }}
 
@@ -36,6 +37,7 @@ class {{ name }} extends Entity
 
 {% endif %}
 {% if accessible %}
+{%- set generatedProperties = generatedProperties|merge(['_accessible']) %}
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -51,6 +53,7 @@ class {{ name }} extends Entity
 
 {% endif %}
 {%- if hidden %}
+{%- set generatedProperties = generatedProperties|merge(['_hidden']) %}
     /**
      * Fields that are excluded from JSON versions of the entity.
      *
@@ -58,7 +61,7 @@ class {{ name }} extends Entity
      */
     protected $_hidden = {{ Bake.exportVar(hidden, 1)|raw }};
 {% endif %}
-{% set userProperties = fileBuilder.classBuilder.userProperties([]) %}
+{% set userProperties = fileBuilder.classBuilder.userProperties(generatedProperties) %}
 {% if userProperties %}
 
     {{~ CodeGen.concat('\n\n', userProperties) }}

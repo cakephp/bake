@@ -1959,6 +1959,10 @@ class TodoItem
      */
     protected const MY_CONST = 1;
 
+    protected $_accessible = [
+        // should not overwritten
+    ];
+
     /**
      * @var string
      */
@@ -1973,7 +1977,7 @@ PARSE;
 
         $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
         file_put_contents($this->generatedFile, $existing);
-        $this->exec('bake model --no-table --no-test --no-fixture --update --force TodoItems');
+        $this->exec('bake model --no-table --no-fields --hidden "user_id" --no-test --no-fixture --update --force TodoItems');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
