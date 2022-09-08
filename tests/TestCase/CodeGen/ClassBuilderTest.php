@@ -22,6 +22,48 @@ use Bake\Test\TestCase\TestCase;
 
 class ClassBuilderTest extends TestCase
 {
+    public function testUserConstants(): void
+    {
+        $parser = new CodeParser();
+        $file = $parser->parseFile(
+            <<<'PARSE'
+<?php
+
+namespace MyApp\Model;
+
+class TestTable
+{
+    /**
+     * @var string
+     */
+    const GENERATED_CONST = 'string';
+
+    /**
+     * @var string
+     */
+    const MY_CONST = 3;
+
+    /**
+     * @param \Cake\ORM\Query $query Query
+     * @return \Cake\ORM\Query
+     */
+    public function findSomething(Query $query): Query
+    {
+    }
+}
+PARSE
+        );
+
+        $builder = new FileBuilder('MyApp\Model', $file);
+        $constants = $builder->classBuilder()->getUserConstants(['GENERATED_CONST']);
+        $this->assertSame(
+            [
+                'MY_CONST',
+            ],
+            array_keys($constants)
+        );
+    }
+
     public function testUserFunctions(): void
     {
         $parser = new CodeParser();

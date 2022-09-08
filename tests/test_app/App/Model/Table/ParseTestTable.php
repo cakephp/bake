@@ -28,6 +28,20 @@ use Cake\Validation\Validator;
 class ParseTestTable extends Table
 {
     /**
+     * @var int
+     */
+    protected const SOME_CONST = 1;
+
+    /**
+     * @var string
+     */
+    protected $withDocProperty = <<<'TEXT'
+    BLOCK OF TEXT
+TEXT;
+
+    protected $withoutDocProperty = 1;
+
+    /**
      * Initialize method
      *
      * @param array $config The configuration for the Table.

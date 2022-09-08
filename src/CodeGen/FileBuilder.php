@@ -56,6 +56,16 @@ class FileBuilder
     }
 
     /**
+     * Returns the file namespace.
+     *
+     * @return string
+     */
+    public function getNamespace(): string
+    {
+        return $this->namespace;
+    }
+
+    /**
      * @return \Bake\CodeGen\ClassBuilder
      */
     public function classBuilder(): ClassBuilder

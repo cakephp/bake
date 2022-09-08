@@ -24,6 +24,7 @@ use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use PhpParser\NodeAbstract;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserFactory;
@@ -46,7 +47,7 @@ class CodeParser extends NodeVisitorAbstract
     /**
      * @var string
      */
-    protected $code = '';
+    protected $fileText = '';
 
     /**
      * @var array
@@ -75,7 +76,7 @@ class CodeParser extends NodeVisitorAbstract
      */
     public function parseFile(string $code): ParsedFile
     {
-        $this->code = $code;
+        $this->fileText = $code;
         try {
             $this->traverser->traverse($this->parser->parse($code));
         } catch (Error $e) {
@@ -166,30 +167,56 @@ class CodeParser extends NodeVisitorAbstract
                 throw new ParseException('Only one class can be defined');
             }
 
-            $methods = [];
-            foreach ($node->getMethods() as $method) {
-                $startPos = $method->getStartFilePos();
-                $endPos = $method->getEndFilePos();
-                $code = '    ' . substr($this->code, $startPos, $endPos - $startPos + 1);
+            $constants = [];
+            foreach ($node->getConstants() as $constant) {
+                if (count($constant->consts) > 1) {
+                    throw new ParseException('Multiple constants per line are not supported, update your file');
+                }
 
-                $doc = $method->getDocComment() ? $method->getDocComment()->getText() : null;
-                $doc = $doc ? '    ' . $doc : null;
-
-                $name = (string)$method->name;
-                $methods[$name] = new ParsedMethod(
-                    $name,
-                    $code,
-                    $doc,
-                    []
-                );
+                $name = (string)current($constant->consts)->name;
+                $constants[$name] = $this->getNodeCode($constant);
             }
 
-            $this->parsed['class'] = new ParsedClass((string)$node->name, $methods);
+            $properties = [];
+            foreach ($node->getProperties() as $property) {
+                if (count($property->props) > 1) {
+                    throw new ParseException('Multiple properties per line are not supported, update your file');
+                }
+
+                $name = (string)current($property->props)->name;
+                $properties[$name] = $this->getNodeCode($property);
+            }
+
+            $methods = [];
+            foreach ($node->getMethods() as $method) {
+                $name = (string)$method->name;
+                $methods[$name] = $this->getNodeCode($method);
+            }
+
+            $this->parsed['class'] = new ParsedClass((string)$node->name, $constants, $properties, $methods);
 
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
 
         return null;
+    }
+
+    /**
+     * @param \PhpParser\NodeAbstract $node Parser node
+     * @return string
+     */
+    protected function getNodeCode(NodeAbstract $node): string
+    {
+        $startPos = $node->getStartFilePos();
+        $endPos = $node->getEndFilePos();
+        $code = '    ' . substr($this->fileText, $startPos, $endPos - $startPos + 1);
+
+        $doc = $node->getDocComment() ? $node->getDocComment()->getText() : null;
+        if ($doc) {
+            $code = sprintf("    %s\n%s", $doc, $code);
+        }
+
+        return $code;
     }
 
     /**

@@ -40,6 +40,19 @@ class CodeParserTest extends TestCase
         );
         $this->assertSame(
             [
+                'SOME_CONST',
+            ],
+            array_keys($file->class->constants)
+        );
+        $this->assertSame(
+            [
+                'withDocProperty',
+                'withoutDocProperty',
+            ],
+            array_keys($file->class->properties)
+        );
+        $this->assertSame(
+            [
                 'initialize',
                 'buildRules',
                 'validationDefault',
@@ -50,6 +63,35 @@ class CodeParserTest extends TestCase
         );
 
         $code = <<<'PARSE'
+    /**
+     * @var int
+     */
+    protected const SOME_CONST = 1;
+PARSE;
+        $this->assertSame($code, $file->class->constants['SOME_CONST']);
+
+        $code = <<<'PARSE'
+    /**
+     * @var string
+     */
+    protected $withDocProperty = <<<'TEXT'
+    BLOCK OF TEXT
+TEXT;
+PARSE;
+        $this->assertSame($code, $file->class->properties['withDocProperty']);
+
+        $code = <<<'PARSE'
+    protected $withoutDocProperty = 1;
+PARSE;
+        $this->assertSame($code, $file->class->properties['withoutDocProperty']);
+
+        $code = <<<'PARSE'
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -59,17 +101,7 @@ class CodeParserTest extends TestCase
         $this->setPrimaryKey('id');
     }
 PARSE;
-        $this->assertSame($code, $file->class->methods['initialize']->code);
-
-        $doc = <<<'PARSE'
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-PARSE;
-        $this->assertSame($doc, $file->class->methods['initialize']->docblock);
+        $this->assertSame($code, $file->class->methods['initialize']);
     }
 
     public function testUseStatements(): void
