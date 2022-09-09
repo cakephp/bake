@@ -25,8 +25,10 @@
 {%- set accessible = Bake.getFieldAccessibility(fields, primaryKey) %}
 
 {%- set generatedProperties = [] %}
-{%- set uses = fileBuilder.uses(['Cake\\ORM\\Entity']) %}
-{{ element('Bake.file_header', {namespace: fileBuilder.namespace, uses: uses}) }}
+{{ element('Bake.file_header', {
+    namespace: fileBuilder.namespace,
+    classImports: fileBuilder.classImports(['Cake\\ORM\\Entity']),
+}) }}
 
 {{ DocBlock.classDescription(name, 'Entity', annotations)|raw }}
 class {{ name }} extends Entity

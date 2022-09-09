@@ -13,15 +13,15 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-<?php
-declare(strict_types=1);
-
-namespace {{namespace }}\Middleware;
-
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\Middleware",
+    classImports: [
+        'Psr\\Http\\Message\\ResponseInterface',
+        'Psr\\Http\\Message\\ServerRequestInterface',
+        'Psr\\Http\\Server\\MiddlewareInterface',
+        'Psr\\Http\\Server\\RequestHandlerInterface',
+    ],
+}) }}
 
 /**
  * {{ name }} middleware

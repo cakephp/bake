@@ -13,14 +13,14 @@
 * @license       http://www.opensource.org/licenses/mit-license.php MIT License
 */
 #}
-<?php
-declare(strict_types=1);
-
-namespace {{ namespace }}\Form;
-
-use Cake\Form\Form;
-use Cake\Form\Schema;
-use Cake\Validation\Validator;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\Form",
+    classImports: [
+        'Cake\\Form\\Form',
+        'Cake\\Form\\Schema',
+        'Cake\\Validation\\Validator',
+    ],
+}) }}
 
 /**
  * {{ name }} Form.

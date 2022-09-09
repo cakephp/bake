@@ -256,8 +256,8 @@ class PluginCommandTest extends TestCase
         );
 
         foreach ($comparisonFiles as $key => $file) {
-            $result = file_get_contents($file);
-            $this->assertSameAsFile($bakedFiles[$key], $result);
+            $result = file_get_contents($bakedFiles[$key]);
+            $this->assertSameAsFile($file, $result);
         }
     }
 
