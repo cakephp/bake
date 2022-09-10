@@ -86,6 +86,13 @@ class TemplateCommand extends BakeCommand
     public $path;
 
     /**
+     * Output extension
+     *
+     * @var string
+     */
+    public $ext = 'php';
+
+    /**
      * Override initialize
      *
      * @return void
@@ -351,12 +358,13 @@ class TemplateCommand extends BakeCommand
             $content = $this->getContent($args, $io, $template);
         }
         if (empty($content)) {
-            $io->err("<warning>No generated content for '{$template}.php', not generating template.</warning>");
+            // phpcs:ignore Generic.Files.LineLength
+            $io->err("<warning>No generated content for '{$template}.{$this->ext}', not generating template.</warning>");
 
             return;
         }
         $path = $this->getTemplatePath($args);
-        $filename = $path . Inflector::underscore($outputFile) . '.php';
+        $filename = $path . Inflector::underscore($outputFile) . '.' . $this->ext;
 
         $io->out("\n" . sprintf('Baking `%s` view template file...', $outputFile), 1, ConsoleIo::NORMAL);
         $io->createFile($filename, $content, $args->getOption('force'));
