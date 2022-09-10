@@ -46,6 +46,11 @@ trait CommonOptionsTrait
     public $connection;
 
     /**
+     * @var bool
+     */
+    public $force = false;
+
+    /**
      * Pull common/frequently used arguments & options into properties
      * so that method signatures can be simpler.
      *
@@ -70,6 +75,7 @@ trait CommonOptionsTrait
 
         $this->theme = $args->getOption('theme');
         $this->connection = $args->getOption('connection');
+        $this->force = $args->getOption('force');
     }
 
     /**
@@ -105,6 +111,7 @@ trait CommonOptionsTrait
         ])->addOption('force', [
             'short' => 'f',
             'boolean' => true,
+            'default' => 'false',
             'help' => 'Force overwriting existing files without prompting.',
         ])->addOption('connection', [
             'short' => 'c',
