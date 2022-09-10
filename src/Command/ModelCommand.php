@@ -1132,7 +1132,7 @@ class ModelCommand extends BakeCommand
             ->set($data)
             ->generate('Bake.Model/entity');
 
-        $io->createFile($filename, $contents, $args->getOption('force'));
+        $io->createFile($filename, $contents, $this->force);
 
         $emptyFile = $path . 'Entity' . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
@@ -1192,7 +1192,7 @@ class ModelCommand extends BakeCommand
             ->set($data)
             ->generate('Bake.Model/table');
 
-        $io->createFile($filename, $contents, $args->getOption('force'));
+        $io->createFile($filename, $contents, $this->force);
 
         // Work around composer caching that classes/files do not exist.
         // Check for the file as it might not exist in tests.

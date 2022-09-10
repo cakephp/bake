@@ -182,7 +182,7 @@ class ControllerCommand extends BakeCommand
 
         $path = $this->getPath($args);
         $filename = $path . $controllerName . 'Controller.php';
-        $io->createFile($filename, $contents, $args->getOption('force'));
+        $io->createFile($filename, $contents, $this->force);
     }
 
     /**
