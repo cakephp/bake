@@ -1660,6 +1660,26 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * Tests baking a file with no changes
+     *
+     * @return void
+     */
+    public function testBakeEntitySimpleUnchanged(): void
+    {
+        $this->generatedFile = APP . 'Model/Entity/User.php';
+        $result = file_get_contents($this->_compareBasePath . __FUNCTION__ . '.php');
+        file_put_contents($this->generatedFile, str_replace("\r\n", "\n", $result));
+
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden users');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+
+        $this->assertOutputContains(sprintf('Skipping update to `%s`. It already exists and would not change.', realpath($this->generatedFile)));
+    }
+
+    /**
      * test baking an entity class
      *
      * @return void
