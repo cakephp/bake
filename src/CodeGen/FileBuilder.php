@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Bake\CodeGen;
 
 use Cake\Log\Log;
-use InvalidArgumentException;
 
 class FileBuilder
 {
@@ -153,13 +152,6 @@ class FileBuilder
                 } else {
                     $alias = $class;
                 }
-            }
-
-            if (array_search($class, $normalized, true) !== false) {
-                throw new InvalidArgumentException(sprintf(
-                    'Cannot specify duplicate import for `%s`',
-                    $class
-                ));
             }
 
             $normalized[$alias] = $class;
