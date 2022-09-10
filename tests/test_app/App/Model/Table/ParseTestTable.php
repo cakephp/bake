@@ -30,11 +30,13 @@ class ParseTestTable extends Table
     /**
      * @var int
      */
+    #[SomeAttribute]
     protected const SOME_CONST = 1;
 
     /**
      * @var string
      */
+    #[SomeAttribute]
     protected $withDocProperty = <<<'TEXT'
     BLOCK OF TEXT
 TEXT;
@@ -106,7 +108,18 @@ TEXT;
      * @param array $options Finder options
      * @return \Cake\ORM\Query
      */
-    public function findTest(Query $query, array $options): Query
+    #[SomeAttribute]
+    public function findAttributes(Query $query, array $options): Query
+    {
+        return $query;
+    }
+
+    /**
+     * @param \Cake\ORM\Query $query Finder query
+     * @param array $options Finder options
+     * @return \Cake\ORM\Query
+     */
+    public function findNoAttributes(Query $query, array $options): Query
     {
         return $query;
     }
