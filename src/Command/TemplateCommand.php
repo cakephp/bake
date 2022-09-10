@@ -18,7 +18,6 @@ namespace Bake\Command;
 
 use Bake\Utility\Model\AssociationFilter;
 use Bake\Utility\TableScanner;
-use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
@@ -386,10 +385,10 @@ class TemplateCommand extends BakeCommand
             $vars['fields'] = array_diff($vars['fields'], $vars['hidden']);
         }
 
-        $renderer = new TemplateRenderer($args->getOption('theme'));
-        $renderer->set('action', $action);
-        $renderer->set('plugin', $this->plugin);
-        $renderer->set($vars);
+        $renderer = $this->createTemplateRenderer()
+            ->set('action', $action)
+            ->set('plugin', $this->plugin)
+            ->set($vars);
 
         $indexColumns = 0;
         if ($action === 'index' && $args->getOption('index-columns') !== null) {

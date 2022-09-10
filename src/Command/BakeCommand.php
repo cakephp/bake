@@ -19,11 +19,14 @@ namespace Bake\Command;
 use Bake\CodeGen\CodeParser;
 use Bake\CodeGen\ParsedFile;
 use Bake\Utility\CommonOptionsTrait;
+use Bake\Utility\TemplateRenderer;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
+use Cake\Event\Event;
+use Cake\Event\EventManager;
 use InvalidArgumentException;
 
 /**
@@ -150,6 +153,19 @@ abstract class BakeCommand extends Command
         }
 
         return str_replace('/', DIRECTORY_SEPARATOR, $path);
+    }
+
+    /**
+     * Creates a new instance of TemplateRenderer with theme set.
+     *
+     * @return \Bake\Utility\TemplateRenderer
+     */
+    public function createTemplateRenderer(): TemplateRenderer
+    {
+        $renderer = new TemplateRenderer($this->theme);
+        EventManager::instance()->dispatch(new Event('Bake.renderer', $renderer));
+
+        return $renderer;
     }
 
     /**

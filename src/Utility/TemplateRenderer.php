@@ -42,7 +42,7 @@ class TemplateRenderer
     /**
      * Template theme
      *
-     * @var string
+     * @var string|null
      */
     protected $theme;
 
@@ -51,9 +51,9 @@ class TemplateRenderer
      *
      * @param ?string $theme The template theme/plugin to use.
      */
-    public function __construct(?string $theme = '')
+    public function __construct(?string $theme = null)
     {
-        $this->theme = $theme ?? '';
+        $this->theme = $theme;
     }
 
     /**
