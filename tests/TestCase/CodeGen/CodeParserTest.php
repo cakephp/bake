@@ -57,7 +57,8 @@ class CodeParserTest extends TestCase
                 'buildRules',
                 'validationDefault',
                 'defaultConnectionName',
-                'findTest',
+                'findAttributes',
+                'findNoAttributes',
             ],
             array_keys($file->class->methods)
         );
@@ -66,6 +67,7 @@ class CodeParserTest extends TestCase
     /**
      * @var int
      */
+    #[SomeAttribute]
     protected const SOME_CONST = 1;
 PARSE;
         $this->assertSame($code, $file->class->constants['SOME_CONST']);
@@ -74,6 +76,7 @@ PARSE;
     /**
      * @var string
      */
+    #[SomeAttribute]
     protected $withDocProperty = <<<'TEXT'
     BLOCK OF TEXT
 TEXT;
@@ -102,6 +105,20 @@ PARSE;
     }
 PARSE;
         $this->assertSame($code, $file->class->methods['initialize']);
+
+        $code = <<<'PARSE'
+    /**
+     * @param \Cake\ORM\Query $query Finder query
+     * @param array $options Finder options
+     * @return \Cake\ORM\Query
+     */
+    #[SomeAttribute]
+    public function findAttributes(Query $query, array $options): Query
+    {
+        return $query;
+    }
+PARSE;
+        $this->assertSame($code, $file->class->methods['findAttributes']);
     }
 
     public function testUseStatements(): void

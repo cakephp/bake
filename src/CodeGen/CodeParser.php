@@ -35,6 +35,11 @@ use PhpParser\ParserFactory;
 class CodeParser extends NodeVisitorAbstract
 {
     /**
+     * @var string
+     */
+    protected const INDENT = '    ';
+
+    /**
      * @var \PhpParser\Parser
      */
     protected $parser;
@@ -197,14 +202,16 @@ class CodeParser extends NodeVisitorAbstract
      */
     protected function getNodeCode(NodeAbstract $node): string
     {
+        $code = '';
+
+        $doc = $node->getDocComment() ? $node->getDocComment()->getText() : '';
+        if ($doc) {
+            $code = static::INDENT . $doc . "\n";
+        }
+
         $startPos = $node->getStartFilePos();
         $endPos = $node->getEndFilePos();
-        $code = '    ' . substr($this->fileText, $startPos, $endPos - $startPos + 1);
-
-        $doc = $node->getDocComment() ? $node->getDocComment()->getText() : null;
-        if ($doc) {
-            $code = sprintf("    %s\n%s", $doc, $code);
-        }
+        $code .= static::INDENT . substr($this->fileText, $startPos, $endPos - $startPos + 1);
 
         return $code;
     }
