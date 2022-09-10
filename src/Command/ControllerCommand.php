@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
-use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
@@ -177,10 +176,9 @@ class ControllerCommand extends BakeCommand
             'pluginPath' => null,
         ];
 
-        $renderer = new TemplateRenderer($this->theme);
-        $renderer->set($data);
-
-        $contents = $renderer->generate('Bake.Controller/controller');
+        $contents = $this->createTemplateRenderer()
+            ->set($data)
+            ->generate('Bake.Controller/controller');
 
         $path = $this->getPath($args);
         $filename = $path . $controllerName . 'Controller.php';

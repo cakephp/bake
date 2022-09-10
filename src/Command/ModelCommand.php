@@ -18,7 +18,6 @@ namespace Bake\Command;
 
 use Bake\CodeGen\FileBuilder;
 use Bake\Utility\TableScanner;
-use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
@@ -1129,11 +1128,11 @@ class ModelCommand extends BakeCommand
             'fileBuilder' => new FileBuilder("{$namespace}\Model\Entity", $parsedFile),
         ];
 
-        $renderer = new TemplateRenderer($this->theme);
-        $renderer->set($data);
-        $out = $renderer->generate('Bake.Model/entity');
+        $contents = $this->createTemplateRenderer()
+            ->set($data)
+            ->generate('Bake.Model/entity');
 
-        $io->createFile($filename, $out, $args->getOption('force'));
+        $io->createFile($filename, $contents, $args->getOption('force'));
 
         $emptyFile = $path . 'Entity' . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
@@ -1189,11 +1188,11 @@ class ModelCommand extends BakeCommand
             'fileBuilder' => new FileBuilder("{$namespace}\Model\Table", $parsedFile),
         ];
 
-        $renderer = new TemplateRenderer($this->theme);
-        $renderer->set($data);
-        $out = $renderer->generate('Bake.Model/table');
+        $contents = $this->createTemplateRenderer()
+            ->set($data)
+            ->generate('Bake.Model/table');
 
-        $io->createFile($filename, $out, $args->getOption('force'));
+        $io->createFile($filename, $contents, $args->getOption('force'));
 
         // Work around composer caching that classes/files do not exist.
         // Check for the file as it might not exist in tests.
