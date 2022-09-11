@@ -16,10 +16,15 @@ declare(strict_types=1);
  */
 namespace Bake\CodeGen;
 
-use Cake\Log\Log;
+use Cake\Console\ConsoleIo;
 
 class FileBuilder
 {
+    /**
+     * @var \Cake\Console\ConsoleIo
+     */
+    protected $io;
+
     /**
      * @var string
      */
@@ -36,10 +41,11 @@ class FileBuilder
     protected $classBuilder;
 
     /**
+     * @param \Cake\Console\ConsoleIo $io Console io
      * @param string $namespace File namespace
      * @param \Bake\CodeGen\ParsedFile $parsedFile Parsed file it already exists
      */
-    public function __construct(string $namespace, ?ParsedFile $parsedFile = null)
+    public function __construct(ConsoleIo $io, string $namespace, ?ParsedFile $parsedFile = null)
     {
         if ($parsedFile && $parsedFile->namespace !== $namespace) {
             throw new ParseException(sprintf(
@@ -49,6 +55,7 @@ class FileBuilder
             ));
         }
 
+        $this->io = $io;
         $this->namespace = $namespace;
         $this->parsedFile = $parsedFile;
         $this->classBuilder = new ClassBuilder($parsedFile->class ?? null);
@@ -172,7 +179,7 @@ class FileBuilder
         $imports = $generated;
         foreach ($user as $alias => $class) {
             if (isset($generated[$alias]) && $generated[$alias] !== $class) {
-                Log::warning(sprintf(
+                $this->io->warning(sprintf(
                     'User import `%s` conflicts with generated import, discarding',
                     $class
                 ));
@@ -181,7 +188,7 @@ class FileBuilder
 
             $generatedAlias = array_search($class, $generated, true);
             if ($generatedAlias !== false && $generatedAlias != $alias) {
-                Log::warning(sprintf(
+                $this->io->warning(sprintf(
                     'User import `%s` conflicts with generated import, discarding',
                     $class
                 ));

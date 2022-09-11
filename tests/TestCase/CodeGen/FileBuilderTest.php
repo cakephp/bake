@@ -20,14 +20,27 @@ use Bake\CodeGen\CodeParser;
 use Bake\CodeGen\FileBuilder;
 use Bake\CodeGen\ParseException;
 use Bake\Test\TestCase\TestCase;
-use Cake\Log\Log;
+use Cake\Console\ConsoleIo;
+use Cake\TestSuite\Constraint\Console\ContentsContain;
+use Cake\TestSuite\Stub\ConsoleOutput;
 
 class FileBuilderTest extends TestCase
 {
-    public function tearDown(): void
+    /**
+     * @var \Cake\TestSuite\Stub\ConsoleOutput
+     */
+    protected $out;
+
+    /**
+     * @var \Cake\Console\ConsoleIo
+     */
+    protected $io;
+
+    public function setUp(): void
     {
-        parent::tearDown();
-        Log::drop('parser');
+        parent::setUp();
+        $this->out = new ConsoleOutput();
+        $this->io = new ConsoleIo($this->out, $this->out);
     }
 
     public function testMismatchedNamespace(): void
@@ -43,7 +56,7 @@ PARSE
         );
 
         $this->expectException(ParseException::class);
-        $builder = new FileBuilder('MyOtherApp\Model', $file);
+        $builder = new FileBuilder($this->io, 'MyOtherApp\Model', $file);
     }
 
     public function testUses(): void
@@ -66,7 +79,7 @@ class TestTable{}
 PARSE
         );
 
-        $builder = new FileBuilder('MyApp\Model', $file);
+        $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
         // Pass required imports out of order
         $uses = $builder->getUses(['Table' => 'Cake\ORM\Table', 'Cake\ORM\Query']);
@@ -91,7 +104,7 @@ PARSE
         );
 
         // Build without existing file
-        $builder = new FileBuilder('MyApp\Model');
+        $builder = new FileBuilder($this->io, 'MyApp\Model');
         $uses = $builder->getUses(['Cake\ORM\Table', 'Cake\ORM\Query'], ['implode'], ['DATE_ATOM']);
         $this->assertSame(
             [
@@ -112,11 +125,6 @@ PARSE
 
     public function testImportConflictUserClass(): void
     {
-        Log::setConfig('parser', [
-            'className' => 'Array',
-            'levels' => ['warning'],
-        ]);
-
         $parser = new CodeParser();
         $file = $parser->parseFile(<<<'PARSE'
 <?php
@@ -129,22 +137,14 @@ class TestTable{}
 PARSE
         );
 
-        $builder = new FileBuilder('MyApp\Model', $file);
+        $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
         $builder->getUses(['Cake\ORM\Query']);
-        $this->assertSame(
-            ['warning: User import `Cake\ORM\Query` conflicts with generated import, discarding'],
-            Log::engine('parser')->read()
-        );
+        $this->assertThat('User import `Cake\ORM\Query` conflicts with generated import, discarding', new ContentsContain($this->out->messages(), 'output'));
     }
 
     public function testImportConflictUserAlias(): void
     {
-        Log::setConfig('parser', [
-            'className' => 'Array',
-            'levels' => ['warning'],
-        ]);
-
         $parser = new CodeParser();
         $file = $parser->parseFile(<<<'PARSE'
 <?php
@@ -157,12 +157,9 @@ class TestTable{}
 PARSE
         );
 
-        $builder = new FileBuilder('MyApp\Model', $file);
+        $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
         $builder->getUses(['Cake\ORM\Query']);
-        $this->assertSame(
-            ['warning: User import `MyApp\Query` conflicts with generated import, discarding'],
-            Log::engine('parser')->read()
-        );
+        $this->assertThat('User import `MyApp\Query` conflicts with generated import, discarding', new ContentsContain($this->out->messages(), 'output'));
     }
 }
