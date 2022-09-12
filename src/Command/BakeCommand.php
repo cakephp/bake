@@ -212,4 +212,32 @@ abstract class BakeCommand extends Command
 
         return null;
     }
+
+    /**
+     * Write file contents out to path and prompt user with options with file exists.
+     *
+     * @param \Cake\Console\ConsoleIo $io Console io
+     * @param string $path The path to create the file at
+     * @param string $contents The contents to put into the file
+     * @param bool $forceOverwrite Whether the file should be overwritten without prompting the user
+     * @param bool $skipIfUnchnged Skip writing output if the contents match existing file
+     * @return bool True if successful, false otherwise
+     * @throws \Cake\Console\Exception\StopException When `q` is given as an answer
+     *   to whether a file should be overwritten.
+     */
+    protected function writeFile(
+        ConsoleIo $io,
+        string $path,
+        string $contents,
+        bool $forceOverwrite = false,
+        bool $skipIfUnchnged = true
+    ): bool {
+        if ($skipIfUnchnged && file_exists($path) && file_get_contents($path) === $contents) {
+            $io->info("Skipping update to `{$path}`. It already exists and would not change.");
+
+            return true;
+        }
+
+        return $io->createFile($path, $contents, $forceOverwrite);
+    }
 }
