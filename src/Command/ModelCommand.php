@@ -1125,7 +1125,7 @@ class ModelCommand extends BakeCommand
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
             'primaryKey' => [],
-            'fileBuilder' => new FileBuilder("{$namespace}\Model\Entity", $parsedFile),
+            'fileBuilder' => new FileBuilder($io, "{$namespace}\Model\Entity", $parsedFile),
         ];
 
         $contents = $this->createTemplateRenderer()
@@ -1185,7 +1185,7 @@ class ModelCommand extends BakeCommand
             'rulesChecker' => [],
             'behaviors' => [],
             'connection' => $this->connection,
-            'fileBuilder' => new FileBuilder("{$namespace}\Model\Table", $parsedFile),
+            'fileBuilder' => new FileBuilder($io, "{$namespace}\Model\Table", $parsedFile),
         ];
 
         $contents = $this->createTemplateRenderer()

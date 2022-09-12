@@ -19,9 +19,22 @@ namespace Bake\Test\TestCase\CodeGen;
 use Bake\CodeGen\CodeParser;
 use Bake\CodeGen\FileBuilder;
 use Bake\Test\TestCase\TestCase;
+use Cake\Console\ConsoleIo;
+use Cake\TestSuite\Stub\ConsoleOutput;
 
 class ClassBuilderTest extends TestCase
 {
+    /**
+     * @var \Cake\Console\ConsoleIo
+     */
+    protected $io;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->io = new ConsoleIo(new ConsoleOutput());
+    }
+
     public function testUserConstants(): void
     {
         $parser = new CodeParser();
@@ -54,7 +67,7 @@ class TestTable
 PARSE
         );
 
-        $builder = new FileBuilder('MyApp\Model', $file);
+        $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
         $constants = $builder->classBuilder()->getUserConstants(['GENERATED_CONST']);
         $this->assertSame(
             [
@@ -111,7 +124,7 @@ class TestTable
 PARSE
         );
 
-        $builder = new FileBuilder('MyApp\Model', $file);
+        $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
         $methods = $builder->classBuilder()->getUserFunctions(['buildRules']);
         $this->assertSame(
             [
