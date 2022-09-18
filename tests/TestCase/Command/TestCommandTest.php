@@ -177,7 +177,8 @@ class TestCommandTest extends TestCase
         $this->assertOutputContains('3. BakeArticlesTable');
         $this->assertOutputContains('4. CategoryThreadsTable');
         $this->assertOutputContains('5. HiddenFieldsTable');
-        $this->assertOutputContains('6. TemplateTaskCommentsTable');
+        $this->assertOutputContains('6. ParseTestTable');
+        $this->assertOutputContains('7. TemplateTaskCommentsTable');
         $this->assertOutputContains('Re-run your command as `cake bake Table <classname>`');
     }
 

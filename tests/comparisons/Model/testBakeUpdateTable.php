@@ -7,33 +7,44 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use RuntimeException as CustomException;
 
 /**
- * Items Model
+ * TodoItems Model
  *
  * @property \Bake\Test\App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \Bake\Test\App\Model\Table\TodoRemindersTable&\Cake\ORM\Association\HasOne $TodoReminders
  * @property \Bake\Test\App\Model\Table\TodoTasksTable&\Cake\ORM\Association\HasMany $TodoTasks
  * @property \Bake\Test\App\Model\Table\TodoLabelsTable&\Cake\ORM\Association\BelongsToMany $TodoLabels
  *
- * @method \Bake\Test\App\Model\Entity\Item newEmptyEntity()
- * @method \Bake\Test\App\Model\Entity\Item newEntity(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\Item[] newEntities(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\Item get($primaryKey, $options = [])
- * @method \Bake\Test\App\Model\Entity\Item findOrCreate($search, ?callable $callback = null, $options = [])
- * @method \Bake\Test\App\Model\Entity\Item patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\Item[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\Item|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\Item saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\Item[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\Item[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\Item[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\Item[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem newEmptyEntity()
+ * @method \Bake\Test\App\Model\Entity\TodoItem newEntity(array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem[] newEntities(array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem get($primaryKey, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoItem[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class ItemsTable extends Table
+class TodoItemsTable extends Table
 {
+    /**
+     * @var int
+     */
+    protected const MY_CONST = 1;
+
+    /**
+     * @var string
+     */
+    protected $myProperty = 'string';
+
     /**
      * Initialize method
      *
@@ -113,18 +124,17 @@ class ItemsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('user_id', 'Users'), ['errorField' => 'user_id']);
+        // generation of this function is disabled by --no-rules and should stay
 
         return $rules;
     }
 
     /**
-     * Returns the database connection name to use by default.
-     *
-     * @return string
      */
-    public static function defaultConnectionName(): string
+    public function findByPriority(Query $query): Query
     {
-        return 'test';
+        throw new CustomException();
+
+        return $query;
     }
 }

@@ -13,15 +13,15 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-<?php
-declare(strict_types=1);
-
-namespace {{ namespace }}\Command;
-
-use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\Command",
+    classImports: [
+        'Cake\\Command\\Command',
+        'Cake\\Console\\Arguments',
+        'Cake\\Console\\ConsoleIo',
+        'Cake\\Console\\ConsoleOptionParser',
+    ],
+}) }}
 
 /**
  * {{ name }} command.

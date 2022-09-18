@@ -1,4 +1,6 @@
-{#
+<?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -9,27 +11,13 @@
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
- * @since         2.0.0
+ * @since         2.8.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-#}
-{{ element('Bake.file_header', {
-    namespace: "#{namespace}\\Controller\Component",
-    classImports: [
-        'Cake\Controller\Component'
-        'Cake\Controller\ComponentRegistry'
-    ],
-}) }}
+namespace Bake\CodeGen;
 
-/**
- * {{ name }} component
- */
-class {{ name }}Component extends Component
+use Cake\Core\Exception\CakeException;
+
+class ParseException extends CakeException
 {
-    /**
-     * Default configuration.
-     *
-     * @var array<string, mixed>
-     */
-    protected $_defaultConfig = [];
 }

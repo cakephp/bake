@@ -106,7 +106,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testgetTable()
+    public function testGetTable()
     {
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
@@ -389,6 +389,108 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * Test that association generation ignores `anything_id` fields if
+     * AnythingsTable object nor `anythings` database table exist
+     *
+     * @return void
+     */
+    public function testGetAssociationsIgnoreUnderscoreIdIfNoDbTable()
+    {
+        $items = $this->getTableLocator()->get('TodoItems');
+
+        $items->setSchema($items->getSchema()->addColumn('anything_id', ['type' => 'integer']));
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $args = new Arguments([], [], []);
+        $io = $this->createMock(ConsoleIo::class);
+        $result = $command->getAssociations($items, $args, $io);
+        $expected = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Users',
+                    'foreignKey' => 'user_id',
+                    'joinType' => 'INNER',
+                ],
+            ],
+            'hasMany' => [
+                [
+                    'alias' => 'TodoTasks',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
+            'belongsToMany' => [
+                [
+                    'alias' => 'TodoLabels',
+                    'foreignKey' => 'todo_item_id',
+                    'joinTable' => 'todo_items_todo_labels',
+                    'targetForeignKey' => 'todo_label_id',
+                ],
+            ],
+            'hasOne' => [
+                [
+                    'alias' => 'TodoReminders',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test that association generation adds association when `anything_id` fields and
+     * AnythingsTable object exist even if no db table
+     *
+     * @return void
+     */
+    public function testGetAssociationsAddAssociationIfTableExist()
+    {
+        $items = $this->getTableLocator()->get('TodoItems');
+
+        $items->setSchema($items->getSchema()->addColumn('template_task_comment_id', ['type' => 'integer']));
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $args = new Arguments([], [], []);
+        $io = $this->createMock(ConsoleIo::class);
+        $result = $command->getAssociations($items, $args, $io);
+        $expected = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Users',
+                    'foreignKey' => 'user_id',
+                    'joinType' => 'INNER',
+                ],
+                [
+                    'alias' => 'TemplateTaskComments',
+                    'foreignKey' => 'template_task_comment_id',
+                ],
+            ],
+            'hasMany' => [
+                [
+                    'alias' => 'TodoTasks',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
+            'belongsToMany' => [
+                [
+                    'alias' => 'TodoLabels',
+                    'foreignKey' => 'todo_item_id',
+                    'joinTable' => 'todo_items_todo_labels',
+                    'targetForeignKey' => 'todo_label_id',
+                ],
+            ],
+            'hasOne' => [
+                [
+                    'alias' => 'TodoReminders',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Test that association generation ignores `_id` fields
      *
      * @return void
@@ -505,6 +607,7 @@ class ModelCommandTest extends TestCase
     {
         $model = $this->getTableLocator()->get('Invitations');
         $command = new ModelCommand();
+        $command->connection = 'test';
         $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
@@ -533,6 +636,7 @@ class ModelCommandTest extends TestCase
     {
         $model = $this->getTableLocator()->get('TodoItemsTodoLabels');
         $command = new ModelCommand();
+        $command->connection = 'test';
         $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
@@ -1167,7 +1271,6 @@ class ModelCommandTest extends TestCase
             ],
             'user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
-                'requirePresence' => ['rule' => 'requirePresence', 'args' => ['create']],
                 'notEmpty' => ['rule' => 'notEmptyString', 'args' => []],
             ],
         ];
@@ -1557,6 +1660,26 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * Tests baking a file with no changes
+     *
+     * @return void
+     */
+    public function testBakeEntitySimpleUnchanged(): void
+    {
+        $this->generatedFile = APP . 'Model/Entity/User.php';
+        $result = file_get_contents($this->_compareBasePath . __FUNCTION__ . '.php');
+        file_put_contents($this->generatedFile, str_replace("\r\n", "\n", $result));
+
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden users');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+
+        $this->assertOutputContains(sprintf('Skipping update to `%s`. It already exists and would not change.', realpath($this->generatedFile)));
+    }
+
+    /**
      * test baking an entity class
      *
      * @return void
@@ -1731,9 +1854,9 @@ class ModelCommandTest extends TestCase
         $this->_loadTestPlugin('BakeTest');
         $path = Plugin::path('BakeTest');
 
-        $this->generatedFile = $path . 'src/Model/Table/UsersTable.php';
+        $this->generatedFile = $path . 'src/Model/Entity/User.php';
 
-        $this->exec('bake model --no-validation --no-test --no-fixture --no-entity -p BakeTest Users');
+        $this->exec('bake model --no-validation --no-test --no-fixture --no-table BakeTest.Users');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
@@ -1758,6 +1881,127 @@ class ModelCommandTest extends TestCase
 
         $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    public function testBakeUpdateTableNoFile(): void
+    {
+        $this->generatedFile = APP . 'Model/Table/TodoItemsTable.php';
+        $this->exec('bake model --no-entity --no-test --no-fixture --connection test --update TodoItems');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));
+    }
+
+    public function testBakeUpdateTable(): void
+    {
+        $existing = <<<'PARSE'
+<?php
+declare(strict_types=1);
+
+namespace Bake\Test\App\Model\Table;
+
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+use RuntimeException as CustomException; // should be kept
+
+/**
+ * TodoItems Model
+ */
+class TodoItemsTable extends Table
+{
+    /**
+     * @var int
+     */
+    protected const MY_CONST = 1;
+
+    /**
+     * @var string
+     */
+    protected $myProperty = 'string';
+
+    public function validationDefault(Validator $validator): Validator
+    {
+        // should be overwritten
+        return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        // generation of this function is disabled by --no-rules and should stay
+
+        return $rules;
+    }
+
+    /**
+     */
+    public function findByPriority(Query $query): Query
+    {
+        throw new CustomException();
+
+        return $query;
+    }
+}
+PARSE;
+
+        $this->generatedFile = APP . 'Model/Table/TodoItemsTable.php';
+        file_put_contents($this->generatedFile, $existing);
+        $this->exec('bake model --no-rules --no-entity --no-test --no-fixture --update --force TodoItems');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));
+    }
+
+    public function testBakeUpdateEntity(): void
+    {
+        $existing = <<<'PARSE'
+<?php
+declare(strict_types=1);
+
+namespace Bake\Test\App\Model\Entity;
+
+use MyApp\Test;
+
+class TodoItem
+{
+    /**
+     * @var int
+     */
+    protected const MY_CONST = 1;
+
+    protected $_accessible = [
+        // should not overwritten
+    ];
+
+    /**
+     * @var string
+     */
+    protected $myProperty = 'string';
+
+    protected function _getName(): string
+    {
+        return 'name';
+    }
+}
+PARSE;
+
+        $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
+        file_put_contents($this->generatedFile, $existing);
+        $this->exec('bake model --no-table --no-fields --hidden "user_id" --no-test --no-fixture --update --force TodoItems');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));
     }
 
     /**

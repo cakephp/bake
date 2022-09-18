@@ -13,13 +13,13 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-<?php
-declare(strict_types=1);
-
-namespace {{ namespace }}\View\Helper;
-
-use Cake\View\Helper;
-use Cake\View\View;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\View\\Helper",
+    classImports: [
+        'Cake\\View\\Helper',
+        'Cake\\View\\View',
+    ],
+}) }}
 
 /**
  * {{ name }} helper

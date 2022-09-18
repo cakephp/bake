@@ -13,12 +13,12 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-<?php
-declare(strict_types=1);
-
-namespace {{ namespace }}\Command\Helper;
-
-use Cake\Console\Helper;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\Command\\Helper",
+    classImports: [
+        'Cake\\Console\\Helper',
+    ],
+}) }}
 
 /**
  * {{ name }} command helper.

@@ -16,7 +16,6 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
@@ -279,32 +278,32 @@ class TestCommand extends BakeCommand
 
         $io->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, Shell::QUIET);
 
-        $renderer = new TemplateRenderer($this->theme);
-        $renderer->set('fixtures', $this->_fixtures);
-        $renderer->set('plugin', $this->plugin);
-        $renderer->set(compact(
-            'subject',
-            'className',
-            'properties',
-            'methods',
-            'type',
-            'fullClassName',
-            'mock',
-            'preConstruct',
-            'postConstruct',
-            'construction',
-            'uses',
-            'baseNamespace',
-            'subNamespace',
-            'namespace'
-        ));
-        $out = $renderer->generate('Bake.tests/test_case');
+        $contents = $this->createTemplateRenderer()
+            ->set('fixtures', $this->_fixtures)
+            ->set('plugin', $this->plugin)
+            ->set(compact(
+                'subject',
+                'className',
+                'properties',
+                'methods',
+                'type',
+                'fullClassName',
+                'mock',
+                'preConstruct',
+                'postConstruct',
+                'construction',
+                'uses',
+                'baseNamespace',
+                'subNamespace',
+                'namespace'
+            ))
+            ->generate('Bake.tests/test_case');
 
         $filename = $this->testCaseFileName($type, $fullClassName);
         $emptyFile = dirname($filename) . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
-        if ($io->createFile($filename, $out, $args->getOption('force'))) {
-            return $out;
+        if ($io->createFile($filename, $contents, $this->force)) {
+            return $contents;
         }
 
         return false;

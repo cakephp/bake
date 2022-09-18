@@ -174,18 +174,18 @@ class PluginCommand extends BakeCommand
             true
         );
 
-        $renderer = new TemplateRenderer($args->getOption('theme'));
-        $renderer->set([
-            'name' => $name,
-            'package' => $package,
-            'namespace' => $namespace,
-            'baseNamespace' => $baseNamespace,
-            'plugin' => $pluginName,
-            'routePath' => Inflector::dasherize($pluginName),
-            'path' => $path,
-            'root' => ROOT,
-            'cakeVersion' => $composerConfig['require']['cakephp/cakephp'],
-        ]);
+        $renderer = $this->createTemplateRenderer()
+            ->set([
+                'name' => $name,
+                'package' => $package,
+                'namespace' => $namespace,
+                'baseNamespace' => $baseNamespace,
+                'plugin' => $pluginName,
+                'routePath' => Inflector::dasherize($pluginName),
+                'path' => $path,
+                'root' => ROOT,
+                'cakeVersion' => $composerConfig['require']['cakephp/cakephp'],
+            ]);
 
         $root = $path . $pluginName . DS;
 
@@ -277,7 +277,7 @@ class PluginCommand extends BakeCommand
         $io->out('<info>Modifying composer autoloader</info>');
 
         $out = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
-        $io->createFile($file, $out, (bool)$args->getOption('force'));
+        $io->createFile($file, $out, $this->force);
 
         $composer = $this->findComposer($args, $io);
 

@@ -23,17 +23,23 @@
 {% endif %}
 
 {%- set accessible = Bake.getFieldAccessibility(fields, primaryKey) %}
-<?php
-declare(strict_types=1);
 
-namespace {{ namespace }}\Model\Entity;
-
-use Cake\ORM\Entity;
+{%- set generatedProperties = [] %}
+{{ element('Bake.file_header', {
+    namespace: fileBuilder.namespace,
+    classImports: fileBuilder.classImports(['Cake\\ORM\\Entity']),
+}) }}
 
 {{ DocBlock.classDescription(name, 'Entity', annotations)|raw }}
 class {{ name }} extends Entity
 {
+{% set userConstants = fileBuilder.classBuilder.userConstants([]) %}
+{% if userConstants %}
+    {{~ Bake.concat('\n\n', userConstants) }}
+
+{% endif %}
 {% if accessible %}
+{%- set generatedProperties = generatedProperties|merge(['_accessible']) %}
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -49,11 +55,22 @@ class {{ name }} extends Entity
 
 {% endif %}
 {%- if hidden %}
+{%- set generatedProperties = generatedProperties|merge(['_hidden']) %}
     /**
      * Fields that are excluded from JSON versions of the entity.
      *
      * @var array<string>
      */
     protected $_hidden = {{ Bake.exportVar(hidden, 1)|raw }};
+{% endif %}
+{% set userProperties = fileBuilder.classBuilder.userProperties(generatedProperties) %}
+{% if userProperties %}
+
+    {{~ Bake.concat('\n\n', userProperties) }}
+{% endif %}
+{% set userFunctions = fileBuilder.classBuilder.userFunctions([]) %}
+{% if userFunctions %}
+
+    {{~ Bake.concat('\n\n', userFunctions) }}
 {% endif %}
 }

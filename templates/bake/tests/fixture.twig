@@ -17,12 +17,12 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-<?php
-declare(strict_types=1);
-
-namespace {{ namespace }}\Test\Fixture;
-
-use Cake\TestSuite\Fixture\TestFixture;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\Test\\Fixture",
+    classImports: [
+        'Cake\\TestSuite\\Fixture\\TestFixture',
+    ],
+}) }}
 
 /**
  * {{ name }}Fixture

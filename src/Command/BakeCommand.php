@@ -16,12 +16,17 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Bake\CodeGen\CodeParser;
+use Bake\CodeGen\ParsedFile;
 use Bake\Utility\CommonOptionsTrait;
+use Bake\Utility\TemplateRenderer;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
+use Cake\Event\Event;
+use Cake\Event\EventManager;
 use InvalidArgumentException;
 
 /**
@@ -151,6 +156,19 @@ abstract class BakeCommand extends Command
     }
 
     /**
+     * Creates a new instance of TemplateRenderer with theme set.
+     *
+     * @return \Bake\Utility\TemplateRenderer
+     */
+    public function createTemplateRenderer(): TemplateRenderer
+    {
+        $renderer = new TemplateRenderer($this->theme);
+        EventManager::instance()->dispatch(new Event('Bake.renderer', $renderer));
+
+        return $renderer;
+    }
+
+    /**
      * Delete empty file in a given path
      *
      * @param string $path Path to folder which contains 'empty' file.
@@ -178,5 +196,48 @@ abstract class BakeCommand extends Command
     protected function isValidColumnName(string $name): bool
     {
         return (bool)preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $name);
+    }
+
+    /**
+     * Parses a file if it exists.
+     *
+     * @param string $path File path
+     * @return \Bake\CodeGen\ParsedFile|null
+     */
+    protected function parseFile(string $path): ?ParsedFile
+    {
+        if (file_exists($path)) {
+            return (new CodeParser())->parseFile(file_get_contents($path));
+        }
+
+        return null;
+    }
+
+    /**
+     * Write file contents out to path and prompt user with options with file exists.
+     *
+     * @param \Cake\Console\ConsoleIo $io Console io
+     * @param string $path The path to create the file at
+     * @param string $contents The contents to put into the file
+     * @param bool $forceOverwrite Whether the file should be overwritten without prompting the user
+     * @param bool $skipIfUnchnged Skip writing output if the contents match existing file
+     * @return bool True if successful, false otherwise
+     * @throws \Cake\Console\Exception\StopException When `q` is given as an answer
+     *   to whether a file should be overwritten.
+     */
+    protected function writeFile(
+        ConsoleIo $io,
+        string $path,
+        string $contents,
+        bool $forceOverwrite = false,
+        bool $skipIfUnchnged = true
+    ): bool {
+        if ($skipIfUnchnged && file_exists($path) && file_get_contents($path) === $contents) {
+            $io->info("Skipping update to `{$path}`. It already exists and would not change.");
+
+            return true;
+        }
+
+        return $io->createFile($path, $contents, $forceOverwrite);
     }
 }

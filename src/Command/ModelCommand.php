@@ -16,8 +16,8 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Bake\CodeGen\FileBuilder;
 use Bake\Utility\TableScanner;
-use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
@@ -348,11 +348,25 @@ class ModelCommand extends BakeCommand
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
-                if (!in_array(Inflector::tableize($tmpModelName), $this->_tables, true)) {
+                if (!$this->getTableLocator()->exists($tmpModelName)) {
+                    $this->getTableLocator()->get(
+                        $tmpModelName,
+                        ['connection' => ConnectionManager::get($this->connection)]
+                    );
+                }
+                $associationTable = $this->getTableLocator()->get($tmpModelName);
+                $this->getTableLocator()->remove($tmpModelName);
+                $tables = $this->listAll();
+                // Check if association model could not be instantiated as a subclass but a generic Table instance instead
+                if (
+                    get_class($associationTable) === Table::class &&
+                    !in_array(Inflector::tableize($tmpModelName), $tables, true)
+                ) {
                     $found = $this->findTableReferencedBy($schema, $fieldName);
-                    if ($found) {
-                        $tmpModelName = Inflector::camelize($found);
+                    if (!$found) {
+                        continue;
                     }
+                    $tmpModelName = Inflector::camelize($found);
                 }
                 $assoc = [
                     'alias' => $tmpModelName,
@@ -783,12 +797,19 @@ class ModelCommand extends BakeCommand
 
         $validate = [];
         $primaryKey = $schema->getPrimaryKey();
+        $foreignKeys = [];
+        if (isset($associations['belongsTo'])) {
+            foreach ($associations['belongsTo'] as $assoc) {
+                $foreignKeys[] = $assoc['foreignKey'];
+            }
+        }
         foreach ($fields as $fieldName) {
             // Skip primary key
             if (in_array($fieldName, $primaryKey, true)) {
                 continue;
             }
             $field = $schema->getColumn($fieldName);
+            $field['isForeignKey'] = in_array($fieldName, $foreignKeys, true);
             $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
             if ($validation) {
                 $validate[$fieldName] = $validation;
@@ -876,7 +897,8 @@ class ModelCommand extends BakeCommand
                 'args' => [],
             ];
         } else {
-            if ($metaData['default'] === null || $metaData['default'] === false) {
+            // FKs shouldn't be required on create to allow e.g. save calls with hasMany associations to create entities
+            if (($metaData['default'] === null || $metaData['default'] === false) && !$metaData['isForeignKey']) {
                 $validation['requirePresence'] = [
                     'rule' => 'requirePresence',
                     'args' => ['create'],
@@ -1085,7 +1107,9 @@ class ModelCommand extends BakeCommand
         if ($args->getOption('no-entity')) {
             return;
         }
+
         $name = $this->_entityName($model->getAlias());
+        $io->out("\n" . sprintf('Baking entity class for %s...', $name), 1, ConsoleIo::NORMAL);
 
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
@@ -1094,22 +1118,28 @@ class ModelCommand extends BakeCommand
             $pluginPath = $this->plugin . '.';
         }
 
+        $path = $this->getPath($args);
+        $filename = $path . 'Entity' . DS . $name . '.php';
+
+        $parsedFile = null;
+        if ($args->getOption('update')) {
+            $parsedFile = $this->parseFile($filename);
+        }
+
         $data += [
             'name' => $name,
             'namespace' => $namespace,
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
             'primaryKey' => [],
+            'fileBuilder' => new FileBuilder($io, "{$namespace}\Model\Entity", $parsedFile),
         ];
 
-        $renderer = new TemplateRenderer($this->theme);
-        $renderer->set($data);
-        $out = $renderer->generate('Bake.Model/entity');
+        $contents = $this->createTemplateRenderer()
+            ->set($data)
+            ->generate('Bake.Model/entity');
 
-        $path = $this->getPath($args);
-        $filename = $path . 'Entity' . DS . $name . '.php';
-        $io->out("\n" . sprintf('Baking entity class for %s...', $name), 1, ConsoleIo::NORMAL);
-        $io->createFile($filename, $out, $args->getOption('force'));
+        $this->writeFile($io, $filename, $contents, $this->force);
 
         $emptyFile = $path . 'Entity' . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
@@ -1130,13 +1160,23 @@ class ModelCommand extends BakeCommand
             return;
         }
 
+        $name = $model->getAlias();
+        $io->out("\n" . sprintf('Baking table class for %s...', $name), 1, ConsoleIo::NORMAL);
+
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
         if ($this->plugin) {
             $namespace = $this->_pluginNamespace($this->plugin);
         }
 
-        $name = $model->getAlias();
+        $path = $this->getPath($args);
+        $filename = $path . 'Table' . DS . $name . 'Table.php';
+
+        $parsedFile = null;
+        if ($args->getOption('update')) {
+            $parsedFile = $this->parseFile($filename);
+        }
+
         $entity = $this->_entityName($model->getAlias());
         $data += [
             'plugin' => $this->plugin,
@@ -1152,16 +1192,14 @@ class ModelCommand extends BakeCommand
             'rulesChecker' => [],
             'behaviors' => [],
             'connection' => $this->connection,
+            'fileBuilder' => new FileBuilder($io, "{$namespace}\Model\Table", $parsedFile),
         ];
 
-        $renderer = new TemplateRenderer($this->theme);
-        $renderer->set($data);
-        $out = $renderer->generate('Bake.Model/table');
+        $contents = $this->createTemplateRenderer()
+            ->set($data)
+            ->generate('Bake.Model/table');
 
-        $path = $this->getPath($args);
-        $filename = $path . 'Table' . DS . $name . 'Table.php';
-        $io->out("\n" . sprintf('Baking table class for %s...', $name), 1, ConsoleIo::NORMAL);
-        $io->createFile($filename, $out, $args->getOption('force'));
+        $this->writefile($io, $filename, $contents, $this->force);
 
         // Work around composer caching that classes/files do not exist.
         // Check for the file as it might not exist in tests.
@@ -1240,6 +1278,9 @@ class ModelCommand extends BakeCommand
         )->addArgument('name', [
             'help' => 'Name of the model to bake (without the Table suffix). ' .
                 'You can use Plugin.name to bake plugin models.',
+        ])->addOption('update', [
+            'boolean' => true,
+            'help' => 'Update generated methods in existing files. If the file doesn\'t exist it will be created.',
         ])->addOption('table', [
             'help' => 'The table name to use if you have non-conventional table names.',
         ])->addOption('no-entity', [

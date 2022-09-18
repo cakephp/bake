@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
-use Bake\Utility\TemplateRenderer;
 use Brick\VarExporter\VarExporter;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -261,13 +260,13 @@ class FixtureCommand extends BakeCommand
         $path = $this->getPath($args);
         $filename = $vars['name'] . 'Fixture.php';
 
-        $renderer = new TemplateRenderer($args->getOption('theme'));
-        $renderer->set('model', $model);
-        $renderer->set($vars);
-        $content = $renderer->generate('Bake.tests/fixture');
+        $contents = $this->createTemplateRenderer()
+            ->set('model', $model)
+            ->set($vars)
+            ->generate('Bake.tests/fixture');
 
         $io->out("\n" . sprintf('Baking test fixture for %s...', $model), 1, ConsoleIo::NORMAL);
-        $io->createFile($path . $filename, $content, $args->getOption('force'));
+        $io->createFile($path . $filename, $contents, $this->force);
         $emptyFile = $path . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
     }
