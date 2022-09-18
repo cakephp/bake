@@ -16,8 +16,8 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Bake\CodeGen\FileBuilder;
 use Bake\Utility\TableScanner;
-use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
@@ -227,6 +227,7 @@ class ModelCommand extends BakeCommand
 
         $associations = [
             'belongsTo' => [],
+            'hasOne' => [],
             'hasMany' => [],
             'belongsToMany' => [],
         ];
@@ -242,6 +243,7 @@ class ModelCommand extends BakeCommand
             return $associations;
         }
 
+        $associations = $this->findHasOne($table, $associations);
         $associations = $this->findHasMany($table, $associations);
         $associations = $this->findBelongsToMany($table, $associations);
 
@@ -346,11 +348,25 @@ class ModelCommand extends BakeCommand
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
-                if (!in_array(Inflector::tableize($tmpModelName), $this->_tables, true)) {
+                if (!$this->getTableLocator()->exists($tmpModelName)) {
+                    $this->getTableLocator()->get(
+                        $tmpModelName,
+                        ['connection' => ConnectionManager::get($this->connection)]
+                    );
+                }
+                $associationTable = $this->getTableLocator()->get($tmpModelName);
+                $this->getTableLocator()->remove($tmpModelName);
+                $tables = $this->listAll();
+                // Check if association model could not be instantiated as a subclass but a generic Table instance instead
+                if (
+                    get_class($associationTable) === Table::class &&
+                    !in_array(Inflector::tableize($tmpModelName), $tables, true)
+                ) {
                     $found = $this->findTableReferencedBy($schema, $fieldName);
-                    if ($found) {
-                        $tmpModelName = Inflector::camelize($found);
+                    if (!$found) {
+                        continue;
                     }
+                    $tmpModelName = Inflector::camelize($found);
                 }
                 $assoc = [
                     'alias' => $tmpModelName,
@@ -406,6 +422,105 @@ class ModelCommand extends BakeCommand
     }
 
     /**
+     * Checks whether the given source and target table names are sides
+     * of a possible many-to-many relation.
+     *
+     * @param string $sourceTable The source table name.
+     * @param string $targetTable The target table name.
+     * @return bool
+     */
+    public function isPossibleBelongsToManyRelation(string $sourceTable, string $targetTable): bool
+    {
+        $tables = $this->listAll();
+
+        $pregTableName = preg_quote($sourceTable, '/');
+        $pregPattern = "/^{$pregTableName}_|_{$pregTableName}$/";
+
+        if (preg_match($pregPattern, $targetTable) === 1) {
+            $possibleBTMTargetTable = preg_replace($pregPattern, '', $targetTable);
+            if (in_array($possibleBTMTargetTable, $tables, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks whether the given table schema has a unique constraint for
+     * the given field.
+     *
+     * The check is only going to be satisfied if the constraint has
+     * only this one specific field. Multi-column constraints will not
+     * match, as they cannot guarantee uniqueness on the given field.
+     *
+     * @param \Cake\Database\Schema\TableSchemaInterface $schema The schema to check for the constraint.
+     * @param string $keyField The field of the constraint.
+     * @return bool
+     */
+    public function hasUniqueConstraintFor(TableSchemaInterface $schema, string $keyField): bool
+    {
+        foreach ($schema->constraints() as $constraint) {
+            $constraintInfo = $schema->getConstraint($constraint);
+            if (
+                $constraintInfo['type'] === TableSchema::CONSTRAINT_UNIQUE &&
+                $constraintInfo['columns'] === [$keyField]
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Find the hasOne relations and add them to associations list
+     *
+     * @param \Cake\ORM\Table $model Model instance being generated
+     * @param array $associations Array of in progress associations
+     * @return array Associations with hasOne added in.
+     */
+    public function findHasOne(Table $model, array $associations): array
+    {
+        $schema = $model->getSchema();
+        $primaryKey = $schema->getPrimaryKey();
+        $tableName = $schema->name();
+        $foreignKey = $this->_modelKey($tableName);
+
+        $tables = $this->listAll();
+        foreach ($tables as $otherTableName) {
+            if ($this->isPossibleBelongsToManyRelation($tableName, $otherTableName)) {
+                continue;
+            }
+
+            $otherModel = $this->getTableObject($this->_camelize($otherTableName), $otherTableName);
+            $otherSchema = $otherModel->getSchema();
+
+            foreach ($otherSchema->columns() as $fieldName) {
+                if (!$this->hasUniqueConstraintFor($otherSchema, $fieldName)) {
+                    continue;
+                }
+
+                $assoc = false;
+                if (!in_array($fieldName, $primaryKey) && $fieldName === $foreignKey) {
+                    $assoc = [
+                        'alias' => $otherModel->getAlias(),
+                        'foreignKey' => $fieldName,
+                    ];
+                }
+                if ($assoc && $this->plugin) {
+                    $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
+                }
+                if ($assoc) {
+                    $associations['hasOne'][] = $assoc;
+                }
+            }
+        }
+
+        return $associations;
+    }
+
+    /**
      * Find the hasMany relations and add them to associations list
      *
      * @param \Cake\ORM\Table $model Model instance being generated
@@ -421,21 +536,20 @@ class ModelCommand extends BakeCommand
 
         $tables = $this->listAll();
         foreach ($tables as $otherTableName) {
+            if ($this->isPossibleBelongsToManyRelation($tableName, $otherTableName)) {
+                continue;
+            }
+
             $otherModel = $this->getTableObject($this->_camelize($otherTableName), $otherTableName);
             $otherSchema = $otherModel->getSchema();
 
-            $pregTableName = preg_quote($tableName, '/');
-            $pregPattern = "/^{$pregTableName}_|_{$pregTableName}$/";
-            if (preg_match($pregPattern, $otherTableName) === 1) {
-                $possibleHABTMTargetTable = preg_replace($pregPattern, '', $otherTableName);
-                if (in_array($possibleHABTMTargetTable, $tables)) {
-                    continue;
-                }
-            }
-
             foreach ($otherSchema->columns() as $fieldName) {
                 $assoc = false;
-                if (!in_array($fieldName, $primaryKey) && $fieldName === $foreignKey) {
+                if (
+                    !in_array($fieldName, $primaryKey) &&
+                    $fieldName === $foreignKey &&
+                    !$this->hasUniqueConstraintFor($otherSchema, $fieldName)
+                ) {
                     $assoc = [
                         'alias' => $otherModel->getAlias(),
                         'foreignKey' => $fieldName,
@@ -683,12 +797,19 @@ class ModelCommand extends BakeCommand
 
         $validate = [];
         $primaryKey = $schema->getPrimaryKey();
+        $foreignKeys = [];
+        if (isset($associations['belongsTo'])) {
+            foreach ($associations['belongsTo'] as $assoc) {
+                $foreignKeys[] = $assoc['foreignKey'];
+            }
+        }
         foreach ($fields as $fieldName) {
             // Skip primary key
             if (in_array($fieldName, $primaryKey, true)) {
                 continue;
             }
             $field = $schema->getColumn($fieldName);
+            $field['isForeignKey'] = in_array($fieldName, $foreignKeys, true);
             $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
             if ($validation) {
                 $validate[$fieldName] = $validation;
@@ -776,7 +897,8 @@ class ModelCommand extends BakeCommand
                 'args' => [],
             ];
         } else {
-            if ($metaData['default'] === null || $metaData['default'] === false) {
+            // FKs shouldn't be required on create to allow e.g. save calls with hasMany associations to create entities
+            if (($metaData['default'] === null || $metaData['default'] === false) && !$metaData['isForeignKey']) {
                 $validation['requirePresence'] = [
                     'rule' => 'requirePresence',
                     'args' => ['create'],
@@ -985,7 +1107,9 @@ class ModelCommand extends BakeCommand
         if ($args->getOption('no-entity')) {
             return;
         }
+
         $name = $this->_entityName($model->getAlias());
+        $io->out("\n" . sprintf('Baking entity class for %s...', $name), 1, ConsoleIo::NORMAL);
 
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
@@ -994,22 +1118,28 @@ class ModelCommand extends BakeCommand
             $pluginPath = $this->plugin . '.';
         }
 
+        $path = $this->getPath($args);
+        $filename = $path . 'Entity' . DS . $name . '.php';
+
+        $parsedFile = null;
+        if ($args->getOption('update')) {
+            $parsedFile = $this->parseFile($filename);
+        }
+
         $data += [
             'name' => $name,
             'namespace' => $namespace,
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
             'primaryKey' => [],
+            'fileBuilder' => new FileBuilder($io, "{$namespace}\Model\Entity", $parsedFile),
         ];
 
-        $renderer = new TemplateRenderer($this->theme);
-        $renderer->set($data);
-        $out = $renderer->generate('Bake.Model/entity');
+        $contents = $this->createTemplateRenderer()
+            ->set($data)
+            ->generate('Bake.Model/entity');
 
-        $path = $this->getPath($args);
-        $filename = $path . 'Entity' . DS . $name . '.php';
-        $io->out("\n" . sprintf('Baking entity class for %s...', $name), 1, ConsoleIo::NORMAL);
-        $io->createFile($filename, $out, $args->getOption('force'));
+        $this->writeFile($io, $filename, $contents, $this->force);
 
         $emptyFile = $path . 'Entity' . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);
@@ -1030,13 +1160,23 @@ class ModelCommand extends BakeCommand
             return;
         }
 
+        $name = $model->getAlias();
+        $io->out("\n" . sprintf('Baking table class for %s...', $name), 1, ConsoleIo::NORMAL);
+
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
         if ($this->plugin) {
             $namespace = $this->_pluginNamespace($this->plugin);
         }
 
-        $name = $model->getAlias();
+        $path = $this->getPath($args);
+        $filename = $path . 'Table' . DS . $name . 'Table.php';
+
+        $parsedFile = null;
+        if ($args->getOption('update')) {
+            $parsedFile = $this->parseFile($filename);
+        }
+
         $entity = $this->_entityName($model->getAlias());
         $data += [
             'plugin' => $this->plugin,
@@ -1052,16 +1192,14 @@ class ModelCommand extends BakeCommand
             'rulesChecker' => [],
             'behaviors' => [],
             'connection' => $this->connection,
+            'fileBuilder' => new FileBuilder($io, "{$namespace}\Model\Table", $parsedFile),
         ];
 
-        $renderer = new TemplateRenderer($this->theme);
-        $renderer->set($data);
-        $out = $renderer->generate('Bake.Model/table');
+        $contents = $this->createTemplateRenderer()
+            ->set($data)
+            ->generate('Bake.Model/table');
 
-        $path = $this->getPath($args);
-        $filename = $path . 'Table' . DS . $name . 'Table.php';
-        $io->out("\n" . sprintf('Baking table class for %s...', $name), 1, ConsoleIo::NORMAL);
-        $io->createFile($filename, $out, $args->getOption('force'));
+        $this->writefile($io, $filename, $contents, $this->force);
 
         // Work around composer caching that classes/files do not exist.
         // Check for the file as it might not exist in tests.
@@ -1140,6 +1278,9 @@ class ModelCommand extends BakeCommand
         )->addArgument('name', [
             'help' => 'Name of the model to bake (without the Table suffix). ' .
                 'You can use Plugin.name to bake plugin models.',
+        ])->addOption('update', [
+            'boolean' => true,
+            'help' => 'Update generated methods in existing files. If the file doesn\'t exist it will be created.',
         ])->addOption('table', [
             'help' => 'The table name to use if you have non-conventional table names.',
         ])->addOption('no-entity', [

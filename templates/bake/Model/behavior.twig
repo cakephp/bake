@@ -13,13 +13,13 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-<?php
-declare(strict_types=1);
-
-namespace {{ namespace }}\Model\Behavior;
-
-use Cake\ORM\Behavior;
-use Cake\ORM\Table;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\Model\\Behavior",
+    classImports: [
+        'Cake\\ORM\\Behavior',
+        'Cake\\ORM\\Table',
+    ],
+}) }}
 
 /**
  * {{ name }} behavior

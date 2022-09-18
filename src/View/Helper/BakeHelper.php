@@ -458,6 +458,140 @@ class BakeHelper extends Helper
     }
 
     /**
+     * Generates block of use statements from imports.
+     *
+     * @param array<string|int, string> $imports Class imports
+     * @return string
+     */
+    public function getClassUses(array $imports): string
+    {
+        $uses = [];
+
+        $imports = $this->normalizeImports($imports);
+        asort($imports, SORT_STRING | SORT_FLAG_CASE);
+        foreach ($imports as $alias => $type) {
+            $uses[] = 'use ' . $this->getUseType($alias, $type) . ';';
+        }
+
+        return implode("\n", $uses);
+    }
+
+    /**
+     * Generates block of suse statements from function imports.
+     *
+     * @param array<string|int, string> $imports Function imports
+     * @return string
+     */
+    public function getFunctionUses(array $imports): string
+    {
+        $uses = [];
+
+        $imports = $this->normalizeImports($imports);
+        asort($imports, SORT_STRING | SORT_FLAG_CASE);
+        foreach ($imports as $alias => $type) {
+            $uses[] = 'use function ' . $this->getUseType($alias, $type) . ';';
+        }
+
+        return implode("\n", $uses);
+    }
+
+    /**
+     * Generates block of use statements from const imports.
+     *
+     * @param array<string|int, string> $imports constImports
+     * @return string
+     */
+    public function getConstUses(array $imports): string
+    {
+        $uses = [];
+
+        $imports = $this->normalizeImports($imports);
+        asort($imports, SORT_STRING | SORT_FLAG_CASE);
+        foreach ($imports as $alias => $type) {
+            $uses[] = 'use const ' . $this->getUseType($alias, $type) . ';';
+        }
+
+        return implode("\n", $uses);
+    }
+
+    /**
+     * Normalizes imports included from generated code into [alias => name] format.
+     *
+     * @param array<string|int, string> $imports Imports
+     * @return array<string, string>
+     */
+    protected function normalizeImports(array $imports): array
+    {
+        $normalized = [];
+        foreach ($imports as $alias => $class) {
+            if (is_int($alias)) {
+                $last = strrpos($class, '\\', -1);
+                if ($last !== false) {
+                    $alias = substr($class, strrpos($class, '\\', -1) + 1);
+                } else {
+                    $alias = $class;
+                }
+            }
+
+            $normalized[$alias] = $class;
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Gets use type string from name and alias.
+     *
+     * @param string $alias Import alias
+     * @param string $name Import name
+     * @return string
+     */
+    protected function getUseType(string $alias, string $name): string
+    {
+        if ($name == $alias || substr($name, -strlen("\\{$alias}")) === "\\{$alias}") {
+            return $name;
+        }
+
+        return "{$name} as {$alias}";
+    }
+
+    /**
+     * Concats strings together.
+     *
+     * @param string $delimiter Delimiter to separate strings
+     * @param array<array<string>|string> $strings Strings to concatenate
+     * @param string $prefix Code to prepend if final output is not empty
+     * @param string $suffix Code to append if final output is not empty
+     * @return string
+     */
+    public function concat(
+        string $delimiter,
+        array $strings,
+        string $prefix = '',
+        string $suffix = ''
+    ): string {
+        $output = implode(
+            $delimiter,
+            array_map(function ($string) use ($delimiter) {
+                if (is_string($string)) {
+                    return $string;
+                }
+
+                return implode($delimiter, array_filter($string));
+            }, array_filter($strings))
+        );
+
+        if ($prefix && !empty($output)) {
+            $output = $prefix . $output;
+        }
+        if ($suffix && !empty($output)) {
+            $output .= $suffix;
+        }
+
+        return $output;
+    }
+
+    /**
      * To be mocked elsewhere...
      *
      * @param \Cake\ORM\Table $table Table

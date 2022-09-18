@@ -250,4 +250,34 @@ class BakeHelperTest extends TestCase
         ];
         $this->assertSame($expected, $result);
     }
+
+    public function testConcat(): void
+    {
+        $statements = [
+            'use Cake\ORM\Query;',
+            'use RuntimeException as MyException;',
+            '',
+        ];
+        $code = $this->BakeHelper->concat("\n", $statements);
+        $this->assertSame(
+            <<<'PARSE'
+use Cake\ORM\Query;
+use RuntimeException as MyException;
+PARSE
+            ,
+            $code
+        );
+
+        $code = $this->BakeHelper->concat("\n", $statements, "\n", "\n");
+        $this->assertSame(
+            <<<'PARSE'
+
+use Cake\ORM\Query;
+use RuntimeException as MyException;
+
+PARSE
+            ,
+            $code
+        );
+    }
 }

@@ -25,15 +25,11 @@
     {%- set uses = uses|merge(['Cake\\Console\\TestSuite\\ConsoleIntegrationTestTrait']) %}
 {% endif %}
 {%- set uses = uses|merge(["Cake\\TestSuite\\TestCase"]) %}
-{%- set uses = uses|sort %}
-<?php
-declare(strict_types=1);
 
-namespace {{ baseNamespace }}\Test\TestCase\{{ subNamespace }};
-
-{% for dependency in uses %}
-use {{ dependency }};
-{% endfor %}
+{{- element('Bake.file_header', {
+    namespace: "#{baseNamespace}\\Test\\TestCase\\#{subNamespace}",
+    classImports: uses,
+}) }}
 
 /**
  * {{ fullClassName }} Test Case

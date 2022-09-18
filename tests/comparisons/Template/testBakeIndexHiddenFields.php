@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \Bake\Test\App\View\AppView $this
- * @var \Bake\Test\App\Model\Entity\HiddenField[]|\Cake\Collection\CollectionInterface $hiddenFields
+ * @var iterable<\Bake\Test\App\Model\Entity\HiddenField> $hiddenFields
  */
 ?>
 <div class="hiddenFields index content">

@@ -13,22 +13,22 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-<?php
-declare(strict_types=1);
-
-namespace {{ namespace }};
-
-use Cake\Core\BasePlugin;
-use Cake\Core\ContainerInterface;
-use Cake\Core\PluginApplicationInterface;
-use Cake\Http\MiddlewareQueue;
-use Cake\Routing\RouteBuilder;
-use Cake\Console\CommandCollection;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}",
+    classImports: [
+        'Cake\\Console\\CommandCollection',
+        'Cake\\Core\\BasePlugin',
+        'Cake\\Core\\ContainerInterface',
+        'Cake\\Core\\PluginApplicationInterface',
+        'Cake\\Http\\MiddlewareQueue',
+        'Cake\\Routing\\RouteBuilder',
+    ],
+}) }}
 
 /**
  * Plugin for {{ namespace }}
  */
-class Plugin extends BasePlugin
+class {{ name }}Plugin extends BasePlugin
 {
     /**
      * Load all the plugin configuration and bootstrap logic.
@@ -85,7 +85,7 @@ class Plugin extends BasePlugin
      * @param \Cake\Console\CommandCollection $commands The command collection to update.
      * @return \Cake\Console\CommandCollection
      */
-    public function console(CommandCollection $commands) : CommandCollection
+    public function console(CommandCollection $commands): CommandCollection
     {
         // Add your commands here
 

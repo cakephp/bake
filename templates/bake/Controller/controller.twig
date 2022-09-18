@@ -17,15 +17,11 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-<?php
-declare(strict_types=1);
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\Controller#{prefix}",
+    classImports: (plugin or prefix) ? ["#{baseNamespace}\\Controller\\AppController"] : [],
+}) }}
 
-namespace {{ namespace }}\Controller{{ prefix }};
-
-{% if plugin or prefix %}
-use {{ baseNamespace }}\Controller\AppController;
-
-{% endif %}
 /**
  * {{ name }} Controller
  *

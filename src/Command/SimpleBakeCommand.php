@@ -16,7 +16,6 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Bake\Utility\TemplateRenderer;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
@@ -100,13 +99,13 @@ abstract class SimpleBakeCommand extends BakeCommand
      */
     protected function bake(string $name, Arguments $args, ConsoleIo $io): void
     {
-        $renderer = new TemplateRenderer($args->getOption('theme'));
-        $renderer->set('name', $name);
-        $renderer->set($this->templateData($args));
-        $contents = $renderer->generate($this->template());
+        $contents = $this->createTemplateRenderer()
+            ->set('name', $name)
+            ->set($this->templateData($args))
+            ->generate($this->template());
 
         $filename = $this->getPath($args) . $this->fileName($name);
-        $io->createFile($filename, $contents, (bool)$args->getOption('force'));
+        $io->createFile($filename, $contents, $this->force);
 
         $emptyFile = $this->getPath($args) . '.gitkeep';
         $this->deleteEmptyFile($emptyFile, $io);

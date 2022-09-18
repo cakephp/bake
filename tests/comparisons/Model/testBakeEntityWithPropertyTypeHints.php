@@ -22,6 +22,7 @@ use Cake\ORM\Entity;
  * @property string $unknown_type
  *
  * @property \Bake\Test\App\Model\Entity\User $user
+ * @property \Bake\Test\App\Model\Entity\TodoReminder $todo_reminder
  * @property \BakeTest\Model\Entity\TodoTask[] $todo_tasks
  * @property \Bake\Test\App\Model\Entity\TodoLabel[] $todo_labels
  */
