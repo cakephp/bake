@@ -348,7 +348,14 @@ class ModelCommand extends BakeCommand
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
+                if (!$this->getTableLocator()->exists($tmpModelName)) {
+                    $this->getTableLocator()->get(
+                        $tmpModelName,
+                        ['connection' => ConnectionManager::get($this->connection)]
+                    );
+                }
                 $associationTable = $this->getTableLocator()->get($tmpModelName);
+                $this->getTableLocator()->remove($tmpModelName);
                 $tables = $this->listAll();
                 // Check if association model could not be instantiated as a subclass but a generic Table instance instead
                 if (
