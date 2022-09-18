@@ -13,17 +13,17 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-<?php
-declare(strict_types=1);
-
-namespace {{ namespace }};
-
-use Cake\Console\CommandCollection;
-use Cake\Core\BasePlugin;
-use Cake\Core\ContainerInterface;
-use Cake\Core\PluginApplicationInterface;
-use Cake\Http\MiddlewareQueue;
-use Cake\Routing\RouteBuilder;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}",
+    classImports: [
+        'Cake\\Console\\CommandCollection',
+        'Cake\\Core\\BasePlugin',
+        'Cake\\Core\\ContainerInterface',
+        'Cake\\Core\\PluginApplicationInterface',
+        'Cake\\Http\\MiddlewareQueue',
+        'Cake\\Routing\\RouteBuilder',
+    ],
+}) }}
 
 /**
  * Plugin for {{ namespace }}

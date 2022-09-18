@@ -94,7 +94,9 @@ class CodeParser extends NodeVisitorAbstract
 
         return new ParsedFile(
             $this->parsed['namespace'],
-            $this->parsed['imports'],
+            $this->parsed['imports']['class'],
+            $this->parsed['imports']['function'],
+            $this->parsed['imports']['const'],
             $this->parsed['class']
         );
     }

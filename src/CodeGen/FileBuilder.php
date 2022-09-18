@@ -80,66 +80,36 @@ class FileBuilder
     }
 
     /**
-     * Returns sorted list of class imports to include in generated file.
+     * Returns class imports merged with user imports from file.
      *
-     * @param array<string|int, string> $generatedClasses Generated class imports
-     * @param array<string|int, string> $generatedFunctions Generated function imports
-     * @param array<string|int, string> $generatedConsts Generated const imports
-     * @return array<string, array<string>>
+     * @param array<string|int, string> $imports Class imports to merge with file imports
+     * @return array<string, string>
      */
-    public function getUses(
-        array $generatedClasses = [],
-        array $generatedFunctions = [],
-        array $generatedConsts = []
-    ): array {
-        $uses = [];
-
-        $imports = $this->mergeUserImports($generatedClasses, $this->parsedFile->imports['class'] ?? []);
-        foreach ($imports as $alias => $type) {
-            $uses['class'][] = $this->getUse('class', $alias, $type);
-        }
-
-        $imports = $this->mergeUserImports($generatedFunctions, $this->parsedFile->imports['function'] ?? []);
-        foreach ($imports as $alias => $type) {
-            $uses['function'][] = $this->getUse('function', $alias, $type);
-        }
-
-        $imports = $this->mergeUserImports($generatedConsts, $this->parsedFile->imports['const'] ?? []);
-        foreach ($imports as $alias => $type) {
-            $uses['const'][] = $this->getUse('const', $alias, $type);
-        }
-
-        return $uses;
+    public function getClassImports(array $imports = []): array
+    {
+        return $this->mergeFileImports($this->normalizeImports($imports), $this->parsedFile->classImports ?? []);
     }
 
     /**
-     * Builds a use statement.
+     * Returns function imports merged with user imports from file.
      *
-     * @param string $section Use section "class', 'function' or 'const
-     * @param string $alias Import alias
-     * @param string $type Import type
-     * @return string
+     * @param array<string|int, string> $imports Function imports to merge with file imports
+     * @return array<string, string>
      */
-    protected function getUse(string $section, string $alias, string $type): string
+    public function getFunctionImports(array $imports = []): array
     {
-        $prefix = '';
-        switch ($section) {
-            case 'class':
-                $prefix = 'use';
-                break;
-            case 'function':
-                $prefix = 'use function';
-                break;
-            case 'const':
-                $prefix = 'use const';
-                break;
-        }
+        return $this->mergeFileImports($this->normalizeImports($imports), $this->parsedFile->functionImports ?? []);
+    }
 
-        if ($type == $alias || substr($type, -strlen("\\{$alias}")) === "\\{$alias}") {
-            return "{$prefix} {$type};";
-        }
-
-        return "{$prefix} {$type} as {$alias};";
+    /**
+     * Returns const imports merged with user imports from file.
+     *
+     * @param array<string|int, string> $imports Const imports to merge with file imports
+     * @return array<string, string>
+     */
+    public function getConstImports(array $imports = []): array
+    {
+        return $this->mergeFileImports($this->normalizeImports($imports), $this->parsedFile->constImports ?? []);
     }
 
     /**
@@ -148,7 +118,7 @@ class FileBuilder
      * @param array<string|int, string> $imports Imports
      * @return array<string, string>
      */
-    protected function normalizeIncludes(array $imports): array
+    protected function normalizeImports(array $imports): array
     {
         $normalized = [];
         foreach ($imports as $alias => $class) {
@@ -168,28 +138,25 @@ class FileBuilder
     }
 
     /**
-     * @param array<string|int, string> $generated Generated imports to merge into
-     * @param array<string, string> $user User imports to merge
+     * @param array<string, string> $imports Imports
+     * @param array<string, string> $fileImports File imports to merge
      * @return array<string, string>
      */
-    protected function mergeUserImports(array $generated, array $user): array
+    protected function mergeFileImports(array $imports, array $fileImports): array
     {
-        $generated = $this->normalizeIncludes($generated);
-
-        $imports = $generated;
-        foreach ($user as $alias => $class) {
-            if (isset($generated[$alias]) && $generated[$alias] !== $class) {
+        foreach ($fileImports as $alias => $class) {
+            if (isset($imports[$alias]) && $imports[$alias] !== $class) {
                 $this->io->warning(sprintf(
-                    'User import `%s` conflicts with generated import, discarding',
+                    'File import `%s` conflicts with generated import, discarding',
                     $class
                 ));
                 continue;
             }
 
-            $generatedAlias = array_search($class, $generated, true);
-            if ($generatedAlias !== false && $generatedAlias != $alias) {
+            $existingAlias = array_search($class, $imports, true);
+            if ($existingAlias !== false && $existingAlias != $alias) {
                 $this->io->warning(sprintf(
-                    'User import `%s` conflicts with generated import, discarding',
+                    'File import `%s` conflicts with generated import, discarding',
                     $class
                 ));
                 continue;

@@ -15,8 +15,10 @@
 #}
 {% set annotations = DocBlock.buildTableAnnotations(associations, associationInfo, behaviors, entity, namespace) %}
 {% set generatedFunctions = ['initialize'] %}
-{% set uses = fileBuilder.uses(['Cake\\ORM\\Query', 'Cake\\ORM\\RulesChecker', 'Cake\\ORM\\Table', 'Cake\\Validation\\Validator'], [], []) %}
-{{ element('Bake.file_header', {namespace: fileBuilder.namespace, uses: uses}) }}
+{{ element('Bake.file_header', {
+    namespace: fileBuilder.namespace,
+    classImports: fileBuilder.classImports(['Cake\\ORM\\Query', 'Cake\\ORM\\RulesChecker', 'Cake\\ORM\\Table', 'Cake\\Validation\\Validator']),
+}) }}
 
 {{ DocBlock.classDescription(name, 'Model', annotations)|raw }}
 class {{ name }}Table extends Table

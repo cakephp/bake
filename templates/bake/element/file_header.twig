@@ -1,5 +1,4 @@
 <?php
 declare(strict_types=1);
-
-namespace {{ namespace }};
-{{-  Bake.concat('\n', [uses.class ?? [], uses.function ?? [], uses.const ?? []], '\n\n') }}
+{{- namespace ? "\n\nnamespace #{namespace};" : '' }}
+{{- Bake.concat('\n', [Bake.classUses(classImports ?? []), Bake.functionUses(functionImports ?? []), Bake.constUses(constImports ?? [])], '\n\n') }}

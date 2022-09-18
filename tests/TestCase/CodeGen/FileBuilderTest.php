@@ -82,44 +82,54 @@ PARSE
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
         // Pass required imports out of order
-        $uses = $builder->getUses(['Table' => 'Cake\ORM\Table', 'Cake\ORM\Query']);
         $this->assertSame(
             [
-                'class' => [
-                    'use Cake\ORM\Query;',
-                    'use Cake\ORM\Table;',
-                    'use MyApp\Expression\MyExpression;',
-                    'use RuntimeException as MyException;',
-                ],
-                'function' => [
-                    'use function implode as custom_implode;',
-                    'use function MyApp\my_function;',
-                ],
-                'const' => [
-                    'use const DATE_ATOM as CUSTOM_DATE;',
-                    'use const MyApp\MY_CONSTANT;',
-                ],
+                'Query' => 'Cake\ORM\Query',
+                'Table' => 'Cake\ORM\Table',
+                'MyExpression' => 'MyApp\Expression\MyExpression',
+                'MyException' => 'RuntimeException',
             ],
-            $uses
+            $builder->getClassImports(['Table' => 'Cake\ORM\Table', 'Cake\ORM\Query'])
+        );
+
+        $this->assertSame(
+            [
+                'custom_implode' => 'implode',
+                'my_function' => 'MyApp\my_function',
+            ],
+            $builder->getFunctionImports()
+        );
+
+        $this->assertSame(
+            [
+                'CUSTOM_DATE' => 'DATE_ATOM',
+                'MY_CONSTANT' => 'MyApp\MY_CONSTANT',
+            ],
+            $builder->getConstImports()
         );
 
         // Build without existing file
         $builder = new FileBuilder($this->io, 'MyApp\Model');
-        $uses = $builder->getUses(['Cake\ORM\Table', 'Cake\ORM\Query'], ['implode'], ['DATE_ATOM']);
         $this->assertSame(
             [
-                'class' => [
-                    'use Cake\ORM\Query;',
-                    'use Cake\ORM\Table;',
-                ],
-                'function' => [
-                    'use function implode;',
-                ],
-                'const' => [
-                    'use const DATE_ATOM;',
-                ],
+                'Query' => 'Cake\ORM\Query',
+                'Table' => 'Cake\ORM\Table',
             ],
-            $uses
+            $builder->getClassImports(['Cake\ORM\Table', 'Cake\ORM\Query'])
+        );
+
+        $this->assertSame(
+            [
+                'implode' => 'implode',
+            ],
+            $builder->getFunctionImports(['implode'])
+        );
+
+        $this->assertSame(
+            [
+                'DATE_ATOM' => 'DATE_ATOM',
+            ],
+            $builder->getConstImports(['DATE_ATOM'])
         );
     }
 
@@ -139,8 +149,8 @@ PARSE
 
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
-        $builder->getUses(['Cake\ORM\Query']);
-        $this->assertThat('User import `Cake\ORM\Query` conflicts with generated import, discarding', new ContentsContain($this->out->messages(), 'output'));
+        $builder->getClassImports(['Cake\ORM\Query']);
+        $this->assertThat('File import `Cake\ORM\Query` conflicts with generated import, discarding', new ContentsContain($this->out->messages(), 'output'));
     }
 
     public function testImportConflictUserAlias(): void
@@ -159,7 +169,7 @@ PARSE
 
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
-        $builder->getUses(['Cake\ORM\Query']);
-        $this->assertThat('User import `MyApp\Query` conflicts with generated import, discarding', new ContentsContain($this->out->messages(), 'output'));
+        $builder->getClassImports(['Cake\ORM\Query']);
+        $this->assertThat('File import `MyApp\Query` conflicts with generated import, discarding', new ContentsContain($this->out->messages(), 'output'));
     }
 }
