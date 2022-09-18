@@ -44,7 +44,7 @@ class TemplateRenderer
      *
      * @var string|null
      */
-    protected string $theme;
+    protected ?string $theme;
 
     /**
      * Constructor

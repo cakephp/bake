@@ -48,7 +48,7 @@ trait CommonOptionsTrait
     /**
      * @var bool
      */
-    public $force = false;
+    public bool $force = false;
 
     /**
      * Pull common/frequently used arguments & options into properties

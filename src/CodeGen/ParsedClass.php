@@ -24,22 +24,22 @@ class ParsedClass
     /**
      * @var string
      */
-    public $name;
+    public string $name;
 
     /**
      * @var array<string, string>
      */
-    public $constants;
+    public array $constants;
 
     /**
      * @var array<string, string>
      */
-    public $properties;
+    public array $properties;
 
     /**
      * @var array<string, string>
      */
-    public $methods;
+    public array $methods;
 
     /**
      * @param string $name Class name

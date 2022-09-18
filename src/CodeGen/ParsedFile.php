@@ -24,27 +24,27 @@ class ParsedFile
     /**
      * @var string
      */
-    public $namespace;
+    public string $namespace;
 
     /**
      * @var array<string, string>
      */
-    public $classImports;
+    public array $classImports;
 
     /**
      * @var array<string, string>
      */
-    public $functionImports;
+    public array $functionImports;
 
     /**
      * @var array<string, string>
      */
-    public $constImports;
+    public array $constImports;
 
     /**
      * @var \Bake\CodeGen\ParsedClass
      */
-    public $class;
+    public ParsedClass $class;
 
     /**
      * @param string $namespace Namespace

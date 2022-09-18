@@ -90,7 +90,7 @@ class TemplateCommand extends BakeCommand
      *
      * @var string
      */
-    public $ext = 'php';
+    public string $ext = 'php';
 
     /**
      * Override initialize
