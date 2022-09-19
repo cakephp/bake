@@ -16,8 +16,8 @@ use MyApp\Test;
  * @property string $effort
  * @property bool $completed
  * @property int $todo_task_count
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $updated
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $updated
  *
  * @property \Bake\Test\App\Model\Entity\User $user
  * @property \Bake\Test\App\Model\Entity\TodoReminder $todo_reminder
@@ -36,18 +36,18 @@ class TodoItem extends Entity
      *
      * @var array<string>
      */
-    protected $_hidden = [
+    protected array $_hidden = [
         'user_id',
     ];
 
-    protected $_accessible = [
+    protected array $_accessible = [
         // should not overwritten
     ];
 
     /**
      * @var string
      */
-    protected $myProperty = 'string';
+    protected string $myProperty = 'string';
 
     protected function _getName(): string
     {

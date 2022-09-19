@@ -1978,14 +1978,14 @@ class TodoItem
      */
     protected const MY_CONST = 1;
 
-    protected $_accessible = [
+    protected array $_accessible = [
         // should not overwritten
     ];
 
     /**
      * @var string
      */
-    protected $myProperty = 'string';
+    protected string $myProperty = 'string';
 
     protected function _getName(): string
     {

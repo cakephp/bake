@@ -11,8 +11,8 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string|null $username
  * @property string|null $password
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $updated
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $updated
  *
  * @property \BakeTest\Model\Entity\Comment[] $comments
  * @property \BakeTest\Model\Entity\TodoItem[] $todo_items
@@ -28,7 +28,7 @@ class User extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'username' => true,
         'password' => true,
         'created' => true,
@@ -42,7 +42,7 @@ class User extends Entity
      *
      * @var array<string>
      */
-    protected $_hidden = [
+    protected array $_hidden = [
         'password',
     ];
 }
