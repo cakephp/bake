@@ -60,7 +60,7 @@ class ImportHelper
             if (isset($existing[$alias]) && $existing[$alias] !== $class) {
                 if ($io) {
                     $io->warning(sprintf(
-                        'Import `%s` conflicts with existing import, discarding',
+                        'Import `%s` conflicts with existing import, discarding.',
                         $class
                     ));
                 }
@@ -71,7 +71,7 @@ class ImportHelper
             if ($existingAlias !== false && $existingAlias != $alias) {
                 if ($io) {
                     $io->warning(sprintf(
-                        'Import `%s` conflicts with existing import, discarding',
+                        'Import `%s` conflicts with existing import, discarding.',
                         $class
                     ));
                 }
