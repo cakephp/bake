@@ -1900,7 +1900,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Model\Table;
 
-use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -1943,7 +1943,7 @@ class TodoItemsTable extends Table
 
     /**
      */
-    public function findByPriority(Query $query): Query
+    public function findByPriority(SelectQuery $query): SelectQuery
     {
         throw new CustomException();
 
