@@ -150,7 +150,7 @@ PARSE
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
         $builder->getClassImports(['Cake\ORM\Query']);
-        $this->assertThat('File import `Cake\ORM\Query` conflicts with generated import, discarding', new ContentsContain($this->out->messages(), 'output'));
+        $this->assertThat('Import `Cake\ORM\Query` conflicts with existing import, discarding', new ContentsContain($this->out->messages(), 'output'));
     }
 
     public function testImportConflictUserAlias(): void
@@ -170,6 +170,6 @@ PARSE
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
         $builder->getClassImports(['Cake\ORM\Query']);
-        $this->assertThat('File import `MyApp\Query` conflicts with generated import, discarding', new ContentsContain($this->out->messages(), 'output'));
+        $this->assertThat('Import `MyApp\Query` conflicts with existing import, discarding', new ContentsContain($this->out->messages(), 'output'));
     }
 }

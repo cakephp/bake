@@ -87,7 +87,7 @@ class FileBuilder
      */
     public function getClassImports(array $imports = []): array
     {
-        return $this->mergeFileImports($this->normalizeImports($imports), $this->parsedFile->classImports ?? []);
+        return ImportHelper::merge($imports, $this->parsedFile->classImports ?? [], $this->io);
     }
 
     /**
@@ -98,7 +98,7 @@ class FileBuilder
      */
     public function getFunctionImports(array $imports = []): array
     {
-        return $this->mergeFileImports($this->normalizeImports($imports), $this->parsedFile->functionImports ?? []);
+        return ImportHelper::merge($imports, $this->parsedFile->functionImports ?? [], $this->io);
     }
 
     /**
@@ -109,64 +109,6 @@ class FileBuilder
      */
     public function getConstImports(array $imports = []): array
     {
-        return $this->mergeFileImports($this->normalizeImports($imports), $this->parsedFile->constImports ?? []);
-    }
-
-    /**
-     * Normalizes imports included from generated code into [alias => name] format.
-     *
-     * @param array<string|int, string> $imports Imports
-     * @return array<string, string>
-     */
-    protected function normalizeImports(array $imports): array
-    {
-        $normalized = [];
-        foreach ($imports as $alias => $class) {
-            if (is_int($alias)) {
-                $last = strrpos($class, '\\', -1);
-                if ($last !== false) {
-                    $alias = substr($class, strrpos($class, '\\', -1) + 1);
-                } else {
-                    $alias = $class;
-                }
-            }
-
-            $normalized[$alias] = $class;
-        }
-
-        return $normalized;
-    }
-
-    /**
-     * @param array<string, string> $imports Imports
-     * @param array<string, string> $fileImports File imports to merge
-     * @return array<string, string>
-     */
-    protected function mergeFileImports(array $imports, array $fileImports): array
-    {
-        foreach ($fileImports as $alias => $class) {
-            if (isset($imports[$alias]) && $imports[$alias] !== $class) {
-                $this->io->warning(sprintf(
-                    'File import `%s` conflicts with generated import, discarding',
-                    $class
-                ));
-                continue;
-            }
-
-            $existingAlias = array_search($class, $imports, true);
-            if ($existingAlias !== false && $existingAlias != $alias) {
-                $this->io->warning(sprintf(
-                    'File import `%s` conflicts with generated import, discarding',
-                    $class
-                ));
-                continue;
-            }
-
-            $imports[$alias] = $class;
-        }
-
-        asort($imports, SORT_STRING | SORT_FLAG_CASE);
-
-        return $imports;
+        return ImportHelper::merge($imports, $this->parsedFile->constImports ?? [], $this->io);
     }
 }
