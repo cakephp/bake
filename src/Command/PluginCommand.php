@@ -203,7 +203,7 @@ class PluginCommand extends BakeCommand
             $templatesPath = array_shift($paths) . BakeView::BAKE_TEMPLATE_FOLDER . '/Plugin';
             if (is_dir($templatesPath)) {
                 $templates = array_keys(iterator_to_array(
-                    $fs->findRecursive($templatesPath, '/.*\.(twig|php)/')
+                    $fs->findRecursive($templatesPath, '/\.twig$/')
                 ));
             }
         } while (!$templates);
