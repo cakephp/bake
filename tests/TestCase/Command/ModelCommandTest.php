@@ -1901,6 +1901,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Model\Table;
 
+use App\SomeInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -1910,7 +1911,7 @@ use RuntimeException as CustomException; // should be kept
 /**
  * TodoItems Model
  */
-class TodoItemsTable extends Table
+class TodoItemsTable extends Table implements SomeInterface
 {
     /**
      * @var int
@@ -1970,9 +1971,10 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Model\Entity;
 
+use Authorization\IdentityInterface;
 use MyApp\Test;
 
-class TodoItem
+class TodoItem implements IdentityInterface
 {
     /**
      * @var int

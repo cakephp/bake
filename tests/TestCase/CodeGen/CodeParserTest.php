@@ -121,6 +121,32 @@ PARSE;
         $this->assertSame($code, $file->class->methods['findAttributes']);
     }
 
+    public function testClassImplements(): void
+    {
+        $parser = new CodeParser();
+        $file = $parser->parseFile(<<<'PARSE'
+<?php
+
+namespace Test;
+
+use Authorization\IdentityInterface;
+use SomeOther;
+
+class TestTable extends \Cake\ORM\Table implements IdentityInterface, SomeOther\Interface
+{
+}
+PARSE
+        );
+
+        $this->assertSame(
+            [
+                'IdentityInterface',
+                'SomeOther\Interface',
+            ],
+            $file->class->implements
+        );
+    }
+
     public function testUseStatements(): void
     {
         $parser = new CodeParser();

@@ -31,7 +31,7 @@
 }) }}
 
 {{ DocBlock.classDescription(name, 'Entity', annotations)|raw }}
-class {{ name }} extends Entity
+class {{ name }} extends Entity{{ fileBuilder.classBuilder.implements ? ' implements ' ~ fileBuilder.classBuilder.implements|join(', ') : '' }}
 {
 {% set userConstants = fileBuilder.classBuilder.userConstants([]) %}
 {% if userConstants %}

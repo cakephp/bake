@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Model\Table;
 
+use App\SomeInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -33,7 +34,7 @@ use RuntimeException as CustomException;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class TodoItemsTable extends Table
+class TodoItemsTable extends Table implements SomeInterface
 {
     /**
      * @var int

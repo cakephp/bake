@@ -190,7 +190,17 @@ class CodeParser extends NodeVisitorAbstract
                 $methods[$name] = $this->getNodeCode($method);
             }
 
-            $this->parsed['class'] = new ParsedClass((string)$node->name, $constants, $properties, $methods);
+            $implements = array_map(function ($name) {
+                return (string)$name;
+            }, $node->implements);
+
+            $this->parsed['class'] = new ParsedClass(
+                (string)$node->name,
+                $implements,
+                $constants,
+                $properties,
+                $methods
+            );
 
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }

@@ -27,6 +27,11 @@ class ParsedClass
     public $name;
 
     /**
+     * @var array<string>
+     */
+    public $implements;
+
+    /**
      * @var array<string, string>
      */
     public $constants;
@@ -43,13 +48,15 @@ class ParsedClass
 
     /**
      * @param string $name Class name
+     * @param array<string> $implements List of implements
      * @param array<string, string> $constants Class constants
      * @param array<string, string> $properties Class properties
      * @param array<string, string> $methods Class methods
      */
-    public function __construct(string $name, array $constants, array $properties, array $methods)
+    public function __construct(string $name, array $implements, array $constants, array $properties, array $methods)
     {
         $this->name = $name;
+        $this->implements = $implements;
         $this->constants = $constants;
         $this->properties = $properties;
         $this->methods = $methods;
