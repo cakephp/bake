@@ -14,7 +14,7 @@
             <?= $this->Html->link(__('New Template Task Comment'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
-    <div class="column-responsive column-80">
+    <div class="column column-80">
         <div class="templateTaskComments view content">
             <h3><?= h($templateTaskComment->name) ?></h3>
             <table>

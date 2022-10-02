@@ -14,7 +14,7 @@
             <?= $this->Html->link(__('New Test Template Model'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
-    <div class="column-responsive column-80">
+    <div class="column column-80">
         <div class="testTemplateModels view content">
             <h3><?= h($testTemplateModel->name) ?></h3>
             <table>
