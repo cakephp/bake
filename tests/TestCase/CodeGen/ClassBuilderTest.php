@@ -35,6 +35,35 @@ class ClassBuilderTest extends TestCase
         $this->io = new ConsoleIo(new ConsoleOutput());
     }
 
+    public function testImplements(): void
+    {
+        $parser = new CodeParser();
+        $file = $parser->parseFile(<<<'PARSE'
+<?php
+
+namespace MyApp\Model;
+
+use Authorization\IdentityInterface;
+use SomeOther;
+
+class User implements SomeOther\Interface, IdentityInterface
+{
+}
+PARSE
+        );
+
+        $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
+        $implements = $builder->classBuilder()->getImplements(['NewInterface', 'SomeOther\Interface']);
+        $this->assertSame(
+            [
+                'NewInterface',
+                'SomeOther\Interface',
+                'IdentityInterface',
+            ],
+            array_values($implements)
+        );
+    }
+
     public function testUserConstants(): void
     {
         $parser = new CodeParser();
