@@ -14,7 +14,7 @@
             <?= $this->Html->link(__('New Hidden Field'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
-    <div class="column-responsive column-80">
+    <div class="column column-80">
         <div class="hiddenFields view content">
             <h3><?= h($hiddenField->id) ?></h3>
             <table>

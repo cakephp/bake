@@ -11,7 +11,7 @@
             <?= $this->Html->link(__('List Test Template Models'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
-    <div class="column-responsive column-80">
+    <div class="column column-80">
         <div class="testTemplateModels form content">
             <?= $this->Form->create($testTemplateModel) ?>
             <fieldset>
