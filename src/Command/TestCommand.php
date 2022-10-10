@@ -57,6 +57,7 @@ class TestCommand extends BakeCommand
         'Mailer' => 'Mailer',
         'Command' => 'Command',
         'CommandHelper' => 'Command\Helper',
+        'Middleware' => 'Middleware',
     ];
 
     /**
@@ -79,6 +80,7 @@ class TestCommand extends BakeCommand
         'Mailer' => 'Mailer',
         'Command' => 'Command',
         'CommandHelper' => 'Helper',
+        'Middleware' => 'Middleware',
     ];
 
     /**
