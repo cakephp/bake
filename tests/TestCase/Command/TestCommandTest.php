@@ -292,6 +292,8 @@ class TestCommandTest extends TestCase
             ['Task', 'ExampleTask', 'App\Shell\Task\ExampleTask'],
             ['Cell', 'Example', 'App\View\Cell\ExampleCell'],
             ['Cell', 'ExampleCell', 'App\View\Cell\ExampleCell'],
+            ['Middleware', 'Example', 'App\Middleware\ExampleMiddleware'],
+            ['Middleware', 'ExampleMiddleware', 'App\Middleware\ExampleMiddleware'],
         ];
     }
 
@@ -589,6 +591,23 @@ class TestCommandTest extends TestCase
             ROOT . 'tests/TestCase/Shell/Helper/ExampleHelperTest.php',
         ];
         $this->exec('bake test shell_helper Example');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
+    }
+
+    /**
+     * test baking middleware test files
+     *
+     * @return void
+     */
+    public function testBakeMiddlewareTest()
+    {
+        $this->generatedFiles = [
+            ROOT . 'tests/TestCase/Middleware/ExampleMiddlewareTest.php',
+        ];
+        $this->exec('bake test Middleware ExampleMiddleware');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
