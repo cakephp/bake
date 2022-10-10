@@ -292,8 +292,6 @@ class TestCommandTest extends TestCase
             ['Task', 'ExampleTask', 'App\Shell\Task\ExampleTask'],
             ['Cell', 'Example', 'App\View\Cell\ExampleCell'],
             ['Cell', 'ExampleCell', 'App\View\Cell\ExampleCell'],
-            ['Middleware', 'Example', 'App\Middleware\ExampleMiddleware'],
-            ['Middleware', 'ExampleMiddleware', 'App\Middleware\ExampleMiddleware'],
         ];
     }
 
@@ -598,23 +596,6 @@ class TestCommandTest extends TestCase
     }
 
     /**
-     * test baking middleware test files
-     *
-     * @return void
-     */
-    public function testBakeMiddlewareTest()
-    {
-        $this->generatedFiles = [
-            ROOT . 'tests/TestCase/Middleware/ExampleMiddlewareTest.php',
-        ];
-        $this->exec('bake test Middleware ExampleMiddleware');
-
-        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
-        $this->assertFilesExist($this->generatedFiles);
-        $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
-    }
-
-    /**
      * Test baking an unknown class type.
      *
      * @return void
@@ -765,8 +746,6 @@ class TestCommandTest extends TestCase
             ],
             ['Shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
             ['shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
-            ['Middleware', 'App\Middleware\ExampleMiddleware', 'TestCase/Middleware/ExampleMiddlewareTest.php'],
-            ['middleware', 'App\Middleware\ExampleMiddleware', 'TestCase/Middleware/ExampleMiddlewareTest.php'],
         ];
     }
 
@@ -821,7 +800,6 @@ class TestCommandTest extends TestCase
             ['Behavior', 'Model\Behavior'],
             ['Helper', 'View\Helper'],
             ['ShellHelper', 'Shell\Helper'],
-            ['Middleware', 'Middleware'],
         ];
     }
 
