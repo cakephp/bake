@@ -765,6 +765,8 @@ class TestCommandTest extends TestCase
             ],
             ['Shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
             ['shell', 'App\Shell\ExampleShell', 'TestCase/Shell/ExampleShellTest.php'],
+            ['Middleware', 'App\Middleware\ExampleMiddleware', 'TestCase/Middleware/ExampleMiddlewareTest.php'],
+            ['middleware', 'App\Middleware\ExampleMiddleware', 'TestCase/Middleware/ExampleMiddlewareTest.php'],
         ];
     }
 
@@ -819,6 +821,7 @@ class TestCommandTest extends TestCase
             ['Behavior', 'Model\Behavior'],
             ['Helper', 'View\Helper'],
             ['ShellHelper', 'Shell\Helper'],
+            ['Middleware', 'Middleware'],
         ];
     }
 
