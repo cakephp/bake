@@ -34,10 +34,9 @@ class BakeArticlesController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['BakeUsers'],
-        ];
-        $bakeArticles = $this->paginate($this->BakeArticles);
+        $query = $this->BakeArticles->find()
+            ->contain(['BakeUsers']);
+        $bakeArticles = $this->paginate($query);
 
         $this->set(compact('bakeArticles'));
     }
