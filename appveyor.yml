@@ -45,7 +45,7 @@ install:
 before_test:
 # This script solves the "Database 'model' is being recovered. Waiting until recovery is finished."
 # This solution comes from https://gist.github.com/jonathanhickford/1cb0d6665adab8b9c664
-# and is follow by http://help.appveyor.com/discussions/suggestions/264-database-mssqlsystemresource-is-being-recovered-waiting-for-sql-server-to-start
+# and is follow by https://help.appveyor.com/discussions/suggestions/264-database-mssqlsystemresource-is-being-recovered-waiting-for-sql-server-to-start
 - ps: >-
     $tries = 5;
 
