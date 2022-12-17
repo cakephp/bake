@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Model\Entity;
 
+use Authorization\IdentityInterface;
 use Cake\ORM\Entity;
 use MyApp\Test;
 
@@ -24,7 +25,7 @@ use MyApp\Test;
  * @property \Bake\Test\App\Model\Entity\TodoTask[] $todo_tasks
  * @property \Bake\Test\App\Model\Entity\TodoLabel[] $todo_labels
  */
-class TodoItem extends Entity
+class TodoItem extends Entity implements IdentityInterface
 {
     /**
      * @var int

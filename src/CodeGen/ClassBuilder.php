@@ -32,6 +32,17 @@ class ClassBuilder
     }
 
     /**
+     * Returns the list of implements to add to class.
+     *
+     * @param array<string> $generated Implements that are generated
+     * @return array<string>
+     */
+    public function getImplements(array $generated = []): array
+    {
+        return array_unique(array_merge($generated, $this->parsedClass->implements ?? []));
+    }
+
+    /**
      * Returns the user functions from existing file.
      *
      * @param array<string> $generated Constants that are generated

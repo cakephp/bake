@@ -39,14 +39,14 @@ class MiddlewareCommandTest extends TestCase
     }
 
     /**
-     * Test the excute method.
+     * Test the execute method.
      *
      * @return void
      */
     public function testMain()
     {
         $this->generatedFile = APP . 'Middleware/ExampleMiddleware.php';
-        $this->exec('bake middleware example');
+        $this->exec('bake middleware example', ['y']);
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains('class ExampleMiddleware', $this->generatedFile);
@@ -63,7 +63,7 @@ class MiddlewareCommandTest extends TestCase
         $path = Plugin::path('TestBake');
 
         $this->generatedFile = $path . 'src/Middleware/ExampleMiddleware.php';
-        $this->exec('bake middleware TestBake.example');
+        $this->exec('bake middleware TestBake.example', ['y']);
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains('class ExampleMiddleware', $this->generatedFile);
@@ -80,7 +80,7 @@ class MiddlewareCommandTest extends TestCase
         $path = Plugin::path('TestBake');
 
         $this->generatedFile = $path . 'src/Middleware/ExampleMiddleware.php';
-        $this->exec('bake middleware TestBake.example');
+        $this->exec('bake middleware TestBake.example', ['y']);
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));

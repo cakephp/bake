@@ -156,4 +156,14 @@ class SimpleBakeCommandTest extends TestCase
         $this->assertIsString($task->fileName('Example'));
         $this->assertIsString($task->template());
     }
+
+    public function testBakeComponent(): void
+    {
+        $this->generatedFile = APP . 'Controller/Component/ExampleComponent.php';
+        $this->exec('bake component --no-test Example');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertFileContains('class ExampleComponent extends Component', $this->generatedFile);
+    }
 }

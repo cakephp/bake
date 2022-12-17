@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\View\Helper;
 
+use Bake\CodeGen\ImportHelper;
 use Bake\Utility\Model\AssociationFilter;
 use Brick\VarExporter\VarExporter;
 use Cake\Core\Configure;
@@ -466,7 +467,7 @@ class BakeHelper extends Helper
     {
         $uses = [];
 
-        $imports = $this->normalizeImports($imports);
+        $imports = ImportHelper::normalize($imports);
         asort($imports, SORT_STRING | SORT_FLAG_CASE);
         foreach ($imports as $alias => $type) {
             $uses[] = 'use ' . $this->getUseType($alias, $type) . ';';
@@ -485,7 +486,7 @@ class BakeHelper extends Helper
     {
         $uses = [];
 
-        $imports = $this->normalizeImports($imports);
+        $imports = ImportHelper::normalize($imports);
         asort($imports, SORT_STRING | SORT_FLAG_CASE);
         foreach ($imports as $alias => $type) {
             $uses[] = 'use function ' . $this->getUseType($alias, $type) . ';';
@@ -504,38 +505,13 @@ class BakeHelper extends Helper
     {
         $uses = [];
 
-        $imports = $this->normalizeImports($imports);
+        $imports = ImportHelper::normalize($imports);
         asort($imports, SORT_STRING | SORT_FLAG_CASE);
         foreach ($imports as $alias => $type) {
             $uses[] = 'use const ' . $this->getUseType($alias, $type) . ';';
         }
 
         return implode("\n", $uses);
-    }
-
-    /**
-     * Normalizes imports included from generated code into [alias => name] format.
-     *
-     * @param array<string|int, string> $imports Imports
-     * @return array<string, string>
-     */
-    protected function normalizeImports(array $imports): array
-    {
-        $normalized = [];
-        foreach ($imports as $alias => $class) {
-            if (is_int($alias)) {
-                $last = strrpos($class, '\\', -1);
-                if ($last !== false) {
-                    $alias = substr($class, strrpos($class, '\\', -1) + 1);
-                } else {
-                    $alias = $class;
-                }
-            }
-
-            $normalized[$alias] = $class;
-        }
-
-        return $normalized;
     }
 
     /**
