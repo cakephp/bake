@@ -26,8 +26,9 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
-use Cake\Filesystem\Filesystem;
+use Cake\Utility\Filesystem;
 use Cake\Utility\Inflector;
+use RuntimeException;
 
 /**
  * The Plugin Command handles creating an empty plugin, ready to be used
@@ -39,7 +40,7 @@ class PluginCommand extends BakeCommand
      *
      * @var string
      */
-    public $path;
+    public string $path;
 
     /**
      * initialize
@@ -296,7 +297,7 @@ class PluginCommand extends BakeCommand
             $io->out($process->call($command));
 
             chdir($cwd);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $error = $e->getMessage();
             $io->error(sprintf('Could not run `composer dump-autoload`: %s', $error));
             $this->abort();
@@ -397,7 +398,7 @@ class PluginCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return string|bool Either the path to composer or false if it cannot be found.
      */
-    public function findComposer(Arguments $args, ConsoleIo $io)
+    public function findComposer(Arguments $args, ConsoleIo $io): string|bool
     {
         if ($args->hasOption('composer')) {
             /** @var string $path */
@@ -423,7 +424,7 @@ class PluginCommand extends BakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return string|bool
      */
-    protected function _searchPath(array $path, ConsoleIo $io)
+    protected function _searchPath(array $path, ConsoleIo $io): string|bool
     {
         $composer = ['composer.phar', 'composer'];
         foreach ($path as $dir) {

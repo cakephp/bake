@@ -21,6 +21,9 @@ use Bake\Test\TestCase\TestCase;
 use Cake\Console\Arguments;
 use Cake\Console\CommandInterface;
 use Cake\Console\ConsoleIo;
+use Cake\Console\Exception\StopException;
+use Cake\Console\TestSuite\StubConsoleInput;
+use Cake\Console\TestSuite\StubConsoleOutput;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Database\Driver\Mysql;
@@ -42,7 +45,7 @@ class ModelCommandTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.Comments',
         'plugin.Bake.Tags',
         'plugin.Bake.ArticlesTags',
@@ -68,7 +71,6 @@ class ModelCommandTest extends TestCase
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
 
         $this->getTableLocator()->clear();
     }
@@ -171,9 +173,14 @@ class ModelCommandTest extends TestCase
         $schema = $command->getTableObject('TodoItems', 'todo_items')->getSchema();
         $schema->addColumn('_valid', ['type' => 'string', 'length' => null]);
 
-        $io = $this->createMock(ConsoleIo::class);
-        $io->expects($this->never())->method('abort');
-        $command->validateNames($schema, $io);
+        $abortCalled = false;
+        try {
+            $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
+            $command->validateNames($schema, $io);
+        } catch (StopException) {
+            $abortCalled = true;
+        }
+        $this->assertFalse($abortCalled);
     }
 
     /**
@@ -187,8 +194,8 @@ class ModelCommandTest extends TestCase
         $schema = $command->getTableObject('TodoItems', 'todo_items')->getSchema();
         $schema->addColumn('0invalid', ['type' => 'string', 'length' => null]);
 
-        $io = $this->createMock(ConsoleIo::class);
-        $io->expects($this->once())->method('abort');
+        $this->expectException(StopException::class);
+        $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
         $command->validateNames($schema, $io);
     }
 
@@ -1902,7 +1909,7 @@ declare(strict_types=1);
 namespace Bake\Test\App\Model\Table;
 
 use App\SomeInterface;
-use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -1945,7 +1952,7 @@ class TodoItemsTable extends Table implements SomeInterface
 
     /**
      */
-    public function findByPriority(Query $query): Query
+    public function findByPriority(SelectQuery $query): SelectQuery
     {
         throw new CustomException();
 
@@ -1981,14 +1988,14 @@ class TodoItem implements IdentityInterface
      */
     protected const MY_CONST = 1;
 
-    protected $_accessible = [
+    protected array $_accessible = [
         // should not overwritten
     ];
 
     /**
      * @var string
      */
-    protected $myProperty = 'string';
+    protected string $myProperty = 'string';
 
     protected function _getName(): string
     {

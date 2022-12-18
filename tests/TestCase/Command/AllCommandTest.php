@@ -31,7 +31,7 @@ class AllCommandTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.Products',
         'plugin.Bake.ProductVersions',
     ];
@@ -39,7 +39,7 @@ class AllCommandTest extends TestCase
     /**
      * @var array<string>
      */
-    protected $tables = ['products', 'product_versions'];
+    protected array $tables = ['products', 'product_versions'];
 
     /**
      * setUp method
@@ -51,7 +51,6 @@ class AllCommandTest extends TestCase
         parent::setUp();
 
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
 
         $connection = ConnectionManager::get('test');
         $subsetCollection = new SubsetSchemaCollection($connection->getSchemaCollection(), $this->tables);

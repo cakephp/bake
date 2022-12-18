@@ -21,21 +21,4 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class BakeArticlesBakeTagsFixture extends TestFixture
 {
-    /**
-     * fields property
-     *
-     * @var array<string, mixed>
-     */
-    public $fields = [
-        'bake_article_id' => ['type' => 'integer', 'null' => false],
-        'bake_tag_id' => ['type' => 'integer', 'null' => false],
-        '_constraints' => ['UNIQUE_TAG' => ['type' => 'unique', 'columns' => ['bake_article_id', 'bake_tag_id']]],
-    ];
-
-    /**
-     * records property
-     *
-     * @var array
-     */
-    public $records = [];
 }

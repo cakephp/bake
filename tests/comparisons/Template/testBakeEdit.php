@@ -17,7 +17,7 @@
             <?= $this->Html->link(__('List Authors'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
-    <div class="column-responsive column-80">
+    <div class="column column-80">
         <div class="authors form content">
             <?= $this->Form->create($author) ?>
             <fieldset>

@@ -35,7 +35,6 @@ class CommandHelperTest extends TestCase
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Command' . DS;
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
     }
 
     /**

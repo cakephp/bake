@@ -24,27 +24,4 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class TodoTasksFixture extends TestFixture
 {
-    /**
-     * fields property
-     *
-     * @var array<string, mixed>
-     */
-    public $fields = [
-        'uid' => ['type' => 'integer'],
-        'todo_item_id' => ['type' => 'integer', 'null' => false],
-        'title' => ['type' => 'string', 'length' => 50, 'null' => false],
-        'body' => 'text',
-        'completed' => ['type' => 'boolean', 'default' => false, 'null' => false],
-        'effort' => ['type' => 'decimal', 'default' => 0.0, 'null' => false, 'unsigned' => true],
-        'created' => 'datetime',
-        'updated' => 'datetime',
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['uid']]],
-    ];
-
-    /**
-     * records property
-     *
-     * @var array
-     */
-    public $records = [];
 }

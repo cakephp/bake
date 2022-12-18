@@ -33,8 +33,8 @@ class ArticlesTable extends Table
     /**
      * Find published
      *
-     * @param  Cake\ORM\Query $query The query
-     * @return Cake\ORM\Query
+     * @param  Cake\ORM\Query\SelectQuery $query The query
+     * @return Cake\ORM\Query\SelectQuery
      */
     public function findPublished($query)
     {

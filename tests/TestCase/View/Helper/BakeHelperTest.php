@@ -35,7 +35,7 @@ class BakeHelperTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.BakeArticles',
         'plugin.Bake.BakeComments',
         'plugin.Bake.BakeArticlesBakeTags',
@@ -254,14 +254,14 @@ class BakeHelperTest extends TestCase
     public function testConcat(): void
     {
         $statements = [
-            'use Cake\ORM\Query;',
+            'use Cake\ORM\Query\SelectQuery;',
             'use RuntimeException as MyException;',
             '',
         ];
         $code = $this->BakeHelper->concat("\n", $statements);
         $this->assertSame(
             <<<'PARSE'
-use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use RuntimeException as MyException;
 PARSE
             ,
@@ -272,7 +272,7 @@ PARSE
         $this->assertSame(
             <<<'PARSE'
 
-use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use RuntimeException as MyException;
 
 PARSE

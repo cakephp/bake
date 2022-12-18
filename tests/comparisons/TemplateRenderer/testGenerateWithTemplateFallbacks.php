@@ -15,5 +15,5 @@ class ArticlesFixture extends TestFixture
      *
      * @var string
      */
-    public $table = 'articles';
+    public string $table = 'articles';
 }

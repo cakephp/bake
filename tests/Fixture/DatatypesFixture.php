@@ -22,29 +22,11 @@ use Cake\TestSuite\Fixture\TestFixture;
 class DatatypesFixture extends TestFixture
 {
     /**
-     * Fields property
-     *
-     * @var array<string, mixed>
-     */
-    public $fields = [
-        'id' => ['type' => 'integer', 'null' => false],
-        'decimal_field' => ['type' => 'decimal', 'length' => '6', 'precision' => 3, 'default' => '0.000'],
-        'float_field' => ['type' => 'float', 'length' => '5,2', 'null' => false, 'default' => null],
-        'huge_int' => ['type' => 'biginteger'],
-        'small_int' => ['type' => 'smallinteger'],
-        'tiny_int' => ['type' => 'tinyinteger'],
-        'bool' => ['type' => 'boolean', 'null' => false, 'default' => false],
-        'uuid' => ['type' => 'uuid'],
-        'timestamp_field' => ['type' => 'timestamp'],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
-    ];
-
-    /**
      * Records property
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         ['decimal_field' => '30.123', 'float_field' => 42.23, 'huge_int' => '1234567891234567891', 'small_int' => '1234', 'tiny_int' => '12', 'bool' => 0, 'timestamp_field' => '2007-03-17 01:16:23'],
     ];
 }

@@ -33,7 +33,6 @@ class FormCommandTest extends TestCase
     {
         parent::setUp();
 
-        $this->useCommandRunner();
         $this->setAppNamespace('Bake\Test\App');
     }
 

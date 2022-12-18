@@ -15,8 +15,8 @@ use Cake\ORM\Entity;
  * @property string $effort
  * @property bool $completed
  * @property int $todo_task_count
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $updated
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $updated
  *
  * @property \Bake\Test\App\Model\Entity\User $user
  * @property \Bake\Test\App\Model\Entity\TodoReminder $todo_reminder
@@ -34,7 +34,7 @@ class TodoItem extends Entity
      *
      * @var array<string, bool>
      */
-    protected $_accessible = [
+    protected array $_accessible = [
         'id' => true,
         'title' => true,
         'body' => true,

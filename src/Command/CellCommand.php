@@ -31,7 +31,7 @@ class CellCommand extends SimpleBakeCommand
      *
      * @var string
      */
-    public $pathFragment = 'View/Cell/';
+    public string $pathFragment = 'View/Cell/';
 
     /**
      * @inheritDoc

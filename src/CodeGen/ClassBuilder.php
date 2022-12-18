@@ -21,7 +21,7 @@ class ClassBuilder
     /**
      * @var \Bake\CodeGen\ParsedClass|null
      */
-    protected $parsedClass;
+    protected ?ParsedClass $parsedClass;
 
     /**
      * @param \Bake\CodeGen\ParsedClass $parsedClass Parsed class it already exists

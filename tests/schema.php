@@ -228,6 +228,19 @@ return [
         'constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ],
     [
+        'table' => 'cars',
+        'columns' => [
+            'id' => ['type' => 'integer'],
+            'bake_user_id' => ['type' => 'integer', 'null' => false],
+            'title' => ['type' => 'string', 'null' => false],
+            'body' => 'text',
+            'published' => ['type' => 'boolean', 'length' => 1, 'default' => false],
+            'created' => 'datetime',
+            'updated' => 'datetime',
+        ],
+        'constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
+    ],
+    [
         'table' => 'bake_comments',
         'columns' => [
             'otherid' => ['type' => 'integer'],
@@ -349,6 +362,17 @@ return [
     ],
     [
         'table' => 'users',
+        'columns' => [
+            'id' => ['type' => 'integer'],
+            'username' => ['type' => 'string', 'null' => true, 'length' => 255],
+            'password' => ['type' => 'string', 'null' => true, 'length' => 255],
+            'created' => ['type' => 'timestamp', 'null' => true],
+            'updated' => ['type' => 'timestamp', 'null' => true],
+        ],
+        'constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
+    ],
+    [
+        'table' => 'bake_users',
         'columns' => [
             'id' => ['type' => 'integer'],
             'username' => ['type' => 'string', 'null' => true, 'length' => 255],

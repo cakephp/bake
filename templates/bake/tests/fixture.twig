@@ -35,7 +35,7 @@ class {{ name }}Fixture extends TestFixture
      *
      * @var string
      */
-    public $table = '{{ table|raw }}';
+    public string $table = '{{ table|raw }}';
 {% endif %}
 
 {%- if import %}
@@ -44,7 +44,7 @@ class {{ name }}Fixture extends TestFixture
      *
      * @var array<string, mixed>
      */
-    public $import = {{ import|raw }};
+    public array $import = {{ import|raw }};
 
 {% endif %}
 
@@ -55,7 +55,7 @@ class {{ name }}Fixture extends TestFixture
      * @var array<string, mixed>
      */
     // phpcs:disable
-    public $fields = {{ schema|raw }};
+    public array $fields = {{ schema|raw }};
     // phpcs:enable
 {% endif %}
 

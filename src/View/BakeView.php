@@ -35,7 +35,7 @@ class BakeView extends TwigView
     /**
      * @inheritDoc
      */
-    protected $layout = 'Bake.default';
+    protected string $layout = 'Bake.default';
 
     /**
      * Initialize view
@@ -73,7 +73,7 @@ class BakeView extends TwigView
      * @throws \Cake\Core\Exception\CakeException If there is an error in the view.
      * @return string Rendered content.
      */
-    public function render(?string $template = null, $layout = null): string
+    public function render(?string $template = null, string|false|null $layout = null): string
     {
         $viewFileName = $this->_getTemplateFileName($template);
         [, $templateEventName] = pluginSplit($template);
@@ -109,7 +109,7 @@ class BakeView extends TwigView
      * ($this by default).
      * @return \Cake\Event\EventInterface
      */
-    public function dispatchEvent(string $name, $data = null, $subject = null): EventInterface
+    public function dispatchEvent(string $name, mixed $data = null, mixed $subject = null): EventInterface
     {
         $name = preg_replace('/^View\./', 'Bake.', $name);
 
@@ -121,7 +121,7 @@ class BakeView extends TwigView
      *
      * @param ?string $plugin Optional plugin name to scan for view files.
      * @param bool $cached Set to false to force a refresh of view paths. Default true.
-     * @return string[] paths
+     * @return array<string> paths
      */
     protected function _paths(?string $plugin = null, bool $cached = true): array
     {

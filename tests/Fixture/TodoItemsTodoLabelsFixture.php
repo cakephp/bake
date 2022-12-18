@@ -24,37 +24,4 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class TodoItemsTodoLabelsFixture extends TestFixture
 {
-    /**
-     * fields property
-     *
-     * @var array<string, mixed>
-     */
-    public $fields = [
-        'todo_item_id' => ['type' => 'integer', 'null' => false],
-        'todo_label_id' => ['type' => 'integer', 'null' => false],
-        '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['todo_item_id', 'todo_label_id']],
-            'item_fk' => [
-                'type' => 'foreign',
-                'columns' => ['todo_item_id'],
-                'references' => ['todo_items', 'id'],
-                'update' => 'cascade',
-                'delete' => 'cascade',
-            ],
-            'label_fk' => [
-                'type' => 'foreign',
-                'columns' => ['todo_label_id'],
-                'references' => ['todo_labels', 'id'],
-                'update' => 'cascade',
-                'delete' => 'cascade',
-            ],
-        ],
-    ];
-
-    /**
-     * records property
-     *
-     * @var array
-     */
-    public $records = [];
 }

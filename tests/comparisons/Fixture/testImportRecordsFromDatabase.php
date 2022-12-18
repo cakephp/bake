@@ -15,7 +15,7 @@ class DatatypesFixture extends TestFixture
      *
      * @var array<string, mixed>
      */
-    public $import = ['table' => 'datatypes', 'connection' => 'test'];
+    public array $import = ['table' => 'datatypes', 'connection' => 'test'];
 
     /**
      * Init method

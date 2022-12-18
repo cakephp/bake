@@ -29,7 +29,7 @@ class Process
     /**
      * @var \Cake\Console\ConsoleIo
      */
-    protected $io;
+    protected ConsoleIo $io;
 
     /**
      * Constructor
@@ -74,7 +74,7 @@ class Process
         $exit = proc_close($process);
 
         if ($exit !== 0) {
-            throw new \RuntimeException($error);
+            throw new RuntimeException($error);
         }
 
         return $output;

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Model\Table;
 
-use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;

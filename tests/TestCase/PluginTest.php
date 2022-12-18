@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Bake\Test\TestCase;
 
-use Bake\Plugin;
+use Bake\BakePlugin;
 use Cake\Console\CommandCollection;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\RouteCollection;
@@ -37,7 +37,7 @@ class PluginTest extends TestCase
         $collection = new RouteCollection();
         $routes = new RouteBuilder($collection, '/');
 
-        $plugin = new Plugin();
+        $plugin = new BakePlugin();
         $this->assertNull($plugin->routes($routes));
         $this->assertCount(0, $collection->routes());
     }
@@ -45,14 +45,14 @@ class PluginTest extends TestCase
     public function testConsoleDiscoverBakeCommands()
     {
         $commands = new CommandCollection();
-        $plugin = new Plugin();
+        $plugin = new BakePlugin();
         $commands = $plugin->console($commands);
 
         // Spot check bake commands
         $this->assertTrue($commands->has('bake controller'));
         $this->assertTrue($commands->has('bake controller all'));
         $this->assertTrue($commands->has('bake middleware'));
-        $this->assertTrue($commands->has('bake shell_helper'));
+        $this->assertTrue($commands->has('bake command_helper'));
 
         // Ensure base classes are not included
         $this->assertFalse($commands->has('bake bake'));
@@ -65,7 +65,7 @@ class PluginTest extends TestCase
         $this->_loadTestPlugin('BakeTest');
 
         $commands = new CommandCollection();
-        $plugin = new Plugin();
+        $plugin = new BakePlugin();
         $commands = $plugin->console($commands);
 
         $this->assertTrue($commands->has('bake zergling'));
@@ -78,7 +78,7 @@ class PluginTest extends TestCase
         $this->_loadTestPlugin('WithBakeSubFolder');
 
         $commands = new CommandCollection();
-        $plugin = new Plugin();
+        $plugin = new BakePlugin();
         $commands = $plugin->console($commands);
 
         $this->assertTrue($commands->has('bake led_zepplin'));
@@ -93,7 +93,7 @@ class PluginTest extends TestCase
         $this->setAppNamespace('Bake\Test\App');
 
         $commands = new CommandCollection();
-        $plugin = new Plugin();
+        $plugin = new BakePlugin();
         $commands = $plugin->console($commands);
 
         $this->assertTrue($commands->has('bake custom_controller'));

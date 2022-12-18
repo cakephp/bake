@@ -27,27 +27,14 @@ class BakeTemplateProfilesFixture extends TestFixture
     /**
      * @var string
      */
-    public $table = 'profiles';
-
-    /**
-     * fields property
-     *
-     * @var array<string, mixed>
-     */
-    public $fields = [
-        'id' => ['type' => 'integer'],
-        'author_id' => ['type' => 'integer', 'null' => false],
-        'nick' => ['type' => 'string', 'null' => false],
-        'avatar' => ['type' => 'string', 'default' => null],
-        '_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
-    ];
+    public string $table = 'profiles';
 
     /**
      * records property
      *
      * @var array
      */
-    public $records = [
+    public array $records = [
         ['author_id' => 1, 'nick' => 'The Comedian', 'avatar' => 'smiley.png'],
         ['author_id' => 2, 'nick' => 'Rorschach', 'avatar' => 'stains.png'],
         ['author_id' => 3, 'nick' => 'Ozymandias', 'avatar' => null],

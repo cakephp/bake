@@ -23,7 +23,7 @@ class ArticlesTableTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'app.Articles',
         'app.Authors',
         'app.Tags',

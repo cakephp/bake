@@ -35,7 +35,6 @@ class CellCommandTest extends TestCase
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Cell' . DS;
 
-        $this->useCommandRunner();
         $this->setAppNamespace('Bake\Test\App');
     }
 

@@ -20,7 +20,7 @@ use Bake\CodeGen\CodeParser;
 use Bake\CodeGen\FileBuilder;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\ConsoleIo;
-use Cake\TestSuite\Stub\ConsoleOutput;
+use Cake\Console\TestSuite\StubConsoleOutput;
 
 class ClassBuilderTest extends TestCase
 {
@@ -32,7 +32,7 @@ class ClassBuilderTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->io = new ConsoleIo(new ConsoleOutput());
+        $this->io = new ConsoleIo(new StubConsoleOutput());
     }
 
     public function testImplements(): void
@@ -86,10 +86,10 @@ class TestTable
     const MY_CONST = 3;
 
     /**
-     * @param \Cake\ORM\Query $query Query
-     * @return \Cake\ORM\Query
+     * @param \Cake\ORM\Query\SelectQuery $query Query
+     * @return \Cake\ORM\Query\SelectQuery
      */
-    public function findSomething(Query $query): Query
+    public function findSomething(Query $query): SelectQuery
     {
     }
 }
@@ -115,7 +115,7 @@ PARSE
 
 namespace MyApp\Model;
 
-use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\Table;
 
 class TestTable
@@ -135,18 +135,18 @@ class TestTable
     }
 
     /**
-     * @param \Cake\ORM\Query $query Query
-     * @return \Cake\ORM\Query
+     * @param \Cake\ORM\Query\SelectQuery $query Query
+     * @return \Cake\ORM\Query\SelectQuery
      */
-    public function findSomething(Query $query): Query
+    public function findSomething(Query $query): SelectQuery
     {
     }
 
     /**
-     * @param \Cake\ORM\Query $query Query
-     * @return \Cake\ORM\Query
+     * @param \Cake\ORM\Query\SelectQuery $query Query
+     * @return \Cake\ORM\Query\SelectQuery
      */
-    public function findSomethingElse(Query $query): Query
+    public function findSomethingElse(Query $query): SelectQuery
     {
     }
 }

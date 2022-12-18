@@ -42,7 +42,7 @@ class ModelCommand extends BakeCommand
      *
      * @var string
      */
-    public $pathFragment = 'Model/';
+    public string $pathFragment = 'Model/';
 
     /**
      * Table prefix
@@ -51,14 +51,14 @@ class ModelCommand extends BakeCommand
      *
      * @var string
      */
-    public $tablePrefix = '';
+    public string $tablePrefix = '';
 
     /**
      * Holds tables found on connection.
      *
-     * @var string[]
+     * @var array<string>
      */
-    protected $_tables = [];
+    protected array $_tables = [];
 
     /**
      * Execute the command.
@@ -623,7 +623,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @return array<string>|string|null
      */
-    public function getDisplayField(Table $model, Arguments $args)
+    public function getDisplayField(Table $model, Arguments $args): array|string|null
     {
         if ($args->getOption('display-field')) {
             return (string)$args->getOption('display-field');
@@ -637,7 +637,7 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model The model to introspect.
      * @param \Cake\Console\Arguments $args CLI Arguments
-     * @return string[] The columns in the primary key
+     * @return array<string> The columns in the primary key
      */
     public function getPrimaryKey(Table $model, Arguments $args): array
     {
@@ -726,11 +726,11 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $table The table instance to get fields for.
      * @param \Cake\Console\Arguments $args CLI Arguments
-     * @return string[]|false|null Either an array of fields, `false` in
+     * @return array<string>|false|null Either an array of fields, `false` in
      *   case the no-fields option is used, or `null` if none of the
      *   field options is used.
      */
-    public function getFields(Table $table, Arguments $args)
+    public function getFields(Table $table, Arguments $args): array|false|null
     {
         if ($args->getOption('no-fields')) {
             return false;
@@ -757,7 +757,7 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model The model to introspect.
      * @param \Cake\Console\Arguments $args CLI Arguments
-     * @return string[] The columns to make accessible
+     * @return array<string> The columns to make accessible
      */
     public function getHiddenFields(Table $model, Arguments $args): array
     {
@@ -784,7 +784,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @return array|false The validation rules.
      */
-    public function getValidation(Table $model, array $associations, Arguments $args)
+    public function getValidation(Table $model, array $associations, Arguments $args): array|false
     {
         if ($args->getOption('no-validation')) {
             return [];
@@ -1215,7 +1215,7 @@ class ModelCommand extends BakeCommand
     /**
      * Outputs the a list of possible models or controllers from database
      *
-     * @return string[]
+     * @return array<string>
      */
     public function listAll(): array
     {
@@ -1234,7 +1234,7 @@ class ModelCommand extends BakeCommand
     /**
      * Outputs the a list of unskipped models or controllers from database
      *
-     * @return string[]
+     * @return array<string>
      */
     public function listUnskipped(): array
     {

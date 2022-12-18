@@ -29,7 +29,7 @@ class MailerCommand extends SimpleBakeCommand
      *
      * @var string
      */
-    public $pathFragment = 'Mailer/';
+    public string $pathFragment = 'Mailer/';
 
     /**
      * @inheritDoc

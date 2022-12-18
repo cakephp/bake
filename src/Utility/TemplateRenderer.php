@@ -37,14 +37,14 @@ class TemplateRenderer
      *
      * @var \Bake\View\BakeView|null
      */
-    protected $view;
+    protected ?BakeView $view = null;
 
     /**
      * Template theme
      *
      * @var string|null
      */
-    protected $theme;
+    protected ?string $theme;
 
     /**
      * Constructor

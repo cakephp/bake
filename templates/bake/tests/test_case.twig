@@ -16,17 +16,15 @@
  */
 #}
 {% set isController = type|lower == 'controller' %}
-{% set isShell = type|lower == 'shell' %}
 {% set isCommand = type|lower == 'command' %}
 {% if isController %}
     {%- set traitName = 'IntegrationTestTrait' %}
-{% elseif isShell or isCommand %}
+    {%- set uses = uses|merge(['Cake\\TestSuite\\IntegrationTestTrait']) %}
+{% elseif isCommand %}
     {%- set traitName = 'ConsoleIntegrationTestTrait' %}
+    {%- set uses = uses|merge(['Cake\\Console\\TestSuite\\ConsoleIntegrationTestTrait']) %}
 {% endif %}
 {%- set uses = uses|merge(["Cake\\TestSuite\\TestCase"]) %}
-{% if traitName is defined %}
-    {%- set uses = uses|merge(["Cake\\TestSuite\\#{traitName}"]) %}
-{% endif %}
 
 {{- element('Bake.file_header', {
     namespace: "#{baseNamespace}\\Test\\TestCase\\#{subNamespace}",
@@ -71,7 +69,7 @@ class {{ className }}Test extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = {{ Bake.exportVar(fixtures|values, 1)|raw }};
+    protected array $fixtures = {{ Bake.exportVar(fixtures|values, 1)|raw }};
 {% if construction or methods %}
 
 {% endif %}

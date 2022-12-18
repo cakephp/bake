@@ -33,7 +33,7 @@ class ControllerCommandTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.BakeArticles',
         'plugin.Bake.BakeArticlesBakeTags',
         'plugin.Bake.BakeComments',
@@ -49,7 +49,6 @@ class ControllerCommandTest extends TestCase
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
-        $this->useCommandRunner();
         $this->setAppNamespace('Bake\Test\App');
 
         $this->getTableLocator()->get('BakeArticles', [
@@ -130,7 +129,7 @@ class ControllerCommandTest extends TestCase
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
             'bake controller --connection test --no-test --no-actions ' .
-            '--components "RequestHandler, Auth, Company/TestBakeThree.Something, TestBake.Other, Apple, NonExistent" ' .
+            '--components "FormProtection, Flash, Company/TestBakeThree.Something, TestBake.Other, Apple, NonExistent" ' .
             'BakeArticles'
         );
 
@@ -149,7 +148,7 @@ class ControllerCommandTest extends TestCase
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
             'bake controller --connection test --no-test ' .
-            '--helpers Html,Time --components RequestHandler,Auth ' .
+            '--helpers Html,Time --components FormProtection,Flash ' .
             '--actions login,logout BakeArticles'
         );
 
@@ -168,7 +167,7 @@ class ControllerCommandTest extends TestCase
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
             'bake controller --connection test --no-test ' .
-            '--helpers Html,Time --components RequestHandler,Auth --no-actions BakeArticles'
+            '--helpers Html,Time --components FormProtection,Flash --no-actions BakeArticles'
         );
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
@@ -186,7 +185,7 @@ class ControllerCommandTest extends TestCase
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
             'bake controller --connection test --no-test ' .
-            '--helpers Html,Time --components "RequestHandler, Auth" BakeArticles'
+            '--helpers Html,Time --components "FormProtection, Flash" BakeArticles'
         );
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);

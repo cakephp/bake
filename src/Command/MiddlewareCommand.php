@@ -26,7 +26,7 @@ class MiddlewareCommand extends SimpleBakeCommand
      *
      * @var string
      */
-    public $pathFragment = 'Middleware/';
+    public string $pathFragment = 'Middleware/';
 
     /**
      * @inheritDoc

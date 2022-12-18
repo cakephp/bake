@@ -18,11 +18,13 @@ namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
 use Brick\VarExporter\VarExporter;
+use Cake\Chronos\Chronos;
+use Cake\Chronos\ChronosDate;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
-use Cake\Database\Exception\DatabaseException;
+use Cake\Core\Exception\CakeException;
 use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
@@ -71,7 +73,7 @@ class FixtureCommand extends BakeCommand
         ])->addOption('count', [
             'help' => 'When using generated data, the number of records to include in the fixture(s).',
             'short' => 'n',
-            'default' => 1,
+            'default' => '1',
         ])->addOption('fields', [
             'help' => 'Create a fixture that includes the deprecated $fields property.',
             'short' => 'f',
@@ -159,7 +161,7 @@ class FixtureCommand extends BakeCommand
 
         try {
             $data = $this->readSchema($model, $useTable);
-        } catch (DatabaseException $e) {
+        } catch (CakeException $e) {
             $this->getTableLocator()->remove($model);
             $useTable = Inflector::underscore($model);
             $table = $useTable;
@@ -318,7 +320,7 @@ class FixtureCommand extends BakeCommand
      * Formats Schema columns from Model Object
      *
      * @param array $values options keys(type, null, default, key, length, extra)
-     * @return string[] Formatted values
+     * @return array<string> Formatted values
      */
     protected function _values(array $values): array
     {
@@ -435,9 +437,11 @@ class FixtureCommand extends BakeCommand
     protected function _makeRecordString(array $records): string
     {
         foreach ($records as &$record) {
-            array_walk($record, function (&$value) {
-                if ($value instanceof DateTimeInterface) {
+            array_walk($record, function (&$value): void {
+                if ($value instanceof DateTimeInterface || $value instanceof Chronos) {
                     $value = $value->format('Y-m-d H:i:s');
+                } elseif ($value instanceof ChronosDate) {
+                    $value = $value->format('Y-m-d');
                 }
             });
         }

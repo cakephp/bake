@@ -35,7 +35,6 @@ class MailerCommandTest extends TestCase
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Mailer' . DS;
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
     }
 
     /**

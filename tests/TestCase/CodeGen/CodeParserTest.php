@@ -31,7 +31,7 @@ class CodeParserTest extends TestCase
         $this->assertSame('ParseTestTable', $file->class->name);
         $this->assertSame(
             [
-                'Query' => 'Cake\ORM\Query',
+                'SelectQuery' => 'Cake\ORM\Query\SelectQuery',
                 'RulesChecker' => 'Cake\ORM\RulesChecker',
                 'Table' => 'Cake\ORM\Table',
                 'Validator' => 'Cake\Validation\Validator',
@@ -108,12 +108,12 @@ PARSE;
 
         $code = <<<'PARSE'
     /**
-     * @param \Cake\ORM\Query $query Finder query
+     * @param \Cake\ORM\Query\SelectQuery $query Finder query
      * @param array $options Finder options
-     * @return \Cake\ORM\Query
+     * @return \Cake\ORM\Query\SelectQuery
      */
     #[SomeAttribute]
-    public function findAttributes(Query $query, array $options): Query
+    public function findAttributes(SelectQuery $query, array $options): SelectQuery
     {
         return $query;
     }

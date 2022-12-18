@@ -13,6 +13,7 @@ use Cake\Datasource\SchemaInterface;
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
+use function pluginSplit;
 
 /**
  * Bake helper
@@ -26,14 +27,14 @@ class BakeHelper extends Helper
      *
      * @var array<string, mixed>
      */
-    protected $_defaultConfig = [];
+    protected array $_defaultConfig = [];
 
     /**
      * AssociationFilter utility
      *
      * @var \Bake\Utility\Model\AssociationFilter|null
      */
-    protected $_associationFilter = null;
+    protected ?AssociationFilter $_associationFilter = null;
 
     /**
      * Used for generating formatted properties such as component and helper arrays
@@ -140,7 +141,7 @@ class BakeHelper extends Helper
      * @throws \Brick\VarExporter\ExportException
      * @see https://github.com/brick/varexporter#options
      */
-    public function exportVar($var, int $indentLevel = 0, int $options = 0): string
+    public function exportVar(mixed $var, int $indentLevel = 0, int $options = 0): string
     {
         $options |= VarExporter::TRAILING_COMMA_IN_ARRAY;
 
@@ -173,7 +174,7 @@ class BakeHelper extends Helper
      *
      * @param \Cake\ORM\Table $table object to find associations on
      * @param string $assoc association to extract
-     * @return string[]
+     * @return array<string>
      */
     public function aliasExtractor(Table $table, string $assoc): array
     {
@@ -207,7 +208,7 @@ class BakeHelper extends Helper
      */
     public function classInfo(string $class, string $type, string $suffix): array
     {
-        [$plugin, $name] = \pluginSplit($class);
+        [$plugin, $name] = pluginSplit($class);
 
         $base = Configure::read('App.namespace');
         if ($plugin !== null) {
@@ -245,7 +246,7 @@ class BakeHelper extends Helper
         array $fields,
         SchemaInterface $schema,
         ?Table $modelObject = null,
-        $takeFields = 0,
+        string|int $takeFields = 0,
         array $filterTypes = ['binary']
     ): array {
         $fields = collection($fields)
@@ -362,7 +363,7 @@ class BakeHelper extends Helper
      *
      * @param string $field Field name.
      * @param array $rules Validation rules list.
-     * @return string[]
+     * @return array<string>
      */
     public function getValidationMethods(string $field, array $rules): array
     {
@@ -415,11 +416,11 @@ class BakeHelper extends Helper
     /**
      * Get field accessibility data.
      *
-     * @param string[]|false|null $fields Fields list.
-     * @param string[]|null $primaryKey Primary key.
+     * @param array<string>|false|null $fields Fields list.
+     * @param array<string>|null $primaryKey Primary key.
      * @return array<string, bool>
      */
-    public function getFieldAccessibility($fields = null, $primaryKey = null): array
+    public function getFieldAccessibility(array|false|null $fields = null, ?array $primaryKey = null): array
     {
         $accessible = [];
 
@@ -570,8 +571,8 @@ class BakeHelper extends Helper
      * To be mocked elsewhere...
      *
      * @param \Cake\ORM\Table $table Table
-     * @param string[] $aliases array of aliases
-     * @return string[]
+     * @param array<string> $aliases array of aliases
+     * @return array<string>
      */
     protected function _filterHasManyAssociationsAliases(Table $table, array $aliases): array
     {

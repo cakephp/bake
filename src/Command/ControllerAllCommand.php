@@ -33,7 +33,7 @@ class ControllerAllCommand extends BakeCommand
     /**
      * @var \Bake\Command\ControllerCommand
      */
-    protected $controllerCommand;
+    protected ControllerCommand $controllerCommand;
 
     /**
      * @inheritDoc

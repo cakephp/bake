@@ -32,7 +32,7 @@ class FixtureAllCommandTest extends TestCase
      *
      * @var array<string>
      */
-    protected $fixtures = [
+    protected array $fixtures = [
         'plugin.Bake.Articles',
         'plugin.Bake.Comments',
     ];
@@ -40,7 +40,7 @@ class FixtureAllCommandTest extends TestCase
     /**
      * @var array<string>
      */
-    protected $tables = ['articles', 'comments'];
+    protected array $tables = ['articles', 'comments'];
 
     /**
      * setUp method
@@ -53,7 +53,6 @@ class FixtureAllCommandTest extends TestCase
 
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
         $this->setAppNamespace('Bake\Test\App');
-        $this->useCommandRunner();
 
         $connection = ConnectionManager::get('test');
         $subsetCollection = new SubsetSchemaCollection($connection->getSchemaCollection(), $this->tables);
@@ -129,11 +128,11 @@ class FixtureAllCommandTest extends TestCase
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
-            "public \$import = ['table' => 'articles'",
+            "public array \$import = ['table' => 'articles'",
             $this->generatedFiles[0]
         );
         $this->assertFileContains(
-            "public \$import = ['table' => 'comments'",
+            "public array \$import = ['table' => 'comments'",
             $this->generatedFiles[1]
         );
     }

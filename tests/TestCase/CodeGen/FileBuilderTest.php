@@ -21,8 +21,8 @@ use Bake\CodeGen\FileBuilder;
 use Bake\CodeGen\ParseException;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\ConsoleIo;
-use Cake\TestSuite\Constraint\Console\ContentsContain;
-use Cake\TestSuite\Stub\ConsoleOutput;
+use Cake\Console\TestSuite\Constraint\ContentsContain;
+use Cake\Console\TestSuite\StubConsoleOutput;
 
 class FileBuilderTest extends TestCase
 {
@@ -39,7 +39,7 @@ class FileBuilderTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->out = new ConsoleOutput();
+        $this->out = new StubConsoleOutput();
         $this->io = new ConsoleIo($this->out, $this->out);
     }
 
@@ -84,12 +84,12 @@ PARSE
         // Pass required imports out of order
         $this->assertSame(
             [
-                'Query' => 'Cake\ORM\Query',
+                'SelectQuery' => 'Cake\ORM\Query\SelectQuery',
                 'Table' => 'Cake\ORM\Table',
                 'MyExpression' => 'MyApp\Expression\MyExpression',
                 'MyException' => 'RuntimeException',
             ],
-            $builder->getClassImports(['Table' => 'Cake\ORM\Table', 'Cake\ORM\Query'])
+            $builder->getClassImports(['Table' => 'Cake\ORM\Table', 'Cake\ORM\Query\SelectQuery'])
         );
 
         $this->assertSame(
@@ -112,10 +112,10 @@ PARSE
         $builder = new FileBuilder($this->io, 'MyApp\Model');
         $this->assertSame(
             [
-                'Query' => 'Cake\ORM\Query',
+                'SelectQuery' => 'Cake\ORM\Query\SelectQuery',
                 'Table' => 'Cake\ORM\Table',
             ],
-            $builder->getClassImports(['Cake\ORM\Table', 'Cake\ORM\Query'])
+            $builder->getClassImports(['Cake\ORM\Table', 'Cake\ORM\Query\SelectQuery'])
         );
 
         $this->assertSame(
@@ -141,7 +141,7 @@ PARSE
 
 namespace MyApp\Model;
 
-use Cake\ORM\Query as MyQuery;
+use Cake\ORM\Query\SelectQuery as MyQuery;
 
 class TestTable{}
 PARSE
@@ -149,8 +149,8 @@ PARSE
 
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
-        $builder->getClassImports(['Cake\ORM\Query']);
-        $this->assertThat('Import `Cake\ORM\Query` conflicts with existing import, discarding', new ContentsContain($this->out->messages(), 'output'));
+        $builder->getClassImports(['Cake\ORM\Query\SelectQuery']);
+        $this->assertThat('Import `Cake\ORM\Query\SelectQuery` conflicts with existing import, discarding', new ContentsContain($this->out->messages(), 'output'));
     }
 
     public function testImportConflictUserAlias(): void
@@ -161,7 +161,7 @@ PARSE
 
 namespace MyApp\Model;
 
-use MyApp\Query as Query;
+use MyApp\Query as SelectQuery;
 
 class TestTable{}
 PARSE
@@ -169,7 +169,7 @@ PARSE
 
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
-        $builder->getClassImports(['Cake\ORM\Query']);
+        $builder->getClassImports(['Cake\ORM\Query\SelectQuery']);
         $this->assertThat('Import `MyApp\Query` conflicts with existing import, discarding', new ContentsContain($this->out->messages(), 'output'));
     }
 }

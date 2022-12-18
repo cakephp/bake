@@ -15,8 +15,8 @@ use Cake\ORM\Entity;
  * @property string $effort
  * @property bool $completed
  * @property int $todo_task_count
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $updated
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \Cake\I18n\DateTime|null $updated
  * @property array $array_type
  * @property array $json_type
  * @property string $unknown_type

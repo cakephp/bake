@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Model\Table;
 
-use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -104,22 +104,22 @@ TEXT;
     }
 
     /**
-     * @param \Cake\ORM\Query $query Finder query
+     * @param \Cake\ORM\Query\SelectQuery $query Finder query
      * @param array $options Finder options
-     * @return \Cake\ORM\Query
+     * @return \Cake\ORM\Query\SelectQuery
      */
     #[SomeAttribute]
-    public function findAttributes(Query $query, array $options): Query
+    public function findAttributes(SelectQuery $query, array $options): SelectQuery
     {
         return $query;
     }
 
     /**
-     * @param \Cake\ORM\Query $query Finder query
+     * @param \Cake\ORM\Query\SelectQuery $query Finder query
      * @param array $options Finder options
-     * @return \Cake\ORM\Query
+     * @return \Cake\ORM\Query\SelectQuery
      */
-    public function findNoAttributes(Query $query, array $options): Query
+    public function findNoAttributes(SelectQuery $query, array $options): SelectQuery
     {
         return $query;
     }

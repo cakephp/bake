@@ -29,7 +29,6 @@ class PostsController extends AppController
     public function initialize(): void
     {
         $this->loadComponent('Flash');
-        $this->loadComponent('RequestHandler');
     }
 
     /**

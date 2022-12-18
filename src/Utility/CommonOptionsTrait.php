@@ -33,22 +33,22 @@ trait CommonOptionsTrait
     /**
      * @var string
      */
-    public $plugin;
+    public ?string $plugin = null;
 
     /**
      * @var string|null
      */
-    public $theme;
+    public ?string $theme = null;
 
     /**
      * @var string
      */
-    public $connection;
+    public string $connection;
 
     /**
      * @var bool
      */
-    public $force = false;
+    public bool $force = false;
 
     /**
      * Pull common/frequently used arguments & options into properties

@@ -16,7 +16,6 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Bake\Shell\Task\BakeTask;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\Command\HelpCommand;
@@ -25,10 +24,6 @@ use Cake\Console\CommandCollectionAwareInterface;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Exception\ConsoleException;
-use Cake\Console\Shell;
-use Cake\Core\Configure;
-use Cake\Core\Plugin as CorePlugin;
-use Cake\Utility\Inflector;
 
 /**
  * Command that provides help and an entry point to bake tools.
@@ -40,14 +35,14 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
      *
      * @var \Cake\Console\CommandCollection
      */
-    protected $commands;
+    protected CommandCollection $commands;
 
     /**
      * The HelpCommand to get help.
      *
      * @var \Cake\Console\Command\HelpCommand
      */
-    protected $help;
+    protected HelpCommand $help;
 
     /**
      * @inheritDoc
@@ -68,8 +63,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
     /**
      * Run the command.
      *
-     * Override the run() method so that we can splice in dynamic
-     * subcommand handling for legacy tasks.
+     * Override the run() method for special handling of the `--help` option.
      *
      * @param array $argv Arguments from the CLI environment.
      * @param \Cake\Console\ConsoleIo $io The console io
@@ -107,9 +101,6 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
     /**
      * Execute the command.
      *
-     * This command acts as a catch-all for legacy tasks that may
-     * be defined in the application or plugins.
-     *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null The exit code or null for success
@@ -118,77 +109,16 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
     {
         if ($args->hasArgumentAt(0)) {
             $name = $args->getArgumentAt(0);
-            $task = $this->createTask($name, $io);
-            if ($task) {
-                $argList = $args->getArguments();
-
-                // Remove command name.
-                array_shift($argList);
-                foreach ($args->getOptions() as $key => $value) {
-                    if ($value === false) {
-                        continue;
-                    } elseif ($value === true) {
-                        $argList[] = '--' . $key;
-                    } else {
-                        $argList[] = '--' . $key;
-                        $argList[] = $value;
-                    }
-                }
-
-                $result = $task->runCommand($argList);
-                if ($result === false) {
-                    return static::CODE_ERROR;
-                }
-                if ($result === true) {
-                    return static::CODE_SUCCESS;
-                }
-
-                return $result;
-            }
-            $io->err("<error>Could not find a task named `{$name}`.</error>");
+            $io->err(
+                "<error>Could not find bake command named `$name`."
+                . ' Run `bake --help` to get a list of commands.</error>'
+            );
 
             return static::CODE_ERROR;
         }
         $io->err('<warning>No command provided. Run `bake --help` to get a list of commands.</warning>');
 
         return static::CODE_ERROR;
-    }
-
-    /**
-     * Find and create a Shell based BakeTask
-     *
-     * @param string $name The task name.
-     * @param \Cake\Console\ConsoleIo $io The console io.
-     * @return \Cake\Console\Shell|null
-     */
-    protected function createTask(string $name, ConsoleIo $io): ?Shell
-    {
-        $found = false;
-        $name = Inflector::camelize($name);
-        $factory = function ($className, $io) {
-            $task = new $className($io);
-            $task->setRootName('cake bake');
-
-            return $task;
-        };
-
-        // Look in each plugin for the requested task
-        foreach (CorePlugin::loaded() as $plugin) {
-            $namespace = str_replace('/', '\\', $plugin);
-            $candidate = $namespace . '\Shell\Task\\' . $name . 'Task';
-            if (class_exists($candidate) && is_subclass_of($candidate, BakeTask::class)) {
-                return $factory($candidate, $io);
-            }
-        }
-
-        // Try the app as well
-        $namespace = Configure::read('App.namespace');
-        $candidate = $namespace . '\Shell\Task\\' . $name . 'Task';
-        if (class_exists($candidate) && is_subclass_of($candidate, BakeTask::class)) {
-            return $factory($candidate, $io);
-        }
-
-        return null;
     }
 
     /**
@@ -207,8 +137,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
                 'Bake generates code for your application. Different types of classes can be generated' .
                 ' with the subcommands listed below. For example run <info>bake controller --help</info>' .
                 ' to learn more about generating a controller.'
-            )
-            ->setEpilog('Older Shell based tasks will not be listed here, but can still be run.');
+            );
         $commands = [];
         foreach ($this->commands as $command => $class) {
             if (substr($command, 0, 4) === 'bake') {

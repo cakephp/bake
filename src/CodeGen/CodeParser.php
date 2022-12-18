@@ -27,6 +27,7 @@ use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeAbstract;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
+use PhpParser\Parser;
 use PhpParser\ParserFactory;
 
 /**
@@ -42,22 +43,22 @@ class CodeParser extends NodeVisitorAbstract
     /**
      * @var \PhpParser\Parser
      */
-    protected $parser;
+    protected Parser $parser;
 
     /**
      * @var \PhpParser\NodeTraverser
      */
-    protected $traverser;
+    protected NodeTraverser $traverser;
 
     /**
      * @var string
      */
-    protected $fileText = '';
+    protected string $fileText = '';
 
     /**
      * @var array
      */
-    protected $parsed = [];
+    protected array $parsed = [];
 
     /**
      * Constructor
