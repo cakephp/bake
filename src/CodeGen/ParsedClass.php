@@ -29,7 +29,7 @@ class ParsedClass
     /**
      * @var array<string>
      */
-    public $implements;
+    public array $implements;
 
     /**
      * @var array<string, string>
