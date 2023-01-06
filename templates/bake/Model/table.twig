@@ -17,7 +17,7 @@
 {% set generatedFunctions = ['initialize'] %}
 {{ element('Bake.file_header', {
     namespace: fileBuilder.namespace,
-    classImports: fileBuilder.classImports(['Cake\\ORM\\Query', 'Cake\\ORM\\RulesChecker', 'Cake\\ORM\\Table', 'Cake\\Validation\\Validator']),
+    classImports: fileBuilder.classImports(['Cake\\ORM\\RulesChecker', 'Cake\\ORM\\Table', 'Cake\\Validation\\Validator']),
 }) }}
 
 {{ DocBlock.classDescription(name, 'Model', annotations)|raw }}
