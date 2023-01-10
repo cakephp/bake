@@ -50,9 +50,9 @@
             "@test",
             "@cs-check"
         ],
-        "cs-check": "phpcs --parallel=16 -p src/ tests/",
-        "cs-fix": "phpcbf --parallel=16 -p src/ tests/",
-        "stan": "phpstan analyse src/ && psalm.phar",
+        "cs-check": "phpcs --parallel=16",
+        "cs-fix": "phpcbf --parallel=16",
+        "stan": "phpstan analyse && psalm.phar",
         "stan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan:^1.7 psalm/phar:~4.27.0 && mv composer.backup composer.json",
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-clover=clover.xml"
