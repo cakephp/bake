@@ -19,14 +19,14 @@
     },
     "require": {
         "cakephp/cakephp": "5.x-dev",
-        "cakephp/twig-view": "dev-cake5",
+        "cakephp/twig-view": "2.x-dev",
         "brick/varexporter": "^0.3.5",
         "nikic/php-parser": "^4.13.2"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "5.x-dev",
         "phpunit/phpunit": "^9.5.19",
-        "cakephp/debug_kit": "dev-cake5",
+        "cakephp/debug_kit": "5.x-dev,
         "cakephp/plugin-installer": "^1.3"
     },
     "autoload": {
