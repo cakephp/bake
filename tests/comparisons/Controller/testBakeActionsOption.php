@@ -47,7 +47,7 @@ class BakeArticlesController extends AppController
     /**
      * Logout method
      *
-     * @return \Cake\Http\Response|null|void Redirects to logout URL
+     * @return \Cake\Http\Response|null Redirects to logout URL
      */
     public function logout()
     {
