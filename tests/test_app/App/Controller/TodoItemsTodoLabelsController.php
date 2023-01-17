@@ -86,7 +86,7 @@ class TodoItemsTodoLabelsController extends AppController
      * Delete method
      *
      * @param string|null $id Todo Items Todo Label id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
