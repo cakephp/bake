@@ -18,11 +18,16 @@ namespace Bake\View;
 
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
+use Cake\Event\EventDispatcherTrait;
 use Cake\Event\EventInterface;
 use Cake\TwigView\View\TwigView;
 
 class BakeView extends TwigView
 {
+    /**
+     * @use \Cake\Event\EventDispatcherTrait<\Cake\View\View>
+     */
+    use EventDispatcherTrait;
     use ConventionsTrait;
 
     /**
@@ -101,15 +106,16 @@ class BakeView extends TwigView
      *
      * Use the Bake prefix for bake related view events
      *
+     * @template TSubject of \Cake\View\View
      * @param string $name Name of the event.
-     * @param mixed $data Any value you wish to be transported with this event to
+     * @param array $data Any value you wish to be transported with this event to
      * it can be read by listeners.
      *
-     * @param mixed $subject The object that this event applies to
+     * @param TSubject|null $subject The object that this event applies to
      * ($this by default).
-     * @return \Cake\Event\EventInterface<mixed>
+     * @return \Cake\Event\EventInterface<\Cake\View\View>
      */
-    public function dispatchEvent(string $name, mixed $data = null, mixed $subject = null): EventInterface
+    public function dispatchEvent(string $name, array $data = [], ?object $subject = null): EventInterface
     {
         $name = preg_replace('/^View\./', 'Bake.', $name);
 

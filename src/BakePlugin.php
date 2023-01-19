@@ -49,6 +49,7 @@ class BakePlugin extends BasePlugin
     /**
      * Load the TwigView plugin.
      *
+     * @phpstan-ignore-next-line
      * @param \Cake\Core\PluginApplicationInterface $app The host application
      * @return void
      */
@@ -142,6 +143,7 @@ class BakePlugin extends BasePlugin
                 } catch (ReflectionException $e) {
                     continue;
                 }
+                /** @psalm-suppress TypeDoesNotContainType */
                 if (!$reflection->isInstantiable() || !$reflection->isSubclassOf(BakeCommand::class)) {
                     continue;
                 }
