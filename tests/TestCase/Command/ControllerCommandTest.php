@@ -149,7 +149,7 @@ class ControllerCommandTest extends TestCase
         $this->exec(
             'bake controller --connection test --no-test ' .
             '--helpers Html,Time --components FormProtection,Flash ' .
-            '--actions login,logout BakeArticles'
+            '--actions index BakeArticles'
         );
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);

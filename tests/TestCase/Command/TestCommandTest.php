@@ -283,8 +283,6 @@ class TestCommandTest extends TestCase
             ['Behavior', 'TimestampBehavior', 'App\Model\Behavior\TimestampBehavior'],
             ['Helper', 'Form', 'App\View\Helper\FormHelper'],
             ['Helper', 'FormHelper', 'App\View\Helper\FormHelper'],
-            ['Component', 'Auth', 'App\Controller\Component\AuthComponent'],
-            ['Component', 'AuthComponent', 'App\Controller\Component\AuthComponent'],
             ['Cell', 'Example', 'App\View\Cell\ExampleCell'],
             ['Cell', 'ExampleCell', 'App\View\Cell\ExampleCell'],
         ];
@@ -622,13 +620,6 @@ class TestCommandTest extends TestCase
             'App\View\Helper\FormHelper',
         ];
         $this->assertEquals($expected, $result);
-
-        $result = $command->generateUses('Component', 'App\Controller\Component\AuthComponent');
-        $expected = [
-            'Cake\Controller\ComponentRegistry',
-            'App\Controller\Component\AuthComponent',
-        ];
-        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -657,21 +648,11 @@ class TestCommandTest extends TestCase
             ['Controller', 'App\Controller\PostsController', 'TestCase/Controller/PostsControllerTest.php'],
             ['Controller', 'App\Controller\Admin\PostsController', 'TestCase/Controller/Admin/PostsControllerTest.php'],
             ['Behavior', 'App\Model\Behavior\TreeBehavior', 'TestCase/Model/Behavior/TreeBehaviorTest.php'],
-            [
-                'Component',
-                'App\Controller\Component\AuthComponent',
-                'TestCase/Controller/Component/AuthComponentTest.php',
-            ],
             ['entity', 'App\Model\Entity\Article', 'TestCase/Model/Entity/ArticleTest.php'],
             ['table', 'App\Model\Table\PostsTable', 'TestCase/Model/Table/PostsTableTest.php'],
             ['helper', 'App\View\Helper\FormHelper', 'TestCase/View/Helper/FormHelperTest.php'],
             ['controller', 'App\Controller\PostsController', 'TestCase/Controller/PostsControllerTest.php'],
             ['behavior', 'App\Model\Behavior\TreeBehavior', 'TestCase/Model/Behavior/TreeBehaviorTest.php'],
-            [
-                'component',
-                'App\Controller\Component\AuthComponent',
-                'TestCase/Controller/Component/AuthComponentTest.php',
-            ],
         ];
     }
 
