@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace BakeTest\Controller;
 
 use Bake\Test\App\Controller\AppController;
+use Cake\Http\Response;
 
 /**
  * BakeArticles Controller
@@ -15,9 +16,9 @@ class BakeArticlesController extends AppController
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return void Renders view
      */
-    public function index()
+    public function index(): void
     {
         $query = $this->BakeArticles->find()
             ->contain(['BakeUsers']);
@@ -30,10 +31,10 @@ class BakeArticlesController extends AppController
      * View method
      *
      * @param string|null $id Bake Article id.
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view($id = null): void
     {
         $bakeArticle = $this->BakeArticles->get($id, [
             'contain' => ['BakeUsers', 'BakeTags', 'BakeComments'],
@@ -97,7 +98,7 @@ class BakeArticlesController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete($id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);
         $bakeArticle = $this->BakeArticles->get($id);

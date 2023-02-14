@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Controller;
 
+use Cake\Http\Response;
+
 /**
  * BakeArticles Controller
  *

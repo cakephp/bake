@@ -17,9 +17,12 @@
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
+{%- set uses = ['Cake\\Http\\Response'] -%}
+{%- set uses = (plugin or prefix) ? uses|merge(["#{baseNamespace}\\Controller\\AppController"]) : uses -%}
+
 {{ element('Bake.file_header', {
     namespace: "#{namespace}\\Controller#{prefix}",
-    classImports: (plugin or prefix) ? ["#{baseNamespace}\\Controller\\AppController"] : [],
+    classImports: uses,
 }) }}
 
 /**
