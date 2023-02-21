@@ -34,6 +34,8 @@ class PluginCommandTest extends TestCase
 {
     protected $testAppFile = APP . 'Application.php';
 
+    protected $pluginsPath = TMP . 'plugin_task' . DS;
+
     /**
      * setUp method
      *
@@ -47,11 +49,10 @@ class PluginCommandTest extends TestCase
         $this->useCommandRunner();
 
         // Output into a safe place.
-        $path = TMP . 'plugin_task' . DS;
-        Configure::write('App.paths.plugins', [$path]);
+        Configure::write('App.paths.plugins', [$this->pluginsPath]);
 
         // Create the test output path
-        mkdir($path, 0777, true);
+        mkdir($this->pluginsPath, 0777, true);
 
         if (file_exists(APP . 'Application.php.bak')) {
             rename(APP . 'Application.php.bak', APP . 'Application.php');
@@ -68,7 +69,7 @@ class PluginCommandTest extends TestCase
     public function tearDown(): void
     {
         $fs = new Filesystem();
-        $fs->deleteDir(TMP . 'plugin_task');
+        $fs->deleteDir($this->pluginsPath);
 
         if (file_exists(APP . 'Application.php.bak')) {
             rename(APP . 'Application.php.bak', APP . 'Application.php');
@@ -84,6 +85,16 @@ class PluginCommandTest extends TestCase
      */
     public function testMainBakePluginContents()
     {
+        $this->exec('bake plugin SimpleExample', ['y', 'n']);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertPluginContents('SimpleExample');
+    }
+
+    public function testBakingWithNonExistentPluginsDir()
+    {
+        $fs = new Filesystem();
+        $fs->deleteDir($this->pluginsPath);
+
         $this->exec('bake plugin SimpleExample', ['y', 'n']);
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertPluginContents('SimpleExample');
@@ -211,7 +222,7 @@ class PluginCommandTest extends TestCase
         $result = $command->findPath($paths, $io);
 
         $this->assertNull($result, 'no return');
-        $this->assertSame(TMP . 'plugin_task' . DS, $command->path);
+        $this->assertSame($this->pluginsPath, $command->path);
     }
 
     /**
