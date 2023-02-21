@@ -102,6 +102,9 @@ class PluginCommand extends BakeCommand
         if (count($pathOptions) > 1) {
             $this->findPath($pathOptions, $io);
         }
+        if (!is_dir($this->path)) {
+            mkdir($this->path);
+        }
         $io->out(sprintf('<info>Plugin Name:</info> %s', $plugin));
         $io->out(sprintf('<info>Plugin Directory:</info> %s', $this->path . $plugin));
         $io->hr();
