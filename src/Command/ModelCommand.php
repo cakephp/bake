@@ -233,7 +233,7 @@ class ModelCommand extends BakeCommand
         ];
 
         $primary = $table->getPrimaryKey();
-        $associations = $this->findBelongsTo($table, $associations);
+        $associations = $this->findBelongsTo($table, $associations, $args);
 
         if (is_array($primary) && count($primary) > 1) {
             $io->warning(
@@ -329,9 +329,10 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model Database\Table instance of table being generated.
      * @param array $associations Array of in progress associations
+     * @param Arguments|null $args
      * @return array Associations with belongsTo added in.
      */
-    public function findBelongsTo(Table $model, array $associations): array
+    public function findBelongsTo(Table $model, array $associations, ?Arguments $args = null): array
     {
         $schema = $model->getSchema();
         foreach ($schema->columns() as $fieldName) {
@@ -362,11 +363,13 @@ class ModelCommand extends BakeCommand
                     get_class($associationTable) === Table::class &&
                     !in_array(Inflector::tableize($tmpModelName), $tables, true)
                 ) {
+                    $allowAliasRelations = $args && $args->getOption('allow-alias-relations');
                     $found = $this->findTableReferencedBy($schema, $fieldName);
-                    if (!$found) {
+                    if ($found) {
+                        $tmpModelName = Inflector::camelize($found);
+                    } elseif (!$allowAliasRelations) {
                         continue;
                     }
-                    $tmpModelName = Inflector::camelize($found);
                 }
                 $assoc = [
                     'alias' => $tmpModelName,
@@ -1319,6 +1322,9 @@ class ModelCommand extends BakeCommand
         ])->addOption('no-fixture', [
             'boolean' => true,
             'help' => 'Do not generate a test fixture skeleton.',
+        ])->addOption('allow-alias-relations', [
+            'boolean' => true,
+            'help' => 'Skip checks for existing tables of has one relations, e.g. for an example_id field.',
         ])->setEpilog(
             'Omitting all arguments and options will list the table names you can generate models for.'
         );
