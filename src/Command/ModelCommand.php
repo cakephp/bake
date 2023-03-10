@@ -329,7 +329,7 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model Database\Table instance of table being generated.
      * @param array $associations Array of in progress associations
-     * @param Arguments|null $args
+     * @param \Cake\Console\Arguments|null $args CLI arguments
      * @return array Associations with belongsTo added in.
      */
     public function findBelongsTo(Table $model, array $associations, ?Arguments $args = null): array
