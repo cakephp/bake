@@ -363,7 +363,7 @@ class ModelCommand extends BakeCommand
                     get_class($associationTable) === Table::class &&
                     !in_array(Inflector::tableize($tmpModelName), $tables, true)
                 ) {
-                    $allowAliasRelations = $args && $args->getOption('allow-alias-relations');
+                    $allowAliasRelations = $args && $args->getOption('skip-relation-check');
                     $found = $this->findTableReferencedBy($schema, $fieldName);
                     if ($found) {
                         $tmpModelName = Inflector::camelize($found);
@@ -1322,9 +1322,10 @@ class ModelCommand extends BakeCommand
         ])->addOption('no-fixture', [
             'boolean' => true,
             'help' => 'Do not generate a test fixture skeleton.',
-        ])->addOption('allow-alias-relations', [
+        ])->addOption('skip-relation-check', [
             'boolean' => true,
-            'help' => 'Skip checks for existing tables of has one relations, e.g. for an example_id field.',
+            'help' => 'Generate relations for all "example_id" fields'
+            . ' without checking the database if a table "examples" exists.',
         ])->setEpilog(
             'Omitting all arguments and options will list the table names you can generate models for.'
         );

@@ -492,7 +492,7 @@ class ModelCommandTest extends TestCase
 
     /**
      * Test that association generation adds `Anythings` association for `anything_id` field
-     * when using `--allow-alias-relations` option, even if no db table exists
+     * when using `--skip-relation-check` option, even if no db table exists
      *
      * @return void
      */
@@ -504,7 +504,7 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $command->connection = 'test';
 
-        $args = new Arguments([], ['allow-alias-relations' => true], []);
+        $args = new Arguments([], ['skip-relation-check' => true], []);
         $io = $this->createMock(ConsoleIo::class);
         $result = $command->getAssociations($items, $args, $io);
         $expected = [
