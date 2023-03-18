@@ -491,6 +491,59 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * Test that association generation adds `Anythings` association for `anything_id` field
+     * when using `--skip-relation-check` option, even if no db table exists
+     *
+     * @return void
+     */
+    public function testGetAssociationsAddAssociationIfNoTableExistButAliasIsAllowed()
+    {
+        $items = $this->getTableLocator()->get('TodoItems');
+
+        $items->setSchema($items->getSchema()->addColumn('anything_id', ['type' => 'integer']));
+        $command = new ModelCommand();
+        $command->connection = 'test';
+
+        $args = new Arguments([], ['skip-relation-check' => true], []);
+        $io = $this->createMock(ConsoleIo::class);
+        $result = $command->getAssociations($items, $args, $io);
+        $expected = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Users',
+                    'foreignKey' => 'user_id',
+                    'joinType' => 'INNER',
+                ],
+                [
+                    'alias' => 'Anythings',
+                    'foreignKey' => 'anything_id',
+                ],
+            ],
+            'hasMany' => [
+                [
+                    'alias' => 'TodoTasks',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
+            'belongsToMany' => [
+                [
+                    'alias' => 'TodoLabels',
+                    'foreignKey' => 'todo_item_id',
+                    'joinTable' => 'todo_items_todo_labels',
+                    'targetForeignKey' => 'todo_label_id',
+                ],
+            ],
+            'hasOne' => [
+                [
+                    'alias' => 'TodoReminders',
+                    'foreignKey' => 'todo_item_id',
+                ],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Test that association generation ignores `_id` fields
      *
      * @return void
