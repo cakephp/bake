@@ -28,6 +28,7 @@ use Cake\Core\ConventionsTrait;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
 use InvalidArgumentException;
+use function Cake\Core\pluginSplit;
 
 /**
  * Base class for commands that bake can use.

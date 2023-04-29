@@ -31,6 +31,7 @@ use Cake\Database\Schema\TableSchemaInterface;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
+use function Cake\Core\pluginSplit;
 
 /**
  * Command for generating model files.

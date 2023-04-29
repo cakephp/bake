@@ -21,6 +21,7 @@ use Cake\Core\ConventionsTrait;
 use Cake\Event\EventDispatcherTrait;
 use Cake\Event\EventInterface;
 use Cake\TwigView\View\TwigView;
+use function Cake\Core\pluginSplit;
 
 class BakeView extends TwigView
 {

@@ -30,6 +30,7 @@ use Cake\Utility\Inflector;
 use Cake\View\Exception\MissingTemplateException;
 use Exception;
 use RuntimeException;
+use function Cake\Core\namespaceSplit;
 
 /**
  * Task class for creating view template files.

@@ -29,6 +29,7 @@ use Cake\Core\Plugin;
 use Cake\Utility\Filesystem;
 use Cake\Utility\Inflector;
 use RuntimeException;
+use function Cake\Core\env;
 
 /**
  * The Plugin Command handles creating an empty plugin, ready to be used
