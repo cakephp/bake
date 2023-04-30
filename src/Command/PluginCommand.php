@@ -29,6 +29,7 @@ use Cake\Core\Plugin;
 use Cake\Utility\Filesystem;
 use Cake\Utility\Inflector;
 use RuntimeException;
+use function Cake\Core\env;
 
 /**
  * The Plugin Command handles creating an empty plugin, ready to be used
@@ -384,7 +385,7 @@ class PluginCommand extends BakeCommand
         ])->addOption('theme', [
             'short' => 't',
             'help' => 'The theme to use when baking code.',
-            'default' => Configure::read('Bake.theme') ?? '',
+            'default' => Configure::read('Bake.theme') ?: null,
             'choices' => $this->_getBakeThemes(),
         ]);
 

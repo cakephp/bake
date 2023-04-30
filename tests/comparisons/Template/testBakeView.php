@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <th><?= __('Profile') ?></th>
-                    <td><?= $author->has('profile') ? $this->Html->link($author->profile->id, ['controller' => 'Profiles', 'action' => 'view', $author->profile->id]) : '' ?></td>
+                    <td><?= $author->has('profile') ? $this->Html->link($author->profile->nick, ['controller' => 'Profiles', 'action' => 'view', $author->profile->id]) : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Id') ?></th>

@@ -64,7 +64,6 @@ class MailerCommandTest extends TestCase
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
-        $templatePath = Plugin::templatePath('TestBake');
 
         $this->generatedFiles = [
             $path . 'src/Mailer/ExampleMailer.php',

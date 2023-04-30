@@ -13,7 +13,8 @@ use Cake\Datasource\SchemaInterface;
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
-use function pluginSplit;
+use function Cake\Collection\collection;
+use function Cake\Core\pluginSplit;
 
 /**
  * Bake helper
@@ -280,7 +281,7 @@ class BakeHelper extends Helper
         $immediateAssociations = $associations['BelongsTo'];
         $associationFields = collection($fields)
             ->map(function ($field) use ($immediateAssociations) {
-                foreach ($immediateAssociations as $alias => $details) {
+                foreach ($immediateAssociations as $details) {
                     if ($field === $details['foreignKey']) {
                         return [$field => $details];
                     }

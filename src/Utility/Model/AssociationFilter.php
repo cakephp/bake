@@ -19,6 +19,7 @@ namespace Bake\Utility\Model;
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
 use Exception;
+use function Cake\Core\namespaceSplit;
 
 /**
  * Utility class to filter Model Table associations

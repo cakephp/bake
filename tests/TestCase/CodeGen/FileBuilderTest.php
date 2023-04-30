@@ -56,7 +56,7 @@ PARSE
         );
 
         $this->expectException(ParseException::class);
-        $builder = new FileBuilder($this->io, 'MyOtherApp\Model', $file);
+        new FileBuilder($this->io, 'MyOtherApp\Model', $file);
     }
 
     public function testUses(): void

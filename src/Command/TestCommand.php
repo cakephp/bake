@@ -29,6 +29,8 @@ use Cake\Utility\Filesystem;
 use Cake\Utility\Inflector;
 use ReflectionClass;
 use UnexpectedValueException;
+use function Cake\Core\namespaceSplit;
+use function Cake\Core\pluginSplit;
 
 /**
  * Command class for generating test files.
