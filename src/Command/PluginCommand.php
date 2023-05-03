@@ -170,7 +170,6 @@ class PluginCommand extends BakeCommand
         }
         $package = Inflector::dasherize($vendor) . '/' . Inflector::dasherize($name);
 
-        /** @psalm-suppress UndefinedConstant */
         $composerConfig = json_decode(
             file_get_contents(ROOT . DS . 'composer.json'),
             true
