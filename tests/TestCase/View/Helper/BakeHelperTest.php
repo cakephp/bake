@@ -90,7 +90,7 @@ class BakeHelperTest extends TestCase
         ]);
         $this->BakeHelper = $this->getMockBuilder('Bake\View\Helper\BakeHelper')
                 ->disableOriginalConstructor()
-                ->setMethods(['_filterHasManyAssociationsAliases'])
+                ->onlyMethods(['_filterHasManyAssociationsAliases'])
                 ->getMock();
         $this->BakeHelper->expects($this->once())
                 ->method('_filterHasManyAssociationsAliases')

@@ -3,7 +3,7 @@
 /tools
 /vendor
 /.idea/
-/.phpunit.result.cache
+/.phpunit.cache
 tests/test_app/App/Model/Table/CommentsTable.php
 tests/test_app/App/Controller/ProductVersionsController.php
 tests/test_app/App/Controller/ProductsController.php

@@ -130,7 +130,7 @@ class SimpleBakeCommandTest extends TestCase
      *
      * @return string[][]
      */
-    public function subclassProvider()
+    public static function subclassProvider()
     {
         return [
             ['Bake\Command\BehaviorCommand'],
