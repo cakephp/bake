@@ -131,11 +131,67 @@ class DocBlockHelperTest extends TestCase
      * Tests the buildEntityPropertyHintTypeMap method
      *
      * @return void
-     * @covers ::buildEntityPropertyHintTypeMap
      */
     public function testBuildEntityPropertyHintTypeMap()
     {
-        $this->markTestIncomplete('Not implemented yet');
+        $map = [
+            'string' => [
+                'char',
+                'string',
+                'text',
+                'uuid',
+                'decimal',
+            ],
+            'int' => [
+                'integer',
+                'biginteger',
+                'smallinteger',
+                'tinyinteger',
+            ],
+            'float' => [
+                'float',
+            ],
+            'bool' => [
+                'boolean',
+            ],
+            'array' => [
+                'array',
+                'json',
+            ],
+            'string|resource' => [
+                'binary',
+            ],
+            '\Cake\I18n\Date' => [
+                'date',
+            ],
+            '\Cake\I18n\DateTime' => [
+                'datetime',
+                'datetimefractional',
+                'timestamp',
+                'timestampfractional',
+                'timestamptimezone',
+            ],
+            '\Cake\I18n\Time' => [
+                'time',
+            ],
+        ];
+
+        foreach ($map as $return => $colTypes) {
+            foreach ($colTypes as $colType) {
+                $schema = [
+                    'col_to_check' => [
+                        'type' => $colType,
+                        'null' => false,
+                        'kind' => 'column',
+                    ],
+                ];
+                $assocEntityType = $this->DocBlockHelper->buildEntityPropertyHintTypeMap($schema);
+                $expected = [
+                    'col_to_check' => $return,
+                ];
+                $this->assertEquals($expected, $assocEntityType);
+            }
+        }
     }
 
     /**
