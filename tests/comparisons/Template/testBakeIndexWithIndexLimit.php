@@ -21,7 +21,7 @@
                 <?php foreach ($templateTaskComments as $templateTaskComment): ?>
                 <tr>
                     <td><?= $this->Number->format($templateTaskComment->id) ?></td>
-                    <td><?= $templateTaskComment->has('article') ? $this->Html->link($templateTaskComment->article->title, ['controller' => 'Articles', 'action' => 'view', $templateTaskComment->article->id]) : '' ?></td>
+                    <td><?= $templateTaskComment->hasValue('article') ? $this->Html->link($templateTaskComment->article->title, ['controller' => 'Articles', 'action' => 'view', $templateTaskComment->article->id]) : '' ?></td>
                     <td><?= $this->Number->format($templateTaskComment->user_id) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $templateTaskComment->id]) ?>

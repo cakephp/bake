@@ -20,7 +20,7 @@
             <table>
                 <tr>
                     <th><?= __('Role') ?></th>
-                    <td><?= $author->has('role') ? $this->Html->link($author->role->name, ['controller' => 'Roles', 'action' => 'view', $author->role->id]) : '' ?></td>
+                    <td><?= $author->hasValue('role') ? $this->Html->link($author->role->name, ['controller' => 'Roles', 'action' => 'view', $author->role->id]) : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Name') ?></th>
@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <th><?= __('Profile') ?></th>
-                    <td><?= $author->has('profile') ? $this->Html->link($author->profile->nick, ['controller' => 'Profiles', 'action' => 'view', $author->profile->id]) : '' ?></td>
+                    <td><?= $author->hasValue('profile') ? $this->Html->link($author->profile->nick, ['controller' => 'Profiles', 'action' => 'view', $author->profile->id]) : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Id') ?></th>
