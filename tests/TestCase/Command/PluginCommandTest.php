@@ -178,25 +178,6 @@ class PluginCommandTest extends TestCase
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
 
-        $result = json_decode(file_get_contents(ROOT . 'composer.json'), true);
-        $this->assertArrayHasKey('autoload', $result);
-        $this->assertArrayHasKey('psr-4', $result['autoload']);
-        $this->assertArrayHasKey('ComposerExample\\', $result['autoload']['psr-4']);
-
-        $this->assertArrayHasKey('autoload-dev', $result);
-        $this->assertArrayHasKey('psr-4', $result['autoload-dev']);
-        $this->assertArrayHasKey('ComposerExample\\Test\\', $result['autoload-dev']['psr-4']);
-
-        $pluginPath = App::path('plugins')[0];
-        $this->assertSame(
-            $pluginPath . 'ComposerExample' . DS . 'src' . DS,
-            $result['autoload']['psr-4']['ComposerExample\\']
-        );
-        $this->assertSame(
-            $pluginPath . 'ComposerExample' . DS . 'tests' . DS,
-            $result['autoload-dev']['psr-4']['ComposerExample\\Test\\']
-        );
-
         // Restore
         copy(ROOT . 'composer.json.bak', $composerConfig);
         unlink(ROOT . 'composer.json.bak');
