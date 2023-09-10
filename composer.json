@@ -20,7 +20,7 @@
     "require": {
         "cakephp/cakephp": "^5.0.0",
         "cakephp/twig-view": "^2.0.0",
-        "brick/varexporter": "^0.3.5",
+        "brick/varexporter": "^0.4.0",
         "nikic/php-parser": "^4.13.2"
     },
     "require-dev": {
