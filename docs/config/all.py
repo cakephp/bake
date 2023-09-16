@@ -10,10 +10,10 @@ from cakephpsphinx.config.all import *
 #
 
 # The full version, including alpha/beta/rc tags.
-release = '2.x'
+release = '3.x'
 
 # The search index version.
-search_version = 'bake-2'
+search_version = 'bake-3'
 
 # The marketing display name for the book.
 version_name = ''
@@ -24,7 +24,8 @@ project = 'CakePHP Bake'
 # Other versions that display in the version picker menu.
 version_list = [
     {'name': '1.x', 'number': '/bake/1.x', 'title': '1.x'},
-    {'name': '2.x', 'number': '/bake/2.x', 'title': '2.x', 'current': True},
+    {'name': '2.x', 'number': '/bake/2.x', 'title': '2.x'},
+    {'name': '3.x', 'number': '/bake/3.x', 'title': '3.x', 'current': True},
 ]
 
 # Languages available.
