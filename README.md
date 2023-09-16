@@ -20,7 +20,7 @@ composer require --dev cakephp/bake
 
 ## Documentation
 
-You can find the documentation for bake [on its own cookbook](https://book.cakephp.org/bake/2).
+You can find the documentation for bake [on its own cookbook](https://book.cakephp.org/bake/3).
 
 ## Testing
 
