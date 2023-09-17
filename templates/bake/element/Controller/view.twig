@@ -26,9 +26,6 @@
      */
     public function view($id = null)
     {
-        ${{ singularName }} = $this->{{ currentModelName }}->get($id, [
-            'contain' => {{ Bake.exportArray(allAssociations)|raw }},
-        ]);
-
+        ${{ singularName }} = $this->{{ currentModelName }}->get($id, contain: {{ Bake.exportArray(allAssociations)|raw }});
         $this->set(compact('{{ singularName }}'));
     }

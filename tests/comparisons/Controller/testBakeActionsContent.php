@@ -33,10 +33,7 @@ class BakeArticlesController extends AppController
      */
     public function view($id = null)
     {
-        $bakeArticle = $this->BakeArticles->get($id, [
-            'contain' => ['BakeUsers', 'BakeTags', 'BakeComments'],
-        ]);
-
+        $bakeArticle = $this->BakeArticles->get($id, contain: ['BakeUsers', 'BakeTags', 'BakeComments']);
         $this->set(compact('bakeArticle'));
     }
 
@@ -57,8 +54,8 @@ class BakeArticlesController extends AppController
             }
             $this->Flash->error(__('The bake article could not be saved. Please, try again.'));
         }
-        $bakeUsers = $this->BakeArticles->BakeUsers->find('list', ['limit' => 200])->all();
-        $bakeTags = $this->BakeArticles->BakeTags->find('list', ['limit' => 200])->all();
+        $bakeUsers = $this->BakeArticles->BakeUsers->find('list', limit: 200)->all();
+        $bakeTags = $this->BakeArticles->BakeTags->find('list', limit: 200)->all();
         $this->set(compact('bakeArticle', 'bakeUsers', 'bakeTags'));
     }
 
@@ -71,9 +68,7 @@ class BakeArticlesController extends AppController
      */
     public function edit($id = null)
     {
-        $bakeArticle = $this->BakeArticles->get($id, [
-            'contain' => ['BakeTags'],
-        ]);
+        $bakeArticle = $this->BakeArticles->get($id, contain: ['BakeTags']);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
             if ($this->BakeArticles->save($bakeArticle)) {
@@ -83,8 +78,8 @@ class BakeArticlesController extends AppController
             }
             $this->Flash->error(__('The bake article could not be saved. Please, try again.'));
         }
-        $bakeUsers = $this->BakeArticles->BakeUsers->find('list', ['limit' => 200])->all();
-        $bakeTags = $this->BakeArticles->BakeTags->find('list', ['limit' => 200])->all();
+        $bakeUsers = $this->BakeArticles->BakeUsers->find('list', limit: 200)->all();
+        $bakeTags = $this->BakeArticles->BakeTags->find('list', limit: 200)->all();
         $this->set(compact('bakeArticle', 'bakeUsers', 'bakeTags'));
     }
 
