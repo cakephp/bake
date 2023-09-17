@@ -44,8 +44,6 @@ Para ver as opções disponíveis no Bake digite::
      - bake model
      - bake model all
      - bake plugin
-     - bake shell
-     - bake shell_helper
      - bake task
      - bake template
      - bake template all
@@ -104,7 +102,7 @@ disponíveis usando a opção ``--help``::
     Omitting all arguments and options will list the table names you can
     generate models for.
 
-   
+
 
 Temas para o Bake
 =================
