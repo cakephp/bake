@@ -14,7 +14,7 @@ Si tiene problemas para ejecutar el script, asegurese de:
    lanzar ``bin/cake bake``.
 
 Antes de comenzar la ejecución, asegúrese de disponer al menos de una conexión
-a una base de datos configurada. 
+a una base de datos configurada.
 
 Para comenzar con la ejecución del comando debe abrir la consola de windows
 y ejecutar "Cake Bake"
@@ -53,8 +53,6 @@ El resultado debería ser algo similar a lo siguiente::
     - migration_snapshot
     - model
     - plugin
-    - shell
-    - shell-helper
     - template
     - test
 
@@ -112,4 +110,4 @@ propios templates, ver :ref:`bake theme creation documentation
 
 .. meta::
     :title lang=es: Crear código con Bake
-    :keywords lang=es: interfaz de línea de comando, aplicación funcional, base de datos, configuración de base de datos, bash script, ingredientes básicos, proyecto, modelo, path, crear código, generación de código, scaffolding, usuarios windows, archivo de configuración, pocos minutos, configurar, iew, shell, modelos, running, mysql
+    :keywords lang=es: interfaz de línea de comando, aplicación funcional, base de datos, configuración de base de datos, bash script, ingredientes básicos, proyecto, modelo, path, crear código, generación de código, scaffolding, usuarios windows, archivo de configuración, pocos minutos, configurar, view, modelos, running, mysql

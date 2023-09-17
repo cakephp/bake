@@ -62,4 +62,4 @@ theme bake <creating-a-bake-theme>`.
 
 .. meta::
     :title lang=fr: Génération de Code avec Bake
-    :keywords lang=fr: interface ligne de commande,application fonctionnelle,base de données,configuration base de données,bash script,ingredients basiques,project,model,path path,génération de code,scaffolding,windows users,configuration file,few minutes,config,iew,shell,models,running,mysql
+    :keywords lang=fr: interface ligne de commande,application fonctionnelle,base de données,configuration base de données,bash script,ingredients basiques,project,model,path path,génération de code,scaffolding,windows users,configuration file,few minutes,config,view,models,running,mysql

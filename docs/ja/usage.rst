@@ -43,8 +43,6 @@ Windows システムの場合、 ``bin\cake bake`` を試してみてくださ�
     - migration_snapshot
     - model
     - plugin
-    - shell
-    - shell-helper
     - template
     - test
 
@@ -99,4 +97,4 @@ Bake テーマオプション
 
 .. meta::
     :title lang=ja: Code Generation with Bake
-    :keywords lang=ja: command line interface,functional application,database,database configuration,bash script,basic ingredients,project,model,path path,code generation,scaffolding,windows users,configuration file,few minutes,config,iew,shell,models,running,mysql
+    :keywords lang=ja: command line interface,functional application,database,database configuration,bash script,basic ingredients,project,model,path path,code generation,scaffolding,windows users,configuration file,few minutes,config,view,models,running,mysql

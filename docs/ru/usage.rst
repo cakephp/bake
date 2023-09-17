@@ -46,8 +46,6 @@
     - model
     - plugin
     - seed
-    - shell
-    - shell_helper
     - task
     - template
     - test
@@ -94,8 +92,6 @@
                         and testing setup for a new plugin. Can create
                         plugins in any of your bootstrapped plugin paths.
     seed                Bake seed class.
-    shell               Bake a shell class file.
-    shell_helper        Bake a shell_helper class file.
     task                Bake a task class file.
     template            Bake views for a controller, using built-in or
                         custom templates.
@@ -128,4 +124,4 @@
 
 .. meta::
     :title lang=ru: Генерация кода с помощью Bake
-    :keywords lang=en: command line interface,functional application,database,database configuration,bash script,basic ingredients,project,model,path path,code generation,scaffolding,windows users,configuration file,few minutes,config,iew,shell,models,running,mysql
+    :keywords lang=en: command line interface,functional application,database,database configuration,bash script,basic ingredients,project,model,path path,code generation,scaffolding,windows users,configuration file,few minutes,config,view,models,running,mysql
