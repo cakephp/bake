@@ -24,7 +24,7 @@ use Cake\ORM\Table;
 class BakeArticlesTable extends Table
 {
     /**
-     * @param array $config
+     * @param array<string, mixed> $config
      * @return void
      */
     public function initialize(array $config): void
