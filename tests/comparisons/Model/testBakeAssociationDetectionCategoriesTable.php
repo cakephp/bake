@@ -16,7 +16,7 @@ use Cake\Validation\Validator;
  * @method \Bake\Test\App\Model\Entity\Category newEmptyEntity()
  * @method \Bake\Test\App\Model\Entity\Category newEntity(array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Category[] newEntities(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\Category get($primaryKey, $options = [])
+ * @method \Bake\Test\App\Model\Entity\Category get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Bake\Test\App\Model\Entity\Category findOrCreate($search, ?callable $callback = null, $options = [])
  * @method \Bake\Test\App\Model\Entity\Category patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Category[] patchEntities(iterable $entities, array $data, array $options = [])
