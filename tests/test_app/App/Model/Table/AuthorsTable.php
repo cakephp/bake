@@ -23,7 +23,7 @@ use Cake\ORM\Table;
 class AuthorsTable extends Table
 {
     /**
-     * @param array $config
+     * @param array<string, mixed> $config
      * @return void
      */
     public function initialize(array $config): void
