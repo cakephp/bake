@@ -16,7 +16,7 @@ use Cake\Validation\Validator;
  * @method \Bake\Test\App\Model\Entity\TodoTask newEmptyEntity()
  * @method \Bake\Test\App\Model\Entity\TodoTask newEntity(array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask[] newEntities(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\TodoTask get($primaryKey, $options = [])
+ * @method \Bake\Test\App\Model\Entity\TodoTask get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
  * @method \Bake\Test\App\Model\Entity\TodoTask findOrCreate($search, ?callable $callback = null, $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\TodoTask[] patchEntities(iterable $entities, array $data, array $options = [])
