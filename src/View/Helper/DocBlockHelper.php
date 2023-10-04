@@ -5,6 +5,7 @@ namespace Bake\View\Helper;
 
 use Cake\Collection\Collection;
 use Cake\Core\App;
+use Cake\Database\TypeFactory;
 use Cake\ORM\Association;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -200,6 +201,13 @@ class DocBlockHelper extends Helper
                 return 'string|resource';
 
             case 'date':
+                $dbType = TypeFactory::build($type);
+                if (method_exists($dbType, 'getDateClassName')) {
+                    return '\\' . $dbType->getDateClassName();
+                } elseif (method_exists($dbType, 'getDateTimeClassName')) {
+                    return '\\' . $dbType->getDateTimeClassName();
+                }
+
                 return '\Cake\I18n\Date';
 
             case 'datetime':
@@ -207,9 +215,19 @@ class DocBlockHelper extends Helper
             case 'timestamp':
             case 'timestampfractional':
             case 'timestamptimezone':
+                $dbType = TypeFactory::build($type);
+                if (method_exists($dbType, 'getDateTimeClassName')) {
+                    return '\\' . $dbType->getDateTimeClassName();
+                }
+
                 return '\Cake\I18n\DateTime';
 
             case 'time':
+                $dbType = TypeFactory::build($type);
+                if (method_exists($dbType, 'getDateTimeClassName')) {
+                    return '\\' . $dbType->getDateTimeClassName();
+                }
+
                 return '\Cake\I18n\Time';
         }
 
