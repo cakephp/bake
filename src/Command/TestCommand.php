@@ -23,6 +23,7 @@ use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Core\Exception\CakeException;
 use Cake\Core\Plugin;
+use Cake\Datasource\RepositoryInterface;
 use Cake\Http\ServerRequest as Request;
 use Cake\ORM\Table;
 use Cake\Utility\Filesystem;
@@ -453,12 +454,15 @@ class TestCommand extends BakeCommand
     /**
      * Process a model, pull out model name + associations converted to fixture names.
      *
-     * @param \Cake\ORM\Table $subject A Model class to scan for associations and pull fixtures off of.
+     * @param \Cake\Datasource\RepositoryInterface $subject A Model class to scan for associations and pull fixtures off of.
      * @return void
      */
-    protected function _processModel(Table $subject): void
+    protected function _processModel(RepositoryInterface $subject): void
     {
         $this->_addFixture($subject->getAlias());
+        if (!method_exists($subject, 'associations')) {
+            return;
+        }
         foreach ($subject->associations()->keys() as $alias) {
             $assoc = $subject->getAssociation($alias);
             $target = $assoc->getTarget();
