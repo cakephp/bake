@@ -18,7 +18,6 @@ namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
 use Brick\VarExporter\VarExporter;
-use Cake\Chronos\Chronos;
 use Cake\Chronos\ChronosDate;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -438,7 +437,7 @@ class FixtureCommand extends BakeCommand
     {
         foreach ($records as &$record) {
             array_walk($record, function (&$value): void {
-                if ($value instanceof DateTimeInterface || $value instanceof Chronos) {
+                if ($value instanceof DateTimeInterface) {
                     $value = $value->format('Y-m-d H:i:s');
                 } elseif ($value instanceof ChronosDate) {
                     $value = $value->format('Y-m-d');
