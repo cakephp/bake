@@ -15,17 +15,17 @@ use Cake\Validation\Validator;
  *
  * @method \Bake\Test\App\Model\Entity\Category newEmptyEntity()
  * @method \Bake\Test\App\Model\Entity\Category newEntity(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\Category[] newEntities(array $data, array $options = [])
+ * @method array<\Bake\Test\App\Model\Entity\Category> newEntities(array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Category get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \Bake\Test\App\Model\Entity\Category findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \Bake\Test\App\Model\Entity\Category findOrCreate($search, ?callable $callback = null, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Category patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\Category[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\Category|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\Category saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\Category[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\Category[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\Category[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\Category[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ * @method array<\Bake\Test\App\Model\Entity\Category> patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\Category|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\Category saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category>|false saveMany(iterable $entities, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category> saveManyOrFail(iterable $entities, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category>|false deleteMany(iterable $entities, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category> deleteManyOrFail(iterable $entities, array $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */

@@ -13,17 +13,17 @@ use Cake\Validation\Validator;
  *
  * @method \Bake\Test\App\Model\Entity\ParseTestTable newEmptyEntity()
  * @method \Bake\Test\App\Model\Entity\ParseTestTable newEntity(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\ParseTestTable[] newEntities(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\ParseTestTable get($primaryKey, $options = [])
- * @method \Bake\Test\App\Model\Entity\ParseTestTable findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method array<\Bake\Test\App\Model\Entity\ParseTestTable> newEntities(array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\ParseTestTable get($primaryKey, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\ParseTestTable findOrCreate($search, ?callable $callback = null, array $options = [])
  * @method \Bake\Test\App\Model\Entity\ParseTestTable patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\ParseTestTable[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\ParseTestTable|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\ParseTestTable saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\ParseTestTable[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\ParseTestTable[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\ParseTestTable[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\ParseTestTable[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ * @method array<\Bake\Test\App\Model\Entity\ParseTestTable> patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\ParseTestTable|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\ParseTestTable saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable>|false saveMany(iterable $entities, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable> saveManyOrFail(iterable $entities, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable>|false deleteMany(iterable $entities, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable> deleteManyOrFail(iterable $entities, array $options = [])
  */
 class ParseTestTable extends Table
 {
