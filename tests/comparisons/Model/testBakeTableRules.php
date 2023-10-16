@@ -13,17 +13,17 @@ use Cake\Validation\Validator;
  *
  * @method \Bake\Test\App\Model\Entity\UniqueField newEmptyEntity()
  * @method \Bake\Test\App\Model\Entity\UniqueField newEntity(array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\UniqueField[] newEntities(array $data, array $options = [])
+ * @method array<\Bake\Test\App\Model\Entity\UniqueField> newEntities(array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\UniqueField get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \Bake\Test\App\Model\Entity\UniqueField findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \Bake\Test\App\Model\Entity\UniqueField findOrCreate($search, ?callable $callback = null, array $options = [])
  * @method \Bake\Test\App\Model\Entity\UniqueField patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\UniqueField[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \Bake\Test\App\Model\Entity\UniqueField|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\UniqueField saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \Bake\Test\App\Model\Entity\UniqueField[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\UniqueField[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\UniqueField[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \Bake\Test\App\Model\Entity\UniqueField[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ * @method array<\Bake\Test\App\Model\Entity\UniqueField> patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\UniqueField|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \Bake\Test\App\Model\Entity\UniqueField saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\UniqueField>|false saveMany(iterable $entities, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\UniqueField> saveManyOrFail(iterable $entities, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\UniqueField>|false deleteMany(iterable $entities, array $options = [])
+ * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\UniqueField> deleteManyOrFail(iterable $entities, array $options = [])
  */
 class UniqueFieldsTable extends Table
 {
