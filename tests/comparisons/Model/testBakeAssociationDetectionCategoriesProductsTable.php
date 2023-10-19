@@ -23,10 +23,10 @@ use Cake\Validation\Validator;
  * @method array<\Bake\Test\App\Model\Entity\CategoriesProduct> patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\CategoriesProduct|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
  * @method \Bake\Test\App\Model\Entity\CategoriesProduct saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\CategoriesProduct>|false saveMany(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\CategoriesProduct> saveManyOrFail(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\CategoriesProduct>|false deleteMany(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\CategoriesProduct> deleteManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\CategoriesProduct>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\CategoriesProduct>|false saveMany(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\CategoriesProduct>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\CategoriesProduct> saveManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\CategoriesProduct>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\CategoriesProduct>|false deleteMany(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\CategoriesProduct>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\CategoriesProduct> deleteManyOrFail(iterable $entities, array $options = [])
  */
 class CategoriesProductsTable extends Table
 {

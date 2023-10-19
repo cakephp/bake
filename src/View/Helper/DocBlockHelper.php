@@ -272,10 +272,10 @@ class DocBlockHelper extends Helper
         $annotations[] = "@method array<\\{$namespace}\\Model\\Entity\\{$entity}> patchEntities(iterable \$entities, array \$data, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity}|false save(\\Cake\\Datasource\\EntityInterface \$entity, array \$options = [])";
         $annotations[] = "@method \\{$namespace}\\Model\\Entity\\{$entity} saveOrFail(\\Cake\\Datasource\\EntityInterface \$entity, array \$options = [])";
-        $annotations[] = "@method \Cake\Datasource\ResultSetInterface<\\{$namespace}\\Model\\Entity\\{$entity}>|false saveMany(iterable \$entities, array \$options = [])";
-        $annotations[] = "@method \Cake\Datasource\ResultSetInterface<\\{$namespace}\\Model\\Entity\\{$entity}> saveManyOrFail(iterable \$entities, array \$options = [])";
-        $annotations[] = "@method \Cake\Datasource\ResultSetInterface<\\{$namespace}\\Model\\Entity\\{$entity}>|false deleteMany(iterable \$entities, array \$options = [])";
-        $annotations[] = "@method \Cake\Datasource\ResultSetInterface<\\{$namespace}\\Model\\Entity\\{$entity}> deleteManyOrFail(iterable \$entities, array \$options = [])";
+        $annotations[] = "@method iterable<\\{$namespace}\\Model\\Entity\\{$entity}>|\Cake\Datasource\ResultSetInterface<\\{$namespace}\\Model\\Entity\\{$entity}>|false saveMany(iterable \$entities, array \$options = [])";
+        $annotations[] = "@method iterable<\\{$namespace}\\Model\\Entity\\{$entity}>|\Cake\Datasource\ResultSetInterface<\\{$namespace}\\Model\\Entity\\{$entity}> saveManyOrFail(iterable \$entities, array \$options = [])";
+        $annotations[] = "@method iterable<\\{$namespace}\\Model\\Entity\\{$entity}>|\Cake\Datasource\ResultSetInterface<\\{$namespace}\\Model\\Entity\\{$entity}>|false deleteMany(iterable \$entities, array \$options = [])";
+        $annotations[] = "@method iterable<\\{$namespace}\\Model\\Entity\\{$entity}>|\Cake\Datasource\ResultSetInterface<\\{$namespace}\\Model\\Entity\\{$entity}> deleteManyOrFail(iterable \$entities, array \$options = [])";
         // phpcs:enable
         foreach ($behaviors as $behavior => $behaviorData) {
             $className = App::className($behavior, 'Model/Behavior', 'Behavior');

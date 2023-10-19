@@ -20,10 +20,10 @@ use Cake\Validation\Validator;
  * @method array<\Bake\Test\App\Model\Entity\ParseTestTable> patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\ParseTestTable|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
  * @method \Bake\Test\App\Model\Entity\ParseTestTable saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable>|false saveMany(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable> saveManyOrFail(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable>|false deleteMany(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable> deleteManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\ParseTestTable>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable>|false saveMany(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\ParseTestTable>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable> saveManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\ParseTestTable>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable>|false deleteMany(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\ParseTestTable>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\ParseTestTable> deleteManyOrFail(iterable $entities, array $options = [])
  */
 class ParseTestTable extends Table
 {
