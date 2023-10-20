@@ -25,10 +25,10 @@ use Cake\Validation\Validator;
  * @method array<\Bake\Test\App\Model\Entity\Item> patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Item|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Item saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Item>|false saveMany(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Item> saveManyOrFail(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Item>|false deleteMany(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Item> deleteManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\Item>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Item>|false saveMany(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\Item>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Item> saveManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\Item>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Item>|false deleteMany(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\Item>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Item> deleteManyOrFail(iterable $entities, array $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */

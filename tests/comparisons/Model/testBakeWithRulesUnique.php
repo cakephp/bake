@@ -23,10 +23,10 @@ use Cake\Validation\Validator;
  * @method array<\Bake\Test\App\Model\Entity\User> patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\User|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
  * @method \Bake\Test\App\Model\Entity\User saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\User>|false saveMany(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\User> saveManyOrFail(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\User>|false deleteMany(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\User> deleteManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\User>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\User>|false saveMany(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\User>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\User> saveManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\User>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\User>|false deleteMany(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\User>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\User> deleteManyOrFail(iterable $entities, array $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */

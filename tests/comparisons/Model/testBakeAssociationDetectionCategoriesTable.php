@@ -22,10 +22,10 @@ use Cake\Validation\Validator;
  * @method array<\Bake\Test\App\Model\Entity\Category> patchEntities(iterable $entities, array $data, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Category|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
  * @method \Bake\Test\App\Model\Entity\Category saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category>|false saveMany(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category> saveManyOrFail(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category>|false deleteMany(iterable $entities, array $options = [])
- * @method \Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category> deleteManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\Category>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category>|false saveMany(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\Category>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category> saveManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\Category>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category>|false deleteMany(iterable $entities, array $options = [])
+ * @method iterable<\Bake\Test\App\Model\Entity\Category>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\Category> deleteManyOrFail(iterable $entities, array $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
