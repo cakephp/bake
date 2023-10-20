@@ -204,8 +204,6 @@ class DocBlockHelper extends Helper
                 $dbType = TypeFactory::build($type);
                 if (method_exists($dbType, 'getDateClassName')) {
                     return '\\' . $dbType->getDateClassName();
-                } elseif (method_exists($dbType, 'getDateTimeClassName')) {
-                    return '\\' . $dbType->getDateTimeClassName();
                 }
 
                 return '\Cake\I18n\Date';
@@ -216,9 +214,7 @@ class DocBlockHelper extends Helper
             case 'timestampfractional':
             case 'timestamptimezone':
                 $dbType = TypeFactory::build($type);
-                if (method_exists($dbType, 'getDateClassName')) {
-                    return '\\' . $dbType->getDateClassName();
-                } elseif (method_exists($dbType, 'getDateTimeClassName')) {
+                if (method_exists($dbType, 'getDateTimeClassName')) {
                     return '\\' . $dbType->getDateTimeClassName();
                 }
 
