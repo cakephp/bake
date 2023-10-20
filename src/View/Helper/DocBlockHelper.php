@@ -226,8 +226,8 @@ class DocBlockHelper extends Helper
 
             case 'time':
                 $dbType = TypeFactory::build($type);
-                if (method_exists($dbType, 'getDateTimeClassName')) {
-                    return '\\' . $dbType->getDateTimeClassName();
+                if (method_exists($dbType, 'getTimeClassName')) {
+                    return '\\' . $dbType->getTimeClassName();
                 }
 
                 return '\Cake\I18n\Time';
