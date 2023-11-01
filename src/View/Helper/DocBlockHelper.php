@@ -203,6 +203,7 @@ class DocBlockHelper extends Helper
             case 'date':
                 $dbType = TypeFactory::build($type);
                 if (method_exists($dbType, 'getDateClassName')) {
+                    // allow custom Date class which should extend \Cake\I18n\Date
                     return '\\' . $dbType->getDateClassName();
                 }
 
@@ -215,6 +216,7 @@ class DocBlockHelper extends Helper
             case 'timestamptimezone':
                 $dbType = TypeFactory::build($type);
                 if (method_exists($dbType, 'getDateTimeClassName')) {
+                    // allow custom DateTime class which should extend \Cake\I18n\DateTime
                     return '\\' . $dbType->getDateTimeClassName();
                 }
 
@@ -223,6 +225,7 @@ class DocBlockHelper extends Helper
             case 'time':
                 $dbType = TypeFactory::build($type);
                 if (method_exists($dbType, 'getTimeClassName')) {
+                    // allow custom Time class which should extend \Cake\I18n\Time
                     return '\\' . $dbType->getTimeClassName();
                 }
 
