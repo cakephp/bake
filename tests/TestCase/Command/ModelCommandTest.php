@@ -46,6 +46,7 @@ class ModelCommandTest extends TestCase
      * @var array<string>
      */
     protected array $fixtures = [
+        'plugin.Bake.Articles',
         'plugin.Bake.Comments',
         'plugin.Bake.Tags',
         'plugin.Bake.ArticlesTags',
@@ -1917,6 +1918,22 @@ class ModelCommandTest extends TestCase
         $this->generatedFile = $path . 'src/Model/Entity/User.php';
 
         $this->exec('bake model --no-validation --no-test --no-fixture --no-table BakeTest.Users');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an entity class with an enum field
+     *
+     * @return void
+     */
+    public function testBakeEntityEnum()
+    {
+        $this->generatedFile = APP . 'Model/Entity/Article.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields Articles');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
