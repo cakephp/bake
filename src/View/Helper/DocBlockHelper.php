@@ -5,6 +5,7 @@ namespace Bake\View\Helper;
 
 use Cake\Collection\Collection;
 use Cake\Core\App;
+use Cake\Database\Type\EnumType;
 use Cake\Database\TypeFactory;
 use Cake\ORM\Association;
 use Cake\Utility\Inflector;
@@ -230,6 +231,14 @@ class DocBlockHelper extends Helper
                 }
 
                 return '\Cake\I18n\Time';
+
+            default:
+                if (str_starts_with($type, 'enum-')) {
+                    $dbType = TypeFactory::build($type);
+                    if ($dbType instanceof EnumType) {
+                        return '\\' . $dbType->getEnumClassName();
+                    }
+                }
         }
 
         // Any unique or custom types will have a `string` type hint
