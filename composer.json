@@ -1,16 +1,19 @@
 {
     "name": "cakephp/bake",
     "description": "Bake plugin for CakePHP",
-    "type": "cakephp-plugin",
-    "keywords": ["cakephp", "bake"],
-    "homepage": "https://github.com/cakephp/bake",
     "license": "MIT",
+    "type": "cakephp-plugin",
+    "keywords": [
+        "cakephp",
+        "bake"
+    ],
     "authors": [
         {
             "name": "CakePHP Community",
             "homepage": "https://github.com/cakephp/bake/graphs/contributors"
         }
     ],
+    "homepage": "https://github.com/cakephp/bake",
     "support": {
         "issues": "https://github.com/cakephp/bake/issues",
         "forum": "https://stackoverflow.com/tags/cakephp",
@@ -18,15 +21,15 @@
         "source": "https://github.com/cakephp/bake"
     },
     "require": {
+        "brick/varexporter": "^0.4.0",
         "cakephp/cakephp": "^5.0.0",
         "cakephp/twig-view": "^2.0.0",
-        "brick/varexporter": "^0.4.0",
         "nikic/php-parser": "^4.13.2"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^5.0.0",
-        "phpunit/phpunit": "^10.1.0",
-        "cakephp/debug_kit": "^5.0.0"
+        "cakephp/debug_kit": "^5.0.0",
+        "phpunit/phpunit": "^10.1.0"
     },
     "autoload": {
         "psr-4": {
@@ -36,11 +39,17 @@
     "autoload-dev": {
         "psr-4": {
             "BakeTest\\": "tests/test_app/Plugin/BakeTest/src/",
+            "Bake\\Test\\": "tests/",
+            "Bake\\Test\\App\\": "tests/test_app/App/",
             "Company\\Pastry\\": "tests/test_app/Plugin/Company/Pastry/src/",
             "Pastry\\PastryTest\\": "tests/test_app/Plugin/PastryTest/src/",
-            "WithBakeSubFolder\\": "tests/test_app/Plugin/WithBakeSubFolder/src/",
-            "Bake\\Test\\": "tests/",
-            "Bake\\Test\\App\\": "tests/test_app/App/"
+            "WithBakeSubFolder\\": "tests/test_app/Plugin/WithBakeSubFolder/src/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "cakephp/plugin-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "scripts": {
@@ -50,22 +59,16 @@
         ],
         "cs-check": "phpcs --parallel=16 -p src/ tests/",
         "cs-fix": "phpcbf --parallel=16 -p src/ tests/",
+        "phpstan": "tools/phpstan analyse",
+        "psalm": "tools/psalm --show-info=false",
+        "psalm-baseline": "tools/psalm --set-baseline=psalm-baseline.xml",
         "stan": [
             "@phpstan",
             "@psalm"
         ],
-        "phpstan": "tools/phpstan analyse",
-        "psalm": "tools/psalm --show-info=false",
         "stan-baseline": "tools/phpstan --generate-baseline",
-        "psalm-baseline": "tools/psalm --set-baseline=psalm-baseline.xml",
         "stan-setup": "phive install",
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-clover=clover.xml"
-    },
-    "config": {
-        "allow-plugins": {
-            "cakephp/plugin-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
     }
 }
