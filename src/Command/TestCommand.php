@@ -460,7 +460,7 @@ class TestCommand extends BakeCommand
     /**
      * Process a model, pull out model name + associations converted to fixture names.
      *
-     * @param @param \Cake\Datasource\RepositoryInterface $subject A Model class to scan for associations and pull fixtures off of.
+     * @param \Cake\Datasource\RepositoryInterface $subject A Model class to scan for associations and pull fixtures off of.
      * @return void
      */
     protected function _processModel(RepositoryInterface $subject): void
