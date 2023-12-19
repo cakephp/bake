@@ -1195,6 +1195,7 @@ class ModelCommand extends BakeCommand
             'validation' => [],
             'rulesChecker' => [],
             'behaviors' => [],
+            'enums' => $this->enums($model, $entity, $namespace),
             'connection' => $this->connection,
             'fileBuilder' => new FileBuilder($io, "{$namespace}\Model\Table", $parsedFile),
         ];
@@ -1381,5 +1382,49 @@ class ModelCommand extends BakeCommand
             ['type', 'name']
         );
         $test->execute($testArgs, $io);
+    }
+
+    /**
+     * @param \Cake\ORM\Table $table
+     * @param string $entity
+     * @param string $namespace
+     * @return array<string, class-string>
+     */
+    protected function enums(Table $table, string $entity, string $namespace): array
+    {
+        $fields = $this->possibleEnumFields($table->getSchema());
+        $enumClassNamespace = $namespace . '\Model\Enum\\';
+
+        $enums = [];
+        foreach ($fields as $field) {
+            $enumClassName = $enumClassNamespace . $entity . Inflector::camelize($field);
+            if (!class_exists($enumClassName)) {
+                continue;
+            }
+
+            $enums[$field] = $enumClassName;
+        }
+
+        return $enums;
+    }
+
+    /**
+     * @param \Cake\Database\Schema\TableSchemaInterface $schema
+     * @return array<string>
+     */
+    protected function possibleEnumFields(TableSchemaInterface $schema): array
+    {
+        $fields = [];
+
+        foreach ($schema->columns() as $column) {
+            $columnSchema = $schema->getColumn($column);
+            if (!in_array($columnSchema['type'], ['string', 'integer', 'tinyinteger'], true)) {
+                continue;
+            }
+
+            $fields[] = $column;
+        }
+
+        return $fields;
     }
 }

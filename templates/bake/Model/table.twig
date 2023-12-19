@@ -61,6 +61,17 @@ class {{ name }}Table extends Table{{ fileBuilder.classBuilder.implements ? ' im
     {%- endif %}
 {% endif %}
 
+{%- if enums %}
+
+{% endif %}
+
+{%- if enums %}
+
+{%- for name, className in enums %}
+        $this->getSchema()->setColumnType('{{ name }}', \Cake\Database\Type\EnumType::from(\{{ className }}::class));
+{% endfor %}
+{% endif %}
+
 {%- if behaviors %}
 
 {% endif %}
