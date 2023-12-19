@@ -1338,6 +1338,91 @@ class ModelCommandTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testGetValidationOfPossibleFileFields(): void
+    {
+        $model = $this->getTableLocator()->get('TodoItems');
+        $model->setSchema([
+            // matches
+            'attachment' => ['type' => 'custom', 'null' => true],
+            'file' => ['type' => 'string', 'null' => true],
+            'image' => ['type' => 'string', 'null' => true],
+            'PDF_ATTACHMENT' => ['type' => 'string', 'null' => true],
+            'pdf-file' => ['type' => 'string', 'null' => true],
+            'pdf image' => ['type' => 'string', 'null' => true],
+            // non-matches
+            'attachment_size' => ['type' => 'integer', 'null' => true],
+            'file_location' => ['type' => 'string', 'null' => true],
+            'image_width' => ['type' => 'integer', 'null' => true],
+            'profile_id' => ['type' => 'integer', 'null' => true],
+            'filesize' => ['type' => 'integer', 'null' => true],
+            'pilgrimage' => ['type' => 'string', 'null' => true],
+            'reattachments' => ['type' => 'integer', 'null' => true],
+        ]);
+
+        $associations = [];
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+
+        $result = $command->getValidation($model, $associations, $args);
+
+        $expected = [
+            // matches
+            'attachment' => [
+                'allowEmpty' => ['rule' => 'allowEmptyFile', 'args' => []],
+            ],
+            'file' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyFile', 'args' => []],
+            ],
+            'image' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyFile', 'args' => []],
+            ],
+            'PDF_ATTACHMENT' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyFile', 'args' => []],
+            ],
+            'pdf-file' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyFile', 'args' => []],
+            ],
+            'pdf image' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyFile', 'args' => []],
+            ],
+            // non-matches
+            'attachment_size' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
+            ],
+            'file_location' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
+            ],
+            'image_width' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
+            ],
+            'profile_id' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
+            ],
+            'filesize' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
+            ],
+            'pilgrimage' => [
+                'scalar' => ['rule' => 'scalar', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
+            ],
+            'reattachments' => [
+                'integer' => ['rule' => 'integer', 'args' => []],
+                'allowEmpty' => ['rule' => 'allowEmptyString', 'args' => []],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
     /**
      * test getting validation rules with the no-rules param.
      *
