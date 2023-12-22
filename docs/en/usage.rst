@@ -31,9 +31,11 @@ You can get the list of available bake command by running ``bin/cake bake --help
     - bake behavior
     - bake cell
     - bake command
+    - bake command_helper
     - bake component
     - bake controller
     - bake controller all
+    - bake enum
     - bake fixture
     - bake fixture all
     - bake form
