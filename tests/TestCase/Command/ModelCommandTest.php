@@ -1368,7 +1368,7 @@ class ModelCommandTest extends TestCase
                 ],
                 [
                     'alias' => 'Sites',
-                    'foreignKey' => 'site_id',
+                    'foreignKey' => ['site_id1', 'site_id2'],
                 ],
             ],
             'hasMany' => [
@@ -1382,18 +1382,20 @@ class ModelCommandTest extends TestCase
         $args = new Arguments([], [], []);
         $result = $command->getRules($model, $associations, $args);
         $expected = [
-            'username' => [
+            [
                 'name' => 'isUnique',
                 'fields' => ['username'],
                 'options' => [],
             ],
-            'country_id' => [
+            [
                 'name' => 'existsIn',
+                'fields' => ['country_id'],
                 'extra' => 'Countries',
                 'options' => [],
             ],
-            'site_id' => [
+            [
                 'name' => 'existsIn',
+                'fields' => ['site_id1', 'site_id2'],
                 'extra' => 'Sites',
                 'options' => [],
             ],
@@ -1404,9 +1406,6 @@ class ModelCommandTest extends TestCase
     /**
      * Tests the getRules with unique keys.
      *
-     * Multi-column constraints are ignored as they would
-     * require a break in compatibility.
-     *
      * @return void
      */
     public function testGetRulesUniqueKeys()
@@ -1416,7 +1415,7 @@ class ModelCommandTest extends TestCase
             'type' => 'unique',
             'columns' => ['title'],
         ]);
-        $model->getSchema()->addConstraint('ignored_constraint', [
+        $model->getSchema()->addConstraint('unique_composite', [
             'type' => 'unique',
             'columns' => ['title', 'user_id'],
         ]);
@@ -1425,9 +1424,132 @@ class ModelCommandTest extends TestCase
         $args = new Arguments([], [], []);
         $result = $command->getRules($model, [], $args);
         $expected = [
-            'title' => [
+            [
+                'name' => 'isUnique',
+                'fields' => ['title'],
+                'options' => [],
+            ],
+            [
                 'name' => 'isUnique',
                 'fields' => ['title', 'user_id'],
+                'options' => [],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Tests that there are no conflicts between neither multiple constraints,
+     * nor with foreign keys that share one or more identical column.
+     */
+    public function testGetRulesNoColumnNameConflictForUniqueConstraints(): void
+    {
+        $model = $this->getTableLocator()->get('Users');
+        $model->setSchema([
+            'department_id' => ['type' => 'integer', 'null' => false],
+            'username' => ['type' => 'string', 'null' => false],
+            'email' => ['type' => 'string', 'null' => false],
+        ]);
+
+        $model->getSchema()->addConstraint('unique_composite_1', [
+            'type' => 'unique',
+            'columns' => ['department_id', 'username'],
+        ]);
+        $model->getSchema()->addConstraint('unique_composite_2', [
+            'type' => 'unique',
+            'columns' => ['department_id', 'email'],
+        ]);
+
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+        $associations = [
+            'belongsTo' => [
+                ['alias' => 'Departments', 'foreignKey' => 'department_id'],
+            ],
+        ];
+
+        $result = $command->getRules($model, $associations, $args);
+        $expected = [
+            [
+                'name' => 'isUnique',
+                'fields' => ['department_id', 'username'],
+                'options' => [],
+            ],
+            [
+                'name' => 'isUnique',
+                'fields' => ['department_id', 'email'],
+                'options' => [],
+            ],
+            [
+                'name' => 'existsIn',
+                'fields' => ['department_id'],
+                'extra' => 'Departments',
+                'options' => [],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Tests generating unique rules for possibly unique columns based on
+     * column names instead of on actual unique constraints.
+     */
+    public function testGetRulesForPossiblyUniqueColumns(): void
+    {
+        $model = $this->getTableLocator()->get('Users');
+        $model->setSchema([
+            'department_id' => ['type' => 'integer', 'null' => false],
+            'username' => ['type' => 'string', 'null' => false],
+            'login' => ['type' => 'string', 'null' => false],
+            'email' => ['type' => 'string', 'null' => false],
+        ]);
+
+        $command = new ModelCommand();
+        $args = new Arguments([], [], []);
+        $result = $command->getRules($model, [], $args);
+        $expected = [
+            [
+                'name' => 'isUnique',
+                'fields' => ['username'],
+                'options' => [],
+            ],
+            [
+                'name' => 'isUnique',
+                'fields' => ['login'],
+                'options' => [],
+            ],
+            [
+                'name' => 'isUnique',
+                'fields' => ['email'],
+                'options' => [],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+
+        // possibly unique columns should not cause additional rules
+        // to be generated in case the column is already present in
+        // an actual unique constraint
+
+        $model->getSchema()->addConstraint('unique_composite', [
+            'type' => 'unique',
+            'columns' => ['department_id', 'username'],
+        ]);
+
+        $result = $command->getRules($model, [], $args);
+        $expected = [
+            [
+                'name' => 'isUnique',
+                'fields' => ['login'],
+                'options' => [],
+            ],
+            [
+                'name' => 'isUnique',
+                'fields' => ['email'],
+                'options' => [],
+            ],
+            [
+                'name' => 'isUnique',
+                'fields' => ['department_id', 'username'],
                 'options' => [],
             ],
         ];

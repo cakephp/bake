@@ -128,13 +128,13 @@ class {{ name }}Table extends Table{{ fileBuilder.classBuilder.implements ? ' im
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-{% for field, rule in rulesChecker %}
-{% set fields = rule.fields is defined ? Bake.exportArray(rule.fields) : Bake.exportVar(field) %}
+{% for rule in rulesChecker %}
+{% set fields = Bake.exportArray(rule.fields) %}
 {% set options = '' %}
 {% for optionName, optionValue in rule.options %}
     {%~ set options = (loop.first ? '[' : options) ~ "'#{optionName}' => " ~ Bake.exportVar(optionValue) ~ (loop.last ? ']' : ', ') %}
 {% endfor %}
-        $rules->add($rules->{{ rule.name }}({{ fields|raw }}{{ (rule.extra|default ? ", '#{rule.extra}'" : '')|raw }}{{ (options ? ', ' ~ options : '')|raw }}), ['errorField' => '{{ field }}']);
+        $rules->add($rules->{{ rule.name }}({{ fields|raw }}{{ (rule.extra|default ? ", '#{rule.extra}'" : '')|raw }}{{ (options ? ', ' ~ options : '')|raw }}), ['errorField' => '{{ rule.fields[0] }}']);
 {% endfor %}
 
         return $rules;
