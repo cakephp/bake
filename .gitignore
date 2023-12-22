@@ -10,3 +10,4 @@ tests/test_app/App/Controller/ProductsController.php
 tests/test_app/Plugin/TestBake/
 tests/test_app/tests/
 clover.xml
+/.phpunit.result.cache

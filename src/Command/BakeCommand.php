@@ -221,7 +221,7 @@ abstract class BakeCommand extends Command
      * @param string $path The path to create the file at
      * @param string $contents The contents to put into the file
      * @param bool $forceOverwrite Whether the file should be overwritten without prompting the user
-     * @param bool $skipIfUnchnged Skip writing output if the contents match existing file
+     * @param bool $skipIfUnchanged Skip writing output if the contents match existing file
      * @return bool True if successful, false otherwise
      * @throws \Cake\Console\Exception\StopException When `q` is given as an answer
      *   to whether a file should be overwritten.
@@ -231,9 +231,9 @@ abstract class BakeCommand extends Command
         string $path,
         string $contents,
         bool $forceOverwrite = false,
-        bool $skipIfUnchnged = true
+        bool $skipIfUnchanged = true
     ): bool {
-        if ($skipIfUnchnged && file_exists($path) && file_get_contents($path) === $contents) {
+        if ($skipIfUnchanged && file_exists($path) && file_get_contents($path) === $contents) {
             $io->info("Skipping update to `{$path}`. It already exists and would not change.");
 
             return true;
