@@ -88,7 +88,7 @@ you can use the following event::
                     'view',
                     'add',
                     'edit',
-                    'delete'
+                    'delete',
                 ]);
             }
         }
