@@ -9,7 +9,7 @@ use Cake\Utility\Inflector;
 /**
  * FooBar Enum
  */
-enum FooBar implements EnumLabelInterface
+enum FooBar: int implements EnumLabelInterface
 {
     /**
      * @return string

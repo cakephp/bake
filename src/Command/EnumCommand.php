@@ -16,6 +16,10 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Cake\Console\Arguments;
+use Cake\Console\ConsoleOptionParser;
+use InvalidArgumentException;
+
 /**
  * Enum code generator.
  */
@@ -50,5 +54,46 @@ class EnumCommand extends SimpleBakeCommand
     public function template(): string
     {
         return 'Bake.Model/enum';
+    }
+
+    /**
+     * Get template data.
+     *
+     * @param \Cake\Console\Arguments $arguments The arguments for the command
+     * @return array
+     * @phpstan-return array<string, mixed>
+     */
+    public function templateData(Arguments $arguments): array
+    {
+        $data = parent::templateData($arguments);
+
+        $backed = $arguments->getOption('backed');
+        if ($backed && !in_array($backed, ['string', 'int'], true)) {
+            throw new InvalidArgumentException('Backed enums must be of type `string` or `int`');
+        }
+
+        $data['backed'] = $backed;
+
+        return $data;
+    }
+
+    /**
+     * Gets the option parser instance and configures it.
+     *
+     * @param \Cake\Console\ConsoleOptionParser $parser The option parser to update.
+     * @return \Cake\Console\ConsoleOptionParser
+     */
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        $parser = $this->_setCommonOptions($parser);
+
+        $parser->setDescription(
+            'Bake (backed) enums for use in models.'
+        )->addOption('backed', [
+            'help' => 'If using backed enums. Set to `string` or `int`.',
+            'short' => 'b',
+        ]);
+
+        return $parser;
     }
 }
