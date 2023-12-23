@@ -90,7 +90,7 @@ class EnumCommand extends SimpleBakeCommand
         $parser->setDescription(
             'Bake (backed) enums for use in models.'
         )->addOption('backed', [
-            'help' => 'If using backed enums. Set to `string` or `int`.',
+            'help' => 'Valid options are `string` for string columns or `int` for tinyinteger columns.',
             'short' => 'b',
         ]);
 
