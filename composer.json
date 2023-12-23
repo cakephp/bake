@@ -17,10 +17,10 @@
     "support": {
         "issues": "https://github.com/cakephp/bake/issues",
         "forum": "https://stackoverflow.com/tags/cakephp",
-        "irc": "irc://irc.freenode.org/cakephp",
         "source": "https://github.com/cakephp/bake"
     },
     "require": {
+        "php": ">=8.1",
         "brick/varexporter": "^0.4.0",
         "cakephp/cakephp": "^5.0.0",
         "cakephp/twig-view": "^2.0.0",
@@ -42,7 +42,6 @@
             "Bake\\Test\\": "tests/",
             "Bake\\Test\\App\\": "tests/test_app/App/",
             "Company\\Pastry\\": "tests/test_app/Plugin/Company/Pastry/src/",
-            "Pastry\\PastryTest\\": "tests/test_app/Plugin/PastryTest/src/",
             "WithBakeSubFolder\\": "tests/test_app/Plugin/WithBakeSubFolder/src/"
         }
     },
