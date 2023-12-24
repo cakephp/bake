@@ -66,13 +66,7 @@ class EnumCommand extends SimpleBakeCommand
     public function templateData(Arguments $arguments): array
     {
         $data = parent::templateData($arguments);
-
-        $backed = $arguments->getOption('backed');
-        if ($backed && !in_array($backed, ['string', 'int'], true)) {
-            throw new InvalidArgumentException('Backed enums must be of type `string` or `int`');
-        }
-
-        $data['backed'] = $backed;
+        $data['backingType'] = $arguments->getOption('backing-type');
 
         return $data;
     }
@@ -88,9 +82,11 @@ class EnumCommand extends SimpleBakeCommand
         $parser = $this->_setCommonOptions($parser);
 
         $parser->setDescription(
-            'Bake (backed) enums for use in models.'
-        )->addOption('backed', [
-            'help' => 'Valid options are `string` for string columns or `int` for tinyinteger columns.',
+            'Bake enums for use in models.'
+        )->addOption('backing-type', [
+            'help' => 'The return type for the enum class',
+            'default' => 'string',
+            'choices' => ['string', 'int'],
             'short' => 'b',
         ]);
 

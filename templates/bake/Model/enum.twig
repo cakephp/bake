@@ -22,7 +22,7 @@
 }) }}
 
 {{ DocBlock.classDescription(name, 'Enum', [])|raw }}
-enum {{ name }}{{ backed ? ': ' ~ backed : ''}} implements EnumLabelInterface
+enum {{ name }}: {{ backingType }} implements EnumLabelInterface
 {
     /**
      * @return string
