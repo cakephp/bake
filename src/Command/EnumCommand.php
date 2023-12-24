@@ -82,9 +82,9 @@ class EnumCommand extends SimpleBakeCommand
         $parser = $this->_setCommonOptions($parser);
 
         $parser->setDescription(
-            'Bake enums for use in models.'
+            'Bake backed enums for use in models.'
         )->addOption('backing-type', [
-            'help' => 'The return type for the enum class',
+            'help' => 'The return type for the backed enum class',
             'default' => 'string',
             'choices' => ['string', 'int'],
             'short' => 'b',
