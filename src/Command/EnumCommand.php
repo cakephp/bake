@@ -18,7 +18,6 @@ namespace Bake\Command;
 
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleOptionParser;
-use InvalidArgumentException;
 
 /**
  * Enum code generator.
@@ -66,7 +65,7 @@ class EnumCommand extends SimpleBakeCommand
     public function templateData(Arguments $arguments): array
     {
         $data = parent::templateData($arguments);
-        $data['backingType'] = $arguments->getOption('backing-type');
+        $data['backingType'] = $arguments->getOption('integer') ? 'int' : 'string';
 
         return $data;
     }
@@ -83,11 +82,10 @@ class EnumCommand extends SimpleBakeCommand
 
         $parser->setDescription(
             'Bake backed enums for use in models.'
-        )->addOption('backing-type', [
-            'help' => 'The return type for the backed enum class',
-            'default' => 'string',
-            'choices' => ['string', 'int'],
-            'short' => 'b',
+        )->addOption('integer', [
+            'help' => 'Using backed enums with int instead of string as return type',
+            'boolean' => true,
+            'short' => 'i',
         ]);
 
         return $parser;

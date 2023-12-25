@@ -61,7 +61,7 @@ class EnumCommandTest extends TestCase
     public function testBakeEnumBackedInt()
     {
         $this->generatedFile = APP . 'Model/Enum/FooBar.php';
-        $this->exec('bake enum FooBar -b int', ['y']);
+        $this->exec('bake enum FooBar -i', ['y']);
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
