@@ -65,7 +65,7 @@ class EnumCommand extends SimpleBakeCommand
     public function templateData(Arguments $arguments): array
     {
         $data = parent::templateData($arguments);
-        $data['backingType'] = $arguments->getOption('integer') ? 'int' : 'string';
+        $data['backingType'] = $arguments->getOption('int') ? 'int' : 'string';
 
         return $data;
     }
@@ -82,7 +82,7 @@ class EnumCommand extends SimpleBakeCommand
 
         $parser->setDescription(
             'Bake backed enums for use in models.'
-        )->addOption('integer', [
+        )->addOption('int', [
             'help' => 'Using backed enums with int instead of string as return type',
             'boolean' => true,
             'short' => 'i',
