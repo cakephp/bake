@@ -963,7 +963,7 @@ class ModelCommand extends BakeCommand
                 return $prefix . 'EmptyDateTime';
         }
 
-        if (preg_match('/file|image/', $fieldName)) {
+        if (preg_match('/(^|\s|_|-)(attachment|file|image)$/i', $fieldName)) {
             return $prefix . 'EmptyFile';
         }
 
