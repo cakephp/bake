@@ -1418,7 +1418,7 @@ class ModelCommand extends BakeCommand
 
         foreach ($schema->columns() as $column) {
             $columnSchema = $schema->getColumn($column);
-            if (!in_array($columnSchema['type'], ['string', 'integer', 'tinyinteger'], true)) {
+            if (!in_array($columnSchema['type'], ['string', 'integer', 'tinyinteger', 'smallinteger'], true)) {
                 continue;
             }
 
