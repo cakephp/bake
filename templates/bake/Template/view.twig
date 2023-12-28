@@ -76,6 +76,19 @@
                 </tr>
 {% endfor %}
 {% endif %}
+{% if groupedFields.enum %}
+{% for field in groupedFields.enum %}
+                <tr>
+                    <th><?= __('{{ field|humanize }}') ?></th>
+{% set columnData = Bake.columnData(field, schema) %}
+{% if columnData.null %}
+                <td><?= ${{ singularVar }}->{{ field }} === null ? '' : h(${{ singularVar }}->{{ field }}->label()) ?></td>
+{% else %}
+                <td><?= h(${{ singularVar }}->{{ field }}->label()) ?></td>
+{% endif %}
+                </tr>
+{% endfor %}
+{% endif %}
 {% if groupedFields.date %}
 {% for field in groupedFields.date %}
                 <tr>
