@@ -111,6 +111,8 @@ class ModelCommand extends BakeCommand
         $tableObject = $this->getTableObject($name, $table);
         $this->validateNames($tableObject->getSchema(), $io);
         $data = $this->getTableContext($tableObject, $table, $name, $args, $io);
+
+        $this->bakeEnums($tableObject, $data, $args, $io);
         $this->bakeTable($tableObject, $data, $args, $io);
         $this->bakeEntity($tableObject, $data, $args, $io);
         $this->bakeFixture($tableObject->getAlias(), $tableObject->getTable(), $args, $io);
@@ -168,6 +170,7 @@ class ModelCommand extends BakeCommand
         $behaviors = $this->getBehaviors($tableObject);
         $connection = $this->connection;
         $hidden = $this->getHiddenFields($tableObject, $args);
+        $enumSchema = $this->getEnumDefinitions($tableObject->getSchema());
 
         return compact(
             'associations',
@@ -181,7 +184,8 @@ class ModelCommand extends BakeCommand
             'rulesChecker',
             'behaviors',
             'connection',
-            'hidden'
+            'hidden',
+            'enumSchema',
         );
     }
 
@@ -1118,7 +1122,7 @@ class ModelCommand extends BakeCommand
      * Bake an entity class.
      *
      * @param \Cake\ORM\Table $model Model name or object
-     * @param array $data An array to use to generate the Table
+     * @param array<string, mixed> $data An array to use to generate the Table
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @param \Cake\Console\ConsoleIo $io CLI io
      * @return void
@@ -1170,7 +1174,7 @@ class ModelCommand extends BakeCommand
      * Bake a table class.
      *
      * @param \Cake\ORM\Table $model Model name or object
-     * @param array $data An array to use to generate the Table
+     * @param array<string, mixed> $data An array to use to generate the Table
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @param \Cake\Console\ConsoleIo $io CLI Arguments
      * @return void
@@ -1443,5 +1447,95 @@ class ModelCommand extends BakeCommand
         }
 
         return $fields;
+    }
+
+    /**
+     * @param \Cake\Database\Schema\TableSchemaInterface $schema
+     * @return array<string, mixed>
+     */
+    protected function getEnumDefinitions(TableSchemaInterface $schema): array
+    {
+        $enums = [];
+
+        foreach ($schema->columns() as $column) {
+            $columnSchema = $schema->getColumn($column);
+            if (!in_array($columnSchema['type'], ['string', 'integer', 'tinyinteger', 'smallinteger'], true)) {
+                continue;
+            }
+
+            if (empty($columnSchema['comment']) || strpos($columnSchema['comment'], '[enum]') === false) {
+                continue;
+            }
+
+            $enumsDefinitionString = mb_substr($columnSchema['comment'], strpos($columnSchema['comment'], '[enum]') + 6);
+            $enumsDefinition = $this->parseEnumsDefinition($enumsDefinitionString);
+            if (!$enumsDefinition) {
+                continue;
+            }
+
+            $enums[$column] = $enumsDefinition;
+        }
+
+        return $enums;
+    }
+
+    /**
+     * @param string $enumsDefinitionString
+     * @return array<int|string, string>
+     */
+    protected function parseEnumsDefinition(string $enumsDefinitionString): array
+    {
+        $enumCases = explode(',', $enumsDefinitionString);
+
+        $definition = [];
+        foreach ($enumCases as $enumCase) {
+            $key = $value = trim($enumCase);
+            if (str_contains($key, ':')) {
+                $value = trim(mb_substr($key, strpos($key, ':') + 1));
+                $key = mb_substr($key, 0, strpos($key, ':'));
+            }
+
+            $definition[$key] = mb_strtolower($value);
+        }
+
+        return $definition;
+    }
+
+    /**
+     * @param \Cake\ORM\Table $model
+     * @param array<string, mixed> $data
+     * @param \Cake\Console\Arguments $args
+     * @param \Cake\Console\ConsoleIo $io
+     * @return void
+     */
+    protected function bakeEnums(Table $model, array $data, Arguments $args, ConsoleIo $io): void
+    {
+        $enums = $data['enumSchema'];
+        if (!$enums) {
+            return;
+        }
+
+        $entity = $this->_entityName($model->getAlias());
+
+        foreach ($enums as $column => $enum) {
+            $enumCommand = new EnumCommand();
+
+            $name = $entity . Inflector::camelize($column);
+            if ($this->plugin) {
+                $name = $this->plugin . '.' . $name;
+            }
+
+            $cases = [];
+            foreach ($enum as $k => $v) {
+                $cases[] = $k . ':' . $v;
+            }
+
+            $args = new Arguments(
+                [$name, implode(',', $cases)],
+                ['int' => false] + $args->getOptions(),
+                ['name', 'cases']
+            );
+            $enumCommand->execute($args, $io);
+        }
     }
 }

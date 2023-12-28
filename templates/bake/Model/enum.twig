@@ -24,11 +24,15 @@
 {{ DocBlock.classDescription(name, 'Enum', [])|raw }}
 enum {{ name }}: {{ backingType }} implements EnumLabelInterface
 {
+{% if cases %}
+    {{ Bake.concat('\n    ', cases) }}
+
+{% endif %}
     /**
      * @return string
      */
     public function label(): string
     {
-        return Inflector::humanize(Inflector::underscore($this->name));
+        return Inflector::humanize(mb_strtolower($this->name));
     }
 }

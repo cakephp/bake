@@ -18,6 +18,8 @@ namespace Bake\Command;
 
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Utility\Inflector;
+use InvalidArgumentException;
 
 /**
  * Enum code generator.
@@ -64,8 +66,20 @@ class EnumCommand extends SimpleBakeCommand
      */
     public function templateData(Arguments $arguments): array
     {
+        $cases = $this->parseCases($arguments->getArgument('cases'), (bool)$arguments->getOption('int'));
+        $isOfTypeInt = $this->isOfTypeInt($cases);
+        $backingType = $isOfTypeInt ? 'int' : 'string';
+        if ($arguments->getOption('int')) {
+            if ($cases && !$isOfTypeInt) {
+                throw new InvalidArgumentException('The cases provided do not seem to match the int type you want to bake');
+            }
+
+            $backingType = 'int';
+        }
+
         $data = parent::templateData($arguments);
-        $data['backingType'] = $arguments->getOption('int') ? 'int' : 'string';
+        $data['backingType'] = $backingType;
+        $data['cases'] = $this->formatCases($cases);
 
         return $data;
     }
@@ -82,12 +96,82 @@ class EnumCommand extends SimpleBakeCommand
 
         $parser->setDescription(
             'Bake backed enums for use in models.'
-        )->addOption('int', [
-            'help' => 'Using backed enums with int instead of string as return type',
+        )->addArgument('name', [
+            'help' => 'Name of the enum to bake. You can use Plugin.name to bake plugin enums.',
+            'required' => true,
+        ])->addArgument('cases', [
+            'help' => 'List of either `one,two` for string or `0:foo,1:bar` for int type.',
+        ])->addOption('int', [
+            'help' => 'Using backed enums with int instead of string as return type.',
             'boolean' => true,
             'short' => 'i',
         ]);
 
         return $parser;
+    }
+
+    /**
+     * @param string|null $casesString
+     * @return array<int|string, string>
+     */
+    protected function parseCases(?string $casesString, bool $int): array
+    {
+        if ($casesString === null) {
+            return [];
+        }
+
+        $enumCases = explode(',', $casesString);
+
+        $definition = [];
+        foreach ($enumCases as $k => $enumCase) {
+            $key = $value = trim($enumCase);
+            if (str_contains($key, ':')) {
+                $value = trim(mb_substr($key, strpos($key, ':') + 1));
+                $key = mb_substr($key, 0, strpos($key, ':'));
+            } elseif ($int) {
+                $key = $k;
+            }
+
+            $definition[$key] = $value;
+        }
+
+        return $definition;
+    }
+
+    /**
+     * @param array<int|string, string> $definition
+     * @return bool
+     */
+    protected function isOfTypeInt(array $definition): bool
+    {
+        if (!$definition) {
+            return false;
+        }
+
+        foreach ($definition as $key => $value) {
+            if (!is_int($key)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array<int|string, string> $cases
+     * @return array<string>
+     */
+    protected function formatCases(array $cases): array
+    {
+        $formatted = [];
+        foreach ($cases as $case => $alias) {
+            $alias = mb_strtoupper(Inflector::underscore($alias));
+            if (is_string($case)) {
+                $case = '\'' . $case . '\'';
+            }
+            $formatted[] = 'case ' . $alias . ' = ' . $case . ';';
+        }
+
+        return $formatted;
     }
 }
