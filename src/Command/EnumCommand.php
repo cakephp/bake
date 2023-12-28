@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Utility\Inflector;
 use InvalidArgumentException;
@@ -173,5 +174,27 @@ class EnumCommand extends SimpleBakeCommand
         }
 
         return $formatted;
+    }
+
+    /**
+     * Generate a class stub
+     *
+     * @param string $name The class name
+     * @param \Cake\Console\Arguments $args The console arguments
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return void
+     */
+    protected function bake(string $name, Arguments $args, ConsoleIo $io): void
+    {
+        parent::bake($name, $args, $io);
+
+        $path = $this->getPath($args);
+        $filename = $path . $name . '.php';
+
+        // Work around composer caching that classes/files do not exist.
+        // Check for the file as it might not exist in tests.
+        if (file_exists($filename)) {
+            require_once $filename;
+        }
     }
 }

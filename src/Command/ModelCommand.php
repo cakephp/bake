@@ -1439,6 +1439,12 @@ class ModelCommand extends BakeCommand
 
         foreach ($schema->columns() as $column) {
             $columnSchema = $schema->getColumn($column);
+            if (str_starts_with($columnSchema['type'], 'enum-')) {
+                $fields[] = $column;
+
+                continue;
+            }
+
             if (!in_array($columnSchema['type'], ['string', 'integer', 'tinyinteger', 'smallinteger'], true)) {
                 continue;
             }

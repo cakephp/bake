@@ -233,7 +233,7 @@ class BakeHelper extends Helper
                 if (isset($associationFields[$field])) {
                     return 'string';
                 }
-                if (str_starts_with($type, 'enum-')) {
+                if ($type && str_starts_with($type, 'enum-')) {
                     return 'enum';
                 }
                 $numberTypes = ['decimal', 'biginteger', 'integer', 'float', 'smallinteger', 'tinyinteger'];
