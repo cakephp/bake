@@ -1973,7 +1973,24 @@ class ModelCommandTest extends TestCase
     }
 
     /**
-     * test generation with counter cach
+     * test generation with enum
+     *
+     * @return void
+     */
+    public function testBakeTableWithEnum(): void
+    {
+        $this->generatedFile = APP . 'Model/Table/BakeUsersTable.php';
+
+        $this->exec('bake model --no-validation --no-test --no-fixture --no-entity BakeUsers');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertStringContainsString('$this->getSchema()->setColumnType(\'status\', \Cake\Database\Type\EnumType::from(\Bake\Test\App\Model\Enum\BakeUserStatus::class));', $result);
+    }
+
+    /**
+     * test generation with counter cache
      *
      * @return void
      */
