@@ -984,22 +984,14 @@ class ModelCommand extends BakeCommand
             return [];
         }
         $schema = $model->getSchema();
-        $fields = $schema->columns();
-        if (empty($fields)) {
+        $schemaFields = $schema->columns();
+        if (empty($schemaFields)) {
             return [];
         }
 
-        $uniqueColumns = ['username', 'login'];
-        if (in_array($model->getAlias(), ['Users', 'Accounts'])) {
-            $uniqueColumns[] = 'email';
-        }
+        $uniqueRules = [];
+        $uniqueConstraintsColumns = [];
 
-        $rules = [];
-        foreach ($fields as $fieldName) {
-            if (in_array($fieldName, $uniqueColumns, true)) {
-                $rules[$fieldName] = ['name' => 'isUnique', 'fields' => [$fieldName], 'options' => []];
-            }
-        }
         foreach ($schema->constraints() as $name) {
             $constraint = $schema->getConstraint($name);
             if ($constraint['type'] !== TableSchema::CONSTRAINT_UNIQUE) {
@@ -1007,8 +999,11 @@ class ModelCommand extends BakeCommand
             }
 
             $options = [];
-            $fields = $constraint['columns'];
-            foreach ($fields as $field) {
+            /** @var array<string> $constraintFields */
+            $constraintFields = $constraint['columns'];
+            $uniqueConstraintsColumns = [...$uniqueConstraintsColumns, ...$constraintFields];
+
+            foreach ($constraintFields as $field) {
                 if ($schema->isNullable($field)) {
                     $allowMultiple = !ConnectionManager::get($this->connection)->getDriver() instanceof Sqlserver;
                     $options['allowMultipleNulls'] = $allowMultiple;
@@ -1016,15 +1011,37 @@ class ModelCommand extends BakeCommand
                 }
             }
 
-            $rules[$constraint['columns'][0]] = ['name' => 'isUnique', 'fields' => $fields, 'options' => $options];
+            $uniqueRules[] = ['name' => 'isUnique', 'fields' => $constraintFields, 'options' => $options];
         }
+
+        $possiblyUniqueColumns = ['username', 'login'];
+        if (in_array($model->getAlias(), ['Users', 'Accounts'])) {
+            $possiblyUniqueColumns[] = 'email';
+        }
+
+        $possiblyUniqueRules = [];
+        foreach ($schemaFields as $field) {
+            if (
+                !in_array($field, $uniqueConstraintsColumns, true) &&
+                in_array($field, $possiblyUniqueColumns, true)
+            ) {
+                $possiblyUniqueRules[] = ['name' => 'isUnique', 'fields' => [$field], 'options' => []];
+            }
+        }
+
+        $rules = [...$possiblyUniqueRules, ...$uniqueRules];
 
         if (empty($associations['belongsTo'])) {
             return $rules;
         }
 
         foreach ($associations['belongsTo'] as $assoc) {
-            $rules[$assoc['foreignKey']] = ['name' => 'existsIn', 'extra' => $assoc['alias'], 'options' => []];
+            $rules[] = [
+                'name' => 'existsIn',
+                'fields' => (array)$assoc['foreignKey'],
+                'extra' => $assoc['alias'],
+                'options' => [],
+            ];
         }
 
         return $rules;
