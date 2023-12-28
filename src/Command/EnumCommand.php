@@ -71,7 +71,7 @@ class EnumCommand extends SimpleBakeCommand
         $backingType = $isOfTypeInt ? 'int' : 'string';
         if ($arguments->getOption('int')) {
             if ($cases && !$isOfTypeInt) {
-                throw new InvalidArgumentException('The cases provided do not seem to match the int type you want to bake');
+                throw new InvalidArgumentException('Cases do not match requested `int` backing type.');
             }
 
             $backingType = 'int';
