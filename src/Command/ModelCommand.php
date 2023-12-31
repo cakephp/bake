@@ -1475,7 +1475,7 @@ class ModelCommand extends BakeCommand
             }
 
             $enumsDefinitionString = trim(mb_substr($columnSchema['comment'], strpos($columnSchema['comment'], '[enum]') + 6));
-            $isInt = in_array($columnSchema['type'], ['integer', 'tinyinteger', 'smallinteger', true]);
+            $isInt = in_array($columnSchema['type'], ['integer', 'tinyinteger', 'smallinteger'], true);
             $enumsDefinition = EnumParser::parseCases($enumsDefinitionString, $isInt);
             if (!$enumsDefinition) {
                 continue;
