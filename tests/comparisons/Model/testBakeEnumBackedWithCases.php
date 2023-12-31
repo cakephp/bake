@@ -11,6 +11,10 @@ use Cake\Utility\Inflector;
  */
 enum FooBar: string implements EnumLabelInterface
 {
+    case Foo = 'foo';
+    case Bar = 'b';
+    case BarBaz = 'bar_baz';
+
     /**
      * @return string
      */

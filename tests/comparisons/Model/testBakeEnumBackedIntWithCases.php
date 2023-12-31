@@ -9,8 +9,12 @@ use Cake\Utility\Inflector;
 /**
  * FooBar Enum
  */
-enum FooBar: string implements EnumLabelInterface
+enum FooBar: int implements EnumLabelInterface
 {
+    case Foo = 0;
+    case Bar = 1;
+    case BarBaz = 9;
+
     /**
      * @return string
      */

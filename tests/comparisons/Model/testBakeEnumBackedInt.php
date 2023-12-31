@@ -16,6 +16,6 @@ enum FooBar: int implements EnumLabelInterface
      */
     public function label(): string
     {
-        return Inflector::humanize(mb_strtolower($this->name));
+        return Inflector::humanize(Inflector::underscore($this->name));
     }
 }

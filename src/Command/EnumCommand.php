@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Bake\Utility\Model\EnumParser;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
@@ -67,7 +68,7 @@ class EnumCommand extends SimpleBakeCommand
      */
     public function templateData(Arguments $arguments): array
     {
-        $cases = $this->parseCases($arguments->getArgument('cases'), (bool)$arguments->getOption('int'));
+        $cases = EnumParser::parseCases($arguments->getArgument('cases'), (bool)$arguments->getOption('int'));
         $isOfTypeInt = $this->isOfTypeInt($cases);
         $backingType = $isOfTypeInt ? 'int' : 'string';
         if ($arguments->getOption('int')) {
@@ -101,7 +102,7 @@ class EnumCommand extends SimpleBakeCommand
             'help' => 'Name of the enum to bake. You can use Plugin.name to bake plugin enums.',
             'required' => true,
         ])->addArgument('cases', [
-            'help' => 'List of either `one,two` for string or `0:foo,1:bar` for int type.',
+            'help' => 'List of either `one,two` for string or `foo:0,bar:1` for int type.',
         ])->addOption('int', [
             'help' => 'Using backed enums with int instead of string as return type.',
             'boolean' => true,
@@ -112,35 +113,7 @@ class EnumCommand extends SimpleBakeCommand
     }
 
     /**
-     * @param string|null $casesString
-     * @return array<int|string, string>
-     */
-    protected function parseCases(?string $casesString, bool $int): array
-    {
-        if ($casesString === null) {
-            return [];
-        }
-
-        $enumCases = explode(',', $casesString);
-
-        $definition = [];
-        foreach ($enumCases as $k => $enumCase) {
-            $key = $value = trim($enumCase);
-            if (str_contains($key, ':')) {
-                $value = trim(mb_substr($key, strpos($key, ':') + 1));
-                $key = mb_substr($key, 0, strpos($key, ':'));
-            } elseif ($int) {
-                $key = $k;
-            }
-
-            $definition[$key] = $value;
-        }
-
-        return $definition;
-    }
-
-    /**
-     * @param array<int|string, string> $definition
+     * @param array<string, int|string> $definition
      * @return bool
      */
     protected function isOfTypeInt(array $definition): bool
@@ -149,8 +122,8 @@ class EnumCommand extends SimpleBakeCommand
             return false;
         }
 
-        foreach ($definition as $key => $value) {
-            if (!is_int($key)) {
+        foreach ($definition as $value) {
+            if (!is_int($value)) {
                 return false;
             }
         }
@@ -159,18 +132,18 @@ class EnumCommand extends SimpleBakeCommand
     }
 
     /**
-     * @param array<int|string, string> $cases
+     * @param array<string, int|string> $cases
      * @return array<string>
      */
     protected function formatCases(array $cases): array
     {
         $formatted = [];
-        foreach ($cases as $case => $alias) {
-            $alias = mb_strtoupper(Inflector::underscore($alias));
-            if (is_string($case)) {
-                $case = '\'' . $case . '\'';
+        foreach ($cases as $case => $value) {
+            $case = Inflector::camelize(Inflector::underscore($case));
+            if (is_string($value)) {
+                $value = '\'' . $value . '\'';
             }
-            $formatted[] = 'case ' . $alias . ' = ' . $case . ';';
+            $formatted[] = 'case ' . $case . ' = ' . $value . ';';
         }
 
         return $formatted;

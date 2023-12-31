@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Bake\CodeGen\FileBuilder;
+use Bake\Utility\Model\EnumParser;
 use Bake\Utility\TableScanner;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
@@ -1473,8 +1474,9 @@ class ModelCommand extends BakeCommand
                 continue;
             }
 
-            $enumsDefinitionString = mb_substr($columnSchema['comment'], strpos($columnSchema['comment'], '[enum]') + 6);
-            $enumsDefinition = $this->parseEnumsDefinition($enumsDefinitionString);
+            $enumsDefinitionString = trim(mb_substr($columnSchema['comment'], strpos($columnSchema['comment'], '[enum]') + 6));
+            $isInt = in_array($columnSchema['type'], ['integer', 'tinyinteger', 'smallinteger', true]);
+            $enumsDefinition = EnumParser::parseCases($enumsDefinitionString, $isInt);
             if (!$enumsDefinition) {
                 continue;
             }
