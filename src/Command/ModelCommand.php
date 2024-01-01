@@ -1486,11 +1486,9 @@ class ModelCommand extends BakeCommand
                 $dbType = TypeFactory::build($columnSchema['type']);
                 if ($dbType instanceof EnumType) {
                     $class = $dbType->getEnumClassName();
-                    /** @var \BackedEnum $enum */
-                    $rEnum = new ReflectionEnum($class);
-                    $rBackingType = $rEnum->getBackingType();
-                    $type = (string)$rBackingType;
-                    if ($type === 'int') {
+                    $reflectionEnum = new ReflectionEnum($class);
+                    $backingType = (string)$reflectionEnum->getBackingType();
+                    if ($backingType === 'int') {
                         $isInt = true;
                     }
                 }
