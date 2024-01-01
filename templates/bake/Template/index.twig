@@ -50,7 +50,7 @@
 {% if isKey is not same as(true) %}
 {% set columnData = Bake.columnData(field, schema) %}
 {% if columnData.type starts with 'enum-' %}
-                    <td><?= h(${{ singularVar }}->{{ field }}->label()) ?></td>
+                    <td><?= ${{ singularVar }}->{{ field }} === null ? '' : h(${{ singularVar }}->{{ field }}->label()) ?></td>
 {% elseif columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
                     <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
 {% elseif columnData.null %}

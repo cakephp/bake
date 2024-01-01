@@ -29,9 +29,12 @@ use Cake\Database\Exception\DatabaseException;
 use Cake\Database\Schema\CachedCollection;
 use Cake\Database\Schema\TableSchema;
 use Cake\Database\Schema\TableSchemaInterface;
+use Cake\Database\Type\EnumType;
+use Cake\Database\TypeFactory;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\Utility\Inflector;
+use ReflectionEnum;
 use function Cake\Core\pluginSplit;
 
 /**
@@ -1466,7 +1469,10 @@ class ModelCommand extends BakeCommand
 
         foreach ($schema->columns() as $column) {
             $columnSchema = $schema->getColumn($column);
-            if (!in_array($columnSchema['type'], ['string', 'integer', 'tinyinteger', 'smallinteger'], true)) {
+            if (
+                !in_array($columnSchema['type'], ['string', 'integer', 'tinyinteger', 'smallinteger'], true)
+                && !str_starts_with($columnSchema['type'], 'enum-')
+            ) {
                 continue;
             }
 
@@ -1476,37 +1482,31 @@ class ModelCommand extends BakeCommand
 
             $enumsDefinitionString = trim(mb_substr($columnSchema['comment'], strpos($columnSchema['comment'], '[enum]') + 6));
             $isInt = in_array($columnSchema['type'], ['integer', 'tinyinteger', 'smallinteger'], true);
+            if (str_starts_with($columnSchema['type'], 'enum-')) {
+                $dbType = TypeFactory::build($columnSchema['type']);
+                if ($dbType instanceof EnumType) {
+                    $class = $dbType->getEnumClassName();
+                    /** @var \BackedEnum $enum */
+                    $rEnum = new ReflectionEnum($class);
+                    $rBackingType = $rEnum->getBackingType();
+                    $type = (string)$rBackingType;
+                    if ($type === 'int') {
+                        $isInt = true;
+                    }
+                }
+            }
             $enumsDefinition = EnumParser::parseCases($enumsDefinitionString, $isInt);
             if (!$enumsDefinition) {
                 continue;
             }
 
-            $enums[$column] = $enumsDefinition;
+            $enums[$column] = [
+                'type' => $isInt ? 'int' : 'string',
+                'cases' => $enumsDefinition,
+            ];
         }
 
         return $enums;
-    }
-
-    /**
-     * @param string $enumsDefinitionString
-     * @return array<int|string, string>
-     */
-    protected function parseEnumsDefinition(string $enumsDefinitionString): array
-    {
-        $enumCases = explode(',', $enumsDefinitionString);
-
-        $definition = [];
-        foreach ($enumCases as $enumCase) {
-            $key = $value = trim($enumCase);
-            if (str_contains($key, ':')) {
-                $value = trim(mb_substr($key, strpos($key, ':') + 1));
-                $key = mb_substr($key, 0, strpos($key, ':'));
-            }
-
-            $definition[$key] = mb_strtolower($value);
-        }
-
-        return $definition;
     }
 
     /**
@@ -1525,7 +1525,7 @@ class ModelCommand extends BakeCommand
 
         $entity = $this->_entityName($model->getAlias());
 
-        foreach ($enums as $column => $enum) {
+        foreach ($enums as $column => $data) {
             $enumCommand = new EnumCommand();
 
             $name = $entity . Inflector::camelize($column);
@@ -1533,14 +1533,16 @@ class ModelCommand extends BakeCommand
                 $name = $this->plugin . '.' . $name;
             }
 
+            $enumCases = $data['cases'];
+
             $cases = [];
-            foreach ($enum as $k => $v) {
+            foreach ($enumCases as $k => $v) {
                 $cases[] = $k . ':' . $v;
             }
 
             $args = new Arguments(
                 [$name, implode(',', $cases)],
-                ['int' => false] + $args->getOptions(),
+                ['int' => $data['type'] === 'int'] + $args->getOptions(),
                 ['name', 'cases']
             );
             $enumCommand->execute($args, $io);
