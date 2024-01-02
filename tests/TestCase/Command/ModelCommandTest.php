@@ -2112,6 +2112,35 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * test generation with enum config in column comment
+     *
+     * @return void
+     */
+    public function testBakeTableWithEnumConfig(): void
+    {
+        $this->generatedFile = APP . 'Model/Table/BakeUsersTable.php';
+
+        $bakeUsers = $this->getTableLocator()->get('BakeUsers');
+        $attributes = [
+            'type' => 'string',
+            'null' => true,
+            'comment' => '[enum]male,female,diverse',
+        ];
+        $bakeUsers->setSchema($bakeUsers->getSchema()->addColumn('nullable_gender', $attributes));
+
+        $this->exec('bake model --no-validation --no-test --no-fixture --no-entity BakeUsers', ['y']);
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertStringContainsString('$this->getSchema()->setColumnType(\'nullable_gender\', \Cake\Database\Type\EnumType::from(\Bake\Test\App\Model\Enum\BakeUserNullableGender::class));', $result);
+
+        $generatedEnumFile = APP . 'Model/Enum/BakeUserNullableGender.php';
+        $result = file_get_contents($generatedEnumFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
      * test generation with counter cache
      *
      * @return void
