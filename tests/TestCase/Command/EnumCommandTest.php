@@ -68,4 +68,36 @@ class EnumCommandTest extends TestCase
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
+
+    /**
+     * test baking an enum with string return type and cases
+     *
+     * @return void
+     */
+    public function testBakeEnumBackedWithCases()
+    {
+        $this->generatedFile = APP . 'Model/Enum/FooBar.php';
+        $this->exec('bake enum FooBar foo,bar:b,bar_baz', ['y']);
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an enum with string return type and cases
+     *
+     * @return void
+     */
+    public function testBakeEnumBackedIntWithCases()
+    {
+        $this->generatedFile = APP . 'Model/Enum/FooBar.php';
+        $this->exec('bake enum FooBar foo,bar,bar_baz:9 -i', ['y']);
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
 }

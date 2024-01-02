@@ -19,14 +19,14 @@ use Cake\Utility\Inflector;
 
 enum BakeUserStatus: int implements EnumLabelInterface
 {
-    case INACTIVE = 0;
-    case ACTIVE = 1;
+    case Inactive = 0;
+    case Active = 1;
 
     /**
      * @return string
      */
     public function label(): string
     {
-        return Inflector::humanize(mb_strtolower($this->name));
+        return Inflector::humanize(Inflector::underscore($this->name));
     }
 }

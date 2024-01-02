@@ -16,8 +16,12 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Bake\Utility\Model\EnumParser;
 use Cake\Console\Arguments;
+use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Utility\Inflector;
+use InvalidArgumentException;
 
 /**
  * Enum code generator.
@@ -64,8 +68,20 @@ class EnumCommand extends SimpleBakeCommand
      */
     public function templateData(Arguments $arguments): array
     {
+        $cases = EnumParser::parseCases($arguments->getArgument('cases'), (bool)$arguments->getOption('int'));
+        $isOfTypeInt = $this->isOfTypeInt($cases);
+        $backingType = $isOfTypeInt ? 'int' : 'string';
+        if ($arguments->getOption('int')) {
+            if ($cases && !$isOfTypeInt) {
+                throw new InvalidArgumentException('Cases do not match requested `int` backing type.');
+            }
+
+            $backingType = 'int';
+        }
+
         $data = parent::templateData($arguments);
-        $data['backingType'] = $arguments->getOption('int') ? 'int' : 'string';
+        $data['backingType'] = $backingType;
+        $data['cases'] = $this->formatCases($cases);
 
         return $data;
     }
@@ -82,12 +98,76 @@ class EnumCommand extends SimpleBakeCommand
 
         $parser->setDescription(
             'Bake backed enums for use in models.'
-        )->addOption('int', [
-            'help' => 'Using backed enums with int instead of string as return type',
+        )->addArgument('name', [
+            'help' => 'Name of the enum to bake. You can use Plugin.name to bake plugin enums.',
+            'required' => true,
+        ])->addArgument('cases', [
+            'help' => 'List of either `one,two` for string or `foo:0,bar:1` for int type.',
+        ])->addOption('int', [
+            'help' => 'Using backed enums with int instead of string as return type.',
             'boolean' => true,
             'short' => 'i',
         ]);
 
         return $parser;
+    }
+
+    /**
+     * @param array<string, int|string> $definition
+     * @return bool
+     */
+    protected function isOfTypeInt(array $definition): bool
+    {
+        if (!$definition) {
+            return false;
+        }
+
+        foreach ($definition as $value) {
+            if (!is_int($value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array<string, int|string> $cases
+     * @return array<string>
+     */
+    protected function formatCases(array $cases): array
+    {
+        $formatted = [];
+        foreach ($cases as $case => $value) {
+            $case = Inflector::camelize(Inflector::underscore($case));
+            if (is_string($value)) {
+                $value = '\'' . $value . '\'';
+            }
+            $formatted[] = 'case ' . $case . ' = ' . $value . ';';
+        }
+
+        return $formatted;
+    }
+
+    /**
+     * Generate a class stub
+     *
+     * @param string $name The class name
+     * @param \Cake\Console\Arguments $args The console arguments
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return void
+     */
+    protected function bake(string $name, Arguments $args, ConsoleIo $io): void
+    {
+        parent::bake($name, $args, $io);
+
+        $path = $this->getPath($args);
+        $filename = $path . $name . '.php';
+
+        // Work around composer caching that classes/files do not exist.
+        // Check for the file as it might not exist in tests.
+        if (file_exists($filename)) {
+            require_once $filename;
+        }
     }
 }
