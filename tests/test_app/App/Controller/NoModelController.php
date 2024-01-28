@@ -22,7 +22,7 @@ namespace Bake\Test\App\Controller;
 class NoModelController extends AppController
 {
     /**
-     * @var string
+     * @var string|null
      */
     protected ?string $defaultTable = '';
 
