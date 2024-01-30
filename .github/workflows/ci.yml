@@ -6,6 +6,7 @@ on:
       - 2.x
       - 2.next
       - 3.x
+      - 3.next
   pull_request:
     branches:
       - '*'
