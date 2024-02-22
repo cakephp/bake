@@ -1476,11 +1476,11 @@ class ModelCommand extends BakeCommand
                 continue;
             }
 
-            if (empty($columnSchema['comment']) || strpos($columnSchema['comment'], '[enum]') === false) {
+            if (empty($columnSchema['comment']) || !str_contains($columnSchema['comment'], '[enum]')) {
                 continue;
             }
 
-            $enumsDefinitionString = trim(mb_substr($columnSchema['comment'], strpos($columnSchema['comment'], '[enum]') + 6));
+            $enumsDefinitionString = EnumParser::parseDefinitionString($columnSchema['comment']);
             $isInt = in_array($columnSchema['type'], ['integer', 'tinyinteger', 'smallinteger'], true);
             if (str_starts_with($columnSchema['type'], 'enum-')) {
                 $dbType = TypeFactory::build($columnSchema['type']);

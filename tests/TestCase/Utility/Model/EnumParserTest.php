@@ -27,6 +27,21 @@ class EnumParserTest extends TestCase
     /**
      * @return void
      */
+    public function testParseDefinitionString(): void
+    {
+        $definitionString = EnumParser::parseDefinitionString('[enum]');
+        $this->assertSame('', $definitionString);
+
+        $definitionString = EnumParser::parseDefinitionString('[enum] foo, bar');
+        $this->assertSame('foo, bar', $definitionString);
+
+        $definitionString = EnumParser::parseDefinitionString('[enum] foo, bar; Some additional comment');
+        $this->assertSame('foo, bar', $definitionString);
+    }
+
+    /**
+     * @return void
+     */
     public function testParseCases(): void
     {
         $cases = EnumParser::parseCases('', false);

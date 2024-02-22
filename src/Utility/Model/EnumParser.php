@@ -42,4 +42,20 @@ enum EnumParser
 
         return $definition;
     }
+
+    /**
+     * Parses an enum definition from a DB column comment.
+     *
+     * @param string $comment
+     * @return string
+     */
+    public static function parseDefinitionString(string $comment): string
+    {
+        $string = trim(mb_substr($comment, strpos($comment, '[enum]') + 6));
+        if (str_contains($string, ';')) {
+            $string = trim(mb_substr($string, 0, strpos($string, ';')));
+        }
+
+        return $string;
+    }
 }
