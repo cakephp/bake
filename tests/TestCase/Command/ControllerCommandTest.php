@@ -31,7 +31,7 @@ class ControllerCommandTest extends TestCase
     /**
      * fixtures
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected array $fixtures = [
         'plugin.Bake.BakeArticles',

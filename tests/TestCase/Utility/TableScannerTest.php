@@ -23,7 +23,7 @@ use Cake\Datasource\ConnectionManager;
 class TableScannerTest extends TestCase
 {
     /**
-     * @var array<string>
+     * @var list<string>
      */
     protected array $fixtures = [
         'plugin.Bake.TodoTasks',

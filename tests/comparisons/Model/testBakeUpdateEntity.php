@@ -35,14 +35,14 @@ class TodoItem extends Entity implements IdentityInterface
     /**
      * Fields that are excluded from JSON versions of the entity.
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected array $_hidden = [
         'user_id',
     ];
 
     protected array $_accessible = [
-        // should not overwritten
+        // should not get overwritten
     ];
 
     /**
