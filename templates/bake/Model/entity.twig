@@ -59,7 +59,7 @@ class {{ name }} extends Entity{{ fileBuilder.classBuilder.implements ? ' implem
     /**
      * Fields that are excluded from JSON versions of the entity.
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected array $_hidden = {{ Bake.exportVar(hidden, 1)|raw }};
 {% endif %}

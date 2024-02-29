@@ -43,7 +43,7 @@ class ModelCommandTest extends TestCase
      * Don't sort this list alphabetically - otherwise there are table constraints
      * which fail when using postgres
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected array $fixtures = [
         'plugin.Bake.Articles',
@@ -2312,7 +2312,7 @@ class TodoItem implements IdentityInterface
     protected const MY_CONST = 1;
 
     protected array $_accessible = [
-        // should not overwritten
+        // should not get overwritten
     ];
 
     /**

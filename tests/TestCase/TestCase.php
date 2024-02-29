@@ -32,7 +32,7 @@ abstract class TestCase extends BaseTestCase
     protected $generatedFile = '';
 
     /**
-     * @var array<string>
+     * @var list<string>
      */
     protected $generatedFiles = [];
 
@@ -84,7 +84,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * Assert that a list of files exist.
      *
-     * @param array<string> $files The list of files to check.
+     * @param list<string> $files The list of files to check.
      * @param string $message The message to use if a check fails.
      */
     protected function assertFilesExist(array $files, $message = '')
