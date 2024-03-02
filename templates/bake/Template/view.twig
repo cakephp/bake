@@ -119,7 +119,7 @@
 {% set relations = associations.BelongsToMany|merge(associations.HasMany) %}
 {% for alias, details in relations %}
 {% set otherSingularVar = details.singular|variable %}
-{% set otherPluralHumanName = alias|underscore|humanize %}
+{% set otherPluralHumanName = details.controller|underscore|humanize %}
             <div class="related">
                 <h4><?= __('Related {{ otherPluralHumanName }}') ?></h4>
                 <?php if (!empty(${{ singularVar }}->{{ details.property }})) : ?>
