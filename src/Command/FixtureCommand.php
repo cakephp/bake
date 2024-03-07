@@ -430,18 +430,17 @@ class FixtureCommand extends BakeCommand
                             $class = $dbType->getEnumClassName();
                             $reflectionEnum = new ReflectionEnum($class);
                             $backingType = (string)$reflectionEnum->getBackingType();
-                            $isInt = $backingType === 'int';
 
                             if ($fieldInfo['default'] !== null) {
                                 $insert = $fieldInfo['default'];
-                                if ($isInt) {
+                                if ($backingType === 'int') {
                                     $insert = (int)$insert;
                                 }
                             } else {
                                 $cases = $reflectionEnum->getCases();
                                 $firstCase = array_shift($cases);
                                 /** @var \BackedEnum $firstValue */
-                                $firstValue= $firstCase->getValue();
+                                $firstValue = $firstCase->getValue();
                                 $insert = $firstValue->value;
                             }
                         }
