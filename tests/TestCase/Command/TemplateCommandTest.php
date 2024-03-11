@@ -339,7 +339,6 @@ class TemplateCommandTest extends TestCase
                         'displayField' => 'name',
                         'foreignKey' => 'author_id',
                         'alias' => 'Authors',
-                        'singular' => 'Author',
                         'controller' => 'TemplateTaskAuthors',
                         'fields' => ['name'],
                     ],

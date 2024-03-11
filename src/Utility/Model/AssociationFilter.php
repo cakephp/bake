@@ -100,7 +100,6 @@ class AssociationFilter
                         'displayField' => $target->getDisplayField(),
                         'foreignKey' => $assoc->getForeignKey(),
                         'alias' => $alias,
-                        'singular' => Inflector::singularize($assocName),
                         'controller' => $className,
                         'fields' => $target->getSchema()->columns(),
                         'navLink' => $navLink,
