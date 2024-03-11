@@ -26,10 +26,13 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Core\Exception\CakeException;
 use Cake\Database\Schema\TableSchemaInterface;
+use Cake\Database\Type\EnumType;
+use Cake\Database\TypeFactory;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
 use Cake\Utility\Text;
 use DateTimeInterface;
+use ReflectionEnum;
 
 /**
  * Task class for creating and updating fixtures files.
@@ -419,6 +422,33 @@ class FixtureCommand extends BakeCommand
                         $insert = Text::uuid();
                         break;
                 }
+                if (str_starts_with($fieldInfo['type'], 'enum-')) {
+                    $insert = null;
+                    if ($fieldInfo['default'] || $fieldInfo['null'] === false) {
+                        $dbType = TypeFactory::build($fieldInfo['type']);
+                        if ($dbType instanceof EnumType) {
+                            $class = $dbType->getEnumClassName();
+                            $reflectionEnum = new ReflectionEnum($class);
+                            $backingType = (string)$reflectionEnum->getBackingType();
+
+                            if ($fieldInfo['default'] !== null) {
+                                $insert = $fieldInfo['default'];
+                                if ($backingType === 'int') {
+                                    $insert = (int)$insert;
+                                }
+                            } else {
+                                $cases = $reflectionEnum->getCases();
+                                if ($cases) {
+                                    $firstCase = array_shift($cases);
+                                    /** @var \BackedEnum $firstValue */
+                                    $firstValue = $firstCase->getValue();
+                                    $insert = $firstValue->value;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 $record[$field] = $insert;
             }
             $records[] = $record;
