@@ -438,10 +438,12 @@ class FixtureCommand extends BakeCommand
                                 }
                             } else {
                                 $cases = $reflectionEnum->getCases();
-                                $firstCase = array_shift($cases);
-                                /** @var \BackedEnum $firstValue */
-                                $firstValue = $firstCase->getValue();
-                                $insert = $firstValue->value;
+                                if ($cases) {
+                                    $firstCase = array_shift($cases);
+                                    /** @var \BackedEnum $firstValue */
+                                    $firstValue = $firstCase->getValue();
+                                    $insert = $firstValue->value;
+                                }
                             }
                         }
                     }
