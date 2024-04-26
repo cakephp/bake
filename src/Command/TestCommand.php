@@ -441,13 +441,13 @@ class TestCommand extends BakeCommand
      * Generate the list of fixtures that will be required to run this test based on
      * loaded models.
      *
-     * @param \Cake\ORM\Table|\Cake\Controller\Controller $subject The object you want to generate fixtures for.
+     * @param \Cake\Datasource\RepositoryInterface|\Cake\Controller\Controller $subject The object you want to generate fixtures for.
      * @return string[] Array of fixtures to be included in the test.
      */
     public function generateFixtureList($subject): array
     {
         $this->_fixtures = [];
-        if ($subject instanceof Table) {
+        if ($subject instanceof RepositoryInterface) {
             $this->_processModel($subject);
         } elseif ($subject instanceof Controller) {
             $this->_processController($subject);
