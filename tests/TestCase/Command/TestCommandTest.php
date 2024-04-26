@@ -18,6 +18,8 @@ namespace Bake\Test\TestCase\Command;
 
 use Bake\Command\TestCommand;
 use Bake\Test\App\Controller\PostsController;
+use Bake\Test\App\Model\NonTable\NonTableWithAssociations;
+use Bake\Test\App\Model\NonTable\NonTableWithoutAssociations;
 use Bake\Test\App\Model\Table\ArticlesTable;
 use Bake\Test\App\Model\Table\CategoryThreadsTable;
 use Bake\Test\TestCase\TestCase;
@@ -229,6 +231,39 @@ class TestCommandTest extends TestCase
             'app.Authors',
             'app.Tags',
             'app.ArticlesTags',
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test that the generation of fixtures works correctly with a non-table model without associations.
+     *
+     * @return void
+     */
+    public function testFixtureArrayGenerationFromNonTableModelWithoutAssociations()
+    {
+        $command = new TestCommand();
+        $subject = new NonTableWithoutAssociations();
+        $result = $command->generateFixtureList($subject);
+        $expected = [
+            'app.NonTableWithoutAssociations',
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test that the generation of fixtures works correctly with a non-table model with associations.
+     *
+     * @return void
+     */
+    public function testFixtureArrayGenerationFromNonTableModelWithAssociations()
+    {
+        $command = new TestCommand();
+        $subject = new NonTableWithAssociations();
+        $result = $command->generateFixtureList($subject);
+        $expected = [
+            'app.NonTableWithAssociations',
+            'app.Users',
         ];
         $this->assertEquals($expected, $result);
     }
