@@ -98,7 +98,7 @@ class BakeHelper extends Helper
     {
         $options = 0;
         if ($inline) {
-            $options = VarExporter::INLINE_NUMERIC_SCALAR_ARRAY;
+            $options = VarExporter::INLINE_SCALAR_LIST;
         }
 
         return $this->exportVar($var, $indentLevel, $options);
@@ -369,7 +369,7 @@ class BakeHelper extends Helper
                 return $this->exportVar(
                     $item,
                     is_array($item) ? 3 : 0,
-                    VarExporter::INLINE_NUMERIC_SCALAR_ARRAY
+                    VarExporter::INLINE_SCALAR_LIST
                 );
             }, $rule['args']);
             $validationMethods[] = sprintf(

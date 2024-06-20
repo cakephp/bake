@@ -21,7 +21,7 @@
     },
     "require": {
         "php": ">=8.1",
-        "brick/varexporter": "^0.4.0",
+        "brick/varexporter": "^0.5.0",
         "cakephp/cakephp": "^5.0.3",
         "cakephp/twig-view": "^2.0.0",
         "nikic/php-parser": "^4.13.2 || ^5.0.0"
