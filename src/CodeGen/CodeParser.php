@@ -66,7 +66,7 @@ class CodeParser extends NodeVisitorAbstract
      */
     public function __construct()
     {
-        $version = PhpVersion::fromComponents(8,1);
+        $version = PhpVersion::fromComponents(8, 1);
         $this->parser = (new ParserFactory())->createForVersion($version);
         $this->traverser = new NodeTraverser();
         $this->traverser->addVisitor($this);
