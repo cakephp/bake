@@ -21,6 +21,7 @@ use Bake\Command\EntryCommand;
 use Cake\Console\CommandCollection;
 use Cake\Core\BasePlugin;
 use Cake\Core\Configure;
+use Cake\Core\Exception\CakeException;
 use Cake\Core\Plugin;
 use Cake\Core\PluginApplicationInterface;
 use DirectoryIterator;
@@ -55,7 +56,11 @@ class BakePlugin extends BasePlugin
      */
     public function bootstrap(PluginApplicationInterface $app): void
     {
-        $app->addPlugin('Cake/TwigView');
+        try {
+            $app->addPlugin('Cake/TwigView');
+        } catch (CakeException $e) {
+            // Do nothing, the app or another plugin could load Twig.
+        }
     }
 
     /**
