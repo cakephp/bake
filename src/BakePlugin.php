@@ -50,7 +50,6 @@ class BakePlugin extends BasePlugin
     /**
      * Load the TwigView plugin.
      *
-     * @phpstan-ignore-next-line
      * @param \Cake\Core\PluginApplicationInterface $app The host application
      * @return void
      */
@@ -138,22 +137,20 @@ class BakePlugin extends BasePlugin
             if ($item->isDot() || $item->isDir()) {
                 continue;
             }
-            /** @psalm-var class-string<\Bake\Command\BakeCommand> $class */
             $class = $namespace . $item->getBasename('.php');
 
             if (!$hasSubfolder) {
                 try {
                     $reflection = new ReflectionClass($class);
-                /** @phpstan-ignore-next-line */
-                } catch (ReflectionException $e) {
+                } catch (ReflectionException) {
                     continue;
                 }
-                /** @psalm-suppress TypeDoesNotContainType */
                 if (!$reflection->isInstantiable() || !$reflection->isSubclassOf(BakeCommand::class)) {
                     continue;
                 }
             }
 
+            /** @var class-string<\Bake\Command\BakeCommand> $class */
             $candidates[$class::defaultName()] = $class;
         }
 
