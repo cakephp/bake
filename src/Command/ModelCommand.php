@@ -275,6 +275,9 @@ class ModelCommand extends BakeCommand
         if (get_class($model) !== Table::class) {
             return;
         }
+
+        $this->ensureAliasUniqueness($associations);
+
         foreach ($associations as $type => $assocs) {
             foreach ($assocs as $assoc) {
                 $alias = $assoc['alias'];
@@ -1545,5 +1548,39 @@ class ModelCommand extends BakeCommand
             );
             $enumCommand->execute($args, $io);
         }
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $associations
+     * @return array<string, array<string, mixed>>
+     */
+    protected function ensureAliasUniqueness(array $associations): array
+    {
+        $existing = [];
+        foreach ($associations as $type => $associationsPerType) {
+            foreach ($associationsPerType as $k => $association) {
+                $alias = $association['alias'];
+                if (in_array($alias, $existing, true)) {
+                    $alias = $this->alias($association);
+                }
+                $existing[] = $alias;
+                $association['class'] = $association['alias'];
+                $association['alias'] = $alias;
+                $associations[$type][$k] = $association;
+            }
+        }
+
+        return $associations;
+    }
+
+    /**
+     * @param array<string, mixed> $association
+     * @return string
+     */
+    protected function alias(array $association): string
+    {
+        $foreignKey = $association['foreignKey'];
+
+        return $this->_modelNameFromKey($foreignKey);
     }
 }
