@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -14,6 +15,7 @@ declare(strict_types=1);
  * @since         0.1.0
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace Bake\Command;
 
 use Bake\CodeGen\FileBuilder;
@@ -385,15 +387,18 @@ class ModelCommand extends BakeCommand
                 }
                 $assoc = [
                     'alias' => $tmpModelName,
+                    'className' => $tmpModelName,
                     'foreignKey' => $fieldName,
                 ];
                 if ($schema->getColumn($fieldName)['null'] === false) {
                     $assoc['joinType'] = 'INNER';
                 }
             }
-
             if ($this->plugin && empty($assoc['className'])) {
                 $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
+            }
+            if (!empty($assoc['className'])) {
+                $assoc['alias'] = $assoc['className'] . '_' .  $model->getAlias() . '_' . $fieldName;
             }
             $associations['belongsTo'][] = $assoc;
         }
@@ -711,7 +716,7 @@ class ModelCommand extends BakeCommand
             if ($entityClass === '\Cake\ORM\Entity') {
                 $namespace = Configure::read('App.namespace');
 
-                [$plugin, ] = pluginSplit($association->getTarget()->getRegistryAlias());
+                [$plugin,] = pluginSplit($association->getTarget()->getRegistryAlias());
                 if ($plugin !== null) {
                     $namespace = $plugin;
                 }
@@ -1355,7 +1360,7 @@ class ModelCommand extends BakeCommand
         ])->addOption('skip-relation-check', [
             'boolean' => true,
             'help' => 'Generate relations for all "example_id" fields'
-            . ' without checking the database if a table "examples" exists.',
+                . ' without checking the database if a table "examples" exists.',
         ])->setEpilog(
             'Omitting all arguments and options will list the table names you can generate models for.'
         );
