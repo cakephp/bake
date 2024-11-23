@@ -382,6 +382,7 @@ class ModelCommand extends BakeCommand
                 }
                 $assoc = [
                     'alias' => $tmpModelName,
+                    'className' => $tmpModelName,
                     'foreignKey' => $fieldName,
                 ];
                 if ($schema->getColumn($fieldName)['null'] === false) {
@@ -391,6 +392,9 @@ class ModelCommand extends BakeCommand
 
             if ($this->plugin && empty($assoc['className'])) {
                 $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
+            }
+            if (!empty($assoc['className'])) {
+                $assoc['alias'] = $assoc['className'] . '_' .  $model->getAlias() . '_' . $fieldName;
             }
             $associations['belongsTo'][] = $assoc;
         }
