@@ -1566,7 +1566,9 @@ class ModelCommand extends BakeCommand
                 $existing[] = $alias;
                 if (empty($association['className'])) {
                     $className = $this->plugin ? $this->plugin . '.' . $association['alias'] : $association['alias'];
-                    $association['className'] = $className;
+                    if ($className !== $alias) {
+                        $association['className'] = $className;
+                    }
                 }
                 $association['alias'] = $alias;
                 $associations[$type][$k] = $association;
