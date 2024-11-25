@@ -602,9 +602,10 @@ class ModelCommandTest extends TestCase
                 'joinType' => 'INNER',
             ],
             [
-                'alias' => 'Users',
+                'alias' => 'Receivers',
                 'foreignKey' => 'receiver_id',
                 'joinType' => 'INNER',
+                'className' => 'Users',
             ],
         ];
         $this->assertEquals($expected, $result['belongsTo']);
