@@ -256,6 +256,8 @@ class ModelCommand extends BakeCommand
         $associations = $this->findHasMany($table, $associations);
         $associations = $this->findBelongsToMany($table, $associations);
 
+        $associations = $this->ensureAliasUniqueness($associations);
+
         return $associations;
     }
 
@@ -275,8 +277,6 @@ class ModelCommand extends BakeCommand
         if (get_class($model) !== Table::class) {
             return;
         }
-
-        $this->ensureAliasUniqueness($associations);
 
         foreach ($associations as $type => $assocs) {
             foreach ($assocs as $assoc) {
@@ -1561,7 +1561,7 @@ class ModelCommand extends BakeCommand
             foreach ($associationsPerType as $k => $association) {
                 $alias = $association['alias'];
                 if (in_array($alias, $existing, true)) {
-                    $alias = $this->alias($association);
+                    $alias = $this->createAssociationAlias($association);
                 }
                 $existing[] = $alias;
                 if (empty($association['className'])) {
@@ -1580,7 +1580,7 @@ class ModelCommand extends BakeCommand
      * @param array<string, mixed> $association
      * @return string
      */
-    protected function alias(array $association): string
+    protected function createAssociationAlias(array $association): string
     {
         $foreignKey = $association['foreignKey'];
 
