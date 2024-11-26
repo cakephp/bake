@@ -12,6 +12,7 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \BakeTest\Model\Table\CommentsTable&\Cake\ORM\Association\HasMany $Comments
+ * @property \BakeTest\Model\Table\RelationsTable&\Cake\ORM\Association\HasMany $Relations
  * @property \BakeTest\Model\Table\TodoItemsTable&\Cake\ORM\Association\HasMany $TodoItems
  *
  * @method \BakeTest\Model\Entity\User newEmptyEntity()
@@ -51,6 +52,10 @@ class UsersTable extends Table
         $this->hasMany('Comments', [
             'foreignKey' => 'user_id',
             'className' => 'BakeTest.Comments',
+        ]);
+        $this->hasMany('Relations', [
+            'foreignKey' => 'user_id',
+            'className' => 'BakeTest.Relations',
         ]);
         $this->hasMany('TodoItems', [
             'foreignKey' => 'user_id',

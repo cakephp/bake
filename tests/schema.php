@@ -384,6 +384,34 @@ return [
         'constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ],
     [
+        'table' => 'relations',
+        'columns' => [
+            'id' => ['type' => 'integer'],
+            'user_id' => ['type' => 'integer', 'null' => false],
+            'other_id' => ['type' => 'integer', 'null' => false],
+            'body' => 'text',
+            'created' => 'datetime',
+            'updated' => 'datetime',
+        ],
+        'constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+            'user_idx' => [
+                'type' => 'foreign',
+                'columns' => ['user_id'],
+                'references' => ['users', 'id'],
+                'update' => 'noAction',
+                'delete' => 'noAction',
+            ],
+            'other_idx' => [
+                'type' => 'foreign',
+                'columns' => ['other_id'],
+                'references' => ['users', 'id'],
+                'update' => 'noAction',
+                'delete' => 'noAction',
+            ],
+        ],
+    ],
+    [
         'table' => 'invitations',
         'columns' => [
             'id' => ['type' => 'integer'],

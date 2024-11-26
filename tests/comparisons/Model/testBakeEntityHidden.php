@@ -15,6 +15,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime|null $updated
  *
  * @property \Bake\Test\App\Model\Entity\Comment[] $comments
+ * @property \Bake\Test\App\Model\Entity\Relation[] $relations
  * @property \Bake\Test\App\Model\Entity\TodoItem[] $todo_items
  */
 class User extends Entity

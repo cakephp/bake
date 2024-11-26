@@ -669,6 +669,35 @@ class ModelCommandTest extends TestCase
      */
     public function testBelongsToGenerationConstraints()
     {
+        $model = $this->getTableLocator()->get('Relations');
+        $command = new ModelCommand();
+        $command->connection = 'test';
+        $result = $command->findBelongsTo($model, []);
+        $expected = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Users',
+                    'foreignKey' => 'user_id',
+                    'joinType' => 'INNER',
+                ],
+                [
+                    'alias' => 'Others',
+                    'foreignKey' => 'other_id',
+                    'joinType' => 'INNER',
+                    'className' => 'Users',
+                ],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test that belongsTo association generation uses aliased constraints on the table
+     *
+     * @return void
+     */
+    public function testBelongsToGenerationConstraintsAliased()
+    {
         $model = $this->getTableLocator()->get('Invitations');
         $command = new ModelCommand();
         $command->connection = 'test';
