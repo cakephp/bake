@@ -346,13 +346,13 @@ class ModelCommand extends BakeCommand
      */
     public function findBelongsTo(Table $model, array $associations, ?Arguments $args = null): array
     {
-        $className = null;
         $schema = $model->getSchema();
         foreach ($schema->columns() as $fieldName) {
             if (!preg_match('/^.+_id$/', $fieldName) || ($schema->getPrimaryKey() === [$fieldName])) {
                 continue;
             }
 
+            $className = null;
             if ($fieldName === 'parent_id') {
                 $className = $this->plugin ? $this->plugin . '.' . $model->getAlias() : $model->getAlias();
                 $assoc = [
