@@ -346,6 +346,7 @@ class ModelCommand extends BakeCommand
      */
     public function findBelongsTo(Table $model, array $associations, ?Arguments $args = null): array
     {
+        $className = null;
         $schema = $model->getSchema();
         foreach ($schema->columns() as $fieldName) {
             if (!preg_match('/^.+_id$/', $fieldName) || ($schema->getPrimaryKey() === [$fieldName])) {
@@ -377,7 +378,6 @@ class ModelCommand extends BakeCommand
                 ) {
                     $allowAliasRelations = $args && $args->getOption('skip-relation-check');
                     $found = $this->findTableReferencedBy($schema, $fieldName);
-                    $className = null;
                     if ($found) {
                         $className = ($this->plugin ? $this->plugin . '.' : '') . Inflector::camelize($found);
                     } elseif (!$allowAliasRelations) {
