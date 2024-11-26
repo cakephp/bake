@@ -597,9 +597,10 @@ class ModelCommandTest extends TestCase
 
         $expected = [
             [
-                'alias' => 'Users',
+                'alias' => 'Senders',
                 'foreignKey' => 'sender_id',
                 'joinType' => 'INNER',
+                'className' => 'Users',
             ],
             [
                 'alias' => 'Receivers',
@@ -675,14 +676,16 @@ class ModelCommandTest extends TestCase
         $expected = [
             'belongsTo' => [
                 [
-                    'alias' => 'Users',
+                    'alias' => 'Senders',
                     'foreignKey' => 'sender_id',
                     'joinType' => 'INNER',
+                    'className' => 'Users',
                 ],
                 [
-                    'alias' => 'Users',
+                    'alias' => 'Receivers',
                     'foreignKey' => 'receiver_id',
                     'joinType' => 'INNER',
+                    'className' => 'Users',
                 ],
             ],
         ];

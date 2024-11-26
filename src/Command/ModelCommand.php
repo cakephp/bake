@@ -377,8 +377,9 @@ class ModelCommand extends BakeCommand
                 ) {
                     $allowAliasRelations = $args && $args->getOption('skip-relation-check');
                     $found = $this->findTableReferencedBy($schema, $fieldName);
+                    $className = null;
                     if ($found) {
-                        $tmpModelName = Inflector::camelize($found);
+                        $className = ($this->plugin ? $this->plugin . '.' : '') . Inflector::camelize($found);
                     } elseif (!$allowAliasRelations) {
                         continue;
                     }
@@ -387,6 +388,9 @@ class ModelCommand extends BakeCommand
                     'alias' => $tmpModelName,
                     'foreignKey' => $fieldName,
                 ];
+                if ($className && $className !== $tmpModelName) {
+                    $assoc['className'] = $className;
+                }
                 if ($schema->getColumn($fieldName)['null'] === false) {
                     $assoc['joinType'] = 'INNER';
                 }
@@ -395,6 +399,7 @@ class ModelCommand extends BakeCommand
             if ($this->plugin && empty($assoc['className'])) {
                 $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
             }
+
             $associations['belongsTo'][] = $assoc;
         }
 
