@@ -21,6 +21,7 @@ use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
+use Throwable;
 
 /**
  * Command for `bake all`
@@ -49,7 +50,7 @@ class AllCommand extends BakeCommand
         $parser = $this->_setCommonOptions($parser);
 
         $parser = $parser->setDescription(
-            'Generate the model, controller, template, tests and fixture for a table.'
+            'Generate the model, controller, template, tests and fixture for a table.',
         )->addArgument('name', [
             'help' => 'Name of the table to generate code for.',
         ])->addOption('everything', [
@@ -83,7 +84,7 @@ class AllCommand extends BakeCommand
         /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
-        if (empty($name) && !$args->getOption('everything')) {
+        if (!$name && !$args->getOption('everything')) {
             $io->out('Choose a table to generate from the following:');
             foreach ($scanner->listUnskipped() as $table) {
                 $io->out('- ' . $this->_camelize($table));
@@ -110,15 +111,31 @@ class AllCommand extends BakeCommand
                 unset($options['prefix']);
             }
 
+            $errors = 0;
             foreach ($tables as $table) {
                 $parser = $command->getOptionParser();
                 $subArgs = new Arguments([$table], $options, $parser->argumentNames());
-                $command->execute($subArgs, $io);
+
+                try {
+                    $command->execute($subArgs, $io);
+                } catch (Throwable $e) {
+                    if (!$args->getOption('everything') || !$args->getOption('force')) {
+                        throw $e;
+                    }
+
+                    $message = sprintf('Error generating %s for %s: %s', $commandName, $table, $e->getMessage());
+                    $io->err('<error>' . $message . '</error>');
+                    $errors++;
+                }
             }
         }
 
-        $io->out('<success>Bake All complete.</success>', 1, ConsoleIo::NORMAL);
+        if ($errors) {
+            $io->out(sprintf('<warning>Bake All completed, but with %s errors.</warning>', $errors), 1, ConsoleIo::NORMAL);
+        } else {
+            $io->out('<success>Bake All complete.</success>', 1, ConsoleIo::NORMAL);
+        }
 
-        return static::CODE_SUCCESS;
+        return $errors ? static::CODE_ERROR : static::CODE_SUCCESS;
     }
 }
