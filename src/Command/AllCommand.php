@@ -98,6 +98,7 @@ class AllCommand extends BakeCommand
             $tables = [$name];
         }
 
+        $errors = 0;
         foreach ($this->commands as $commandName) {
             /** @var \Cake\Command\Command $command */
             $command = new $commandName();
@@ -111,7 +112,6 @@ class AllCommand extends BakeCommand
                 unset($options['prefix']);
             }
 
-            $errors = 0;
             foreach ($tables as $table) {
                 $parser = $command->getOptionParser();
                 $subArgs = new Arguments([$table], $options, $parser->argumentNames());
