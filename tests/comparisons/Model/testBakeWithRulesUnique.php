@@ -12,6 +12,7 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \Bake\Test\App\Model\Table\CommentsTable&\Cake\ORM\Association\HasMany $Comments
+ * @property \Bake\Test\App\Model\Table\RelationsTable&\Cake\ORM\Association\HasMany $Relations
  * @property \Bake\Test\App\Model\Table\TodoItemsTable&\Cake\ORM\Association\HasMany $TodoItems
  *
  * @method \Bake\Test\App\Model\Entity\User newEmptyEntity()
@@ -49,6 +50,9 @@ class UsersTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->hasMany('Comments', [
+            'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('Relations', [
             'foreignKey' => 'user_id',
         ]);
         $this->hasMany('TodoItems', [
