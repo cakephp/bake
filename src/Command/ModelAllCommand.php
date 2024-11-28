@@ -83,7 +83,8 @@ class ModelAllCommand extends BakeCommand
         /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
-        foreach ($scanner->listUnskipped() as $table) {
+        $tables = $scanner->removeShadowTranslationTables($scanner->listUnskipped());
+        foreach ($tables as $table) {
             $this->getTableLocator()->clear();
             $modelArgs = new Arguments([$table], $args->getOptions(), ['name']);
             $this->modelCommand->execute($modelArgs, $io);

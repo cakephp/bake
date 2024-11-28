@@ -84,17 +84,17 @@ class AllCommand extends BakeCommand
         /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
+        $tables = $scanner->removeShadowTranslationTables($scanner->listUnskipped());
+
         if (!$name && !$args->getOption('everything')) {
             $io->out('Choose a table to generate from the following:');
-            foreach ($scanner->listUnskipped() as $table) {
+            foreach ($tables as $table) {
                 $io->out('- ' . $this->_camelize($table));
             }
 
             return static::CODE_SUCCESS;
         }
-        if ($args->getOption('everything')) {
-            $tables = $scanner->listUnskipped();
-        } else {
+        if (!$args->getOption('everything')) {
             $tables = [$name];
         }
 

@@ -125,4 +125,26 @@ class TableScannerTest extends TestCase
             }
         }
     }
+
+    /**
+     * @return void
+     */
+    public function testRemoveShadowTranslationTables(): void
+    {
+        $this->tableScanner = new TableScanner($this->connection);
+
+        $tables = [
+            'items' => 'items',
+            'users' => 'users',
+            'users_translations' => 'users_translations',
+            'item_translations' => 'item_translations',
+        ];
+        $result = $this->tableScanner->removeShadowTranslationTables($tables);
+        $expected = [
+            'items' => 'items',
+            'users' => 'users',
+            'item_translations' => 'item_translations',
+        ];
+        $this->assertEquals($expected, $result);
+    }
 }

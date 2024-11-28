@@ -86,7 +86,9 @@ class FixtureAllCommand extends BakeCommand
         $connection = ConnectionManager::get($args->getOption('connection') ?? 'default');
         $scanner = new TableScanner($connection);
         $fixture = new FixtureCommand();
-        foreach ($scanner->listUnskipped() as $table) {
+
+        $tables = $scanner->removeShadowTranslationTables($scanner->listUnskipped());
+        foreach ($tables as $table) {
             $fixtureArgs = new Arguments([$table], $args->getOptions(), ['name']);
             $fixture->execute($fixtureArgs, $io);
         }
