@@ -1251,7 +1251,7 @@ class ModelCommand extends BakeCommand
     }
 
     /**
-     * Outputs the a list of possible models or controllers from database
+     * Outputs the list of possible models or controllers from database
      *
      * @return array<string>
      */
@@ -1270,7 +1270,7 @@ class ModelCommand extends BakeCommand
     }
 
     /**
-     * Outputs the a list of unskipped models or controllers from database
+     * Outputs the list of unskipped models or controllers from database
      *
      * @return array<string>
      */
