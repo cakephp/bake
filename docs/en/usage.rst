@@ -52,6 +52,18 @@ You can get the list of available bake command by running ``bin/cake bake --help
     To run a command, type `cake command_name [args|options]`
     To get help on a specific command, type `cake command_name --help`
 
+Bake Models
+===========
+
+Models are generically baked from the existing DB tables.
+The conventions here apply, so it will detect relations based on ``thing_id`` foreign keys to ``things`` tables with their ``id`` primary keys.
+
+For non-conventional relations, you can use references in the constraints / foreign key definitions for Bake to detect the relations, e.g.::
+
+    ->addForeignKey('billing_country_id', 'countries') // defaults to `id`
+    ->addForeignKey('shipping_country_id', 'countries', 'cid')
+
+
 Bake Themes
 ===========
 
