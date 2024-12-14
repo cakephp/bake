@@ -43,6 +43,8 @@ class PluginCommand extends BakeCommand
      */
     public string $path;
 
+    protected bool $isVendor = false;
+
     /**
      * initialize
      *
@@ -72,6 +74,18 @@ class PluginCommand extends BakeCommand
         }
         $parts = explode('/', $name);
         $plugin = implode('/', array_map([Inflector::class, 'camelize'], $parts));
+
+        if ($args->getOption('standalone-path')) {
+            $this->path = $args->getOption('standalone-path');
+            $this->path = rtrim($this->path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $this->isVendor = true;
+
+            if (!is_dir($this->path)) {
+                $io->err(sprintf('Path `%s` does not exist.', $this->path));
+
+                return static::CODE_ERROR;
+            }
+        }
 
         $pluginPath = $this->_pluginPath($plugin);
         if (is_dir($pluginPath)) {
@@ -115,24 +129,27 @@ class PluginCommand extends BakeCommand
         }
 
         $this->_generateFiles($plugin, $this->path, $args, $io);
-        $this->_modifyApplication($plugin, $io);
 
-        $composer = $this->findComposer($args, $io);
+        if (!$this->isVendor) {
+            $this->_modifyApplication($plugin, $io);
 
-        try {
-            $cwd = getcwd();
+            $composer = $this->findComposer($args, $io);
 
-            // Windows makes running multiple commands at once hard.
-            chdir(dirname($this->_rootComposerFilePath()));
-            $command = 'php ' . escapeshellarg($composer) . ' dump-autoload';
-            $process = new Process($io);
-            $io->out($process->call($command));
+            try {
+                $cwd = getcwd();
 
-            chdir($cwd);
-        } catch (RuntimeException $e) {
-            $error = $e->getMessage();
-            $io->error(sprintf('Could not run `composer dump-autoload`: %s', $error));
-            $this->abort();
+                // Windows makes running multiple commands at once hard.
+                chdir(dirname($this->_rootComposerFilePath()));
+                $command = 'php ' . escapeshellarg($composer) . ' dump-autoload';
+                $process = new Process($io);
+                $io->out($process->call($command));
+
+                chdir($cwd);
+            } catch (RuntimeException $e) {
+                $error = $e->getMessage();
+                $io->error(sprintf('Could not run `composer dump-autoload`: %s', $error));
+                $this->abort();
+            }
         }
 
         $io->hr();
@@ -219,9 +236,24 @@ class PluginCommand extends BakeCommand
         do {
             $templatesPath = array_shift($paths) . BakeView::BAKE_TEMPLATE_FOLDER . '/Plugin';
             if (is_dir($templatesPath)) {
-                $templates = array_keys(iterator_to_array(
+                $files = iterator_to_array(
                     $fs->findRecursive($templatesPath, '/\.twig$/')
-                ));
+                );
+
+                if (!$this->isVendor) {
+                    $vendorFiles = [
+                        '.gitignore.twig', 'README.md.twig', 'composer.json.twig', 'phpunit.xml.dist.twig',
+                        'bootstrap.php.twig', 'schema.sql.twig',
+                    ];
+
+                    foreach ($files as $key => $file) {
+                        if (in_array($file->getFilename(), $vendorFiles, true)) {
+                            unset($files[$key]);
+                        }
+                    }
+                }
+
+                $templates = array_keys($files);
             }
         } while (!$templates);
 
@@ -326,7 +358,8 @@ class PluginCommand extends BakeCommand
             'Create the directory structure, AppController class and testing setup for a new plugin. ' .
             'Can create plugins in any of your bootstrapped plugin paths.'
         )->addArgument('name', [
-            'help' => 'CamelCased name of the plugin to create.',
+            'help' => 'CamelCased name of the plugin to create.'
+            . ' For standalone plugins you can use vendor prefixed names like MyVendor/MyPlugin.',
         ])->addOption('composer', [
             'default' => ROOT . DS . 'composer.phar',
             'help' => 'The path to the composer executable.',
@@ -339,6 +372,10 @@ class PluginCommand extends BakeCommand
             'help' => 'The theme to use when baking code.',
             'default' => Configure::read('Bake.theme') ?: null,
             'choices' => $this->_getBakeThemes(),
+        ])
+        ->addOption('standalone-path', [
+            'short' => 'p',
+            'help' => 'Generate a standalone plugin in the provided path.',
         ]);
 
         return $parser;

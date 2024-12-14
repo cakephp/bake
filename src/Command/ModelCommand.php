@@ -256,6 +256,8 @@ class ModelCommand extends BakeCommand
         $associations = $this->findHasMany($table, $associations);
         $associations = $this->findBelongsToMany($table, $associations);
 
+        $associations = $this->ensureAliasUniqueness($associations);
+
         return $associations;
     }
 
@@ -275,6 +277,7 @@ class ModelCommand extends BakeCommand
         if (get_class($model) !== Table::class) {
             return;
         }
+
         foreach ($associations as $type => $assocs) {
             foreach ($assocs as $assoc) {
                 $alias = $assoc['alias'];
@@ -349,6 +352,7 @@ class ModelCommand extends BakeCommand
                 continue;
             }
 
+            $className = null;
             if ($fieldName === 'parent_id') {
                 $className = $this->plugin ? $this->plugin . '.' . $model->getAlias() : $model->getAlias();
                 $assoc = [
@@ -375,7 +379,7 @@ class ModelCommand extends BakeCommand
                     $allowAliasRelations = $args && $args->getOption('skip-relation-check');
                     $found = $this->findTableReferencedBy($schema, $fieldName);
                     if ($found) {
-                        $tmpModelName = Inflector::camelize($found);
+                        $className = ($this->plugin ? $this->plugin . '.' : '') . Inflector::camelize($found);
                     } elseif (!$allowAliasRelations) {
                         continue;
                     }
@@ -384,6 +388,9 @@ class ModelCommand extends BakeCommand
                     'alias' => $tmpModelName,
                     'foreignKey' => $fieldName,
                 ];
+                if ($className && $className !== $tmpModelName) {
+                    $assoc['className'] = $className;
+                }
                 if ($schema->getColumn($fieldName)['null'] === false) {
                     $assoc['joinType'] = 'INNER';
                 }
@@ -392,6 +399,7 @@ class ModelCommand extends BakeCommand
             if ($this->plugin && empty($assoc['className'])) {
                 $assoc['className'] = $this->plugin . '.' . $assoc['alias'];
             }
+
             $associations['belongsTo'][] = $assoc;
         }
 
@@ -1243,7 +1251,7 @@ class ModelCommand extends BakeCommand
     }
 
     /**
-     * Outputs the a list of possible models or controllers from database
+     * Outputs the list of possible models or controllers from database
      *
      * @return array<string>
      */
@@ -1262,7 +1270,7 @@ class ModelCommand extends BakeCommand
     }
 
     /**
-     * Outputs the a list of unskipped models or controllers from database
+     * Outputs the list of unskipped models or controllers from database
      *
      * @return array<string>
      */
@@ -1545,5 +1553,44 @@ class ModelCommand extends BakeCommand
             );
             $enumCommand->execute($args, $io);
         }
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $associations
+     * @return array<string, array<string, mixed>>
+     */
+    protected function ensureAliasUniqueness(array $associations): array
+    {
+        $existing = [];
+        foreach ($associations as $type => $associationsPerType) {
+            foreach ($associationsPerType as $k => $association) {
+                $alias = $association['alias'];
+                if (in_array($alias, $existing, true)) {
+                    $alias = $this->createAssociationAlias($association);
+                }
+                $existing[] = $alias;
+                if (empty($association['className'])) {
+                    $className = $this->plugin ? $this->plugin . '.' . $association['alias'] : $association['alias'];
+                    if ($className !== $alias) {
+                        $association['className'] = $className;
+                    }
+                }
+                $association['alias'] = $alias;
+                $associations[$type][$k] = $association;
+            }
+        }
+
+        return $associations;
+    }
+
+    /**
+     * @param array<string, mixed> $association
+     * @return string
+     */
+    protected function createAssociationAlias(array $association): string
+    {
+        $foreignKey = $association['foreignKey'];
+
+        return $this->_modelNameFromKey($foreignKey);
     }
 }

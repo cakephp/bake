@@ -15,6 +15,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime|null $updated
  *
  * @property \BakeTest\Model\Entity\Comment[] $comments
+ * @property \BakeTest\Model\Entity\Relation[] $relations
  * @property \BakeTest\Model\Entity\TodoItem[] $todo_items
  */
 class User extends Entity
@@ -34,6 +35,7 @@ class User extends Entity
         'created' => true,
         'updated' => true,
         'comments' => true,
+        'relations' => true,
         'todo_items' => true,
     ];
 

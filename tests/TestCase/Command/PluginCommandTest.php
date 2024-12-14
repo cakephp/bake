@@ -36,6 +36,8 @@ class PluginCommandTest extends TestCase
 
     protected $pluginsPath = TMP . 'plugin_task' . DS;
 
+    protected string $pluginsStandalonePath = TMP . 'plugin_standalone_task' . DS;
+
     /**
      * setUp method
      *
@@ -55,6 +57,11 @@ class PluginCommandTest extends TestCase
             mkdir($this->pluginsPath, 0777, true);
         }
 
+        // Create the test output path
+        if (!file_exists($this->pluginsStandalonePath)) {
+            mkdir($this->pluginsStandalonePath, 0777, true);
+        }
+
         if (file_exists(APP . 'Application.php.bak')) {
             rename(APP . 'Application.php.bak', APP . 'Application.php');
         } else {
@@ -71,6 +78,7 @@ class PluginCommandTest extends TestCase
     {
         $fs = new Filesystem();
         $fs->deleteDir($this->pluginsPath);
+        $fs->deleteDir($this->pluginsStandalonePath);
 
         if (file_exists(APP . 'Application.php.bak')) {
             rename(APP . 'Application.php.bak', APP . 'Application.php');
@@ -123,9 +131,9 @@ class PluginCommandTest extends TestCase
      */
     public function testMainVendorName()
     {
-        $this->exec('bake plugin Company/Example', ['y', 'n']);
+        $this->exec('bake plugin Company/Example --standalone-path ' . $this->pluginsStandalonePath, ['y', 'n']);
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
-        $this->assertPluginContents('Company/Example');
+        $this->assertPluginContents('Company/Example', true);
     }
 
     /**
@@ -135,9 +143,9 @@ class PluginCommandTest extends TestCase
      */
     public function testMainVendorNameCasingFix()
     {
-        $this->exec('bake plugin company/example', ['y', 'n']);
+        $this->exec('bake plugin company/example --standalone-path ' . $this->pluginsStandalonePath, ['y', 'n']);
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
-        $this->assertPluginContents('Company/Example');
+        $this->assertPluginContents('Company/Example', true);
     }
 
     /**
@@ -231,15 +239,20 @@ class PluginCommandTest extends TestCase
      * Compare to a static copy of the plugin in the comparison folder
      *
      * @param string $pluginName the name of the plugin to compare to
+     * @param bool $vendor Whether testing a vendor plugin generation
      * @return void
      */
-    public function assertPluginContents($pluginName)
+    public function assertPluginContents($pluginName, bool $vendor = false): void
     {
         $pluginName = str_replace('/', DS, $pluginName);
         $comparisonRoot = $this->_compareBasePath . $pluginName . DS;
         $comparisonFiles = $this->getFiles($comparisonRoot);
 
-        $bakedRoot = App::path('plugins')[0] . $pluginName . DS;
+        if ($vendor) {
+            $bakedRoot = $this->pluginsStandalonePath . $pluginName . DS;
+        } else {
+            $bakedRoot = App::path('plugins')[0] . $pluginName . DS;
+        }
         $bakedFiles = $this->getFiles($bakedRoot);
 
         $this->assertCount(

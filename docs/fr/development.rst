@@ -137,7 +137,7 @@ ressemble à ceci::
         /**
         * Méthode hook pour définir le parseur d'option de cette commande.
         *
-        * @see https://book.cakephp.org/4/fr/console-commands/commands.html#defining-arguments-and-options
+        * @see https://book.cakephp.org/5/fr/console-commands/commands.html#defining-arguments-and-options
         * @param \Cake\Console\ConsoleOptionParser $parser Le parseur à définir
         * @return \Cake\Console\ConsoleOptionParser Le parseur construit.
         */
@@ -181,7 +181,7 @@ ressemble à ceci::
         /**
         * Méthode hook pour définir le parseur d'option de cette commande.
         *
-        * @see https://book.cakephp.org/4/fr/console-commands/commands.html#defining-arguments-and-options
+        * @see https://book.cakephp.org/5/fr/console-commands/commands.html#defining-arguments-and-options
         * @param \Cake\Console\ConsoleOptionParser $parser Le parseur à définir
         * @return \Cake\Console\ConsoleOptionParser Le parseur construit.
         */

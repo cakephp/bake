@@ -597,14 +597,16 @@ class ModelCommandTest extends TestCase
 
         $expected = [
             [
-                'alias' => 'Users',
+                'alias' => 'Senders',
                 'foreignKey' => 'sender_id',
                 'joinType' => 'INNER',
+                'className' => 'Users',
             ],
             [
-                'alias' => 'Users',
+                'alias' => 'Receivers',
                 'foreignKey' => 'receiver_id',
                 'joinType' => 'INNER',
+                'className' => 'Users',
             ],
         ];
         $this->assertEquals($expected, $result['belongsTo']);
@@ -667,7 +669,7 @@ class ModelCommandTest extends TestCase
      */
     public function testBelongsToGenerationConstraints()
     {
-        $model = $this->getTableLocator()->get('Invitations');
+        $model = $this->getTableLocator()->get('Relations');
         $command = new ModelCommand();
         $command->connection = 'test';
         $result = $command->findBelongsTo($model, []);
@@ -675,13 +677,44 @@ class ModelCommandTest extends TestCase
             'belongsTo' => [
                 [
                     'alias' => 'Users',
-                    'foreignKey' => 'sender_id',
+                    'foreignKey' => 'user_id',
                     'joinType' => 'INNER',
                 ],
                 [
-                    'alias' => 'Users',
+                    'alias' => 'Others',
+                    'foreignKey' => 'other_id',
+                    'joinType' => 'INNER',
+                    'className' => 'Users',
+                ],
+            ],
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test that belongsTo association generation uses aliased constraints on the table
+     *
+     * @return void
+     */
+    public function testBelongsToGenerationConstraintsAliased()
+    {
+        $model = $this->getTableLocator()->get('Invitations');
+        $command = new ModelCommand();
+        $command->connection = 'test';
+        $result = $command->findBelongsTo($model, []);
+        $expected = [
+            'belongsTo' => [
+                [
+                    'alias' => 'Senders',
+                    'foreignKey' => 'sender_id',
+                    'joinType' => 'INNER',
+                    'className' => 'Users',
+                ],
+                [
+                    'alias' => 'Receivers',
                     'foreignKey' => 'receiver_id',
                     'joinType' => 'INNER',
+                    'className' => 'Users',
                 ],
             ],
         ];

@@ -65,7 +65,8 @@ class TemplateAllCommand extends BakeCommand
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
 
-        foreach ($scanner->listUnskipped() as $table) {
+        $tables = $scanner->removeShadowTranslationTables($scanner->listUnskipped());
+        foreach ($tables as $table) {
             $parser = $this->templateCommand->getOptionParser();
             $templateArgs = new Arguments(
                 [$table],

@@ -58,13 +58,13 @@ class TableScanner
     /**
      * Get all tables in the connection without applying ignores.
      *
-     * @return array<string>
+     * @return array<string, string>
      */
     public function listAll(): array
     {
         $schema = $this->connection->getSchemaCollection();
         $tables = $schema->listTables();
-        if (empty($tables)) {
+        if (!$tables) {
             throw new RuntimeException('Your database does not have any tables.');
         }
         sort($tables);
@@ -75,7 +75,7 @@ class TableScanner
     /**
      * Get all tables in the connection that aren't ignored.
      *
-     * @return array<string>
+     * @return array<string, string>
      */
     public function listUnskipped(): array
     {
@@ -91,13 +91,36 @@ class TableScanner
     }
 
     /**
+     * Call from any All command that needs the shadow translation tables to be skipped.
+     *
+     * @param array<string, string> $tables
+     * @return array<string, string>
+     */
+    public function removeShadowTranslationTables(array $tables): array
+    {
+        foreach ($tables as $key => $table) {
+            if (!preg_match('/^(.+)_translations$/', $table, $matches)) {
+                continue;
+            }
+
+            if (empty($tables[$matches[1]])) {
+                continue;
+            }
+
+            unset($tables[$key]);
+        }
+
+        return $tables;
+    }
+
+    /**
      * @param string $table Table name.
      * @return bool
      */
     protected function shouldSkip(string $table): bool
     {
         foreach ($this->ignore as $ignore) {
-            if (strpos($ignore, '/') === 0) {
+            if (str_starts_with($ignore, '/')) {
                 if ((bool)preg_match($ignore, $table)) {
                     return true;
                 }
