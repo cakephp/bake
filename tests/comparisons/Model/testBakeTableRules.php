@@ -35,8 +35,6 @@ class UniqueFieldsTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('unique_fields');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');

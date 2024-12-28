@@ -40,8 +40,6 @@ class TodoTasksTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('todo_tasks');
         $this->setDisplayField('title');
         $this->setPrimaryKey('uid');

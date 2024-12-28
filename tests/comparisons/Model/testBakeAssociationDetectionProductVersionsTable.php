@@ -37,8 +37,6 @@ class ProductVersionsTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('product_versions');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');

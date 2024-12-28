@@ -37,8 +37,6 @@ class OldProductsTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('old_products');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');

@@ -37,8 +37,6 @@ class TestBakeArticlesTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('bake_articles');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');

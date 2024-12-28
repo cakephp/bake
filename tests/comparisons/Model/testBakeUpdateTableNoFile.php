@@ -42,8 +42,6 @@ class TodoItemsTable extends Table
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
         $this->setTable('todo_items');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');

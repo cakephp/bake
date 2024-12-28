@@ -41,8 +41,6 @@ class {{ name }}Table extends Table{{ fileBuilder.classBuilder.implements ? ' im
      */
     public function initialize(array $config): void
     {
-        parent::initialize($config);
-
 {% if table %}
         $this->setTable('{{ table }}');
 {% endif %}
