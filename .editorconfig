@@ -19,3 +19,6 @@ indent_size = 2
 
 [*.twig]
 insert_final_newline = false
+
+[tests/comparisons/Template/*.php]
+insert_final_newline = false
