@@ -46,17 +46,6 @@ class PluginCommand extends BakeCommand
     protected bool $isVendor = false;
 
     /**
-     * initialize
-     *
-     * @return void
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->path = current(App::path('plugins'));
-    }
-
-    /**
      * Execute the command.
      *
      * @param \Cake\Console\Arguments $args The command arguments.
@@ -114,10 +103,15 @@ class PluginCommand extends BakeCommand
      */
     public function bake(string $plugin, Arguments $args, ConsoleIo $io): ?bool
     {
-        $pathOptions = App::path('plugins');
-        if (count($pathOptions) > 1) {
-            $this->findPath($pathOptions, $io);
+        if (!$this->isVendor) {
+            $pathOptions = App::path('plugins');
+            $this->path = current($pathOptions);
+
+            if (count($pathOptions) > 1) {
+                $this->findPath($pathOptions, $io);
+            }
         }
+
         $io->out(sprintf('<info>Plugin Name:</info> %s', $plugin));
         $io->out(sprintf('<info>Plugin Directory:</info> %s', $this->path . $plugin));
         $io->hr();
