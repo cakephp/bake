@@ -30,7 +30,14 @@
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $bakeUser->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $bakeUser->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $bakeUser->id], ['confirm' => __('Are you sure you want to delete # {0}?', $bakeUser->id)]) ?>
+                        <?= $this->Form->postLink(
+                            __('Delete'),
+                            ['action' => 'delete', $bakeUser->id],
+                            [
+                                'method' => 'delete',
+                                'confirm' => __('Are you sure you want to delete # {0}?', $bakeUser->id),
+                            ]
+                        ) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
