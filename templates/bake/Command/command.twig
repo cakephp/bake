@@ -29,6 +29,23 @@
 class {{ name }}Command extends Command
 {
     /**
+     * The name of this command.
+     *
+     * @var string
+     */
+    protected string $name = '{{ command_name }}';
+
+    /**
+     * Get the default command name.
+     *
+     * @return string
+     */
+    public static function defaultName(): string
+    {
+        return '{{ command_name }}';
+    }
+
+    /**
      * Get the command description.
      *
      * @return string
