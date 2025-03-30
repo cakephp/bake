@@ -16,6 +16,9 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Cake\Console\Arguments;
+use Cake\Utility\Inflector;
+
 /**
  * Console Command generator.
  */
@@ -50,5 +53,25 @@ class CommandCommand extends SimpleBakeCommand
     public function template(): string
     {
         return 'Bake.Command/command';
+    }
+
+    /**
+     * Get template data.
+     *
+     * @param \Cake\Console\Arguments $arguments Arguments object.
+     * @return array
+     * @phpstan-return array<string, mixed>
+     */
+    public function templateData(Arguments $arguments): array
+    {
+        $data = parent::templateData($arguments);
+
+        $data['command_name'] = Inflector::underscore(str_replace(
+            '.',
+            ' ',
+            $arguments->getArgument('name')
+        ));
+
+        return $data;
     }
 }

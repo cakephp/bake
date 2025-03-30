@@ -5,7 +5,7 @@ namespace Bake\Utility\Model;
 
 use InvalidArgumentException;
 
-enum EnumParser
+class EnumParser
 {
     /**
      * @param string|null $casesString

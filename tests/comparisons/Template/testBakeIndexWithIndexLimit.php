@@ -26,7 +26,14 @@
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $templateTaskComment->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $templateTaskComment->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $templateTaskComment->id], ['confirm' => __('Are you sure you want to delete # {0}?', $templateTaskComment->id)]) ?>
+                        <?= $this->Form->postLink(
+                            __('Delete'),
+                            ['action' => 'delete', $templateTaskComment->id],
+                            [
+                                'method' => 'delete',
+                                'confirm' => __('Are you sure you want to delete # {0}?', $templateTaskComment->id),
+                            ]
+                        ) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
