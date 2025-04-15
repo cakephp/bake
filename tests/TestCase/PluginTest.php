@@ -86,7 +86,7 @@ class PluginTest extends TestCase
         $this->assertTrue($commands->has('bake led_zepplin'));
         $this->assertFalse(
             $commands->has('bake the_who'),
-            'Only commands from "Bake" subfolder should be loaded'
+            'Only commands from "Bake" subfolder should be loaded',
         );
     }
 

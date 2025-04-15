@@ -232,12 +232,12 @@ class TemplateCommand extends BakeCommand
             $methods = array_diff(
                 array_map(
                     'Cake\Utility\Inflector::underscore',
-                    get_class_methods($this->controllerClass)
+                    get_class_methods($this->controllerClass),
                 ),
                 array_map(
                     'Cake\Utility\Inflector::underscore',
-                    get_class_methods($base . '\Controller\AppController')
-                )
+                    get_class_methods($base . '\Controller\AppController'),
+                ),
             );
         }
         if (empty($methods)) {
@@ -331,7 +331,7 @@ class TemplateCommand extends BakeCommand
             'hidden',
             'associations',
             'keyFields',
-            'namespace'
+            'namespace',
         );
     }
 
@@ -350,7 +350,7 @@ class TemplateCommand extends BakeCommand
         ConsoleIo $io,
         string $template,
         string|bool $content = '',
-        ?string $outputFile = null
+        ?string $outputFile = null,
     ): void {
         if ($outputFile === null) {
             $outputFile = $template;
@@ -420,7 +420,7 @@ class TemplateCommand extends BakeCommand
         $parser = $this->_setCommonOptions($parser);
 
         $parser->setDescription(
-            'Bake views for a controller, using built-in or custom templates. '
+            'Bake views for a controller, using built-in or custom templates. ',
         )->addArgument('name', [
             'help' => 'Name of the controller views to bake. You can use Plugin.name as a shortcut for plugin baking.',
         ])->addArgument('template', [

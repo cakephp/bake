@@ -193,7 +193,7 @@ class BakeHelper extends Helper
         SchemaInterface $schema,
         ?Table $modelObject = null,
         string|int $takeFields = 0,
-        array $filterTypes = ['binary']
+        array $filterTypes = ['binary'],
     ): array {
         $fields = collection($fields)
             ->filter(function ($field) use ($schema, $filterTypes) {
@@ -351,7 +351,7 @@ class BakeHelper extends Helper
                     $field,
                     $ruleName,
                     $rule['rule'],
-                    $rule['provider']
+                    $rule['provider'],
                 );
                 continue;
             }
@@ -360,7 +360,7 @@ class BakeHelper extends Helper
                 $validationMethods[] = sprintf(
                     "->%s('%s')",
                     $rule['rule'],
-                    $field
+                    $field,
                 );
                 continue;
             }
@@ -369,14 +369,14 @@ class BakeHelper extends Helper
                 return $this->exportVar(
                     $item,
                     is_array($item) ? 3 : 0,
-                    VarExporter::INLINE_SCALAR_LIST
+                    VarExporter::INLINE_SCALAR_LIST,
                 );
             }, $rule['args']);
             $validationMethods[] = sprintf(
                 "->%s('%s', %s)",
                 $rule['rule'],
                 $field,
-                implode(', ', $rule['args'])
+                implode(', ', $rule['args']),
             );
         }
 
@@ -514,7 +514,7 @@ class BakeHelper extends Helper
         string $delimiter,
         array $strings,
         string $prefix = '',
-        string $suffix = ''
+        string $suffix = '',
     ): string {
         $output = implode(
             $delimiter,
@@ -524,7 +524,7 @@ class BakeHelper extends Helper
                 }
 
                 return implode($delimiter, array_filter($string));
-            }, array_filter($strings))
+            }, array_filter($strings)),
         );
 
         if ($prefix && !empty($output)) {

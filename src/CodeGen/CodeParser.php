@@ -95,7 +95,7 @@ class CodeParser extends NodeVisitorAbstract
             $this->parsed['imports']['class'],
             $this->parsed['imports']['function'],
             $this->parsed['imports']['const'],
-            $this->parsed['class']
+            $this->parsed['class'],
         );
     }
 
@@ -201,7 +201,7 @@ class CodeParser extends NodeVisitorAbstract
                 $implements,
                 $constants,
                 $properties,
-                $methods
+                $methods,
             );
 
             return NodeVisitor::DONT_TRAVERSE_CHILDREN;

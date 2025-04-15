@@ -140,12 +140,12 @@ abstract class SimpleBakeCommand extends BakeCommand
         $parser = $this->_setCommonOptions($parser);
         $name = $this->name();
         $parser->setDescription(
-            sprintf('Bake a %s class file.', $name)
+            sprintf('Bake a %s class file.', $name),
         )->addArgument('name', [
             'help' => sprintf(
                 'Name of the %s to bake. Can use Plugin.name to bake %s files into plugins.',
                 $name,
-                $name
+                $name,
             ),
         ])->addOption('no-test', [
             'boolean' => true,

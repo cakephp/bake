@@ -51,7 +51,7 @@ class FileBuilder
             throw new ParseException(sprintf(
                 'Existing namespace `%s` does not match expected namespace `%s`, cannot update existing file',
                 $parsedFile->namespace,
-                $namespace
+                $namespace,
             ));
         }
 

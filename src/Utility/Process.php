@@ -59,7 +59,7 @@ class Process
         $process = proc_open(
             $command,
             $descriptorSpec,
-            $pipes
+            $pipes,
         );
         if (!is_resource($process)) {
             throw new RuntimeException("Could not start subprocess for `$command`");

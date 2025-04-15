@@ -138,7 +138,7 @@ abstract class BakeCommand extends Command
         if (empty($paths)) {
             throw new InvalidArgumentException(
                 'Could not read template paths. ' .
-                'Ensure `App.paths.templates` is defined in your application configuration.'
+                'Ensure `App.paths.templates` is defined in your application configuration.',
             );
         }
         $path = $paths[0];
@@ -231,7 +231,7 @@ abstract class BakeCommand extends Command
         string $path,
         string $contents,
         bool $forceOverwrite = false,
-        bool $skipIfUnchanged = true
+        bool $skipIfUnchanged = true,
     ): bool {
         if ($skipIfUnchanged && file_exists($path) && file_get_contents($path) === $contents) {
             $io->info("Skipping update to `{$path}`. It already exists and would not change.");

@@ -49,7 +49,7 @@ class FixtureAllCommand extends BakeCommand
         $parser = $this->_setCommonOptions($parser);
 
         $parser = $parser->setDescription(
-            'Generate all fixtures for use with the test suite.'
+            'Generate all fixtures for use with the test suite.',
         )->addOption('count', [
             'help' => 'When using generated data, the number of records to include in the fixture(s).',
             'short' => 'n',

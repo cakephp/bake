@@ -67,7 +67,7 @@ class FixtureCommand extends BakeCommand
         $parser = $this->_setCommonOptions($parser);
 
         $parser = $parser->setDescription(
-            'Generate fixtures for use with the test suite. You can use `bake fixture all` to bake all fixtures.'
+            'Generate fixtures for use with the test suite. You can use `bake fixture all` to bake all fixtures.',
         )->addArgument('name', [
             'help' => 'Name of the fixture to bake (without the `Fixture` suffix). ' .
                 'You can use Plugin.name to bake plugin fixtures.',
@@ -228,7 +228,7 @@ class FixtureCommand extends BakeCommand
                 $io->abort(sprintf(
                     'Unable to bake model. Table column name must start with a letter or underscore and
                     cannot contain special characters. Found `%s`.',
-                    $column
+                    $column,
                 ));
             }
         }
@@ -387,7 +387,7 @@ class FixtureCommand extends BakeCommand
                                     0,
                                     (int)$fieldInfo['length'] > 2
                                         ? (int)$fieldInfo['length'] - 2
-                                        : (int)$fieldInfo['length']
+                                        : (int)$fieldInfo['length'],
                                 );
                             }
                         }

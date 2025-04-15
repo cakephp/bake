@@ -49,8 +49,7 @@ use SomeOther;
 class User implements SomeOther\Interface, IdentityInterface
 {
 }
-PARSE
-        );
+PARSE,);
 
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
         $implements = $builder->classBuilder()->getImplements(['NewInterface', 'SomeOther\Interface']);
@@ -60,7 +59,7 @@ PARSE
                 'SomeOther\Interface',
                 'IdentityInterface',
             ],
-            array_values($implements)
+            array_values($implements),
         );
     }
 
@@ -93,7 +92,7 @@ class TestTable
     {
     }
 }
-PARSE
+PARSE,
         );
 
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
@@ -102,7 +101,7 @@ PARSE
             [
                 'MY_CONST',
             ],
-            array_keys($constants)
+            array_keys($constants),
         );
     }
 
@@ -150,7 +149,7 @@ class TestTable
     {
     }
 }
-PARSE
+PARSE,
         );
 
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
@@ -160,7 +159,7 @@ PARSE
                 'findSomething',
                 'findSomethingElse',
             ],
-            array_keys($methods)
+            array_keys($methods),
         );
     }
 }

@@ -88,7 +88,7 @@ class ControllerAllCommandTest extends TestCase
 
         $this->assertFileDoesNotExist(
             ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php',
-            'Test should not be created as options should be forwarded'
+            'Test should not be created as options should be forwarded',
         );
     }
 }

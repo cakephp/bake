@@ -86,7 +86,7 @@ class AssociationFilterTest extends TestCase
         $this->assertSame(
             $expected,
             $result,
-            'hasMany should filter results based on belongsToMany existing aliases'
+            'hasMany should filter results based on belongsToMany existing aliases',
         );
     }
 
@@ -112,7 +112,7 @@ class AssociationFilterTest extends TestCase
         $this->assertSame(
             $expected,
             $result,
-            'hasMany should filter results based on belongsToMany existing aliases'
+            'hasMany should filter results based on belongsToMany existing aliases',
         );
         $table->associations()->remove('ExtraArticles');
     }

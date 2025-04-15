@@ -52,8 +52,7 @@ class FileBuilderTest extends TestCase
 namespace MyApp\Model;
 
 class TestTable{}
-PARSE
-        );
+PARSE,);
 
         $this->expectException(ParseException::class);
         new FileBuilder($this->io, 'MyOtherApp\Model', $file);
@@ -76,8 +75,7 @@ use const MyApp\MY_CONSTANT;
 use const DATE_ATOM as CUSTOM_DATE;
 
 class TestTable{}
-PARSE
-        );
+PARSE,);
 
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
@@ -89,7 +87,7 @@ PARSE
                 'MyExpression' => 'MyApp\Expression\MyExpression',
                 'MyException' => 'RuntimeException',
             ],
-            $builder->getClassImports(['Table' => 'Cake\ORM\Table', 'Cake\ORM\Query\SelectQuery'])
+            $builder->getClassImports(['Table' => 'Cake\ORM\Table', 'Cake\ORM\Query\SelectQuery']),
         );
 
         $this->assertSame(
@@ -97,7 +95,7 @@ PARSE
                 'custom_implode' => 'implode',
                 'my_function' => 'MyApp\my_function',
             ],
-            $builder->getFunctionImports()
+            $builder->getFunctionImports(),
         );
 
         $this->assertSame(
@@ -105,7 +103,7 @@ PARSE
                 'CUSTOM_DATE' => 'DATE_ATOM',
                 'MY_CONSTANT' => 'MyApp\MY_CONSTANT',
             ],
-            $builder->getConstImports()
+            $builder->getConstImports(),
         );
 
         // Build without existing file
@@ -115,21 +113,21 @@ PARSE
                 'SelectQuery' => 'Cake\ORM\Query\SelectQuery',
                 'Table' => 'Cake\ORM\Table',
             ],
-            $builder->getClassImports(['Cake\ORM\Table', 'Cake\ORM\Query\SelectQuery'])
+            $builder->getClassImports(['Cake\ORM\Table', 'Cake\ORM\Query\SelectQuery']),
         );
 
         $this->assertSame(
             [
                 'implode' => 'implode',
             ],
-            $builder->getFunctionImports(['implode'])
+            $builder->getFunctionImports(['implode']),
         );
 
         $this->assertSame(
             [
                 'DATE_ATOM' => 'DATE_ATOM',
             ],
-            $builder->getConstImports(['DATE_ATOM'])
+            $builder->getConstImports(['DATE_ATOM']),
         );
     }
 
@@ -144,8 +142,7 @@ namespace MyApp\Model;
 use Cake\ORM\Query\SelectQuery as MyQuery;
 
 class TestTable{}
-PARSE
-        );
+PARSE,);
 
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 
@@ -164,8 +161,7 @@ namespace MyApp\Model;
 use MyApp\Query as SelectQuery;
 
 class TestTable{}
-PARSE
-        );
+PARSE,);
 
         $builder = new FileBuilder($this->io, 'MyApp\Model', $file);
 

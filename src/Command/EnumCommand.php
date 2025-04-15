@@ -97,7 +97,7 @@ class EnumCommand extends SimpleBakeCommand
         $parser = $this->_setCommonOptions($parser);
 
         $parser->setDescription(
-            'Bake backed enums for use in models.'
+            'Bake backed enums for use in models.',
         )->addArgument('name', [
             'help' => 'Name of the enum to bake. You can use Plugin.name to bake plugin enums.',
             'required' => true,

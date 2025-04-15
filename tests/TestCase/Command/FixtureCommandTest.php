@@ -125,7 +125,7 @@ class FixtureCommandTest extends TestCase
 
         $this->assertSameAsFile(
             __FUNCTION__ . '.php',
-            file_get_contents($this->generatedFile)
+            file_get_contents($this->generatedFile),
         );
     }
 
@@ -160,7 +160,7 @@ class FixtureCommandTest extends TestCase
         $this->assertFileContains(
             "'body' => 'Body \"value\"'",
             $this->generatedFile,
-            'Data has bad escaping'
+            'Data has bad escaping',
         );
     }
 
@@ -296,7 +296,7 @@ class FixtureCommandTest extends TestCase
         $this->assertStringContainsString("'uuid' => ['type' => 'uuid'", $result);
         $this->assertMatchesRegularExpression(
             "/(\s+)('uuid' => ')([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})(')/",
-            $result
+            $result,
         );
     }
 

@@ -169,19 +169,19 @@ class AllCommandTest extends TestCase
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
             'namespace Bake\Test\App\Controller\Admin;',
-            $path . 'Controller/Admin/ProductsController.php'
+            $path . 'Controller/Admin/ProductsController.php',
         );
         $this->assertFileContains(
             'use Bake\Test\App\Controller\AppController;',
-            $path . 'Controller/Admin/ProductsController.php'
+            $path . 'Controller/Admin/ProductsController.php',
         );
         $this->assertFileContains(
             'class ProductsController extends AppController',
-            $path . 'Controller/Admin/ProductsController.php'
+            $path . 'Controller/Admin/ProductsController.php',
         );
         $this->assertFileContains(
             'use Bake\Test\App\Controller\Admin\ProductsController;',
-            $testsPath . 'TestCase/Controller/Admin/ProductsControllerTest.php'
+            $testsPath . 'TestCase/Controller/Admin/ProductsControllerTest.php',
         );
         $this->assertOutputContains('Bake All complete');
     }
@@ -214,11 +214,11 @@ class AllCommandTest extends TestCase
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains(
             '@uses \Bake\Test\App\Controller\ProductsController::index()',
-            $testsPath . 'TestCase/Controller/ProductsControllerTest.php'
+            $testsPath . 'TestCase/Controller/ProductsControllerTest.php',
         );
         $this->assertFileContains(
             '@uses \Bake\Test\App\Model\Table\ProductsTable::validationDefault()',
-            $testsPath . 'TestCase/Model/Table/ProductsTableTest.php'
+            $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
         );
         $this->assertOutputContains('Bake All complete');
         foreach ($this->generatedFiles as $file) {

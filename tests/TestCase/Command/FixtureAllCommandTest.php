@@ -108,7 +108,7 @@ class FixtureAllCommandTest extends TestCase
         $this->assertFileContains("'title' => 'Third Article'", $this->generatedFiles[0]);
         $this->assertFileContains(
             "'comment' => 'First Comment for First Article'",
-            $this->generatedFiles[1]
+            $this->generatedFiles[1],
         );
     }
 
@@ -129,11 +129,11 @@ class FixtureAllCommandTest extends TestCase
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
             "public array \$import = ['table' => 'articles'",
-            $this->generatedFiles[0]
+            $this->generatedFiles[0],
         );
         $this->assertFileContains(
             "public array \$import = ['table' => 'comments'",
-            $this->generatedFiles[1]
+            $this->generatedFiles[1],
         );
     }
 }

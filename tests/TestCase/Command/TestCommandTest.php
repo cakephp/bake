@@ -109,7 +109,7 @@ class TestCommandTest extends TestCase
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
             'class TestTaskTagTableTest extends TestCase',
-            $this->generatedFiles[0]
+            $this->generatedFiles[0],
         );
     }
 
@@ -131,11 +131,11 @@ class TestCommandTest extends TestCase
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
             'class BakeArticlesTableTest extends TestCase',
-            $this->generatedFiles[0]
+            $this->generatedFiles[0],
         );
         $this->assertFileContains(
             'namespace TestBake\Test\TestCase\Model\Table;',
-            $this->generatedFiles[0]
+            $this->generatedFiles[0],
         );
     }
 
@@ -736,7 +736,7 @@ class TestCommandTest extends TestCase
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains(
             '@uses \Bake\Test\App\Controller\ProductsController::index()',
-            $testsPath . 'TestCase/Controller/ProductsControllerTest.php'
+            $testsPath . 'TestCase/Controller/ProductsControllerTest.php',
         );
     }
 
@@ -758,7 +758,7 @@ class TestCommandTest extends TestCase
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains(
             '@uses \Bake\Test\App\Model\Table\ProductsTable::validationDefault()',
-            $testsPath . 'TestCase/Model/Table/ProductsTableTest.php'
+            $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
         );
     }
 }

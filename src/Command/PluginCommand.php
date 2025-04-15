@@ -185,7 +185,7 @@ class PluginCommand extends BakeCommand
         string $pluginName,
         string $path,
         Arguments $args,
-        ConsoleIo $io
+        ConsoleIo $io,
     ): void {
         $namespace = str_replace('/', '\\', $pluginName);
         $baseNamespace = Configure::read('App.namespace');
@@ -199,7 +199,7 @@ class PluginCommand extends BakeCommand
 
         $composerConfig = json_decode(
             file_get_contents(ROOT . DS . 'composer.json'),
-            true
+            true,
         );
 
         $renderer = $this->createTemplateRenderer()
@@ -231,7 +231,7 @@ class PluginCommand extends BakeCommand
             $templatesPath = array_shift($paths) . BakeView::BAKE_TEMPLATE_FOLDER . '/Plugin';
             if (is_dir($templatesPath)) {
                 $files = iterator_to_array(
-                    $fs->findRecursive($templatesPath, '/\.twig$/')
+                    $fs->findRecursive($templatesPath, '/\.twig$/'),
                 );
 
                 if (!$this->isVendor) {
@@ -278,7 +278,7 @@ class PluginCommand extends BakeCommand
         string $template,
         string $root,
         string $filename,
-        ConsoleIo $io
+        ConsoleIo $io,
     ): void {
         $io->out(sprintf('Generating %s file...', $template));
         $out = $renderer->generate('Bake.Plugin/' . $template);
@@ -350,7 +350,7 @@ class PluginCommand extends BakeCommand
     {
         $parser->setDescription(
             'Create the directory structure, AppController class and testing setup for a new plugin. ' .
-            'Can create plugins in any of your bootstrapped plugin paths.'
+            'Can create plugins in any of your bootstrapped plugin paths.',
         )->addArgument('name', [
             'help' => 'CamelCased name of the plugin to create.'
             . ' For standalone plugins you can use vendor prefixed names like MyVendor/MyPlugin.',

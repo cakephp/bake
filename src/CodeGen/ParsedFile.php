@@ -58,7 +58,7 @@ class ParsedFile
         array $classImports,
         array $functionImports,
         array $constImports,
-        ParsedClass $class
+        ParsedClass $class,
     ) {
         $this->namespace = $namespace;
         $this->classImports = $classImports;

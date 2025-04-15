@@ -68,7 +68,7 @@ trait CommonOptionsTrait
 
             if (strpos($this->plugin, '\\')) {
                 throw new InvalidArgumentException(
-                    'Invalid plugin namespace separator, please use / instead of \ for plugins.'
+                    'Invalid plugin namespace separator, please use / instead of \ for plugins.',
                 );
             }
         }

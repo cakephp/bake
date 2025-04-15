@@ -164,7 +164,7 @@ use Cake\ORM\Query\SelectQuery;
 use RuntimeException as MyException;
 PARSE
             ,
-            $code
+            $code,
         );
 
         $code = $this->BakeHelper->concat("\n", $statements, "\n", "\n");
@@ -176,7 +176,7 @@ use RuntimeException as MyException;
 
 PARSE
             ,
-            $code
+            $code,
         );
     }
 

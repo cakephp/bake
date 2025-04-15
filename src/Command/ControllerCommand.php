@@ -150,7 +150,7 @@ class ControllerCommand extends BakeCommand
             'pluralName',
             'prefix',
             'singularHumanName',
-            'singularName'
+            'singularName',
         );
         $data['name'] = $controllerName;
 
@@ -206,7 +206,7 @@ class ControllerCommand extends BakeCommand
         $testArgs = new Arguments(
             ['controller', $className],
             $args->getOptions(),
-            ['type', 'name']
+            ['type', 'name'],
         );
         $test->execute($testArgs, $io);
     }
@@ -259,7 +259,7 @@ class ControllerCommand extends BakeCommand
     {
         $parser = $this->_setCommonOptions($parser);
         $parser->setDescription(
-            'Bake a controller skeleton.'
+            'Bake a controller skeleton.',
         )->addArgument('name', [
             'help' => 'Name of the controller to bake (without the `Controller` suffix). ' .
                 'You can use Plugin.name to bake controllers into plugins.',

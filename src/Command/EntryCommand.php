@@ -79,7 +79,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
             $args = new Arguments(
                 $arguments,
                 $options,
-                $parser->argumentNames()
+                $parser->argumentNames(),
             );
         } catch (ConsoleException $e) {
             $io->err('Error: ' . $e->getMessage());
@@ -111,7 +111,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
             $name = $args->getArgumentAt(0);
             $io->err(
                 "<error>Could not find bake command named `$name`."
-                . ' Run `bake --help` to get a list of commands.</error>'
+                . ' Run `bake --help` to get a list of commands.</error>',
             );
 
             return static::CODE_ERROR;
@@ -136,7 +136,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
             ->setDescription(
                 'Bake generates code for your application. Different types of classes can be generated' .
                 ' with the subcommands listed below. For example run <info>bake controller --help</info>' .
-                ' to learn more about generating a controller.'
+                ' to learn more about generating a controller.',
             );
         $commands = [];
         foreach ($this->commands as $command => $class) {

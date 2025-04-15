@@ -138,7 +138,7 @@ class ModelCommand extends BakeCommand
                 $io->abort(sprintf(
                     'Unable to bake model. Table column name must start with a letter or underscore and
                     cannot contain special characters. Found `%s`.',
-                    $column
+                    $column,
                 ));
             }
         }
@@ -159,7 +159,7 @@ class ModelCommand extends BakeCommand
         string $table,
         string $name,
         Arguments $args,
-        ConsoleIo $io
+        ConsoleIo $io,
     ): array {
         $associations = $this->getAssociations($tableObject, $args, $io);
         $this->applyAssociations($tableObject, $associations);
@@ -246,7 +246,7 @@ class ModelCommand extends BakeCommand
 
         if (is_array($primary) && count($primary) > 1) {
             $io->warning(
-                'Bake cannot generate associations for composite primary keys at this time.'
+                'Bake cannot generate associations for composite primary keys at this time.',
             );
 
             return $associations;
@@ -365,7 +365,7 @@ class ModelCommand extends BakeCommand
                 if (!$this->getTableLocator()->exists($tmpModelName)) {
                     $this->getTableLocator()->get(
                         $tmpModelName,
-                        ['connection' => ConnectionManager::get($this->connection)]
+                        ['connection' => ConnectionManager::get($this->connection)],
                     );
                 }
                 $associationTable = $this->getTableLocator()->get($tmpModelName);
@@ -852,7 +852,7 @@ class ModelCommand extends BakeCommand
         TableSchemaInterface $schema,
         string $fieldName,
         array $metaData,
-        array $primaryKey
+        array $primaryKey,
     ): array {
         $ignoreFields = ['lft', 'rght', 'created', 'modified', 'updated'];
         if (in_array($fieldName, $ignoreFields, true)) {
@@ -1312,7 +1312,7 @@ class ModelCommand extends BakeCommand
         $parser = $this->_setCommonOptions($parser);
 
         $parser->setDescription(
-            'Bake table and entity classes.'
+            'Bake table and entity classes.',
         )->addArgument('name', [
             'help' => 'Name of the model to bake (without the Table suffix). ' .
                 'You can use Plugin.name to bake plugin models.',
@@ -1362,7 +1362,7 @@ class ModelCommand extends BakeCommand
             'help' => 'Generate relations for all "example_id" fields'
             . ' without checking the database if a table "examples" exists.',
         ])->setEpilog(
-            'Omitting all arguments and options will list the table names you can generate models for.'
+            'Omitting all arguments and options will list the table names you can generate models for.',
         );
 
         return $parser;
@@ -1381,7 +1381,7 @@ class ModelCommand extends BakeCommand
         string $className,
         string $useTable,
         Arguments $args,
-        ConsoleIo $io
+        ConsoleIo $io,
     ): void {
         if ($args->getOption('no-fixture')) {
             return;
@@ -1390,7 +1390,7 @@ class ModelCommand extends BakeCommand
         $fixtureArgs = new Arguments(
             [$className],
             ['table' => $useTable] + $args->getOptions(),
-            ['name']
+            ['name'],
         );
         $fixture->execute($fixtureArgs, $io);
     }
@@ -1412,7 +1412,7 @@ class ModelCommand extends BakeCommand
         $testArgs = new Arguments(
             ['table', $className],
             $args->getOptions(),
-            ['type', 'name']
+            ['type', 'name'],
         );
         $test->execute($testArgs, $io);
     }
@@ -1549,7 +1549,7 @@ class ModelCommand extends BakeCommand
             $args = new Arguments(
                 [$name, implode(',', $cases)],
                 ['int' => $data['type'] === 'int'] + $args->getOptions(),
-                ['name', 'cases']
+                ['name', 'cases'],
             );
             $enumCommand->execute($args, $io);
         }

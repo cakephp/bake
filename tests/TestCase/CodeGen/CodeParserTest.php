@@ -36,20 +36,20 @@ class CodeParserTest extends TestCase
                 'Table' => 'Cake\ORM\Table',
                 'Validator' => 'Cake\Validation\Validator',
             ],
-            $file->classImports
+            $file->classImports,
         );
         $this->assertSame(
             [
                 'SOME_CONST',
             ],
-            array_keys($file->class->constants)
+            array_keys($file->class->constants),
         );
         $this->assertSame(
             [
                 'withDocProperty',
                 'withoutDocProperty',
             ],
-            array_keys($file->class->properties)
+            array_keys($file->class->properties),
         );
         $this->assertSame(
             [
@@ -60,7 +60,7 @@ class CodeParserTest extends TestCase
                 'findAttributes',
                 'findNoAttributes',
             ],
-            array_keys($file->class->methods)
+            array_keys($file->class->methods),
         );
 
         $code = <<<'PARSE'
@@ -135,15 +135,14 @@ use SomeOther;
 class TestTable extends \Cake\ORM\Table implements IdentityInterface, SomeOther\Interface
 {
 }
-PARSE
-        );
+PARSE,);
 
         $this->assertSame(
             [
                 'IdentityInterface',
                 'SomeOther\Interface',
             ],
-            $file->class->implements
+            $file->class->implements,
         );
     }
 
@@ -165,15 +164,14 @@ use const Test\Another\TEST_CONSTANT;
 use const Test\Another\TEST_CONSTANT2 as NEW_CONSTANT;
 
 class TestTable{}
-PARSE
-        );
+PARSE,);
 
         $this->assertSame(
             [
                 'ClassA' => 'Test\Another\ClassA',
                 'C' => 'Test\Another\ClassC',
             ],
-            $file->classImports
+            $file->classImports,
         );
 
         $this->assertSame(
@@ -181,7 +179,7 @@ PARSE
                 'test_func' => 'Test\Another\test_func',
                 'new_func' => 'Test\Another\test_func2',
             ],
-            $file->functionImports
+            $file->functionImports,
         );
 
         $this->assertSame(
@@ -189,7 +187,7 @@ PARSE
                 'TEST_CONSTANT' => 'Test\Another\TEST_CONSTANT',
                 'NEW_CONSTANT' => 'Test\Another\TEST_CONSTANT2',
             ],
-            $file->constImports
+            $file->constImports,
         );
     }
 
@@ -201,8 +199,7 @@ PARSE
 <?php
 
 namespace Bake\Test;
-PARSE
-        );
+PARSE,);
         $this->assertNull($file);
     }
 
@@ -215,8 +212,7 @@ PARSE
 <?php
 
 class TestTable{}
-PARSE
-        );
+PARSE,);
     }
 
     public function testParseMultipleNamespaces(): void
@@ -234,8 +230,7 @@ class TestTable{}
 namespace Bake\Test2;
 
 class Test2Table{}
-PARSE
-        );
+PARSE,);
     }
 
     public function testParseMultipleUses(): void
@@ -251,8 +246,7 @@ namespace Bake\Test;
 use Cake\ORM\Query, Cake\ORM\Table;
 
 class TestTable{}
-PARSE
-        );
+PARSE,);
     }
 
     public function testParseGroupUses(): void
@@ -268,7 +262,6 @@ namespace Bake\Test;
 use Cake\ORM\{Query, Table};
 
 class TestTable{}
-PARSE
-        );
+PARSE,);
     }
 }

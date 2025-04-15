@@ -171,7 +171,7 @@ class PluginCommandTest extends TestCase
     {
         $this->skipIf(
             DIRECTORY_SEPARATOR == '\\',
-            'Skipping composer test on windows as `which` does not work well.'
+            'Skipping composer test on windows as `which` does not work well.',
         );
         $composerPath = exec('which composer');
         if (!$composerPath && file_exists('./composer.phar')) {
@@ -258,7 +258,7 @@ class PluginCommandTest extends TestCase
         $this->assertCount(
             count($comparisonFiles),
             $bakedFiles,
-            'A different number of files were created than expected'
+            'A different number of files were created than expected',
         );
 
         foreach ($comparisonFiles as $key => $file) {
@@ -285,7 +285,7 @@ class PluginCommandTest extends TestCase
             $path,
             function (SplFileInfo $fileInfo) {
                 return $fileInfo->isFile();
-            }
+            },
         );
 
         $files = array_keys(iterator_to_array($iterator));

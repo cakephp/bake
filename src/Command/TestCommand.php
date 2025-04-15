@@ -140,7 +140,7 @@ class TestCommand extends BakeCommand
     {
         $io->out(
             'You must provide a class type to bake a test for. The valid types are:',
-            2
+            2,
         );
         $i = 0;
         foreach ($this->classTypes as $option => $package) {
@@ -162,7 +162,7 @@ class TestCommand extends BakeCommand
         $type = $this->mapType($typeName);
         $io->out(
             'You must provide a class to bake a test for. Some possible options are:',
-            2
+            2,
         );
         $options = $this->_getClassOptions($type);
         $i = 0;
@@ -291,7 +291,7 @@ class TestCommand extends BakeCommand
                 'uses',
                 'baseNamespace',
                 'subNamespace',
-                'namespace'
+                'namespace',
             ))
             ->generate('Bake.tests/test_case');
 
@@ -710,7 +710,7 @@ class TestCommand extends BakeCommand
         $types = array_merge($types, array_map([$this, 'underscore'], $types));
 
         $parser->setDescription(
-            'Bake test case skeletons for classes.'
+            'Bake test case skeletons for classes.',
         )->addArgument('type', [
             'help' => 'Type of class to bake, can be any of the following:' .
                 ' controller, model, helper, component or behavior.',

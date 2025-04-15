@@ -99,7 +99,7 @@ class TemplateCommandTest extends TestCase
         $this->assertSame('Comments', $command->controllerName);
         $this->assertSame(
             'Bake\Test\App\Controller\CommentsController',
-            $command->controllerClass
+            $command->controllerClass,
         );
     }
 
@@ -133,7 +133,7 @@ class TemplateCommandTest extends TestCase
         $this->assertSame('Tests', $command->controllerName);
         $this->assertSame(
             'BakeTest\Controller\TestsController',
-            $command->controllerClass
+            $command->controllerClass,
         );
     }
 
@@ -151,7 +151,7 @@ class TemplateCommandTest extends TestCase
         $this->assertSame('Posts', $command->controllerName);
         $this->assertSame(
             'Bake\Test\App\Controller\Admin\PostsController',
-            $command->controllerClass
+            $command->controllerClass,
         );
 
         $command->plugin = 'BakeTest';
@@ -159,7 +159,7 @@ class TemplateCommandTest extends TestCase
         $this->assertSame('Comments', $command->controllerName);
         $this->assertSame(
             'BakeTest\Controller\Admin\CommentsController',
-            $command->controllerClass
+            $command->controllerClass,
         );
     }
 
@@ -177,7 +177,7 @@ class TemplateCommandTest extends TestCase
         $this->assertSame('Posts', $command->controllerName);
         $this->assertSame(
             'Bake\Test\App\Controller\Admin\Management\PostsController',
-            $command->controllerClass
+            $command->controllerClass,
         );
     }
 
@@ -195,7 +195,7 @@ class TemplateCommandTest extends TestCase
         $this->assertSame('Posts', $command->controllerName);
         $this->assertSame(
             'Bake\Test\App\Controller\PostsController',
-            $command->controllerClass
+            $command->controllerClass,
         );
     }
 
@@ -226,7 +226,7 @@ class TemplateCommandTest extends TestCase
         $command->model('BakeTestComments');
         $this->assertSame(
             'BakeTest.BakeTestComments',
-            $command->modelName
+            $command->modelName,
         );
     }
 
@@ -762,11 +762,11 @@ class TemplateCommandTest extends TestCase
         $this->assertFileExists($this->generatedFile);
         $this->assertFileDoesNotExist(
             ROOT . 'templates/TemplateTaskComments/edit.php',
-            'no extra files'
+            'no extra files',
         );
         $this->assertFileDoesNotExist(
             ROOT . 'templates/TemplateTaskComments/add.php',
-            'no extra files'
+            'no extra files',
         );
     }
 
@@ -788,11 +788,11 @@ class TemplateCommandTest extends TestCase
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileDoesNotExist(
             ROOT . 'templates/TemplateTaskComments/edit.php',
-            'no extra files'
+            'no extra files',
         );
         $this->assertFileDoesNotExist(
             ROOT . 'templates/TemplateTaskComments/view.php',
-            'no extra files'
+            'no extra files',
         );
     }
 
@@ -813,7 +813,7 @@ class TemplateCommandTest extends TestCase
         $this->assertFileExists($this->generatedFile);
         $this->assertFileDoesNotExist(
             $path . 'Comments/view.php',
-            'No other templates made'
+            'No other templates made',
         );
     }
 

@@ -151,7 +151,7 @@ class ControllerCommandTest extends TestCase
         $this->exec(
             'bake controller --connection test --no-test --no-actions ' .
             '--components "FormProtection, Flash, Company/TestBakeThree.Something, TestBake.Other, Apple, NonExistent" ' .
-            'BakeArticles'
+            'BakeArticles',
         );
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
@@ -170,7 +170,7 @@ class ControllerCommandTest extends TestCase
         $this->exec(
             'bake controller --connection test --no-test ' .
             '--helpers Html,Time --components FormProtection,Flash ' .
-            '--actions index BakeArticles'
+            '--actions index BakeArticles',
         );
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
@@ -188,7 +188,7 @@ class ControllerCommandTest extends TestCase
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
             'bake controller --connection test --no-test ' .
-            '--helpers Html,Time --components FormProtection,Flash --no-actions BakeArticles'
+            '--helpers Html,Time --components FormProtection,Flash --no-actions BakeArticles',
         );
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
@@ -206,7 +206,7 @@ class ControllerCommandTest extends TestCase
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
             'bake controller --connection test --no-test ' .
-            '--helpers Html,Time --components "FormProtection, Flash" BakeArticles'
+            '--helpers Html,Time --components "FormProtection, Flash" BakeArticles',
         );
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
@@ -329,11 +329,11 @@ class ControllerCommandTest extends TestCase
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains(
             'class BakeArticlesControllerTest extends TestCase',
-            $this->generatedFiles[1]
+            $this->generatedFiles[1],
         );
         $this->assertFileContains(
             'use IntegrationTestTrait',
-            $this->generatedFiles[1]
+            $this->generatedFiles[1],
         );
     }
 

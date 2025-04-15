@@ -61,7 +61,7 @@ class ImportHelper
                 if ($io) {
                     $io->warning(sprintf(
                         'Import `%s` conflicts with existing import, discarding.',
-                        $class
+                        $class,
                     ));
                 }
                 continue;
@@ -72,7 +72,7 @@ class ImportHelper
                 if ($io) {
                     $io->warning(sprintf(
                         'Import `%s` conflicts with existing import, discarding.',
-                        $class
+                        $class,
                     ));
                 }
                 continue;

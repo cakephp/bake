@@ -71,7 +71,7 @@ class TemplateAllCommand extends BakeCommand
             $templateArgs = new Arguments(
                 [$table],
                 $args->getOptions(),
-                $parser->argumentNames()
+                $parser->argumentNames(),
             );
 
             $this->templateCommand->execute($templateArgs, $io);

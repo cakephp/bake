@@ -151,7 +151,7 @@ class DocBlockHelper extends Helper
                     $properties = $this->_insertAfter(
                         $properties,
                         $info['association']->getForeignKey(),
-                        [$property => $type]
+                        [$property => $type],
                     );
                 } else {
                     $properties[$property] = $type;
@@ -278,7 +278,7 @@ class DocBlockHelper extends Helper
         array $associationInfo,
         array $behaviors,
         string $entity,
-        string $namespace
+        string $namespace,
     ): array {
         $annotations = [];
         foreach ($associations as $type => $assocs) {
@@ -334,7 +334,7 @@ class DocBlockHelper extends Helper
             $target = array_merge(
                 array_slice($target, 0, $index + 1),
                 $value,
-                array_slice($target, $index + 1, null)
+                array_slice($target, $index + 1, null),
             );
         } else {
             $target += (array)$value;
