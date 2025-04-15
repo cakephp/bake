@@ -79,7 +79,6 @@ class FixtureCommand extends BakeCommand
             'default' => '1',
         ])->addOption('fields', [
             'help' => 'Create a fixture that includes the deprecated $fields property.',
-            'short' => 'f',
             'boolean' => true,
         ])->addOption('schema', [
             'help' => 'Create a fixture that imports schema, instead of dumping a schema snapshot into the fixture.',
