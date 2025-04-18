@@ -6,7 +6,8 @@
     "keywords": [
         "cakephp",
         "bake",
-        "dev"
+        "dev",
+        "cli"
     ],
     "authors": [
         {
