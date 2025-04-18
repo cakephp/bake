@@ -5,7 +5,8 @@
     "type": "cakephp-plugin",
     "keywords": [
         "cakephp",
-        "bake"
+        "bake",
+        "dev"
     ],
     "authors": [
         {
