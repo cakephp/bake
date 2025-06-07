@@ -407,7 +407,7 @@ class TemplateCommand extends BakeCommand
         $renderer->set('indexColumns', $indexColumns);
 
         $useDomain = $args->getOption('use-domain') ?? false;
-        if (!$this->plugin) {
+        if ($useDomain && !$this->plugin) {
             throw new RuntimeException('Cannot set useDomain option when not in a plugin context.');
         }
         $renderer->set('useDomain', $useDomain);
