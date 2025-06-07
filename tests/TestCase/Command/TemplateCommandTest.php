@@ -660,6 +660,28 @@ class TemplateCommandTest extends TestCase
     }
 
     /**
+     * test Bake with plugins with __d() translations.
+     *
+     * @return void
+     */
+    public function testBakePluginTemplatesWithDomain()
+    {
+        $this->_loadTestPlugin('BakeTest');
+        $path = Plugin::templatePath('BakeTest');
+
+        // Setup association to ensure properties don't have dots
+        $model = $this->getTableLocator()->get('BakeTest.Comments');
+        $model->belongsTo('Articles');
+
+        $this->generatedFile = $path . 'Comments/index.php';
+        $this->exec('bake template BakeTest.comments index --use-domain');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertFileContains('__d(\'BakeTest\', ', $this->generatedFile);
+    }
+
+    /**
      * Ensure that models in a tree don't include form fields for lft/rght
      *
      * @return void

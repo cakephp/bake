@@ -406,6 +406,12 @@ class TemplateCommand extends BakeCommand
         }
         $renderer->set('indexColumns', $indexColumns);
 
+        $useDomain = $args->getOption('use-domain') ?? false;
+        if (!$this->plugin) {
+            throw new RuntimeException('Cannot set useDomain option when not in a plugin context.');
+        }
+        $renderer->set('useDomain', $useDomain);
+
         return $renderer->generate("Bake.Template/$action");
     }
 
@@ -431,6 +437,9 @@ class TemplateCommand extends BakeCommand
             'help' => 'The controller name if you have a controller that does not follow conventions.',
         ])->addOption('prefix', [
             'help' => 'The routing prefix to generate views for.',
+        ])->addOption('use-domain', [
+            'help' => 'Use __d() instead of __() for translations.',
+            'boolean' => true,
         ])->addOption('index-columns', [
             'help' => 'Limit for the number of index columns',
             'default' => '0',

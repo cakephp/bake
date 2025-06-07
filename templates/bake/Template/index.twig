@@ -21,9 +21,9 @@
 ?>
 <div class="{{ pluralVar }} index content">
 {% set fields = Bake.filterFields(fields, schema, modelObject, indexColumns, ['binary', 'text']) %}
-    <?= $this->Html->link(__('New {{ singularHumanName }}'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <?= $this->Html->link({% if useDomain %}__d('{{ plugin }}', {% else %}{% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}{% endif %}'New {{ singularHumanName }}'), ['action' => 'add'], ['class' => 'button float-right']) ?>
 {% set done = [] %}
-    <h3><?= __('{{ pluralHumanName }}') ?></h3>
+    <h3><?= {% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'{{ pluralHumanName }}') ?></h3>
     <div class="table-responsive">
         <table>
             <thead>
@@ -31,7 +31,7 @@
 {% for field in fields %}
                     <th><?= $this->Paginator->sort('{{ field }}') ?></th>
 {% endfor %}
-                    <th class="actions"><?= __('Actions') ?></th>
+                    <th class="actions"><?= {% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'Actions') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -63,14 +63,14 @@
 {% endfor %}
 {% set pk = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', {{ pk|raw }}]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', {{ pk|raw }}]) ?>
+                        <?= $this->Html->link({% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'View'), ['action' => 'view', {{ pk|raw }}]) ?>
+                        <?= $this->Html->link({% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'Edit'), ['action' => 'edit', {{ pk|raw }}]) ?>
                         <?= $this->Form->postLink(
-                            __('Delete'),
+                            {% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'Delete'),
                             ['action' => 'delete', {{ pk|raw }}],
                             [
                                 'method' => 'delete',
-                                'confirm' => __('Are you sure you want to delete # {0}?', {{ pk|raw }}),
+                                'confirm' => {% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'Are you sure you want to delete # {0}?', {{ pk|raw }}),
                             ]
                         ) ?>
                     </td>
@@ -81,12 +81,12 @@
     </div>
     <div class="paginator">
         <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
+            <?= $this->Paginator->first('<< ' . {% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'first')) ?>
+            <?= $this->Paginator->prev('< ' . {% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'previous')) ?>
             <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
+            <?= $this->Paginator->next({% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'next') . ' >') ?>
+            <?= $this->Paginator->last({% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'last') . ' >>') ?>
         </ul>
-        <p><?= $this->Paginator->counter(__('Page {{ '{{' }}page{{ '}}' }} of {{ '{{' }}pages{{ '}}' }}, showing {{ '{{' }}current{{ '}}' }} record(s) out of {{ '{{' }}count{{ '}}' }} total')) ?></p>
+        <p><?= $this->Paginator->counter({% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'Page {{ '{{' }}page{{ '}}' }} of {{ '{{' }}pages{{ '}}' }}, showing {{ '{{' }}current{{ '}}' }} record(s) out of {{ '{{' }}count{{ '}}' }} total')) ?></p>
     </div>
 </div>
