@@ -130,7 +130,6 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $this->help = new HelpCommand();
-        /** @psalm-suppress InaccessibleMethod Protected methods as class based */
         $parser = $this->help->buildOptionParser($parser);
         $parser
             ->setDescription(
