@@ -113,11 +113,11 @@ class CommandCommandTest extends TestCase
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains(
-            '@uses \Bake\Test\App\Command\DocblockCommand::buildOptionParser()',
+            '@link \Bake\Test\App\Command\DocblockCommand::buildOptionParser()',
             $testsPath . 'TestCase/Command/DocblockCommandTest.php',
         );
         $this->assertFileContains(
-            '@uses \Bake\Test\App\Command\DocblockCommand::execute()',
+            '@link \Bake\Test\App\Command\DocblockCommand::execute()',
             $testsPath . 'TestCase/Command/DocblockCommandTest.php',
         );
     }
@@ -142,11 +142,11 @@ class CommandCommandTest extends TestCase
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains(
-            '@uses \BakeTest\Command\DocblockCommand::buildOptionParser()',
+            '@link \BakeTest\Command\DocblockCommand::buildOptionParser()',
             $testsPath . 'TestCase/Command/DocblockCommandTest.php',
         );
         $this->assertFileContains(
-            '@uses \BakeTest\Command\DocblockCommand::execute()',
+            '@link \BakeTest\Command\DocblockCommand::execute()',
             $testsPath . 'TestCase/Command/DocblockCommandTest.php',
         );
     }
