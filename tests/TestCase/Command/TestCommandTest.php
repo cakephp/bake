@@ -735,7 +735,7 @@ class TestCommandTest extends TestCase
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains(
-            '@uses \Bake\Test\App\Controller\ProductsController::index()',
+            '@link \Bake\Test\App\Controller\ProductsController::index()',
             $testsPath . 'TestCase/Controller/ProductsControllerTest.php',
         );
     }
@@ -757,7 +757,7 @@ class TestCommandTest extends TestCase
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains(
-            '@uses \Bake\Test\App\Model\Table\ProductsTable::validationDefault()',
+            '@link \Bake\Test\App\Model\Table\ProductsTable::validationDefault()',
             $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
         );
     }
