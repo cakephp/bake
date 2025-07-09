@@ -360,7 +360,7 @@ class TemplateCommand extends BakeCommand
         }
         if (empty($content)) {
             // phpcs:ignore Generic.Files.LineLength
-            $io->err("<warning>No generated content for '{$template}.{$this->ext}', not generating template.</warning>");
+            $io->warning("No generated content for '{$template}.{$this->ext}', not generating template.");
 
             return;
         }

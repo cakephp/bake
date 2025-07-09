@@ -124,7 +124,7 @@ class TestCommand extends BakeCommand
         $name = $this->_getName($name);
 
         if ($this->bake($type, $name, $args, $io)) {
-            $io->out('<success>Done</success>');
+            $io->success('Done');
         }
 
         return static::CODE_SUCCESS;
@@ -188,13 +188,13 @@ class TestCommand extends BakeCommand
 
         foreach ($classes as $class) {
             if ($this->bake($type, $class, $args, $io)) {
-                $io->out('<success>Done - ' . $class . '</success>');
+                $io->success('Done - ' . $class);
             } else {
-                $io->out('<error>Failed - ' . $class . '</error>');
+                $io->error('Failed - ' . $class);
             }
         }
 
-        $io->out('<info>Bake finished</info>');
+        $io->info('Bake finished');
     }
 
     /**
