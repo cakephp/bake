@@ -68,6 +68,18 @@ abstract class BakeCommand extends Command
     }
 
     /**
+     * @inheritDoc
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        // Use our own table locator with fallback classes
+        $locator = new TableLocator();
+        $locator->allowFallbackClass(true);
+        $this->setTableLocator($locator);
+    }
+
+    /**
      * Handles splitting up the plugin prefix and classname.
      *
      * Sets the plugin parameter and plugin property.
