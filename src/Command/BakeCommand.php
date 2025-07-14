@@ -27,6 +27,7 @@ use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
+use Cake\ORM\Exception\MissingTableClassException;
 use Cake\ORM\Locator\TableLocator;
 use InvalidArgumentException;
 use function Cake\Core\pluginSplit;
@@ -74,10 +75,23 @@ abstract class BakeCommand extends Command
     public function initialize(): void
     {
         parent::initialize();
-        // Use our own table locator with fallback classes
-        $locator = new TableLocator();
-        $locator->allowFallbackClass(true);
-        $this->setTableLocator($locator);
+
+        $locator = $this->getTableLocator();
+
+        try {
+            $locator->get('NonExistingTable');
+            $fallbackEnabled = true;
+            $locator->remove('NonExistingTable');
+        } catch (MissingTableClassException $e) {
+            $fallbackEnabled = false;
+        }
+
+        if (!$fallbackEnabled) {
+            // Use our own table locator with fallback classes
+            $locator = new TableLocator();
+            $locator->allowFallbackClass(true);
+            $this->setTableLocator($locator);
+        }
     }
 
     /**
