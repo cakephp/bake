@@ -367,7 +367,7 @@ class TemplateCommand extends BakeCommand
         $path = $this->getTemplatePath($args);
         $filename = $path . Inflector::underscore($outputFile) . '.' . $this->ext;
 
-        $io->out("\n" . sprintf('Baking `%s` view template file...', $outputFile), 1, ConsoleIo::NORMAL);
+        $io->out("\n" . sprintf('Baking `%s` view template file...', $outputFile));
         $io->createFile($filename, $content, $this->force);
     }
 

@@ -131,9 +131,9 @@ class AllCommand extends BakeCommand
         }
 
         if ($errors) {
-            $io->warning(sprintf('Bake All completed, but with %s errors.', $errors), 1, ConsoleIo::NORMAL);
+            $io->warning(sprintf('Bake All completed, but with %s errors.', $errors));
         } else {
-            $io->success('Bake All complete.', 1, ConsoleIo::NORMAL);
+            $io->success('Bake All complete.');
         }
 
         return $errors ? static::CODE_ERROR : static::CODE_SUCCESS;

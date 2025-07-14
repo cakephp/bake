@@ -1146,7 +1146,7 @@ class ModelCommand extends BakeCommand
         }
 
         $name = $this->_entityName($model->getAlias());
-        $io->out("\n" . sprintf('Baking entity class for %s...', $name), 1, ConsoleIo::NORMAL);
+        $io->out("\n" . sprintf('Baking entity class for %s...', $name));
 
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
@@ -1198,7 +1198,7 @@ class ModelCommand extends BakeCommand
         }
 
         $name = $model->getAlias();
-        $io->out("\n" . sprintf('Baking table class for %s...', $name), 1, ConsoleIo::NORMAL);
+        $io->out("\n" . sprintf('Baking table class for %s...', $name));
 
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
