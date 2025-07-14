@@ -27,6 +27,7 @@ use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
+use Cake\ORM\Locator\TableLocator;
 use InvalidArgumentException;
 use function Cake\Core\pluginSplit;
 
