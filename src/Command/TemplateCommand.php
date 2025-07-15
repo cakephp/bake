@@ -360,14 +360,14 @@ class TemplateCommand extends BakeCommand
         }
         if (empty($content)) {
             // phpcs:ignore Generic.Files.LineLength
-            $io->err("<warning>No generated content for '{$template}.{$this->ext}', not generating template.</warning>");
+            $io->warning("No generated content for '{$template}.{$this->ext}', not generating template.");
 
             return;
         }
         $path = $this->getTemplatePath($args);
         $filename = $path . Inflector::underscore($outputFile) . '.' . $this->ext;
 
-        $io->out("\n" . sprintf('Baking `%s` view template file...', $outputFile), 1, ConsoleIo::NORMAL);
+        $io->out("\n" . sprintf('Baking `%s` view template file...', $outputFile));
         $io->createFile($filename, $content, $this->force);
     }
 

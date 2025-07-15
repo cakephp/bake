@@ -82,7 +82,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
                 $parser->argumentNames(),
             );
         } catch (ConsoleException $e) {
-            $io->err('Error: ' . $e->getMessage());
+            $io->error('Error: ' . $e->getMessage());
 
             return static::CODE_ERROR;
         }
@@ -109,14 +109,14 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
     {
         if ($args->hasArgumentAt(0)) {
             $name = $args->getArgumentAt(0);
-            $io->err(
-                "<error>Could not find bake command named `$name`."
-                . ' Run `bake --help` to get a list of commands.</error>',
+            $io->error(
+                "Could not find bake command named `$name`."
+                . ' Run `bake --help` to get a list of commands.',
             );
 
             return static::CODE_ERROR;
         }
-        $io->err('<warning>No command provided. Run `bake --help` to get a list of commands.</warning>');
+        $io->warning('No command provided. Run `bake --help` to get a list of commands.');
 
         return static::CODE_ERROR;
     }

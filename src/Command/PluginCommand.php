@@ -56,8 +56,8 @@ class PluginCommand extends BakeCommand
     {
         $name = $args->getArgument('name');
         if (empty($name)) {
-            $io->err('<error>You must provide a plugin name in CamelCase format.</error>');
-            $io->err('To make an "MyExample" plugin, run <info>`cake bake plugin MyExample`</info>.');
+            $io->error('You must provide a plugin name in CamelCase format.');
+            $io->out('To make an "MyExample" plugin, run <info>`cake bake plugin MyExample`</info>.');
 
             return static::CODE_ERROR;
         }
@@ -70,7 +70,7 @@ class PluginCommand extends BakeCommand
             $this->isVendor = true;
 
             if (!is_dir($this->path)) {
-                $io->err(sprintf('Path `%s` does not exist.', $this->path));
+                $io->error(sprintf('Path `%s` does not exist.', $this->path));
 
                 return static::CODE_ERROR;
             }
