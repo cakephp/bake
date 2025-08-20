@@ -244,7 +244,7 @@ class TestCommand extends BakeCommand
 
         // Check if fixture factories plugin is available
         $hasFixtureFactories = $this->hasFixtureFactories();
-        
+
         if (!$args->getOption('no-fixture')) {
             if ($hasFixtureFactories) {
                 $io->info('Fixture Factories plugin detected - skipping fixture property generation.');
