@@ -63,11 +63,11 @@ class {{ className }}Test extends TestCase
 {% endfor %}
 {% endif %}
 
-{%- if fixtures %}
+{%- if fixtures and not (hasFixtureFactories|default(false)) %}
     /**
      * Fixtures
      *
-     * @var list<string>
+     * @var array<string>
      */
     protected array $fixtures = {{ Bake.exportVar(fixtures|values, 1)|raw }};
 {% if construction or methods %}

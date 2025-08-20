@@ -33,7 +33,7 @@ class SubsetSchemaCollection implements CollectionInterface
     protected CollectionInterface $collection;
 
     /**
-     * @var list<string>
+     * @var array<string>
      */
     protected array $tables = [];
 
