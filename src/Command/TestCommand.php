@@ -318,9 +318,8 @@ class TestCommand extends BakeCommand
      */
     protected function hasFixtureFactories(): bool
     {
-        // Check if the CakephpFixtureFactories plugin class exists
-        return class_exists('CakephpFixtureFactories\Plugin') ||
-               class_exists('CakephpFixtureFactories\CakephpFixtureFactoriesPlugin');
+        return class_exists('CakephpFixtureFactories\Plugin')
+            || class_exists('CakephpFixtureFactories\CakephpFixtureFactoriesPlugin');
     }
 
     /**
