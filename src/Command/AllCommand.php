@@ -124,16 +124,16 @@ class AllCommand extends BakeCommand
                     }
 
                     $message = sprintf('Error generating %s for %s: %s', $commandName, $table, $e->getMessage());
-                    $io->err('<error>' . $message . '</error>');
+                    $io->error($message);
                     $errors++;
                 }
             }
         }
 
         if ($errors) {
-            $io->out(sprintf('<warning>Bake All completed, but with %s errors.</warning>', $errors), 1, ConsoleIo::NORMAL);
+            $io->warning(sprintf('Bake All completed, but with %s errors.', $errors));
         } else {
-            $io->out('<success>Bake All complete.</success>', 1, ConsoleIo::NORMAL);
+            $io->success('Bake All complete.');
         }
 
         return $errors ? static::CODE_ERROR : static::CODE_SUCCESS;

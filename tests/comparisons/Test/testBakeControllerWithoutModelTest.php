@@ -10,7 +10,7 @@ use Cake\TestSuite\TestCase;
 /**
  * Bake\Test\App\Controller\NoModelController Test Case
  *
- * @uses \Bake\Test\App\Controller\NoModelController
+ * @link \Bake\Test\App\Controller\NoModelController
  */
 class NoModelControllerTest extends TestCase
 {
@@ -20,7 +20,7 @@ class NoModelControllerTest extends TestCase
      * Test index method
      *
      * @return void
-     * @uses \Bake\Test\App\Controller\NoModelController::index()
+     * @link \Bake\Test\App\Controller\NoModelController::index()
      */
     public function testIndex(): void
     {

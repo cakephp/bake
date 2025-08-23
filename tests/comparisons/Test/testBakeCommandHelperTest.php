@@ -63,7 +63,7 @@ class ErrorHelperTest extends TestCase
      * Test output method
      *
      * @return void
-     * @uses \Bake\Test\App\Command\Helper\ErrorHelper::output()
+     * @link \Bake\Test\App\Command\Helper\ErrorHelper::output()
      */
     public function testOutput(): void
     {

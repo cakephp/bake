@@ -187,11 +187,11 @@ class AllCommandTest extends TestCase
     }
 
     /**
-     * Test docblock @ uses generated for test methods
+     * Test docblock @ link generated for test methods
      *
      * @return void
      */
-    public function testGenerateUsesDocBlockController()
+    public function testGenerateLinkDocBlockController()
     {
         $path = APP;
         $testsPath = ROOT . 'tests' . DS;
@@ -213,11 +213,11 @@ class AllCommandTest extends TestCase
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileContains(
-            '@uses \Bake\Test\App\Controller\ProductsController::index()',
+            '@link \Bake\Test\App\Controller\ProductsController::index()',
             $testsPath . 'TestCase/Controller/ProductsControllerTest.php',
         );
         $this->assertFileContains(
-            '@uses \Bake\Test\App\Model\Table\ProductsTable::validationDefault()',
+            '@link \Bake\Test\App\Model\Table\ProductsTable::validationDefault()',
             $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
         );
         $this->assertOutputContains('Bake All complete');

@@ -12,87 +12,59 @@ cake コンソールは、 PHP CLI (command line interface) で実行します�
 
 bake を実行する前にデータベースとの接続を確認しましょう。
 
-``bin/cake bake`` を引数無しで実行すると可能なタスクを表示できます。
+``bin/cake bake --help`` を実行すると可能なbakeコマンドを表示できます。
+(Windows システムの場合、 ``bin\cake bake --help`` を使います。)::
 
-Windows システムの場合、 ``bin\cake bake`` を試してみてください。
+    $ bin/cake bake --help
+    Current Paths:
 
-それは以下のように表示されます。 ::
+    * app:  src/
+    * root: /path/to/your/app/
+    * core: /path/to/your/app/vendor/cakephp/cakephp/
 
-    $ bin/cake bake
+    Available Commands:
 
-    Welcome to CakePHP v3.1.6 Console
-    ---------------------------------------------------------------
-    App : src
-    Path: /var/www/cakephp.dev/src/
-    PHP: 5.5.8
-    ---------------------------------------------------------------
-    The following commands can be used to generate skeleton code for your application.
+    Bake:
+    - bake all
+    - bake behavior
+    - bake cell
+    - bake command
+    - bake command_helper
+    - bake component
+    - bake controller
+    - bake controller all
+    - bake enum
+    - bake fixture
+    - bake fixture all
+    - bake form
+    - bake helper
+    - bake mailer
+    - bake middleware
+    - bake model
+    - bake model all
+    - bake plugin
+    - bake template
+    - bake template all
+    - bake test
 
-    Available bake commands:
+    To run a command, type `cake command_name [args|options]`
+    To get help on a specific command, type `cake command_name --help`
 
-    - all
-    - behavior
-    - cell
-    - component
-    - controller
-    - fixture
-    - form
-    - helper
-    - mailer
-    - migration
-    - migration_snapshot
-    - model
-    - plugin
-    - template
-    - test
+Bake モデル
+===========
 
-    By using `cake bake [name]` you can invoke a specific bake task.
+モデルは、既存のデータベーステーブルから一般的に生成（bake）されます。
+規約が適用されるため、外部キー ``thing_id`` とテーブル ``things`` の主キー ``id`` に基づいてリレーションが検出されます。
 
-より詳しい各コマンドの情報を得るには、 ``--help`` オプションをつけ実行してください。 ::
+規約から外れたリレーションの場合、Bake がリレーションを検出するために、制約/外部キー定義でリレーションを使用できます。例::
 
-    $ bin/cake bake controller --help
+    ->addForeignKey('billing_country_id', 'countries') // defaults to `id`
+    ->addForeignKey('shipping_country_id', 'countries', 'cid')
 
-    Welcome to CakePHP v3.1.6 Console
-    ---------------------------------------------------------------
-    App : src
-    Path: /var/www/cakephp.dev/src/
-    ---------------------------------------------------------------
-    Bake a controller skeleton.
-
-    Usage:
-    cake bake controller [subcommand] [options] [<name>]
-
-    Subcommands:
-
-    all  Bake all controllers with CRUD methods.
-
-    To see help on a subcommand use `cake bake controller [subcommand] --help`
-
-    Options:
-
-    --help, -h        Display this help.
-    --verbose, -v     Enable verbose output.
-    --quiet, -q       Enable quiet output.
-    --plugin, -p      Plugin to bake into.
-    --force, -f       Force overwriting existing files without prompting.
-    --connection, -c  The datasource connection to get data from.
-                      (default: default)
-    --theme, -t       The theme to use when baking code.
-    --components      The comma separated list of components to use.
-    --helpers         The comma separated list of helpers to use.
-    --prefix          The namespace/routing prefix to use.
-    --no-test         Do not generate a test skeleton.
-    --no-actions      Do not generate basic CRUD action methods.
-
-    Arguments:
-
-    name  Name of the controller to bake. Can use Plugin.name to bake
-        controllers into plugins. (optional)
-
-Bake テーマオプション
+Bake テーマ
 =====================
 
-テーマオプションは全 bake コマンドで一般的です。また、bake テンプレートファイルを変更することができます。
+テーマオプションは全 bake コマンドで共通です。また、bakeする際のbake テンプレートファイルを変更することができます。
 テーマを作るには、 :ref:`Bake テーマ作成ドキュメント <creating-a-bake-theme>` をご覧ください。
 
 .. meta::
