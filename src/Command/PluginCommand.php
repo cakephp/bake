@@ -125,7 +125,9 @@ class PluginCommand extends BakeCommand
         $this->_generateFiles($plugin, $this->path, $args, $io);
 
         if (!$this->isVendor) {
-            $this->_modifyApplication($plugin, $io);
+            if (!$args->getOption('class-only')) {
+                $this->_modifyApplication($plugin, $io);
+            }
 
             $composer = $this->findComposer($args, $io);
 
@@ -245,6 +247,12 @@ class PluginCommand extends BakeCommand
                             unset($files[$key]);
                         }
                     }
+                }
+
+                if ($args->getOption('class-only')) {
+                    $files = array_filter($files, function ($file) {
+                        return $file->getFilename() === 'Plugin.php.twig';
+                    });
                 }
 
                 $templates = array_keys($files);
@@ -370,6 +378,10 @@ class PluginCommand extends BakeCommand
         ->addOption('standalone-path', [
             'short' => 'p',
             'help' => 'Generate a standalone plugin in the provided path.',
+        ])->addOption('class-only', [
+            'short' => 'c',
+            'boolean' => true,
+            'help' => 'Generate only the plugin class.',
         ]);
 
         return $parser;
