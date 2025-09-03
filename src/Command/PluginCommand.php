@@ -238,7 +238,7 @@ class PluginCommand extends BakeCommand
 
                 if (!$this->isVendor) {
                     $vendorFiles = [
-                        '.gitignore.twig', 'README.md.twig', 'composer.json.twig', 'phpunit.xml.dist.twig',
+                        '.gitignore.twig', 'README.md.twig', 'phpunit.xml.dist.twig',
                         'bootstrap.php.twig', 'schema.sql.twig',
                     ];
 
