@@ -32,7 +32,7 @@
 {% endif %}
 
 {%- for component in components %}
-{% set classInfo = Bake.classInfo(component, 'Controller/Component', 'Component') %}
+    {%~ set classInfo = Bake.classInfo(component, 'Controller/Component', 'Component') %}
  * @property {{ classInfo.fqn }} ${{ classInfo.name }}
 {% endfor %}
  */
@@ -48,20 +48,20 @@ class {{ name }}Controller extends AppController
     {
         parent::initialize();
 
-{% for component in components %}
+    {%~ for component in components %}
         $this->loadComponent('{{ component }}');
-{% endfor %}
-{% if helpers %}
+    {%~ endfor %}
+    {%~ if helpers %}
         $this->viewBuilder()->setHelpers({{ Bake.exportArray(helpers)|raw }});
-{% endif %}
-{% if has_login %}
+    {%~ endif %}
+    {%~ if has_login %}
         $this->Authentication->allowUnauthenticated(['login']);
-{% endif %}
+    {%~ endif %}
     }
-{% if actions|length %}{{ "\n" }}{% endif %}
+    {%~ if actions|length %}{{ "\n" }}{% endif %}
 {% endif %}
-{%- for action in actions %}
-{% if loop.index > 1 %}{{ "\n" }}{% endif %}
+{% for action in actions %}
+    {%~ if loop.index > 1 %}{{ "\n" }}{% endif %}
     {{- element('Bake.Controller/' ~ action) -}}
 {% endfor %}
 }
