@@ -1878,7 +1878,7 @@ class ModelCommandTest extends TestCase
 
         $name = 'TestBakeArticles';
         $args = new Arguments([$name], ['table' => 'bake_articles', 'force' => true], []);
-        $io = new ConsoleIo($this->_out, $this->_err, $this->_in);
+        $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
 
         $table = $command->getTable($name, $args);
         $tableObject = $command->getTableObject($name, $table);
@@ -1910,7 +1910,7 @@ class ModelCommandTest extends TestCase
 
         $name = 'UniqueFields';
         $args = new Arguments([$name], ['table' => 'unique_fields', 'force' => true], []);
-        $io = new ConsoleIo($this->_out, $this->_err, $this->_in);
+        $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
 
         $table = $command->getTable($name, $args);
         $tableObject = $command->getTableObject($name, $table);
@@ -2548,7 +2548,7 @@ PARSE;
 
         $name = 'TestBakeArticles';
         $args = new Arguments([$name], ['table' => 'bake_articles', 'force' => true], []);
-        $io = new ConsoleIo($this->_out, $this->_err, $this->_in);
+        $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
 
         $table = $command->getTable($name, $args);
         $tableObject = $command->getTableObject($name, $table);
