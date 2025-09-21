@@ -304,7 +304,7 @@ class BakeHelper extends Helper
     public function enumSupportsLabel(string $field, TableSchema $schema): bool
     {
         $typeName = $schema->getColumnType($field);
-        if (!str_starts_with($typeName, 'enum-')) {
+        if (!$typeName || !str_starts_with($typeName, 'enum-')) {
             return false;
         }
         $type = TypeFactory::build($typeName);
