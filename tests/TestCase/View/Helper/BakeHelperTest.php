@@ -191,13 +191,11 @@ PARSE
 
     public function testEnumSupportsLabel(): void
     {
-        $table = $this->getTableLocator()->get('Users', [
-            'className' => '\Bake\Test\App\Model\Table\BakeUsersTable',
-        ]);
+        $table = $this->fetchTable('BakeUsers');
         $schema = $table->getSchema();
         $schema->setColumnType('status', EnumType::from(BakeUserStatus::class));
 
-        $this->assertFalse($this->BakeHelper->enumSupportsLabel('status', $schema));
+        $this->assertTrue($this->BakeHelper->enumSupportsLabel('status', $schema));
         $this->assertFalse($this->BakeHelper->enumSupportsLabel('username', $schema));
         $this->assertFalse($this->BakeHelper->enumSupportsLabel('does_not_exist', $schema));
     }
