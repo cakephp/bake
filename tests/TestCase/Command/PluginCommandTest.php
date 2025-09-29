@@ -233,6 +233,18 @@ class PluginCommandTest extends TestCase
         $command->findPath($paths, $io);
     }
 
+    public function testMainClassOnlyOption()
+    {
+        $this->exec('bake plugin ClassOnly --class-only', ['y', 'n']);
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+
+        $bakedRoot = App::path('plugins')[0];
+        $pluginClass = $bakedRoot . 'ClassOnly/src/ClassOnlyPlugin.php';
+        $this->assertFileContains('use Cake\Core\BasePlugin', $pluginClass);
+
+        $this->assertFileDoesNotExist($bakedRoot . 'ClassOnly/webroot');
+    }
+
     /**
      * Check the baked plugin matches the expected output
      *

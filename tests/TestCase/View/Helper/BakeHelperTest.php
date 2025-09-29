@@ -16,8 +16,10 @@ declare(strict_types=1);
  */
 namespace Bake\Test\TestCase\View\Helper;
 
+use Bake\Test\App\Model\Enum\BakeUserStatus;
 use Bake\View\BakeView;
 use Bake\View\Helper\BakeHelper;
+use Cake\Database\Type\EnumType;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest as Request;
 use Cake\TestSuite\TestCase;
@@ -33,13 +35,14 @@ class BakeHelperTest extends TestCase
      * Don't sort this list alphabetically - otherwise there are table constraints
      * which fail when using postgres
      *
-     * @var list<string>
+     * @var array<string>
      */
     protected array $fixtures = [
         'plugin.Bake.BakeArticles',
         'plugin.Bake.BakeComments',
         'plugin.Bake.BakeArticlesBakeTags',
         'plugin.Bake.BakeTags',
+        'plugin.Bake.Users',
     ];
 
     /**
@@ -89,12 +92,12 @@ class BakeHelperTest extends TestCase
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
         ]);
         $this->BakeHelper = $this->getMockBuilder('Bake\View\Helper\BakeHelper')
-                ->disableOriginalConstructor()
-                ->onlyMethods(['_filterHasManyAssociationsAliases'])
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->onlyMethods(['_filterHasManyAssociationsAliases'])
+            ->getMock();
         $this->BakeHelper->expects($this->once())
-                ->method('_filterHasManyAssociationsAliases')
-                ->with($table, ['ArticlesTags']);
+            ->method('_filterHasManyAssociationsAliases')
+            ->with($table, ['ArticlesTags']);
         $result = $this->BakeHelper->aliasExtractor($table, 'HasMany');
         $this->assertEmpty($result);
     }
@@ -107,7 +110,7 @@ class BakeHelperTest extends TestCase
     public function testAliasExtractorBelongsTo()
     {
         $table = $this->getTableLocator()->get('Articles', [
-                    'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
+            'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
         ]);
         $result = $this->BakeHelper->aliasExtractor($table, 'BelongsTo');
         $expected = ['authors'];
@@ -122,7 +125,7 @@ class BakeHelperTest extends TestCase
     public function testAliasExtractorBelongsToMany()
     {
         $table = $this->getTableLocator()->get('Articles', [
-                    'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
+            'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
         ]);
         $result = $this->BakeHelper->aliasExtractor($table, 'BelongsToMany');
         $expected = ['tags'];
@@ -184,5 +187,16 @@ PARSE
     {
         $this->assertTrue($this->BakeHelper->hasPlugin('Bake'));
         $this->assertFalse($this->BakeHelper->hasPlugin('DebugKit'));
+    }
+
+    public function testEnumSupportsLabel(): void
+    {
+        $table = $this->fetchTable('BakeUsers');
+        $schema = $table->getSchema();
+        $schema->setColumnType('status', EnumType::from(BakeUserStatus::class));
+
+        $this->assertTrue($this->BakeHelper->enumSupportsLabel('status', $schema));
+        $this->assertFalse($this->BakeHelper->enumSupportsLabel('username', $schema));
+        $this->assertFalse($this->BakeHelper->enumSupportsLabel('does_not_exist', $schema));
     }
 }

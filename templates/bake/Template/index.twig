@@ -38,28 +38,28 @@
                 <?php foreach (${{ pluralVar }} as ${{ singularVar }}): ?>
                 <tr>
 {% for field in fields %}
-{% set isKey = false %}
-{% if associations.BelongsTo is defined %}
-{% for alias, details in associations.BelongsTo %}
-{% if field == details.foreignKey %}
-{% set isKey = true %}
+    {%~ set isKey = false %}
+    {%~ if associations.BelongsTo is defined %}
+        {%~ for alias, details in associations.BelongsTo %}
+            {%~ if field == details.foreignKey %}
+                {%~ set isKey = true %}
                     <td><?= ${{ singularVar }}->hasValue('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
-{% endif %}
-{% endfor %}
-{% endif %}
-{% if isKey is not same as(true) %}
-{% set columnData = Bake.columnData(field, schema) %}
-{% set supportsLabel = Bake.enumSupportsLabel(field, schema) %}
-{% if columnData.type starts with 'enum-' %}
+            {%~ endif %}
+        {%~ endfor %}
+    {%~ endif %}
+    {%~ if isKey is not same as(true) %}
+        {%~ set columnData = Bake.columnData(field, schema) %}
+        {%~ set supportsLabel = Bake.enumSupportsLabel(field, schema) %}
+        {%~ if columnData.type starts with 'enum-' %}
                     <td><?= ${{ singularVar }}->{{ field }} === null ? '' : h(${{ singularVar }}->{{ field }}->{% if supportsLabel %}label(){% else %}value{% endif %}) ?></td>
-{% elseif columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
+        {%~ elseif columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
                     <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
-{% elseif columnData.null %}
+        {%~ elseif columnData.null %}
                     <td><?= ${{ singularVar }}->{{ field }} === null ? '' : $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
-{% else %}
+        {%~ else %}
                     <td><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
-{% endif %}
-{% endif %}
+        {%~ endif %}
+    {%~ endif %}
 {% endfor %}
 {% set pk = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
                     <td class="actions">
