@@ -18,8 +18,8 @@
 {% set annotations = DocBlock.propertyHints(propertyHintMap) %}
 
 {%- if associationHintMap %}
-    {%- set annotations = annotations|merge(['']) %}
-    {%- set annotations = annotations|merge(DocBlock.propertyHints(associationHintMap)) %}
+    {%~ set annotations = annotations|merge(['']) %}
+    {%~ set annotations = annotations|merge(DocBlock.propertyHints(associationHintMap)) %}
 {% endif %}
 
 {%- set accessible = Bake.getFieldAccessibility(fields, primaryKey) %}
@@ -39,7 +39,7 @@ class {{ name }} extends Entity{{ fileBuilder.classBuilder.implements ? ' implem
 
 {% endif %}
 {% if accessible %}
-{%- set generatedProperties = generatedProperties|merge(['_accessible']) %}
+{%~ set generatedProperties = generatedProperties|merge(['_accessible']) %}
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -54,12 +54,12 @@ class {{ name }} extends Entity{{ fileBuilder.classBuilder.implements ? ' implem
 {% if accessible and hidden %}
 
 {% endif %}
-{%- if hidden %}
-{%- set generatedProperties = generatedProperties|merge(['_hidden']) %}
+{% if hidden %}
+    {%~ set generatedProperties = generatedProperties|merge(['_hidden']) %}
     /**
      * Fields that are excluded from JSON versions of the entity.
      *
-     * @var list<string>
+     * @var array<string>
      */
     protected array $_hidden = {{ Bake.exportVar(hidden, 1)|raw }};
 {% endif %}

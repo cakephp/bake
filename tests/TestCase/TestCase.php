@@ -32,7 +32,7 @@ abstract class TestCase extends BaseTestCase
     protected $generatedFile = '';
 
     /**
-     * @var list<string>
+     * @var array<string>
      */
     protected $generatedFiles = [];
 

@@ -50,58 +50,43 @@ class {{ name }}Table extends Table{{ fileBuilder.classBuilder.implements ? ' im
 {%- if displayField %}
         $this->setDisplayField({{ (displayField is iterable ? Bake.exportArray(displayField) : Bake.exportVar(displayField))|raw }});
 {% endif %}
-
-{%- if primaryKey %}
-    {%- if primaryKey is iterable and primaryKey|length > 1 %}
+{% if primaryKey %}
+    {%~ if primaryKey is iterable and primaryKey|length > 1 %}
         $this->setPrimaryKey({{ Bake.exportArray(primaryKey)|raw }});
-        {{- "\n" }}
-    {%- else %}
+    {%~ else %}
         $this->setPrimaryKey('{{ primaryKey|as_array|first }}');
-        {{- "\n" }}
-    {%- endif %}
+    {%~ endif %}
 {% endif %}
+{% if enums %}
 
-{%- if enums %}
-
-{% endif %}
-
-{%- if enums %}
-
-{%- for name, className in enums %}
+    {%~ for name, className in enums %}
         $this->getSchema()->setColumnType('{{ name }}', \Cake\Database\Type\EnumType::from(\{{ className }}::class));
-{% endfor %}
+    {%~ endfor %}
 {% endif %}
+{% if behaviors %}
 
-{%- if behaviors %}
-
-{% endif %}
-
-{%- for behavior, behaviorData in behaviors %}
+    {%~ for behavior, behaviorData in behaviors %}
         $this->addBehavior('{{ behavior }}'{{ (behaviorData ? (", " ~ Bake.exportArray(behaviorData, 2)|raw ~ '') : '')|raw }});
-{% endfor %}
-
-{%- if associations.belongsTo or associations.hasMany or associations.belongsToMany %}
-
+    {%~ endfor %}
 {% endif %}
+{% if associations.belongsTo or associations.hasMany or associations.belongsToMany %}
 
-{%- for type, assocs in associations %}
-    {%- for assoc in assocs %}
-        {%- set assocData = [] %}
-        {%- for key, val in assoc %}
-            {%- if key is not same as('alias') %}
-                {%- set assocData = assocData|merge({(key): val}) %}
-            {%- endif %}
-        {%- endfor %}
+    {%~ for type, assocs in associations %}
+        {%~ for assoc in assocs %}
+            {%~ set assocData = [] %}
+            {%~ for key, val in assoc %}
+                {%~ if key is not same as('alias') %}
+                    {%~ set assocData = assocData|merge({(key): val}) %}
+                {%~ endif %}
+            {%~ endfor %}
         $this->{{ type }}('{{ assoc.alias }}', {{ Bake.exportArray(assocData, 2)|raw }});
-        {{- "\n" }}
-    {%- endfor %}
-{% endfor %}
+        {%~ endfor %}
+    {%~ endfor %}
+{% endif %}
     }
-{{- "\n" }}
+{% if validation %}
 
-{%- if validation %}
-{% set generatedFunctions = generatedFunctions|merge(['validationDefault']) %}
-
+    {%~ set generatedFunctions = generatedFunctions|merge(['validationDefault']) %}
     /**
      * Default validation rules.
      *
@@ -110,25 +95,24 @@ class {{ name }}Table extends Table{{ fileBuilder.classBuilder.implements ? ' im
      */
     public function validationDefault(Validator $validator): Validator
     {
-{% for field, rules in validation %}
-{% set validationMethods = Bake.getValidationMethods(field, rules) %}
-{% if validationMethods %}
+    {%~ for field, rules in validation %}
+        {%~ set validationMethods = Bake.getValidationMethods(field, rules) %}
+        {%~ if validationMethods %}
         $validator
-{% for validationMethod in validationMethods %}
-{% if loop.last %}
-{% set validationMethod = validationMethod ~ ';' %}
-{% endif %}
+            {%~ for validationMethod in validationMethods %}
+                {%~ if loop.last %}
+                    {%~ set validationMethod = validationMethod ~ ';' %}
+                {%~ endif %}
             {{ validationMethod|raw }}
-{% endfor %}
+            {%~ endfor %}
 
-{% endif %}
-{% endfor %}
+        {%~ endif %}
+    {%~ endfor %}
         return $validator;
     }
 {% endif %}
-
 {%- if rulesChecker %}
-{% set generatedFunctions = generatedFunctions|merge(['buildRules']) %}
+    {%~ set generatedFunctions = generatedFunctions|merge(['buildRules']) %}
 
     /**
      * Returns a rules checker object that will be used for validating
@@ -139,21 +123,20 @@ class {{ name }}Table extends Table{{ fileBuilder.classBuilder.implements ? ' im
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-{% for rule in rulesChecker %}
-{% set fields = Bake.exportArray(rule.fields) %}
-{% set options = '' %}
-{% for optionName, optionValue in rule.options %}
-    {%~ set options = (loop.first ? '[' : options) ~ "'#{optionName}' => " ~ Bake.exportVar(optionValue) ~ (loop.last ? ']' : ', ') %}
-{% endfor %}
+    {%~ for rule in rulesChecker %}
+        {%~ set fields = Bake.exportArray(rule.fields) %}
+        {%~ set options = '' %}
+        {%~ for optionName, optionValue in rule.options %}
+            {%~ set options = (loop.first ? '[' : options) ~ "'#{optionName}' => " ~ Bake.exportVar(optionValue) ~ (loop.last ? ']' : ', ') %}
+        {%~ endfor %}
         $rules->add($rules->{{ rule.name }}({{ fields|raw }}{{ (rule.extra|default ? ", '#{rule.extra}'" : '')|raw }}{{ (options ? ', ' ~ options : '')|raw }}), ['errorField' => '{{ rule.fields[0] }}']);
-{% endfor %}
+    {%~ endfor %}
 
         return $rules;
     }
 {% endif %}
-
-{%- if connection is not same as('default') %}
-{% set generatedFunctions = generatedFunctions|merge(['defaultConnectionName']) %}
+{% if connection is not same as('default') %}
+    {%~ set generatedFunctions = generatedFunctions|merge(['defaultConnectionName']) %}
 
     /**
      * Returns the database connection name to use by default.
