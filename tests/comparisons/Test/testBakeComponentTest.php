@@ -47,7 +47,7 @@ class AppleComponentTest extends TestCase
      * Test startup method
      *
      * @return void
-     * @uses \Bake\Test\App\Controller\Component\AppleComponent::startup()
+     * @link \Bake\Test\App\Controller\Component\AppleComponent::startup()
      */
     public function testStartup(): void
     {

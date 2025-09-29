@@ -115,7 +115,7 @@ class BakePlugin extends BasePlugin
      * @param string $namespace The namespace classes are expected to be in.
      * @param string $path The path to look in.
      * @return array<string>
-     * @psalm-return array<string, class-string<\Bake\Command\BakeCommand>>
+     * @phpstan-return array<string, class-string<\Bake\Command\BakeCommand>>
      */
     protected function findInPath(string $namespace, string $path): array
     {

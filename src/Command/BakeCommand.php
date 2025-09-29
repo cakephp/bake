@@ -27,6 +27,7 @@ use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
+use Cake\ORM\Locator\TableLocator;
 use InvalidArgumentException;
 use function Cake\Core\pluginSplit;
 
@@ -47,6 +48,22 @@ abstract class BakeCommand extends Command
      * @var string
      */
     protected string $pathFragment;
+
+    /**
+     * Initialize the command.
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $locator = $this->getTableLocator();
+        if ($locator instanceof TableLocator) {
+            $locator->allowFallbackClass(true);
+            $this->setTableLocator($locator);
+        }
+    }
 
     /**
      * Get the command name.
@@ -180,7 +197,7 @@ abstract class BakeCommand extends Command
     {
         if (file_exists($path)) {
             unlink($path);
-            $io->out(sprintf('<success>Deleted</success> `%s`', $path), 1, ConsoleIo::NORMAL);
+            $io->out(sprintf('<success>Deleted</success> `%s`', $path));
         }
     }
 

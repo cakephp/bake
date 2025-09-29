@@ -35,7 +35,7 @@
  * {{ fullClassName }} Test Case
 {% if isController or isCommand %}
  *
- * @uses \{{ fullClassName }}
+ * @link \{{ fullClassName }}
 {% endif %}
  */
 class {{ className }}Test extends TestCase
@@ -123,7 +123,7 @@ class {{ className }}Test extends TestCase
      * Test {{ method }} method
      *
      * @return void
-     * @uses \{{ fullClassName }}::{{ method }}()
+     * @link \{{ fullClassName }}::{{ method }}()
      */
     public function test{{ method|camelize }}(): void
     {
