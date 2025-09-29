@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
+use Bake\CodeGen\ColumnTypeExtractor;
 use Bake\CodeGen\FileBuilder;
 use Bake\Utility\Model\EnumParser;
 use Bake\Utility\TableScanner;
@@ -1210,11 +1211,24 @@ class ModelCommand extends BakeCommand
         $filename = $path . 'Table' . DS . $name . 'Table.php';
 
         $parsedFile = null;
+        $customColumnTypes = [];
         if ($args->getOption('update')) {
             $parsedFile = $this->parseFile($filename);
+            // Extract custom column types from existing file
+            if ($parsedFile && isset($parsedFile->class->methods['initialize'])) {
+                $customColumnTypes = $this->extractCustomColumnTypes($parsedFile->class->methods['initialize']);
+            }
         }
 
         $entity = $this->_entityName($model->getAlias());
+        $enums = $this->enums($model, $entity, $namespace);
+
+        // Merge custom column types with generated enums
+        // Remove custom types that are now handled by enums
+        foreach ($enums as $field => $enumClass) {
+            unset($customColumnTypes[$field]);
+        }
+
         $data += [
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
@@ -1228,7 +1242,8 @@ class ModelCommand extends BakeCommand
             'validation' => [],
             'rulesChecker' => [],
             'behaviors' => [],
-            'enums' => $this->enums($model, $entity, $namespace),
+            'enums' => $enums,
+            'customColumnTypes' => $customColumnTypes,
             'connection' => $this->connection,
             'fileBuilder' => new FileBuilder($io, "{$namespace}\Model\Table", $parsedFile),
         ];
@@ -1592,5 +1607,18 @@ class ModelCommand extends BakeCommand
         $foreignKey = $association['foreignKey'];
 
         return $this->_modelNameFromKey($foreignKey);
+    }
+
+    /**
+     * Extract custom column type mappings from existing initialize method
+     *
+     * @param string $initializeMethod The initialize method code
+     * @return array<string, string> Map of column names to type expressions
+     */
+    protected function extractCustomColumnTypes(string $initializeMethod): array
+    {
+        $extractor = new ColumnTypeExtractor();
+
+        return $extractor->extract($initializeMethod);
     }
 }
