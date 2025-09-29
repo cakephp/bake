@@ -21,7 +21,7 @@
 ?>
 <div class="{{ pluralVar }} index content">
 {% set fields = Bake.filterFields(fields, schema, modelObject, indexColumns, ['binary', 'text']) %}
-    <?= $this->Html->link({% if useDomain %}__d('{{ plugin }}', {% else %}{% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}{% endif %}'New {{ singularHumanName }}'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <?= $this->Html->link({% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'New {{ singularHumanName }}'), ['action' => 'add'], ['class' => 'button float-right']) ?>
 {% set done = [] %}
     <h3><?= {% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'{{ pluralHumanName }}') ?></h3>
     <div class="table-responsive">

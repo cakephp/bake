@@ -112,14 +112,15 @@ class ControllerCommand extends BakeCommand
 
         $currentModelName = $controllerName;
         $plugin = $this->plugin;
-        if ($plugin) {
-            $plugin .= '.';
+        $pluginPath = $plugin;
+        if ($pluginPath) {
+            $pluginPath .= '.';
         }
 
-        if ($this->getTableLocator()->exists($plugin . $currentModelName)) {
-            $modelObj = $this->getTableLocator()->get($plugin . $currentModelName);
+        if ($this->getTableLocator()->exists($pluginPath . $currentModelName)) {
+            $modelObj = $this->getTableLocator()->get($pluginPath . $currentModelName);
         } else {
-            $modelObj = $this->getTableLocator()->get($plugin . $currentModelName, [
+            $modelObj = $this->getTableLocator()->get($pluginPath . $currentModelName, [
                 'connectionName' => $this->connection,
             ]);
         }

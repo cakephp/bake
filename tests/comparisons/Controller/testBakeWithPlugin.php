@@ -50,11 +50,11 @@ class BakeArticlesController extends AppController
         if ($this->request->is('post')) {
             $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
             if ($this->BakeArticles->save($bakeArticle)) {
-                $this->Flash->success(__('The bake article has been saved.'));
+                $this->Flash->success(__d('BakeTest', 'The bake article has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The bake article could not be saved. Please, try again.'));
+            $this->Flash->error(__d('BakeTest', 'The bake article could not be saved. Please, try again.'));
         }
         $bakeUsers = $this->BakeArticles->BakeUsers->find('list', limit: 200)->all();
         $bakeTags = $this->BakeArticles->BakeTags->find('list', limit: 200)->all();
@@ -74,11 +74,11 @@ class BakeArticlesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $bakeArticle = $this->BakeArticles->patchEntity($bakeArticle, $this->request->getData());
             if ($this->BakeArticles->save($bakeArticle)) {
-                $this->Flash->success(__('The bake article has been saved.'));
+                $this->Flash->success(__d('BakeTest', 'The bake article has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The bake article could not be saved. Please, try again.'));
+            $this->Flash->error(__d('BakeTest', 'The bake article could not be saved. Please, try again.'));
         }
         $bakeUsers = $this->BakeArticles->BakeUsers->find('list', limit: 200)->all();
         $bakeTags = $this->BakeArticles->BakeTags->find('list', limit: 200)->all();
@@ -97,9 +97,9 @@ class BakeArticlesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $bakeArticle = $this->BakeArticles->get($id);
         if ($this->BakeArticles->delete($bakeArticle)) {
-            $this->Flash->success(__('The bake article has been deleted.'));
+            $this->Flash->success(__d('BakeTest', 'The bake article has been deleted.'));
         } else {
-            $this->Flash->error(__('The bake article could not be deleted. Please, try again.'));
+            $this->Flash->error(__d('BakeTest', 'The bake article could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

@@ -27,7 +27,7 @@
         $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
         if ($result->isValid()) {
-            $this->Flash->success(__('Login successful'));
+            $this->Flash->success({% if plugin %}__d('{{ plugin }}', {% else %}__({% endif %}'Login successful'));
             $redirect = $this->Authentication->getLoginRedirect();
             if ($redirect) {
                 return $this->redirect($redirect);
@@ -36,6 +36,6 @@
 
         // Display error if user submitted and authentication failed
         if ($this->request->is('post')) {
-            $this->Flash->error(__('Invalid username or password'));
+            $this->Flash->error({% if plugin %}__d('{{ plugin }}', {% else %}__({% endif %}'Invalid username or password'));
         }
     }

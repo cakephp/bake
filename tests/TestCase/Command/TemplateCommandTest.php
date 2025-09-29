@@ -674,7 +674,7 @@ class TemplateCommandTest extends TestCase
         $model->belongsTo('Articles');
 
         $this->generatedFile = $path . 'Comments/index.php';
-        $this->exec('bake template BakeTest.comments index --use-domain');
+        $this->exec('bake template BakeTest.comments index');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
