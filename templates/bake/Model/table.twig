@@ -63,6 +63,12 @@ class {{ name }}Table extends Table{{ fileBuilder.classBuilder.implements ? ' im
         $this->getSchema()->setColumnType('{{ name }}', \Cake\Database\Type\EnumType::from(\{{ className }}::class));
     {%~ endfor %}
 {% endif %}
+{% if customColumnTypes is defined and customColumnTypes %}
+
+    {%~ for columnName, typeExpression in customColumnTypes %}
+        $this->getSchema()->setColumnType('{{ columnName }}', {{ typeExpression|raw }});
+    {%~ endfor %}
+{% endif %}
 {% if behaviors %}
 
     {%~ for behavior, behaviorData in behaviors %}
