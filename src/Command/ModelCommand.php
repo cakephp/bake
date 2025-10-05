@@ -642,15 +642,15 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model The model to introspect.
      * @param \Cake\Console\Arguments $args CLI Arguments
-     * @return array<string>|string|null
+     * @return array<string>|string
      */
-    public function getDisplayField(Table $model, Arguments $args): array|string|null
+    public function getDisplayField(Table $model, Arguments $args): array|string
     {
         if ($args->getOption('display-field')) {
             return (string)$args->getOption('display-field');
         }
 
-        return $model->getDisplayField();
+        return $model->getDisplayField() ?? [];
     }
 
     /**

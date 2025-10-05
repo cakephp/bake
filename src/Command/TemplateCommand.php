@@ -100,6 +100,8 @@ class TemplateCommand extends BakeCommand
      */
     public function initialize(): void
     {
+        parent::initialize();
+
         $this->path = current(App::path('templates'));
     }
 
