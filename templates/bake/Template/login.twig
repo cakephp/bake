@@ -21,10 +21,10 @@
 <div class="{{ pluralVar }} form content">
     <?= $this->Form->create() ?>
     <fieldset>
-        <legend><?= __('Please enter your username and password') ?></legend>
+        <legend><?= {% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'Please enter your username and password') ?></legend>
         <?= $this->Form->control('username') ?>
         <?= $this->Form->control('password') ?>
     </fieldset>
-    <?= $this->Form->button(__('Login')); ?>
+    <?= $this->Form->button({% if useDomain %}__d('{{ plugin }}', {% else %}__({% endif %}'Login')); ?>
     <?= $this->Form->end() ?>
 </div>

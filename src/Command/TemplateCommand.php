@@ -408,6 +408,10 @@ class TemplateCommand extends BakeCommand
         }
         $renderer->set('indexColumns', $indexColumns);
 
+        // Always use domain translations when in plugin context
+        $useDomain = (bool)$this->plugin;
+        $renderer->set('useDomain', $useDomain);
+
         return $renderer->generate("Bake.Template/$action");
     }
 
