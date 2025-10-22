@@ -25,7 +25,7 @@
         "php": ">=8.1",
         "brick/varexporter": "^0.6.0",
         "cakephp/cakephp": "^5.1",
-        "cakephp/twig-view": "^2.0.0",
+        "cakephp/twig-view": "^2.0.2",
         "nikic/php-parser": "^5.0.0"
     },
     "require-dev": {
