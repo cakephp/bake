@@ -77,7 +77,7 @@ class PluginCommand extends BakeCommand
         }
 
         $pluginPath = $this->_pluginPath($plugin);
-        if (is_dir($pluginPath)) {
+        if (is_dir($pluginPath) && !$args->getOption('class-only')) {
             $io->out(sprintf('Plugin: %s already exists, no action taken', $plugin));
             $io->out(sprintf('Path: %s', $pluginPath));
 
