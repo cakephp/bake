@@ -214,10 +214,29 @@ class TestCommand extends BakeCommand
         }
 
         $path = $base . str_replace('\\', DS, $namespace);
-        $files = (new Filesystem())->find($path);
-        foreach ($files as $fileObj) {
-            if ($fileObj->isFile()) {
-                $classes[] = substr($fileObj->getFileName(), 0, -4) ?: '';
+
+        // For generic Class type (empty namespace), search recursively
+        if ($namespace === '') {
+            $files = (new Filesystem())->findRecursive($path, '/\.php$/');
+            foreach ($files as $fileObj) {
+                if ($fileObj->isFile() && $fileObj->getFileName() !== 'Application.php') {
+                    // Build the namespace path relative to App directory
+                    $relativePath = str_replace($base, '', $fileObj->getPath());
+                    $relativePath = trim(str_replace(DS, '\\', $relativePath), '\\');
+                    $className = substr($fileObj->getFileName(), 0, -4) ?: '';
+                    if ($relativePath) {
+                        $classes[] = $relativePath . '\\' . $className;
+                    } else {
+                        $classes[] = $className;
+                    }
+                }
+            }
+        } else {
+            $files = (new Filesystem())->find($path);
+            foreach ($files as $fileObj) {
+                if ($fileObj->isFile()) {
+                    $classes[] = substr($fileObj->getFileName(), 0, -4) ?: '';
+                }
             }
         }
         sort($classes);
@@ -392,6 +411,11 @@ class TestCommand extends BakeCommand
 
         // For generic Class type, the class name contains the full subnamespace path
         if ($type === 'Class') {
+            // Strip base namespace if user included it
+            if (str_starts_with($class, $namespace . '\\')) {
+                $class = substr($class, strlen($namespace) + 1);
+            }
+
             return $namespace . '\\' . $class;
         }
 

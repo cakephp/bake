@@ -846,4 +846,68 @@ class TestCommandTest extends TestCase
             $this->generatedFiles[0],
         );
     }
+
+    /**
+     * Test that Class type generates correct namespace
+     *
+     * @return void
+     */
+    public function testBakeGenericClassNamespace()
+    {
+        $testsPath = ROOT . 'tests' . DS;
+        $this->generatedFiles = [
+            $testsPath . 'TestCase/Service/SimpleCalculatorTest.php',
+        ];
+
+        $this->exec('bake test Class Service\SimpleCalculator', ['y']);
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileContains(
+            'namespace Bake\Test\App\Test\TestCase\Service;',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'class SimpleCalculatorTest extends TestCase',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileNotContains(
+            'ServiceSimpleCalculator',
+            $this->generatedFiles[0],
+        );
+    }
+
+    /**
+     * Test that Class type handles user including base namespace
+     *
+     * @return void
+     */
+    public function testBakeGenericClassWithBaseNamespace()
+    {
+        $testsPath = ROOT . 'tests' . DS;
+        $this->generatedFiles = [
+            $testsPath . 'TestCase/Service/UserServiceTest.php',
+        ];
+
+        // User includes "Bake\Test\App\" in the class name
+        $this->exec('bake test Class Bake\Test\App\Service\UserService', ['y']);
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileContains(
+            'namespace Bake\Test\App\Test\TestCase\Service;',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'class UserServiceTest extends TestCase',
+            $this->generatedFiles[0],
+        );
+        // Should not have duplicated namespace
+        $this->assertFileNotContains(
+            'namespace Bake\Test\App\Test\TestCase\Bake\Test\App',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileNotContains(
+            'BakeTestAppService',
+            $this->generatedFiles[0],
+        );
+    }
 }
