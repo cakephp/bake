@@ -707,6 +707,7 @@ class TestCommandTest extends TestCase
             ['Entity', 'Model\Entity'],
             ['Behavior', 'Model\Behavior'],
             ['Helper', 'View\Helper'],
+            ['Class', ''],
         ];
     }
 
@@ -759,6 +760,90 @@ class TestCommandTest extends TestCase
         $this->assertFileContains(
             '@link \Bake\Test\App\Model\Table\ProductsTable::validationDefault()',
             $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
+        );
+    }
+
+    /**
+     * Test baking generic Class type without constructor args
+     *
+     * @return void
+     */
+    public function testBakeGenericClassWithoutConstructor()
+    {
+        $testsPath = ROOT . 'tests' . DS;
+        $this->generatedFiles = [
+            $testsPath . 'TestCase/Service/SimpleCalculatorTest.php',
+        ];
+
+        $this->exec('bake test Class Service\SimpleCalculator', ['y']);
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileContains(
+            'class SimpleCalculatorTest extends TestCase',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'protected $SimpleCalculator;',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'protected function setUp(): void',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            '$this->SimpleCalculator = new SimpleCalculator();',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'public function testAdd(): void',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'public function testSubtract(): void',
+            $this->generatedFiles[0],
+        );
+    }
+
+    /**
+     * Test baking generic Class type with required constructor args
+     *
+     * @return void
+     */
+    public function testBakeGenericClassWithRequiredConstructor()
+    {
+        $testsPath = ROOT . 'tests' . DS;
+        $this->generatedFiles = [
+            $testsPath . 'TestCase/Service/UserServiceTest.php',
+        ];
+
+        $this->exec('bake test Class Service\UserService', ['y']);
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileContains(
+            'class UserServiceTest extends TestCase',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileNotContains(
+            'protected UserService $UserService;',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileNotContains(
+            'protected function setUp(): void',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileNotContains(
+            'protected function tearDown(): void',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'public function testGetUserById(): void',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'public function testCreateUser(): void',
+            $this->generatedFiles[0],
         );
     }
 }

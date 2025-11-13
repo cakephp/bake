@@ -55,6 +55,7 @@ class TestCommand extends BakeCommand
         'Command' => 'Command',
         'CommandHelper' => 'Command\Helper',
         'Middleware' => 'Middleware',
+        'Class' => '',
     ];
 
     /**
@@ -75,6 +76,7 @@ class TestCommand extends BakeCommand
         'Command' => 'Command',
         'CommandHelper' => 'Helper',
         'Middleware' => 'Middleware',
+        'Class' => '',
     ];
 
     /**
@@ -266,8 +268,14 @@ class TestCommand extends BakeCommand
         [$preConstruct, $construction, $postConstruct] = $this->generateConstructor($type, $fullClassName);
         $uses = $this->generateUses($type, $fullClassName);
 
-        $subject = $className;
-        [$namespace, $className] = namespaceSplit($fullClassName);
+        // For generic Class type, extract just the class name for the subject
+        if ($type === 'Class') {
+            [$namespace, $className] = namespaceSplit($fullClassName);
+            $subject = $className;
+        } else {
+            $subject = $className;
+            [$namespace, $className] = namespaceSplit($fullClassName);
+        }
 
         $baseNamespace = Configure::read('App.namespace');
         if ($this->plugin) {
@@ -381,6 +389,12 @@ class TestCommand extends BakeCommand
         if ($this->plugin) {
             $namespace = str_replace('/', '\\', $this->plugin);
         }
+
+        // For generic Class type, the class name contains the full subnamespace path
+        if ($type === 'Class') {
+            return $namespace . '\\' . $class;
+        }
+
         $suffix = $this->classSuffixes[$type];
         $subSpace = $this->mapType($type);
         if ($suffix && strpos($class, $suffix) === false) {
@@ -415,7 +429,7 @@ class TestCommand extends BakeCommand
      */
     public function mapType(string $type): string
     {
-        if (empty($this->classTypes[$type])) {
+        if (!isset($this->classTypes[$type])) {
             throw new CakeException('Invalid object type: ' . $type);
         }
 
@@ -585,6 +599,18 @@ class TestCommand extends BakeCommand
             $pre .= '        $this->io = new ConsoleIo($this->stub);';
             $construct = "new {$className}(\$this->io);";
         }
+        if ($type === 'Class') {
+            // Check if class has required constructor parameters
+            if (class_exists($fullClassName)) {
+                $reflection = new ReflectionClass($fullClassName);
+                $constructor = $reflection->getConstructor();
+                if (!$constructor || $constructor->getNumberOfRequiredParameters() === 0) {
+                    $construct = "new {$className}();";
+                }
+            } else {
+                $construct = "new {$className}();";
+            }
+        }
 
         return [$pre, $construct, $post];
     }
@@ -635,7 +661,17 @@ class TestCommand extends BakeCommand
                 break;
         }
 
-        if (!in_array($type, ['Controller', 'Command'])) {
+        // Skip test subject property for Controller, Command, and Class types with required constructor params
+        $skipProperty = in_array($type, ['Controller', 'Command'], true);
+        if ($type === 'Class' && class_exists($fullClassName)) {
+            $reflection = new ReflectionClass($fullClassName);
+            $constructor = $reflection->getConstructor();
+            if ($constructor && $constructor->getNumberOfRequiredParameters() > 0) {
+                $skipProperty = true;
+            }
+        }
+
+        if (!$skipProperty) {
             $properties[] = [
                 'description' => 'Test subject',
                 'type' => '\\' . $fullClassName,
