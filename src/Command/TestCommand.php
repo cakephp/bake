@@ -125,7 +125,11 @@ class TestCommand extends BakeCommand
         $name = $args->getArgument('name');
         $name = $this->_getName($name);
 
-        if ($this->bake($type, $name, $args, $io)) {
+        $result = $this->bake($type, $name, $args, $io);
+        if ($result === static::CODE_ERROR) {
+            return static::CODE_ERROR;
+        }
+        if ($result) {
             $io->success('Done');
         }
 
@@ -251,17 +255,42 @@ class TestCommand extends BakeCommand
      * @param string $className the 'cake name' for the class ie. Posts for the PostsController
      * @param \Cake\Console\Arguments $args Arguments
      * @param \Cake\Console\ConsoleIo $io ConsoleIo instance
-     * @return string|bool
+     * @return string|bool|int Returns the generated code as string on success, false on failure, or CODE_ERROR for validation errors
      */
-    public function bake(string $type, string $className, Arguments $args, ConsoleIo $io): string|bool
+    public function bake(string $type, string $className, Arguments $args, ConsoleIo $io): string|bool|int
     {
         $type = $this->normalize($type);
         if (!isset($this->classSuffixes[$type]) || !isset($this->classTypes[$type])) {
             return false;
         }
 
+        // For Class type, validate that backslashes are properly escaped
+        if ($type === 'Class' && !str_contains($className, '\\')) {
+            $io->error('Class name appears to have no namespace separators.');
+            $io->out('');
+            $io->out('If you meant to specify a namespaced class, please use quotes:');
+            $io->out("  <info>bin/cake bake test class '{$className}'</info>");
+            $io->out('');
+            $io->out('Or specify without the base namespace:');
+            $io->out('  <info>bin/cake bake test class YourNamespace\\ClassName</info>');
+
+            return static::CODE_ERROR;
+        }
+
         $prefix = $this->getPrefix($args);
         $fullClassName = $this->getRealClassName($type, $className, $prefix);
+
+        // For Class type, validate that the class exists
+        if ($type === 'Class' && !class_exists($fullClassName)) {
+            $io->error("Class '{$fullClassName}' does not exist or cannot be loaded.");
+            $io->out('');
+            $io->out('Please check:');
+            $io->out('  - The class file exists in the correct location');
+            $io->out('  - The class is properly autoloaded');
+            $io->out('  - The namespace and class name are correct');
+
+            return static::CODE_ERROR;
+        }
 
         // Check if fixture factories plugin is available
         $hasFixtureFactories = $this->hasFixtureFactories();

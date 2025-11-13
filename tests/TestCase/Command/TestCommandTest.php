@@ -910,4 +910,21 @@ class TestCommandTest extends TestCase
             $this->generatedFiles[0],
         );
     }
+
+    /**
+     * Test that Class type validates backslash escaping
+     *
+     * @return void
+     */
+    public function testBakeGenericClassValidatesBackslashes()
+    {
+        // Simulate what happens when user doesn't quote: App\Error\ErrorLogger
+        // Bash strips backslashes resulting in: AppErrorErrorLogger
+        $this->exec('bake test Class AppErrorErrorLogger');
+
+        $this->assertExitCode(CommandInterface::CODE_ERROR);
+        $this->assertErrorContains('Class name appears to have no namespace separators');
+        $this->assertOutputContains('please use quotes');
+        $this->assertOutputContains("bin/cake bake test class 'AppErrorErrorLogger'");
+    }
 }
