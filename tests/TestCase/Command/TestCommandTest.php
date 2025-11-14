@@ -707,6 +707,7 @@ class TestCommandTest extends TestCase
             ['Entity', 'Model\Entity'],
             ['Behavior', 'Model\Behavior'],
             ['Helper', 'View\Helper'],
+            ['Class', ''],
         ];
     }
 
@@ -760,5 +761,170 @@ class TestCommandTest extends TestCase
             '@link \Bake\Test\App\Model\Table\ProductsTable::validationDefault()',
             $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
         );
+    }
+
+    /**
+     * Test baking generic Class type without constructor args
+     *
+     * @return void
+     */
+    public function testBakeGenericClassWithoutConstructor()
+    {
+        $testsPath = ROOT . 'tests' . DS;
+        $this->generatedFiles = [
+            $testsPath . 'TestCase/Service/SimpleCalculatorTest.php',
+        ];
+
+        $this->exec('bake test Class Service\SimpleCalculator', ['y']);
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileContains(
+            'class SimpleCalculatorTest extends TestCase',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'protected $SimpleCalculator;',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'protected function setUp(): void',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            '$this->SimpleCalculator = new SimpleCalculator();',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'public function testAdd(): void',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'public function testSubtract(): void',
+            $this->generatedFiles[0],
+        );
+    }
+
+    /**
+     * Test baking generic Class type with required constructor args
+     *
+     * @return void
+     */
+    public function testBakeGenericClassWithRequiredConstructor()
+    {
+        $testsPath = ROOT . 'tests' . DS;
+        $this->generatedFiles = [
+            $testsPath . 'TestCase/Service/UserServiceTest.php',
+        ];
+
+        $this->exec('bake test Class Service\UserService', ['y']);
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFilesExist($this->generatedFiles);
+        $this->assertFileContains(
+            'class UserServiceTest extends TestCase',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileNotContains(
+            'protected UserService $UserService;',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileNotContains(
+            'protected function setUp(): void',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileNotContains(
+            'protected function tearDown(): void',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'public function testGetUserById(): void',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'public function testCreateUser(): void',
+            $this->generatedFiles[0],
+        );
+    }
+
+    /**
+     * Test that Class type generates correct namespace
+     *
+     * @return void
+     */
+    public function testBakeGenericClassNamespace()
+    {
+        $testsPath = ROOT . 'tests' . DS;
+        $this->generatedFiles = [
+            $testsPath . 'TestCase/Service/SimpleCalculatorTest.php',
+        ];
+
+        $this->exec('bake test Class Service\SimpleCalculator', ['y']);
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileContains(
+            'namespace Bake\Test\App\Test\TestCase\Service;',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'class SimpleCalculatorTest extends TestCase',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileNotContains(
+            'ServiceSimpleCalculator',
+            $this->generatedFiles[0],
+        );
+    }
+
+    /**
+     * Test that Class type handles user including base namespace
+     *
+     * @return void
+     */
+    public function testBakeGenericClassWithBaseNamespace()
+    {
+        $testsPath = ROOT . 'tests' . DS;
+        $this->generatedFiles = [
+            $testsPath . 'TestCase/Service/UserServiceTest.php',
+        ];
+
+        // User includes "Bake\Test\App\" in the class name
+        $this->exec('bake test Class Bake\Test\App\Service\UserService', ['y']);
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileContains(
+            'namespace Bake\Test\App\Test\TestCase\Service;',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileContains(
+            'class UserServiceTest extends TestCase',
+            $this->generatedFiles[0],
+        );
+        // Should not have duplicated namespace
+        $this->assertFileNotContains(
+            'namespace Bake\Test\App\Test\TestCase\Bake\Test\App',
+            $this->generatedFiles[0],
+        );
+        $this->assertFileNotContains(
+            'BakeTestAppService',
+            $this->generatedFiles[0],
+        );
+    }
+
+    /**
+     * Test that Class type validates backslash escaping
+     *
+     * @return void
+     */
+    public function testBakeGenericClassValidatesBackslashes()
+    {
+        // Simulate what happens when user doesn't quote: App\Error\ErrorLogger
+        // Bash strips backslashes resulting in: AppErrorErrorLogger
+        $this->exec('bake test Class AppErrorErrorLogger');
+
+        $this->assertExitCode(CommandInterface::CODE_ERROR);
+        $this->assertErrorContains('Class name appears to have no namespace separators');
+        $this->assertOutputContains('please use quotes');
+        $this->assertOutputContains("bin/cake bake test class 'AppErrorErrorLogger'");
     }
 }
