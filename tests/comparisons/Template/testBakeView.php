@@ -68,7 +68,6 @@
                     <table>
                         <tr>
                             <th><?= __('Id') ?></th>
-                            <th><?= __('Author Id') ?></th>
                             <th><?= __('Title') ?></th>
                             <th><?= __('Body') ?></th>
                             <th><?= __('Published') ?></th>
@@ -77,7 +76,6 @@
                         <?php foreach ($author->articles as $article) : ?>
                         <tr>
                             <td><?= h($article->id) ?></td>
-                            <td><?= h($article->author_id) ?></td>
                             <td><?= h($article->title) ?></td>
                             <td><?= h($article->body) ?></td>
                             <td><?= h($article->published) ?></td>

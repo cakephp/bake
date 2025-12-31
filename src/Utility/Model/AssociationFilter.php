@@ -93,6 +93,7 @@ class AssociationFilter
                 }
 
                 try {
+                    $foreignKey = (array)$assoc->getForeignKey();
                     $associations[$type][$assocName] = [
                         'property' => $assoc->getProperty(),
                         'variable' => Inflector::variable($assocName),
@@ -101,7 +102,7 @@ class AssociationFilter
                         'foreignKey' => $assoc->getForeignKey(),
                         'alias' => $alias,
                         'controller' => $className,
-                        'fields' => $target->getSchema()->columns(),
+                        'fields' => array_values(array_diff($target->getSchema()->columns(), $foreignKey)),
                         'navLink' => $navLink,
                     ];
                 } catch (Exception $e) {
