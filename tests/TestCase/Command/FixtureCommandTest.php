@@ -200,10 +200,10 @@ class FixtureCommandTest extends TestCase
      */
     public function testMainWithPluginModel()
     {
-        $this->loadPlugins(['FixtureTest' => ['path' => APP . 'Plugin/FixtureTest/']]);
+        $this->loadPlugins(['TestBake' => ['path' => ROOT . 'Plugin/TestBake/']]);
 
-        $this->generatedFile = APP . 'Plugin/FixtureTest/tests/Fixture/ArticlesFixture.php';
-        $this->exec('bake fixture --connection test FixtureTest.Articles');
+        $this->generatedFile = ROOT . 'Plugin/TestBake/tests/Fixture/ArticlesFixture.php';
+        $this->exec('bake fixture --connection test TestBake.Articles');
 
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertFileContains('class ArticlesFixture', $this->generatedFile);

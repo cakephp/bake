@@ -264,12 +264,12 @@ class TemplateCommandTest extends TestCase
      */
     public function testGetTemplatePathPlugin()
     {
-        $pluginPath = APP . 'Plugin/TestTemplate/';
-        $this->loadPlugins(['TestTemplate' => ['path' => $pluginPath]]);
+        $pluginPath = APP . 'Plugin/BakeTest/';
+        $this->loadPlugins(['BakeTest' => ['path' => $pluginPath]]);
 
         $command = new TemplateCommand();
         $command->controllerName = 'Posts';
-        $command->plugin = 'TestTemplate';
+        $command->plugin = 'BakeTest';
 
         // Use this->plugin as plugin could be in the name arg
         $args = new Arguments([], [], []);
@@ -281,7 +281,7 @@ class TemplateCommandTest extends TestCase
         $result = $command->getTemplatePath($args);
         $this->assertPathEquals($pluginPath . 'templates/Admin/Posts/', $result);
 
-        $this->removePlugins(['TestTemplate']);
+        $this->removePlugins(['BakeTest']);
     }
 
     /**

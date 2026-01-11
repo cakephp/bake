@@ -680,14 +680,14 @@ class TestCommandTest extends TestCase
     public function testTestCaseFileNamePlugin()
     {
         $this->loadPlugins([
-            'TestTest' => [
-                'path' => APP . 'Plugin' . DS . 'TestTest' . DS,
+            'TestBake' => [
+                'path' => APP . 'Plugin' . DS . 'TestBake' . DS,
             ],
         ]);
         $this->generatedFiles = [
-            APP . 'Plugin/TestTest/tests/TestCase/Model/Entity/ArticleTest.php',
+            APP . 'Plugin/TestBake/tests/TestCase/Model/Entity/ArticleTest.php',
         ];
-        $this->exec('bake test entity --plugin TestTest Article');
+        $this->exec('bake test entity --plugin TestBake Article');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);

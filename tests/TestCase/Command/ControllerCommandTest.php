@@ -68,7 +68,7 @@ class ControllerCommandTest extends TestCase
         parent::tearDown();
         $this->getTableLocator()->clear();
 
-        $this->removePlugins(['ControllerTest', 'Company/Pastry', 'Authorization', 'BakeTest']);
+        $this->removePlugins(['Company/Pastry', 'Authorization', 'BakeTest']);
     }
 
     /**
