@@ -1552,6 +1552,7 @@ class ModelCommandTest extends TestCase
                 'name' => 'isUnique',
                 'fields' => ['title', 'user_id'],
                 'options' => [],
+                'message' => 'This combination of title and user_id already exists',
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1593,11 +1594,13 @@ class ModelCommandTest extends TestCase
                 'name' => 'isUnique',
                 'fields' => ['department_id', 'username'],
                 'options' => [],
+                'message' => 'This combination of department_id and username already exists',
             ],
             [
                 'name' => 'isUnique',
                 'fields' => ['department_id', 'email'],
                 'options' => [],
+                'message' => 'This combination of department_id and email already exists',
             ],
             [
                 'name' => 'existsIn',
@@ -1670,6 +1673,7 @@ class ModelCommandTest extends TestCase
                 'name' => 'isUnique',
                 'fields' => ['department_id', 'username'],
                 'options' => [],
+                'message' => 'This combination of department_id and username already exists',
             ],
         ];
         $this->assertEquals($expected, $result);
