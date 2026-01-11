@@ -57,7 +57,12 @@ class EntryCommandTest extends TestCase
         $this->exec('bake --help');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
-        $this->assertOutputContains('bake:');
+        // Output format varies between CakePHP versions
+        $output = $this->_out->output();
+        $this->assertTrue(
+            str_contains($output, 'Available Commands') || str_contains($output, 'bake:'),
+            'Expected help output to contain command listing'
+        );
         $this->assertOutputContains('bake controller');
         $this->assertOutputContains('bake controller all');
         $this->assertOutputContains('bake command');
