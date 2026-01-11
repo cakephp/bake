@@ -61,7 +61,7 @@ class EntryCommandTest extends TestCase
         $output = $this->_out->output();
         $this->assertTrue(
             str_contains($output, 'Available Commands') || str_contains($output, 'bake:'),
-            'Expected help output to contain command listing'
+            'Expected help output to contain command listing',
         );
         $this->assertOutputContains('bake controller');
         $this->assertOutputContains('bake controller all');
