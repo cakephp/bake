@@ -57,7 +57,7 @@ class EntryCommandTest extends TestCase
         $this->exec('bake --help');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
-        $this->assertOutputContains('Available Commands');
+        $this->assertOutputContains('bake:');
         $this->assertOutputContains('bake controller');
         $this->assertOutputContains('bake controller all');
         $this->assertOutputContains('bake command');

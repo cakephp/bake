@@ -40,10 +40,17 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Authentication\\": "tests/test_app/Plugin/Authentication/src/",
+            "Authorization\\": "tests/test_app/Plugin/Authorization/src/",
             "BakeTest\\": "tests/test_app/Plugin/BakeTest/src/",
             "Bake\\Test\\": "tests/",
             "Bake\\Test\\App\\": "tests/test_app/App/",
             "Company\\Pastry\\": "tests/test_app/Plugin/Company/Pastry/src/",
+            "FixtureTest\\": "tests/test_app/App/Plugin/FixtureTest/src/",
+            "TestBake\\": "tests/test_app/Plugin/TestBake/src/",
+            "TestBakeTheme\\": "tests/test_app/Plugin/TestBakeTheme/src/",
+            "TestTemplate\\": "tests/test_app/App/Plugin/TestTemplate/src/",
+            "TestTest\\": "tests/test_app/App/Plugin/TestTest/src/",
             "WithBakeSubFolder\\": "tests/test_app/Plugin/WithBakeSubFolder/src/"
         }
     },
