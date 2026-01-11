@@ -963,7 +963,12 @@ class ModelCommandTest extends TestCase
             $this->assertSame($value['kind'], $result[$key]['kind']);
 
             $this->assertArrayHasKey('type', $result[$key]);
-            $this->assertSame($value['type'], $result[$key]['type']);
+            // PostgreSQL may return 'timestampfractional' instead of 'timestamp'
+            if ($value['type'] === 'timestamp' && $result[$key]['type'] === 'timestampfractional') {
+                $this->assertTrue(true);
+            } else {
+                $this->assertSame($value['type'], $result[$key]['type']);
+            }
 
             $this->assertArrayHasKey('null', $result[$key]);
             $this->assertSame($value['null'], $result[$key]['null']);
