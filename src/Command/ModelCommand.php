@@ -1263,7 +1263,7 @@ class ModelCommand extends BakeCommand
             ->set($data)
             ->generate('Bake.Model/table');
 
-        $this->writefile($io, $filename, $contents, $this->force);
+        $this->writeFile($io, $filename, $contents, $this->force);
 
         // Work around composer caching that classes/files do not exist.
         // Check for the file as it might not exist in tests.
