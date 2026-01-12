@@ -1028,7 +1028,18 @@ class ModelCommand extends BakeCommand
                 }
             }
 
-            $uniqueRules[] = ['name' => 'isUnique', 'fields' => $constraintFields, 'options' => $options];
+            $rule = ['name' => 'isUnique', 'fields' => $constraintFields, 'options' => $options];
+
+            // Add descriptive message for composite unique constraints
+            if (count($constraintFields) > 1) {
+                $rule['message'] = sprintf(
+                    'This combination of %s and %s already exists',
+                    implode(', ', array_slice($constraintFields, 0, -1)),
+                    end($constraintFields),
+                );
+            }
+
+            $uniqueRules[] = $rule;
         }
 
         $possiblyUniqueColumns = ['username', 'login'];
@@ -1252,7 +1263,7 @@ class ModelCommand extends BakeCommand
             ->set($data)
             ->generate('Bake.Model/table');
 
-        $this->writefile($io, $filename, $contents, $this->force);
+        $this->writeFile($io, $filename, $contents, $this->force);
 
         // Work around composer caching that classes/files do not exist.
         // Check for the file as it might not exist in tests.

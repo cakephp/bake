@@ -135,7 +135,11 @@ class {{ name }}Table extends Table{{ fileBuilder.classBuilder.implements ? ' im
         {%~ for optionName, optionValue in rule.options %}
             {%~ set options = (loop.first ? '[' : options) ~ "'#{optionName}' => " ~ Bake.exportVar(optionValue) ~ (loop.last ? ']' : ', ') %}
         {%~ endfor %}
-        $rules->add($rules->{{ rule.name }}({{ fields|raw }}{{ (rule.extra|default ? ", '#{rule.extra}'" : '')|raw }}{{ (options ? ', ' ~ options : '')|raw }}), ['errorField' => '{{ rule.fields[0] }}']);
+        {%~ set ruleOptions = "'errorField' => '" ~ rule.fields[0] ~ "'" %}
+        {%~ if rule.message is defined %}
+            {%~ set ruleOptions = ruleOptions ~ ", 'message' => __(" ~ Bake.exportVar(rule.message) ~ ")" %}
+        {%~ endif %}
+        $rules->add($rules->{{ rule.name }}({{ fields|raw }}{{ (rule.extra|default ? ", '#{rule.extra}'" : '')|raw }}{{ (options ? ', ' ~ options : '')|raw }}), [{{ ruleOptions|raw }}]);
     {%~ endfor %}
 
         return $rules;

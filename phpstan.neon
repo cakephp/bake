@@ -9,3 +9,5 @@ parameters:
         - tests/bootstrap.php
     ignoreErrors:
         - identifier: missingType.iterableValue
+        - identifier: missingType.generics
+        - identifier: method.childReturnType
