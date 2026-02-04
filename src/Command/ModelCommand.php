@@ -424,7 +424,7 @@ class ModelCommand extends BakeCommand
 
         foreach ($schema->constraints() as $constraint) {
             $constraintInfo = $schema->getConstraint($constraint);
-            if (!in_array($keyField, $constraintInfo['columns'])) {
+            if (!in_array($keyField, $constraintInfo['columns'] ?? [])) {
                 continue;
             }
 
@@ -933,7 +933,7 @@ class ModelCommand extends BakeCommand
 
         foreach ($schema->constraints() as $constraint) {
             $constraint = $schema->getConstraint($constraint);
-            if (!in_array($fieldName, $constraint['columns'], true) || count($constraint['columns']) > 1) {
+            if (!in_array($fieldName, $constraint['columns'] ?? [], true) || count($constraint['columns']) > 1) {
                 continue;
             }
 
