@@ -264,8 +264,8 @@ class PluginCommand extends BakeCommand
             $template = substr($template, strrpos($template, 'Plugin' . DIRECTORY_SEPARATOR) + 7, -4);
             $template = rtrim($template, '.');
             $filename = $template;
-            if ($filename === 'src/Plugin.php') {
-                $filename = 'src/' . $name . 'Plugin.php';
+            if ($filename === 'src' . DIRECTORY_SEPARATOR . 'Plugin.php') {
+                $filename = 'src' . DIRECTORY_SEPARATOR . $name . 'Plugin.php';
             }
             $this->_generateFile($renderer, $template, $root, $filename, $io);
         }
