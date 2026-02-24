@@ -201,7 +201,7 @@ class PluginCommandTest extends TestCase
      */
     public function testFindPathNonExistent()
     {
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $paths = App::path('plugins');
 
         array_unshift($paths, '/fake/path');
@@ -224,7 +224,7 @@ class PluginCommandTest extends TestCase
     public function testFindPathEmpty()
     {
         $this->expectException(StopException::class);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $paths = ['/fake/path', '/fake/path2'];
 
         $command = new PluginCommand();

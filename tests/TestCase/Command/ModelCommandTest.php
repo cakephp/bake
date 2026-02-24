@@ -295,7 +295,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($items, $args, $io);
 
         $expected = [
@@ -341,7 +341,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $arguments = new Arguments([], ['no-associations' => true], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $articles = $this->getTableLocator()->get('BakeArticle');
         $this->assertEquals([], $command->getAssociations($articles, $arguments, $io));
     }
@@ -359,7 +359,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($items, $args, $io);
         $expected = [
             'belongsTo' => [
@@ -412,7 +412,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($items, $args, $io);
         $expected = [
             'belongsTo' => [
@@ -461,7 +461,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($items, $args, $io);
         $expected = [
             'belongsTo' => [
@@ -514,7 +514,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], ['skip-relation-check' => true], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($items, $args, $io);
         $expected = [
             'belongsTo' => [
@@ -566,7 +566,7 @@ class ModelCommandTest extends TestCase
         ]);
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
 
         $command = new ModelCommand();
         $command->connection = 'test';
@@ -592,7 +592,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($model, $args, $io);
 
         $expected = [
