@@ -122,7 +122,7 @@ class FixtureCommand extends BakeCommand
             return static::CODE_SUCCESS;
         }
 
-        $table = $args->getOption('table') ?? '';
+        $table = (string)$args->getOption('table');
         $model = $this->_camelize($name);
         $this->bake($model, $table, $args, $io);
 
@@ -285,16 +285,19 @@ class FixtureCommand extends BakeCommand
     {
         $cols = $indexes = $constraints = [];
         foreach ($table->columns() as $field) {
+            /** @var array $fieldData */
             $fieldData = $table->getColumn($field);
             $properties = implode(', ', $this->_values($fieldData));
             $cols[] = "        '$field' => [$properties],";
         }
         foreach ($table->indexes() as $index) {
+            /** @var array $fieldData */
             $fieldData = $table->getIndex($index);
             $properties = implode(', ', $this->_values($fieldData));
             $indexes[] = "            '$index' => [$properties],";
         }
         foreach ($table->constraints() as $index) {
+            /** @var array $fieldData */
             $fieldData = $table->getConstraint($index);
             $properties = implode(', ', $this->_values($fieldData));
             $constraints[] = "            '$index' => [$properties],";
@@ -360,6 +363,7 @@ class FixtureCommand extends BakeCommand
         for ($i = 0; $i < $recordCount; $i++) {
             $record = [];
             foreach ($table->columns() as $field) {
+                /** @var array $fieldInfo */
                 $fieldInfo = $table->getColumn($field);
                 $insert = '';
                 switch ($fieldInfo['type']) {

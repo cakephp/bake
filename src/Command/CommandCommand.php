@@ -69,7 +69,7 @@ class CommandCommand extends SimpleBakeCommand
         $data['command_name'] = Inflector::underscore(str_replace(
             '.',
             ' ',
-            $arguments->getArgument('name'),
+            $arguments->getArgument('name') ?? '',
         ));
 
         return $data;

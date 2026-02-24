@@ -84,7 +84,7 @@ class ControllerCommand extends BakeCommand
             $actions = ['index', 'view', 'add', 'edit', 'delete'];
         }
         if ($args->getOption('actions')) {
-            $actions = array_map('trim', explode(',', $args->getOption('actions')));
+            $actions = array_map('trim', explode(',', (string)$args->getOption('actions')));
             $actions = array_filter($actions);
         }
         if (!$args->getOption('actions') && Plugin::isLoaded('Authentication') && $controllerName === 'Users') {
@@ -221,7 +221,7 @@ class ControllerCommand extends BakeCommand
     {
         $components = [];
         if ($args->getOption('components')) {
-            $components = explode(',', $args->getOption('components'));
+            $components = explode(',', (string)$args->getOption('components'));
             $components = array_values(array_filter(array_map('trim', $components)));
         } else {
             if (Plugin::isLoaded('Authorization')) {
@@ -242,7 +242,7 @@ class ControllerCommand extends BakeCommand
     {
         $helpers = [];
         if ($args->getOption('helpers')) {
-            $helpers = explode(',', $args->getOption('helpers'));
+            $helpers = explode(',', (string)$args->getOption('helpers'));
             $helpers = array_values(array_filter(array_map('trim', $helpers)));
         }
 

@@ -102,7 +102,15 @@ class TemplateCommand extends BakeCommand
     {
         parent::initialize();
 
-        $this->path = current(App::path('templates'));
+        $templatePaths = App::path('templates');
+        if ($templatePaths === []) {
+            throw new RuntimeException(
+                'Could not read template paths. ' .
+                'Ensure `App.paths.templates` is defined in your application configuration.',
+            );
+        }
+
+        $this->path = current($templatePaths);
     }
 
     /**
@@ -132,8 +140,7 @@ class TemplateCommand extends BakeCommand
         $template = $args->getArgument('template');
         $action = $args->getArgument('action');
 
-        $controller = $args->getOption('controller');
-        $this->controller($args, $name, $controller);
+        $this->controller($args, $name, (string)$args->getOption('controller'));
         $this->model($name);
 
         if ($template && $action === null) {

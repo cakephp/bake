@@ -392,7 +392,8 @@ class ModelCommand extends BakeCommand
                 if ($className && $className !== $tmpModelName) {
                     $assoc['className'] = $className;
                 }
-                if ($schema->getColumn($fieldName)['null'] === false) {
+                $columnInfo = $schema->getColumn($fieldName);
+                if ($columnInfo !== null && ($columnInfo['null'] ?? true) === false) {
                     $assoc['joinType'] = 'INNER';
                 }
             }
@@ -484,8 +485,9 @@ class ModelCommand extends BakeCommand
         foreach ($schema->constraints() as $constraint) {
             $constraintInfo = $schema->getConstraint($constraint);
             if (
-                $constraintInfo['type'] === TableSchema::CONSTRAINT_UNIQUE &&
-                $constraintInfo['columns'] === [$keyField]
+                $constraintInfo !== null &&
+                ($constraintInfo['type'] ?? null) === TableSchema::CONSTRAINT_UNIQUE &&
+                ($constraintInfo['columns'] ?? []) === [$keyField]
             ) {
                 return true;
             }
@@ -663,7 +665,7 @@ class ModelCommand extends BakeCommand
     public function getPrimaryKey(Table $model, Arguments $args): array
     {
         if ($args->getOption('primary-key')) {
-            $fields = explode(',', $args->getOption('primary-key'));
+            $fields = explode(',', (string)$args->getOption('primary-key'));
 
             return array_values(array_filter(array_map('trim', $fields)));
         }
@@ -702,6 +704,7 @@ class ModelCommand extends BakeCommand
 
         $schema = $model->getSchema();
         foreach ($schema->columns() as $column) {
+            /** @var array $columnSchema */
             $columnSchema = $schema->getColumn($column);
 
             $properties[$column] = [
@@ -757,7 +760,7 @@ class ModelCommand extends BakeCommand
             return false;
         }
         if ($args->getOption('fields')) {
-            $fields = explode(',', $args->getOption('fields'));
+            $fields = explode(',', (string)$args->getOption('fields'));
 
             return array_values(array_filter(array_map('trim', $fields)));
         }
@@ -786,7 +789,7 @@ class ModelCommand extends BakeCommand
             return [];
         }
         if ($args->getOption('hidden')) {
-            $fields = explode(',', $args->getOption('hidden'));
+            $fields = explode(',', (string)$args->getOption('hidden'));
 
             return array_values(array_filter(array_map('trim', $fields)));
         }
@@ -932,6 +935,7 @@ class ModelCommand extends BakeCommand
         }
 
         foreach ($schema->constraints() as $constraint) {
+            /** @var array $constraint */
             $constraint = $schema->getConstraint($constraint);
             if (!in_array($fieldName, $constraint['columns'] ?? [], true) || count($constraint['columns']) > 1) {
                 continue;
@@ -1010,6 +1014,7 @@ class ModelCommand extends BakeCommand
         $uniqueConstraintsColumns = [];
 
         foreach ($schema->constraints() as $name) {
+            /** @var array $constraint */
             $constraint = $schema->getConstraint($name);
             if ($constraint['type'] !== TableSchema::CONSTRAINT_UNIQUE) {
                 continue;
@@ -1476,6 +1481,7 @@ class ModelCommand extends BakeCommand
         $fields = [];
 
         foreach ($schema->columns() as $column) {
+            /** @var array $columnSchema */
             $columnSchema = $schema->getColumn($column);
             if (str_starts_with($columnSchema['type'], 'enum-')) {
                 $fields[] = $column;
@@ -1502,6 +1508,7 @@ class ModelCommand extends BakeCommand
         $enums = [];
 
         foreach ($schema->columns() as $column) {
+            /** @var array $columnSchema */
             $columnSchema = $schema->getColumn($column);
             if (
                 !in_array($columnSchema['type'], ['string', 'integer', 'tinyinteger', 'smallinteger'], true)

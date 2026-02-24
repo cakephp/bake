@@ -110,7 +110,7 @@ class TestCommand extends BakeCommand
 
             return null;
         }
-        $type = $this->normalize($args->getArgument('type'));
+        $type = $this->normalize((string)$args->getArgument('type'));
 
         if ($args->getOption('all')) {
             $this->_bakeAll($type, $args, $io);
@@ -122,7 +122,7 @@ class TestCommand extends BakeCommand
 
             return null;
         }
-        $name = $args->getArgument('name');
+        $name = (string)$args->getArgument('name');
         $name = $this->_getName($name);
 
         $result = $this->bake($type, $name, $args, $io);
@@ -225,8 +225,9 @@ class TestCommand extends BakeCommand
             foreach ($files as $fileObj) {
                 if ($fileObj->isFile() && $fileObj->getFileName() !== 'Application.php') {
                     // Build the namespace path relative to App directory
+                    /** @var string $relativePath */
                     $relativePath = str_replace($base, '', $fileObj->getPath());
-                    $relativePath = trim(str_replace(DS, '\\', $relativePath), '\\');
+                    $relativePath = trim(str_replace(DIRECTORY_SEPARATOR, '\\', $relativePath), '\\');
                     $className = substr($fileObj->getFileName(), 0, -4) ?: '';
                     if ($relativePath) {
                         $classes[] = $relativePath . '\\' . $className;
@@ -272,7 +273,7 @@ class TestCommand extends BakeCommand
             $io->out("  <info>bin/cake bake test class '{$className}'</info>");
             $io->out('');
             $io->out('Or specify without the base namespace:');
-            $io->out('  <info>bin/cake bake test class YourNamespace\\ClassName</info>');
+            $io->out('  <info>bin/cake bake test class YourNamespace\ClassName</info>');
 
             return static::CODE_ERROR;
         }
@@ -299,12 +300,14 @@ class TestCommand extends BakeCommand
             if ($hasFixtureFactories) {
                 $io->info('Fixture Factories plugin detected - skipping fixture property generation.');
             } elseif ($args->getOption('fixtures')) {
-                $fixtures = array_map('trim', explode(',', $args->getOption('fixtures')));
+                $fixtures = array_map('trim', explode(',', (string)$args->getOption('fixtures')));
                 $this->_fixtures = array_filter($fixtures);
             } elseif ($this->typeCanDetectFixtures($type) && class_exists($fullClassName)) {
                 $io->out('Bake is detecting possible fixtures...');
                 $testSubject = $this->buildTestSubject($type, $fullClassName);
-                $this->generateFixtureList($testSubject);
+                if ($testSubject instanceof Table || $testSubject instanceof Controller) {
+                    $this->generateFixtureList($testSubject);
+                }
             }
         }
 
@@ -493,7 +496,7 @@ class TestCommand extends BakeCommand
      * Get methods declared in the class given.
      * No parent methods will be returned
      *
-     * @param string $className Name of class to look at.
+     * @param class-string $className Name of class to look at.
      * @return array<string> Array of method names.
      * @throws \ReflectionException
      */
