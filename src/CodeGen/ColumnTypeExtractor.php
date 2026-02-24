@@ -73,6 +73,9 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
             // Wrap code in a dummy class if needed for parsing
             $wrappedCode = "<?php\nclass Dummy {\n" . $code . "\n}";
             $ast = $this->parser->parse($wrappedCode);
+            if ($ast === null) {
+                return [];
+            }
 
             $traverser = new NodeTraverser();
             $traverser->addVisitor($this);
@@ -144,8 +147,13 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
             ) {
                 // Extract the column name and type expression
                 if (count($methodCall->args) >= 2) {
-                    $columnArg = $methodCall->args[0]->value;
-                    $typeArg = $methodCall->args[1]->value;
+                    $columnArgNode = $methodCall->args[0];
+                    $typeArgNode = $methodCall->args[1];
+                    if (!$columnArgNode instanceof Node\Arg || !$typeArgNode instanceof Node\Arg) {
+                        return;
+                    }
+                    $columnArg = $columnArgNode->value;
+                    $typeArg = $typeArgNode->value;
 
                     // Get column name
                     $columnName = $this->getStringValue($columnArg);
@@ -199,7 +207,11 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
             if ($className === 'EnumType' || str_ends_with($className, '\\EnumType')) {
                 if ($methodName === 'from' && count($node->args) > 0) {
                     // Extract the enum class name
-                    $arg = $node->args[0]->value;
+                    $argNode = $node->args[0];
+                    if (!$argNode instanceof Node\Arg) {
+                        return null;
+                    }
+                    $arg = $argNode->value;
                     if ($arg instanceof Node\Expr\ClassConstFetch) {
                         if (
                             $arg->class instanceof Node\Name &&

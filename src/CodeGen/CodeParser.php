@@ -81,7 +81,11 @@ class CodeParser extends NodeVisitorAbstract
     {
         $this->fileText = $code;
         try {
-            $this->traverser->traverse($this->parser->parse($code));
+            $ast = $this->parser->parse($code);
+            if ($ast === null) {
+                return null;
+            }
+            $this->traverser->traverse($ast);
         } catch (Error $e) {
             throw new ParseException($e->getMessage(), null, $e);
         }
@@ -172,7 +176,11 @@ class CodeParser extends NodeVisitorAbstract
                     throw new ParseException('Multiple constants per line are not supported, update your file');
                 }
 
-                $name = (string)current($constant->consts)->name;
+                $const = current($constant->consts);
+                if ($const === false) {
+                    continue;
+                }
+                $name = (string)$const->name;
                 $constants[$name] = $this->getNodeCode($constant);
             }
 
@@ -182,7 +190,11 @@ class CodeParser extends NodeVisitorAbstract
                     throw new ParseException('Multiple properties per line are not supported, update your file');
                 }
 
-                $name = (string)current($property->props)->name;
+                $prop = current($property->props);
+                if ($prop === false) {
+                    continue;
+                }
+                $name = (string)$prop->name;
                 $properties[$name] = $this->getNodeCode($property);
             }
 

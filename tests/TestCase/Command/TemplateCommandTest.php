@@ -310,7 +310,7 @@ class TemplateCommandTest extends TestCase
         ];
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getContent($args, $io, 'view', $vars);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
@@ -355,7 +355,7 @@ class TemplateCommandTest extends TestCase
 
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getContent($args, $io, 'view', $vars);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
@@ -428,7 +428,7 @@ class TemplateCommandTest extends TestCase
         ];
         $command = new TemplateCommand();
         $args = new Arguments([], ['prefix' => 'Admin'], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
 
         $result = $command->getContent($args, $io, 'view', $vars);
         $this->assertSameAsFile(__FUNCTION__ . '-view.php', $result);

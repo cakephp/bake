@@ -59,7 +59,7 @@ class TemplateRenderer
     /**
      * Get view instance
      *
-     * @return \Cake\View\View
+     * @return \Bake\View\BakeView
      * @triggers Bake.initialize $view
      */
     public function getView(): View
