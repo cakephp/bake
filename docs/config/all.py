@@ -25,6 +25,7 @@ project = 'CakePHP Bake'
 version_list = [
     {'name': '1.x', 'number': '/bake/1.x', 'title': '1.x'},
     {'name': '2.x', 'number': '/bake/2.x', 'title': '2.x', 'current': True},
+    {'name': '3.x', 'number': '/bake/3.x', 'title': '3.x'},
 ]
 
 # Languages available.
