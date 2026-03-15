@@ -21,6 +21,8 @@ use function Cake\Core\pluginSplit;
 
 /**
  * Bake helper
+ *
+ * @extends \Cake\View\Helper<\Cake\View\View>
  */
 class BakeHelper extends Helper
 {
