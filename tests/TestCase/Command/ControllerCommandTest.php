@@ -449,6 +449,9 @@ class ControllerCommandTest extends TestCase
     public function testBakeControllerWithSingularPluralCollision(): void
     {
         $this->generatedFile = APP . 'Controller/NewsController.php';
+        if (file_exists($this->generatedFile)) {
+            unlink($this->generatedFile);
+        }
         $this->exec('bake controller --connection test --no-test News');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
