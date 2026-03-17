@@ -129,6 +129,12 @@ class ControllerCommand extends BakeCommand
         $singularHumanName = $this->_singularHumanName($controllerName);
         $pluralHumanName = $this->_variableName($controllerName);
 
+        // Handle cases where singular and plural are identical (e.g., "news", "sheep")
+        // to avoid variable collisions in generated controller code
+        if ($singularName === $pluralName) {
+            $singularName .= 'Entity';
+        }
+
         $defaultModel = sprintf('%s\Model\Table\%sTable', $namespace, $controllerName);
         if (!class_exists($defaultModel)) {
             $defaultModel = null;

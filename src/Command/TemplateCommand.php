@@ -328,7 +328,7 @@ class TemplateCommand extends BakeCommand
         // Handle cases where singular and plural are identical (e.g., "news", "sheep")
         // to avoid generating invalid code like `foreach ($news as $news)`
         if ($singularVar === $pluralVar) {
-            $singularVar .= 'Item';
+            $singularVar .= 'Entity';
         }
 
         return compact(

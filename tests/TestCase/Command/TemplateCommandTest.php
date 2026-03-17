@@ -914,7 +914,7 @@ class TemplateCommandTest extends TestCase
         // Should NOT have `foreach ($news as $news)` which would overwrite the collection
         $this->assertStringNotContainsString('foreach ($news as $news)', $result);
 
-        // Should have `foreach ($news as $newsItem)` instead
-        $this->assertStringContainsString('foreach ($news as $newsItem)', $result);
+        // Should have `foreach ($news as $newsEntity)` instead
+        $this->assertStringContainsString('foreach ($news as $newsEntity)', $result);
     }
 }

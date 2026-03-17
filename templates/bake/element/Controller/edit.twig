@@ -41,6 +41,9 @@
 {% for assoc in belongsTo|merge(belongsToMany) %}
     {%~ set otherName = Bake.getAssociatedTableAlias(modelObj, assoc) %}
     {%~ set otherPlural = otherName|variable %}
+    {%~ if otherPlural == singularName %}
+        {%~ set otherPlural = otherPlural ~ 'List' %}
+    {%~ endif %}
         ${{ otherPlural }} = $this->{{ currentModelName }}->{{ otherName }}->find('list', limit: 200)->all();
     {%~ set compact = compact|merge(["'#{otherPlural}'"]) %}
 {% endfor %}

@@ -120,6 +120,9 @@
 {% set relations = associations.BelongsToMany|merge(associations.HasMany) %}
 {% for alias, details in relations %}
     {%~ set otherSingularVar = alias|singularize|variable %}
+    {%~ if otherSingularVar == singularVar %}
+        {%~ set otherSingularVar = otherSingularVar ~ 'Related' %}
+    {%~ endif %}
     {%~ set otherPluralHumanName = details.controller|underscore|humanize %}
             <div class="related">
                 <h4><?= __('Related {{ otherPluralHumanName }}') ?></h4>
