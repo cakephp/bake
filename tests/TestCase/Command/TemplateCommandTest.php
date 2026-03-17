@@ -54,6 +54,7 @@ class TemplateCommandTest extends TestCase
         'plugin.Bake.BakeTemplateProfiles',
         'plugin.Bake.CategoryThreads',
         'plugin.Bake.HiddenFields',
+        'plugin.Bake.News',
     ];
 
     /**
@@ -890,5 +891,30 @@ class TemplateCommandTest extends TestCase
         $this->exec('bake template MissingTableClass');
 
         $this->assertExitCode(CommandInterface::CODE_ERROR);
+    }
+
+    /**
+     * Test baking templates for models where singular and plural are identical.
+     *
+     * This tests the fix for generating invalid code like `foreach ($news as $news)`
+     * when the model name is both singular and plural (e.g., "news", "sheep", "fish").
+     *
+     * @return void
+     */
+    public function testBakeIndexWithSingularPluralCollision()
+    {
+        $this->generatedFile = ROOT . 'templates/News/index.php';
+        $this->exec('bake template News index');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+
+        $result = file_get_contents($this->generatedFile);
+
+        // Should NOT have `foreach ($news as $news)` which would overwrite the collection
+        $this->assertStringNotContainsString('foreach ($news as $news)', $result);
+
+        // Should have `foreach ($news as $newsItem)` instead
+        $this->assertStringContainsString('foreach ($news as $newsItem)', $result);
     }
 }

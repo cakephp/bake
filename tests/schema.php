@@ -587,4 +587,16 @@ return [
             'unique_self_referencing_parent' => ['type' => 'unique', 'columns' => ['parent_id']],
         ],
     ],
+    // "news" is both singular and plural - tests variable collision fix
+    [
+        'table' => 'news',
+        'columns' => [
+            'id' => ['type' => 'integer'],
+            'title' => ['type' => 'string', 'length' => 255, 'null' => false],
+            'body' => ['type' => 'text'],
+            'created' => ['type' => 'datetime'],
+            'modified' => ['type' => 'datetime'],
+        ],
+        'constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
+    ],
 ];
