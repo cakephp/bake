@@ -39,6 +39,7 @@ class ControllerCommandTest extends TestCase
         'plugin.Bake.BakeArticlesBakeTags',
         'plugin.Bake.BakeComments',
         'plugin.Bake.BakeTags',
+        'plugin.Bake.News',
         'plugin.Bake.Users',
     ];
 
@@ -434,5 +435,35 @@ class ControllerCommandTest extends TestCase
         $this->assertFileContains('namespace Company\Pastry\Controller;', $this->generatedFile);
         $this->assertFileContains('use Company\Pastry\Controller\AppController;', $this->generatedFile);
         $this->assertFileContains('BakeArticlesController extends AppController', $this->generatedFile);
+    }
+
+    /**
+     * Test baking controller for models where singular and plural are identical.
+     *
+     * This tests the fix for generating variable collisions like `$news` for both
+     * the entity and the paginated collection when the model name is both singular
+     * and plural (e.g., "news", "sheep", "fish").
+     *
+     * @return void
+     */
+    public function testBakeControllerWithSingularPluralCollision(): void
+    {
+        $this->generatedFile = APP . 'Controller/NewsController.php';
+        if (file_exists($this->generatedFile)) {
+            unlink($this->generatedFile);
+        }
+        $this->exec('bake controller --connection test --no-test News');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+
+        $result = file_get_contents($this->generatedFile);
+
+        // In view/edit/add/delete actions, the entity should use 'newsEntity' to avoid collision
+        $this->assertStringContainsString('$newsEntity = $this->News->get(', $result);
+
+        // In index action, the paginated collection should still use 'news'
+        $this->assertStringContainsString('$news = $this->paginate(', $result);
+        $this->assertStringContainsString("compact('news')", $result);
     }
 }

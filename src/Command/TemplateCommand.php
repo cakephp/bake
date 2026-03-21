@@ -325,6 +325,12 @@ class TemplateCommand extends BakeCommand
         $pluralVar = Inflector::variable($this->controllerName);
         $pluralHumanName = $this->_pluralHumanName($this->controllerName);
 
+        // Handle cases where singular and plural are identical (e.g., "news", "sheep")
+        // to avoid generating invalid code like `foreach ($news as $news)`
+        if ($singularVar === $pluralVar) {
+            $singularVar .= 'Entity';
+        }
+
         return compact(
             'modelObject',
             'modelClass',
