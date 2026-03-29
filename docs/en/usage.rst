@@ -64,6 +64,55 @@ For non-conventional relations, you can use references in the constraints / fore
     ->addForeignKey('shipping_country_id', 'countries', 'cid')
 
 
+Bake Enums
+==========
+
+You can use bake to generate `backed enums <https://www.php.net/manual/en/language.enumerations.backed.php>`_
+for use in your models. Enums are placed in **src/Model/Enum/** and implement
+``EnumLabelInterface`` which provides a ``label()`` method for human-readable display.
+
+To bake a string-backed enum::
+
+    bin/cake bake enum ArticleStatus draft,published,archived
+
+This generates **src/Model/Enum/ArticleStatus.php**::
+
+    namespace App\Model\Enum;
+
+    use Cake\Database\Type\EnumLabelInterface;
+    use Cake\Utility\Inflector;
+
+    enum ArticleStatus: string implements EnumLabelInterface
+    {
+        case Draft = 'draft';
+        case Published = 'published';
+        case Archived = 'archived';
+
+        public function label(): string
+        {
+            return Inflector::humanize(Inflector::underscore($this->name));
+        }
+    }
+
+For int-backed enums, use the ``-i`` option and provide values with colons::
+
+    bin/cake bake enum Priority low:1,medium:2,high:3 -i
+
+This generates an int-backed enum::
+
+    enum Priority: int implements EnumLabelInterface
+    {
+        case Low = 1;
+        case Medium = 2;
+        case High = 3;
+
+        // ...
+    }
+
+You can also bake enums into plugins::
+
+    bin/cake bake enum MyPlugin.OrderStatus pending,processing,shipped
+
 Bake Themes
 ===========
 

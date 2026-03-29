@@ -340,8 +340,8 @@ return [
         'table' => 'datatypes',
         'columns' => [
             'id' => ['type' => 'integer', 'null' => false],
-            'decimal_field' => ['type' => 'decimal', 'length' => '6', 'precision' => 3, 'default' => '0.000'],
-            'float_field' => ['type' => 'float', 'length' => '5,2', 'null' => false, 'default' => null],
+            'decimal_field' => ['type' => 'decimal', 'length' => 6, 'precision' => 3, 'default' => '0.000'],
+            'float_field' => ['type' => 'float', 'length' => 5, 'precision' => 2, 'null' => false, 'default' => null],
             'huge_int' => ['type' => 'biginteger'],
             'small_int' => ['type' => 'smallinteger'],
             'tiny_int' => ['type' => 'tinyinteger'],
@@ -586,5 +586,17 @@ return [
             'primary' => ['type' => 'primary', 'columns' => ['id']],
             'unique_self_referencing_parent' => ['type' => 'unique', 'columns' => ['parent_id']],
         ],
+    ],
+    // "news" is both singular and plural - tests variable collision fix
+    [
+        'table' => 'news',
+        'columns' => [
+            'id' => ['type' => 'integer'],
+            'title' => ['type' => 'string', 'length' => 255, 'null' => false],
+            'body' => ['type' => 'text'],
+            'created' => ['type' => 'datetime'],
+            'modified' => ['type' => 'datetime'],
+        ],
+        'constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ],
 ];

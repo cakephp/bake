@@ -60,7 +60,7 @@ class SubsetSchemaCollection implements CollectionInterface
     /**
      * Get the list of tables in this schema collection.
      *
-     * @return list<string>
+     * @return array<string>
      */
     public function listTables(): array
     {

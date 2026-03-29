@@ -23,9 +23,10 @@ class EnumParser
         $definition = [];
         foreach ($enumCases as $k => $enumCase) {
             $case = $value = trim($enumCase);
-            if (str_contains($case, ':')) {
-                $value = trim(mb_substr($case, strpos($case, ':') + 1));
-                $case = mb_substr($case, 0, strpos($case, ':'));
+            $pos = strpos($case, ':');
+            if ($pos !== false) {
+                $value = trim(mb_substr($case, $pos + 1));
+                $case = mb_substr($case, 0, $pos);
             } elseif ($int) {
                 $value = $k;
             }
@@ -52,8 +53,9 @@ class EnumParser
     public static function parseDefinitionString(string $comment): string
     {
         $string = trim(mb_substr($comment, strpos($comment, '[enum]') + 6));
-        if (str_contains($string, ';')) {
-            $string = trim(mb_substr($string, 0, strpos($string, ';')));
+        $pos = strpos($string, ';');
+        if ($pos !== false) {
+            $string = trim(mb_substr($string, 0, $pos));
         }
 
         return $string;

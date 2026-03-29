@@ -112,6 +112,7 @@ abstract class BakeCommand extends Command
      */
     protected function getPrefix(Arguments $args): string
     {
+        /** @var string|null $prefix */
         $prefix = $args->getOption('prefix');
         if (!$prefix) {
             return '';
@@ -225,7 +226,12 @@ abstract class BakeCommand extends Command
     protected function parseFile(string $path): ?ParsedFile
     {
         if (file_exists($path)) {
-            return (new CodeParser())->parseFile(file_get_contents($path));
+            $contents = file_get_contents($path);
+            if ($contents === false) {
+                return null;
+            }
+
+            return (new CodeParser())->parseFile($contents);
         }
 
         return null;

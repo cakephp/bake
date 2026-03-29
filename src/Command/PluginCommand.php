@@ -65,7 +65,7 @@ class PluginCommand extends BakeCommand
         $plugin = implode('/', array_map([Inflector::class, 'camelize'], $parts));
 
         if ($args->getOption('standalone-path')) {
-            $this->path = $args->getOption('standalone-path');
+            $this->path = (string)$args->getOption('standalone-path');
             $this->path = rtrim($this->path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
             $this->isVendor = true;
 
@@ -105,7 +105,8 @@ class PluginCommand extends BakeCommand
     {
         if (!$this->isVendor) {
             $pathOptions = App::path('plugins');
-            $this->path = current($pathOptions);
+            $currentPath = current($pathOptions);
+            $this->path = $currentPath !== false ? $currentPath : '';
 
             if (count($pathOptions) > 1) {
                 $this->findPath($pathOptions, $io);
@@ -130,8 +131,13 @@ class PluginCommand extends BakeCommand
             }
 
             $composer = $this->findComposer($args, $io);
+            if ($composer === false) {
+                $io->error('Could not find composer executable.');
+                $this->abort();
+            }
 
             try {
+                /** @var non-empty-string $cwd */
                 $cwd = getcwd();
 
                 // Windows makes running multiple commands at once hard.
@@ -200,7 +206,7 @@ class PluginCommand extends BakeCommand
         $package = Inflector::dasherize($vendor) . '/' . Inflector::dasherize($name);
 
         $composerConfig = json_decode(
-            file_get_contents(ROOT . DS . 'composer.json'),
+            (string)file_get_contents(ROOT . DS . 'composer.json'),
             true,
         );
 
@@ -221,7 +227,7 @@ class PluginCommand extends BakeCommand
 
         $paths = [];
         if ($args->hasOption('theme')) {
-            $paths[] = Plugin::templatePath($args->getOption('theme'));
+            $paths[] = Plugin::templatePath((string)$args->getOption('theme'));
         }
 
         $paths = array_merge($paths, Configure::read('App.paths.templates'));
@@ -264,8 +270,8 @@ class PluginCommand extends BakeCommand
             $template = substr($template, strrpos($template, 'Plugin' . DIRECTORY_SEPARATOR) + 7, -4);
             $template = rtrim($template, '.');
             $filename = $template;
-            if ($filename === 'src/Plugin.php') {
-                $filename = 'src/' . $name . 'Plugin.php';
+            if ($filename === 'src' . DIRECTORY_SEPARATOR . 'Plugin.php') {
+                $filename = 'src' . DIRECTORY_SEPARATOR . $name . 'Plugin.php';
             }
             $this->_generateFile($renderer, $template, $root, $filename, $io);
         }
@@ -392,7 +398,7 @@ class PluginCommand extends BakeCommand
      *
      * @param \Cake\Console\Arguments $args The command arguments.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return string|bool Either the path to composer or false if it cannot be found.
+     * @return string|false Either the path to composer or false if it cannot be found.
      */
     public function findComposer(Arguments $args, ConsoleIo $io): string|bool
     {
@@ -404,7 +410,7 @@ class PluginCommand extends BakeCommand
             }
         }
         $composer = false;
-        $path = env('PATH');
+        $path = (string)env('PATH');
         if (!empty($path)) {
             $paths = explode(PATH_SEPARATOR, $path);
             $composer = $this->_searchPath($paths, $io);
@@ -418,7 +424,7 @@ class PluginCommand extends BakeCommand
      *
      * @param array<string> $path The paths to search.
      * @param \Cake\Console\ConsoleIo $io The console io
-     * @return string|bool
+     * @return string|false
      */
     protected function _searchPath(array $path, ConsoleIo $io): string|bool
     {

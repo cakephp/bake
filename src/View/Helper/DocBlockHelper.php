@@ -13,6 +13,8 @@ use Cake\View\Helper;
 
 /**
  * DocBlock helper
+ *
+ * @extends \Cake\View\Helper<\Cake\View\View>
  */
 class DocBlockHelper extends Helper
 {

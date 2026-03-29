@@ -26,7 +26,6 @@ use Cake\Core\PluginApplicationInterface;
 use Cake\Http\BaseApplication;
 use DirectoryIterator;
 use ReflectionClass;
-use ReflectionException;
 
 /**
  * Plugin class for bake
@@ -140,11 +139,11 @@ class BakePlugin extends BasePlugin
             $class = $namespace . $item->getBasename('.php');
 
             if (!$hasSubfolder) {
-                try {
-                    $reflection = new ReflectionClass($class);
-                } catch (ReflectionException) {
+                if (!class_exists($class)) {
                     continue;
                 }
+
+                $reflection = new ReflectionClass($class);
                 if (!$reflection->isInstantiable() || !$reflection->isSubclassOf(BakeCommand::class)) {
                     continue;
                 }

@@ -62,7 +62,7 @@ trait CommonOptionsTrait
         // These properties should ideally not exist, but until ConsoleOptionParser
         // gets validation and transform logic they will have to stay.
         if ($args->hasOption('plugin')) {
-            $plugin = $args->getOption('plugin');
+            $plugin = (string)$args->getOption('plugin');
             $parts = explode('/', $plugin);
             $this->plugin = implode('/', array_map([$this, '_camelize'], $parts));
 
@@ -73,9 +73,11 @@ trait CommonOptionsTrait
             }
         }
 
-        $this->theme = $args->getOption('theme');
-        $this->connection = $args->getOption('connection');
-        $this->force = $args->getOption('force');
+        $theme = $args->getOption('theme');
+        $this->theme = is_string($theme) ? $theme : null;
+        $connection = $args->getOption('connection');
+        $this->connection = is_string($connection) ? $connection : 'default';
+        $this->force = (bool)$args->getOption('force');
     }
 
     /**

@@ -295,7 +295,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($items, $args, $io);
 
         $expected = [
@@ -341,7 +341,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $arguments = new Arguments([], ['no-associations' => true], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $articles = $this->getTableLocator()->get('BakeArticle');
         $this->assertEquals([], $command->getAssociations($articles, $arguments, $io));
     }
@@ -359,7 +359,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($items, $args, $io);
         $expected = [
             'belongsTo' => [
@@ -412,7 +412,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($items, $args, $io);
         $expected = [
             'belongsTo' => [
@@ -461,7 +461,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($items, $args, $io);
         $expected = [
             'belongsTo' => [
@@ -514,7 +514,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], ['skip-relation-check' => true], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($items, $args, $io);
         $expected = [
             'belongsTo' => [
@@ -566,7 +566,7 @@ class ModelCommandTest extends TestCase
         ]);
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
 
         $command = new ModelCommand();
         $command->connection = 'test';
@@ -592,7 +592,7 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
 
         $args = new Arguments([], [], []);
-        $io = $this->createMock(ConsoleIo::class);
+        $io = $this->createStub(ConsoleIo::class);
         $result = $command->getAssociations($model, $args, $io);
 
         $expected = [
@@ -963,7 +963,12 @@ class ModelCommandTest extends TestCase
             $this->assertSame($value['kind'], $result[$key]['kind']);
 
             $this->assertArrayHasKey('type', $result[$key]);
-            $this->assertSame($value['type'], $result[$key]['type']);
+            // PostgreSQL may return 'timestampfractional' instead of 'timestamp'
+            if ($value['type'] === 'timestamp' && $result[$key]['type'] === 'timestampfractional') {
+                $this->assertTrue(true);
+            } else {
+                $this->assertSame($value['type'], $result[$key]['type']);
+            }
 
             $this->assertArrayHasKey('null', $result[$key]);
             $this->assertSame($value['null'], $result[$key]['null']);
@@ -1552,6 +1557,7 @@ class ModelCommandTest extends TestCase
                 'name' => 'isUnique',
                 'fields' => ['title', 'user_id'],
                 'options' => [],
+                'message' => 'This combination of title and user_id already exists',
             ],
         ];
         $this->assertEquals($expected, $result);
@@ -1593,11 +1599,13 @@ class ModelCommandTest extends TestCase
                 'name' => 'isUnique',
                 'fields' => ['department_id', 'username'],
                 'options' => [],
+                'message' => 'This combination of department_id and username already exists',
             ],
             [
                 'name' => 'isUnique',
                 'fields' => ['department_id', 'email'],
                 'options' => [],
+                'message' => 'This combination of department_id and email already exists',
             ],
             [
                 'name' => 'existsIn',
@@ -1670,6 +1678,7 @@ class ModelCommandTest extends TestCase
                 'name' => 'isUnique',
                 'fields' => ['department_id', 'username'],
                 'options' => [],
+                'message' => 'This combination of department_id and username already exists',
             ],
         ];
         $this->assertEquals($expected, $result);

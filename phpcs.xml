@@ -6,6 +6,10 @@
     <file>tests/</file>
 
     <rule ref="CakePHP" />
+    <arg value="nps"/>
+    <arg name="colors"/>
+    <arg name="parallel" value="4"/>
+    <arg name="cache" value=".phpcs.cache"/>
 
     <exclude-pattern>*/comparisons/*</exclude-pattern>
     <exclude-pattern>tests/test_app/*</exclude-pattern>
