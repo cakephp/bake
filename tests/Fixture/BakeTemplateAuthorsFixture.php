@@ -24,15 +24,11 @@ class BakeTemplateAuthorsFixture extends TestFixture
 {
     /**
      * Avoid overriding AuthorsFixture's table.
-     *
-     * @var string
      */
     public string $table = 'bake_authors';
 
     /**
      * records property
-     *
-     * @var array
      */
     public array $records = [
         ['name' => 'mariano', 'role_id' => 1],

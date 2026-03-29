@@ -49,14 +49,14 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setAppNamespace('Bake\Test\App');
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Test' . DS;
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->getTableLocator()->clear();
@@ -68,7 +68,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteNoArgsPrintsTypeOptions()
+    public function testExecuteNoArgsPrintsTypeOptions(): void
     {
         $this->exec('bake test');
 
@@ -85,7 +85,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteOneArgPrintsClassOptions()
+    public function testExecuteOneArgPrintsClassOptions(): void
     {
         $this->exec('bake test entity');
 
@@ -98,7 +98,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithTwoArgs()
+    public function testExecuteWithTwoArgs(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Model/Table/TestTaskTagTableTest.php',
@@ -118,7 +118,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithPluginName()
+    public function testExecuteWithPluginName(): void
     {
         $this->_loadTestPlugin('TestBake');
 
@@ -144,7 +144,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithAll()
+    public function testExecuteWithAll(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Model/Table/ArticlesTableTest.php',
@@ -166,7 +166,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testOutputClassOptionsForTable()
+    public function testOutputClassOptionsForTable(): void
     {
         $this->exec('bake test table');
 
@@ -187,7 +187,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testOutputClassOptionsForTablePlugin()
+    public function testOutputClassOptionsForTablePlugin(): void
     {
         $this->loadPlugins(['BakeTest' => ['path' => ROOT . 'Plugin' . DS . 'BakeTest' . DS]]);
         $this->exec('bake test table --plugin BakeTest');
@@ -206,7 +206,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMethodIntrospection()
+    public function testMethodIntrospection(): void
     {
         $command = new TestCommand();
         $result = $command->getTestableMethods('Bake\Test\App\Model\Table\ArticlesTable');
@@ -219,7 +219,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testFixtureArrayGenerationFromModel()
+    public function testFixtureArrayGenerationFromModel(): void
     {
         $command = new TestCommand();
         $subject = new ArticlesTable();
@@ -238,7 +238,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testFixtureArrayGenerationIgnoreSelfAssociation()
+    public function testFixtureArrayGenerationIgnoreSelfAssociation(): void
     {
         $this->getTableLocator()->clear();
         $subject = new CategoryThreadsTable();
@@ -255,7 +255,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testFixtureGenerationFromController()
+    public function testFixtureGenerationFromController(): void
     {
         $subject = new PostsController(new Request());
         $command = new TestCommand();
@@ -271,7 +271,7 @@ class TestCommandTest extends TestCase
      *
      * @return array
      */
-    public static function realClassProvider()
+    public static function realClassProvider(): array
     {
         return [
             ['Entity', 'Article', 'App\Model\Entity\Article'],
@@ -295,7 +295,7 @@ class TestCommandTest extends TestCase
      * @return void
      */
     #[DataProvider('realClassProvider')]
-    public function testGetRealClassname($type, $name, $expected)
+    public function testGetRealClassname(string $type, string $name, string $expected): void
     {
         $this->setAppNamespace('App');
 
@@ -309,7 +309,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetRealClassnamePlugin()
+    public function testGetRealClassnamePlugin(): void
     {
         $this->_loadTestPlugin('TestBake');
         $command = new TestCommand();
@@ -325,7 +325,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetRealClassnamePrefix()
+    public function testGetRealClassnamePrefix(): void
     {
         $command = new TestCommand();
         $result = $command->getRealClassname('Controller', 'Posts', 'Api/Public');
@@ -339,7 +339,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeFixturesParam()
+    public function testBakeFixturesParam(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Model/Table/AuthorsTableTest.php',
@@ -356,7 +356,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeNoFixtureParam()
+    public function testBakeNoFixtureParam(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Model/Table/AuthorsTableTest.php',
@@ -373,7 +373,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeCellTest()
+    public function testBakeCellTest(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/View/Cell/ArticlesCellTest.php',
@@ -390,7 +390,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeCommandTest()
+    public function testBakeCommandTest(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Command/OtherExampleCommandTest.php',
@@ -407,7 +407,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeModelTest()
+    public function testBakeModelTest(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Model/Table/ArticlesTableTest.php',
@@ -424,7 +424,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeControllerTest()
+    public function testBakeControllerTest(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Controller/PostsControllerTest.php',
@@ -441,7 +441,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeControllerWithoutModelTest()
+    public function testBakeControllerWithoutModelTest(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Controller/NoModelControllerTest.php',
@@ -458,7 +458,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakePrefixControllerTest()
+    public function testBakePrefixControllerTest(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Controller/Admin/PostsControllerTest.php',
@@ -475,7 +475,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakePrefixControllerTestWithCliOption()
+    public function testBakePrefixControllerTestWithCliOption(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Controller/Admin/PostsControllerTest.php',
@@ -492,7 +492,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeComponentTest()
+    public function testBakeComponentTest(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Controller/Component/AppleComponentTest.php',
@@ -509,7 +509,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeBehaviorTest()
+    public function testBakeBehaviorTest(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/Model/Behavior/ExampleBehaviorTest.php',
@@ -526,7 +526,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeHelperTest()
+    public function testBakeHelperTest(): void
     {
         $this->generatedFiles = [
             ROOT . 'tests/TestCase/View/Helper/ExampleHelperTest.php',
@@ -543,7 +543,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeUnknownClass()
+    public function testBakeUnknownClass(): void
     {
         $this->exec('bake test Foo Example');
 
@@ -555,7 +555,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGenerateConstructor()
+    public function testGenerateConstructor(): void
     {
         $command = new TestCommand();
         $result = $command->generateConstructor('Controller', 'PostsController');
@@ -600,7 +600,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGenerateUses()
+    public function testGenerateUses(): void
     {
         $command = new TestCommand();
         $result = $command->generateUses('Table', 'App\Model\Table\PostsTable');
@@ -628,7 +628,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMockClassGeneration()
+    public function testMockClassGeneration(): void
     {
         $command = new TestCommand();
         $result = $command->hasMockClass('Controller');
@@ -640,7 +640,7 @@ class TestCommandTest extends TestCase
      *
      * @return array
      */
-    public static function caseFileNameProvider()
+    public static function caseFileNameProvider(): array
     {
         return [
             ['Table', 'App\Model\Table\PostsTable', 'TestCase/Model/Table/PostsTableTest.php'],
@@ -663,7 +663,7 @@ class TestCommandTest extends TestCase
      * @return void
      */
     #[DataProvider('caseFileNameProvider')]
-    public function testTestCaseFileName($type, $class, $expected)
+    public function testTestCaseFileName(string $type, string $class, string $expected): void
     {
         $this->setAppNamespace('App');
         $command = new TestCommand();
@@ -677,7 +677,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testTestCaseFileNamePlugin()
+    public function testTestCaseFileNamePlugin(): void
     {
         $this->loadPlugins([
             'TestTest' => [
@@ -698,7 +698,7 @@ class TestCommandTest extends TestCase
      *
      * @return array
      */
-    public static function mapTypeProvider()
+    public static function mapTypeProvider(): array
     {
         return [
             ['Controller', 'Controller'],
@@ -717,7 +717,7 @@ class TestCommandTest extends TestCase
      * @return void
      */
     #[DataProvider('mapTypeProvider')]
-    public function testMapType($original, $expected)
+    public function testMapType(string $original, string $expected): void
     {
         $command = new TestCommand();
         $this->assertEquals($expected, $command->mapType($original));
@@ -728,7 +728,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGenerateUsesDocBlockController()
+    public function testGenerateUsesDocBlockController(): void
     {
         $testsPath = ROOT . 'tests' . DS;
 
@@ -746,7 +746,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGenerateUsesDocBlockTable()
+    public function testGenerateUsesDocBlockTable(): void
     {
         $testsPath = ROOT . 'tests' . DS;
 
@@ -768,7 +768,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeGenericClassWithoutConstructor()
+    public function testBakeGenericClassWithoutConstructor(): void
     {
         $testsPath = ROOT . 'tests' . DS;
         $this->generatedFiles = [
@@ -810,7 +810,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeGenericClassWithRequiredConstructor()
+    public function testBakeGenericClassWithRequiredConstructor(): void
     {
         $testsPath = ROOT . 'tests' . DS;
         $this->generatedFiles = [
@@ -852,7 +852,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeGenericClassNamespace()
+    public function testBakeGenericClassNamespace(): void
     {
         $testsPath = ROOT . 'tests' . DS;
         $this->generatedFiles = [
@@ -881,7 +881,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeGenericClassWithBaseNamespace()
+    public function testBakeGenericClassWithBaseNamespace(): void
     {
         $testsPath = ROOT . 'tests' . DS;
         $this->generatedFiles = [
@@ -916,7 +916,7 @@ class TestCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeGenericClassValidatesBackslashes()
+    public function testBakeGenericClassValidatesBackslashes(): void
     {
         // Simulate what happens when user doesn't quote: App\Error\ErrorLogger
         // Bash strips backslashes resulting in: AppErrorErrorLogger

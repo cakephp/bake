@@ -21,9 +21,6 @@ namespace Bake\CodeGen;
  */
 class ParsedFile
 {
-    /**
-     * @var string
-     */
     public string $namespace;
 
     /**
@@ -41,9 +38,6 @@ class ParsedFile
      */
     public array $constImports;
 
-    /**
-     * @var \Bake\CodeGen\ParsedClass
-     */
     public ParsedClass $class;
 
     /**

@@ -30,8 +30,6 @@ class EnumCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
-     *
-     * @var string
      */
     public string $pathFragment = 'Model/Enum/';
 
@@ -92,7 +90,7 @@ class EnumCommand extends SimpleBakeCommand
      * @param \Cake\Console\ConsoleOptionParser $parser The option parser to update.
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = $this->_setCommonOptions($parser);
 
@@ -141,7 +139,7 @@ class EnumCommand extends SimpleBakeCommand
         foreach ($cases as $case => $value) {
             $case = Inflector::camelize(Inflector::underscore($case));
             if (is_string($value)) {
-                $value = '\'' . $value . '\'';
+                $value = "'" . $value . "'";
             }
             $formatted[] = 'case ' . $case . ' = ' . $value . ';';
         }

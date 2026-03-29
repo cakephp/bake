@@ -23,8 +23,6 @@ class ComponentCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
-     *
-     * @var string
      */
     public string $pathFragment = 'Controller/Component/';
 

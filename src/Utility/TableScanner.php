@@ -29,9 +29,6 @@ use RuntimeException;
  */
 class TableScanner
 {
-    /**
-     * @var \Cake\Database\Connection
-     */
     protected Connection $connection;
 
     /**
@@ -120,10 +117,8 @@ class TableScanner
     protected function shouldSkip(string $table): bool
     {
         foreach ($this->ignore as $ignore) {
-            if (str_starts_with($ignore, '/')) {
-                if ((bool)preg_match($ignore, $table)) {
-                    return true;
-                }
+            if (str_starts_with($ignore, '/') && (bool)preg_match($ignore, $table)) {
+                return true;
             }
 
             if ($ignore === $table) {

@@ -47,7 +47,7 @@ class ControllerAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
@@ -63,7 +63,7 @@ class ControllerAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->getTableLocator()->clear();
@@ -74,7 +74,7 @@ class ControllerAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         foreach ($this->tables as $table) {
             $plural = Inflector::camelize($table);

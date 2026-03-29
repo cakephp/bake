@@ -47,7 +47,7 @@ class FixtureAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -64,7 +64,7 @@ class FixtureAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $connection = ConnectionManager::get('test');
@@ -76,7 +76,7 @@ class FixtureAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainIntoAll()
+    public function testMainIntoAll(): void
     {
         $this->generatedFiles = [
              ROOT . 'tests/Fixture/ArticlesFixture.php',
@@ -95,7 +95,7 @@ class FixtureAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function testAllWithCountAndRecordsFlags()
+    public function testAllWithCountAndRecordsFlags(): void
     {
         $this->generatedFiles = [
              ROOT . 'tests/Fixture/ArticlesFixture.php',
@@ -117,7 +117,7 @@ class FixtureAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function testAllWithSchemaImport()
+    public function testAllWithSchemaImport(): void
     {
         $this->generatedFiles = [
              ROOT . 'tests/Fixture/ArticlesFixture.php',

@@ -51,7 +51,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
@@ -65,7 +65,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->getTableLocator()->clear();
@@ -76,7 +76,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @return void
      */
-    protected function _compareBakeTableResult($name, $comparisonFile)
+    protected function _compareBakeTableResult($name, string $comparisonFile)
     {
         $this->generatedFiles = [
             APP . "Model/Table/{$name}Table.php",
@@ -93,7 +93,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @return void
      */
-    public function testBakeAssociationDetectionCategoriesTable()
+    public function testBakeAssociationDetectionCategoriesTable(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
@@ -105,7 +105,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @return void
      */
-    public function testBakeAssociationDetectionCategoriesTableSigned()
+    public function testBakeAssociationDetectionCategoriesTableSigned(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
@@ -119,7 +119,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @return void
      */
-    public function testBakeAssociationDetectionCategoriesProductsTable()
+    public function testBakeAssociationDetectionCategoriesProductsTable(): void
     {
         $this->_compareBakeTableResult('CategoriesProducts', __FUNCTION__);
     }
@@ -129,7 +129,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @return void
      */
-    public function testBakeAssociationDetectionOldProductsTable()
+    public function testBakeAssociationDetectionOldProductsTable(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
@@ -141,7 +141,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @return void
      */
-    public function testBakeAssociationDetectionOldProductsTableSigned()
+    public function testBakeAssociationDetectionOldProductsTableSigned(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
@@ -155,7 +155,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @return void
      */
-    public function testBakeAssociationDetectionProductVersionsTable()
+    public function testBakeAssociationDetectionProductVersionsTable(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Mysql, 'Incompatible with mysql');
@@ -168,7 +168,7 @@ class ModelCommandAssociationDetectionTest extends TestCase
      *
      * @return void
      */
-    public function testBakeAssociationDetectionProductVersionsTableSigned()
+    public function testBakeAssociationDetectionProductVersionsTableSigned(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');

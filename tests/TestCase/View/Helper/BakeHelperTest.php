@@ -60,7 +60,7 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -75,7 +75,7 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         unset($this->BakeHelper);
@@ -86,7 +86,7 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function testAliasExtractorFilteredHasMany()
+    public function testAliasExtractorFilteredHasMany(): void
     {
         $table = $this->getTableLocator()->get('Articles', [
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
@@ -107,7 +107,7 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function testAliasExtractorBelongsTo()
+    public function testAliasExtractorBelongsTo(): void
     {
         $table = $this->getTableLocator()->get('Articles', [
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
@@ -122,7 +122,7 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function testAliasExtractorBelongsToMany()
+    public function testAliasExtractorBelongsToMany(): void
     {
         $table = $this->getTableLocator()->get('Articles', [
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
@@ -137,7 +137,7 @@ class BakeHelperTest extends TestCase
      *
      * @return void
      */
-    public function testEscapeArguments()
+    public function testEscapeArguments(): void
     {
         $arguments = [
             100,

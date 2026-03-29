@@ -32,15 +32,11 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
 {
     /**
      * The command collection to get help on.
-     *
-     * @var \Cake\Console\CommandCollection
      */
     protected CommandCollection $commands;
 
     /**
      * The HelpCommand to get help.
-     *
-     * @var \Cake\Console\Command\HelpCommand
      */
     protected HelpCommand $help;
 
@@ -110,7 +106,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
         if ($args->hasArgumentAt(0)) {
             $name = $args->getArgumentAt(0);
             $io->error(
-                "Could not find bake command named `$name`."
+                "Could not find bake command named `{$name}`."
                 . ' Run `bake --help` to get a list of commands.',
             );
 
@@ -127,7 +123,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
      * @param \Cake\Console\ConsoleOptionParser $parser The console option parser
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $this->help = new HelpCommand();
         $parser = $this->help->buildOptionParser($parser);
@@ -139,12 +135,12 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
             );
         $commands = [];
         foreach ($this->commands as $command => $class) {
-            if (substr($command, 0, 4) === 'bake') {
+            if (str_starts_with($command, 'bake')) {
                 $parts = explode(' ', $command);
 
                 // Remove `bake`
                 array_shift($parts);
-                if (count($parts) === 0) {
+                if ($parts === []) {
                     continue;
                 }
                 $commands[$command] = $class;

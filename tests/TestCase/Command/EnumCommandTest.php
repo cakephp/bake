@@ -30,7 +30,7 @@ class EnumCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
@@ -42,7 +42,7 @@ class EnumCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEnum()
+    public function testBakeEnum(): void
     {
         $this->generatedFile = APP . 'Model/Enum/FooBar.php';
         $this->exec('bake enum FooBar', ['y']);
@@ -58,7 +58,7 @@ class EnumCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEnumBackedInt()
+    public function testBakeEnumBackedInt(): void
     {
         $this->generatedFile = APP . 'Model/Enum/FooBar.php';
         $this->exec('bake enum FooBar -i', ['y']);
@@ -74,7 +74,7 @@ class EnumCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEnumBackedWithCases()
+    public function testBakeEnumBackedWithCases(): void
     {
         $this->generatedFile = APP . 'Model/Enum/FooBar.php';
         $this->exec('bake enum FooBar foo,bar:b,bar_baz', ['y']);
@@ -90,7 +90,7 @@ class EnumCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEnumBackedIntWithCases()
+    public function testBakeEnumBackedIntWithCases(): void
     {
         $this->generatedFile = APP . 'Model/Enum/FooBar.php';
         $this->exec('bake enum FooBar foo,bar,bar_baz:9 -i', ['y']);

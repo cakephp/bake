@@ -62,7 +62,7 @@ class FixtureCommand extends BakeCommand
      * @param \Cake\Console\ConsoleOptionParser $parser Option parser to update.
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = $this->_setCommonOptions($parser);
 
@@ -163,7 +163,7 @@ class FixtureCommand extends BakeCommand
 
         try {
             $data = $this->readSchema($model, $useTable);
-        } catch (CakeException $e) {
+        } catch (CakeException) {
             $this->getTableLocator()->remove($model);
             $useTable = Inflector::underscore($model);
             $table = $useTable;
@@ -288,19 +288,19 @@ class FixtureCommand extends BakeCommand
             /** @var array $fieldData */
             $fieldData = $table->getColumn($field);
             $properties = implode(', ', $this->_values($fieldData));
-            $cols[] = "        '$field' => [$properties],";
+            $cols[] = "        '{$field}' => [{$properties}],";
         }
         foreach ($table->indexes() as $index) {
             /** @var array $fieldData */
             $fieldData = $table->getIndex($index);
             $properties = implode(', ', $this->_values($fieldData));
-            $indexes[] = "            '$index' => [$properties],";
+            $indexes[] = "            '{$index}' => [{$properties}],";
         }
         foreach ($table->constraints() as $index) {
             /** @var array $fieldData */
             $fieldData = $table->getConstraint($index);
             $properties = implode(', ', $this->_values($fieldData));
-            $constraints[] = "            '$index' => [$properties],";
+            $constraints[] = "            '{$index}' => [{$properties}],";
         }
         $options = $this->_values($table->getOptions());
 
@@ -318,7 +318,7 @@ class FixtureCommand extends BakeCommand
             $content .= "        '_options' => [\n" . implode(",\n", $options) . "\n        ],\n";
         }
 
-        return "[\n$content    ]";
+        return "[\n{$content}    ]";
     }
 
     /**
@@ -339,11 +339,7 @@ class FixtureCommand extends BakeCommand
                 if ($val === 'NULL') {
                     $val = 'null';
                 }
-                if (!is_numeric($key)) {
-                    $vals[] = "'{$key}' => {$val}";
-                } else {
-                    $vals[] = "{$val}";
-                }
+                $vals[] = is_numeric($key) ? "{$val}" : "'{$key}' => {$val}";
             }
         }
 
@@ -425,7 +421,7 @@ class FixtureCommand extends BakeCommand
                         $insert = Text::uuid();
                         break;
                 }
-                if (str_starts_with($fieldInfo['type'], 'enum-')) {
+                if (str_starts_with((string)$fieldInfo['type'], 'enum-')) {
                     $insert = null;
                     if ($fieldInfo['default'] || $fieldInfo['null'] === false) {
                         $dbType = TypeFactory::build($fieldInfo['type']);

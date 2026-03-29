@@ -30,9 +30,6 @@ class ControllerAllCommand extends BakeCommand
 {
     use LocatorAwareTrait;
 
-    /**
-     * @var \Bake\Command\ControllerCommand
-     */
     protected ControllerCommand $controllerCommand;
 
     /**
@@ -83,7 +80,7 @@ class ControllerAllCommand extends BakeCommand
      * @param \Cake\Console\ConsoleOptionParser $parser The console option parser
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = $this->controllerCommand->buildOptionParser($parser);
         $parser

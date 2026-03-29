@@ -46,7 +46,7 @@ class AllCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -62,7 +62,7 @@ class AllCommandTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $connection = ConnectionManager::get('test');
@@ -74,7 +74,7 @@ class AllCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $path = APP;
         $testsPath = ROOT . 'tests' . DS;
@@ -104,7 +104,7 @@ class AllCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteEverything()
+    public function testExecuteEverything(): void
     {
         $path = APP;
         $testsPath = ROOT . 'tests' . DS;
@@ -145,7 +145,7 @@ class AllCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteWithPrefix()
+    public function testExecuteWithPrefix(): void
     {
         $path = APP;
         $testsPath = ROOT . 'tests' . DS;
@@ -191,7 +191,7 @@ class AllCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGenerateLinkDocBlockController()
+    public function testGenerateLinkDocBlockController(): void
     {
         $path = APP;
         $testsPath = ROOT . 'tests' . DS;

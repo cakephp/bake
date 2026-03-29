@@ -34,15 +34,11 @@ class BakePlugin extends BasePlugin
 {
     /**
      * Plugin name.
-     *
-     * @var string|null
      */
     protected ?string $name = 'Bake';
 
     /**
      * Load routes or not
-     *
-     * @var bool
      */
     protected bool $routesEnabled = false;
 
@@ -95,13 +91,13 @@ class BakePlugin extends BasePlugin
             $pluginPath = $plugin->getClassPath();
 
             $found = $this->findInPath($namespace, $pluginPath);
-            if (count($found)) {
+            if ($found !== []) {
                 $commands->addMany($found);
             }
         }
 
         $found = $this->findInPath(Configure::read('App.namespace'), APP);
-        if (count($found)) {
+        if ($found !== []) {
             $commands->addMany($found);
         }
 

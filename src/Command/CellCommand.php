@@ -28,8 +28,6 @@ class CellCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
-     *
-     * @var string
      */
     public string $pathFragment = 'View/Cell/';
 
@@ -87,7 +85,7 @@ class CellCommand extends SimpleBakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bake(string $name, Arguments $args, ConsoleIo $io): void
+    protected function bake(string $name, Arguments $args, ConsoleIo $io): void
     {
         $this->bakeTemplate($name, $args, $io);
 
@@ -116,7 +114,7 @@ class CellCommand extends SimpleBakeCommand
      * @param \Cake\Console\ConsoleOptionParser $parser Parser instance
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = parent::buildOptionParser($parser);
         $parser->addOption('prefix', [

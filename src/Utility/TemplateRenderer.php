@@ -34,15 +34,11 @@ class TemplateRenderer
 
     /**
      * BakeView instance
-     *
-     * @var \Bake\View\BakeView|null
      */
     protected ?BakeView $view = null;
 
     /**
      * Template theme
-     *
-     * @var string|null
      */
     protected ?string $theme;
 
@@ -64,7 +60,7 @@ class TemplateRenderer
      */
     public function getView(): View
     {
-        if ($this->view) {
+        if ($this->view instanceof BakeView) {
             return $this->view;
         }
 
@@ -99,7 +95,7 @@ class TemplateRenderer
 
         try {
             return $view->render($template);
-        } catch (MissingTemplateException $e) {
+        } catch (MissingTemplateException) {
             $message = sprintf('No bake template found for "%s" skipping file generation.', $template);
             throw new MissingTemplateException($message);
         }

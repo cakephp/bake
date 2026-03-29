@@ -8,8 +8,6 @@ use InvalidArgumentException;
 class EnumParser
 {
     /**
-     * @param string|null $casesString
-     * @param bool $int
      * @return array<string, int|string>
      */
     public static function parseCases(?string $casesString, bool $int): array
@@ -34,8 +32,8 @@ class EnumParser
             if (!preg_match('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$/', $case)) {
                 throw new InvalidArgumentException(sprintf('`%s` is not a valid enum case', $case));
             }
-            if (is_string($value) && str_contains($value, '\'')) {
-                throw new InvalidArgumentException(sprintf('`%s` value cannot contain `\'` character', $case));
+            if (is_string($value) && str_contains($value, "'")) {
+                throw new InvalidArgumentException(sprintf("`%s` value cannot contain `'` character", $case));
             }
 
             $definition[$case] = $int ? (int)$value : $value;
@@ -47,7 +45,6 @@ class EnumParser
     /**
      * Parses an enum definition from a DB column comment.
      *
-     * @param string $comment
      * @return string
      */
     public static function parseDefinitionString(string $comment): string
@@ -55,7 +52,7 @@ class EnumParser
         $string = trim(mb_substr($comment, strpos($comment, '[enum]') + 6));
         $pos = strpos($string, ';');
         if ($pos !== false) {
-            $string = trim(mb_substr($string, 0, $pos));
+            return trim(mb_substr($string, 0, $pos));
         }
 
         return $string;

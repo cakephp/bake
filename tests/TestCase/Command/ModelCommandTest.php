@@ -68,7 +68,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
@@ -82,7 +82,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->getTableLocator()->clear();
@@ -93,7 +93,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testListAllConnection()
+    public function testListAllConnection(): void
     {
         $this->exec('bake model --connection test');
 
@@ -110,7 +110,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetTable()
+    public function testGetTable(): void
     {
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
@@ -127,7 +127,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetTableObject()
+    public function testGetTableObject(): void
     {
         $command = new ModelCommand();
         $command->connection = 'test';
@@ -147,7 +147,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetTableObjectPrefix()
+    public function testGetTableObjectPrefix(): void
     {
         $command = new ModelCommand();
         $command->connection = 'test';
@@ -206,7 +206,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testApplyAssociations()
+    public function testApplyAssociations(): void
     {
         $articles = $this->getTableLocator()->get('TodoItems');
         $assocs = [
@@ -248,7 +248,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testApplyAssociationsConcreteClass()
+    public function testApplyAssociationsConcreteClass(): void
     {
         Configure::write('App.namespace', 'Bake\Test\App');
         $articles = $this->getTableLocator()->get('Articles');
@@ -287,7 +287,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetAssociations()
+    public function testGetAssociations(): void
     {
         $items = $this->getTableLocator()->get('TodoItems');
 
@@ -335,7 +335,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetAssociationsNoFlag()
+    public function testGetAssociationsNoFlag(): void
     {
         $command = new ModelCommand();
         $command->connection = 'test';
@@ -351,7 +351,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetAssociationsPlugin()
+    public function testGetAssociationsPlugin(): void
     {
         $items = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
@@ -403,7 +403,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetAssociationsIgnoreUnderscoreIdIfNoDbTable()
+    public function testGetAssociationsIgnoreUnderscoreIdIfNoDbTable(): void
     {
         $items = $this->getTableLocator()->get('TodoItems');
 
@@ -452,7 +452,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetAssociationsAddAssociationIfTableExist()
+    public function testGetAssociationsAddAssociationIfTableExist(): void
     {
         $items = $this->getTableLocator()->get('TodoItems');
 
@@ -505,7 +505,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetAssociationsAddAssociationIfNoTableExistButAliasIsAllowed()
+    public function testGetAssociationsAddAssociationIfNoTableExistButAliasIsAllowed(): void
     {
         $items = $this->getTableLocator()->get('TodoItems');
 
@@ -557,7 +557,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetAssociationsIgnoreUnderscoreId()
+    public function testGetAssociationsIgnoreUnderscoreId(): void
     {
         $model = $this->getTableLocator()->get('BakeComments');
         $model->setSchema([
@@ -585,7 +585,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetAssociationsConstraints()
+    public function testGetAssociationsConstraints(): void
     {
         $model = $this->getTableLocator()->get('Invitations');
         $command = new ModelCommand();
@@ -617,7 +617,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBelongsToGeneration()
+    public function testBelongsToGeneration(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
@@ -667,7 +667,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBelongsToGenerationConstraints()
+    public function testBelongsToGenerationConstraints(): void
     {
         $model = $this->getTableLocator()->get('Relations');
         $command = new ModelCommand();
@@ -696,7 +696,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBelongsToGenerationConstraintsAliased()
+    public function testBelongsToGenerationConstraintsAliased(): void
     {
         $model = $this->getTableLocator()->get('Invitations');
         $command = new ModelCommand();
@@ -727,7 +727,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBelongsToGenerationCompositeKey()
+    public function testBelongsToGenerationCompositeKey(): void
     {
         $model = $this->getTableLocator()->get('TodoItemsTodoLabels');
         $command = new ModelCommand();
@@ -755,7 +755,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBelongsToGenerationIdMidColumn()
+    public function testBelongsToGenerationIdMidColumn(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
         $model->setSchema([
@@ -772,7 +772,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBelongsToGenerationPrimaryKey()
+    public function testBelongsToGenerationPrimaryKey(): void
     {
         $model = $this->getTableLocator()->get('Articles');
         $model->setSchema([
@@ -792,7 +792,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testHasOneGeneration()
+    public function testHasOneGeneration(): void
     {
         $command = new ModelCommand();
         $command->connection = 'test';
@@ -819,7 +819,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testHasManyGeneration()
+    public function testHasManyGeneration(): void
     {
         $command = new ModelCommand();
         $command->connection = 'test';
@@ -885,7 +885,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testHasAndBelongsToManyGeneration()
+    public function testHasAndBelongsToManyGeneration(): void
     {
         $command = new ModelCommand();
         $command->connection = 'test';
@@ -909,7 +909,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetEntityPropertySchema()
+    public function testGetEntityPropertySchema(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
         $model->belongsTo('BakeUsers');
@@ -996,7 +996,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetFields()
+    public function testGetFields(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
 
@@ -1020,7 +1020,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetFieldsDisabled()
+    public function testGetFieldsDisabled(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
         $args = new Arguments([], ['no-fields' => true], []);
@@ -1034,7 +1034,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetFieldsWhiteList()
+    public function testGetFieldsWhiteList(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
 
@@ -1055,7 +1055,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetHiddenFields()
+    public function testGetHiddenFields(): void
     {
         $model = $this->getTableLocator()->get('Users');
 
@@ -1073,7 +1073,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetHiddenFieldsDisabled()
+    public function testGetHiddenFieldsDisabled(): void
     {
         $model = $this->getTableLocator()->get('Users');
 
@@ -1088,7 +1088,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetHiddenFieldsWhiteList()
+    public function testGetHiddenFieldsWhiteList(): void
     {
         $model = $this->getTableLocator()->get('Users');
 
@@ -1109,7 +1109,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetPrimaryKey()
+    public function testGetPrimaryKey(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
@@ -1130,7 +1130,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetValidationDisabled()
+    public function testGetValidationDisabled(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
@@ -1144,7 +1144,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetValidation()
+    public function testGetValidation(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
@@ -1192,7 +1192,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetValidationSigned()
+    public function testGetValidationSigned(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
@@ -1235,7 +1235,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetValidationUniqueDateField()
+    public function testGetValidationUniqueDateField(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
         $schema = $model->getSchema();
@@ -1263,7 +1263,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetValidationTree()
+    public function testGetValidationTree(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
@@ -1297,7 +1297,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetValidationTreeSigned()
+    public function testGetValidationTreeSigned(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
@@ -1331,7 +1331,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetValidationExcludeForeignKeysSigned()
+    public function testGetValidationExcludeForeignKeysSigned(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Sqlite, 'Incompatible with sqlite');
@@ -1467,7 +1467,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetRulesDisabled()
+    public function testGetRulesDisabled(): void
     {
         $model = $this->getTableLocator()->get('Users');
         $command = new ModelCommand();
@@ -1481,7 +1481,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetRules()
+    public function testGetRules(): void
     {
         $model = $this->getTableLocator()->get('Users');
         $associations = [
@@ -1532,7 +1532,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetRulesUniqueKeys()
+    public function testGetRulesUniqueKeys(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
         $model->getSchema()->addConstraint('unique_title', [
@@ -1689,7 +1689,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetBehaviorsAutoDetect()
+    public function testGetBehaviorsAutoDetect(): void
     {
         $command = new ModelCommand();
         $command->connection = 'test';
@@ -1708,7 +1708,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetDisplayField()
+    public function testGetDisplayField(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
@@ -1726,7 +1726,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeFixture()
+    public function testBakeFixture(): void
     {
         $this->generatedFiles = [
             APP . 'Model/Table/TodoItemsTable.php',
@@ -1745,7 +1745,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeFixtureDisabled()
+    public function testBakeFixtureDisabled(): void
     {
         $this->generatedFiles = [
             APP . 'Model/Table/TodoItemsTable.php',
@@ -1764,7 +1764,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeTest()
+    public function testBakeTest(): void
     {
         $this->generatedFiles = [
             APP . 'Model/Table/TodoItemsTable.php',
@@ -1783,7 +1783,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeTableValidation()
+    public function testBakeTableValidation(): void
     {
         $this->generatedFiles = [
             APP . 'Model/Table/TestBakeArticlesTable.php',
@@ -1940,7 +1940,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeTableConfig()
+    public function testBakeTableConfig(): void
     {
         $this->generatedFiles = [
             APP . 'Model/Table/ItemsTable.php',
@@ -1959,7 +1959,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntitySimple()
+    public function testBakeEntitySimple(): void
     {
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden users');
@@ -1995,7 +1995,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityFullContext()
+    public function testBakeEntityFullContext(): void
     {
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table users');
@@ -2011,7 +2011,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityWithPropertyTypeHints()
+    public function testBakeEntityWithPropertyTypeHints(): void
     {
         $model = $this->getTableLocator()->get('TodoItems');
         $model->associations()->removeAll();
@@ -2045,7 +2045,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityFieldsDefaults()
+    public function testBakeEntityFieldsDefaults(): void
     {
         $this->generatedFiles = [
             APP . 'Model/Entity/TodoItem.php',
@@ -2063,7 +2063,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityNoFields()
+    public function testBakeEntityNoFields(): void
     {
         $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields todo_items');
@@ -2079,7 +2079,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityFieldsWhiteList()
+    public function testBakeEntityFieldsWhiteList(): void
     {
         $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
         $this->exec('bake model --no-test --no-fixture --no-table --fields id,title,body,completed todo_items');
@@ -2095,7 +2095,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityHidden()
+    public function testBakeEntityHidden(): void
     {
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --hidden password users');
@@ -2111,7 +2111,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityCustomHidden()
+    public function testBakeEntityCustomHidden(): void
     {
         $this->generatedFile = APP . 'Model/Entity/User.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --hidden foo,bar users');
@@ -2127,7 +2127,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeTableWithPlugin()
+    public function testBakeTableWithPlugin(): void
     {
         $this->_loadTestPlugin('BakeTest');
         $path = Plugin::path('BakeTest');
@@ -2193,7 +2193,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeTableWithCounterCache()
+    public function testBakeTableWithCounterCache(): void
     {
         $this->generatedFile = APP . 'Model/Table/TodoTasksTable.php';
 
@@ -2211,7 +2211,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityWithPlugin()
+    public function testBakeEntityWithPlugin(): void
     {
         $this->_loadTestPlugin('BakeTest');
         $path = Plugin::path('BakeTest');
@@ -2231,7 +2231,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEntityEnum()
+    public function testBakeEntityEnum(): void
     {
         $this->generatedFile = APP . 'Model/Entity/Article.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields Articles');
@@ -2247,7 +2247,7 @@ class ModelCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeWithRulesUnique()
+    public function testBakeWithRulesUnique(): void
     {
         $this->generatedFiles = [
             APP . 'Model/Table/UsersTable.php',
@@ -2389,7 +2389,7 @@ PARSE;
      *
      * @return void
      */
-    public function testMainNoArgs()
+    public function testMainNoArgs(): void
     {
         $this->exec('bake model');
 
@@ -2402,7 +2402,7 @@ PARSE;
      *
      * @return void
      */
-    public function testMainWithNamedModel()
+    public function testMainWithNamedModel(): void
     {
         $this->generatedFiles = [
             APP . 'Model/Table/UsersTable.php',
@@ -2421,7 +2421,7 @@ PARSE;
      *
      * @return void
      */
-    public static function nameVariations()
+    public static function nameVariations(): array
     {
         return [
             ['TodoItems'], ['todo_items'],
@@ -2434,7 +2434,7 @@ PARSE;
      * @return void
      */
     #[DataProvider('nameVariations')]
-    public function testMainWithNamedModelVariations($name)
+    public function testMainWithNamedModelVariations(string $name): void
     {
         $this->generatedFiles = [
             APP . 'Model/Table/TodoItemsTable.php',
@@ -2453,7 +2453,7 @@ PARSE;
      *
      * @return void
      */
-    public function testBakeTableNullableForeignKey()
+    public function testBakeTableNullableForeignKey(): void
     {
         $this->generatedFiles = [
             APP . 'Model/Table/TestBakeArticlesTable.php',

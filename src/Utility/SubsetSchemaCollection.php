@@ -27,9 +27,6 @@ use Cake\Database\Schema\TableSchemaInterface;
  */
 class SubsetSchemaCollection implements CollectionInterface
 {
-    /**
-     * @var \Cake\Database\Schema\CollectionInterface
-     */
     protected CollectionInterface $collection;
 
     /**

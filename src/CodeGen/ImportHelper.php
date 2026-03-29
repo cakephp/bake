@@ -32,11 +32,7 @@ class ImportHelper
         foreach ($imports as $alias => $class) {
             if (is_int($alias)) {
                 $last = strrpos($class, '\\', -1);
-                if ($last !== false) {
-                    $alias = substr($class, strrpos($class, '\\', -1) + 1);
-                } else {
-                    $alias = $class;
-                }
+                $alias = $last !== false ? substr($class, strrpos($class, '\\', -1) + 1) : $class;
             }
 
             $normalized[$alias] = $class;
@@ -58,7 +54,7 @@ class ImportHelper
         $existing = static::normalize($existing);
         foreach (static::normalize($imports) as $alias => $class) {
             if (isset($existing[$alias]) && $existing[$alias] !== $class) {
-                if ($io) {
+                if ($io instanceof ConsoleIo) {
                     $io->warning(sprintf(
                         'Import `%s` conflicts with existing import, discarding.',
                         $class,
@@ -68,8 +64,8 @@ class ImportHelper
             }
 
             $existingAlias = array_search($class, $existing, true);
-            if ($existingAlias !== false && $existingAlias != $alias) {
-                if ($io) {
+            if ($existingAlias !== false && $existingAlias !== $alias) {
+                if ($io instanceof ConsoleIo) {
                     $io->warning(sprintf(
                         'Import `%s` conflicts with existing import, discarding.',
                         $class,

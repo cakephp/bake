@@ -24,9 +24,6 @@ use Cake\TestSuite\TestCase;
  */
 class ColumnTypeExtractorTest extends TestCase
 {
-    /**
-     * @var \Bake\CodeGen\ColumnTypeExtractor
-     */
     protected ColumnTypeExtractor $extractor;
 
     /**
@@ -34,7 +31,7 @@ class ColumnTypeExtractorTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->extractor = new ColumnTypeExtractor();

@@ -49,7 +49,7 @@ class TemplateAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
@@ -66,7 +66,7 @@ class TemplateAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $connection = ConnectionManager::get('test');
@@ -80,7 +80,7 @@ class TemplateAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteSimple()
+    public function testExecuteSimple(): void
     {
         $this->generatedFiles = [
             ROOT . 'templates/Articles/add.php',
@@ -103,7 +103,7 @@ class TemplateAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteOptionForwarding()
+    public function testExecuteOptionForwarding(): void
     {
         $this->generatedFiles = [
             ROOT . 'templates/Articles/index.php',

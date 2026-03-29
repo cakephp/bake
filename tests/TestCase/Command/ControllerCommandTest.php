@@ -48,7 +48,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
@@ -64,7 +64,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->getTableLocator()->clear();
@@ -77,7 +77,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainListAvailable()
+    public function testMainListAvailable(): void
     {
         $this->exec('bake controller');
 
@@ -93,7 +93,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetComponents()
+    public function testGetComponents(): void
     {
         $command = new ControllerCommand();
         $args = new Arguments([], [], []);
@@ -110,7 +110,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetComponentsInferredDefaults()
+    public function testGetComponentsInferredDefaults(): void
     {
         $this->_loadTestPlugin('Authorization');
 
@@ -129,7 +129,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetHelpers()
+    public function testGetHelpers(): void
     {
         $command = new ControllerCommand();
         $args = new Arguments([], [], []);
@@ -146,7 +146,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeComponents()
+    public function testBakeComponents(): void
     {
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
@@ -165,7 +165,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeActionsOption()
+    public function testBakeActionsOption(): void
     {
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
@@ -184,7 +184,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeNoActions()
+    public function testBakeNoActions(): void
     {
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
@@ -202,7 +202,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeActions()
+    public function testBakeActions(): void
     {
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec(
@@ -218,7 +218,7 @@ class ControllerCommandTest extends TestCase
     /**
      * Test the integration with Authorization plugin
      */
-    public function testBakeActionsAuthorizationPlugin()
+    public function testBakeActionsAuthorizationPlugin(): void
     {
         $this->_loadTestPlugin('Authorization');
 
@@ -233,7 +233,7 @@ class ControllerCommandTest extends TestCase
     /**
      * Test the integration with Authentication plugin
      */
-    public function testBakeActionsAuthenticationPlugin()
+    public function testBakeActionsAuthenticationPlugin(): void
     {
         $this->_loadTestPlugin('Authentication');
 
@@ -257,7 +257,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakePrefixed()
+    public function testBakePrefixed(): void
     {
         $this->generatedFile = APP . 'Controller/Admin/BakeArticlesController.php';
         $this->exec('bake controller --connection test --no-test --prefix admin BakeArticles');
@@ -272,7 +272,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakePrefixNested()
+    public function testBakePrefixNested(): void
     {
         $this->generatedFile = APP . 'Controller/Admin/Management/BakeArticlesController.php';
         $this->exec('bake controller --connection test --no-test --prefix admin/management BakeArticles');
@@ -287,7 +287,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeWithPlugin()
+    public function testBakeWithPlugin(): void
     {
         $this->_loadTestPlugin('BakeTest');
         $path = Plugin::path('BakeTest');
@@ -304,7 +304,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeActionsContent()
+    public function testBakeActionsContent(): void
     {
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec('bake controller --connection test --no-test BakeArticles');
@@ -318,7 +318,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeTest()
+    public function testBakeTest(): void
     {
         $this->generatedFiles = [
             APP . 'Controller/BakeArticlesController.php',
@@ -343,7 +343,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeTestDisabled()
+    public function testBakeTestDisabled(): void
     {
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec('bake controller --connection test --no-test BakeArticles');
@@ -358,7 +358,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainNoArgs()
+    public function testMainNoArgs(): void
     {
         $this->exec('bake controller');
 
@@ -372,7 +372,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public static function nameVariations()
+    public static function nameVariations(): array
     {
         return [
             ['BakeArticles'], ['bake_articles'],
@@ -385,7 +385,7 @@ class ControllerCommandTest extends TestCase
      * @return void
      */
     #[DataProvider('nameVariations')]
-    public function testMainWithControllerNameVariations($name)
+    public function testMainWithControllerNameVariations(string $name): void
     {
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec("bake controller --connection test --no-test {$name}");
@@ -400,7 +400,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithPluginDot()
+    public function testMainWithPluginDot(): void
     {
         $this->_loadTestPlugin('Company/Pastry');
         $path = Plugin::path('Company/Pastry');
@@ -421,7 +421,7 @@ class ControllerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithPluginOption()
+    public function testMainWithPluginOption(): void
     {
         $this->_loadTestPlugin('Company/Pastry');
         $path = Plugin::path('Company/Pastry');
