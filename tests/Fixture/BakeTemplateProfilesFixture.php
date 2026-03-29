@@ -24,15 +24,10 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class BakeTemplateProfilesFixture extends TestFixture
 {
-    /**
-     * @var string
-     */
     public string $table = 'profiles';
 
     /**
      * records property
-     *
-     * @var array
      */
     public array $records = [
         ['author_id' => 1, 'nick' => 'The Comedian', 'avatar' => 'smiley.png'],

@@ -43,7 +43,7 @@ class PluginCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Plugin' . DS;
@@ -74,7 +74,7 @@ class PluginCommandTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $fs = new Filesystem();
         $fs->deleteDir($this->pluginsPath);
@@ -92,14 +92,14 @@ class PluginCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainBakePluginContents()
+    public function testMainBakePluginContents(): void
     {
         $this->exec('bake plugin SimpleExample', ['y', 'n']);
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertPluginContents('SimpleExample');
     }
 
-    public function testBakingWithNonExistentPluginsDir()
+    public function testBakingWithNonExistentPluginsDir(): void
     {
         $fs = new Filesystem();
         $fs->deleteDir($this->pluginsPath);
@@ -114,7 +114,7 @@ class PluginCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainCustomAppNamespace()
+    public function testMainCustomAppNamespace(): void
     {
         $this->exec('bake plugin Simple', ['y', 'n']);
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
@@ -129,7 +129,7 @@ class PluginCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainVendorName()
+    public function testMainVendorName(): void
     {
         $this->exec('bake plugin Company/Example --standalone-path ' . $this->pluginsStandalonePath, ['y', 'n']);
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
@@ -141,7 +141,7 @@ class PluginCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainVendorNameCasingFix()
+    public function testMainVendorNameCasingFix(): void
     {
         $this->exec('bake plugin company/example --standalone-path ' . $this->pluginsStandalonePath, ['y', 'n']);
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
@@ -153,7 +153,7 @@ class PluginCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithNoArgs()
+    public function testMainWithNoArgs(): void
     {
         $this->exec('bake plugin');
 
@@ -167,10 +167,10 @@ class PluginCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainUpdateComposer()
+    public function testMainUpdateComposer(): void
     {
         $this->skipIf(
-            DIRECTORY_SEPARATOR == '\\',
+            DIRECTORY_SEPARATOR === '\\',
             'Skipping composer test on windows as `which` does not work well.',
         );
         $composerPath = exec('which composer');
@@ -199,7 +199,7 @@ class PluginCommandTest extends TestCase
      *
      * @return void
      */
-    public function testFindPathNonExistent()
+    public function testFindPathNonExistent(): void
     {
         $io = $this->createStub(ConsoleIo::class);
         $paths = App::path('plugins');
@@ -221,7 +221,7 @@ class PluginCommandTest extends TestCase
      *
      * @return void
      */
-    public function testFindPathEmpty()
+    public function testFindPathEmpty(): void
     {
         $this->expectException(StopException::class);
         $io = $this->createStub(ConsoleIo::class);
@@ -233,7 +233,7 @@ class PluginCommandTest extends TestCase
         $command->findPath($paths, $io);
     }
 
-    public function testMainClassOnlyOption()
+    public function testMainClassOnlyOption(): void
     {
         $this->exec('bake plugin ClassOnly --class-only', ['y', 'n']);
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
@@ -282,7 +282,6 @@ class PluginCommandTest extends TestCase
     /**
      * Get recursive files list for given path.
      *
-     * @param string $path
      * @return string[]
      */
     protected function getFiles(string $path): array
@@ -295,7 +294,7 @@ class PluginCommandTest extends TestCase
 
         $iterator = $fs->findRecursive(
             $path,
-            function (SplFileInfo $fileInfo) {
+            function (SplFileInfo $fileInfo): bool {
                 return $fileInfo->isFile();
             },
         );

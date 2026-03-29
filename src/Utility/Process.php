@@ -26,9 +26,6 @@ use RuntimeException;
  */
 class Process
 {
-    /**
-     * @var \Cake\Console\ConsoleIo
-     */
     protected ConsoleIo $io;
 
     /**
@@ -62,7 +59,7 @@ class Process
             $pipes,
         );
         if (!is_resource($process)) {
-            throw new RuntimeException("Could not start subprocess for `$command`");
+            throw new RuntimeException("Could not start subprocess for `{$command}`");
         }
         fclose($pipes[0]);
 

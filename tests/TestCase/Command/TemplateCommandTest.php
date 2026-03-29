@@ -64,7 +64,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
@@ -81,7 +81,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->getTableLocator()->clear();
@@ -92,7 +92,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testController()
+    public function testController(): void
     {
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
@@ -107,11 +107,10 @@ class TemplateCommandTest extends TestCase
     /**
      * Test the controller() method.
      *
-     * @param string $name
      * @return void
      */
     #[DataProvider('nameVariations')]
-    public function testControllerVariations($name)
+    public function testControllerVariations(string $name): void
     {
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
@@ -124,7 +123,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testControllerPlugin()
+    public function testControllerPlugin(): void
     {
         $command = new TemplateCommand();
         $command->plugin = 'BakeTest';
@@ -143,7 +142,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testControllerPrefix()
+    public function testControllerPrefix(): void
     {
         $command = new TemplateCommand();
 
@@ -169,7 +168,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testControllerPrefixNested()
+    public function testControllerPrefixNested(): void
     {
         $command = new TemplateCommand();
         $args = new Arguments([], ['prefix' => 'Admin/Management'], []);
@@ -187,7 +186,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testControllerWithOverride()
+    public function testControllerWithOverride(): void
     {
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
@@ -205,7 +204,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testModel()
+    public function testModel(): void
     {
         $command = new TemplateCommand();
         $command->model('Articles');
@@ -220,7 +219,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testModelPlugin()
+    public function testModelPlugin(): void
     {
         $command = new TemplateCommand();
         $command->plugin = 'BakeTest';
@@ -236,7 +235,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetTemplatePath()
+    public function testGetTemplatePath(): void
     {
         $command = new TemplateCommand();
         $command->controllerName = 'Posts';
@@ -263,7 +262,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetTemplatePathPlugin()
+    public function testGetTemplatePathPlugin(): void
     {
         $pluginPath = APP . 'Plugin/TestTemplate/';
         $this->loadPlugins(['TestTemplate' => ['path' => $pluginPath]]);
@@ -290,7 +289,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetContent()
+    public function testGetContent(): void
     {
         $namespace = Configure::read('App.namespace');
         $vars = [
@@ -321,7 +320,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetContentAssociations()
+    public function testGetContentAssociations(): void
     {
         $namespace = Configure::read('App.namespace');
         $vars = [
@@ -366,7 +365,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetContentWithNoPrimaryKey()
+    public function testGetContentWithNoPrimaryKey(): void
     {
         $namespace = Configure::read('App.namespace');
         $vars = [
@@ -402,7 +401,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGetContentWithRoutingPrefix()
+    public function testGetContentWithRoutingPrefix(): void
     {
         $namespace = Configure::read('App.namespace');
 
@@ -443,7 +442,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeView()
+    public function testBakeView(): void
     {
         $this->generatedFile = ROOT . 'templates/Authors/view.php';
         $this->exec('bake template authors view');
@@ -460,7 +459,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeViewEnum()
+    public function testBakeViewEnum(): void
     {
         $table = $this->fetchTable('BakeUsers');
         $table->associations()->removeAll();
@@ -481,7 +480,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeViewEnumNoLabel()
+    public function testBakeViewEnumNoLabel(): void
     {
         $table = $this->fetchTable('Articles');
         $table->getSchema()->setColumnType('published', EnumType::from(ArticleStatus::class));
@@ -501,7 +500,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeViewHiddenFields()
+    public function testBakeViewHiddenFields(): void
     {
         $this->generatedFile = ROOT . 'templates/HiddenFields/view.php';
         $this->exec('bake template HiddenFields view');
@@ -518,7 +517,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEdit()
+    public function testBakeEdit(): void
     {
         $this->generatedFile = ROOT . 'templates/Authors/edit.php';
         $this->exec('bake template authors edit');
@@ -535,7 +534,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeEditWithBelongsToManyAssociation()
+    public function testBakeEditWithBelongsToManyAssociation(): void
     {
         $this->generatedFile = ROOT . 'templates/Articles/edit.php';
         $this->exec('bake template articles edit');
@@ -552,7 +551,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeIndex()
+    public function testBakeIndex(): void
     {
         $this->generatedFile = ROOT . 'templates/TemplateTaskComments/index.php';
         $this->exec('bake template template_task_comments index');
@@ -569,7 +568,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeIndexHiddenFields()
+    public function testBakeIndexHiddenFields(): void
     {
         $this->generatedFile = ROOT . 'templates/HiddenFields/index.php';
         $this->exec('bake template HiddenFields index');
@@ -586,7 +585,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeIndexWithIndexLimit()
+    public function testBakeIndexWithIndexLimit(): void
     {
         $this->generatedFile = ROOT . 'templates/TemplateTaskComments/index.php';
         $this->exec('bake template template_task_comments --index-columns 3 index');
@@ -603,7 +602,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeIndexWithEnumWithLabel()
+    public function testBakeIndexWithEnumWithLabel(): void
     {
         $table = $this->fetchTable('BakeUsers');
         $table->getSchema()->setColumnType('status', EnumType::from(BakeUserStatus::class));
@@ -623,7 +622,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeIndexWithEnumNoLabel()
+    public function testBakeIndexWithEnumNoLabel(): void
     {
         $table = $this->fetchTable('Articles');
         $table->getSchema()->setColumnType('published', EnumType::from(ArticleStatus::class));
@@ -643,7 +642,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeIndexPlugin()
+    public function testBakeIndexPlugin(): void
     {
         $this->_loadTestPlugin('BakeTest');
         $path = Plugin::templatePath('BakeTest');
@@ -665,7 +664,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeTreeNoLftOrRght()
+    public function testBakeTreeNoLftOrRght(): void
     {
         $this->generatedFiles = [
             APP . '../templates/CategoryThreads/add.php',
@@ -691,7 +690,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeSelfAssociationsNoNavLinks()
+    public function testBakeSelfAssociationsNoNavLinks(): void
     {
         $this->generatedFiles = [
             APP . '../templates/CategoryThreads/index.php',
@@ -710,7 +709,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeSelfAssociationsRelatedAssociations()
+    public function testBakeSelfAssociationsRelatedAssociations(): void
     {
         $this->generatedFile = ROOT . 'templates/CategoryThreads/view.php';
         $this->exec('bake template category_threads view');
@@ -727,7 +726,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeWithNoTemplate()
+    public function testBakeWithNoTemplate(): void
     {
         $this->expectException(MissingTemplateException::class);
         $this->expectExceptionMessage('No bake template found for "Bake.Template/delete"');
@@ -739,7 +738,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainNoArgs()
+    public function testMainNoArgs(): void
     {
         $this->exec('bake template');
 
@@ -754,7 +753,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithActionParam()
+    public function testMainWithActionParam(): void
     {
         $this->generatedFile = ROOT . 'templates/TemplateTaskComments/view.php';
         $this->exec('bake template TemplateTaskComments view');
@@ -777,7 +776,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithExistingController()
+    public function testMainWithExistingController(): void
     {
         $this->generatedFiles = [
             ROOT . 'templates/TemplateTaskComments/index.php',
@@ -802,7 +801,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithPluginName()
+    public function testMainWithPluginName(): void
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::templatePath('TestBake');
@@ -823,7 +822,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public static function nameVariations()
+    public static function nameVariations(): array
     {
         return [['TemplateTaskComments'], ['template_task_comments']];
     }
@@ -833,7 +832,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithControllerFlag()
+    public function testMainWithControllerFlag(): void
     {
         $this->generatedFiles = [
             ROOT . 'templates/Blog/index.php',
@@ -854,7 +853,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithControllerAndAdminFlag()
+    public function testMainWithControllerAndAdminFlag(): void
     {
         $this->generatedFiles = [
             ROOT . 'templates/Admin/Posts/index.php',
@@ -871,7 +870,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithAlternateTemplates()
+    public function testMainWithAlternateTemplates(): void
     {
         $this->generatedFile = ROOT . 'templates/TemplateTaskComments/list.php';
         $this->exec('bake template TemplateTaskComments index list');
@@ -886,7 +885,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithMissingTable()
+    public function testMainWithMissingTable(): void
     {
         $this->exec('bake template MissingTableClass');
 
@@ -901,7 +900,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeIndexWithSingularPluralCollision()
+    public function testBakeIndexWithSingularPluralCollision(): void
     {
         $this->generatedFile = ROOT . 'templates/News/index.php';
         $this->exec('bake template News index');

@@ -37,8 +37,6 @@ class BakeHelper extends Helper
 
     /**
      * AssociationFilter utility
-     *
-     * @var \Bake\Utility\Model\AssociationFilter|null
      */
     protected ?AssociationFilter $_associationFilter = null;
 
@@ -152,7 +150,7 @@ class BakeHelper extends Helper
         if ($plugin !== null) {
             $base = $plugin;
         }
-        $base = str_replace('/', '\\', trim($base, '\\'));
+        $base = str_replace('/', '\\', trim((string)$base, '\\'));
         $sub = '\\' . str_replace('/', '\\', trim($type, '\\'));
         $qn = $sub . '\\' . $name . $suffix;
 
@@ -198,12 +196,12 @@ class BakeHelper extends Helper
         array $filterTypes = ['binary'],
     ): array {
         $fields = collection($fields)
-            ->filter(function ($field) use ($schema, $filterTypes) {
+            ->filter(function ($field) use ($schema, $filterTypes): bool {
                 return !in_array($schema->getColumnType($field), $filterTypes);
             });
 
         if (isset($modelObject) && $modelObject->hasBehavior('Tree')) {
-            $fields = $fields->reject(function ($field) {
+            $fields = $fields->reject(function ($field): bool {
                 return $field === 'lft' || $field === 'rght';
             });
         }
@@ -235,15 +233,15 @@ class BakeHelper extends Helper
                 }
             })
             ->filter()
-            ->reduce(function ($fields, $value) {
+            ->reduce(function ($fields, $value): float|int|array {
                 return $fields + $value;
             }, []);
 
         $groupedFields = collection($fields)
-            ->filter(function ($field) use ($schema) {
+            ->filter(function ($field) use ($schema): bool {
                 return $schema->getColumnType($field) !== 'binary';
             })
-            ->groupBy(function ($field) use ($schema, $associationFields) {
+            ->groupBy(function ($field) use ($schema, $associationFields): string {
                 $type = $schema->getColumnType($field);
                 if (isset($associationFields[$field])) {
                     return 'string';
@@ -264,11 +262,11 @@ class BakeHelper extends Helper
                     'timestampfractional',
                     'timestamptimezone',
                 ];
-                if (in_array($type, $dateTypes)) {
+                if (in_array($type, $dateTypes, true)) {
                     return 'date';
                 }
 
-                return in_array($type, ['text', 'boolean']) ? $type : 'string';
+                return in_array($type, ['text', 'boolean'], true) ? $type : 'string';
             })
             ->toArray();
 
@@ -367,7 +365,7 @@ class BakeHelper extends Helper
                 continue;
             }
 
-            $rule['args'] = array_map(function ($item) {
+            $rule['args'] = array_map(function ($item): string {
                 return $this->exportVar(
                     $item,
                     is_array($item) ? 3 : 0,
@@ -423,7 +421,7 @@ class BakeHelper extends Helper
         return array_map(function ($v) {
             if (is_string($v)) {
                 $v = strtr($v, ["'" => "\'"]);
-                $v = "'$v'";
+                $v = "'{$v}'";
             }
 
             return $v;
@@ -496,7 +494,7 @@ class BakeHelper extends Helper
      */
     protected function getUseType(string $alias, string $name): string
     {
-        if ($name == $alias || substr($name, -strlen("\\{$alias}")) === "\\{$alias}") {
+        if ($name === $alias || str_ends_with($name, "\\{$alias}")) {
             return $name;
         }
 
@@ -520,7 +518,7 @@ class BakeHelper extends Helper
     ): string {
         $output = implode(
             $delimiter,
-            array_map(function ($string) use ($delimiter) {
+            array_map(function ($string) use ($delimiter): string {
                 if (is_string($string)) {
                     return $string;
                 }

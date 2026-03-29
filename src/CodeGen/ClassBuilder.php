@@ -18,9 +18,6 @@ namespace Bake\CodeGen;
 
 class ClassBuilder
 {
-    /**
-     * @var \Bake\CodeGen\ParsedClass|null
-     */
     protected ?ParsedClass $parsedClass;
 
     /**
@@ -50,7 +47,7 @@ class ClassBuilder
      */
     public function getUserConstants(array $generated = []): array
     {
-        if ($this->parsedClass === null) {
+        if (!$this->parsedClass instanceof ParsedClass) {
             return [];
         }
 
@@ -65,7 +62,7 @@ class ClassBuilder
      */
     public function getUserProperties(array $generated = []): array
     {
-        if ($this->parsedClass === null) {
+        if (!$this->parsedClass instanceof ParsedClass) {
             return [];
         }
 
@@ -80,7 +77,7 @@ class ClassBuilder
      */
     public function getUserFunctions(array $generated = []): array
     {
-        if ($this->parsedClass === null) {
+        if (!$this->parsedClass instanceof ParsedClass) {
             return [];
         }
 

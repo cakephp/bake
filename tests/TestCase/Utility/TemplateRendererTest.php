@@ -35,7 +35,7 @@ class TemplateRendererTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'TemplateRenderer' . DS;
@@ -47,7 +47,7 @@ class TemplateRendererTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         unset($this->renderer);
@@ -59,7 +59,7 @@ class TemplateRendererTest extends TestCase
      *
      * @return void
      */
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $result = $this->renderer->generate('example', ['test' => 'foo']);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -70,7 +70,7 @@ class TemplateRendererTest extends TestCase
      *
      * @return void
      */
-    public function testGenerateWithTemplateOverride()
+    public function testGenerateWithTemplateOverride(): void
     {
         $this->_loadTestPlugin('TestBakeTheme', true);
         $renderer = new TemplateRenderer('TestBakeTheme');
@@ -87,7 +87,7 @@ class TemplateRendererTest extends TestCase
      *
      * @return void
      */
-    public function testGenerateWithTemplateFallbacks()
+    public function testGenerateWithTemplateFallbacks(): void
     {
         $this->_loadTestPlugin('TestBakeTheme', true);
         $renderer = new TemplateRenderer('TestBakeTheme');

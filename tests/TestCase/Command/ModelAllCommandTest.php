@@ -47,7 +47,7 @@ class ModelAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setAppNamespace('Bake\Test\App');
@@ -62,7 +62,7 @@ class ModelAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $connection = ConnectionManager::get('test');
@@ -76,7 +76,7 @@ class ModelAllCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         foreach ($this->tables as $table) {
             $plural = Inflector::camelize($table);

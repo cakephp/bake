@@ -29,7 +29,7 @@ class EntryCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +41,7 @@ class EntryCommandTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->removePlugins(['BakeTest']);
@@ -52,7 +52,7 @@ class EntryCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteHelp()
+    public function testExecuteHelp(): void
     {
         $this->exec('bake --help');
 
@@ -74,7 +74,7 @@ class EntryCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteAppCommand()
+    public function testExecuteAppCommand(): void
     {
         $this->exec('bake app_policy');
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
@@ -86,7 +86,7 @@ class EntryCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteAppTaskHelp()
+    public function testExecuteAppTaskHelp(): void
     {
         $this->exec('bake app_policy --help');
 
@@ -100,7 +100,7 @@ class EntryCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecutePluginCommand()
+    public function testExecutePluginCommand(): void
     {
         $this->_loadTestPlugin('BakeTest');
 
@@ -116,7 +116,7 @@ class EntryCommandTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteMissingCommand()
+    public function testExecuteMissingCommand(): void
     {
         $this->exec('bake nope');
 

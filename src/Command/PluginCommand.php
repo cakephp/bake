@@ -38,8 +38,6 @@ class PluginCommand extends BakeCommand
 {
     /**
      * Plugin path.
-     *
-     * @var string
      */
     public string $path;
 
@@ -62,7 +60,7 @@ class PluginCommand extends BakeCommand
             return static::CODE_ERROR;
         }
         $parts = explode('/', $name);
-        $plugin = implode('/', array_map([Inflector::class, 'camelize'], $parts));
+        $plugin = implode('/', array_map(Inflector::camelize(...), $parts));
 
         if ($args->getOption('standalone-path')) {
             $this->path = (string)$args->getOption('standalone-path');
@@ -256,7 +254,7 @@ class PluginCommand extends BakeCommand
                 }
 
                 if ($args->getOption('class-only')) {
-                    $files = array_filter($files, function ($file) {
+                    $files = array_filter($files, function ($file): bool {
                         return $file->getFilename() === 'Plugin.php.twig';
                     });
                 }
@@ -267,7 +265,7 @@ class PluginCommand extends BakeCommand
 
         sort($templates);
         foreach ($templates as $template) {
-            $template = substr($template, strrpos($template, 'Plugin' . DIRECTORY_SEPARATOR) + 7, -4);
+            $template = substr((string)$template, strrpos((string)$template, 'Plugin' . DIRECTORY_SEPARATOR) + 7, -4);
             $template = rtrim($template, '.');
             $filename = $template;
             if ($filename === 'src' . DIRECTORY_SEPARATOR . 'Plugin.php') {
@@ -360,7 +358,7 @@ class PluginCommand extends BakeCommand
      * @param \Cake\Console\ConsoleOptionParser $parser The option parser
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser->setDescription(
             'Create the directory structure, AppController class and testing setup for a new plugin. ' .

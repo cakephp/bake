@@ -23,8 +23,6 @@ class CategoryThreadsFixture extends TestFixture
 {
     /**
      * records property
-     *
-     * @var array
      */
     public array $records = [
         ['parent_id' => 0, 'name' => 'Category 1', 'lft' => 1, 'rght' => 14, 'created' => '2007-03-18 15:30:23', 'updated' => '2007-03-18 15:32:31'],

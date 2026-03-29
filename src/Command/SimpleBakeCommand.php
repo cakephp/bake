@@ -135,7 +135,7 @@ abstract class SimpleBakeCommand extends BakeCommand
      * @param \Cake\Console\ConsoleOptionParser $parser Option parser to update.
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = $this->_setCommonOptions($parser);
         $name = $this->name();

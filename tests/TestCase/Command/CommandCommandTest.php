@@ -30,7 +30,7 @@ class CommandCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Command' . DS;
@@ -42,7 +42,7 @@ class CommandCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMain()
+    public function testMain(): void
     {
         $this->generatedFiles = [
             APP . 'Command/ExampleCommand.php',
@@ -60,7 +60,7 @@ class CommandCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainPlugin()
+    public function testMainPlugin(): void
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
@@ -81,7 +81,7 @@ class CommandCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakePlugin()
+    public function testBakePlugin(): void
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
@@ -101,7 +101,7 @@ class CommandCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGenerateUsesDocBlock()
+    public function testGenerateUsesDocBlock(): void
     {
         $testsPath = ROOT . 'tests' . DS;
 
@@ -128,7 +128,7 @@ class CommandCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGenerateUsesDocBlockPlugin()
+    public function testGenerateUsesDocBlockPlugin(): void
     {
         $path = Plugin::path('BakeTest');
 

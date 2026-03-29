@@ -23,8 +23,6 @@ class HelperCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
-     *
-     * @var string
      */
     public string $pathFragment = 'View/Helper/';
 

@@ -36,7 +36,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected $generatedFiles = [];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         Router::reload();
@@ -44,7 +44,7 @@ abstract class TestCase extends BaseTestCase
         $this->loadPlugins(['Cake/TwigView']);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -72,7 +72,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function _loadTestPlugin(string $name, bool $loadBake = false): void
     {
-        $root = dirname(dirname(__FILE__)) . DS;
+        $root = dirname(__FILE__, 2) . DS;
         $path = $root . 'test_app' . DS . 'Plugin' . DS . $name . DS;
 
         $plugins = [

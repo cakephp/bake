@@ -21,15 +21,10 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class BakeTemplateRolesFixture extends TestFixture
 {
-    /**
-     * @var string
-     */
     public string $table = 'roles';
 
     /**
      * records property
-     *
-     * @var array
      */
     public array $records = [
         ['name' => 'admin'],

@@ -31,8 +31,6 @@ class ControllerCommand extends BakeCommand
 {
     /**
      * Path fragment for generated code.
-     *
-     * @var string
      */
     public string $pathFragment = 'Controller/';
 
@@ -229,10 +227,8 @@ class ControllerCommand extends BakeCommand
         if ($args->getOption('components')) {
             $components = explode(',', (string)$args->getOption('components'));
             $components = array_values(array_filter(array_map('trim', $components)));
-        } else {
-            if (Plugin::isLoaded('Authorization')) {
-                $components[] = 'Authorization.Authorization';
-            }
+        } elseif (Plugin::isLoaded('Authorization')) {
+            $components[] = 'Authorization.Authorization';
         }
 
         return $components;
@@ -261,7 +257,7 @@ class ControllerCommand extends BakeCommand
      * @param \Cake\Console\ConsoleOptionParser $parser The console option parser
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = $this->_setCommonOptions($parser);
         $parser->setDescription(

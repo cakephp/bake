@@ -59,7 +59,7 @@ class DocBlockHelper extends Helper
             $lines[] = $annotation;
         }
 
-        $lines = array_merge(['/**'], (new Collection($lines))->map(function ($line) {
+        $lines = array_merge(['/**'], (new Collection($lines))->map(function ($line): string {
             return rtrim(" * {$line}");
         })->toArray(), [' */']);
 
@@ -307,7 +307,7 @@ class DocBlockHelper extends Helper
         $annotations[] = "@method iterable<\\{$namespace}\\Model\\Entity\\{$entity}>|\Cake\Datasource\ResultSetInterface<\\{$namespace}\\Model\\Entity\\{$entity}>|false deleteMany(iterable \$entities, array \$options = [])";
         $annotations[] = "@method iterable<\\{$namespace}\\Model\\Entity\\{$entity}>|\Cake\Datasource\ResultSetInterface<\\{$namespace}\\Model\\Entity\\{$entity}> deleteManyOrFail(iterable \$entities, array \$options = [])";
         // phpcs:enable
-        foreach ($behaviors as $behavior => $behaviorData) {
+        foreach (array_keys($behaviors) as $behavior) {
             $className = App::className($behavior, 'Model/Behavior', 'Behavior');
             if (!$className) {
                 $className = "Cake\ORM\Behavior\\{$behavior}Behavior";
@@ -331,12 +331,12 @@ class DocBlockHelper extends Helper
      */
     protected function _insertAfter(array $target, string $key, mixed $value): array
     {
-        $index = array_search($key, array_keys($target));
+        $index = array_search($key, array_keys($target), true);
         if ($index !== false) {
             $target = array_merge(
                 array_slice($target, 0, $index + 1),
                 $value,
-                array_slice($target, $index + 1, null),
+                array_slice($target, $index + 1),
             );
         } else {
             $target += (array)$value;

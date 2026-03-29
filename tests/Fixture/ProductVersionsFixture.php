@@ -23,8 +23,6 @@ class ProductVersionsFixture extends TestFixture
 {
     /**
      * Records
-     *
-     * @var array
      */
     public array $records = [
         [

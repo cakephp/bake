@@ -31,7 +31,7 @@ class SimpleBakeCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS
@@ -44,7 +44,7 @@ class SimpleBakeCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMain()
+    public function testMain(): void
     {
         $this->generatedFiles = [
             APP . 'Model/Behavior/ExampleBehavior.php',
@@ -62,7 +62,7 @@ class SimpleBakeCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBake()
+    public function testBake(): void
     {
         $this->generatedFiles = [
             APP . 'Model/Behavior/ExampleBehavior.php',
@@ -82,7 +82,7 @@ class SimpleBakeCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeTestNoTest()
+    public function testBakeTestNoTest(): void
     {
         $this->generatedFile = APP . 'Model/Behavior/ExampleBehavior.php';
         $this->exec('bake behavior --no-test Example');
@@ -92,7 +92,7 @@ class SimpleBakeCommandTest extends TestCase
         $this->assertFileContains('class ExampleBehavior extends Behavior', $this->generatedFile);
     }
 
-    public function testBakeWithTheme()
+    public function testBakeWithTheme(): void
     {
         $this->_loadTestPlugin('TestBakeTheme');
 
@@ -108,7 +108,7 @@ class SimpleBakeCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakePlugin()
+    public function testBakePlugin(): void
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
@@ -131,7 +131,7 @@ class SimpleBakeCommandTest extends TestCase
      *
      * @return string[][]
      */
-    public static function subclassProvider()
+    public static function subclassProvider(): array
     {
         return [
             ['Bake\Command\BehaviorCommand'],
@@ -146,11 +146,10 @@ class SimpleBakeCommandTest extends TestCase
     /**
      * Test that the various implementations are sane.
      *
-     * @dataProvider subclassProvider
      * @return void
      */
     #[DataProvider('subclassProvider')]
-    public function testImplementations($class)
+    public function testImplementations(string $class): void
     {
         $task = new $class();
         $this->assertIsString($task->name());

@@ -49,7 +49,7 @@ class DocBlockHelperTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -64,7 +64,7 @@ class DocBlockHelperTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         unset($this->DocBlockHelper);
@@ -75,7 +75,7 @@ class DocBlockHelperTest extends TestCase
      *
      * @return void
      */
-    public function testClassDescription()
+    public function testClassDescription(): void
     {
         $className = 'Comments';
         $classType = 'Model';
@@ -94,7 +94,7 @@ class DocBlockHelperTest extends TestCase
      *
      * @return void
      */
-    public function testAssociatedEntityTypeToHintType()
+    public function testAssociatedEntityTypeToHintType(): void
     {
         // Test with MANY_TO_MANY
         $type = 'Foo';
@@ -130,7 +130,7 @@ class DocBlockHelperTest extends TestCase
      *
      * @return void
      */
-    public function testBuildEntityPropertyHintTypeMap()
+    public function testBuildEntityPropertyHintTypeMap(): void
     {
         $map = [
             'string' => [
@@ -197,7 +197,7 @@ class DocBlockHelperTest extends TestCase
      *
      * @return void
      */
-    public function testBuildEntityAssociationHintTypeMap()
+    public function testBuildEntityAssociationHintTypeMap(): void
     {
         $this->markTestIncomplete('Not implemented yet');
     }
@@ -207,7 +207,7 @@ class DocBlockHelperTest extends TestCase
      *
      * @return void
      */
-    public function testColumnTypeToHintType()
+    public function testColumnTypeToHintType(): void
     {
         $this->markTestIncomplete('Not implemented yet');
     }
@@ -217,7 +217,7 @@ class DocBlockHelperTest extends TestCase
      *
      * @return void
      */
-    public function testPropertyHints()
+    public function testPropertyHints(): void
     {
         $this->markTestIncomplete('Not implemented yet');
     }
@@ -227,7 +227,7 @@ class DocBlockHelperTest extends TestCase
      *
      * @return void
      */
-    public function testBuildTableAnnotations()
+    public function testBuildTableAnnotations(): void
     {
         $this->markTestIncomplete('Not implemented yet');
     }

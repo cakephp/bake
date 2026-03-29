@@ -34,9 +34,6 @@ use PhpParser\PhpVersion;
  */
 class ColumnTypeExtractor extends NodeVisitorAbstract
 {
-    /**
-     * @var \PhpParser\Parser
-     */
     protected Parser $parser;
 
     /**
@@ -44,9 +41,6 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
      */
     protected array $columnTypes = [];
 
-    /**
-     * @var bool
-     */
     protected bool $inInitialize = false;
 
     /**
@@ -80,7 +74,7 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
             $traverser = new NodeTraverser();
             $traverser->addVisitor($this);
             $traverser->traverse($ast);
-        } catch (Exception $e) {
+        } catch (Exception) {
             // If parsing fails, return empty array
             return [];
         }
@@ -136,37 +130,25 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
     protected function processMethodCall(MethodCall $methodCall): void
     {
         // Check if this is a setColumnType call
-        if ($methodCall->name instanceof Node\Identifier && $methodCall->name->name === 'setColumnType') {
-            // Check if it's called on getSchema()
-            if (
-                $methodCall->var instanceof MethodCall &&
-                $methodCall->var->name instanceof Node\Identifier &&
-                $methodCall->var->name->name === 'getSchema' &&
-                $methodCall->var->var instanceof Variable &&
-                $methodCall->var->var->name === 'this'
-            ) {
-                // Extract the column name and type expression
-                if (count($methodCall->args) >= 2) {
-                    $columnArgNode = $methodCall->args[0];
-                    $typeArgNode = $methodCall->args[1];
-                    if (!$columnArgNode instanceof Node\Arg || !$typeArgNode instanceof Node\Arg) {
-                        return;
-                    }
-                    $columnArg = $columnArgNode->value;
-                    $typeArg = $typeArgNode->value;
-
-                    // Get column name
-                    $columnName = $this->getStringValue($columnArg);
-                    if ($columnName === null) {
-                        return;
-                    }
-
-                    // Get the type expression as a string
-                    $typeExpression = $this->getTypeExpression($typeArg);
-                    if ($typeExpression !== null) {
-                        $this->columnTypes[$columnName] = $typeExpression;
-                    }
-                }
+        // Check if it's called on getSchema()
+        // Extract the column name and type expression
+        if ($methodCall->name instanceof Node\Identifier && $methodCall->name->name === 'setColumnType' && ($methodCall->var instanceof MethodCall && $methodCall->var->name instanceof Node\Identifier && $methodCall->var->name->name === 'getSchema' && $methodCall->var->var instanceof Variable && $methodCall->var->var->name === 'this') && count($methodCall->args) >= 2) {
+            $columnArgNode = $methodCall->args[0];
+            $typeArgNode = $methodCall->args[1];
+            if (!$columnArgNode instanceof Node\Arg || !$typeArgNode instanceof Node\Arg) {
+                return;
+            }
+            $columnArg = $columnArgNode->value;
+            $typeArg = $typeArgNode->value;
+            // Get column name
+            $columnName = $this->getStringValue($columnArg);
+            if ($columnName === null) {
+                return;
+            }
+            // Get the type expression as a string
+            $typeExpression = $this->getTypeExpression($typeArg);
+            if ($typeExpression !== null) {
+                $this->columnTypes[$columnName] = $typeExpression;
             }
         }
     }
@@ -204,25 +186,17 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
             $methodName = $node->name->name;
 
             // Handle EnumType::from() calls
-            if ($className === 'EnumType' || str_ends_with($className, '\\EnumType')) {
-                if ($methodName === 'from' && count($node->args) > 0) {
-                    // Extract the enum class name
-                    $argNode = $node->args[0];
-                    if (!$argNode instanceof Node\Arg) {
-                        return null;
-                    }
-                    $arg = $argNode->value;
-                    if ($arg instanceof Node\Expr\ClassConstFetch) {
-                        if (
-                            $arg->class instanceof Node\Name &&
-                            $arg->name instanceof Node\Identifier &&
-                            $arg->name->name === 'class'
-                        ) {
-                            $enumClass = $arg->class->toString();
-                            // Return the full EnumType::from() expression
-                            return 'EnumType::from(' . $enumClass . '::class)';
-                        }
-                    }
+            if (($className === 'EnumType' || str_ends_with($className, '\\EnumType')) && ($methodName === 'from' && $node->args !== [])) {
+                // Extract the enum class name
+                $argNode = $node->args[0];
+                if (!$argNode instanceof Node\Arg) {
+                    return null;
+                }
+                $arg = $argNode->value;
+                if ($arg instanceof Node\Expr\ClassConstFetch && ($arg->class instanceof Node\Name && $arg->name instanceof Node\Identifier && $arg->name->name === 'class')) {
+                    $enumClass = $arg->class->toString();
+                    // Return the full EnumType::from() expression
+                    return 'EnumType::from(' . $enumClass . '::class)';
                 }
             }
         }
