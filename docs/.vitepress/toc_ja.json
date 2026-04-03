@@ -1,0 +1,13 @@
+{
+  "/ja/": [
+    {
+      "text": "CakePHP Bake",
+      "collapsed": false,
+      "items": [
+        { "text": "Bake コンソール", "link": "/ja/" },
+        { "text": "Bake でコード生成", "link": "/ja/usage" },
+        { "text": "Bake の拡張", "link": "/ja/development" }
+      ]
+    }
+  ]
+}
