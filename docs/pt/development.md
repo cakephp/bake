@@ -102,7 +102,7 @@ Os arquivos de template do Bake usam a sintaxe [Twig](https://twig.symfony.com/d
 Então, por exemplo, quando você executar algo como:
 
 ```bash
-$ bin/cake bake shell Foo
+bin/cake bake shell Foo
 ```
 
 O template usado em `vendor/cakephp/bake/src/Template/Bake/Shell/shell.twig` parece com isto:
