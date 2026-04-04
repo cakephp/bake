@@ -31,6 +31,8 @@ export default {
     hostname: 'https://book.cakephp.org/bake/3/',
   },
   themeConfig: {
+    siteTitle: false,
+    pluginName: "Bake",
     socialLinks: [
       { icon: 'github', link: 'https://github.com/cakephp/bake' },
     ],
