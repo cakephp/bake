@@ -24,4 +24,4 @@ jobs:
             enable-spell-check: true
             enable-markdown-lint: true
             enable-link-check: true
-            tools-ref: '3.x'
+            tools-ref: '5.x'
