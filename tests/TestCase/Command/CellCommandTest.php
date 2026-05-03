@@ -30,7 +30,7 @@ class CellCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Cell' . DS;
@@ -43,7 +43,7 @@ class CellCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMain()
+    public function testMain(): void
     {
         $this->generatedFiles = [
             APP . 'View/Cell/ExampleCell.php',
@@ -62,7 +62,7 @@ class CellCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainPlugin()
+    public function testMainPlugin(): void
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
@@ -84,7 +84,7 @@ class CellCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakePlugin()
+    public function testBakePlugin(): void
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
@@ -105,7 +105,7 @@ class CellCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainPrefix()
+    public function testMainPrefix(): void
     {
         $this->generatedFiles = [
             APP . 'View/Cell/Admin/ExampleCell.php',
@@ -125,7 +125,7 @@ class CellCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainPrefixPlugin()
+    public function testMainPrefixPlugin(): void
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');

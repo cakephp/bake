@@ -20,24 +20,12 @@ use Cake\Console\ConsoleIo;
 
 class FileBuilder
 {
-    /**
-     * @var \Cake\Console\ConsoleIo
-     */
     protected ConsoleIo $io;
 
-    /**
-     * @var string
-     */
     protected string $namespace;
 
-    /**
-     * @var \Bake\CodeGen\ParsedFile|null
-     */
     protected ?ParsedFile $parsedFile;
 
-    /**
-     * @var \Bake\CodeGen\ClassBuilder
-     */
     protected ClassBuilder $classBuilder;
 
     /**
@@ -47,7 +35,7 @@ class FileBuilder
      */
     public function __construct(ConsoleIo $io, string $namespace, ?ParsedFile $parsedFile = null)
     {
-        if ($parsedFile && $parsedFile->namespace !== $namespace) {
+        if ($parsedFile instanceof ParsedFile && $parsedFile->namespace !== $namespace) {
             throw new ParseException(sprintf(
                 'Existing namespace `%s` does not match expected namespace `%s`, cannot update existing file',
                 $parsedFile->namespace,

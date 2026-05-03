@@ -44,8 +44,6 @@ abstract class BakeCommand extends Command
 
     /**
      * The pathFragment appended to the plugin/app path.
-     *
-     * @var string
      */
     protected string $pathFragment;
 
@@ -77,7 +75,7 @@ abstract class BakeCommand extends Command
     public static function defaultName(): string
     {
         $name = parent::defaultName();
-        if (strpos($name, 'bake_') === 0) {
+        if (str_starts_with($name, 'bake_')) {
             $name = substr($name, 5);
         }
 
@@ -119,7 +117,7 @@ abstract class BakeCommand extends Command
         }
         $parts = explode('/', $prefix);
 
-        return implode('/', array_map([$this, '_camelize'], $parts));
+        return implode('/', array_map($this->_camelize(...), $parts));
     }
 
     /**
@@ -214,7 +212,7 @@ abstract class BakeCommand extends Command
      */
     protected function isValidColumnName(string $name): bool
     {
-        return (bool)preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $name);
+        return (bool)preg_match('/^[a-zA-Z_]\w*$/', $name);
     }
 
     /**

@@ -53,7 +53,7 @@ class AssociationFilterTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->associationFilter = new AssociationFilter();
@@ -64,7 +64,7 @@ class AssociationFilterTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->getTableLocator()->clear();
         unset($this->associationFilter);
@@ -76,7 +76,7 @@ class AssociationFilterTest extends TestCase
      *
      * @return void
      */
-    public function testFilterHasManyAssociationsAliases()
+    public function testFilterHasManyAssociationsAliases(): void
     {
         $table = $this->getTableLocator()->get('Articles', [
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
@@ -95,7 +95,7 @@ class AssociationFilterTest extends TestCase
      *
      * @return void
      */
-    public function testFilterHasManyAssociationsAliasesExtra()
+    public function testFilterHasManyAssociationsAliasesExtra(): void
     {
         $table = $this->getTableLocator()->get('Articles', [
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
@@ -122,7 +122,7 @@ class AssociationFilterTest extends TestCase
      *
      * @return void
      */
-    public function testFilterAssociations()
+    public function testFilterAssociations(): void
     {
         $table = $this->getTableLocator()->get('Articles', [
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable',
@@ -144,7 +144,7 @@ class AssociationFilterTest extends TestCase
      *
      * @return void
      */
-    public function testFilterAssociationsSelf()
+    public function testFilterAssociationsSelf(): void
     {
         $table = $this->getTableLocator()->get('CategoryThreads', [
             'className' => '\Bake\Test\App\Model\Table\CategoryThreadsTable',
@@ -161,7 +161,7 @@ class AssociationFilterTest extends TestCase
      *
      * @return void
      */
-    public function testFilterAssociationsMissingTable()
+    public function testFilterAssociationsMissingTable(): void
     {
         $table = $this->getTableLocator()->get('Articles', [
             'className' => '\Bake\Test\App\Model\Table\ArticlesTable',

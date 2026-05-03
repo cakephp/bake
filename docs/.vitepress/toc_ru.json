@@ -1,0 +1,13 @@
+{
+  "/ru/": [
+    {
+      "text": "CakePHP Bake",
+      "collapsed": false,
+      "items": [
+        { "text": "Консоль Bake", "link": "/ru/" },
+        { "text": "Генерация кода с помощью Bake", "link": "/ru/usage" },
+        { "text": "Расширение возможностей Bake", "link": "/ru/development" }
+      ]
+    }
+  ]
+}

@@ -30,7 +30,7 @@ class CommandHelperTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Command' . DS;
@@ -42,7 +42,7 @@ class CommandHelperTest extends TestCase
      *
      * @return void
      */
-    public function testBakeCommandHelper()
+    public function testBakeCommandHelper(): void
     {
         $this->generatedFiles = [
             APP . 'Command/Helper/ErrorHelper.php',
@@ -63,7 +63,7 @@ class CommandHelperTest extends TestCase
      *
      * @return void
      */
-    public function testBakeCommandHelperPlugin()
+    public function testBakeCommandHelperPlugin(): void
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');

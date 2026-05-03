@@ -23,8 +23,6 @@ class MiddlewareCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
-     *
-     * @var string
      */
     public string $pathFragment = 'Middleware/';
 

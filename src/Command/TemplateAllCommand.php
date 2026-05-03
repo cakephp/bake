@@ -27,9 +27,6 @@ use Cake\Datasource\ConnectionManager;
  */
 class TemplateAllCommand extends BakeCommand
 {
-    /**
-     * @var \Bake\Command\TemplateCommand
-     */
     protected TemplateCommand $templateCommand;
 
     /**
@@ -86,7 +83,7 @@ class TemplateAllCommand extends BakeCommand
      * @param \Cake\Console\ConsoleOptionParser $parser The option parser to update.
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = $this->_setCommonOptions($parser);
         $parser

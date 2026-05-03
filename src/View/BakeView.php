@@ -132,7 +132,7 @@ class BakeView extends TwigView
         $paths = parent::_paths($plugin, false);
         foreach ($paths as &$path) {
             // Append 'bake' to all directories that aren't the application override directory.
-            if (strpos($path, 'plugin' . DS . 'Bake') === false) {
+            if (!str_contains($path, 'plugin' . DS . 'Bake')) {
                 $path .= static::BAKE_TEMPLATE_FOLDER . DS;
             }
         }

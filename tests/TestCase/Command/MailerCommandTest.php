@@ -30,7 +30,7 @@ class MailerCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Mailer' . DS;
@@ -42,7 +42,7 @@ class MailerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMain()
+    public function testMain(): void
     {
         $this->generatedFiles = [
             APP . 'Mailer/ExampleMailer.php',
@@ -60,7 +60,7 @@ class MailerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainPlugin()
+    public function testMainPlugin(): void
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
@@ -82,7 +82,7 @@ class MailerCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakePlugin()
+    public function testBakePlugin(): void
     {
         $this->_loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');

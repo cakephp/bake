@@ -29,7 +29,7 @@ class ClassBuilderTest extends TestCase
      */
     protected $io;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->io = new ConsoleIo(new StubConsoleOutput());

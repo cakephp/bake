@@ -21,16 +21,6 @@ class ExampleCommand extends Command
     protected string $name = 'test_bake example';
 
     /**
-     * Get the default command name.
-     *
-     * @return string
-     */
-    public static function defaultName(): string
-    {
-        return 'test_bake example';
-    }
-
-    /**
      * Get the command description.
      *
      * @return string

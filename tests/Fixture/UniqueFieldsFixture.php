@@ -23,8 +23,6 @@ class UniqueFieldsFixture extends TestFixture
 {
     /**
      * records property
-     *
-     * @var array
      */
     public array $records = [
         ['field_1' => 'unique_value_1', 'field_2' => 'unique_value_2'],

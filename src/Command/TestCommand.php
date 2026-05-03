@@ -149,7 +149,7 @@ class TestCommand extends BakeCommand
             2,
         );
         $i = 0;
-        foreach ($this->classTypes as $option => $package) {
+        foreach (array_keys($this->classTypes) as $option) {
             $io->out(++$i . '. ' . $option);
         }
         $io->out('');
@@ -228,19 +228,15 @@ class TestCommand extends BakeCommand
                     /** @var string $relativePath */
                     $relativePath = str_replace($base, '', $fileObj->getPath());
                     $relativePath = trim(str_replace(DIRECTORY_SEPARATOR, '\\', $relativePath), '\\');
-                    $className = substr($fileObj->getFileName(), 0, -4) ?: '';
-                    if ($relativePath) {
-                        $classes[] = $relativePath . '\\' . $className;
-                    } else {
-                        $classes[] = $className;
-                    }
+                    $className = substr((string)$fileObj->getFileName(), 0, -4) ?: '';
+                    $classes[] = $relativePath ? $relativePath . '\\' . $className : $className;
                 }
             }
         } else {
             $files = (new Filesystem())->find($path);
             foreach ($files as $fileObj) {
                 if ($fileObj->isFile()) {
-                    $classes[] = substr($fileObj->getFileName(), 0, -4) ?: '';
+                    $classes[] = substr((string)$fileObj->getFileName(), 0, -4) ?: '';
                 }
             }
         }
@@ -332,7 +328,7 @@ class TestCommand extends BakeCommand
         if ($this->plugin) {
             $baseNamespace = $this->_pluginNamespace($this->plugin);
         }
-        $subNamespace = substr($namespace, strlen($baseNamespace) + 1);
+        $subNamespace = substr($namespace, strlen((string)$baseNamespace) + 1);
 
         $properties = $this->generateProperties($type, $subject, $fullClassName);
 
@@ -445,7 +441,7 @@ class TestCommand extends BakeCommand
         if ($type === 'Class') {
             // Strip base namespace if user included it
             if (str_starts_with($class, $namespace . '\\')) {
-                $class = substr($class, strlen($namespace) + 1);
+                $class = substr($class, strlen((string)$namespace) + 1);
             }
 
             return $namespace . '\\' . $class;
@@ -453,7 +449,7 @@ class TestCommand extends BakeCommand
 
         $suffix = $this->classSuffixes[$type];
         $subSpace = $this->mapType($type);
-        if ($suffix && strpos($class, $suffix) === false) {
+        if ($suffix && !str_contains($class, $suffix)) {
             $class .= $suffix;
         }
         if (in_array($type, ['Controller', 'Cell'], true) && $prefix) {
@@ -549,9 +545,9 @@ class TestCommand extends BakeCommand
             $assoc = $subject->getAssociation($alias);
             $target = $assoc->getTarget();
             $name = $target->getAlias();
-            $subjectClass = get_class($subject);
+            $subjectClass = $subject::class;
 
-            if ($subjectClass !== Table::class && $subjectClass === get_class($target)) {
+            if ($subjectClass !== Table::class && $subjectClass === $target::class) {
                 continue;
             }
             if (!isset($this->_fixtures[$name])) {
@@ -571,7 +567,7 @@ class TestCommand extends BakeCommand
     {
         try {
             $model = $subject->fetchTable();
-        } catch (UnexpectedValueException $exception) {
+        } catch (UnexpectedValueException) {
             // No fixtures needed or possible
             return;
         }
@@ -592,11 +588,7 @@ class TestCommand extends BakeCommand
      */
     protected function _addFixture(string $name): void
     {
-        if ($this->plugin) {
-            $prefix = 'plugin.' . $this->plugin . '.';
-        } else {
-            $prefix = 'app.';
-        }
+        $prefix = $this->plugin ? 'plugin.' . $this->plugin . '.' : 'app.';
         $fixture = $prefix . $this->_fixtureName($name);
         $this->_fixtures[$name] = $fixture;
     }
@@ -774,12 +766,11 @@ class TestCommand extends BakeCommand
     public function getBasePath(): string
     {
         $dir = 'TestCase/';
-        $path = defined('TESTS') ? TESTS . $dir : ROOT . DS . 'tests' . DS . $dir;
         if ($this->plugin) {
-            $path = $this->_pluginPath($this->plugin) . 'tests/' . $dir;
+            return $this->_pluginPath($this->plugin) . 'tests/' . $dir;
         }
 
-        return $path;
+        return defined('TESTS') ? TESTS . $dir : ROOT . DS . 'tests' . DS . $dir;
     }
 
     /**
@@ -798,7 +789,7 @@ class TestCommand extends BakeCommand
             $namespace = $this->plugin;
         }
 
-        $classTail = substr($className, strlen($namespace) + 1);
+        $classTail = substr($className, strlen((string)$namespace) + 1);
         $path = $path . $classTail . 'Test.php';
 
         return str_replace(['/', '\\'], DS, $path);
@@ -810,12 +801,12 @@ class TestCommand extends BakeCommand
      * @param \Cake\Console\ConsoleOptionParser $parser Option parser to update
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = $this->_setCommonOptions($parser);
 
         $types = array_keys($this->classTypes);
-        $types = array_merge($types, array_map([$this, 'underscore'], $types));
+        $types = array_merge($types, array_map($this->underscore(...), $types));
 
         $parser->setDescription(
             'Bake test case skeletons for classes.',

@@ -30,24 +30,12 @@ use InvalidArgumentException;
  */
 trait CommonOptionsTrait
 {
-    /**
-     * @var string
-     */
     public ?string $plugin = null;
 
-    /**
-     * @var string|null
-     */
     public ?string $theme = null;
 
-    /**
-     * @var string
-     */
     public string $connection;
 
-    /**
-     * @var bool
-     */
     public bool $force = false;
 
     /**

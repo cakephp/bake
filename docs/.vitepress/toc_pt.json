@@ -1,0 +1,13 @@
+{
+  "/pt/": [
+    {
+      "text": "CakePHP Bake",
+      "collapsed": false,
+      "items": [
+        { "text": "Console Bake", "link": "/pt/" },
+        { "text": "Geração de Código com Bake", "link": "/pt/usage" },
+        { "text": "Estendendo o Bake", "link": "/pt/development" }
+      ]
+    }
+  ]
+}

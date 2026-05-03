@@ -23,8 +23,6 @@ class DatatypesFixture extends TestFixture
 {
     /**
      * Records property
-     *
-     * @var array
      */
     public array $records = [
         ['decimal_field' => '30.123', 'float_field' => 42.23, 'huge_int' => '1234567891234567891', 'small_int' => '1234', 'tiny_int' => '12', 'bool' => 0, 'timestamp_field' => '2007-03-17 01:16:23'],

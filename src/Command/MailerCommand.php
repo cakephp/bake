@@ -26,8 +26,6 @@ class MailerCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
-     *
-     * @var string
      */
     public string $pathFragment = 'Mailer/';
 
@@ -63,7 +61,7 @@ class MailerCommand extends SimpleBakeCommand
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bake(string $name, Arguments $args, ConsoleIo $io): void
+    protected function bake(string $name, Arguments $args, ConsoleIo $io): void
     {
         parent::bake($name, $args, $io);
     }

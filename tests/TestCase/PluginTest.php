@@ -27,13 +27,13 @@ use Cake\Routing\RouteCollection;
  */
 class PluginTest extends TestCase
 {
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->removePlugins(['BakeTest', 'WithBakeSubFolder']);
     }
 
-    public function testRoutes()
+    public function testRoutes(): void
     {
         $collection = new RouteCollection();
         $routes = new RouteBuilder($collection, '/');
@@ -43,7 +43,7 @@ class PluginTest extends TestCase
         $this->assertCount(0, $collection->routes());
     }
 
-    public function testConsoleDiscoverBakeCommands()
+    public function testConsoleDiscoverBakeCommands(): void
     {
         Plugin::getCollection()->add(new BakePlugin());
         $commands = new CommandCollection();
@@ -62,7 +62,7 @@ class PluginTest extends TestCase
         $this->assertFalse($commands->has('bake bake_command'));
     }
 
-    public function testConsoleDiscoverPluginCommands()
+    public function testConsoleDiscoverPluginCommands(): void
     {
         $this->_loadTestPlugin('BakeTest');
 
@@ -75,7 +75,7 @@ class PluginTest extends TestCase
         $this->assertFalse($commands->has('bake BakeTest.zergling'));
     }
 
-    public function testConsoleDiscoverPluginCommandsInSubFolder()
+    public function testConsoleDiscoverPluginCommandsInSubFolder(): void
     {
         $this->_loadTestPlugin('WithBakeSubFolder');
 
@@ -90,7 +90,7 @@ class PluginTest extends TestCase
         );
     }
 
-    public function testConsoleDiscoverAppCommands()
+    public function testConsoleDiscoverAppCommands(): void
     {
         $this->setAppNamespace('Bake\Test\App');
 

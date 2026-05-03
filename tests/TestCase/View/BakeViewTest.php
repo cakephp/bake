@@ -41,7 +41,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'BakeView' . DS;
@@ -56,7 +56,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         unset($this->View);
@@ -67,7 +67,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function testRenderTemplate()
+    public function testRenderTemplate(): void
     {
         $this->View->set(['aVariable' => 123]);
         $result = $this->View->render('simple');
@@ -81,7 +81,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function testRenderIgnorePhpTags()
+    public function testRenderIgnorePhpTags(): void
     {
         $this->View->set(['aVariable' => 123]);
         $result = $this->View->render('simple_php');
@@ -95,7 +95,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function testRenderIgnorePhpShortTags()
+    public function testRenderIgnorePhpShortTags(): void
     {
         $this->View->set(['aVariable' => 123]);
         $result = $this->View->render('simple_php_short_tags');
@@ -109,7 +109,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function testRenderNewlines()
+    public function testRenderNewlines(): void
     {
         $result = $this->View->render('newlines');
         $expected = "There should be a newline about here: \n";
@@ -129,7 +129,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function testSwallowLeadingWhitespace()
+    public function testSwallowLeadingWhitespace(): void
     {
         $result = $this->View->render('leading_whitespace');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -140,7 +140,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function testNoLineBreaks()
+    public function testNoLineBreaks(): void
     {
         $result = $this->View->render('no_line_breaks');
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -152,7 +152,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function testSeparatorRenderEvents()
+    public function testSeparatorRenderEvents(): void
     {
         $this->View->set('test', 'success');
         $result = $this->View->render('Custom' . DS . 'file');
@@ -162,10 +162,10 @@ class BakeViewTest extends TestCase
         );
 
         $this->View->set('test', 'success');
-        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
+        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event): void {
             $event->getSubject()->set('test', 'separator constant beforeRender');
         });
-        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event) {
+        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event): void {
             $event->getSubject()->set('test', 'separator constant afterRender');
         });
         $result = $this->View->render('Custom' . DS . 'file');
@@ -176,10 +176,10 @@ class BakeViewTest extends TestCase
         $this->assertSame($this->View->get('test'), 'separator constant afterRender');
 
         $this->View->set('test', 'success');
-        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
+        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event): void {
             $event->getSubject()->set('test', 'fixed separator beforeRender');
         });
-        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event) {
+        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event): void {
             $event->getSubject()->set('test', 'fixed separator afterRender');
         });
         $result = $this->View->render('Custom/file');
@@ -195,7 +195,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function testPluginRenderEvents()
+    public function testPluginRenderEvents(): void
     {
         $this->View->set('test', 'success');
         $result = $this->View->render('Bake.Custom' . DS . 'file');
@@ -205,10 +205,10 @@ class BakeViewTest extends TestCase
         );
 
         $this->View->set('test', 'success');
-        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
+        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event): void {
             $event->getSubject()->set('test', 'plugin template beforeRender');
         });
-        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event) {
+        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event): void {
             $event->getSubject()->set('test', 'plugin template afterRender');
         });
         $result = $this->View->render('Bake.Custom' . DS . 'file');
@@ -224,7 +224,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function testCustomRenderEvents()
+    public function testCustomRenderEvents(): void
     {
         $this->View->set('test', 'success');
         $result = $this->View->render('Custom' . DS . 'file');
@@ -234,10 +234,10 @@ class BakeViewTest extends TestCase
         );
 
         $this->View->set('test', 'success');
-        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event) {
+        $this->View->getEventManager()->on('Bake.beforeRender.Custom.file', function (Event $event): void {
             $event->getSubject()->set('test', 'custom template beforeRender');
         });
-        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event) {
+        $this->View->getEventManager()->on('Bake.afterRender.Custom.file', function (Event $event): void {
             $event->getSubject()->set('test', 'custom template afterRender');
         });
         $result = $this->View->render('Custom' . DS . 'file');
@@ -253,7 +253,7 @@ class BakeViewTest extends TestCase
      *
      * @return void
      */
-    public function testApplicationOverride()
+    public function testApplicationOverride(): void
     {
         $result = $this->View->render('Bake.override');
         $this->assertSame("Application override.\n", $result);

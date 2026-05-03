@@ -36,7 +36,7 @@ class FileBuilderTest extends TestCase
      */
     protected $io;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->out = new StubConsoleOutput();

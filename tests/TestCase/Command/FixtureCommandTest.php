@@ -51,7 +51,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -117,7 +117,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testImportRecordsFromDatabase()
+    public function testImportRecordsFromDatabase(): void
     {
         $this->generatedFile = ROOT . 'tests/Fixture/DatatypesFixture.php';
         $this->exec('bake fixture --connection test --schema --records --count 2 Datatypes');
@@ -134,7 +134,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testImportOptionsAlternateConnection()
+    public function testImportOptionsAlternateConnection(): void
     {
         $this->generatedFile = ROOT . 'tests/Fixture/ArticleFixture.php';
         $this->exec('bake fixture --connection test --schema Article');
@@ -148,7 +148,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testImportRecordsNoEscaping()
+    public function testImportRecordsNoEscaping(): void
     {
         $articles = $this->getTableLocator()->get('Articles');
         $articles->updateAll(['body' => 'Body "value"'], []);
@@ -169,7 +169,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithTableOption()
+    public function testMainWithTableOption(): void
     {
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test --table comments Articles');
@@ -183,7 +183,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithSingularTable()
+    public function testMainWithSingularTable(): void
     {
         $this->generatedFile = ROOT . 'tests/Fixture/CarFixture.php';
         $this->exec('bake fixture --connection test car');
@@ -198,7 +198,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainWithPluginModel()
+    public function testMainWithPluginModel(): void
     {
         $this->loadPlugins(['FixtureTest' => ['path' => APP . 'Plugin/FixtureTest/']]);
 
@@ -214,7 +214,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainNoArgs()
+    public function testMainNoArgs(): void
     {
         $this->exec('bake fixture --connection test');
 
@@ -228,7 +228,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBake()
+    public function testBake(): void
     {
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test --fields Articles');
@@ -244,7 +244,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakeNoFields()
+    public function testBakeNoFields(): void
     {
         $this->generatedFile = ROOT . 'tests/Fixture/ArticlesFixture.php';
         $this->exec('bake fixture --connection test Articles');
@@ -261,7 +261,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testMainImportSchema()
+    public function testMainImportSchema(): void
     {
         $this->generatedFile = ROOT . 'tests/Fixture/CommentsFixture.php';
         $this->exec('bake fixture --connection test --schema Comments');
@@ -277,7 +277,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testRecordGenerationForDatatypes()
+    public function testRecordGenerationForDatatypes(): void
     {
         $this->generatedFile = ROOT . 'tests/Fixture/DatatypesFixture.php';
         $this->exec('bake fixture --connection test --fields Datatypes');
@@ -305,7 +305,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testRecordGenerationForBinaryType()
+    public function testRecordGenerationForBinaryType(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf($driver instanceof Postgres, 'Incompatible with postgres');
@@ -322,7 +322,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testRecordGenerationForBinaryTypePostgres()
+    public function testRecordGenerationForBinaryTypePostgres(): void
     {
         $driver = ConnectionManager::get('test')->getDriver();
         $this->skipIf(($driver instanceof Postgres) === false, 'Only compatible with postgres');
@@ -339,7 +339,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGenerateFixtureFileRemappedJsonTypes()
+    public function testGenerateFixtureFileRemappedJsonTypes(): void
     {
         $table = $this->getTableLocator()->get('Articles');
         $table->getSchema()->addColumn('body', ['type' => 'json']);
@@ -356,7 +356,7 @@ class FixtureCommandTest extends TestCase
      *
      * @return void
      */
-    public function testGeneratePluginFixtureFile()
+    public function testGeneratePluginFixtureFile(): void
     {
         $this->_loadTestPlugin('TestBake');
         $root = Plugin::path('TestBake');

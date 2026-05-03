@@ -39,22 +39,16 @@ class TemplateCommand extends BakeCommand
 {
     /**
      * Name of the controller being used
-     *
-     * @var string
      */
     public string $controllerName;
 
     /**
      * Classname of the controller being used
-     *
-     * @var string
      */
     public string $controllerClass;
 
     /**
      * Name with plugin of the model being used
-     *
-     * @var string
      */
     public string $modelName;
 
@@ -74,22 +68,16 @@ class TemplateCommand extends BakeCommand
 
     /**
      * AssociationFilter utility
-     *
-     * @var \Bake\Utility\Model\AssociationFilter|null
      */
     protected ?AssociationFilter $_associationFilter = null;
 
     /**
      * Template path.
-     *
-     * @var string
      */
     public string $path;
 
     /**
      * Output extension
-     *
-     * @var string
      */
     public string $ext = 'php';
 
@@ -180,7 +168,7 @@ class TemplateCommand extends BakeCommand
         $tableName = $this->_camelize($table);
         $plugin = $this->plugin;
         if ($plugin) {
-            $plugin = $plugin . '.';
+            $plugin .= '.';
         }
         $this->modelName = $plugin . $tableName;
     }
@@ -222,9 +210,8 @@ class TemplateCommand extends BakeCommand
     public function getTemplatePath(Arguments $args, ?string $container = null): string
     {
         $path = parent::getTemplatePath($args, $container);
-        $path .= $this->controllerName . DS;
 
-        return $path;
+        return $path . $this->controllerName . DS;
     }
 
     /**
@@ -434,7 +421,7 @@ class TemplateCommand extends BakeCommand
      * @param \Cake\Console\ConsoleOptionParser $parser The option parser to update.
      * @return \Cake\Console\ConsoleOptionParser
      */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser = $this->_setCommonOptions($parser);
 
@@ -467,7 +454,7 @@ class TemplateCommand extends BakeCommand
      */
     protected function _filteredAssociations(Table $model): array
     {
-        if ($this->_associationFilter === null) {
+        if (!$this->_associationFilter instanceof AssociationFilter) {
             $this->_associationFilter = new AssociationFilter();
         }
 

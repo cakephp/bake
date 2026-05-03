@@ -21,8 +21,5 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class BakeCarFixture extends TestFixture
 {
-    /**
-     * @var string
-     */
     public string $table = 'car';
 }

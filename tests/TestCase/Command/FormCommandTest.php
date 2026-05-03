@@ -29,7 +29,7 @@ class FormCommandTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +41,7 @@ class FormCommandTest extends TestCase
      *
      * @return void
      */
-    public function testCommand()
+    public function testCommand(): void
     {
         $this->generatedFiles = [
             APP . 'Form' . DS . 'TestForm.php',

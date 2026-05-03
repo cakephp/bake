@@ -45,7 +45,7 @@ class TableScannerTest extends TestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -57,7 +57,7 @@ class TableScannerTest extends TestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
         unset($this->tableScanner);
@@ -66,7 +66,7 @@ class TableScannerTest extends TestCase
     /**
      * @return void
      */
-    public function testListAll()
+    public function testListAll(): void
     {
         $this->tableScanner = new TableScanner($this->connection);
 
@@ -87,7 +87,7 @@ class TableScannerTest extends TestCase
     /**
      * @return void
      */
-    public function testListUnskipped()
+    public function testListUnskipped(): void
     {
         $this->tableScanner = new TableScanner($this->connection, ['todo_items']);
 
@@ -108,7 +108,7 @@ class TableScannerTest extends TestCase
     /**
      * @return void
      */
-    public function testListUnskippedRegex()
+    public function testListUnskippedRegex(): void
     {
         $this->tableScanner = new TableScanner($this->connection, ['/tasks$/']);
 

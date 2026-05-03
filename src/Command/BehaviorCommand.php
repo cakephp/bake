@@ -23,8 +23,6 @@ class BehaviorCommand extends SimpleBakeCommand
 {
     /**
      * Task name used in path generation.
-     *
-     * @var string
      */
     public string $pathFragment = 'Model/Behavior/';
 

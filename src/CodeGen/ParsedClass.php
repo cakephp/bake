@@ -21,9 +21,6 @@ namespace Bake\CodeGen;
  */
 class ParsedClass
 {
-    /**
-     * @var string
-     */
     public string $name;
 
     /**
