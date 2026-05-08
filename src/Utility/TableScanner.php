@@ -47,7 +47,7 @@ class TableScanner
     {
         $this->connection = $connection;
         if ($ignore === null) {
-            $ignore = ['i18n', 'cake_sessions', 'sessions', '/phinxlog/'];
+            $ignore = ['i18n', 'cake_sessions', 'cake_migrations', 'cake_seeds', 'sessions', '/phinxlog/'];
         }
         $this->ignore = $ignore;
     }
