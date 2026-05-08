@@ -18,7 +18,7 @@ class ExampleCommand extends Command
      *
      * @var string
      */
-    protected string $name = 'test_bake example';
+    protected string $name = 'cake test_bake example';
 
     /**
      * Get the default command name.
