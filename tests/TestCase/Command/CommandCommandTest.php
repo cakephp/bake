@@ -53,6 +53,7 @@ class CommandCommandTest extends TestCase
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class ExampleCommand extends Command', $this->generatedFiles[0]);
+        $this->assertFileContains("protected string \$name = 'cake example'", $this->generatedFiles[0]);
     }
 
     /**
