@@ -16,9 +16,11 @@ declare(strict_types=1);
  */
 namespace Bake\Test\TestCase\Command;
 
+use Bake\Command\TemplateAllCommand;
 use Bake\Test\TestCase\TestCase;
 use Bake\Utility\SubsetSchemaCollection;
 use Cake\Console\CommandInterface;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 
@@ -121,5 +123,19 @@ class TemplateAllCommandTest extends TestCase
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('title', $this->generatedFiles[0]);
         $this->assertFileNotContains('published', $this->generatedFiles[0]);
+    }
+
+    /**
+     * The option parser is built before initialize() runs, so the wrapped subcommand
+     * must already be available at that point. Regression test for the subcommand being
+     * assigned in initialize() instead of the constructor.
+     *
+     * @return void
+     */
+    public function testGetOptionParserBeforeInitialize(): void
+    {
+        $command = new TemplateAllCommand();
+
+        $this->assertInstanceOf(ConsoleOptionParser::class, $command->getOptionParser());
     }
 }

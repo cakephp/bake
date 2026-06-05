@@ -16,9 +16,11 @@ declare(strict_types=1);
  */
 namespace Bake\Test\TestCase\Command;
 
+use Bake\Command\ControllerAllCommand;
 use Bake\Test\App\Model\Table\BakeArticlesTable;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\CommandInterface;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Plugin;
 use Cake\Utility\Inflector;
 
@@ -90,5 +92,19 @@ class ControllerAllCommandTest extends TestCase
             ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php',
             'Test should not be created as options should be forwarded',
         );
+    }
+
+    /**
+     * The option parser is built before initialize() runs, so the wrapped subcommand
+     * must already be available at that point. Regression test for the subcommand being
+     * assigned in initialize() instead of the constructor.
+     *
+     * @return void
+     */
+    public function testGetOptionParserBeforeInitialize(): void
+    {
+        $command = new ControllerAllCommand();
+
+        $this->assertInstanceOf(ConsoleOptionParser::class, $command->getOptionParser());
     }
 }

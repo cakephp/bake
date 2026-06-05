@@ -18,6 +18,7 @@ namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
 use Cake\Console\Arguments;
+use Cake\Console\CommandFactoryInterface;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
@@ -38,13 +39,15 @@ class TemplateAllCommand extends BakeCommand
     }
 
     /**
-     * initialize
+     * The subcommand is assigned in the constructor (not initialize()) because
+     * buildOptionParser() runs before initialize() and reads it.
      *
-     * @return void
+     * @param \Cake\Console\CommandFactoryInterface|null $factory Command factory instance.
      */
-    public function initialize(): void
+    public function __construct(?CommandFactoryInterface $factory = null)
     {
-        parent::initialize();
+        parent::__construct($factory);
+
         $this->templateCommand = new TemplateCommand();
     }
 
