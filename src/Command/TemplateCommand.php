@@ -303,7 +303,14 @@ class TemplateCommand extends BakeCommand
         }
         $associations = $this->_filteredAssociations($modelObject);
         $keyFields = [];
-        if (!empty($associations['BelongsTo'])) {
+
+        if (isset($associations['BelongsToMany'])) {
+            foreach ($associations['BelongsToMany'] as $assoc) {
+                $keyFields[$assoc['foreignKey']] = $assoc['variable'];
+            }
+        }
+
+        if (isset($associations['BelongsTo'])) {
             foreach ($associations['BelongsTo'] as $assoc) {
                 $keyFields[$assoc['foreignKey']] = $assoc['variable'];
             }
@@ -412,7 +419,7 @@ class TemplateCommand extends BakeCommand
         $useDomain = (bool)$this->plugin;
         $renderer->set('useDomain', $useDomain);
 
-        return $renderer->generate("Bake.Template/$action");
+        return $renderer->generate("Bake.Template/{$action}");
     }
 
     /**
