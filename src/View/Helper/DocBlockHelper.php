@@ -103,8 +103,8 @@ class DocBlockHelper extends Helper
      * ```
      *
      * @see \Bake\Command\ModelCommand::getEntityPropertySchema
-     * @param array $propertySchema The property schema to use for generating the type map.
-     * @return array The property DocType map.
+     * @param array<string, array<string, mixed>> $propertySchema The property schema to use for generating the type map.
+     * @return array<string, string|null> The property DocType map.
      */
     public function buildEntityPropertyHintTypeMap(array $propertySchema): array
     {
@@ -140,8 +140,8 @@ class DocBlockHelper extends Helper
      * ```
      *
      * @see \Bake\Command\ModelCommand::getEntityPropertySchema
-     * @param array $propertySchema The property schema to use for generating the type map.
-     * @return array The property DocType map.
+     * @param array<string, array<string, mixed>> $propertySchema The property schema to use for generating the type map.
+     * @return array<string, string> The property DocType map.
      */
     public function buildEntityAssociationHintTypeMap(array $propertySchema): array
     {
@@ -268,9 +268,9 @@ class DocBlockHelper extends Helper
     /**
      * Build property, method, mixing annotations for table class.
      *
-     * @param array $associations Associations list.
-     * @param array $associationInfo Association info.
-     * @param array $behaviors Behaviors list.
+     * @param array<string, array<int|string, mixed>> $associations Associations list.
+     * @param array<string, array{targetFqn: string}> $associationInfo Association info.
+     * @param array<string, array<mixed>> $behaviors Behaviors list.
      * @param string $entity Entity name.
      * @param string $namespace Namespace.
      * @return array<string>
@@ -324,10 +324,10 @@ class DocBlockHelper extends Helper
      *
      * In case the given key cannot be found, the value will be appended.
      *
-     * @param array $target The array in which to insert the new value.
+     * @param array<string, mixed> $target The array in which to insert the new value.
      * @param string $key The array key after which to insert the new value.
      * @param mixed $value The entry to insert.
-     * @return array The array with the new value inserted.
+     * @return array<string, mixed> The array with the new value inserted.
      */
     protected function _insertAfter(array $target, string $key, mixed $value): array
     {

@@ -49,6 +49,9 @@ class CodeParser extends NodeVisitorAbstract
 
     protected string $fileText = '';
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $parsed = [];
 
     /**

@@ -71,7 +71,7 @@ trait CommonOptionsTrait
     /**
      * Get available bake themes
      *
-     * @return array
+     * @return list<string>
      */
     protected function _getBakeThemes(): array
     {

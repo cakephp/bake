@@ -82,7 +82,7 @@ class TemplateRenderer
      * Runs the template
      *
      * @param string $template bake template to render
-     * @param array|null $vars Additional vars to set to template scope.
+     * @param array<string, mixed>|null $vars Additional vars to set to template scope.
      * @return string contents of generated code template
      */
     public function generate(string $template, ?array $vars = null): string

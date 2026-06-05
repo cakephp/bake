@@ -167,7 +167,7 @@ class ControllerCommand extends BakeCommand
      * Generate the controller code
      *
      * @param string $controllerName The name of the controller.
-     * @param array $data The data to turn into code.
+     * @param array<string, mixed> $data The data to turn into code.
      * @param \Cake\Console\Arguments $args The console args
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return void

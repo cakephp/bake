@@ -664,7 +664,7 @@ class TemplateCommandTest extends TestCase
      *
      * @return void
      */
-    public function testBakePluginTemplatesWithDomain()
+    public function testBakePluginTemplatesWithDomain(): void
     {
         $this->_loadTestPlugin('BakeTest');
         $path = Plugin::templatePath('BakeTest');
@@ -678,7 +678,7 @@ class TemplateCommandTest extends TestCase
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
-        $this->assertFileContains('__d(\'BakeTest\', ', $this->generatedFile);
+        $this->assertFileContains("__d('BakeTest', ", $this->generatedFile);
     }
 
     /**

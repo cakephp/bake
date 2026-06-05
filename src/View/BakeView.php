@@ -105,7 +105,7 @@ class BakeView extends TwigView
      * Use the Bake prefix for bake related view events
      *
      * @param string $name Name of the event.
-     * @param array $data Any value you wish to be transported with this event to
+     * @param array<array-key, mixed> $data Any value you wish to be transported with this event to
      * it can be read by listeners.
      * @param object|null $subject The object that this event applies to
      * ($this by default).

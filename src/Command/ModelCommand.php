@@ -150,7 +150,7 @@ class ModelCommand extends BakeCommand
      * @param string $name The model name to generate.
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @param \Cake\Console\ConsoleIo $io CLI io
-     * @return array
+     * @return array<string, mixed>
      */
     public function getTableContext(
         Table $tableObject,
@@ -221,7 +221,7 @@ class ModelCommand extends BakeCommand
      * @param \Cake\ORM\Table $table The table to get associations for.
      * @param \Cake\Console\Arguments $args CLI Arguments
      * @param \Cake\Console\ConsoleIo $io CLI io
-     * @return array
+     * @return array<string, array<int|string, mixed>>
      */
     public function getAssociations(Table $table, Arguments $args, ConsoleIo $io): array
     {
@@ -265,7 +265,7 @@ class ModelCommand extends BakeCommand
      * generic table object means fields will be detected correctly.
      *
      * @param \Cake\ORM\Table $model The table to apply associations to.
-     * @param array $associations The associations to append.
+     * @param array<string, array<int|string, mixed>> $associations The associations to append.
      * @return void
      */
     public function applyAssociations(Table $model, array $associations): void
@@ -299,7 +299,7 @@ class ModelCommand extends BakeCommand
      * ```
      *
      * @param \Cake\ORM\Table $table The table from which to collect association information.
-     * @return array A map of association information.
+     * @return array<string, array{targetFqn: string}> A map of association information.
      */
     public function getAssociationInfo(Table $table): array
     {
@@ -336,9 +336,9 @@ class ModelCommand extends BakeCommand
      * Find belongsTo relations and add them to the associations list.
      *
      * @param \Cake\ORM\Table $model Database\Table instance of table being generated.
-     * @param array $associations Array of in progress associations
+     * @param array<string, array<int|string, mixed>> $associations Array of in progress associations
      * @param \Cake\Console\Arguments|null $args CLI arguments
-     * @return array Associations with belongsTo added in.
+     * @return array<string, array<int|string, mixed>> Associations with belongsTo added in.
      */
     public function findBelongsTo(Table $model, array $associations, ?Arguments $args = null): array
     {
@@ -495,8 +495,8 @@ class ModelCommand extends BakeCommand
      * Find the hasOne relations and add them to associations list
      *
      * @param \Cake\ORM\Table $model Model instance being generated
-     * @param array $associations Array of in progress associations
-     * @return array Associations with hasOne added in.
+     * @param array<string, array<int|string, mixed>> $associations Array of in progress associations
+     * @return array<string, array<int|string, mixed>> Associations with hasOne added in.
      */
     public function findHasOne(Table $model, array $associations): array
     {
@@ -542,8 +542,8 @@ class ModelCommand extends BakeCommand
      * Find the hasMany relations and add them to associations list
      *
      * @param \Cake\ORM\Table $model Model instance being generated
-     * @param array $associations Array of in progress associations
-     * @return array Associations with hasMany added in.
+     * @param array<string, array<int|string, mixed>> $associations Array of in progress associations
+     * @return array<string, array<int|string, mixed>> Associations with hasMany added in.
      */
     public function findHasMany(Table $model, array $associations): array
     {
@@ -596,8 +596,8 @@ class ModelCommand extends BakeCommand
      * Find the BelongsToMany relations and add them to associations list
      *
      * @param \Cake\ORM\Table $model Model instance being generated
-     * @param array $associations Array of in-progress associations
-     * @return array Associations with belongsToMany added in.
+     * @param array<string, array<int|string, mixed>> $associations Array of in-progress associations
+     * @return array<string, array<int|string, mixed>> Associations with belongsToMany added in.
      */
     public function findBelongsToMany(Table $model, array $associations): array
     {
@@ -691,7 +691,7 @@ class ModelCommand extends BakeCommand
      * class.
      *
      * @param \Cake\ORM\Table $model The model to introspect.
-     * @return array The property schema
+     * @return array<string, array<string, mixed>> The property schema
      */
     public function getEntityPropertySchema(Table $model): array
     {
@@ -699,7 +699,7 @@ class ModelCommand extends BakeCommand
 
         $schema = $model->getSchema();
         foreach ($schema->columns() as $column) {
-            /** @var array $columnSchema */
+            /** @var array<string, mixed> $columnSchema */
             $columnSchema = $schema->getColumn($column);
 
             $properties[$column] = [
@@ -799,9 +799,9 @@ class ModelCommand extends BakeCommand
      * Generate default validation rules.
      *
      * @param \Cake\ORM\Table $model The model to introspect.
-     * @param array $associations The associations list.
+     * @param array<string, array<int|string, mixed>> $associations The associations list.
      * @param \Cake\Console\Arguments $args CLI Arguments
-     * @return array|false The validation rules.
+     * @return array<string, array<string, mixed>>|false The validation rules.
      */
     public function getValidation(Table $model, array $associations, Arguments $args): array|false
     {
@@ -843,9 +843,9 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\Database\Schema\TableSchemaInterface $schema The table schema for the current field.
      * @param string $fieldName Name of field to be validated.
-     * @param array $metaData metadata for field
+     * @param array<string, mixed> $metaData metadata for field
      * @param array<string> $primaryKey The primary key field. Unused because PK validation is skipped
-     * @return array Array of validation for the field.
+     * @return array<string, array<string, mixed>> Array of validation for the field.
      */
     public function fieldValidation(
         TableSchemaInterface $schema,
@@ -930,9 +930,11 @@ class ModelCommand extends BakeCommand
         }
 
         foreach ($schema->constraints() as $constraint) {
-            /** @var array $constraint */
             $constraint = $schema->getConstraint($constraint);
-            if (!in_array($fieldName, $constraint['columns'] ?? [], true) || count($constraint['columns']) > 1) {
+            if (
+                $constraint === null
+                || !in_array($fieldName, $constraint['columns'] ?? [], true) || count($constraint['columns']) > 1
+            ) {
                 continue;
             }
 
@@ -958,7 +960,7 @@ class ModelCommand extends BakeCommand
      * Get the specific allow empty method for field based on metadata.
      *
      * @param string $fieldName Field name.
-     * @param array $metaData Field meta data.
+     * @param array<string, mixed> $metaData Field meta data.
      * @param string $prefix Method name prefix.
      * @return string
      */
@@ -990,9 +992,9 @@ class ModelCommand extends BakeCommand
      * Generate default rules checker.
      *
      * @param \Cake\ORM\Table $model The model to introspect.
-     * @param array $associations The associations for the model.
+     * @param array<string, array<int|string, mixed>> $associations The associations for the model.
      * @param \Cake\Console\Arguments $args CLI Arguments
-     * @return array The rules to be applied.
+     * @return list<array<string, mixed>> The rules to be applied.
      */
     public function getRules(Table $model, array $associations, Arguments $args): array
     {
@@ -1009,9 +1011,8 @@ class ModelCommand extends BakeCommand
         $uniqueConstraintsColumns = [];
 
         foreach ($schema->constraints() as $name) {
-            /** @var array $constraint */
             $constraint = $schema->getConstraint($name);
-            if ($constraint['type'] !== TableSchema::CONSTRAINT_UNIQUE) {
+            if ($constraint === null || $constraint['type'] !== TableSchema::CONSTRAINT_UNIQUE) {
                 continue;
             }
 
@@ -1079,7 +1080,7 @@ class ModelCommand extends BakeCommand
      * Get behaviors
      *
      * @param \Cake\ORM\Table $model The model to generate behaviors for.
-     * @return array Behaviors
+     * @return array<string, array<mixed>> Behaviors
      */
     public function getBehaviors(Table $model): array
     {
@@ -1115,7 +1116,7 @@ class ModelCommand extends BakeCommand
      * Get CounterCaches
      *
      * @param \Cake\ORM\Table $model The table to get counter cache fields for.
-     * @return array<string, array> CounterCache configurations
+     * @return array<string, list<string>> CounterCache configurations
      */
     public function getCounterCache(Table $model): array
     {
@@ -1472,7 +1473,7 @@ class ModelCommand extends BakeCommand
         $fields = [];
 
         foreach ($schema->columns() as $column) {
-            /** @var array $columnSchema */
+            /** @var array<string, mixed> $columnSchema */
             $columnSchema = $schema->getColumn($column);
             if (str_starts_with((string)$columnSchema['type'], 'enum-')) {
                 $fields[] = $column;
@@ -1498,11 +1499,11 @@ class ModelCommand extends BakeCommand
         $enums = [];
 
         foreach ($schema->columns() as $column) {
-            /** @var array $columnSchema */
             $columnSchema = $schema->getColumn($column);
             if (
-                !in_array($columnSchema['type'], ['string', 'integer', 'tinyinteger', 'smallinteger'], true)
-                && !str_starts_with((string)$columnSchema['type'], 'enum-')
+                $columnSchema === null
+                || (!in_array($columnSchema['type'], ['string', 'integer', 'tinyinteger', 'smallinteger'], true)
+                && !str_starts_with((string)$columnSchema['type'], 'enum-'))
             ) {
                 continue;
             }
@@ -1576,8 +1577,8 @@ class ModelCommand extends BakeCommand
     }
 
     /**
-     * @param array<string, array<string, mixed>> $associations
-     * @return array<string, array<string, mixed>>
+     * @param array<string, array<int|string, mixed>> $associations
+     * @return array<string, array<int|string, mixed>>
      */
     protected function ensureAliasUniqueness(array $associations): array
     {

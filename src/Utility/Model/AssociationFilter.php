@@ -61,7 +61,7 @@ class AssociationFilter
      * already existing in BelongsToMany
      *
      * @param \Cake\ORM\Table $model The model to build associations for.
-     * @return array associations
+     * @return array<string, array<string, array<string, mixed>>> associations
      */
     public function filterAssociations(Table $model): array
     {
