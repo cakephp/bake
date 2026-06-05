@@ -285,19 +285,19 @@ class FixtureCommand extends BakeCommand
     {
         $cols = $indexes = $constraints = [];
         foreach ($table->columns() as $field) {
-            /** @var array $fieldData */
+            /** @var array<string, mixed> $fieldData */
             $fieldData = $table->getColumn($field);
             $properties = implode(', ', $this->_values($fieldData));
             $cols[] = "        '{$field}' => [{$properties}],";
         }
         foreach ($table->indexes() as $index) {
-            /** @var array $fieldData */
+            /** @var array<string, mixed> $fieldData */
             $fieldData = $table->getIndex($index);
             $properties = implode(', ', $this->_values($fieldData));
             $indexes[] = "            '{$index}' => [{$properties}],";
         }
         foreach ($table->constraints() as $index) {
-            /** @var array $fieldData */
+            /** @var array<string, mixed> $fieldData */
             $fieldData = $table->getConstraint($index);
             $properties = implode(', ', $this->_values($fieldData));
             $constraints[] = "            '{$index}' => [{$properties}],";
@@ -324,7 +324,7 @@ class FixtureCommand extends BakeCommand
     /**
      * Formats Schema columns from Model Object
      *
-     * @param array $values options keys(type, null, default, key, length, extra)
+     * @param array<string, mixed> $values options keys(type, null, default, key, length, extra)
      * @return array<string> Formatted values
      */
     protected function _values(array $values): array
@@ -351,7 +351,7 @@ class FixtureCommand extends BakeCommand
      *
      * @param \Cake\Database\Schema\TableSchemaInterface $table Table schema array
      * @param int $recordCount The number of records to generate.
-     * @return array Array of records to use in the fixture.
+     * @return array<array-key, array<string, mixed>> Array of records to use in the fixture.
      */
     protected function _generateRecords(TableSchemaInterface $table, int $recordCount = 1): array
     {
@@ -359,7 +359,7 @@ class FixtureCommand extends BakeCommand
         for ($i = 0; $i < $recordCount; $i++) {
             $record = [];
             foreach ($table->columns() as $field) {
-                /** @var array $fieldInfo */
+                /** @var array<string, mixed> $fieldInfo */
                 $fieldInfo = $table->getColumn($field);
                 $insert = '';
                 switch ($fieldInfo['type']) {
@@ -459,7 +459,7 @@ class FixtureCommand extends BakeCommand
     /**
      * Convert a $records array into a string.
      *
-     * @param array $records Array of records to be converted to string
+     * @param array<array-key, mixed> $records Array of records to be converted to string
      * @return string A string value of the $records array.
      * @throws \Brick\VarExporter\ExportException
      */
@@ -485,7 +485,7 @@ class FixtureCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args CLI arguments
      * @param string $modelName name of the model to take records from.
      * @param string|null $useTable Name of table to use.
-     * @return array Array of records.
+     * @return array<array-key, mixed> Array of records.
      */
     protected function _getRecordsFromTable(Arguments $args, string $modelName, ?string $useTable = null): array
     {

@@ -44,7 +44,7 @@ class BakeHelper extends Helper
      * Used for generating formatted properties such as component and helper arrays
      *
      * @param string $name the name of the property
-     * @param array $value the array of values
+     * @param array<int, string> $value the array of values
      * @param array<string,mixed> $options extra options to be passed to the element
      * @return string
      */
@@ -89,7 +89,7 @@ class BakeHelper extends Helper
      *
      * (Similar to `var_export()` but better).
      *
-     * @param array $var Array to export.
+     * @param array<mixed> $var Array to export.
      * @param int $indentLevel Identation level.
      * @param bool $inline Inline numeric scalar array (adds INLINE_NUMERIC_SCALAR_ARRAY flag)
      * @return string
@@ -140,7 +140,7 @@ class BakeHelper extends Helper
      * @param string $class Class name
      * @param string $type Class type/sub-namespace
      * @param string $suffix Class name suffix
-     * @return array Class info
+     * @return array{fqn: string, namespace: string, class: string, plugin: ?string, name: string, fullName: string} Class info
      */
     public function classInfo(string $class, string $type, string $suffix): array
     {
@@ -181,12 +181,12 @@ class BakeHelper extends Helper
     /**
      * Return list of fields to generate controls for.
      *
-     * @param array $fields Fields list.
+     * @param array<int, string> $fields Fields list.
      * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
      * @param \Cake\ORM\Table|null $modelObject Model object.
      * @param string|int $takeFields Take fields.
      * @param array<string> $filterTypes Filter field types.
-     * @return array
+     * @return array<int, string>
      */
     public function filterFields(
         array $fields,
@@ -216,10 +216,10 @@ class BakeHelper extends Helper
     /**
      * Get fields data for view template.
      *
-     * @param array $fields Fields list.
+     * @param array<int, string> $fields Fields list.
      * @param \Cake\Datasource\SchemaInterface $schema Schema instance.
-     * @param array $associations Associations data.
-     * @return array
+     * @param array<string, array<string, mixed>> $associations Associations data.
+     * @return array{associationFields: mixed, groupedFields: array<array-key, mixed>}
      */
     public function getViewFieldsData(array $fields, SchemaInterface $schema, array $associations): array
     {
@@ -287,7 +287,7 @@ class BakeHelper extends Helper
      *
      * @param string $field Field name.
      * @param \Cake\Database\Schema\TableSchema $schema Schema.
-     * @return array|null
+     * @return array<string, mixed>|null
      */
     public function columnData(string $field, TableSchema $schema): ?array
     {
@@ -332,7 +332,7 @@ class BakeHelper extends Helper
      * Get validation methods data.
      *
      * @param string $field Field name.
-     * @param array $rules Validation rules list.
+     * @param array<string, array<string, mixed>> $rules Validation rules list.
      * @return array<string>
      */
     public function getValidationMethods(string $field, array $rules): array
@@ -413,8 +413,8 @@ class BakeHelper extends Helper
     /**
      * Wrap string arguments with quotes
      *
-     * @param array $args array of arguments
-     * @return array
+     * @param array<mixed> $args array of arguments
+     * @return array<mixed>
      */
     public function escapeArguments(array $args): array
     {

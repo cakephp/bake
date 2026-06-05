@@ -61,7 +61,7 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
      *
      * Override the run() method for special handling of the `--help` option.
      *
-     * @param array $argv Arguments from the CLI environment.
+     * @param array<int, string> $argv Arguments from the CLI environment.
      * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null Exit code or null for success.
      */

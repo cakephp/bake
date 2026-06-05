@@ -266,7 +266,7 @@ class TemplateCommand extends BakeCommand
      * - 'schema'
      *
      * @param \Cake\Console\ConsoleIo $io Instance of the ConsoleIO
-     * @return array Returns variables to be made available to a view template
+     * @return array<string, mixed> Returns variables to be made available to a view template
      */
     protected function _loadController(ConsoleIo $io): array
     {
@@ -379,7 +379,7 @@ class TemplateCommand extends BakeCommand
      * @param \Cake\Console\Arguments $args The CLI arguments
      * @param \Cake\Console\ConsoleIo $io The console io
      * @param string $action name to generate content to
-     * @param array|null $vars passed for use in templates
+     * @param array<string, mixed>|null $vars passed for use in templates
      * @return string Content from template
      */
     public function getContent(Arguments $args, ConsoleIo $io, string $action, ?array $vars = null): string
@@ -450,7 +450,7 @@ class TemplateCommand extends BakeCommand
      * To be mocked...
      *
      * @param \Cake\ORM\Table $model Table
-     * @return array associations
+     * @return array<string, array<string, mixed>> associations
      */
     protected function _filteredAssociations(Table $model): array
     {
