@@ -18,7 +18,6 @@ namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
 use Cake\Console\Arguments;
-use Cake\Console\CommandFactoryInterface;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
@@ -39,19 +38,6 @@ class ControllerAllCommand extends BakeCommand
     public static function defaultName(): string
     {
         return 'bake controller all';
-    }
-
-    /**
-     * The subcommand is assigned in the constructor (not initialize()) because
-     * buildOptionParser() runs before initialize() and reads it.
-     *
-     * @param \Cake\Console\CommandFactoryInterface|null $factory Command factory instance.
-     */
-    public function __construct(?CommandFactoryInterface $factory = null)
-    {
-        parent::__construct($factory);
-
-        $this->controllerCommand = new ControllerCommand();
     }
 
     /**
@@ -85,6 +71,11 @@ class ControllerAllCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
+        // Assigned here (not initialize()) because on CakePHP 5.4+ the parser is built
+        // before initialize() runs, while older versions build it after. ??= keeps it
+        // safe under either ordering and idempotent across repeated calls.
+        $this->controllerCommand ??= new ControllerCommand();
+
         $parser = $this->controllerCommand->buildOptionParser($parser);
         $parser
             ->setDescription('Bake all controller files with tests.')
