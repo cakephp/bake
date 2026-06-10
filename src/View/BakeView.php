@@ -116,7 +116,6 @@ class BakeView extends TwigView
     {
         $name = (string)preg_replace('/^View\./', 'Bake.', $name);
 
-        /** @phpstan-ignore-next-line missingType.generics */
         return parent::dispatchEvent($name, $data, $subject);
     }
 

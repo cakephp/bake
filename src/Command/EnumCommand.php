@@ -61,8 +61,7 @@ class EnumCommand extends SimpleBakeCommand
      * Get template data.
      *
      * @param \Cake\Console\Arguments $arguments The arguments for the command
-     * @return array
-     * @phpstan-return array<string, mixed>
+     * @return array<string, mixed>
      */
     public function templateData(Arguments $arguments): array
     {
