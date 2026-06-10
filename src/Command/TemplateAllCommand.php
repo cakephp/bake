@@ -38,17 +38,6 @@ class TemplateAllCommand extends BakeCommand
     }
 
     /**
-     * initialize
-     *
-     * @return void
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->templateCommand = new TemplateCommand();
-    }
-
-    /**
      * Execute the command.
      *
      * @param \Cake\Console\Arguments $args The command arguments.
@@ -85,6 +74,11 @@ class TemplateAllCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
+        // Assigned here (not initialize()) because on CakePHP 5.4+ the parser is built
+        // before initialize() runs, while older versions build it after. buildOptionParser()
+        // always runs before execute(), so this guarantees the subcommand is available there.
+        $this->templateCommand ??= new TemplateCommand();
+
         $parser = $this->_setCommonOptions($parser);
         $parser
             ->setDescription('Bake all view template files.')
