@@ -587,6 +587,17 @@ return [
             'unique_self_referencing_parent' => ['type' => 'unique', 'columns' => ['parent_id']],
         ],
     ],
+    // "systems" has a "system_id" column that is not a real foreign key.
+    // It would otherwise produce duplicate "Systems" belongsTo/hasMany aliases.
+    [
+        'table' => 'systems',
+        'columns' => [
+            'id' => ['type' => 'integer'],
+            'system_id' => ['type' => 'string', 'length' => 255, 'null' => false],
+            'name' => ['type' => 'string', 'length' => 255, 'null' => true],
+        ],
+        'constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
+    ],
     // "news" is both singular and plural - tests variable collision fix
     [
         'table' => 'news',

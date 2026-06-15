@@ -283,6 +283,35 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * A non-foreign-key column matching the table name (e.g. `system_id` on
+     * `systems`) must not produce duplicate aliases that break baking.
+     *
+     * @return void
+     */
+    public function testGetAssociationsEnsuresUniqueAliasForSelfReferencingKey(): void
+    {
+        $systems = $this->getTableLocator()->get('Systems');
+
+        $command = new ModelCommand();
+        $command->connection = 'test';
+        $args = new Arguments([], [], []);
+        $io = $this->createStub(ConsoleIo::class);
+        $result = $command->getAssociations($systems, $args, $io);
+
+        $belongsToAliases = array_column($result['belongsTo'], 'alias');
+        $hasManyAliases = array_column($result['hasMany'], 'alias');
+        $allAliases = array_merge($belongsToAliases, $hasManyAliases);
+
+        $this->assertContains('Systems', $belongsToAliases);
+        $this->assertContains('Systems2', $hasManyAliases);
+        $this->assertSame($allAliases, array_unique($allAliases), 'Association aliases must be unique.');
+
+        // Applying the deduplicated associations must not throw.
+        $command->applyAssociations($systems, $result);
+        $this->assertSame(['Systems', 'Systems2'], $systems->associations()->keys());
+    }
+
+    /**
      * Test getAssociations
      *
      * @return void

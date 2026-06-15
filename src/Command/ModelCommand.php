@@ -1587,7 +1587,16 @@ class ModelCommand extends BakeCommand
             foreach ($associationsPerType as $k => $association) {
                 $alias = $association['alias'];
                 if (in_array($alias, $existing, true)) {
-                    $alias = $this->createAssociationAlias($association);
+                    // Derive a unique alias by appending a numeric suffix.
+                    // Self-referencing keys (e.g. `system_id` on `systems`)
+                    // would otherwise yield the same colliding alias again.
+                    $base = $this->createAssociationAlias($association);
+                    $alias = $base;
+                    $i = 1;
+                    while (in_array($alias, $existing, true)) {
+                        $i++;
+                        $alias = $base . $i;
+                    }
                 }
                 $existing[] = $alias;
                 if (empty($association['className'])) {
