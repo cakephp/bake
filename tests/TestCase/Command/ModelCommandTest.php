@@ -283,6 +283,82 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * A non-foreign-key column matching the table name (e.g. `system_id` on
+     * `systems`) must not generate an invalid self-referencing association.
+     *
+     * @return void
+     */
+    public function testGetAssociationsSkipsSelfReferencingKey(): void
+    {
+        $systems = $this->getTableLocator()->get('Systems');
+
+        $command = new ModelCommand();
+        $command->connection = 'test';
+        $args = new Arguments([], [], []);
+        $io = $this->createStub(ConsoleIo::class);
+        $result = $command->getAssociations($systems, $args, $io);
+
+        $aliases = array_merge(
+            array_column($result['belongsTo'], 'alias'),
+            array_column($result['hasMany'], 'alias'),
+        );
+        $this->assertNotContains('Systems', $aliases, 'Self-referencing association must not be generated.');
+
+        // Applying the associations must not throw.
+        $command->applyAssociations($systems, $result);
+        $this->assertSame([], $systems->associations()->keys());
+    }
+
+    /**
+     * A real self-referencing foreign key (constrained, not named `parent_id`)
+     * must still produce a belongsTo association.
+     *
+     * @return void
+     */
+    public function testGetAssociationsKeepsConstrainedSelfReference(): void
+    {
+        $nodes = $this->getTableLocator()->get('Nodes');
+
+        $command = new ModelCommand();
+        $command->connection = 'test';
+        $args = new Arguments([], [], []);
+        $io = $this->createStub(ConsoleIo::class);
+        $result = $command->getAssociations($nodes, $args, $io);
+
+        $this->assertSame(['Nodes'], array_column($result['belongsTo'], 'alias'));
+
+        $command->applyAssociations($nodes, $result);
+        $this->assertSame(['Nodes'], $nodes->associations()->keys());
+    }
+
+    /**
+     * A unique non-foreign-key column matching the table name (e.g. a unique
+     * `gadget_id` on `gadgets`) must not generate a self-referencing hasOne.
+     *
+     * @return void
+     */
+    public function testGetAssociationsSkipsUniqueSelfReferencingKey(): void
+    {
+        $gadgets = $this->getTableLocator()->get('Gadgets');
+
+        $command = new ModelCommand();
+        $command->connection = 'test';
+        $args = new Arguments([], [], []);
+        $io = $this->createStub(ConsoleIo::class);
+        $result = $command->getAssociations($gadgets, $args, $io);
+
+        $aliases = array_merge(
+            array_column($result['belongsTo'], 'alias'),
+            array_column($result['hasOne'], 'alias'),
+            array_column($result['hasMany'], 'alias'),
+        );
+        $this->assertNotContains('Gadgets', $aliases, 'Self-referencing association must not be generated.');
+
+        $command->applyAssociations($gadgets, $result);
+        $this->assertSame([], $gadgets->associations()->keys());
+    }
+
+    /**
      * Test getAssociations
      *
      * @return void

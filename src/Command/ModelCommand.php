@@ -358,6 +358,15 @@ class ModelCommand extends BakeCommand
                 ];
             } else {
                 $tmpModelName = $this->_modelNameFromKey($fieldName);
+                // A key that resolves to the table itself (e.g. a `system_id`
+                // column on `systems`) is only a real self-reference when it is
+                // actually constrained as a foreign key to this table. Otherwise
+                // (e.g. an external id that merely follows the `<table>_id`
+                // naming) skip it to avoid generating an invalid self-association
+                // that collides with the table's own alias.
+                if ($tmpModelName === $model->getAlias() && !$this->findTableReferencedBy($schema, $fieldName)) {
+                    continue;
+                }
                 if (!$this->getTableLocator()->exists($tmpModelName)) {
                     $this->getTableLocator()->get(
                         $tmpModelName,
@@ -520,7 +529,11 @@ class ModelCommand extends BakeCommand
                 }
 
                 $assoc = false;
-                if (!in_array($fieldName, $primaryKey) && $fieldName === $foreignKey) {
+                if (
+                    $otherTableName !== $tableName &&
+                    !in_array($fieldName, $primaryKey) &&
+                    $fieldName === $foreignKey
+                ) {
                     $assoc = [
                         'alias' => $otherModel->getAlias(),
                         'foreignKey' => $fieldName,
@@ -564,6 +577,7 @@ class ModelCommand extends BakeCommand
             foreach ($otherSchema->columns() as $fieldName) {
                 $assoc = false;
                 if (
+                    $otherTableName !== $tableName &&
                     !in_array($fieldName, $primaryKey) &&
                     $fieldName === $foreignKey &&
                     !$this->hasUniqueConstraintFor($otherSchema, $fieldName)
