@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Method Bake\\BakePlugin\:\:bootstrap\(\) has parameter \$app with generic interface Cake\\Core\\PluginApplicationInterface but does not specify its types\: TSubject$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/BakePlugin.php
-
-		-
 			message: '#^Instanceof between mixed and Cake\\Chronos\\Chronos will always evaluate to false\.$#'
 			identifier: instanceof.alwaysFalse
 			count: 1

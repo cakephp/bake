@@ -17,22 +17,16 @@
     namespace: "#{namespace}\\Model\\Enum",
     classImports: [
         'Cake\\Database\\Type\\EnumLabelInterface',
-        'Cake\\Utility\\Inflector',
+        'Cake\\Database\\Type\\EnumLabelTrait',
     ],
 }) }}
 
 {{ DocBlock.classDescription(name, 'Enum', [])|raw }}
 enum {{ name }}: {{ backingType }} implements EnumLabelInterface
 {
+    use EnumLabelTrait;
 {% if cases %}
-    {{ Bake.concat('\n    ', cases) }}
 
+    {{ Bake.concat('\n    ', cases) }}
 {% endif %}
-    /**
-     * @return string
-     */
-    public function label(): string
-    {
-        return Inflector::humanize(Inflector::underscore($this->name));
-    }
 }
