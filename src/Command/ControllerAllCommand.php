@@ -41,17 +41,6 @@ class ControllerAllCommand extends BakeCommand
     }
 
     /**
-     * initialize
-     *
-     * @return void
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->controllerCommand = new ControllerCommand();
-    }
-
-    /**
      * Execute the command.
      *
      * @param \Cake\Console\Arguments $args The command arguments.
@@ -82,6 +71,11 @@ class ControllerAllCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
+        // Assigned here (not initialize()) because on CakePHP 5.4+ the parser is built
+        // before initialize() runs, while older versions build it after. ??= keeps it
+        // safe under either ordering and idempotent across repeated calls.
+        $this->controllerCommand ??= new ControllerCommand();
+
         $parser = $this->controllerCommand->buildOptionParser($parser);
         $parser
             ->setDescription('Bake all controller files with tests.')

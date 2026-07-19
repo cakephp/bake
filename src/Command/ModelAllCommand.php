@@ -41,17 +41,6 @@ class ModelAllCommand extends BakeCommand
     }
 
     /**
-     * initialize
-     *
-     * @return void
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-        $this->modelCommand = new ModelCommand();
-    }
-
-    /**
      * Gets the option parser instance and configures it.
      *
      * @param \Cake\Console\ConsoleOptionParser $parser The parser to configure
@@ -59,6 +48,11 @@ class ModelAllCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
+        // Assigned here (not initialize()) because on CakePHP 5.4+ the parser is built
+        // before initialize() runs, while older versions build it after. ??= keeps it
+        // safe under either ordering and idempotent across repeated calls.
+        $this->modelCommand ??= new ModelCommand();
+
         $parser = $this->modelCommand->buildOptionParser($parser);
         $parser
             ->setDescription('Bake all model files with associations and validation.')
