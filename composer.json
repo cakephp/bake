@@ -24,8 +24,8 @@
     "require": {
         "php": ">=8.2",
         "brick/varexporter": "^0.7.0",
-        "cakephp/cakephp": "dev-5.next as 5.4.0",
-        "cakephp/twig-view": "^2.0.2",
+        "cakephp/cakephp": "^5.4",
+        "cakephp/twig-view": "^2.1",
         "nikic/php-parser": "^5.0.0"
     },
     "require-dev": {
