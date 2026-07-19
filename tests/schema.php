@@ -587,6 +587,51 @@ return [
             'unique_self_referencing_parent' => ['type' => 'unique', 'columns' => ['parent_id']],
         ],
     ],
+    // "systems" has a "system_id" column that is not a real foreign key.
+    // Bake must not generate a self-referencing Systems association for it.
+    [
+        'table' => 'systems',
+        'columns' => [
+            'id' => ['type' => 'integer'],
+            'system_id' => ['type' => 'string', 'length' => 255, 'null' => false],
+            'name' => ['type' => 'string', 'length' => 255, 'null' => true],
+        ],
+        'constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
+    ],
+    // "nodes" has a real self-referencing foreign key (node_id -> nodes.id)
+    // that is not named parent_id. The belongsTo association must still be kept.
+    [
+        'table' => 'nodes',
+        'columns' => [
+            'id' => ['type' => 'integer'],
+            'node_id' => ['type' => 'integer', 'null' => true],
+            'name' => ['type' => 'string', 'length' => 255, 'null' => true],
+        ],
+        'constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+            'node_id_fk' => [
+                'type' => 'foreign',
+                'columns' => ['node_id'],
+                'references' => ['nodes', 'id'],
+                'update' => 'cascade',
+                'delete' => 'cascade',
+            ],
+        ],
+    ],
+    // "gadgets" has a unique "gadget_id" column that is not a real foreign key.
+    // Bake must not generate a self-referencing hasOne Gadgets association.
+    [
+        'table' => 'gadgets',
+        'columns' => [
+            'id' => ['type' => 'integer'],
+            'gadget_id' => ['type' => 'string', 'length' => 255, 'null' => false],
+            'name' => ['type' => 'string', 'length' => 255, 'null' => true],
+        ],
+        'constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+            'unique_gadget_id' => ['type' => 'unique', 'columns' => ['gadget_id']],
+        ],
+    ],
     // "news" is both singular and plural - tests variable collision fix
     [
         'table' => 'news',
