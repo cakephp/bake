@@ -29,6 +29,14 @@ class BehaviorCommand extends SimpleBakeCommand
     /**
      * @inheritDoc
      */
+    public static function getDescription(): string
+    {
+        return 'Create a model behavior and test.';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function name(): string
     {
         return 'behavior';

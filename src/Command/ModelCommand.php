@@ -64,6 +64,14 @@ class ModelCommand extends BakeCommand
     protected array $_tables = [];
 
     /**
+     * @inheritDoc
+     */
+    public static function getDescription(): string
+    {
+        return 'Create a table class and its related entity, enums, test fixture and tests.';
+    }
+
+    /**
      * Execute the command.
      *
      * @param \Cake\Console\Arguments $args The command arguments.

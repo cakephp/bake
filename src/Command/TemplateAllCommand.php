@@ -32,6 +32,14 @@ class TemplateAllCommand extends BakeCommand
     /**
      * @inheritDoc
      */
+    public static function getDescription(): string
+    {
+        return 'Create all view templates for all controllers in an application or plugin.';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function defaultName(): string
     {
         return 'bake template all';

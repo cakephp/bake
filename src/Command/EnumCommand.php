@@ -36,6 +36,14 @@ class EnumCommand extends SimpleBakeCommand
     /**
      * @inheritDoc
      */
+    public static function getDescription(): string
+    {
+        return 'Create a model Enum';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function name(): string
     {
         return 'enum';
