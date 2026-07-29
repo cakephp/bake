@@ -32,6 +32,14 @@ class MailerCommand extends SimpleBakeCommand
     /**
      * @inheritDoc
      */
+    public static function getDescription(): string
+    {
+        return 'Create a mailer and test.';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function name(): string
     {
         return 'mailer';
@@ -54,7 +62,7 @@ class MailerCommand extends SimpleBakeCommand
     }
 
     /**
-     * Bake the Mailer class and html/text layout files.
+     * Bake the Mailer class.
      *
      * @param string $name The name of the mailer to make.
      * @param \Cake\Console\Arguments $args The console arguments

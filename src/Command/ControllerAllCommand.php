@@ -35,6 +35,14 @@ class ControllerAllCommand extends BakeCommand
     /**
      * @inheritDoc
      */
+    public static function getDescription(): string
+    {
+        return 'Create all controllers for an application or plugin.';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function defaultName(): string
     {
         return 'bake controller all';

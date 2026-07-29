@@ -29,6 +29,14 @@ class MiddlewareCommand extends SimpleBakeCommand
     /**
      * @inheritDoc
      */
+    public static function getDescription(): string
+    {
+        return 'Create a middleware class and test.';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function name(): string
     {
         return 'middleware';

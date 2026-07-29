@@ -82,6 +82,14 @@ class TemplateCommand extends BakeCommand
     public string $ext = 'php';
 
     /**
+     * @inheritDoc
+     */
+    public static function getDescription(): string
+    {
+        return 'Create a view template.';
+    }
+
+    /**
      * Override initialize
      *
      * @return void

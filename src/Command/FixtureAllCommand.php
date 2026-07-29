@@ -39,6 +39,14 @@ class FixtureAllCommand extends BakeCommand
     }
 
     /**
+     * @inheritDoc
+     */
+    public static function getDescription(): string
+    {
+        return 'Create all fixtures for an application or plugin.';
+    }
+
+    /**
      * Gets the option parser instance and configures it.
      *
      * @param \Cake\Console\ConsoleOptionParser $parser The parser to update

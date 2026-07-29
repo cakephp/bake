@@ -35,6 +35,14 @@ class ControllerCommand extends BakeCommand
     public string $pathFragment = 'Controller/';
 
     /**
+     * @inheritDoc
+     */
+    public static function getDescription(): string
+    {
+        return 'Create a controller and test';
+    }
+
+    /**
      * Execute the command.
      *
      * @param \Cake\Console\Arguments $args The command arguments.

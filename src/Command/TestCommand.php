@@ -96,6 +96,14 @@ class TestCommand extends BakeCommand
     protected array $_fixtures = [];
 
     /**
+     * @inheritDoc
+     */
+    public static function getDescription(): string
+    {
+        return 'Create a test case skeleton for a class.';
+    }
+
+    /**
      * Execute test generation
      *
      * @param \Cake\Console\Arguments $args The command arguments.

@@ -40,6 +40,14 @@ use ReflectionEnum;
 class FixtureCommand extends BakeCommand
 {
     /**
+     * @inheritDoc
+     */
+    public static function getDescription(): string
+    {
+        return 'Create a test fixture class.';
+    }
+
+    /**
      * Get the file path.
      *
      * @param \Cake\Console\Arguments $args Arguments instance to read the prefix option from.

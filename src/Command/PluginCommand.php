@@ -44,6 +44,14 @@ class PluginCommand extends BakeCommand
     protected bool $isVendor = false;
 
     /**
+     * @inheritDoc
+     */
+    public static function getDescription(): string
+    {
+        return 'Create a plugin.';
+    }
+
+    /**
      * Execute the command.
      *
      * @param \Cake\Console\Arguments $args The command arguments.

@@ -35,6 +35,14 @@ class ModelAllCommand extends BakeCommand
     /**
      * @inheritDoc
      */
+    public static function getDescription(): string
+    {
+        return 'Create all models, fixtures and tests in an application or plugin.';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function defaultName(): string
     {
         return 'bake model all';
