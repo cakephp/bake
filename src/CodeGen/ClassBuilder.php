@@ -18,14 +18,11 @@ namespace Bake\CodeGen;
 
 class ClassBuilder
 {
-    protected ?ParsedClass $parsedClass;
-
     /**
      * @param \Bake\CodeGen\ParsedClass $parsedClass Parsed class it already exists
      */
-    public function __construct(?ParsedClass $parsedClass = null)
+    public function __construct(protected ?ParsedClass $parsedClass = null)
     {
-        $this->parsedClass = $parsedClass;
     }
 
     /**

@@ -67,7 +67,7 @@ class TemplateCommandTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Template' . DS;
 
         $this->setAppNamespace('Bake\Test\App');
 
@@ -96,7 +96,8 @@ class TemplateCommandTest extends TestCase
     {
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
-        $command->controller($args, 'Comments');
+        $command->setArgs($args);
+        $command->controller('Comments');
         $this->assertSame('Comments', $command->controllerName);
         $this->assertSame(
             'Bake\Test\App\Controller\CommentsController',
@@ -114,7 +115,8 @@ class TemplateCommandTest extends TestCase
     {
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
-        $command->controller($args, $name);
+        $command->setArgs($args);
+        $command->controller($name);
         $this->assertSame('TemplateTaskComments', $command->controllerName);
     }
 
@@ -128,7 +130,8 @@ class TemplateCommandTest extends TestCase
         $command = new TemplateCommand();
         $command->plugin = 'BakeTest';
         $args = new Arguments([], [], []);
-        $command->controller($args, 'Tests');
+        $command->setArgs($args);
+        $command->controller('Tests');
 
         $this->assertSame('Tests', $command->controllerName);
         $this->assertSame(
@@ -147,7 +150,8 @@ class TemplateCommandTest extends TestCase
         $command = new TemplateCommand();
 
         $args = new Arguments([], ['prefix' => 'Admin'], []);
-        $command->controller($args, 'Posts');
+        $command->setArgs($args);
+        $command->controller('Posts');
         $this->assertSame('Posts', $command->controllerName);
         $this->assertSame(
             'Bake\Test\App\Controller\Admin\PostsController',
@@ -155,7 +159,8 @@ class TemplateCommandTest extends TestCase
         );
 
         $command->plugin = 'BakeTest';
-        $command->controller($args, 'Comments');
+        $command->setArgs($args);
+        $command->controller('Comments');
         $this->assertSame('Comments', $command->controllerName);
         $this->assertSame(
             'BakeTest\Controller\Admin\CommentsController',
@@ -173,7 +178,8 @@ class TemplateCommandTest extends TestCase
         $command = new TemplateCommand();
         $args = new Arguments([], ['prefix' => 'Admin/Management'], []);
 
-        $command->controller($args, 'Posts');
+        $command->setArgs($args);
+        $command->controller('Posts');
         $this->assertSame('Posts', $command->controllerName);
         $this->assertSame(
             'Bake\Test\App\Controller\Admin\Management\PostsController',
@@ -191,7 +197,8 @@ class TemplateCommandTest extends TestCase
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
 
-        $command->controller($args, 'Comments', 'Posts');
+        $command->setArgs($args);
+        $command->controller('Comments', 'Posts');
         $this->assertSame('Posts', $command->controllerName);
         $this->assertSame(
             'Bake\Test\App\Controller\PostsController',
@@ -241,19 +248,23 @@ class TemplateCommandTest extends TestCase
         $command->controllerName = 'Posts';
         $args = new Arguments([], [], []);
 
-        $result = $command->getTemplatePath($args);
+        $command->setArgs($args);
+        $result = $command->getTemplatePath();
         $this->assertPathEquals(ROOT . 'templates/Posts/', $result);
 
         $args = new Arguments([], ['prefix' => 'admin'], []);
-        $result = $command->getTemplatePath($args);
+        $command->setArgs($args);
+        $result = $command->getTemplatePath();
         $this->assertPathEquals(ROOT . 'templates/Admin/Posts/', $result);
 
         $args = new Arguments([], ['prefix' => 'admin/management'], []);
-        $result = $command->getTemplatePath($args);
+        $command->setArgs($args);
+        $result = $command->getTemplatePath();
         $this->assertPathEquals(ROOT . 'templates/Admin/Management/Posts/', $result);
 
         $args = new Arguments([], ['prefix' => 'Admin/management'], []);
-        $result = $command->getTemplatePath($args);
+        $command->setArgs($args);
+        $result = $command->getTemplatePath();
         $this->assertPathEquals(ROOT . 'templates/Admin/Management/Posts/', $result);
     }
 
@@ -273,12 +284,14 @@ class TemplateCommandTest extends TestCase
 
         // Use this->plugin as plugin could be in the name arg
         $args = new Arguments([], [], []);
-        $result = $command->getTemplatePath($args);
+        $command->setArgs($args);
+        $result = $command->getTemplatePath();
         $this->assertPathEquals($pluginPath . 'templates/Posts/', $result);
 
         // Use this->plugin as plugin could be in the name arg
         $args = new Arguments([], ['prefix' => 'admin'], []);
-        $result = $command->getTemplatePath($args);
+        $command->setArgs($args);
+        $result = $command->getTemplatePath();
         $this->assertPathEquals($pluginPath . 'templates/Admin/Posts/', $result);
 
         $this->removePlugins(['TestTemplate']);
@@ -311,7 +324,9 @@ class TemplateCommandTest extends TestCase
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
         $io = $this->createStub(ConsoleIo::class);
-        $result = $command->getContent($args, $io, 'view', $vars);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getContent('view', $vars);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -356,7 +371,9 @@ class TemplateCommandTest extends TestCase
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
         $io = $this->createStub(ConsoleIo::class);
-        $result = $command->getContent($args, $io, 'view', $vars);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getContent('view', $vars);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
 
@@ -393,7 +410,9 @@ class TemplateCommandTest extends TestCase
 
         $command = new TemplateCommand();
         $args = new Arguments([], [], []);
-        $command->getContent($args, $io, 'view', $vars);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $command->getContent('view', $vars);
     }
 
     /**
@@ -430,10 +449,14 @@ class TemplateCommandTest extends TestCase
         $args = new Arguments([], ['prefix' => 'Admin'], []);
         $io = $this->createStub(ConsoleIo::class);
 
-        $result = $command->getContent($args, $io, 'view', $vars);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getContent('view', $vars);
         $this->assertSameAsFile(__FUNCTION__ . '-view.php', $result);
 
-        $result = $command->getContent($args, $io, 'add', $vars);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getContent('add', $vars);
         $this->assertSameAsFile(__FUNCTION__ . '-add.php', $result);
     }
 
@@ -644,7 +667,7 @@ class TemplateCommandTest extends TestCase
      */
     public function testBakeIndexPlugin(): void
     {
-        $this->_loadTestPlugin('BakeTest');
+        $this->loadTestPlugin('BakeTest');
         $path = Plugin::templatePath('BakeTest');
 
         // Setup association to ensure properties don't have dots
@@ -666,7 +689,7 @@ class TemplateCommandTest extends TestCase
      */
     public function testBakePluginTemplatesWithDomain(): void
     {
-        $this->_loadTestPlugin('BakeTest');
+        $this->loadTestPlugin('BakeTest');
         $path = Plugin::templatePath('BakeTest');
 
         // Setup association to ensure properties don't have dots
@@ -825,7 +848,7 @@ class TemplateCommandTest extends TestCase
      */
     public function testMainWithPluginName(): void
     {
-        $this->_loadTestPlugin('TestBake');
+        $this->loadTestPlugin('TestBake');
         $path = Plugin::templatePath('TestBake');
 
         $this->generatedFile = $path . 'Comments/index.php';

@@ -46,21 +46,18 @@ class PluginCommandTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Plugin' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Plugin' . DS;
         $this->setAppNamespace('Bake\Test\App');
 
         // Output into a safe place.
         Configure::write('App.paths.plugins', [$this->pluginsPath]);
 
-        // Create the test output path
-        if (!file_exists($this->pluginsPath)) {
-            mkdir($this->pluginsPath, 0777, true);
-        }
-
-        // Create the test output path
-        if (!file_exists($this->pluginsStandalonePath)) {
-            mkdir($this->pluginsStandalonePath, 0777, true);
-        }
+        // Always start from a clean output path.
+        $fs = new Filesystem();
+        $fs->deleteDir($this->pluginsPath);
+        $fs->deleteDir($this->pluginsStandalonePath);
+        mkdir($this->pluginsPath, 0777, true);
+        mkdir($this->pluginsStandalonePath, 0777, true);
 
         if (file_exists(APP . 'Application.php.bak')) {
             rename(APP . 'Application.php.bak', APP . 'Application.php');
@@ -173,11 +170,11 @@ class PluginCommandTest extends TestCase
             DIRECTORY_SEPARATOR === '\\',
             'Skipping composer test on windows as `which` does not work well.',
         );
-        $composerPath = exec('which composer');
+        $composerPath = (string)exec('which composer');
         if (!$composerPath && file_exists('./composer.phar')) {
             $composerPath = './composer.phar';
         }
-        $this->skipIf(!file_exists($composerPath), 'Cannot find composer.phar.');
+        $this->skipIf(!$composerPath || !file_exists($composerPath), 'Cannot find composer.phar.');
 
         $composerConfig = ROOT . 'composer.json';
         copy($composerConfig, ROOT . 'composer.json.bak');
@@ -209,7 +206,8 @@ class PluginCommandTest extends TestCase
 
         $command = new PluginCommand();
         $command->path = TMP . 'tests' . DS;
-        $result = $command->findPath($paths, $io);
+        $command->setIo($io);
+        $result = $command->findPath($paths);
 
         $this->assertNull($result, 'no return');
         $this->assertSame($this->pluginsPath, $command->path);
@@ -230,7 +228,8 @@ class PluginCommandTest extends TestCase
         $command = new PluginCommand();
         $command->path = TMP . 'tests' . DS;
 
-        $command->findPath($paths, $io);
+        $command->setIo($io);
+        $command->findPath($paths);
     }
 
     public function testMainClassOnlyOption(): void
@@ -257,7 +256,7 @@ class PluginCommandTest extends TestCase
     public function assertPluginContents($pluginName, bool $vendor = false): void
     {
         $pluginName = str_replace('/', DS, $pluginName);
-        $comparisonRoot = $this->_compareBasePath . $pluginName . DS;
+        $comparisonRoot = $this->compareBasePath . $pluginName . DS;
         $comparisonFiles = $this->getFiles($comparisonRoot);
 
         if ($vendor) {

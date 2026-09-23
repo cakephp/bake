@@ -53,7 +53,7 @@ class TestCommandTest extends TestCase
     {
         parent::setUp();
         $this->setAppNamespace('Bake\Test\App');
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Test' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Test' . DS;
     }
 
     protected function tearDown(): void
@@ -120,7 +120,7 @@ class TestCommandTest extends TestCase
      */
     public function testExecuteWithPluginName(): void
     {
-        $this->_loadTestPlugin('TestBake');
+        $this->loadTestPlugin('TestBake');
 
         $this->generatedFiles = [
             ROOT . 'Plugin/TestBake/tests/TestCase/Model/Table/BakeArticlesTableTest.php',
@@ -311,7 +311,7 @@ class TestCommandTest extends TestCase
      */
     public function testGetRealClassnamePlugin(): void
     {
-        $this->_loadTestPlugin('TestBake');
+        $this->loadTestPlugin('TestBake');
         $command = new TestCommand();
         $command->plugin = 'TestBake';
 

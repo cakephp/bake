@@ -38,18 +38,12 @@ class TemplateRenderer
     protected ?BakeView $view = null;
 
     /**
-     * Template theme
-     */
-    protected ?string $theme;
-
-    /**
      * Constructor
      *
      * @param ?string $theme The template theme/plugin to use.
      */
-    public function __construct(?string $theme = null)
+    public function __construct(protected ?string $theme = null)
     {
-        $this->theme = $theme;
     }
 
     /**

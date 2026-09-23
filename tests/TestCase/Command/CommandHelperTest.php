@@ -33,7 +33,7 @@ class CommandHelperTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Command' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Command' . DS;
         $this->setAppNamespace('Bake\Test\App');
     }
 
@@ -54,7 +54,7 @@ class CommandHelperTest extends TestCase
         $this->assertFilesExist($this->generatedFiles);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
 
-        $testsPath = dirname($this->_compareBasePath) . DS . 'Test' . DS;
+        $testsPath = dirname($this->compareBasePath) . DS . 'Test' . DS;
         $this->assertSameAsFile($testsPath . __FUNCTION__ . 'Test.php', file_get_contents($this->generatedFiles[1]));
     }
 
@@ -65,7 +65,7 @@ class CommandHelperTest extends TestCase
      */
     public function testBakeCommandHelperPlugin(): void
     {
-        $this->_loadTestPlugin('TestBake');
+        $this->loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
         $this->generatedFiles = [

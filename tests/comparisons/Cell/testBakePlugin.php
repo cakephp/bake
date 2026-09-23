@@ -16,7 +16,7 @@ class ExampleCell extends Cell
      *
      * @var array<string, mixed>
      */
-    protected array $_validCellOptions = [];
+    protected array $validCellOptions = [];
 
     /**
      * Initialization logic run at the end of object construction.

@@ -25,9 +25,9 @@ use Cake\Console\ConsoleIo;
  */
 class ZerglingCommand extends BakeCommand
 {
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute()
     {
-        $io->out('Zerg generated.');
-        $io->verbose('Loud noises');
+        $this->io->out('Zerg generated.');
+        $this->io->verbose('Loud noises');
     }
 }

@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Bake\Utility;
 
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use RuntimeException;
 
 /**
@@ -26,16 +26,13 @@ use RuntimeException;
  */
 class Process
 {
-    protected ConsoleIo $io;
-
     /**
      * Constructor
      *
-     * @param \Cake\Console\ConsoleIo $io The console io
+     * @param \Cake\Console\ConsoleIoInterface $io The console io
      */
-    public function __construct(ConsoleIo $io)
+    public function __construct(protected ConsoleIoInterface $io)
     {
-        $this->io = $io;
     }
 
     /**

@@ -18,8 +18,15 @@ namespace Bake\CodeGen;
 
 use Exception;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
@@ -49,11 +56,11 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
     public function __construct()
     {
         $version = PhpVersion::fromComponents(8, 1);
-        $this->parser = (new ParserFactory())->createForVersion($version);
+        $this->parser = new ParserFactory()->createForVersion($version);
     }
 
     /**
-     * Extracts column type mappings from initialize method code
+     * Extracts column type mappings from existing Table class initialize methods
      *
      * @param string $code The initialize method code
      * @return array<string, string> Map of column names to type expressions
@@ -88,7 +95,7 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         // Check if we're entering the initialize method
-        if ($node instanceof Node\Stmt\ClassMethod && $node->name->name === 'initialize') {
+        if ($node instanceof ClassMethod && $node->name->name === 'initialize') {
             $this->inInitialize = true;
 
             return null;
@@ -114,7 +121,7 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\ClassMethod && $node->name->name === 'initialize') {
+        if ($node instanceof ClassMethod && $node->name->name === 'initialize') {
             $this->inInitialize = false;
         }
 
@@ -129,7 +136,7 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
      */
     protected function processMethodCall(MethodCall $methodCall): void
     {
-        $isSetColumnTypeCall = $methodCall->name instanceof Node\Identifier
+        $isSetColumnTypeCall = $methodCall->name instanceof Identifier
             && $methodCall->name->name === 'setColumnType';
         $schemaCall = $methodCall->var;
         $isSchemaMethodCall = $schemaCall instanceof MethodCall;
@@ -139,7 +146,7 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
             return;
         }
 
-        $isGetSchemaCall = $schemaCall->name instanceof Node\Identifier
+        $isGetSchemaCall = $schemaCall->name instanceof Identifier
             && $schemaCall->name->name === 'getSchema';
         $isCalledOnThis = $schemaCall->var instanceof Variable
             && $schemaCall->var->name === 'this';
@@ -150,7 +157,7 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
 
         $columnArgNode = $methodCall->args[0];
         $typeArgNode = $methodCall->args[1];
-        if (!$columnArgNode instanceof Node\Arg || !$typeArgNode instanceof Node\Arg) {
+        if (!$columnArgNode instanceof Arg || !$typeArgNode instanceof Arg) {
             return;
         }
 
@@ -176,7 +183,7 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
      */
     protected function getStringValue(Node $node): ?string
     {
-        if ($node instanceof Node\Scalar\String_) {
+        if ($node instanceof String_) {
             return $node->value;
         }
 
@@ -191,13 +198,13 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
      */
     protected function getTypeExpression(Node $node): ?string
     {
-        if ($node instanceof Node\Expr\StaticCall) {
+        if ($node instanceof StaticCall) {
             $staticCall = $node;
             $calledClass = $staticCall->class;
             $calledMethod = $staticCall->name;
 
-            $hasNamedClass = $calledClass instanceof Node\Name;
-            $hasIdentifierMethod = $calledMethod instanceof Node\Identifier;
+            $hasNamedClass = $calledClass instanceof Name;
+            $hasIdentifierMethod = $calledMethod instanceof Identifier;
             if (!$hasNamedClass || !$hasIdentifierMethod) {
                 return null;
             }
@@ -212,19 +219,19 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
             }
 
             $argNode = $staticCall->args[0];
-            if (!$argNode instanceof Node\Arg) {
+            if (!$argNode instanceof Arg) {
                 return null;
             }
 
             $arg = $argNode->value;
-            if (!$arg instanceof Node\Expr\ClassConstFetch) {
+            if (!$arg instanceof ClassConstFetch) {
                 return null;
             }
 
             $enumClassNode = $arg->class;
             $constantName = $arg->name;
-            $hasNamedEnumClass = $enumClassNode instanceof Node\Name;
-            $isClassConstant = $constantName instanceof Node\Identifier
+            $hasNamedEnumClass = $enumClassNode instanceof Name;
+            $isClassConstant = $constantName instanceof Identifier
                 && $constantName->name === 'class';
             if (!$hasNamedEnumClass || !$isClassConstant) {
                 return null;
@@ -235,7 +242,7 @@ class ColumnTypeExtractor extends NodeVisitorAbstract
             return 'EnumType::from(' . $enumClass . '::class)';
         }
 
-        if ($node instanceof Node\Scalar\String_) {
+        if ($node instanceof String_) {
             return '"' . $node->value . '"';
         }
 

@@ -51,7 +51,7 @@ class FixtureAllCommandTest extends TestCase
     {
         parent::setUp();
 
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
         $this->setAppNamespace('Bake\Test\App');
 
         $connection = ConnectionManager::get('test');

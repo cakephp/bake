@@ -25,6 +25,7 @@ use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Association\HasMany;
 use Cake\ORM\Association\HasOne;
+use Cake\ORM\Table;
 use Cake\TestSuite\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -96,30 +97,32 @@ class DocBlockHelperTest extends TestCase
      */
     public function testAssociatedEntityTypeToHintType(): void
     {
+        $sourceTable = new Table(['alias' => 'Source']);
+
         // Test with MANY_TO_MANY
         $type = 'Foo';
-        $association = new BelongsToMany('Foo');
+        $association = new BelongsToMany('Foo', $sourceTable);
         $assocEntityType = $this->DocBlockHelper->associatedEntityTypeToHintType($type, $association);
         $expected = 'Foo[]';
         $this->assertSame($expected, $assocEntityType);
 
         // Test with ONE_TO_MANY
         $type = 'Bar';
-        $association = new HasMany('Bar');
+        $association = new HasMany('Bar', $sourceTable);
         $assocEntityType = $this->DocBlockHelper->associatedEntityTypeToHintType($type, $association);
         $expected = 'Bar[]';
         $this->assertSame($expected, $assocEntityType);
 
         // Test with ONE_TO_ONE
         $type = 'Ping';
-        $association = new HasOne('Ping');
+        $association = new HasOne('Ping', $sourceTable);
         $assocEntityType = $this->DocBlockHelper->associatedEntityTypeToHintType($type, $association);
         $expected = 'Ping';
         $this->assertSame($expected, $assocEntityType);
 
         // Test with MANY_TO_ONE
         $type = 'Pong';
-        $association = new BelongsTo('Pong');
+        $association = new BelongsTo('Pong', $sourceTable);
         $assocEntityType = $this->DocBlockHelper->associatedEntityTypeToHintType($type, $association);
         $expected = 'Pong';
         $this->assertSame($expected, $assocEntityType);

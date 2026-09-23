@@ -21,7 +21,7 @@ class DocBlockHelper extends Helper
     /**
      * @var bool Whether to add a blank line between different class annotations
      */
-    protected bool $_annotationSpacing = true;
+    protected bool $annotationSpacing = true;
 
     /**
      * Writes the DocBlock header for a class which includes the property and method declarations. Annotations are
@@ -48,7 +48,7 @@ class DocBlockHelper extends Helper
             if (strlen($annotation) > 1 && $annotation[0] === '@' && strpos($annotation, ' ') > 0) {
                 $type = substr($annotation, 0, strpos($annotation, ' '));
                 if (
-                    $this->_annotationSpacing &&
+                    $this->annotationSpacing &&
                     $previous !== false &&
                     $previous !== $type
                 ) {
@@ -59,7 +59,7 @@ class DocBlockHelper extends Helper
             $lines[] = $annotation;
         }
 
-        $lines = array_merge(['/**'], (new Collection($lines))->map(function ($line): string {
+        $lines = array_merge(['/**'], new Collection($lines)->map(function ($line): string {
             return rtrim(" * {$line}");
         })->toArray(), [' */']);
 
@@ -150,7 +150,7 @@ class DocBlockHelper extends Helper
             if ($info['kind'] === 'association') {
                 $type = $this->associatedEntityTypeToHintType($info['type'], $info['association']);
                 if ($info['association']->type() === Association::MANY_TO_ONE) {
-                    $properties = $this->_insertAfter(
+                    $properties = $this->insertAfter(
                         $properties,
                         $info['association']->getForeignKey(),
                         [$property => $type],
@@ -329,7 +329,7 @@ class DocBlockHelper extends Helper
      * @param mixed $value The entry to insert.
      * @return array<string, mixed> The array with the new value inserted.
      */
-    protected function _insertAfter(array $target, string $key, mixed $value): array
+    protected function insertAfter(array $target, string $key, mixed $value): array
     {
         $index = array_search($key, array_keys($target), true);
         if ($index !== false) {

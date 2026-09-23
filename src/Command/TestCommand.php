@@ -16,7 +16,6 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Controller\Controller;
@@ -93,7 +92,7 @@ class TestCommand extends BakeCommand
      *
      * @var array<string>
      */
-    protected array $_fixtures = [];
+    protected array $fixtures = [];
 
     /**
      * @inheritDoc
@@ -106,39 +105,35 @@ class TestCommand extends BakeCommand
     /**
      * Execute test generation
      *
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io): ?int
+    public function execute(): ?int
     {
-        $this->extractCommonProperties($args);
-        if (!$args->hasArgument('type') && !$args->hasArgument('name')) {
-            $this->outputTypeChoices($io);
+        $this->extractCommonProperties($this->args);
+        if (!$this->args->hasArgument('type') && !$this->args->hasArgument('name')) {
+            $this->outputTypeChoices();
 
             return null;
         }
-        $type = $this->normalize((string)$args->getArgument('type'));
-
-        if ($args->getOption('all')) {
-            $this->_bakeAll($type, $args, $io);
-
-            return null;
-        }
-        if (!$args->hasArgument('name')) {
-            $this->outputClassChoices($type, $io);
+        $type = $this->normalize((string)$this->args->getArgument('type'));
+        if ($this->args->getOption('all')) {
+            $this->bakeAll($type);
 
             return null;
         }
-        $name = (string)$args->getArgument('name');
-        $name = $this->_getName($name);
+        if (!$this->args->hasArgument('name')) {
+            $this->outputClassChoices($type);
 
-        $result = $this->bake($type, $name, $args, $io);
+            return null;
+        }
+        $name = (string)$this->args->getArgument('name');
+        $name = $this->getNameWithoutPrefix($name);
+        $result = $this->bake($type, $name);
         if ($result === static::CODE_ERROR) {
             return static::CODE_ERROR;
         }
         if ($result) {
-            $io->success('Done');
+            $this->io->success('Done');
         }
 
         return static::CODE_SUCCESS;
@@ -147,68 +142,64 @@ class TestCommand extends BakeCommand
     /**
      * Output a list of class types you can bake a test for.
      *
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function outputTypeChoices(ConsoleIo $io): void
+    protected function outputTypeChoices(): void
     {
-        $io->out(
+        $this->io->out(
             'You must provide a class type to bake a test for. The valid types are:',
             2,
         );
         $i = 0;
         foreach (array_keys($this->classTypes) as $option) {
-            $io->out(++$i . '. ' . $option);
+            $this->io->out(++$i . '. ' . $option);
         }
-        $io->out('');
-        $io->out('Re-run your command as `cake bake <type> <classname>`');
+        $this->io->out('');
+        $this->io->out('Re-run your command as `cake bake <type> <classname>`');
     }
 
     /**
      * Output a list of possible classnames you might want to generate a test for.
      *
      * @param string $typeName The typename to get classes for.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function outputClassChoices(string $typeName, ConsoleIo $io): void
+    protected function outputClassChoices(string $typeName): void
     {
         $type = $this->mapType($typeName);
-        $io->out(
+        $this->io->out(
             'You must provide a class to bake a test for. Some possible options are:',
             2,
         );
-        $options = $this->_getClassOptions($type);
+        $options = $this->getClassOptions($type);
         $i = 0;
         foreach ($options as $option) {
-            $io->out(++$i . '. ' . $option);
+            $this->io->out(++$i . '. ' . $option);
         }
-        $io->out('');
-        $io->out('Re-run your command as `cake bake ' . $typeName . ' <classname>`');
+        $this->io->out('');
+        $this->io->out('Re-run your command as `cake bake ' . $typeName . ' <classname>`');
     }
 
     /**
      * Bake all tests for one class type.
      *
      * @param string $type The typename to get bake all classes for.
-     * @param \Cake\Console\Arguments $args Arguments
-     * @param \Cake\Console\ConsoleIo $io ConsoleIo instance
      * @return void
      */
-    protected function _bakeAll(string $type, Arguments $args, ConsoleIo $io): void
+    protected function bakeAll(string $type): void
     {
         $mappedType = $this->mapType($type);
-        $classes = $this->_getClassOptions($mappedType);
+        $classes = $this->getClassOptions($mappedType);
 
         foreach ($classes as $class) {
-            if ($this->bake($type, $class, $args, $io)) {
-                $io->success('Done - ' . $class);
+            if ($this->bake($type, $class)) {
+                $this->io->success('Done - ' . $class);
             } else {
-                $io->error('Failed - ' . $class);
+                $this->io->error('Failed - ' . $class);
             }
         }
 
-        $io->info('Bake finished');
+        $this->io->info('Bake finished');
     }
 
     /**
@@ -217,7 +208,7 @@ class TestCommand extends BakeCommand
      * @param string $namespace The namespace fragment to look for classes in.
      * @return array<string>
      */
-    protected function _getClassOptions(string $namespace): array
+    protected function getClassOptions(string $namespace): array
     {
         $classes = [];
         $base = APP;
@@ -229,7 +220,7 @@ class TestCommand extends BakeCommand
 
         // For generic Class type (empty namespace), search recursively
         if ($namespace === '') {
-            $files = (new Filesystem())->findRecursive($path, '/\.php$/');
+            $files = new Filesystem()->findRecursive($path, '/\.php$/');
             foreach ($files as $fileObj) {
                 if ($fileObj->isFile() && $fileObj->getFileName() !== 'Application.php') {
                     // Build the namespace path relative to App directory
@@ -241,7 +232,7 @@ class TestCommand extends BakeCommand
                 }
             }
         } else {
-            $files = (new Filesystem())->find($path);
+            $files = new Filesystem()->find($path);
             foreach ($files as $fileObj) {
                 if ($fileObj->isFile()) {
                     $classes[] = substr((string)$fileObj->getFileName(), 0, -4) ?: '';
@@ -258,11 +249,9 @@ class TestCommand extends BakeCommand
      *
      * @param string $type Type of object to bake test case for ie. Model, Controller
      * @param string $className the 'cake name' for the class ie. Posts for the PostsController
-     * @param \Cake\Console\Arguments $args Arguments
-     * @param \Cake\Console\ConsoleIo $io ConsoleIo instance
-     * @return string|bool|int Returns the generated code as string on success, false on failure, or CODE_ERROR for validation errors
+     * @return string|int|bool Returns the generated code as string on success, false on failure, or CODE_ERROR for validation errors
      */
-    public function bake(string $type, string $className, Arguments $args, ConsoleIo $io): string|bool|int
+    public function bake(string $type, string $className): string|bool|int
     {
         $type = $this->normalize($type);
         if (!isset($this->classSuffixes[$type]) || !isset($this->classTypes[$type])) {
@@ -271,28 +260,28 @@ class TestCommand extends BakeCommand
 
         // For Class type, validate that backslashes are properly escaped
         if ($type === 'Class' && !str_contains($className, '\\')) {
-            $io->error('Class name appears to have no namespace separators.');
-            $io->out('');
-            $io->out('If you meant to specify a namespaced class, please use quotes:');
-            $io->out("  <info>bin/cake bake test class '{$className}'</info>");
-            $io->out('');
-            $io->out('Or specify without the base namespace:');
-            $io->out('  <info>bin/cake bake test class YourNamespace\ClassName</info>');
+            $this->io->error('Class name appears to have no namespace separators.');
+            $this->io->out('');
+            $this->io->out('If you meant to specify a namespaced class, please use quotes:');
+            $this->io->out("  <info>bin/cake bake test class '{$className}'</info>");
+            $this->io->out('');
+            $this->io->out('Or specify without the base namespace:');
+            $this->io->out('  <info>bin/cake bake test class YourNamespace\ClassName</info>');
 
             return static::CODE_ERROR;
         }
 
-        $prefix = $this->getPrefix($args);
+        $prefix = $this->getPrefix();
         $fullClassName = $this->getRealClassName($type, $className, $prefix);
 
         // For Class type, validate that the class exists
         if ($type === 'Class' && !class_exists($fullClassName)) {
-            $io->error("Class '{$fullClassName}' does not exist or cannot be loaded.");
-            $io->out('');
-            $io->out('Please check:');
-            $io->out('  - The class file exists in the correct location');
-            $io->out('  - The class is properly autoloaded');
-            $io->out('  - The namespace and class name are correct');
+            $this->io->error("Class '{$fullClassName}' does not exist or cannot be loaded.");
+            $this->io->out('');
+            $this->io->out('Please check:');
+            $this->io->out('  - The class file exists in the correct location');
+            $this->io->out('  - The class is properly autoloaded');
+            $this->io->out('  - The namespace and class name are correct');
 
             return static::CODE_ERROR;
         }
@@ -300,14 +289,14 @@ class TestCommand extends BakeCommand
         // Check if fixture factories plugin is available
         $hasFixtureFactories = $this->hasFixtureFactories();
 
-        if (!$args->getOption('no-fixture')) {
+        if (!$this->args->getOption('no-fixture')) {
             if ($hasFixtureFactories) {
-                $io->info('Fixture Factories plugin detected - skipping fixture property generation.');
-            } elseif ($args->getOption('fixtures')) {
-                $fixtures = array_map('trim', explode(',', (string)$args->getOption('fixtures')));
-                $this->_fixtures = array_filter($fixtures);
+                $this->io->info('Fixture Factories plugin detected - skipping fixture property generation.');
+            } elseif ($this->args->getOption('fixtures')) {
+                $fixtures = array_map('trim', explode(',', (string)$this->args->getOption('fixtures')));
+                $this->fixtures = array_filter($fixtures);
             } elseif ($this->typeCanDetectFixtures($type) && class_exists($fullClassName)) {
-                $io->out('Bake is detecting possible fixtures...');
+                $this->io->out('Bake is detecting possible fixtures...');
                 $testSubject = $this->buildTestSubject($type, $fullClassName);
                 if ($testSubject instanceof Table || $testSubject instanceof Controller) {
                     $this->generateFixtureList($testSubject);
@@ -334,16 +323,16 @@ class TestCommand extends BakeCommand
 
         $baseNamespace = Configure::read('App.namespace');
         if ($this->plugin) {
-            $baseNamespace = $this->_pluginNamespace($this->plugin);
+            $baseNamespace = $this->pluginNamespace($this->plugin);
         }
         $subNamespace = substr($namespace, strlen((string)$baseNamespace) + 1);
 
         $properties = $this->generateProperties($type, $subject, $fullClassName);
 
-        $io->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, ConsoleIo::QUIET);
+        $this->io->out("\n" . sprintf('Baking test case for %s ...', $fullClassName), 1, ConsoleIo::QUIET);
 
         $contents = $this->createTemplateRenderer()
-            ->set('fixtures', $this->_fixtures)
+            ->set('fixtures', $this->fixtures)
             ->set('plugin', $this->plugin)
             ->set('hasFixtureFactories', $hasFixtureFactories)
             ->set(compact(
@@ -366,8 +355,8 @@ class TestCommand extends BakeCommand
 
         $filename = $this->testCaseFileName($type, $fullClassName);
         $emptyFile = dirname($filename) . DS . '.gitkeep';
-        $this->deleteEmptyFile($emptyFile, $io);
-        if ($io->createFile($filename, $contents, $this->force)) {
+        $this->deleteEmptyFile($emptyFile);
+        if ($this->io->createFile($filename, $contents, $this->force)) {
             return $contents;
         }
 
@@ -530,14 +519,14 @@ class TestCommand extends BakeCommand
      */
     public function generateFixtureList(Table|Controller $subject): array
     {
-        $this->_fixtures = [];
+        $this->fixtures = [];
         if ($subject instanceof Table) {
-            $this->_processModel($subject);
+            $this->processModel($subject);
         } else {
-            $this->_processController($subject);
+            $this->processController($subject);
         }
 
-        return array_values($this->_fixtures);
+        return array_values($this->fixtures);
     }
 
     /**
@@ -546,9 +535,9 @@ class TestCommand extends BakeCommand
      * @param \Cake\ORM\Table $subject A Model class to scan for associations and pull fixtures off of.
      * @return void
      */
-    protected function _processModel(Table $subject): void
+    protected function processModel(Table $subject): void
     {
-        $this->_addFixture($subject->getAlias());
+        $this->addFixture($subject->getAlias());
         foreach ($subject->associations()->keys() as $alias) {
             $assoc = $subject->getAssociation($alias);
             $target = $assoc->getTarget();
@@ -558,8 +547,8 @@ class TestCommand extends BakeCommand
             if ($subjectClass !== Table::class && $subjectClass === $target::class) {
                 continue;
             }
-            if (!isset($this->_fixtures[$name])) {
-                $this->_addFixture($target->getAlias());
+            if (!isset($this->fixtures[$name])) {
+                $this->addFixture($target->getAlias());
             }
         }
     }
@@ -571,7 +560,7 @@ class TestCommand extends BakeCommand
      * @param \Cake\Controller\Controller $subject A controller to pull model names off of.
      * @return void
      */
-    protected function _processController(Controller $subject): void
+    protected function processController(Controller $subject): void
     {
         try {
             $model = $subject->fetchTable();
@@ -583,7 +572,7 @@ class TestCommand extends BakeCommand
         $models = [$model->getAlias()];
         foreach ($models as $model) {
             [, $model] = pluginSplit($model);
-            $this->_processModel($subject->{$model});
+            $this->processModel($subject->{$model});
         }
     }
 
@@ -594,11 +583,11 @@ class TestCommand extends BakeCommand
      * @param string $name Name of the Model class that a fixture might be required for.
      * @return void
      */
-    protected function _addFixture(string $name): void
+    protected function addFixture(string $name): void
     {
         $prefix = $this->plugin ? 'plugin.' . $this->plugin . '.' : 'app.';
-        $fixture = $prefix . $this->_fixtureName($name);
-        $this->_fixtures[$name] = $fixture;
+        $fixture = $prefix . $this->fixtureName($name);
+        $this->fixtures[$name] = $fixture;
     }
 
     /**
@@ -623,7 +612,9 @@ class TestCommand extends BakeCommand
     public function generateConstructor(string $type, string $fullClassName): array
     {
         [, $className] = namespaceSplit($fullClassName);
-        $pre = $construct = $post = '';
+        $pre = '';
+        $construct = '';
+        $post = '';
         if ($type === 'Table') {
             $tableName = str_replace('Table', '', $className);
             $pre = "\$config = \$this->getTableLocator()->exists('{$tableName}') " .
@@ -775,7 +766,7 @@ class TestCommand extends BakeCommand
     {
         $dir = 'TestCase/';
         if ($this->plugin) {
-            return $this->_pluginPath($this->plugin) . 'tests/' . $dir;
+            return $this->pluginPath($this->plugin) . 'tests/' . $dir;
         }
 
         return defined('TESTS') ? TESTS . $dir : ROOT . DS . 'tests' . DS . $dir;
@@ -811,7 +802,7 @@ class TestCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = $this->_setCommonOptions($parser);
+        $parser = $this->setCommonOptions($parser);
 
         $types = array_keys($this->classTypes);
         $types = array_merge($types, array_map($this->underscore(...), $types));

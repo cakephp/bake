@@ -21,25 +21,6 @@ namespace Bake\CodeGen;
  */
 class ParsedFile
 {
-    public string $namespace;
-
-    /**
-     * @var array<string, string>
-     */
-    public array $classImports;
-
-    /**
-     * @var array<string, string>
-     */
-    public array $functionImports;
-
-    /**
-     * @var array<string, string>
-     */
-    public array $constImports;
-
-    public ParsedClass $class;
-
     /**
      * @param string $namespace Namespace
      * @param array<string, string> $classImports Class imports
@@ -48,16 +29,11 @@ class ParsedFile
      * @param \Bake\CodeGen\ParsedClass $class Parsed class
      */
     public function __construct(
-        string $namespace,
-        array $classImports,
-        array $functionImports,
-        array $constImports,
-        ParsedClass $class,
+        public string $namespace,
+        public array $classImports,
+        public array $functionImports,
+        public array $constImports,
+        public ParsedClass $class,
     ) {
-        $this->namespace = $namespace;
-        $this->classImports = $classImports;
-        $this->functionImports = $functionImports;
-        $this->constImports = $constImports;
-        $this->class = $class;
     }
 }

@@ -16,7 +16,7 @@ declare(strict_types=1);
  */
 namespace Bake\CodeGen;
 
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 
 class ImportHelper
 {
@@ -46,15 +46,15 @@ class ImportHelper
      *
      * @param array<string|int, string> $existing Existing imports to merge into
      * @param array<string|int, string> $imports Imports to merge into existing
-     * @param \Cake\Console\ConsoleIo|null $io Used to output warnings on collisions
+     * @param \Cake\Console\ConsoleIoInterface|null $io Used to output warnings on collisions
      * @return array<string, string>
      */
-    public static function merge(array $existing, array $imports, ?ConsoleIo $io = null): array
+    public static function merge(array $existing, array $imports, ?ConsoleIoInterface $io = null): array
     {
         $existing = static::normalize($existing);
         foreach (static::normalize($imports) as $alias => $class) {
             if (isset($existing[$alias]) && $existing[$alias] !== $class) {
-                if ($io instanceof ConsoleIo) {
+                if ($io !== null) {
                     $io->warning(sprintf(
                         'Import `%s` conflicts with existing import, discarding.',
                         $class,
@@ -65,7 +65,7 @@ class ImportHelper
 
             $existingAlias = array_search($class, $existing, true);
             if ($existingAlias !== false && $existingAlias !== $alias) {
-                if ($io instanceof ConsoleIo) {
+                if ($io !== null) {
                     $io->warning(sprintf(
                         'Import `%s` conflicts with existing import, discarding.',
                         $class,

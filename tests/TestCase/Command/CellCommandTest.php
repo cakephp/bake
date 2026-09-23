@@ -33,7 +33,7 @@ class CellCommandTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Cell' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Cell' . DS;
 
         $this->setAppNamespace('Bake\Test\App');
     }
@@ -64,7 +64,7 @@ class CellCommandTest extends TestCase
      */
     public function testMainPlugin(): void
     {
-        $this->_loadTestPlugin('TestBake');
+        $this->loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
         $this->generatedFiles = [
@@ -86,7 +86,7 @@ class CellCommandTest extends TestCase
      */
     public function testBakePlugin(): void
     {
-        $this->_loadTestPlugin('TestBake');
+        $this->loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
         $this->generatedFiles = [
@@ -127,7 +127,7 @@ class CellCommandTest extends TestCase
      */
     public function testMainPrefixPlugin(): void
     {
-        $this->_loadTestPlugin('TestBake');
+        $this->loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
         $this->generatedFiles = [

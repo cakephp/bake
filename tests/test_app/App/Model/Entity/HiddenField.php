@@ -20,5 +20,5 @@ use Cake\ORM\Entity;
 
 class HiddenField extends Entity
 {
-    protected array $_hidden = ['password', 'auth_token'];
+    protected array $hidden = ['password', 'auth_token'];
 }

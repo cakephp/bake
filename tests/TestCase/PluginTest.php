@@ -64,7 +64,7 @@ class PluginTest extends TestCase
 
     public function testConsoleDiscoverPluginCommands(): void
     {
-        $this->_loadTestPlugin('BakeTest');
+        $this->loadTestPlugin('BakeTest');
 
         $commands = new CommandCollection();
         $plugin = new BakePlugin();
@@ -77,7 +77,7 @@ class PluginTest extends TestCase
 
     public function testConsoleDiscoverPluginCommandsInSubFolder(): void
     {
-        $this->_loadTestPlugin('WithBakeSubFolder');
+        $this->loadTestPlugin('WithBakeSubFolder');
 
         $commands = new CommandCollection();
         $plugin = new BakePlugin();
