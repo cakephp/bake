@@ -301,7 +301,7 @@ return [
         'columns' => [
             'id' => ['type' => 'integer'],
             'byte' => ['type' => 'binary', 'length' => 1],
-            'data' => ['type' => 'binary', 'length' => 300],
+            'data' => ['type' => 'binary', 'length' => 255],
         ],
         'constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
     ],
