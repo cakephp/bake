@@ -97,7 +97,7 @@ $cacheDir = getenv('RECTOR_CACHE_DIR') ?: sys_get_temp_dir() . DIRECTORY_SEPARAT
 return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/src',
-        __DIR__ . '/tests',
+        __DIR__ . '/tests/TestCase',
     ])
 
     ->withCache(
@@ -157,9 +157,7 @@ return RectorConfig::configure()
         RemoveAlwaysTrueIfConditionRector::class,
         RemoveDeadInstanceOfRector::class,
         UnwrapFutureCompatibleIfPhpVersionRector::class,
-        RemoveNullArgOnNullDefaultParamRector::class => [
-            __DIR__ . '/tests/TestCase/Database/Expression/QueryExpressionTest.php',
-        ],
+        RemoveNullArgOnNullDefaultParamRector::class,
         RemoveNonExistingVarAnnotationRector::class,
         RemoveUselessVarTagRector::class,
         PowToExpRector::class,
