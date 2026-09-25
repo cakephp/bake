@@ -11,7 +11,7 @@ Avant d'utiliser ou d'étendre Bake, assurez-vous qu'il est installé dans votre
 Bake est disponible sous forme de plugin que vous pouvez installer avec Composer :
 
 ```bash
-composer require --dev cakephp/bake:"^2.0"
+composer require --dev cakephp/bake:"^4.0"
 ```
 
 Cela installe Bake comme dépendance de développement, et il ne sera donc pas déployé en production.
@@ -21,5 +21,5 @@ Vous pouvez aussi l'omettre complètement, ce qui fera charger ce plugin à la d
 
 ## Plan de la documentation
 
-- [Génération de code avec Bake](/fr/usage) couvre l'exécution du CLI, les commandes disponibles et les thèmes Bake.
-- [Étendre Bake](/fr/development) couvre les events, les templates Twig, les thèmes et les commandes Bake personnalisées.
+- [Génération de code avec Bake](/fr/usage) couvre l'exécution du CLI, la liste des commandes disponibles, la génération de modèles et d'enums, et le changement de thème Bake.
+- [Étendre Bake](/fr/development) couvre les events, les templates Twig, les thèmes personnalisés, les surcharges de templates d'application et la création de commandes Bake personnalisées.

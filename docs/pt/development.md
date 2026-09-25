@@ -1,24 +1,25 @@
 # Estendendo o Bake
 
-O Bake fornece uma arquitetura expansível que permite à sua aplicação ou plugin modificar ou adicionar funcionalidades às funções básicas.
-Bake faz uso de uma classe view dedicada que usa o mecanismo de templates [Twig](https://twig.symfony.com/).
+O Bake possui uma arquitetura extensível que permite à sua aplicação ou plugins
+modificar ou complementar as funcionalidades básicas.
+O Bake faz uso de uma classe de view dedicada que usa o mecanismo de templates [Twig](https://twig.symfony.com/).
 
 ## Eventos do Bake
 
 Como uma classe view, `BakeView` emite os mesmos eventos que qualquer outra classe view, mais um evento extra de inicialização.
-Enquanto as classes view padrão usam o prefixo `View.`, `BakeView` usa o prefixo `Bake.`.
+No entanto, enquanto as classes view padrão usam o prefixo de evento `View.`, `BakeView` usa o prefixo de evento `Bake.`.
 
-O evento de inicialização pode ser usado para fazer mudanças que se aplicam a todas as saídas do Bake.
-Por exemplo, ao adicionar outro helper à classe view do Bake:
+O evento de inicialização pode ser usado para fazer mudanças que se aplicam a toda saída gerada pelo Bake.
+Por exemplo, para adicionar outro helper à classe view do Bake:
 
 ```php
 <?php
-// config/bootstrap_cli.php
-
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Event\EventManager;
 
-EventManager::instance()->on('Bake.initialize', function (Event $event) {
+// in src/Application::bootstrapCli()
+
+EventManager::instance()->on('Bake.initialize', function (EventInterface $event) {
     $view = $event->getSubject();
 
     // In my bake templates, allow the use of the MySpecial helper
@@ -29,19 +30,17 @@ EventManager::instance()->on('Bake.initialize', function (Event $event) {
 });
 ```
 
-Se você deseja modificar o Bake a partir de outro plugin, é recomendável colocar os eventos do plugin no arquivo `config/bootstrap.php`.
-
-Os eventos do Bake podem ser úteis para pequenas alterações nos templates existentes.
-Por exemplo, para alterar os nomes das variáveis usados no controller e template quando executar o Bake:
+Os eventos do Bake também podem ser úteis para fazer pequenas alterações nos templates existentes.
+Por exemplo, para alterar os nomes das variáveis usadas ao gerar os arquivos de controller e template, escute o evento `Bake.beforeRender`:
 
 ```php
 <?php
-// config/bootstrap_cli.php
-
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Event\EventManager;
 
-EventManager::instance()->on('Bake.beforeRender', function (Event $event) {
+// in src/Application::bootstrapCli()
+
+EventManager::instance()->on('Bake.beforeRender', function (EventInterface $event) {
     $view = $event->getSubject();
 
     // Use $rows for the main data variable in indexes
@@ -62,22 +61,21 @@ EventManager::instance()->on('Bake.beforeRender', function (Event $event) {
 });
 ```
 
-Você também pode aplicar os eventos `Bake.beforeRender` e `Bake.afterRender` a um arquivo específico.
-Por exemplo, se quiser adicionar ações ao `UsersController` ao gerar a partir de `Controller/controller.twig`:
+Você também pode restringir os eventos `Bake.beforeRender` e `Bake.afterRender` a um arquivo gerado específico.
+Por exemplo, se você quiser adicionar ações específicas ao seu `UsersController` ao gerar a partir de um arquivo `Controller/controller.twig`:
 
 ```php
 <?php
-// config/bootstrap_cli.php
-
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Event\EventManager;
-use Cake\Utility\Hash;
+
+// in src/Application::bootstrapCli()
 
 EventManager::instance()->on(
     'Bake.beforeRender.Controller.controller',
-    function (Event $event) {
+    function (EventInterface $event) {
         $view = $event->getSubject();
-        if ($view->viewVars['name'] == 'Users') {
+        if ($view->get('name') === 'Users') {
             // add the login and logout actions to the Users controller
             $view->set('actions', [
                 'login',
@@ -93,170 +91,271 @@ EventManager::instance()->on(
 );
 ```
 
-Ao adicionar listeners específicos para determinados templates do Bake, você simplifica a lógica relacionada ao Bake e fornece callbacks fáceis de testar.
+Ao restringir os listeners de eventos a templates específicos do bake, você simplifica a lógica de eventos relacionada ao bake e fornece callbacks mais fáceis de testar.
 
 ## Sintaxe de Templates do Bake
 
-Os arquivos de template do Bake usam a sintaxe [Twig](https://twig.symfony.com/doc/2.x/).
+Os arquivos de template do Bake usam a sintaxe de templates [Twig](https://twig.symfony.com/).
 
-Então, por exemplo, quando você executar algo como:
+Por exemplo, ao gerar um comando como este:
 
 ```bash
-bin/cake bake shell Foo
+bin/cake bake command Foo
 ```
 
-O template usado em `vendor/cakephp/bake/src/Template/Bake/Shell/shell.twig` parece com isto:
+O template usado em `vendor/cakephp/bake/templates/bake/Command/command.twig` tem este aspecto:
 
 ```php
-<?php
-namespace {{ namespace }}\Shell;
-
-use Cake\Console\Shell;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\Command",
+    classImports: [
+        'Cake\\Command\\Command',
+        'Cake\\Console\\ConsoleOptionParser',
+    ],
+}) }}
 
 /**
- * {{ name }} shell command.
+ * {{ name }} command.
  */
-class {{ name }}Shell extends Shell
+class {{ name }}Command extends Command
 {
     /**
-     * main() method.
+     * The name of this command.
      *
-     * @return bool|int Success or error code.
+     * @var string
      */
-    public function main()
+    protected string $name = 'cake {{ command_name }}';
+
+    /**
+     * Get the default command name.
+     *
+     * @return string
+     */
+    public static function defaultName(): string
+    {
+        return '{{ command_name }}';
+    }
+
+    /**
+     * Get the command description.
+     *
+     * @return string
+     */
+    public static function getDescription(): string
+    {
+        return 'Command description here.';
+    }
+
+    /**
+     * Hook method for defining this command's option parser.
+     *
+     * @link https://book.cakephp.org/6/en/console-commands/commands.html#defining-arguments-and-options
+     * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+     * @return \Cake\Console\ConsoleOptionParser The built parser.
+     */
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        return parent::buildOptionParser($parser)
+            ->setDescription(static::getDescription());
+    }
+
+    /**
+     * Implement this method with your command's logic.
+     *
+     * @return int|null|void The exit code or null for success
+     */
+    public function execute()
     {
     }
 }
 ```
 
-E o resultado gerado em `src/Shell/FooShell.php` é semelhante a:
+A chamada `element()` emite o cabeçalho `<?php declare(strict_types=1);`, o namespace e as instruções `use`.
+Note que os comandos usam `$this->args` e `$this->io` em vez de recebê-los como parâmetros de `execute()`.
+
+A classe gerada em `src/Command/FooCommand.php` fica assim:
 
 ```php
 <?php
-namespace App\Shell;
+declare(strict_types=1);
 
-use Cake\Console\Shell;
+namespace App\Command;
+
+use Cake\Command\Command;
+use Cake\Console\ConsoleOptionParser;
 
 /**
- * Foo shell command.
+ * Foo command.
  */
-class FooShell extends Shell
+class FooCommand extends Command
 {
     /**
-     * main() method.
+     * The name of this command.
      *
-     * @return bool|int Success or error code.
+     * @var string
      */
-    public function main()
+    protected string $name = 'cake foo';
+
+    /**
+     * Get the default command name.
+     *
+     * @return string
+     */
+    public static function defaultName(): string
+    {
+        return 'foo';
+    }
+
+    /**
+     * Get the command description.
+     *
+     * @return string
+     */
+    public static function getDescription(): string
+    {
+        return 'Command description here.';
+    }
+
+    /**
+     * Hook method for defining this command's option parser.
+     *
+     * @link https://book.cakephp.org/6/en/console-commands/commands.html#defining-arguments-and-options
+     * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+     * @return \Cake\Console\ConsoleOptionParser The built parser.
+     */
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        return parent::buildOptionParser($parser)
+            ->setDescription(static::getDescription());
+    }
+
+    /**
+     * Implement this method with your command's logic.
+     *
+     * @return int|null|void The exit code or null for success
+     */
+    public function execute()
     {
     }
 }
 ```
-
-::: info
-Nas versões anteriores à 1.5.0, o Bake usava tags estilo ERB dentro dos arquivos de template `.ctp`.
-
-- `<%` abre uma tag PHP de template Bake.
-- `%>` fecha uma tag PHP de template Bake.
-- `<%=` é a forma short-echo do template Bake.
-- `<%-` abre a tag removendo espaços em branco antes dela.
-- `-%>` fecha a tag removendo espaços em branco após ela.
-:::
 
 ## Criando um Tema Bake
 
-Se você deseja modificar a saída produzida com o comando `bake`, pode criar seu próprio tema para substituir alguns ou todos os templates que o Bake usa.
+Se você deseja modificar a saída produzida pelo comando `bake`, pode criar seu próprio tema do Bake, o que permite substituir alguns ou todos os templates que o Bake usa.
 
-1. Gere um novo plugin. O nome do plugin é o nome do tema.
-2. Crie uma nova pasta em `plugins/[name]/Template/Bake/Template/`.
-3. Copie qualquer template que queira modificar de `vendor/cakephp/bake/src/Template/Bake/Template` para a pasta acima e altere conforme sua necessidade.
-4. Ao executar o Bake, use a opção `--theme` para especificar o tema. Para evitar repetir isso a cada chamada, também é possível definir o tema padrão:
+1. Gere um novo plugin. O nome do plugin é o nome do tema do Bake. Por exemplo, `bin/cake bake plugin custom_bake`.
+2. Crie um novo diretório em `plugins/CustomBake/templates/bake`.
+3. Copie quaisquer templates que queira sobrescrever de `vendor/cakephp/bake/templates/bake` para arquivos correspondentes no seu plugin.
+4. Ao executar o Bake, use a opção `--theme CustomBake` para usar seu tema do bake. Para evitar especificar essa opção toda vez, você também pode definir seu tema personalizado como padrão:
 
 ```php
 <?php
-// no config/bootstrap.php ou no config/bootstrap_cli.php
+// in src/Application::bootstrapCli() before loading the 'Bake' plugin.
 Configure::write('Bake.theme', 'MyTheme');
 ```
 
-## Customizando os Templates do Bake
+## Templates de Bake da Aplicação
 
-Se você deseja modificar a saída padrão produzida pelo comando `bake`, também pode criar seus próprios templates diretamente na aplicação.
-Nesse caso, você não precisa usar `--theme` na linha de comando.
+Se você só precisa personalizar alguns templates do bake, ou precisa usar dependências da aplicação em seus templates, pode incluir sobrescritas de templates nos templates da aplicação.
+Essas sobrescritas funcionam de forma semelhante à sobrescrita de outros templates de plugins.
 
-1. Crie o diretório `/Template/Bake/`.
-2. Copie os arquivos que deseja sobrescrever de `vendor/cakephp/bake/src/Template/Bake/` e modifique-os.
+1. Crie um novo diretório em `/templates/plugin/Bake/`.
+2. Copie quaisquer templates que queira sobrescrever de `vendor/cakephp/bake/templates/bake/` para arquivos correspondentes na sua aplicação.
 
-## Criando Novos Comandos Bake
+Você não precisa usar a opção `--theme` ao usar templates da aplicação.
 
-É possível adicionar novas opções de comando ou sobrescrever algumas providas pelo CakePHP criando tarefas na sua aplicação ou plugin.
-Ao estender `Bake\Shell\Task\BakeTask`, o Bake encontra a nova tarefa e a inclui em sua lista.
+## Criando Novas Opções de Comando do Bake
 
-Como exemplo, criaremos uma tarefa que gera uma classe `foo`.
-Primeiro, crie `src/Shell/Task/FooTask.php`.
-Vamos estender `SimpleBakeTask` porque a nova shell task será simples.
+É possível adicionar novas opções de comando do bake, ou sobrescrever as fornecidas pelo CakePHP, criando comandos na sua aplicação ou plugins.
+Ao estender `Bake\Command\BakeCommand`, o Bake encontrará seu novo comando e o incluirá como parte do bake.
+
+Como exemplo, crie o arquivo do comando `src/Command/Bake/FooCommand.php`.
+Estenderemos `SimpleBakeCommand` porque o comando é simples:
 
 ```php
 <?php
-namespace App\Shell\Task;
+declare(strict_types=1);
 
-use Bake\Shell\Task\SimpleBakeTask;
+namespace App\Command\Bake;
 
-class FooTask extends SimpleBakeTask
+use Bake\Command\SimpleBakeCommand;
+
+class FooCommand extends SimpleBakeCommand
 {
-    public $pathFragment = 'Foo/';
+    public string $pathFragment = 'FooPath/';
 
-    public function name()
+    public function name(): string
     {
         return 'foo';
     }
 
-    public function fileName($name)
+    public function template(): string
     {
-        return $name . 'Foo.php';
+        return 'fooTemplate';
     }
 
-    public function template()
+    public function fileName(string $name): string
     {
-        return 'foo';
+        return $name . 'FooOut.php';
     }
 }
 ```
 
-Depois, crie `/Template/Bake/foo.twig`:
+Em seguida, crie `templates/bake/foo_template.twig`:
 
 ```php
 <?php
-namespace {{ namespace }}\Foo;
+namespace {{ namespace }}\FooPath;
 
 /**
- * {{ $name }} foo
+ * {{ name }} fooOut
  */
-class {{ name }}Foo
+class {{ name }}FooOut
 {
-    // Adicione código.
+    // Add code.
 }
 ```
 
-Agora a nova tarefa deve aparecer na saída de `bin/cake bake`.
-Você pode executá-la com `bin/cake bake foo Example`, o que gerará `src/Foo/ExampleFoo.php`.
+Agora você deve ver seu novo comando na saída de `bin/cake bake`.
+Execute-o com `bin/cake bake foo Example`.
+Isso gera `src/FooPath/ExampleFooOut.php`.
 
-Se você quiser que o `bake` também crie um arquivo de teste para `ExampleFoo`, sobrescreva o método `bakeTest()` em `FooTask`:
+Se você também quiser que o `bake` crie um arquivo de teste para a sua classe `ExampleFooOut`, sobrescreva o método `bakeTest()` em `FooCommand`:
 
 ```php
-public function bakeTest($className)
+use Bake\Command\TestCommand;
+
+public function bakeTest(string $className): void
 {
-    if (!isset($this->Test->classSuffixes[$this->name()])) {
-      $this->Test->classSuffixes[$this->name()] = 'Foo';
+    if ($this->args->getOption('no-test')) {
+        return;
     }
 
-    $name = ucfirst($this->name());
-    if (!isset($this->Test->classTypes[$name])) {
-      $this->Test->classTypes[$name] = 'Foo';
-    }
-
-    return parent::bakeTest($className);
+    $test = new TestCommand();
+    $test->classSuffixes['Foo'] = 'FooOut';
+    $test->classTypes['Foo'] = 'FooPath';
+    $test->plugin = $this->plugin;
+    $test->setArgs($this->args);
+    $test->setIo($this->io);
+    $test->bake('Foo', $className);
 }
 ```
 
-- O **sufixo da classe** será anexado ao nome fornecido na chamada ao Bake. No exemplo acima, isso criaria `ExampleFooTest.php`.
-- O **tipo de classe** será o subnamespace usado para levar ao arquivo relativo à aplicação ou plugin. No exemplo acima, isso criaria o namespace `App\Test\TestCase\Foo`.
+- O **sufixo da classe** é anexado ao nome fornecido na sua chamada ao `bake`. No exemplo acima, isso criaria `ExampleFooOut` e seu arquivo de teste `tests/TestCase/FooPath/ExampleFooOutTest.php`.
+- O valor do **tipo de classe** é o sub-namespace usado para acessar seu arquivo em relação ao app ou plugin no qual você está gerando. No exemplo acima, isso criaria o namespace de teste `App\Test\TestCase\FooPath`.
+
+## Configurando a Classe BakeView
+
+Os comandos do Bake usam a classe `BakeView` para renderizar templates.
+Você pode acessar a instância escutando o evento `Bake.initialize`:
+
+```php
+<?php
+\Cake\Event\EventManager::instance()->on(
+    'Bake.initialize',
+    function ($event, $view) {
+        $view->loadHelper('Foo');
+    }
+);
+```
