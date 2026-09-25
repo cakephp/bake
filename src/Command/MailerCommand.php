@@ -16,9 +16,6 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-
 /**
  * Mailer code generator.
  */
@@ -65,12 +62,10 @@ class MailerCommand extends SimpleBakeCommand
      * Bake the Mailer class.
      *
      * @param string $name The name of the mailer to make.
-     * @param \Cake\Console\Arguments $args The console arguments
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function bake(string $name, Arguments $args, ConsoleIo $io): void
+    protected function bake(string $name): void
     {
-        parent::bake($name, $args, $io);
+        parent::bake($name);
     }
 }

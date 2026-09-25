@@ -20,7 +20,8 @@ class EnumParser
 
         $definition = [];
         foreach ($enumCases as $k => $enumCase) {
-            $case = $value = trim($enumCase);
+            $case = trim($enumCase);
+            $value = $case;
             $pos = strpos($case, ':');
             if ($pos !== false) {
                 $value = trim(mb_substr($case, $pos + 1));

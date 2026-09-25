@@ -52,7 +52,7 @@ trait CommonOptionsTrait
         if ($args->hasOption('plugin')) {
             $plugin = (string)$args->getOption('plugin');
             $parts = explode('/', $plugin);
-            $this->plugin = implode('/', array_map([$this, '_camelize'], $parts));
+            $this->plugin = implode('/', array_map([$this, 'camelize'], $parts));
 
             if (strpos($this->plugin, '\\')) {
                 throw new InvalidArgumentException(
@@ -73,7 +73,7 @@ trait CommonOptionsTrait
      *
      * @return list<string>
      */
-    protected function _getBakeThemes(): array
+    protected function getBakeThemes(): array
     {
         $bakeThemes = [];
         $templates = 'templates' . DS . 'bake';
@@ -93,7 +93,7 @@ trait CommonOptionsTrait
      * @param \Cake\Console\ConsoleOptionParser $parser Options parser.
      * @return \Cake\Console\ConsoleOptionParser
      */
-    protected function _setCommonOptions(ConsoleOptionParser $parser): ConsoleOptionParser
+    protected function setCommonOptions(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         $parser->addOption('plugin', [
             'short' => 'p',
@@ -111,7 +111,7 @@ trait CommonOptionsTrait
             'short' => 't',
             'help' => 'The theme to use when baking code.',
             'default' => Configure::read('Bake.theme') ?? '',
-            'choices' => $this->_getBakeThemes(),
+            'choices' => $this->getBakeThemes(),
         ]);
 
         return $parser;

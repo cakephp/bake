@@ -68,7 +68,6 @@ For instance, if you want to add specific actions to your `UsersController` when
 <?php
 use Cake\Event\EventInterface;
 use Cake\Event\EventManager;
-use Cake\Utility\Hash;
 
 // in src/Application::bootstrapCli()
 
@@ -107,47 +106,72 @@ bin/cake bake command Foo
 The template used at `vendor/cakephp/bake/templates/bake/Command/command.twig` looks like this:
 
 ```php
-<?php
-declare(strict_types=1);
-
-namespace {{ namespace }}\Command;
-
-use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\Command",
+    classImports: [
+        'Cake\\Command\\Command',
+        'Cake\\Console\\ConsoleOptionParser',
+    ],
+}) }}
 
 /**
-* {{ name }} command.
-*/
+ * {{ name }} command.
+ */
 class {{ name }}Command extends Command
 {
     /**
-    * Hook method for defining this command's option parser.
-    *
-    * @link https://book.cakephp.org/5/en/console-commands/commands.html#defining-arguments-and-options
-    * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
-    * @return \Cake\Console\ConsoleOptionParser The built parser.
-    */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
-    {
-        $parser = parent::buildOptionParser($parser);
+     * The name of this command.
+     *
+     * @var string
+     */
+    protected string $name = 'cake {{ command_name }}';
 
-        return $parser;
+    /**
+     * Get the default command name.
+     *
+     * @return string
+     */
+    public static function defaultName(): string
+    {
+        return '{{ command_name }}';
     }
 
     /**
-    * Implement this method with your command's logic.
-    *
-    * @param \Cake\Console\Arguments $args The command arguments.
-    * @param \Cake\Console\ConsoleIo $io The console io
-    * @return int|null|void The exit code or null for success
-    */
-    public function execute(Arguments $args, ConsoleIo $io)
+     * Get the command description.
+     *
+     * @return string
+     */
+    public static function getDescription(): string
+    {
+        return 'Command description here.';
+    }
+
+    /**
+     * Hook method for defining this command's option parser.
+     *
+     * @link https://book.cakephp.org/6/en/console-commands/commands.html#defining-arguments-and-options
+     * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+     * @return \Cake\Console\ConsoleOptionParser The built parser.
+     */
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        return parent::buildOptionParser($parser)
+            ->setDescription(static::getDescription());
+    }
+
+    /**
+     * Implement this method with your command's logic.
+     *
+     * @return int|null|void The exit code or null for success
+     */
+    public function execute()
     {
     }
 }
 ```
+
+The `element()` call emits the `<?php declare(strict_types=1);` header, the namespace, and the `use` statements.
+Note that commands use `$this->args` and `$this->io` instead of receiving them as `execute()` parameters.
 
 The resultant baked class at `src/Command/FooCommand.php` looks like this:
 
@@ -158,37 +182,59 @@ declare(strict_types=1);
 namespace App\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 
 /**
-* Foo command.
-*/
+ * Foo command.
+ */
 class FooCommand extends Command
 {
     /**
-    * Hook method for defining this command's option parser.
-    *
-    * @link https://book.cakephp.org/5/en/console-commands/commands.html#defining-arguments-and-options
-    * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
-    * @return \Cake\Console\ConsoleOptionParser The built parser.
-    */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
-    {
-        $parser = parent::buildOptionParser($parser);
+     * The name of this command.
+     *
+     * @var string
+     */
+    protected string $name = 'cake foo';
 
-        return $parser;
+    /**
+     * Get the default command name.
+     *
+     * @return string
+     */
+    public static function defaultName(): string
+    {
+        return 'foo';
     }
 
     /**
-    * Implement this method with your command's logic.
-    *
-    * @param \Cake\Console\Arguments $args The command arguments.
-    * @param \Cake\Console\ConsoleIo $io The console io
-    * @return int|null|void The exit code or null for success
-    */
-    public function execute(Arguments $args, ConsoleIo $io)
+     * Get the command description.
+     *
+     * @return string
+     */
+    public static function getDescription(): string
+    {
+        return 'Command description here.';
+    }
+
+    /**
+     * Hook method for defining this command's option parser.
+     *
+     * @link https://book.cakephp.org/6/en/console-commands/commands.html#defining-arguments-and-options
+     * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+     * @return \Cake\Console\ConsoleOptionParser The built parser.
+     */
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        return parent::buildOptionParser($parser)
+            ->setDescription(static::getDescription());
+    }
+
+    /**
+     * Implement this method with your command's logic.
+     *
+     * @return int|null|void The exit code or null for success
+     */
+    public function execute()
     {
     }
 }
@@ -237,7 +283,7 @@ use Bake\Command\SimpleBakeCommand;
 
 class FooCommand extends SimpleBakeCommand
 {
-    public $pathFragment = 'FooPath/';
+    public string $pathFragment = 'FooPath/';
 
     public function name(): string
     {
@@ -278,26 +324,26 @@ This generates `src/FooPath/ExampleFooOut.php`.
 If you also want `bake` to create a test file for your `ExampleFooOut` class, override the `bakeTest()` method in `FooCommand`:
 
 ```php
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Bake\Command\TestCommand;
 
-public function bakeTest(string $className, Arguments $args, ConsoleIo $io): void
+public function bakeTest(string $className): void
 {
-    if (!isset($this->Test->classSuffixes[$this->name()])) {
-        $this->Test->classSuffixes[$this->name()] = 'Foo';
+    if ($this->args->getOption('no-test')) {
+        return;
     }
 
-    $name = ucfirst($this->name());
-    if (!isset($this->Test->classTypes[$name])) {
-        $this->Test->classTypes[$name] = 'Foo';
-    }
-
-    parent::bakeTest($className, $args, $io);
+    $test = new TestCommand();
+    $test->classSuffixes['Foo'] = 'FooOut';
+    $test->classTypes['Foo'] = 'FooPath';
+    $test->plugin = $this->plugin;
+    $test->setArgs($this->args);
+    $test->setIo($this->io);
+    $test->bake('Foo', $className);
 }
 ```
 
-- The **class suffix** is appended to the name provided in your `bake` call. In the example above, that would create `ExampleFooTest.php`.
-- The **class type** is the sub-namespace used to reach your file relative to the app or plugin you are baking into. In the example above, that would create the test namespace `App\Test\TestCase\Foo`.
+- The **class suffix** is appended to the name provided in your `bake` call. In the example above, that would create `ExampleFooOut` and its test file `tests/TestCase/FooPath/ExampleFooOutTest.php`.
+- The **class type** value is the sub-namespace used to reach your file relative to the app or plugin you are baking into. In the example above, that would create the test namespace `App\Test\TestCase\FooPath`.
 
 ## Configuring the BakeView Class
 

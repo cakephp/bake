@@ -58,7 +58,7 @@ class EntryCommandTest extends TestCase
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         // Output format varies between CakePHP versions
-        $output = $this->_out->output();
+        $output = $this->out->output();
         $this->assertTrue(
             str_contains($output, 'Available Commands') || str_contains($output, 'bake:'),
             'Expected help output to contain command listing',
@@ -102,7 +102,7 @@ class EntryCommandTest extends TestCase
      */
     public function testExecutePluginCommand(): void
     {
-        $this->_loadTestPlugin('BakeTest');
+        $this->loadTestPlugin('BakeTest');
 
         $this->exec('bake zergling --verbose');
 

@@ -70,7 +70,7 @@ abstract class TestCase extends BaseTestCase
      * @param bool $loadBake Whether or not to load the Bake plugin as well.
      * @return void
      */
-    protected function _loadTestPlugin(string $name, bool $loadBake = false): void
+    protected function loadTestPlugin(string $name, bool $loadBake = false): void
     {
         $root = dirname(__FILE__, 2) . DS;
         $path = $root . 'test_app' . DS . 'Plugin' . DS . $name . DS;

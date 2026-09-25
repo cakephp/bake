@@ -18,7 +18,6 @@ namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
 use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
 
@@ -48,27 +47,26 @@ class TemplateAllCommand extends BakeCommand
     /**
      * Execute the command.
      *
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return int The exit code
      */
-    public function execute(Arguments $args, ConsoleIo $io): int
+    public function execute(): int
     {
-        $this->extractCommonProperties($args);
+        $this->extractCommonProperties($this->args);
         /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
-
         $tables = $scanner->removeShadowTranslationTables($scanner->listUnskipped());
         foreach ($tables as $table) {
             $parser = $this->templateCommand->getOptionParser();
             $templateArgs = new Arguments(
                 [$table],
-                $args->getOptions(),
+                $this->args->getOptions(),
                 $parser->argumentNames(),
             );
 
-            $this->templateCommand->execute($templateArgs, $io);
+            $this->templateCommand->setArgs($templateArgs);
+            $this->templateCommand->setIo($this->io);
+            $this->templateCommand->execute();
         }
 
         return static::CODE_SUCCESS;
@@ -87,7 +85,7 @@ class TemplateAllCommand extends BakeCommand
         // always runs before execute(), so this guarantees the subcommand is available there.
         $this->templateCommand ??= new TemplateCommand();
 
-        $parser = $this->_setCommonOptions($parser);
+        $parser = $this->setCommonOptions($parser);
         $parser
             ->setDescription('Bake all view template files.')
             ->addOption('prefix', [

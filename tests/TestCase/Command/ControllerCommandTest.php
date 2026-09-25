@@ -51,7 +51,7 @@ class ControllerCommandTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
         $this->setAppNamespace('Bake\Test\App');
 
         $this->getTableLocator()->get('BakeArticles', [
@@ -97,11 +97,13 @@ class ControllerCommandTest extends TestCase
     {
         $command = new ControllerCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getComponents($args);
+        $command->setArgs($args);
+        $result = $command->getComponents();
         $this->assertSame([], $result);
 
         $args = new Arguments([], ['components' => '  , Auth, ,  RequestHandler'], []);
-        $result = $command->getComponents($args);
+        $command->setArgs($args);
+        $result = $command->getComponents();
         $this->assertSame(['Auth', 'RequestHandler'], $result);
     }
 
@@ -112,15 +114,17 @@ class ControllerCommandTest extends TestCase
      */
     public function testGetComponentsInferredDefaults(): void
     {
-        $this->_loadTestPlugin('Authorization');
+        $this->loadTestPlugin('Authorization');
 
         $command = new ControllerCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getComponents($args);
+        $command->setArgs($args);
+        $result = $command->getComponents();
         $this->assertSame(['Authorization.Authorization'], $result);
 
         $args = new Arguments([], ['components' => 'Flash, FormProtection'], []);
-        $result = $command->getComponents($args);
+        $command->setArgs($args);
+        $result = $command->getComponents();
         $this->assertSame(['Flash', 'FormProtection'], $result);
     }
 
@@ -133,11 +137,13 @@ class ControllerCommandTest extends TestCase
     {
         $command = new ControllerCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getHelpers($args);
+        $command->setArgs($args);
+        $result = $command->getHelpers();
         $this->assertSame([], $result);
 
         $args = new Arguments([], ['helpers' => '  , Session , ,  Number'], []);
-        $result = $command->getHelpers($args);
+        $command->setArgs($args);
+        $result = $command->getHelpers();
         $this->assertSame(['Session', 'Number'], $result);
     }
 
@@ -220,7 +226,7 @@ class ControllerCommandTest extends TestCase
      */
     public function testBakeActionsAuthorizationPlugin(): void
     {
-        $this->_loadTestPlugin('Authorization');
+        $this->loadTestPlugin('Authorization');
 
         $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
         $this->exec('bake controller --connection test --no-test BakeArticles');
@@ -235,7 +241,7 @@ class ControllerCommandTest extends TestCase
      */
     public function testBakeActionsAuthenticationPlugin(): void
     {
-        $this->_loadTestPlugin('Authentication');
+        $this->loadTestPlugin('Authentication');
 
         $generatedFile = APP . 'Controller/UsersController.php';
         $exists = file_exists($generatedFile);
@@ -289,7 +295,7 @@ class ControllerCommandTest extends TestCase
      */
     public function testBakeWithPlugin(): void
     {
-        $this->_loadTestPlugin('BakeTest');
+        $this->loadTestPlugin('BakeTest');
         $path = Plugin::path('BakeTest');
 
         $this->generatedFile = $path . 'src/Controller/BakeArticlesController.php';
@@ -402,7 +408,7 @@ class ControllerCommandTest extends TestCase
      */
     public function testMainWithPluginDot(): void
     {
-        $this->_loadTestPlugin('Company/Pastry');
+        $this->loadTestPlugin('Company/Pastry');
         $path = Plugin::path('Company/Pastry');
 
         $this->generatedFile = $path . 'src/Controller/BakeArticlesController.php';
@@ -423,7 +429,7 @@ class ControllerCommandTest extends TestCase
      */
     public function testMainWithPluginOption(): void
     {
-        $this->_loadTestPlugin('Company/Pastry');
+        $this->loadTestPlugin('Company/Pastry');
         $path = Plugin::path('Company/Pastry');
 
         $this->generatedFile = $path . 'src/Controller/BakeArticlesController.php';

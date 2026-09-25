@@ -22,7 +22,6 @@ use Bake\CodeGen\ParsedFile;
 use Bake\Utility\Model\EnumParser;
 use Bake\Utility\TableScanner;
 use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Database\Connection;
@@ -61,7 +60,7 @@ class ModelCommand extends BakeCommand
      *
      * @var array<string>
      */
-    protected array $_tables = [];
+    protected array $tables = [];
 
     /**
      * @inheritDoc
@@ -74,24 +73,20 @@ class ModelCommand extends BakeCommand
     /**
      * Execute the command.
      *
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io): ?int
+    public function execute(): ?int
     {
-        $this->extractCommonProperties($args);
-        $name = $this->_getName($args->getArgument('name') ?? '');
-
+        $this->extractCommonProperties($this->args);
+        $name = $this->getNameWithoutPrefix($this->args->getArgument('name') ?? '');
         if (empty($name)) {
-            $io->out('Choose a model to bake from the following:');
+            $this->io->out('Choose a model to bake from the following:');
             foreach ($this->listUnskipped() as $table) {
-                $io->out('- ' . $this->_camelize($table));
+                $this->io->out('- ' . $this->camelize($table));
             }
 
             return static::CODE_SUCCESS;
         }
-
         // Disable caching before baking with connection
         $connection = ConnectionManager::get($this->connection);
         if ($connection instanceof Connection) {
@@ -101,8 +96,7 @@ class ModelCommand extends BakeCommand
                 $connection->cacheMetadata(false);
             }
         }
-
-        $this->bake($this->_camelize($name), $args, $io);
+        $this->bake($this->camelize($name));
 
         return static::CODE_SUCCESS;
     }
@@ -111,37 +105,34 @@ class ModelCommand extends BakeCommand
      * Generate code for the given model name.
      *
      * @param string $name The model name to generate.
-     * @param \Cake\Console\Arguments $args Console Arguments.
-     * @param \Cake\Console\ConsoleIo $io Console Io.
      * @return void
      */
-    public function bake(string $name, Arguments $args, ConsoleIo $io): void
+    public function bake(string $name): void
     {
-        $table = $this->getTable($name, $args);
+        $table = $this->getTable($name);
         $tableObject = $this->getTableObject($name, $table);
-        $this->validateNames($tableObject->getSchema(), $io);
-        $data = $this->getTableContext($tableObject, $table, $name, $args, $io);
+        $this->validateNames($tableObject->getSchema());
+        $data = $this->getTableContext($tableObject, $table, $name);
 
-        $this->bakeEnums($tableObject, $data, $args, $io);
-        $this->bakeTable($tableObject, $data, $args, $io);
-        $this->bakeEntity($tableObject, $data, $args, $io);
-        $this->bakeFixture($tableObject->getAlias(), $tableObject->getTable(), $args, $io);
-        $this->bakeTest($tableObject->getAlias(), $args, $io);
+        $this->bakeEnums($tableObject, $data);
+        $this->bakeTable($tableObject, $data);
+        $this->bakeEntity($tableObject, $data);
+        $this->bakeFixture($tableObject->getAlias(), $tableObject->getTable());
+        $this->bakeTest($tableObject->getAlias());
     }
 
     /**
      * Validates table and column names are supported.
      *
      * @param \Cake\Database\Schema\TableSchemaInterface $schema Table schema
-     * @param \Cake\Console\ConsoleIo $io Console io
      * @return void
      * @throws \Cake\Console\Exception\StopException When table or column names are not supported
      */
-    public function validateNames(TableSchemaInterface $schema, ConsoleIo $io): void
+    public function validateNames(TableSchemaInterface $schema): void
     {
         foreach ($schema->columns() as $column) {
             if (!$this->isValidColumnName($column)) {
-                $io->abort(sprintf(
+                $this->io->abort(sprintf(
                     'Unable to bake model. Table column name must start with a letter or underscore and
                     cannot contain special characters. Found `%s`.',
                     $column,
@@ -156,30 +147,26 @@ class ModelCommand extends BakeCommand
      * @param \Cake\ORM\Table $tableObject The model name to generate.
      * @param string $table The table name for the model being baked.
      * @param string $name The model name to generate.
-     * @param \Cake\Console\Arguments $args CLI Arguments
-     * @param \Cake\Console\ConsoleIo $io CLI io
      * @return array<string, mixed>
      */
     public function getTableContext(
         Table $tableObject,
         string $table,
         string $name,
-        Arguments $args,
-        ConsoleIo $io,
     ): array {
-        $associations = $this->getAssociations($tableObject, $args, $io);
+        $associations = $this->getAssociations($tableObject);
         $this->applyAssociations($tableObject, $associations);
         $associationInfo = $this->getAssociationInfo($tableObject);
 
-        $primaryKey = $this->getPrimaryKey($tableObject, $args);
-        $displayField = $this->getDisplayField($tableObject, $args);
+        $primaryKey = $this->getPrimaryKey($tableObject);
+        $displayField = $this->getDisplayField($tableObject);
         $propertySchema = $this->getEntityPropertySchema($tableObject);
-        $fields = $this->getFields($tableObject, $args);
-        $validation = $this->getValidation($tableObject, $associations, $args);
-        $rulesChecker = $this->getRules($tableObject, $associations, $args);
+        $fields = $this->getFields($tableObject);
+        $validation = $this->getValidation($tableObject, $associations);
+        $rulesChecker = $this->getRules($tableObject, $associations);
         $behaviors = $this->getBehaviors($tableObject);
         $connection = $this->connection;
-        $hidden = $this->getHiddenFields($tableObject, $args);
+        $hidden = $this->getHiddenFields($tableObject);
         $enumSchema = $this->getEnumDefinitions($tableObject->getSchema());
 
         return compact(
@@ -227,16 +214,14 @@ class ModelCommand extends BakeCommand
      * Get the array of associations to generate.
      *
      * @param \Cake\ORM\Table $table The table to get associations for.
-     * @param \Cake\Console\Arguments $args CLI Arguments
-     * @param \Cake\Console\ConsoleIo $io CLI io
      * @return array<string, array<int|string, mixed>>
      */
-    public function getAssociations(Table $table, Arguments $args, ConsoleIo $io): array
+    public function getAssociations(Table $table): array
     {
-        if ($args->getOption('no-associations')) {
+        if ($this->args->getOption('no-associations')) {
             return [];
         }
-        $io->out('One moment while associations are detected.');
+        $this->io->out('One moment while associations are detected.');
 
         $this->listAll();
 
@@ -248,10 +233,10 @@ class ModelCommand extends BakeCommand
         ];
 
         $primary = $table->getPrimaryKey();
-        $associations = $this->findBelongsTo($table, $associations, $args);
+        $associations = $this->findBelongsTo($table, $associations);
 
         if (is_array($primary) && count($primary) > 1) {
-            $io->warning(
+            $this->io->warning(
                 'Bake cannot generate associations for composite primary keys at this time.',
             );
 
@@ -345,10 +330,9 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model Database\Table instance of table being generated.
      * @param array<string, array<int|string, mixed>> $associations Array of in progress associations
-     * @param \Cake\Console\Arguments|null $args CLI arguments
      * @return array<string, array<int|string, mixed>> Associations with belongsTo added in.
      */
-    public function findBelongsTo(Table $model, array $associations, ?Arguments $args = null): array
+    public function findBelongsTo(Table $model, array $associations): array
     {
         $schema = $model->getSchema();
         foreach ($schema->columns() as $fieldName) {
@@ -365,7 +349,7 @@ class ModelCommand extends BakeCommand
                     'foreignKey' => $fieldName,
                 ];
             } else {
-                $tmpModelName = $this->_modelNameFromKey($fieldName);
+                $tmpModelName = $this->modelNameFromKey($fieldName);
                 // A key that resolves to the table itself (e.g. a `system_id`
                 // column on `systems`) is only a real self-reference when it is
                 // actually constrained as a foreign key to this table. Otherwise
@@ -389,7 +373,7 @@ class ModelCommand extends BakeCommand
                     $associationTable::class === Table::class &&
                     !in_array(Inflector::tableize($tmpModelName), $tables, true)
                 ) {
-                    $allowAliasRelations = $args instanceof Arguments && $args->getOption('skip-relation-check');
+                    $allowAliasRelations = isset($this->args) && $this->args->getOption('skip-relation-check');
                     $found = $this->findTableReferencedBy($schema, $fieldName);
                     if ($found) {
                         $className = ($this->plugin ? $this->plugin . '.' : '') . Inflector::camelize($found);
@@ -520,7 +504,7 @@ class ModelCommand extends BakeCommand
         $schema = $model->getSchema();
         $primaryKey = $schema->getPrimaryKey();
         $tableName = $schema->name();
-        $foreignKey = $this->_modelKey($tableName);
+        $foreignKey = $this->modelKey($tableName);
 
         $tables = $this->listAll();
         foreach ($tables as $otherTableName) {
@@ -528,7 +512,7 @@ class ModelCommand extends BakeCommand
                 continue;
             }
 
-            $otherModel = $this->getTableObject($this->_camelize($otherTableName), $otherTableName);
+            $otherModel = $this->getTableObject($this->camelize($otherTableName), $otherTableName);
             $otherSchema = $otherModel->getSchema();
 
             foreach ($otherSchema->columns() as $fieldName) {
@@ -571,7 +555,7 @@ class ModelCommand extends BakeCommand
         $schema = $model->getSchema();
         $primaryKey = $schema->getPrimaryKey();
         $tableName = $schema->name();
-        $foreignKey = $this->_modelKey($tableName);
+        $foreignKey = $this->modelKey($tableName);
 
         $tables = $this->listAll();
         foreach ($tables as $otherTableName) {
@@ -579,7 +563,7 @@ class ModelCommand extends BakeCommand
                 continue;
             }
 
-            $otherModel = $this->getTableObject($this->_camelize($otherTableName), $otherTableName);
+            $otherModel = $this->getTableObject($this->camelize($otherTableName), $otherTableName);
             $otherSchema = $otherModel->getSchema();
 
             foreach ($otherSchema->columns() as $fieldName) {
@@ -625,7 +609,7 @@ class ModelCommand extends BakeCommand
     {
         $schema = $model->getSchema();
         $tableName = $schema->name();
-        $foreignKey = $this->_modelKey($tableName);
+        $foreignKey = $this->modelKey($tableName);
 
         $tables = $this->listAll();
         foreach ($tables as $otherTableName) {
@@ -639,11 +623,11 @@ class ModelCommand extends BakeCommand
                 $assocTable = substr($otherTableName, 0, $otherOffset);
             }
             if ($assocTable && in_array($assocTable, $tables)) {
-                $habtmName = $this->_camelize($assocTable);
+                $habtmName = $this->camelize($assocTable);
                 $assoc = [
                     'alias' => $habtmName,
                     'foreignKey' => $foreignKey,
-                    'targetForeignKey' => $this->_modelKey($habtmName),
+                    'targetForeignKey' => $this->modelKey($habtmName),
                     'joinTable' => $otherTableName,
                 ];
                 if ($this->plugin) {
@@ -660,29 +644,27 @@ class ModelCommand extends BakeCommand
      * Get the display field from the model or parameters
      *
      * @param \Cake\ORM\Table $model The model to introspect.
-     * @param \Cake\Console\Arguments $args CLI Arguments
      * @return array<string>|string
      */
-    public function getDisplayField(Table $model, Arguments $args): array|string
+    public function getDisplayField(Table $model): array|string
     {
-        if ($args->getOption('display-field')) {
-            return (string)$args->getOption('display-field');
+        if ($this->args->getOption('display-field')) {
+            return (string)$this->args->getOption('display-field');
         }
 
-        return $model->getDisplayField() ?? [];
+        return $model->getDisplayField();
     }
 
     /**
      * Get the primary key field from the model or parameters
      *
      * @param \Cake\ORM\Table $model The model to introspect.
-     * @param \Cake\Console\Arguments $args CLI Arguments
      * @return array<string> The columns in the primary key
      */
-    public function getPrimaryKey(Table $model, Arguments $args): array
+    public function getPrimaryKey(Table $model): array
     {
-        if ($args->getOption('primary-key')) {
-            $fields = explode(',', (string)$args->getOption('primary-key'));
+        if ($this->args->getOption('primary-key')) {
+            $fields = explode(',', (string)$this->args->getOption('primary-key'));
 
             return array_values(array_filter(array_map('trim', $fields)));
         }
@@ -743,7 +725,7 @@ class ModelCommand extends BakeCommand
                 }
                 $namespace = str_replace('/', '\\', trim((string)$namespace, '\\'));
 
-                $entityClass = $this->_entityName($association->getTarget()->getAlias());
+                $entityClass = $this->entityName($association->getTarget()->getAlias());
                 $entityClass = '\\' . $namespace . '\Model\Entity\\' . $entityClass;
             }
 
@@ -766,18 +748,17 @@ class ModelCommand extends BakeCommand
      * fields will be set as accessible.
      *
      * @param \Cake\ORM\Table $table The table instance to get fields for.
-     * @param \Cake\Console\Arguments $args CLI Arguments
      * @return array<string>|false|null Either an array of fields, `false` in
      *   case the no-fields option is used, or `null` if none of the
      *   field options is used.
      */
-    public function getFields(Table $table, Arguments $args): array|false|null
+    public function getFields(Table $table): array|false|null
     {
-        if ($args->getOption('no-fields')) {
+        if ($this->args->getOption('no-fields')) {
             return false;
         }
-        if ($args->getOption('fields')) {
-            $fields = explode(',', (string)$args->getOption('fields'));
+        if ($this->args->getOption('fields')) {
+            $fields = explode(',', (string)$this->args->getOption('fields'));
 
             return array_values(array_filter(array_map('trim', $fields)));
         }
@@ -797,16 +778,15 @@ class ModelCommand extends BakeCommand
      * Uses the hidden and no-hidden options.
      *
      * @param \Cake\ORM\Table $model The model to introspect.
-     * @param \Cake\Console\Arguments $args CLI Arguments
      * @return array<string> The columns to make accessible
      */
-    public function getHiddenFields(Table $model, Arguments $args): array
+    public function getHiddenFields(Table $model): array
     {
-        if ($args->getOption('no-hidden')) {
+        if ($this->args->getOption('no-hidden')) {
             return [];
         }
-        if ($args->getOption('hidden')) {
-            $fields = explode(',', (string)$args->getOption('hidden'));
+        if ($this->args->getOption('hidden')) {
+            $fields = explode(',', (string)$this->args->getOption('hidden'));
 
             return array_values(array_filter(array_map('trim', $fields)));
         }
@@ -822,17 +802,16 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model The model to introspect.
      * @param array<string, array<int|string, mixed>> $associations The associations list.
-     * @param \Cake\Console\Arguments $args CLI Arguments
      * @return array<string, array<string, mixed>>|false The validation rules.
      */
-    public function getValidation(Table $model, array $associations, Arguments $args): array|false
+    public function getValidation(Table $model, array $associations): array|false
     {
-        if ($args->getOption('no-validation')) {
+        if ($this->args->getOption('no-validation')) {
             return [];
         }
         $schema = $model->getSchema();
         $fields = $schema->columns();
-        if (!$fields) {
+        if ($fields === []) {
             return false;
         }
 
@@ -852,7 +831,7 @@ class ModelCommand extends BakeCommand
             $field = $schema->getColumn($fieldName);
             $field['isForeignKey'] = in_array($fieldName, $foreignKeys, true);
             $validation = $this->fieldValidation($schema, $fieldName, $field, $primaryKey);
-            if ($validation) {
+            if ($validation !== []) {
                 $validate[$fieldName] = $validation;
             }
         }
@@ -1015,17 +994,16 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model The model to introspect.
      * @param array<string, array<int|string, mixed>> $associations The associations for the model.
-     * @param \Cake\Console\Arguments $args CLI Arguments
      * @return list<array<string, mixed>> The rules to be applied.
      */
-    public function getRules(Table $model, array $associations, Arguments $args): array
+    public function getRules(Table $model, array $associations): array
     {
-        if ($args->getOption('no-rules')) {
+        if ($this->args->getOption('no-rules')) {
             return [];
         }
         $schema = $model->getSchema();
         $schemaFields = $schema->columns();
-        if (empty($schemaFields)) {
+        if ($schemaFields === []) {
             return [];
         }
 
@@ -1109,7 +1087,7 @@ class ModelCommand extends BakeCommand
         $behaviors = [];
         $schema = $model->getSchema();
         $fields = $schema->columns();
-        if (empty($fields)) {
+        if ($fields === []) {
             return [];
         }
         if (in_array('created', $fields, true) || in_array('modified', $fields, true)) {
@@ -1127,7 +1105,7 @@ class ModelCommand extends BakeCommand
         }
 
         $counterCache = $this->getCounterCache($model);
-        if (!empty($counterCache)) {
+        if ($counterCache !== []) {
             $behaviors['CounterCache'] = $counterCache;
         }
 
@@ -1146,7 +1124,7 @@ class ModelCommand extends BakeCommand
         $counterCache = [];
         foreach ($belongsTo['belongsTo'] as $otherTable) {
             $otherAlias = $otherTable['alias'];
-            $otherModel = $this->getTableObject($this->_camelize($otherAlias), Inflector::underscore($otherAlias));
+            $otherModel = $this->getTableObject($this->camelize($otherAlias), Inflector::underscore($otherAlias));
 
             try {
                 $otherSchema = $otherModel->getSchema();
@@ -1170,31 +1148,29 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model Model name or object
      * @param array<string, mixed> $data An array to use to generate the Table
-     * @param \Cake\Console\Arguments $args CLI Arguments
-     * @param \Cake\Console\ConsoleIo $io CLI io
      * @return void
      */
-    public function bakeEntity(Table $model, array $data, Arguments $args, ConsoleIo $io): void
+    public function bakeEntity(Table $model, array $data): void
     {
-        if ($args->getOption('no-entity')) {
+        if ($this->args->getOption('no-entity')) {
             return;
         }
 
-        $name = $this->_entityName($model->getAlias());
-        $io->out("\n" . sprintf('Baking entity class for %s...', $name));
+        $name = $this->entityName($model->getAlias());
+        $this->io->out("\n" . sprintf('Baking entity class for %s...', $name));
 
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
         if ($this->plugin) {
-            $namespace = $this->_pluginNamespace($this->plugin);
+            $namespace = $this->pluginNamespace($this->plugin);
             $pluginPath = $this->plugin . '.';
         }
 
-        $path = $this->getPath($args);
+        $path = $this->getPath();
         $filename = $path . 'Entity' . DS . $name . '.php';
 
         $parsedFile = null;
-        if ($args->getOption('update')) {
+        if ($this->args->getOption('update')) {
             $parsedFile = $this->parseFile($filename);
         }
 
@@ -1204,17 +1180,17 @@ class ModelCommand extends BakeCommand
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
             'primaryKey' => [],
-            'fileBuilder' => new FileBuilder($io, "{$namespace}\Model\Entity", $parsedFile),
+            'fileBuilder' => new FileBuilder($this->io, "{$namespace}\Model\Entity", $parsedFile),
         ];
 
         $contents = $this->createTemplateRenderer()
             ->set($data)
             ->generate('Bake.Model/entity');
 
-        $this->writeFile($io, $filename, $contents, $this->force);
+        $this->writeFile($this->io, $filename, $contents, $this->force);
 
         $emptyFile = $path . 'Entity' . DS . '.gitkeep';
-        $this->deleteEmptyFile($emptyFile, $io);
+        $this->deleteEmptyFile($emptyFile);
     }
 
     /**
@@ -1222,31 +1198,29 @@ class ModelCommand extends BakeCommand
      *
      * @param \Cake\ORM\Table $model Model name or object
      * @param array<string, mixed> $data An array to use to generate the Table
-     * @param \Cake\Console\Arguments $args CLI Arguments
-     * @param \Cake\Console\ConsoleIo $io CLI Arguments
      * @return void
      */
-    public function bakeTable(Table $model, array $data, Arguments $args, ConsoleIo $io): void
+    public function bakeTable(Table $model, array $data): void
     {
-        if ($args->getOption('no-table')) {
+        if ($this->args->getOption('no-table')) {
             return;
         }
 
         $name = $model->getAlias();
-        $io->out("\n" . sprintf('Baking table class for %s...', $name));
+        $this->io->out("\n" . sprintf('Baking table class for %s...', $name));
 
         $namespace = Configure::read('App.namespace');
         $pluginPath = '';
         if ($this->plugin) {
-            $namespace = $this->_pluginNamespace($this->plugin);
+            $namespace = $this->pluginNamespace($this->plugin);
         }
 
-        $path = $this->getPath($args);
+        $path = $this->getPath();
         $filename = $path . 'Table' . DS . $name . 'Table.php';
 
         $parsedFile = null;
         $customColumnTypes = [];
-        if ($args->getOption('update')) {
+        if ($this->args->getOption('update')) {
             $parsedFile = $this->parseFile($filename);
             // Extract custom column types from existing file
             if ($parsedFile instanceof ParsedFile && isset($parsedFile->class->methods['initialize'])) {
@@ -1254,7 +1228,7 @@ class ModelCommand extends BakeCommand
             }
         }
 
-        $entity = $this->_entityName($model->getAlias());
+        $entity = $this->entityName($model->getAlias());
         $enums = $this->enums($model, $entity, $namespace);
 
         // Merge custom column types with generated enums
@@ -1279,14 +1253,14 @@ class ModelCommand extends BakeCommand
             'enums' => $enums,
             'customColumnTypes' => $customColumnTypes,
             'connection' => $this->connection,
-            'fileBuilder' => new FileBuilder($io, "{$namespace}\Model\Table", $parsedFile),
+            'fileBuilder' => new FileBuilder($this->io, "{$namespace}\Model\Table", $parsedFile),
         ];
 
         $contents = $this->createTemplateRenderer()
             ->set($data)
             ->generate('Bake.Model/table');
 
-        $this->writeFile($io, $filename, $contents, $this->force);
+        $this->writeFile($this->io, $filename, $contents, $this->force);
 
         // Work around composer caching that classes/files do not exist.
         // Check for the file as it might not exist in tests.
@@ -1296,7 +1270,7 @@ class ModelCommand extends BakeCommand
         $this->getTableLocator()->clear();
 
         $emptyFile = $path . 'Table' . DS . '.gitkeep';
-        $this->deleteEmptyFile($emptyFile, $io);
+        $this->deleteEmptyFile($emptyFile);
     }
 
     /**
@@ -1306,16 +1280,16 @@ class ModelCommand extends BakeCommand
      */
     public function listAll(): array
     {
-        if (!empty($this->_tables)) {
-            return $this->_tables;
+        if ($this->tables !== []) {
+            return $this->tables;
         }
 
         /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
-        $this->_tables = $scanner->listAll();
+        $this->tables = $scanner->listAll();
 
-        return $this->_tables;
+        return $this->tables;
     }
 
     /**
@@ -1338,13 +1312,12 @@ class ModelCommand extends BakeCommand
      * Uses the `table` option if it is set.
      *
      * @param string $name Table name
-     * @param \Cake\Console\Arguments $args The CLI arguments
      * @return string
      */
-    public function getTable(string $name, Arguments $args): string
+    public function getTable(string $name): string
     {
-        if ($args->getOption('table')) {
-            return (string)$args->getOption('table');
+        if ($this->args->getOption('table')) {
+            return (string)$this->args->getOption('table');
         }
 
         return Inflector::underscore($name);
@@ -1358,7 +1331,7 @@ class ModelCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = $this->_setCommonOptions($parser);
+        $parser = $this->setCommonOptions($parser);
 
         $parser->setDescription(
             'Bake table and entity classes.',
@@ -1422,48 +1395,46 @@ class ModelCommand extends BakeCommand
      *
      * @param string $className Name of class to bake fixture for
      * @param string $useTable Optional table name for fixture to use.
-     * @param \Cake\Console\Arguments $args Arguments instance
-     * @param \Cake\Console\ConsoleIo $io ConsoleIo instance
      * @return void
      */
     public function bakeFixture(
         string $className,
         string $useTable,
-        Arguments $args,
-        ConsoleIo $io,
     ): void {
-        if ($args->getOption('no-fixture')) {
+        if ($this->args->getOption('no-fixture')) {
             return;
         }
         $fixture = new FixtureCommand();
         $fixtureArgs = new Arguments(
             [$className],
-            ['table' => $useTable] + $args->getOptions(),
+            ['table' => $useTable] + $this->args->getOptions(),
             ['name'],
         );
-        $fixture->execute($fixtureArgs, $io);
+        $fixture->setIo($this->io);
+        $fixture->setArgs($fixtureArgs);
+        $fixture->execute();
     }
 
     /**
      * Assembles and writes a unit test file
      *
      * @param string $className Model class name
-     * @param \Cake\Console\Arguments $args Arguments instance
-     * @param \Cake\Console\ConsoleIo $io ConsoleIo instance
      * @return void
      */
-    public function bakeTest(string $className, Arguments $args, ConsoleIo $io): void
+    public function bakeTest(string $className): void
     {
-        if ($args->getOption('no-test')) {
+        if ($this->args->getOption('no-test')) {
             return;
         }
         $test = new TestCommand();
         $testArgs = new Arguments(
             ['table', $className],
-            $args->getOptions(),
+            $this->args->getOptions(),
             ['type', 'name'],
         );
-        $test->execute($testArgs, $io);
+        $test->setIo($this->io);
+        $test->setArgs($testArgs);
+        $test->execute();
     }
 
     /**
@@ -1548,7 +1519,7 @@ class ModelCommand extends BakeCommand
                 }
             }
             $enumsDefinition = EnumParser::parseCases($enumsDefinitionString, $isInt);
-            if (!$enumsDefinition) {
+            if ($enumsDefinition === []) {
                 continue;
             }
 
@@ -1565,14 +1536,14 @@ class ModelCommand extends BakeCommand
      * @param array<string, mixed> $data
      * @return void
      */
-    protected function bakeEnums(Table $model, array $data, Arguments $args, ConsoleIo $io): void
+    protected function bakeEnums(Table $model, array $data): void
     {
         $enums = $data['enumSchema'];
         if (!$enums) {
             return;
         }
 
-        $entity = $this->_entityName($model->getAlias());
+        $entity = $this->entityName($model->getAlias());
 
         foreach ($enums as $column => $data) {
             $enumCommand = new EnumCommand();
@@ -1589,12 +1560,14 @@ class ModelCommand extends BakeCommand
                 $cases[] = $k . ':' . $v;
             }
 
-            $args = new Arguments(
+            $this->args = new Arguments(
                 [$name, implode(',', $cases)],
-                ['int' => $data['type'] === 'int'] + $args->getOptions(),
+                ['int' => $data['type'] === 'int'] + $this->args->getOptions(),
                 ['name', 'cases'],
             );
-            $enumCommand->execute($args, $io);
+            $enumCommand->setArgs($this->args);
+            $enumCommand->setIo($this->io);
+            $enumCommand->execute();
         }
     }
 
@@ -1634,7 +1607,7 @@ class ModelCommand extends BakeCommand
     {
         $foreignKey = $association['foreignKey'];
 
-        return $this->_modelNameFromKey($foreignKey);
+        return $this->modelNameFromKey($foreignKey);
     }
 
     /**

@@ -19,7 +19,6 @@ namespace Bake\Command;
 use Bake\Utility\CommonOptionsTrait;
 use Bake\Utility\TableScanner;
 use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
 
@@ -54,7 +53,7 @@ class FixtureAllCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = $this->_setCommonOptions($parser);
+        $parser = $this->setCommonOptions($parser);
 
         $parser = $parser->setDescription(
             'Generate all fixtures for use with the test suite.',
@@ -82,23 +81,21 @@ class FixtureAllCommand extends BakeCommand
     /**
      * Execute the command.
      *
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null
      */
-    public function execute(Arguments $args, ConsoleIo $io): ?int
+    public function execute(): ?int
     {
-        $this->extractCommonProperties($args);
-
+        $this->extractCommonProperties($this->args);
         /** @var \Cake\Database\Connection $connection */
-        $connection = ConnectionManager::get((string)($args->getOption('connection') ?: 'default'));
+        $connection = ConnectionManager::get((string)($this->args->getOption('connection') ?: 'default'));
         $scanner = new TableScanner($connection);
         $fixture = new FixtureCommand();
-
         $tables = $scanner->removeShadowTranslationTables($scanner->listUnskipped());
         foreach ($tables as $table) {
-            $fixtureArgs = new Arguments([$table], $args->getOptions(), ['name']);
-            $fixture->execute($fixtureArgs, $io);
+            $fixtureArgs = new Arguments([$table], $this->args->getOptions(), ['name']);
+            $fixture->setArgs($fixtureArgs);
+            $fixture->setIo($this->io);
+            $fixture->execute();
         }
 
         return static::CODE_SUCCESS;

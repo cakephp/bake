@@ -10,9 +10,10 @@ const tocPt = require('./toc_pt.json')
 const tocRu = require('./toc_ru.json')
 
 const versions = {
-  text: '3.x',
+  text: '4.x',
   items: [
-    { text: '3.x (current)', link: 'https://book.cakephp.org/bake/3/', target: '_self' },
+    { text: '4.x (current)', link: 'https://book.cakephp.org/bake/4/', target: '_self' },
+    { text: '3.x', link: 'https://book.cakephp.org/bake/3/', target: '_self' },
     { text: '2.x', link: 'https://book.cakephp.org/bake/2.x/', target: '_self' },
     { text: '1.x', link: 'https://book.cakephp.org/bake/1.x/', target: '_self' },
   ],
@@ -23,12 +24,12 @@ export default {
   srcDir: '.',
   title: 'Bake',
   description: 'CakePHP Bake Documentation',
-  base: '/bake/3/',
+  base: '/bake/4/',
   rewrites: {
     'en/:slug*': ':slug*',
   },
   sitemap: {
-    hostname: 'https://book.cakephp.org/bake/3/',
+    hostname: 'https://book.cakephp.org/bake/4/',
   },
   themeConfig: {
     siteTitle: false,
@@ -37,7 +38,7 @@ export default {
       { icon: 'github', link: 'https://github.com/cakephp/bake' },
     ],
     editLink: {
-      pattern: 'https://github.com/cakephp/bake/edit/3.x/docs/:path',
+      pattern: 'https://github.com/cakephp/bake/edit/4.x/docs/:path',
       text: 'Edit this page on GitHub',
     },
     sidebar: tocEn,

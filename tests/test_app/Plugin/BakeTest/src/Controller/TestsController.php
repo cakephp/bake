@@ -34,7 +34,7 @@ class TestsController extends AppController
         $this->set('test_value', 'It is a variable');
     }
 
-    public function some_method()
+    public function some_method(): \Cake\Http\Response
     {
         $this->response->body(25);
 

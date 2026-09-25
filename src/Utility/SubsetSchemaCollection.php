@@ -27,21 +27,12 @@ use Cake\Database\Schema\TableSchemaInterface;
  */
 class SubsetSchemaCollection implements CollectionInterface
 {
-    protected CollectionInterface $collection;
-
-    /**
-     * @var array<string>
-     */
-    protected array $tables = [];
-
     /**
      * @param \Cake\Database\Schema\CollectionInterface $collection The wrapped collection
      * @param list<string> $tables The subset of tables.
      */
-    public function __construct(CollectionInterface $collection, array $tables)
+    public function __construct(protected CollectionInterface $collection, protected array $tables)
     {
-        $this->collection = $collection;
-        $this->tables = $tables;
     }
 
     /**
@@ -60,6 +51,16 @@ class SubsetSchemaCollection implements CollectionInterface
      * @return array<string>
      */
     public function listTables(): array
+    {
+        return $this->tables;
+    }
+
+    /**
+     * Get the list of tables in this schema collection.
+     *
+     * @return array<string>
+     */
+    public function listTablesWithoutViews(): array
     {
         return $this->tables;
     }

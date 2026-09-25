@@ -29,8 +29,6 @@ use RuntimeException;
  */
 class TableScanner
 {
-    protected Connection $connection;
-
     /**
      * @var array<string>
      */
@@ -43,12 +41,9 @@ class TableScanner
      * @param array<string>|null $ignore List of tables or regex pattern to ignore. If null, the default ignore
      *   list will be used.
      */
-    public function __construct(Connection $connection, ?array $ignore = null)
+    public function __construct(protected Connection $connection, ?array $ignore = null)
     {
-        $this->connection = $connection;
-        if ($ignore === null) {
-            $ignore = ['i18n', 'cake_sessions', 'cake_migrations', 'cake_seeds', 'sessions', '/phinxlog/'];
-        }
+        $ignore ??= ['i18n', 'cake_sessions', 'cake_migrations', 'cake_seeds', 'sessions', '/phinxlog/'];
         $this->ignore = $ignore;
     }
 
@@ -61,7 +56,7 @@ class TableScanner
     {
         $schema = $this->connection->getSchemaCollection();
         $tables = $schema->listTables();
-        if (!$tables) {
+        if ($tables === []) {
             throw new RuntimeException('Your database does not have any tables.');
         }
         sort($tables);

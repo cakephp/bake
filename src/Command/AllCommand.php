@@ -18,7 +18,6 @@ namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
 use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
 use Throwable;
@@ -47,7 +46,7 @@ class AllCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = $this->_setCommonOptions($parser);
+        $parser = $this->setCommonOptions($parser);
 
         $parser = $parser->setDescription(
             'Generate the model, controller, template, tests and fixture for a table.',
@@ -68,44 +67,38 @@ class AllCommand extends BakeCommand
     /**
      * Execute the command.
      *
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io): ?int
+    public function execute(): ?int
     {
-        $this->extractCommonProperties($args);
-        $name = $args->getArgument('name') ?? '';
-        $name = $this->_getName($name);
-
-        $io->out('Bake All');
-        $io->hr();
-
+        $this->extractCommonProperties($this->args);
+        $name = $this->args->getArgument('name') ?? '';
+        $name = $this->getNameWithoutPrefix($name);
+        $this->io->out('Bake All');
+        $this->io->hr();
         /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
         $tables = $scanner->removeShadowTranslationTables($scanner->listUnskipped());
-
-        if (!$name && !$args->getOption('everything')) {
-            $io->out('Choose a table to generate from the following:');
+        if (!$name && !$this->args->getOption('everything')) {
+            $this->io->out('Choose a table to generate from the following:');
             foreach ($tables as $table) {
-                $io->out('- ' . $this->_camelize($table));
+                $this->io->out('- ' . $this->camelize($table));
             }
 
             return static::CODE_SUCCESS;
         }
-        if (!$args->getOption('everything')) {
+        if (!$this->args->getOption('everything')) {
             $tables = [$name];
         }
-
         $errors = 0;
         foreach ($this->commands as $commandName) {
-            /** @var \Cake\Command\Command $command */
-            $command = new $commandName();
+            /** @var \Bake\Command\BakeCommand $command */
+            $command = new $commandName($this->factory);
 
-            $options = $args->getOptions();
+            $options = $this->args->getOptions();
             if (
-                $args->hasOption('prefix') &&
+                $this->args->hasOption('prefix') &&
                 !($command instanceof ControllerCommand) &&
                 !($command instanceof TemplateCommand)
             ) {
@@ -116,24 +109,26 @@ class AllCommand extends BakeCommand
                 $parser = $command->getOptionParser();
                 $subArgs = new Arguments([$table], $options, $parser->argumentNames());
 
+                $command->setIo($this->io);
+                $command->setArgs($subArgs);
+
                 try {
-                    $command->execute($subArgs, $io);
+                    $command->execute();
                 } catch (Throwable $e) {
-                    if (!$args->getOption('everything') || !$args->getOption('force')) {
+                    if (!$this->args->getOption('everything') || !$this->args->getOption('force')) {
                         throw $e;
                     }
 
                     $message = sprintf('Error generating %s for %s: %s', $commandName, $table, $e->getMessage());
-                    $io->error($message);
+                    $this->io->error($message);
                     $errors++;
                 }
             }
         }
-
         if ($errors) {
-            $io->warning(sprintf('Bake All completed, but with %s errors.', $errors));
+            $this->io->warning(sprintf('Bake All completed, but with %s errors.', $errors));
         } else {
-            $io->success('Bake All complete.');
+            $this->io->success('Bake All complete.');
         }
 
         return $errors ? static::CODE_ERROR : static::CODE_SUCCESS;

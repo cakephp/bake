@@ -39,7 +39,7 @@ class {{ name }} extends Entity{{ fileBuilder.classBuilder.implements ? ' implem
 
 {% endif %}
 {% if accessible %}
-{%~ set generatedProperties = generatedProperties|merge(['_accessible']) %}
+{%~ set generatedProperties = generatedProperties|merge(['patchable']) %}
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -49,19 +49,19 @@ class {{ name }} extends Entity{{ fileBuilder.classBuilder.implements ? ' implem
      *
      * @var array<string, bool>
      */
-    protected array $_accessible = {{ Bake.exportVar(accessible, 1)|raw }};
+    protected array $patchable = {{ Bake.exportVar(accessible, 1)|raw }};
 {% endif %}
 {% if accessible and hidden %}
 
 {% endif %}
 {% if hidden %}
-    {%~ set generatedProperties = generatedProperties|merge(['_hidden']) %}
+    {%~ set generatedProperties = generatedProperties|merge(['hidden']) %}
     /**
      * Fields that are excluded from JSON versions of the entity.
      *
      * @var array<string>
      */
-    protected array $_hidden = {{ Bake.exportVar(hidden, 1)|raw }};
+    protected array $hidden = {{ Bake.exportVar(hidden, 1)|raw }};
 {% endif %}
 {% set userProperties = fileBuilder.classBuilder.userProperties(generatedProperties) %}
 {% if userProperties %}

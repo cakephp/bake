@@ -33,7 +33,7 @@ class MiddlewareCommandTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Middleware' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Middleware' . DS;
         $this->setAppNamespace('Bake\Test\App');
     }
 
@@ -58,7 +58,7 @@ class MiddlewareCommandTest extends TestCase
      */
     public function testMainPlugin(): void
     {
-        $this->_loadTestPlugin('TestBake');
+        $this->loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
         $this->generatedFile = $path . 'src/Middleware/ExampleMiddleware.php';
@@ -75,7 +75,7 @@ class MiddlewareCommandTest extends TestCase
      */
     public function testBakePlugin(): void
     {
-        $this->_loadTestPlugin('TestBake');
+        $this->loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
         $this->generatedFile = $path . 'src/Middleware/ExampleMiddleware.php';

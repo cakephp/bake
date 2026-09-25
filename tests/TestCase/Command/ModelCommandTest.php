@@ -71,7 +71,7 @@ class ModelCommandTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Model' . DS;
         $this->setAppNamespace('Bake\Test\App');
 
         $this->getTableLocator()->clear();
@@ -114,11 +114,13 @@ class ModelCommandTest extends TestCase
     {
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getTable('TodoItems', $args);
+        $command->setArgs($args);
+        $result = $command->getTable('TodoItems');
         $this->assertSame('todo_items', $result);
 
         $args = new Arguments([], ['table' => 'items'], []);
-        $result = $command->getTable('TodoItems', $args);
+        $command->setArgs($args);
+        $result = $command->getTable('TodoItems');
         $this->assertSame('items', $result);
     }
 
@@ -178,7 +180,8 @@ class ModelCommandTest extends TestCase
         $abortCalled = false;
         try {
             $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
-            $command->validateNames($schema, $io);
+            $command->setIo($io);
+            $command->validateNames($schema);
         } catch (StopException) {
             $abortCalled = true;
         }
@@ -198,7 +201,8 @@ class ModelCommandTest extends TestCase
 
         $this->expectException(StopException::class);
         $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
-        $command->validateNames($schema, $io);
+        $command->setIo($io);
+        $command->validateNames($schema);
     }
 
     /**
@@ -296,7 +300,9 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
         $args = new Arguments([], [], []);
         $io = $this->createStub(ConsoleIo::class);
-        $result = $command->getAssociations($systems, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getAssociations($systems);
 
         $aliases = array_merge(
             array_column($result['belongsTo'], 'alias'),
@@ -323,7 +329,9 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
         $args = new Arguments([], [], []);
         $io = $this->createStub(ConsoleIo::class);
-        $result = $command->getAssociations($nodes, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getAssociations($nodes);
 
         $this->assertSame(['Nodes'], array_column($result['belongsTo'], 'alias'));
 
@@ -345,7 +353,9 @@ class ModelCommandTest extends TestCase
         $command->connection = 'test';
         $args = new Arguments([], [], []);
         $io = $this->createStub(ConsoleIo::class);
-        $result = $command->getAssociations($gadgets, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getAssociations($gadgets);
 
         $aliases = array_merge(
             array_column($result['belongsTo'], 'alias'),
@@ -372,7 +382,9 @@ class ModelCommandTest extends TestCase
 
         $args = new Arguments([], [], []);
         $io = $this->createStub(ConsoleIo::class);
-        $result = $command->getAssociations($items, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getAssociations($items);
 
         $expected = [
             'belongsTo' => [
@@ -419,7 +431,9 @@ class ModelCommandTest extends TestCase
         $arguments = new Arguments([], ['no-associations' => true], []);
         $io = $this->createStub(ConsoleIo::class);
         $articles = $this->getTableLocator()->get('BakeArticle');
-        $this->assertEquals([], $command->getAssociations($articles, $arguments, $io));
+        $command->setArgs($arguments);
+        $command->setIo($io);
+        $this->assertEquals([], $command->getAssociations($articles));
     }
 
     /**
@@ -436,7 +450,9 @@ class ModelCommandTest extends TestCase
 
         $args = new Arguments([], [], []);
         $io = $this->createStub(ConsoleIo::class);
-        $result = $command->getAssociations($items, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getAssociations($items);
         $expected = [
             'belongsTo' => [
                 [
@@ -489,7 +505,9 @@ class ModelCommandTest extends TestCase
 
         $args = new Arguments([], [], []);
         $io = $this->createStub(ConsoleIo::class);
-        $result = $command->getAssociations($items, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getAssociations($items);
         $expected = [
             'belongsTo' => [
                 [
@@ -538,7 +556,9 @@ class ModelCommandTest extends TestCase
 
         $args = new Arguments([], [], []);
         $io = $this->createStub(ConsoleIo::class);
-        $result = $command->getAssociations($items, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getAssociations($items);
         $expected = [
             'belongsTo' => [
                 [
@@ -591,7 +611,9 @@ class ModelCommandTest extends TestCase
 
         $args = new Arguments([], ['skip-relation-check' => true], []);
         $io = $this->createStub(ConsoleIo::class);
-        $result = $command->getAssociations($items, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getAssociations($items);
         $expected = [
             'belongsTo' => [
                 [
@@ -646,7 +668,9 @@ class ModelCommandTest extends TestCase
 
         $command = new ModelCommand();
         $command->connection = 'test';
-        $result = $command->getAssociations($model, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getAssociations($model);
         $expected = [
             'hasOne' => [],
             'hasMany' => [],
@@ -669,7 +693,9 @@ class ModelCommandTest extends TestCase
 
         $args = new Arguments([], [], []);
         $io = $this->createStub(ConsoleIo::class);
-        $result = $command->getAssociations($model, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $result = $command->getAssociations($model);
 
         $expected = [
             [
@@ -699,6 +725,7 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $command->connection = 'test';
 
+        $command->setArgs(new Arguments([], [], []));
         $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
@@ -712,6 +739,7 @@ class ModelCommandTest extends TestCase
         $this->assertEquals($expected, $result);
 
         $model = $this->getTableLocator()->get('CategoryThreads');
+        $command->setArgs(new Arguments([], [], []));
         $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
@@ -725,6 +753,7 @@ class ModelCommandTest extends TestCase
         $this->assertEquals($expected, $result);
 
         $command->plugin = 'Blog';
+        $command->setArgs(new Arguments([], [], []));
         $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
@@ -748,6 +777,7 @@ class ModelCommandTest extends TestCase
         $model = $this->getTableLocator()->get('Relations');
         $command = new ModelCommand();
         $command->connection = 'test';
+        $command->setArgs(new Arguments([], [], []));
         $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
@@ -777,6 +807,7 @@ class ModelCommandTest extends TestCase
         $model = $this->getTableLocator()->get('Invitations');
         $command = new ModelCommand();
         $command->connection = 'test';
+        $command->setArgs(new Arguments([], [], []));
         $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
@@ -808,6 +839,7 @@ class ModelCommandTest extends TestCase
         $model = $this->getTableLocator()->get('TodoItemsTodoLabels');
         $command = new ModelCommand();
         $command->connection = 'test';
+        $command->setArgs(new Arguments([], [], []));
         $result = $command->findBelongsTo($model, []);
         $expected = [
             'belongsTo' => [
@@ -839,6 +871,7 @@ class ModelCommandTest extends TestCase
             'thing_id_field' => ['type' => 'integer'],
         ]);
         $command = new ModelCommand();
+        $command->setArgs(new Arguments([], [], []));
         $result = $command->findBelongsTo($model, []);
         $this->assertEquals([], $result);
     }
@@ -859,6 +892,7 @@ class ModelCommandTest extends TestCase
             ],
         ]);
         $command = new ModelCommand();
+        $command->setArgs(new Arguments([], [], []));
         $result = $command->findBelongsTo($model, []);
         $this->assertEquals([], $result);
     }
@@ -1077,7 +1111,8 @@ class ModelCommandTest extends TestCase
         $model = $this->getTableLocator()->get('TodoItems');
 
         $command = new ModelCommand();
-        $result = $command->getFields($model, new Arguments([], [], []));
+        $command->setArgs(new Arguments([], [], []));
+        $result = $command->getFields($model);
         $expected = [
             'user_id',
             'title',
@@ -1101,7 +1136,8 @@ class ModelCommandTest extends TestCase
         $model = $this->getTableLocator()->get('TodoItems');
         $args = new Arguments([], ['no-fields' => true], []);
         $command = new ModelCommand();
-        $result = $command->getFields($model, $args);
+        $command->setArgs($args);
+        $result = $command->getFields($model);
         $this->assertFalse($result);
     }
 
@@ -1116,7 +1152,8 @@ class ModelCommandTest extends TestCase
 
         $args = new Arguments([], ['fields' => 'id, title  , , body ,  created'], []);
         $command = new ModelCommand();
-        $result = $command->getFields($model, $args);
+        $command->setArgs($args);
+        $result = $command->getFields($model);
         $expected = [
             'id',
             'title',
@@ -1137,7 +1174,8 @@ class ModelCommandTest extends TestCase
 
         $args = new Arguments([], [], []);
         $command = new ModelCommand();
-        $result = $command->getHiddenFields($model, $args);
+        $command->setArgs($args);
+        $result = $command->getHiddenFields($model);
         $expected = [
             'password',
         ];
@@ -1155,7 +1193,8 @@ class ModelCommandTest extends TestCase
 
         $args = new Arguments([], ['no-hidden' => true], []);
         $command = new ModelCommand();
-        $result = $command->getHiddenFields($model, $args);
+        $command->setArgs($args);
+        $result = $command->getHiddenFields($model);
         $this->assertEquals([], $result);
     }
 
@@ -1170,7 +1209,8 @@ class ModelCommandTest extends TestCase
 
         $args = new Arguments([], ['hidden' => 'id, title  , , body ,  created'], []);
         $command = new ModelCommand();
-        $result = $command->getHiddenFields($model, $args);
+        $command->setArgs($args);
+        $result = $command->getHiddenFields($model);
         $expected = [
             'id',
             'title',
@@ -1191,12 +1231,14 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
 
-        $result = $command->getPrimaryKey($model, $args);
+        $command->setArgs($args);
+        $result = $command->getPrimaryKey($model);
         $expected = ['id'];
         $this->assertEquals($expected, $result);
 
         $args = new Arguments([], ['primary-key' => 'id, , account_id'], []);
-        $result = $command->getPrimaryKey($model, $args);
+        $command->setArgs($args);
+        $result = $command->getPrimaryKey($model);
         $expected = ['id', 'account_id'];
         $this->assertEquals($expected, $result);
     }
@@ -1211,7 +1253,8 @@ class ModelCommandTest extends TestCase
         $model = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
         $args = new Arguments([], ['no-validation' => true], []);
-        $result = $command->getValidation($model, [], $args);
+        $command->setArgs($args);
+        $result = $command->getValidation($model, []);
         $this->assertEquals([], $result);
     }
 
@@ -1230,7 +1273,8 @@ class ModelCommandTest extends TestCase
 
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getValidation($model, [], $args);
+        $command->setArgs($args);
+        $result = $command->getValidation($model, []);
         $expected = [
             'user_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -1277,7 +1321,8 @@ class ModelCommandTest extends TestCase
         $model = $this->getTableLocator()->get('TodoTasks');
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getValidation($model, [], $args);
+        $command->setArgs($args);
+        $result = $command->getValidation($model, []);
         $expected = [
             'todo_item_id' => [
                 'integer' => ['rule' => 'integer', 'args' => []],
@@ -1324,7 +1369,8 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
 
-        $result = $command->getValidation($model, [], $args);
+        $command->setArgs($args);
+        $result = $command->getValidation($model, []);
         $this->assertArrayHasKey('release_date', $result);
         $expected = [
             'dateTime' => ['rule' => 'dateTime', 'args' => []],
@@ -1348,7 +1394,8 @@ class ModelCommandTest extends TestCase
         $model = $this->getTableLocator()->get('NumberTrees');
         $args = new Arguments([], [], []);
         $command = new ModelCommand();
-        $result = $command->getValidation($model, [], $args);
+        $command->setArgs($args);
+        $result = $command->getValidation($model, []);
         $expected = [
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
@@ -1382,7 +1429,8 @@ class ModelCommandTest extends TestCase
         $model = $this->getTableLocator()->get('NumberTrees');
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getValidation($model, [], $args);
+        $command->setArgs($args);
+        $result = $command->getValidation($model, []);
         $expected = [
             'name' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
@@ -1421,7 +1469,8 @@ class ModelCommandTest extends TestCase
         ];
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getValidation($model, $associations, $args);
+        $command->setArgs($args);
+        $result = $command->getValidation($model, $associations);
         $expected = [
             'title' => [
                 'scalar' => ['rule' => 'scalar', 'args' => []],
@@ -1478,7 +1527,8 @@ class ModelCommandTest extends TestCase
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
 
-        $result = $command->getValidation($model, $associations, $args);
+        $command->setArgs($args);
+        $result = $command->getValidation($model, $associations);
 
         $expected = [
             // matches
@@ -1548,7 +1598,8 @@ class ModelCommandTest extends TestCase
         $model = $this->getTableLocator()->get('Users');
         $command = new ModelCommand();
         $args = new Arguments([], ['no-rules' => true], []);
-        $result = $command->getRules($model, [], $args);
+        $command->setArgs($args);
+        $result = $command->getRules($model, []);
         $this->assertEquals([], $result);
     }
 
@@ -1580,7 +1631,8 @@ class ModelCommandTest extends TestCase
         ];
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getRules($model, $associations, $args);
+        $command->setArgs($args);
+        $result = $command->getRules($model, $associations);
         $expected = [
             [
                 'name' => 'isUnique',
@@ -1622,7 +1674,8 @@ class ModelCommandTest extends TestCase
 
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getRules($model, [], $args);
+        $command->setArgs($args);
+        $result = $command->getRules($model, []);
         $expected = [
             [
                 'name' => 'isUnique',
@@ -1669,7 +1722,8 @@ class ModelCommandTest extends TestCase
             ],
         ];
 
-        $result = $command->getRules($model, $associations, $args);
+        $command->setArgs($args);
+        $result = $command->getRules($model, $associations);
         $expected = [
             [
                 'name' => 'isUnique',
@@ -1709,7 +1763,8 @@ class ModelCommandTest extends TestCase
 
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getRules($model, [], $args);
+        $command->setArgs($args);
+        $result = $command->getRules($model, []);
         $expected = [
             [
                 'name' => 'isUnique',
@@ -1738,7 +1793,8 @@ class ModelCommandTest extends TestCase
             'columns' => ['department_id', 'username'],
         ]);
 
-        $result = $command->getRules($model, [], $args);
+        $command->setArgs($args);
+        $result = $command->getRules($model, []);
         $expected = [
             [
                 'name' => 'isUnique',
@@ -1789,11 +1845,13 @@ class ModelCommandTest extends TestCase
         $model = $this->getTableLocator()->get('TodoItems');
         $command = new ModelCommand();
         $args = new Arguments([], [], []);
-        $result = $command->getDisplayField($model, $args);
+        $command->setArgs($args);
+        $result = $command->getDisplayField($model);
         $this->assertSame('title', $result);
 
         $args = new Arguments([], ['display-field' => 'custom'], []);
-        $result = $command->getDisplayField($model, $args);
+        $command->setArgs($args);
+        $result = $command->getDisplayField($model);
         $this->assertSame('custom', $result);
     }
 
@@ -1965,9 +2023,12 @@ class ModelCommandTest extends TestCase
         $args = new Arguments([$name], ['table' => 'bake_articles', 'force' => true], []);
         $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
 
-        $table = $command->getTable($name, $args);
+        $command->setArgs($args);
+        $table = $command->getTable($name);
         $tableObject = $command->getTableObject($name, $table);
-        $data = $command->getTableContext($tableObject, $table, $name, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $data = $command->getTableContext($tableObject, $table, $name);
         $data['validation'] = $validation;
         $data['associations'] = [
             'belongsTo' => [],
@@ -1975,7 +2036,7 @@ class ModelCommandTest extends TestCase
             'belongsToMany' => [],
         ];
         $data['rulesChecker'] = [];
-        $command->bakeTable($tableObject, $data, $args, $io);
+        $command->bakeTable($tableObject, $data);
 
         $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
@@ -1997,14 +2058,17 @@ class ModelCommandTest extends TestCase
         $args = new Arguments([$name], ['table' => 'unique_fields', 'force' => true], []);
         $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
 
-        $table = $command->getTable($name, $args);
+        $command->setArgs($args);
+        $table = $command->getTable($name);
         $tableObject = $command->getTableObject($name, $table);
-        $data = $command->getTableContext($tableObject, $table, $name, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $data = $command->getTableContext($tableObject, $table, $name);
         $data['validation'] = [];
-        $command->bakeTable($tableObject, $data, $args, $io);
+        $command->bakeTable($tableObject, $data);
 
         $result = file_get_contents($this->generatedFiles[0]);
-        $expected = file_get_contents($this->_compareBasePath . __FUNCTION__ . '.php');
+        $expected = file_get_contents($this->compareBasePath . __FUNCTION__ . '.php');
         if (ConnectionManager::get('test')->getDriver() instanceof Sqlserver) {
             $expected = preg_replace("/'allowMultipleNulls' => true/", "'allowMultipleNulls' => false", $expected);
         }
@@ -2054,7 +2118,7 @@ class ModelCommandTest extends TestCase
     public function testBakeEntitySimpleUnchanged(): void
     {
         $this->generatedFile = APP . 'Model/Entity/User.php';
-        $result = file_get_contents($this->_compareBasePath . __FUNCTION__ . '.php');
+        $result = file_get_contents($this->compareBasePath . __FUNCTION__ . '.php');
         file_put_contents($this->generatedFile, str_replace("\r\n", "\n", $result));
 
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden users');
@@ -2205,7 +2269,7 @@ class ModelCommandTest extends TestCase
      */
     public function testBakeTableWithPlugin(): void
     {
-        $this->_loadTestPlugin('BakeTest');
+        $this->loadTestPlugin('BakeTest');
         $path = Plugin::path('BakeTest');
 
         $this->generatedFile = $path . 'src/Model/Table/UsersTable.php';
@@ -2289,7 +2353,7 @@ class ModelCommandTest extends TestCase
      */
     public function testBakeEntityWithPlugin(): void
     {
-        $this->_loadTestPlugin('BakeTest');
+        $this->loadTestPlugin('BakeTest');
         $path = Plugin::path('BakeTest');
 
         $this->generatedFile = $path . 'src/Model/Entity/User.php';
@@ -2435,7 +2499,7 @@ class TodoItem implements IdentityInterface
      */
     protected const MY_CONST = 1;
 
-    protected array $_accessible = [
+    protected array $patchable = [
         // should not get overwritten
     ];
 
@@ -2635,9 +2699,12 @@ PARSE;
         $args = new Arguments([$name], ['table' => 'bake_articles', 'force' => true], []);
         $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
 
-        $table = $command->getTable($name, $args);
+        $command->setArgs($args);
+        $table = $command->getTable($name);
         $tableObject = $command->getTableObject($name, $table);
-        $data = $command->getTableContext($tableObject, $table, $name, $args, $io);
+        $command->setArgs($args);
+        $command->setIo($io);
+        $data = $command->getTableContext($tableObject, $table, $name);
         $data['validation'] = $validation;
         $data['associations'] = [
             'belongsTo' => [],
@@ -2645,7 +2712,7 @@ PARSE;
             'belongsToMany' => [],
         ];
         $data['rulesChecker'] = [];
-        $command->bakeTable($tableObject, $data, $args, $io);
+        $command->bakeTable($tableObject, $data);
 
         $result = file_get_contents($this->generatedFiles[0]);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);

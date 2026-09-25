@@ -89,7 +89,7 @@ class TodoTasksController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete($id = null): ?\Cake\Http\Response
     {
         $this->request->allowMethod(['post', 'delete']);
         $todoTask = $this->TodoTasks->get($id);
