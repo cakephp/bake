@@ -15,6 +15,10 @@
 #}
 {% set propertyHintMap = DocBlock.buildEntityPropertyHintTypeMap(propertySchema ?: []) %}
 {% set associationHintMap = DocBlock.buildEntityAssociationHintTypeMap(propertySchema ?: []) %}
+{% set fileNamespace = fileBuilder.namespace %}
+{% set propertyImports = concreteProperties|default(false) ? DocBlock.buildEntityPropertyImports(propertySchema ?: [], fileNamespace) : [] %}
+{% set classImports = fileBuilder.classImports(['Cake\\ORM\\Entity']|merge(propertyImports)) %}
+{% set concreteDeclarations = concreteProperties|default(false) ? DocBlock.buildEntityPropertyDeclarations(propertySchema ?: [], classImports, fileNamespace) : {} %}
 {% set annotations = DocBlock.propertyHints(propertyHintMap) %}
 
 {%- if associationHintMap %}
@@ -26,7 +30,7 @@
 {%- set generatedProperties = [] %}
 {{ element('Bake.file_header', {
     namespace: fileBuilder.namespace,
-    classImports: fileBuilder.classImports(['Cake\\ORM\\Entity']),
+    classImports: classImports,
 }) }}
 
 {{ DocBlock.classDescription(name, 'Entity', annotations)|raw }}
@@ -61,6 +65,15 @@ class {{ name }} extends Entity{{ fileBuilder.classBuilder.implements ? ' implem
      * @var array<string>
      */
     protected array $hidden = {{ Bake.exportVar(hidden, 1)|raw }};
+{% endif %}
+{% if concreteDeclarations and (accessible or hidden) %}
+
+{% endif %}
+{% if concreteDeclarations %}
+    {%~ set generatedProperties = generatedProperties|merge(concreteDeclarations|keys) %}
+    {%~ for declaration in concreteDeclarations %}
+    {{ declaration }}
+    {%~ endfor %}
 {% endif %}
 {% set userProperties = fileBuilder.classBuilder.userProperties(generatedProperties) %}
 {% if userProperties %}
