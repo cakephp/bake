@@ -57,6 +57,57 @@ For non-conventional relations, you can use references in constraints or foreign
 ->addForeignKey('shipping_country_id', 'countries', 'cid')
 ```
 
+### Concrete Entity Properties
+
+By default entity fields are stored as dynamic fields. Pass `--concrete-properties` to have Bake
+declare real PHP properties on the baked entity class, following
+[Declaring Concrete Properties](https://book.cakephp.org/6.x/orm/entities.html#declaring-concrete-properties)
+in the CakePHP book:
+
+```bash
+bin/cake bake model Articles --concrete-properties
+```
+
+The generated properties use `public protected(set)` visibility, so they can be read directly
+while writes still go through the entity's `set()` API. Class types are referenced by their
+short name instead of a fully qualified name:
+
+```php
+use App\Model\Enum\Status;
+use Cake\I18n\DateTime;
+use Cake\ORM\Entity;
+
+class Article extends Entity
+{
+    public protected(set) int $id;
+    public protected(set) ?string $title;
+    public protected(set) ?DateTime $created;
+    public protected(set) ?Status $status;
+    public protected(set) bool $published;
+    public protected(set) ?User $author;
+    public protected(set) ?array $comments;
+}
+```
+
+Classes outside the entity's namespace, like `Cake\I18n\DateTime` or the `Status` enum, are
+imported, with imports kept alphabetically ordered. Classes in the same namespace, like the
+`User` association (`App\Model\Entity\User`), don't need an import and are referenced by their
+short name directly.
+
+Note that:
+
+- Fields used by `Cake\ORM\Entity` itself, such as `hidden`, `patchable`, `dirty` and `errors`,
+  are skipped so those remain dynamic fields.
+- No property is initialized, not even the nullable ones. Fields which have not been hydrated,
+  like an association which has not been loaded, are uninitialized, so reading them directly
+  raises an `Error` about accessing an uninitialized property. The entity API handles this
+  safely: `$article->get('author')` and `hasValue('author')` return `null` and `false`
+  respectively for such fields.
+- The `@property` annotations in the class docblock are still generated as they can express
+  types like an array of entities that PHP property types cannot.
+- Re-baking an existing entity with the option and `--update` does not duplicate the
+  declarations.
+
 ## Bake Enums
 
 You can use Bake to generate [backed enums](https://www.php.net/manual/en/language.enumerations.backed.php) for use in your models.

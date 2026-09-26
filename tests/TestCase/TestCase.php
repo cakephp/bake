@@ -132,4 +132,27 @@ abstract class TestCase extends BaseTestCase
         $contents = file_get_contents($path);
         $this->assertStringNotContainsString($expected, $contents, $message);
     }
+
+    /**
+     * Assert that a generated PHP file passes the PHP linter.
+     *
+     * Useful as generated code can be syntactically valid for the parser
+     * used when updating existing files, while still being invalid for
+     * the PHP runtime. For example a non-nullable typed property
+     * initialized with a `null` default value.
+     *
+     * @param string $path The path to check.
+     * @return void
+     */
+    protected function assertPhpLints($path)
+    {
+        $this->assertFileExists($path, 'Cannot lint, file does not exist.');
+
+        $output = [];
+        $status = 0;
+        exec(escapeshellarg(PHP_BINARY) . ' -l ' . escapeshellarg($path) . ' 2>&1', $output, $status);
+
+        $message = "php -l reported errors for `{$path}`:\n" . implode("\n", $output);
+        $this->assertSame(0, $status, $message);
+    }
 }
