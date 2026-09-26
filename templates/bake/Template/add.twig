@@ -19,12 +19,12 @@
  * @var \{{ entityClass }} ${{ singularVar }}
 {% if associations.BelongsTo is defined %}
     {%~ for assocName, assocData in associations.BelongsTo %}
- * @var \Cake\Collection\CollectionInterface|string[] ${{ assocData.variable }}
+ * @var \Cake\Collection\CollectionInterface|array<string> ${{ assocData.variable }}
     {%~ endfor %}
 {% endif %}
 {% if associations.BelongsToMany is defined %}
     {%~ for assocName, assocData in associations.BelongsToMany %}
- * @var \Cake\Collection\CollectionInterface|string[] ${{ assocData.variable }}
+ * @var \Cake\Collection\CollectionInterface|array<string> ${{ assocData.variable }}
     {%~ endfor %}
 {% endif %}
  */

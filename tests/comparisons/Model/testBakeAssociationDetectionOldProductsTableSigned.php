@@ -24,7 +24,6 @@ use Cake\Validation\Validator;
  * @method iterable<\Bake\Test\App\Model\Entity\OldProduct>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\OldProduct> saveManyOrFail(iterable $entities, array $options = [])
  * @method iterable<\Bake\Test\App\Model\Entity\OldProduct>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\OldProduct>|false deleteMany(iterable $entities, array $options = [])
  * @method iterable<\Bake\Test\App\Model\Entity\OldProduct>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\OldProduct> deleteManyOrFail(iterable $entities, array $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class OldProductsTable extends Table

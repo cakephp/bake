@@ -12,7 +12,6 @@ use Cake\Validation\Validator;
  * ProductVersions Model
  *
  * @property \Bake\Test\App\Model\Table\ProductsTable&\Cake\ORM\Association\BelongsTo $Products
- *
  * @method \Bake\Test\App\Model\Entity\ProductVersion newEmptyEntity()
  * @method \Bake\Test\App\Model\Entity\ProductVersion newEntity(array $data, array $options = [])
  * @method array<\Bake\Test\App\Model\Entity\ProductVersion> newEntities(array $data, array $options = [])

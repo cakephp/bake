@@ -14,7 +14,6 @@ use Cake\Validation\Validator;
  * @property \BakeTest\Model\Table\CommentsTable&\Cake\ORM\Association\HasMany $Comments
  * @property \BakeTest\Model\Table\RelationsTable&\Cake\ORM\Association\HasMany $Relations
  * @property \BakeTest\Model\Table\TodoItemsTable&\Cake\ORM\Association\HasMany $TodoItems
- *
  * @method \BakeTest\Model\Entity\User newEmptyEntity()
  * @method \BakeTest\Model\Entity\User newEntity(array $data, array $options = [])
  * @method array<\BakeTest\Model\Entity\User> newEntities(array $data, array $options = [])
@@ -28,7 +27,6 @@ use Cake\Validation\Validator;
  * @method iterable<\BakeTest\Model\Entity\User>|\Cake\Datasource\ResultSetInterface<\BakeTest\Model\Entity\User> saveManyOrFail(iterable $entities, array $options = [])
  * @method iterable<\BakeTest\Model\Entity\User>|\Cake\Datasource\ResultSetInterface<\BakeTest\Model\Entity\User>|false deleteMany(iterable $entities, array $options = [])
  * @method iterable<\BakeTest\Model\Entity\User>|\Cake\Datasource\ResultSetInterface<\BakeTest\Model\Entity\User> deleteManyOrFail(iterable $entities, array $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class UsersTable extends Table

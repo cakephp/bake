@@ -13,10 +13,9 @@ use Cake\ORM\Entity;
  * @property string|null $title
  * @property string|null $body
  * @property \Bake\Test\App\Model\Enum\ArticleStatus|null $published
- *
  * @property \Bake\Test\App\Model\Entity\Author $author
- * @property \Bake\Test\App\Model\Entity\Tag[] $tags
- * @property \Bake\Test\App\Model\Entity\ArticlesTag[] $articles_tags
+ * @property array<\Bake\Test\App\Model\Entity\Tag> $tags
+ * @property array<\Bake\Test\App\Model\Entity\ArticlesTag> $articles_tags
  */
 class Article extends Entity
 {

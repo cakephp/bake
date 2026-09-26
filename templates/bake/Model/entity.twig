@@ -18,7 +18,6 @@
 {% set annotations = DocBlock.propertyHints(propertyHintMap) %}
 
 {%- if associationHintMap %}
-    {%~ set annotations = annotations|merge(['']) %}
     {%~ set annotations = annotations|merge(DocBlock.propertyHints(associationHintMap)) %}
 {% endif %}
 
