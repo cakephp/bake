@@ -328,7 +328,7 @@ class DocBlockHelper extends Helper
      */
     protected function reservedEntityPropertyNames(): array
     {
-        $properties = (new ReflectionProperty(Entity::class, 'restrictedProperties'))->getValue();
+        $properties = new ReflectionProperty(Entity::class, 'restrictedProperties')->getValue();
 
         return is_array($properties) ? $properties : [];
     }
