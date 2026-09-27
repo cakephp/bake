@@ -21,11 +21,12 @@ class DocBlockHelper extends Helper
     /**
      * @var bool Whether to add a blank line between different class annotations
      */
-    protected bool $annotationSpacing = true;
+    protected bool $annotationSpacing = false;
 
     /**
      * Writes the DocBlock header for a class which includes the property and method declarations. Annotations are
-     * sorted and grouped by type and value. Groups of annotations are separated by blank lines.
+     * sorted and grouped by type and value. If enabled via the `$annotationSpacing` setting of this helper, groups of
+     * annotations are separated by blank lines.
      *
      * @param string $className The class this comment block is for.
      * @param string $classType The type of class (example, Entity)
@@ -80,7 +81,7 @@ class DocBlockHelper extends Helper
             $annotationType === Association::MANY_TO_MANY ||
             $annotationType === Association::ONE_TO_MANY
         ) {
-            return $type . '[]';
+            return 'array<' . $type . '>';
         }
 
         return $type;

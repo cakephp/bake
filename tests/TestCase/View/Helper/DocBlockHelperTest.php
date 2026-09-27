@@ -28,6 +28,7 @@ use Cake\ORM\Association\HasOne;
 use Cake\ORM\Table;
 use Cake\TestSuite\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use ReflectionProperty;
 
 /**
  * DocBlockHelper Test
@@ -72,7 +73,7 @@ class DocBlockHelperTest extends TestCase
     }
 
     /**
-     * Tests the classDescription method including annotation spacing
+     * Tests the classDescription method
      *
      * @return void
      */
@@ -85,6 +86,28 @@ class DocBlockHelperTest extends TestCase
             '@foo $bar baz',
             '@see there',
         ];
+        $classDescription = $this->DocBlockHelper->classDescription($className, $classType, $lines);
+        $expected = "/**\n * Comments Model\n *\n * Line 1\n * @foo \$bar baz\n * @see there\n */";
+        $this::assertSame($expected, $classDescription);
+    }
+
+    /**
+     * Tests the classDescription method with annotation spacing enabled
+     *
+     * @return void
+     */
+    public function testClassDescriptionAnnotationSpacing(): void
+    {
+        $className = 'Comments';
+        $classType = 'Model';
+        $lines = [
+            'Line 1',
+            '@foo $bar baz',
+            '@see there',
+        ];
+        $reflection = new ReflectionProperty($this->DocBlockHelper, 'annotationSpacing');
+        $reflection->setValue($this->DocBlockHelper, true);
+
         $classDescription = $this->DocBlockHelper->classDescription($className, $classType, $lines);
         $expected = "/**\n * Comments Model\n *\n * Line 1\n * @foo \$bar baz\n *\n * @see there\n */";
         $this::assertSame($expected, $classDescription);
@@ -103,14 +126,14 @@ class DocBlockHelperTest extends TestCase
         $type = 'Foo';
         $association = new BelongsToMany('Foo', $sourceTable);
         $assocEntityType = $this->DocBlockHelper->associatedEntityTypeToHintType($type, $association);
-        $expected = 'Foo[]';
+        $expected = 'array<Foo>';
         $this->assertSame($expected, $assocEntityType);
 
         // Test with ONE_TO_MANY
         $type = 'Bar';
         $association = new HasMany('Bar', $sourceTable);
         $assocEntityType = $this->DocBlockHelper->associatedEntityTypeToHintType($type, $association);
-        $expected = 'Bar[]';
+        $expected = 'array<Bar>';
         $this->assertSame($expected, $assocEntityType);
 
         // Test with ONE_TO_ONE

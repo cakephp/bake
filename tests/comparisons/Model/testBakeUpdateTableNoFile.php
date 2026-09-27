@@ -15,7 +15,6 @@ use Cake\Validation\Validator;
  * @property \Bake\Test\App\Model\Table\TodoRemindersTable&\Cake\ORM\Association\HasOne $TodoReminders
  * @property \Bake\Test\App\Model\Table\TodoTasksTable&\Cake\ORM\Association\HasMany $TodoTasks
  * @property \Bake\Test\App\Model\Table\TodoLabelsTable&\Cake\ORM\Association\BelongsToMany $TodoLabels
- *
  * @method \Bake\Test\App\Model\Entity\TodoItem newEmptyEntity()
  * @method \Bake\Test\App\Model\Entity\TodoItem newEntity(array $data, array $options = [])
  * @method array<\Bake\Test\App\Model\Entity\TodoItem> newEntities(array $data, array $options = [])
@@ -29,7 +28,6 @@ use Cake\Validation\Validator;
  * @method iterable<\Bake\Test\App\Model\Entity\TodoItem>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\TodoItem> saveManyOrFail(iterable $entities, array $options = [])
  * @method iterable<\Bake\Test\App\Model\Entity\TodoItem>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\TodoItem>|false deleteMany(iterable $entities, array $options = [])
  * @method iterable<\Bake\Test\App\Model\Entity\TodoItem>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\TodoItem> deleteManyOrFail(iterable $entities, array $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class TodoItemsTable extends Table

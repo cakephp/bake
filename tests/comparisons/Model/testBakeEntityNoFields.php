@@ -17,11 +17,10 @@ use Cake\ORM\Entity;
  * @property int $todo_task_count
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $updated
- *
  * @property \Bake\Test\App\Model\Entity\User $user
  * @property \Bake\Test\App\Model\Entity\TodoReminder $todo_reminder
- * @property \Bake\Test\App\Model\Entity\TodoTask[] $todo_tasks
- * @property \Bake\Test\App\Model\Entity\TodoLabel[] $todo_labels
+ * @property array<\Bake\Test\App\Model\Entity\TodoTask> $todo_tasks
+ * @property array<\Bake\Test\App\Model\Entity\TodoLabel> $todo_labels
  */
 class TodoItem extends Entity
 {

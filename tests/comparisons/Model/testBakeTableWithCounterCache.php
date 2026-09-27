@@ -12,7 +12,6 @@ use Cake\Validation\Validator;
  * TodoTasks Model
  *
  * @property \Bake\Test\App\Model\Table\TodoItemsTable&\Cake\ORM\Association\BelongsTo $TodoItems
- *
  * @method \Bake\Test\App\Model\Entity\TodoTask newEmptyEntity()
  * @method \Bake\Test\App\Model\Entity\TodoTask newEntity(array $data, array $options = [])
  * @method array<\Bake\Test\App\Model\Entity\TodoTask> newEntities(array $data, array $options = [])
@@ -26,7 +25,6 @@ use Cake\Validation\Validator;
  * @method iterable<\Bake\Test\App\Model\Entity\TodoTask>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\TodoTask> saveManyOrFail(iterable $entities, array $options = [])
  * @method iterable<\Bake\Test\App\Model\Entity\TodoTask>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\TodoTask>|false deleteMany(iterable $entities, array $options = [])
  * @method iterable<\Bake\Test\App\Model\Entity\TodoTask>|\Cake\Datasource\ResultSetInterface<\Bake\Test\App\Model\Entity\TodoTask> deleteManyOrFail(iterable $entities, array $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  * @mixin \Cake\ORM\Behavior\CounterCacheBehavior
  */

@@ -13,10 +13,9 @@ use Cake\ORM\Entity;
  * @property string|null $password
  * @property \Cake\I18n\DateTime|null $created
  * @property \Cake\I18n\DateTime|null $updated
- *
- * @property \Bake\Test\App\Model\Entity\Comment[] $comments
- * @property \Bake\Test\App\Model\Entity\Relation[] $relations
- * @property \Bake\Test\App\Model\Entity\TodoItem[] $todo_items
+ * @property array<\Bake\Test\App\Model\Entity\Comment> $comments
+ * @property array<\Bake\Test\App\Model\Entity\Relation> $relations
+ * @property array<\Bake\Test\App\Model\Entity\TodoItem> $todo_items
  */
 class User extends Entity
 {
