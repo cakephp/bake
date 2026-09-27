@@ -33,12 +33,12 @@ class BakeHelper extends Helper
      *
      * @var array<string, mixed>
      */
-    protected array $_defaultConfig = [];
+    protected array $defaultConfig = [];
 
     /**
      * AssociationFilter utility
      */
-    protected ?AssociationFilter $_associationFilter = null;
+    protected ?AssociationFilter $associationFilter = null;
 
     /**
      * Used for generating formatted properties such as component and helper arrays
@@ -50,7 +50,7 @@ class BakeHelper extends Helper
      */
     public function arrayProperty(string $name, array $value = [], array $options = []): string
     {
-        if (!$value) {
+        if ($value === []) {
             return '';
         }
 
@@ -62,7 +62,7 @@ class BakeHelper extends Helper
             'value' => $value,
         ];
 
-        return $this->_View->element('array_property', $options);
+        return $this->View->element('array_property', $options);
     }
 
     /**
@@ -119,7 +119,7 @@ class BakeHelper extends Helper
         };
         $aliases = array_map($extractor, $table->associations()->getByType($assoc));
         if ($assoc === 'HasMany') {
-            return $this->_filterHasManyAssociationsAliases($table, $aliases);
+            return $this->filterHasManyAssociationsAliases($table, $aliases);
         }
 
         return $aliases;
@@ -544,12 +544,10 @@ class BakeHelper extends Helper
      * @param array<string> $aliases array of aliases
      * @return array<string>
      */
-    protected function _filterHasManyAssociationsAliases(Table $table, array $aliases): array
+    protected function filterHasManyAssociationsAliases(Table $table, array $aliases): array
     {
-        if (is_null($this->_associationFilter)) {
-            $this->_associationFilter = new AssociationFilter();
-        }
+        $this->associationFilter ??= new AssociationFilter();
 
-        return $this->_associationFilter->filterHasManyAssociationsAliases($table, $aliases);
+        return $this->associationFilter->filterHasManyAssociationsAliases($table, $aliases);
     }
 }

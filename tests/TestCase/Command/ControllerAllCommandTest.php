@@ -19,9 +19,11 @@ namespace Bake\Test\TestCase\Command;
 use Bake\Command\ControllerAllCommand;
 use Bake\Test\App\Model\Table\BakeArticlesTable;
 use Bake\Test\TestCase\TestCase;
+use Bake\Utility\SubsetSchemaCollection;
 use Cake\Console\CommandInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Plugin;
+use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
 
 /**
@@ -52,8 +54,12 @@ class ControllerAllCommandTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Controller' . DS;
         $this->setAppNamespace('Bake\Test\App');
+
+        $connection = ConnectionManager::get('test');
+        $subsetCollection = new SubsetSchemaCollection($connection->getSchemaCollection(), $this->tables);
+        $connection->setSchemaCollection($subsetCollection);
 
         $this->getTableLocator()->get('BakeArticles', [
             'className' => BakeArticlesTable::class,
@@ -68,6 +74,9 @@ class ControllerAllCommandTest extends TestCase
     protected function tearDown(): void
     {
         parent::tearDown();
+        $connection = ConnectionManager::get('test');
+        $connection->setSchemaCollection($connection->getSchemaCollection()->getInnerCollection());
+
         $this->getTableLocator()->clear();
     }
 

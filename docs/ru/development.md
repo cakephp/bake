@@ -1,50 +1,48 @@
 # Расширение возможностей Bake
 
 Bake имеет расширяемую архитектуру, которая позволяет вашему приложению или плагинам изменять или дополнять базовую функциональность.
-Bake использует специальный класс представления и механизм шаблонизатора [Twig](https://twig.symfony.com/).
+Bake использует выделенный класс представления, работающий с движком шаблонов [Twig](https://twig.symfony.com/).
 
 ## События Bake
 
-`BakeView`, как и любой другой класс представления, генерирует стандартные события, а также дополнительное событие инициализации.
-Стандартные классы представления используют префикс `View.`, а `BakeView` использует префикс `Bake.`.
+Как и любой другой класс представления, `BakeView` генерирует те же события, плюс одно дополнительное событие инициализации.
+Однако стандартные классы представления используют префикс события `View.`, а `BakeView` — префикс `Bake.`.
 
-Событие `initialize` можно использовать для внесения изменений, которые применяются ко всему выводу Bake.
-Например, чтобы добавить helper в класс представления Bake:
+Событие инициализации можно использовать для внесения изменений, которые применяются ко всему выводу Bake.
+Например, чтобы добавить ещё один helper в класс представления Bake:
 
 ```php
 <?php
-// config/bootstrap_cli.php
-
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Event\EventManager;
 
-EventManager::instance()->on('Bake.initialize', function (Event $event) {
+// in src/Application::bootstrapCli()
+
+EventManager::instance()->on('Bake.initialize', function (EventInterface $event) {
     $view = $event->getSubject();
 
-    // В моих шаблонах bake разрешить использование MySpecial helper
+    // In my bake templates, allow the use of the MySpecial helper
     $view->loadHelper('MySpecial', ['some' => 'config']);
 
-    // И добавить переменную $author, чтобы она всегда была доступна
+    // And add an $author variable so it's always available
     $view->set('author', 'Andy');
 });
 ```
 
-Если вы хотите изменить Bake из другого плагина, удобнее всего разместить события плагина в `config/bootstrap.php`.
-
-События Bake полезны и для небольших изменений существующих шаблонов.
-Например, чтобы изменить имена переменных, используемых при генерации controller и template файлов, можно слушать `Bake.beforeRender`:
+События Bake также пригодятся для небольших изменений существующих шаблонов.
+Например, чтобы изменить имена переменных, используемых при генерации файлов контроллера и шаблона, слушайте событие `Bake.beforeRender`:
 
 ```php
 <?php
-// config/bootstrap_cli.php
-
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Event\EventManager;
 
-EventManager::instance()->on('Bake.beforeRender', function (Event $event) {
+// in src/Application::bootstrapCli()
+
+EventManager::instance()->on('Bake.beforeRender', function (EventInterface $event) {
     $view = $event->getSubject();
 
-    // Использовать $rows для основной переменной данных в index
+    // Use $rows for the main data variable in indexes
     if ($view->get('pluralName')) {
         $view->set('pluralName', 'rows');
     }
@@ -52,7 +50,7 @@ EventManager::instance()->on('Bake.beforeRender', function (Event $event) {
         $view->set('pluralVar', 'rows');
     }
 
-    // Использовать $theOne для основной переменной данных в view/edit
+    // Use $theOne for the main data variable in view/edit
     if ($view->get('singularName')) {
         $view->set('singularName', 'theOne');
     }
@@ -62,24 +60,23 @@ EventManager::instance()->on('Bake.beforeRender', function (Event $event) {
 });
 ```
 
-Вы также можете привязать события `Bake.beforeRender` и `Bake.afterRender` к конкретному генерируемому файлу.
-Например, если вы хотите добавить действия в `UsersController` при генерации из `Controller/controller.twig`:
+Вы также можете ограничить события `Bake.beforeRender` и `Bake.afterRender` конкретным генерируемым файлом.
+Например, если вы хотите добавить определённые действия в ваш `UsersController` при генерации из файла `Controller/controller.twig`:
 
 ```php
 <?php
-// config/bootstrap_cli.php
-
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Event\EventManager;
-use Cake\Utility\Hash;
+
+// in src/Application::bootstrapCli()
 
 EventManager::instance()->on(
     'Bake.beforeRender.Controller.controller',
-    function (Event $event) {
+    function (EventInterface $event) {
         $view = $event->getSubject();
-        if ($view->viewVars['name'] == 'Users') {
-            // добавим действия входа и выхода в контроллер Users
-            $view->viewVars['actions'] = [
+        if ($view->get('name') === 'Users') {
+            // add the login and logout actions to the Users controller
+            $view->set('actions', [
                 'login',
                 'logout',
                 'index',
@@ -87,177 +84,277 @@ EventManager::instance()->on(
                 'add',
                 'edit',
                 'delete',
-            ];
+            ]);
         }
     }
 );
 ```
 
-Фокусируя обработчики на конкретных шаблонах Bake, вы упрощаете связанную с Bake логику событий и получаете более удобные для тестирования callback-функции.
+Привязывая обработчики событий к конкретным шаблонам bake, вы упрощаете связанную с Bake логику событий и получаете более удобные для тестирования callback-функции.
 
 ## Синтаксис шаблонов Bake
 
-Файлы шаблонов Bake используют синтаксис [Twig](https://twig.symfony.com/doc/2.x/).
+Файлы шаблонов Bake используют синтаксис шаблонов [Twig](https://twig.symfony.com/).
 
-Например, при генерации shell-команды:
+Например, при генерации команды следующим образом:
 
 ```bash
-bin/cake bake shell Foo
+bin/cake bake command Foo
 ```
 
-Шаблон `vendor/cakephp/bake/src/Template/Bake/Shell/shell.twig` выглядит так:
+Шаблон, используемый в `vendor/cakephp/bake/templates/bake/Command/command.twig`, выглядит так:
 
 ```php
-<?php
-namespace {{ namespace }}\Shell;
-
-use Cake\Console\Shell;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\Command",
+    classImports: [
+        'Cake\\Command\\Command',
+        'Cake\\Console\\ConsoleOptionParser',
+    ],
+}) }}
 
 /**
- * {{ name }} shell command.
+ * {{ name }} command.
  */
-class {{ name }}Shell extends Shell
+class {{ name }}Command extends Command
 {
     /**
-     * main() method.
+     * The name of this command.
      *
-     * @return bool|int Success or error code.
+     * @var string
      */
-    public function main()
+    protected string $name = 'cake {{ command_name }}';
+
+    /**
+     * Get the default command name.
+     *
+     * @return string
+     */
+    public static function defaultName(): string
+    {
+        return '{{ command_name }}';
+    }
+
+    /**
+     * Get the command description.
+     *
+     * @return string
+     */
+    public static function getDescription(): string
+    {
+        return 'Command description here.';
+    }
+
+    /**
+     * Hook method for defining this command's option parser.
+     *
+     * @link https://book.cakephp.org/6/en/console-commands/commands.html#defining-arguments-and-options
+     * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+     * @return \Cake\Console\ConsoleOptionParser The built parser.
+     */
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        return parent::buildOptionParser($parser)
+            ->setDescription(static::getDescription());
+    }
+
+    /**
+     * Implement this method with your command's logic.
+     *
+     * @return int|null|void The exit code or null for success
+     */
+    public function execute()
     {
     }
 }
 ```
 
-И итоговый класс `src/Shell/FooShell.php` будет выглядеть так:
+Вызов `element()` выводит заголовок `<?php declare(strict_types=1);`, пространство имён и инструкции `use`.
+Обратите внимание, что команды используют `$this->args` и `$this->io` вместо того, чтобы получать их в качестве параметров `execute()`.
+
+Итоговый сгенерированный класс в `src/Command/FooCommand.php` выглядит так:
 
 ```php
 <?php
-namespace App\Shell;
+declare(strict_types=1);
 
-use Cake\Console\Shell;
+namespace App\Command;
+
+use Cake\Command\Command;
+use Cake\Console\ConsoleOptionParser;
 
 /**
- * Foo shell command.
+ * Foo command.
  */
-class FooShell extends Shell
+class FooCommand extends Command
 {
     /**
-     * main() method.
+     * The name of this command.
      *
-     * @return bool|int Success or error code.
+     * @var string
      */
-    public function main()
+    protected string $name = 'cake foo';
+
+    /**
+     * Get the default command name.
+     *
+     * @return string
+     */
+    public static function defaultName(): string
+    {
+        return 'foo';
+    }
+
+    /**
+     * Get the command description.
+     *
+     * @return string
+     */
+    public static function getDescription(): string
+    {
+        return 'Command description here.';
+    }
+
+    /**
+     * Hook method for defining this command's option parser.
+     *
+     * @link https://book.cakephp.org/6/en/console-commands/commands.html#defining-arguments-and-options
+     * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+     * @return \Cake\Console\ConsoleOptionParser The built parser.
+     */
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        return parent::buildOptionParser($parser)
+            ->setDescription(static::getDescription());
+    }
+
+    /**
+     * Implement this method with your command's logic.
+     *
+     * @return int|null|void The exit code or null for success
+     */
+    public function execute()
     {
     }
 }
 ```
-
-::: info
-До версии 1.5.0 Bake использовал пользовательские теги ERB-стиля внутри `.ctp` файлов шаблонов.
-
-- `<%` открывающий PHP-тег шаблона Bake.
-- `%>` закрывающий PHP-тег шаблона Bake.
-- `<%=` короткий echo-тег шаблона Bake.
-- `<%-` открывающий тег с удалением пробелов перед тегом.
-- `-%>` закрывающий тег с удалением пробелов после тега.
-:::
 
 ## Создание темы Bake
 
-Если вы хотите изменить вывод, создаваемый командой `bake`, вы можете создать собственную тему Bake, которая позволит заменить часть или все шаблоны.
+Если вы хотите изменить вывод, создаваемый командой `bake`, вы можете создать собственную тему Bake, которая позволит заменить часть или все шаблоны, используемые Bake.
 
-1. Сгенерируйте новый плагин. Имя плагина станет именем темы Bake.
-2. Создайте директорию `plugins/[name]/src/Template/Bake/Template/`.
-3. Скопируйте нужные шаблоны из `vendor/cakephp/bake/src/Template/Bake/Template` в соответствующие файлы вашего плагина.
-4. При запуске Bake используйте параметр `--theme`, чтобы указать тему. Чтобы не передавать его каждый раз, можно настроить тему по умолчанию:
+1. Сгенерируйте новый плагин. Имя плагина станет именем темы Bake. Например, `bin/cake bake plugin custom_bake`.
+2. Создайте новую директорию `plugins/CustomBake/templates/bake`.
+3. Скопируйте нужные шаблоны из `vendor/cakephp/bake/templates/bake` в соответствующие файлы вашего плагина.
+4. При запуске Bake используйте параметр `--theme CustomBake`, чтобы применить вашу тему. Чтобы не указывать его каждый раз, можно сделать вашу собственную тему темой по умолчанию:
 
 ```php
 <?php
-// В config/bootstrap.php или config/bootstrap_cli.php
+// in src/Application::bootstrapCli() before loading the 'Bake' plugin.
 Configure::write('Bake.theme', 'MyTheme');
 ```
 
-## Настройка шаблонов Bake
+## Шаблоны Bake приложения
 
-Если вы хотите изменить стандартный вывод команды `bake`, вы можете создать собственные шаблоны прямо в приложении.
-В этом случае использовать `--theme` в командной строке не нужно.
+Если вам нужно настроить лишь несколько шаблонов bake или использовать зависимости приложения в ваших шаблонах, вы можете разместить переопределения шаблонов в шаблонах приложения.
+Такие переопределения работают так же, как переопределение других шаблонов плагинов.
 
-1. Создайте директорию `/src/Template/Bake/`.
-2. Скопируйте шаблоны, которые хотите изменить, из `vendor/cakephp/bake/src/Template/Bake/`.
+1. Создайте новую директорию `/templates/plugin/Bake/`.
+2. Скопируйте нужные шаблоны из `vendor/cakephp/bake/templates/bake/` в соответствующие файлы вашего приложения.
+
+При использовании шаблонов приложения параметр `--theme` использовать не нужно.
 
 ## Создание новых параметров команды Bake
 
-Можно добавить новые параметры команды Bake или переопределить существующие, создавая задачи в приложении или плагине.
-Если расширить `Bake\Shell\Task\BakeTask`, Bake найдёт новую задачу и включит её в список доступных.
+Можно добавить новые команды bake или переопределить команды, предоставляемые CakePHP, создавая команды в вашем приложении или плагинах.
+Если расширить `Bake\Command\BakeCommand`, Bake найдёт вашу новую команду и включит её в состав bake.
 
-В качестве примера создадим задачу, которая генерирует произвольный класс `foo`.
-Сначала создайте файл `src/Shell/Task/FooTask.php`.
-Мы расширим `SimpleBakeTask`, так как новая shell task будет простой.
+В качестве примера создайте файл команды `src/Command/Bake/FooCommand.php`.
+Мы расширим `SimpleBakeCommand`, так как команда простая:
 
 ```php
 <?php
-namespace App\Shell\Task;
+declare(strict_types=1);
 
-use Bake\Shell\Task\SimpleBakeTask;
+namespace App\Command\Bake;
 
-class FooTask extends SimpleBakeTask
+use Bake\Command\SimpleBakeCommand;
+
+class FooCommand extends SimpleBakeCommand
 {
-    public $pathFragment = 'Foo/';
+    public string $pathFragment = 'FooPath/';
 
-    public function name()
+    public function name(): string
     {
         return 'foo';
     }
 
-    public function fileName($name)
+    public function template(): string
     {
-        return $name . 'Foo.php';
+        return 'fooTemplate';
     }
 
-    public function template()
+    public function fileName(string $name): string
     {
-        return 'foo';
+        return $name . 'FooOut.php';
     }
 }
 ```
 
-После этого создайте `src/Template/Bake/foo.twig`:
+Затем создайте `templates/bake/foo_template.twig`:
 
 ```php
 <?php
-namespace {{ namespace }}\Foo;
+namespace {{ namespace }}\FooPath;
 
 /**
- * {{ $name }} foo
+ * {{ name }} fooOut
  */
-class {{ name }}Foo
+class {{ name }}FooOut
 {
-    // Добавить код.
+    // Add code.
 }
 ```
 
-Теперь вы должны увидеть новую задачу в выводе `bin/cake bake`.
+Теперь вы должны увидеть новую команду в выводе `bin/cake bake`.
 Запустите её командой `bin/cake bake foo Example`.
-Это создаст класс `ExampleFoo` в `src/Foo/ExampleFoo.php`.
+Это создаст `src/FooPath/ExampleFooOut.php`.
 
-Если вы хотите, чтобы вызов `bake` также создавал тестовый файл для `ExampleFoo`, переопределите метод `bakeTest()` в `FooTask`:
+Если вы хотите, чтобы `bake` также создавал тестовый файл для вашего класса `ExampleFooOut`, переопределите метод `bakeTest()` в `FooCommand`:
 
 ```php
-public function bakeTest($className)
+use Bake\Command\TestCommand;
+
+public function bakeTest(string $className): void
 {
-    if (!isset($this->Test->classSuffixes[$this->name()])) {
-      $this->Test->classSuffixes[$this->name()] = 'Foo';
+    if ($this->args->getOption('no-test')) {
+        return;
     }
 
-    $name = ucfirst($this->name());
-    if (!isset($this->Test->classTypes[$name])) {
-      $this->Test->classTypes[$name] = 'Foo';
-    }
-
-    return parent::bakeTest($className);
+    $test = new TestCommand();
+    $test->classSuffixes['Foo'] = 'FooOut';
+    $test->classTypes['Foo'] = 'FooPath';
+    $test->plugin = $this->plugin;
+    $test->setArgs($this->args);
+    $test->setIo($this->io);
+    $test->bake('Foo', $className);
 }
 ```
 
-- **Суффикс класса** добавляется к имени, переданному в вызове `bake`. В примере выше это создаст `ExampleFooTest.php`.
-- **Тип класса** определяет подпространство имён, ведущее к файлу относительно приложения или плагина. В примере выше это создаст тест с namespace `App\Test\TestCase\Foo`.
+- **Суффикс класса** добавляется к имени, переданному в вашем вызове `bake`. В примере выше это создаст `ExampleFooOut` и его тестовый файл `tests/TestCase/FooPath/ExampleFooOutTest.php`.
+- Значение **типа класса** — это подпространство имён, ведущее к вашему файлу относительно приложения или плагина, в который выполняется генерация. В примере выше это создаст namespace теста `App\Test\TestCase\FooPath`.
+
+## Настройка класса BakeView
+
+Команды Bake используют класс `BakeView` для отрисовки шаблонов.
+Получить доступ к экземпляру можно, слушая событие `Bake.initialize`:
+
+```php
+<?php
+\Cake\Event\EventManager::instance()->on(
+    'Bake.initialize',
+    function ($event, $view) {
+        $view->loadHelper('Foo');
+    }
+);
+```

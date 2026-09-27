@@ -16,7 +16,6 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Cake\Console\Arguments;
 use Cake\Utility\Inflector;
 
 /**
@@ -64,17 +63,16 @@ class CommandCommand extends SimpleBakeCommand
     /**
      * Get template data.
      *
-     * @param \Cake\Console\Arguments $arguments Arguments object.
      * @return array<string, mixed>
      */
-    public function templateData(Arguments $arguments): array
+    public function templateData(): array
     {
-        $data = parent::templateData($arguments);
+        $data = parent::templateData();
 
         $data['command_name'] = Inflector::underscore(str_replace(
             '.',
             ' ',
-            $arguments->getArgument('name') ?? '',
+            $this->args->getArgument('name') ?? '',
         ));
 
         return $data;

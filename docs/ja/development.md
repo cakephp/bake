@@ -21,15 +21,13 @@ use Cake\Event\EventManager;
 EventManager::instance()->on('Bake.initialize', function (EventInterface $event) {
     $view = $event->getSubject();
 
-    // bake テンプレートの中で MySpecial ヘルパーの使用を可能にします
+    // In my bake templates, allow the use of the MySpecial helper
     $view->loadHelper('MySpecial', ['some' => 'config']);
 
-    // そして、$author 変数を利用可能にするために追加
+    // And add an $author variable so it's always available
     $view->set('author', 'Andy');
 });
 ```
-
-別のプラグインの中から Bake を変更したい場合は、プラグインの `config/bootstrap.php` に Bake イベントを置くのが有効です。
 
 Bake イベントは、既存テンプレートへの小さな変更にも役立ちます。
 たとえば、コントローラーやテンプレートファイルを Bake するときに使う変数名を変更するには `Bake.beforeRender` を利用します。
@@ -44,7 +42,7 @@ use Cake\Event\EventManager;
 EventManager::instance()->on('Bake.beforeRender', function (EventInterface $event) {
     $view = $event->getSubject();
 
-    // indexes の中のメインデータ変数に $rows を使用
+    // Use $rows for the main data variable in indexes
     if ($view->get('pluralName')) {
         $view->set('pluralName', 'rows');
     }
@@ -52,7 +50,7 @@ EventManager::instance()->on('Bake.beforeRender', function (EventInterface $even
         $view->set('pluralVar', 'rows');
     }
 
-    // view と edit の中のメインデータ変数に $theOne を使用
+    // Use $theOne for the main data variable in view/edit
     if ($view->get('singularName')) {
         $view->set('singularName', 'theOne');
     }
@@ -69,7 +67,6 @@ EventManager::instance()->on('Bake.beforeRender', function (EventInterface $even
 <?php
 use Cake\Event\EventInterface;
 use Cake\Event\EventManager;
-use Cake\Utility\Hash;
 
 // in src/Application::bootstrapCli()
 
@@ -78,7 +75,7 @@ EventManager::instance()->on(
     function (EventInterface $event) {
         $view = $event->getSubject();
         if ($view->get('name') === 'Users') {
-            // Users コントローラーに login と logout を追加
+            // add the login and logout actions to the Users controller
             $view->set('actions', [
                 'login',
                 'logout',
@@ -97,7 +94,7 @@ EventManager::instance()->on(
 
 ## Bake テンプレート構文
 
-Bake テンプレートファイルは [Twig](https://twig.symfony.com/doc/2.x/) 構文を使用します。
+Bake テンプレートファイルは [Twig](https://twig.symfony.com/) 構文を使用します。
 
 たとえば、次のようにコマンドを Bake した場合:
 
@@ -108,47 +105,72 @@ bin/cake bake command Foo
 `vendor/cakephp/bake/templates/bake/Command/command.twig` のテンプレートは次のようになります。
 
 ```php
-<?php
-declare(strict_types=1);
-
-namespace {{ namespace }}\Command;
-
-use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
-use Cake\Console\ConsoleOptionParser;
+{{ element('Bake.file_header', {
+    namespace: "#{namespace}\\Command",
+    classImports: [
+        'Cake\\Command\\Command',
+        'Cake\\Console\\ConsoleOptionParser',
+    ],
+}) }}
 
 /**
-* {{ name }} command.
-*/
+ * {{ name }} command.
+ */
 class {{ name }}Command extends Command
 {
     /**
-    * Hook method for defining this command's option parser.
-    *
-    * @see https://book.cakephp.org/5/en/console-commands/commands.html#defining-arguments-and-options
-    * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
-    * @return \Cake\Console\ConsoleOptionParser The built parser.
-    */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
-    {
-        $parser = parent::buildOptionParser($parser);
+     * The name of this command.
+     *
+     * @var string
+     */
+    protected string $name = 'cake {{ command_name }}';
 
-        return $parser;
+    /**
+     * Get the default command name.
+     *
+     * @return string
+     */
+    public static function defaultName(): string
+    {
+        return '{{ command_name }}';
     }
 
     /**
-    * Implement this method with your command's logic.
-    *
-    * @param \Cake\Console\Arguments $args The command arguments.
-    * @param \Cake\Console\ConsoleIo $io The console io
-    * @return int|null|void The exit code or null for success
-    */
-    public function execute(Arguments $args, ConsoleIo $io)
+     * Get the command description.
+     *
+     * @return string
+     */
+    public static function getDescription(): string
+    {
+        return 'Command description here.';
+    }
+
+    /**
+     * Hook method for defining this command's option parser.
+     *
+     * @link https://book.cakephp.org/6/en/console-commands/commands.html#defining-arguments-and-options
+     * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+     * @return \Cake\Console\ConsoleOptionParser The built parser.
+     */
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        return parent::buildOptionParser($parser)
+            ->setDescription(static::getDescription());
+    }
+
+    /**
+     * Implement this method with your command's logic.
+     *
+     * @return int|null|void The exit code or null for success
+     */
+    public function execute()
     {
     }
 }
 ```
+
+`element()` 呼び出しは `<?php declare(strict_types=1);` ヘッダー、名前空間、`use` 文を出力します。
+なお、コマンドは `execute()` にパラメータとして受け取る代わりに、`$this->args` と `$this->io` を使用します。
 
 生成される `src/Command/FooCommand.php` は次のようになります。
 
@@ -159,37 +181,59 @@ declare(strict_types=1);
 namespace App\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 
 /**
-* Foo command.
-*/
+ * Foo command.
+ */
 class FooCommand extends Command
 {
     /**
-    * Hook method for defining this command's option parser.
-    *
-    * @see https://book.cakephp.org/5/en/console-commands/commands.html#defining-arguments-and-options
-    * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
-    * @return \Cake\Console\ConsoleOptionParser The built parser.
-    */
-    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
-    {
-        $parser = parent::buildOptionParser($parser);
+     * The name of this command.
+     *
+     * @var string
+     */
+    protected string $name = 'cake foo';
 
-        return $parser;
+    /**
+     * Get the default command name.
+     *
+     * @return string
+     */
+    public static function defaultName(): string
+    {
+        return 'foo';
     }
 
     /**
-    * Implement this method with your command's logic.
-    *
-    * @param \Cake\Console\Arguments $args The command arguments.
-    * @param \Cake\Console\ConsoleIo $io The console io
-    * @return int|null|void The exit code or null for success
-    */
-    public function execute(Arguments $args, ConsoleIo $io)
+     * Get the command description.
+     *
+     * @return string
+     */
+    public static function getDescription(): string
+    {
+        return 'Command description here.';
+    }
+
+    /**
+     * Hook method for defining this command's option parser.
+     *
+     * @link https://book.cakephp.org/6/en/console-commands/commands.html#defining-arguments-and-options
+     * @param \Cake\Console\ConsoleOptionParser $parser The parser to be defined
+     * @return \Cake\Console\ConsoleOptionParser The built parser.
+     */
+    public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        return parent::buildOptionParser($parser)
+            ->setDescription(static::getDescription());
+    }
+
+    /**
+     * Implement this method with your command's logic.
+     *
+     * @return int|null|void The exit code or null for success
+     */
+    public function execute()
     {
     }
 }
@@ -200,13 +244,13 @@ class FooCommand extends Command
 `bake` コマンドで生成された出力を変更したい場合は、一部または全部のテンプレートを置き換える独自テーマを作成できます。
 
 1. 新しいプラグインを Bake します。プラグイン名が Bake テーマ名になります。例: `bin/cake bake plugin custom_bake`
-2. `plugins/CustomBake/templates/bake/` を作成します。
+2. `plugins/CustomBake/templates/bake` を作成します。
 3. 上書きしたいテンプレートを `vendor/cakephp/bake/templates/bake` から対応する場所へコピーします。
-4. Bake 実行時に `--theme CustomBake` を使います。毎回指定したくない場合はデフォルトテーマに設定することもできます。
+4. Bake 実行時に `--theme CustomBake` オプションで bake テーマを使います。毎回指定しなくても、カスタムテーマをデフォルトに設定しておくこともできます。
 
 ```php
 <?php
-// src/Application::bootstrapCli() の中で 'Bake' プラグインを読み込む前に
+// in src/Application::bootstrapCli() before loading the 'Bake' plugin.
 Configure::write('Bake.theme', 'MyTheme');
 ```
 
@@ -225,8 +269,8 @@ Configure::write('Bake.theme', 'MyTheme');
 アプリケーションやプラグインで新しい Bake コマンドオプションを追加したり、CakePHP が提供するオプションを上書きしたりできます。
 `Bake\Command\BakeCommand` を継承すると、Bake はその新しいコマンドを見つけて Bake の一部として扱います。
 
-例として、任意の `foo` クラスを作成するコマンド `src/Command/Bake/FooCommand.php` を作成します。
-シンプルなコマンドなので `SimpleBakeCommand` を継承します。
+例として、コマンドファイル `src/Command/Bake/FooCommand.php` を作成します。
+コマンドがシンプルなため、`SimpleBakeCommand` を継承します:
 
 ```php
 <?php
@@ -238,7 +282,7 @@ use Bake\Command\SimpleBakeCommand;
 
 class FooCommand extends SimpleBakeCommand
 {
-    public $pathFragment = 'FooPath/';
+    public string $pathFragment = 'FooPath/';
 
     public function name(): string
     {
@@ -273,31 +317,32 @@ class {{ name }}FooOut
 ```
 
 これで `bin/cake bake` の出力に新しいコマンドが表示されるはずです。
-`bin/cake bake foo Example` を実行すると、`src/FooPath/ExampleFooOut.php` に `ExampleFooOut` クラスが生成されます。
+`bin/cake bake foo Example` を実行してください。
+`src/FooPath/ExampleFooOut.php` が生成されます。
 
 また、`ExampleFooOut` クラスのテストファイルも生成したい場合は、`FooCommand` クラスで `bakeTest()` をオーバーライドします。
 
 ```php
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Bake\Command\TestCommand;
 
-public function bakeTest(string $className, Arguments $args, ConsoleIo $io): void
+public function bakeTest(string $className): void
 {
-    if (!isset($this->Test->classSuffixes[$this->name()])) {
-        $this->Test->classSuffixes[$this->name()] = 'Foo';
+    if ($this->args->getOption('no-test')) {
+        return;
     }
 
-    $name = ucfirst($this->name());
-    if (!isset($this->Test->classTypes[$name])) {
-        $this->Test->classTypes[$name] = 'Foo';
-    }
-
-    return parent::bakeTest($className);
+    $test = new TestCommand();
+    $test->classSuffixes['Foo'] = 'FooOut';
+    $test->classTypes['Foo'] = 'FooPath';
+    $test->plugin = $this->plugin;
+    $test->setArgs($this->args);
+    $test->setIo($this->io);
+    $test->bake('Foo', $className);
 }
 ```
 
-- **class suffix** は `bake` 呼び出しで与えた名前に追加されます。前の例では `ExampleFooTest.php` を作成します。
-- **class type** はファイルに到達するためのサブ名前空間です。前の例では `App\Test\TestCase\Foo` という名前空間でテストを作成します。
+- **class suffix** は `bake` 呼び出しで与えた名前に追加されます。上の例では、`ExampleFooOut` とそのテストファイル `tests/TestCase/FooPath/ExampleFooOutTest.php` が作成されます。
+- **class type** の値は、Bake 対象のアプリケーションまたはプラグインを基準に、ファイルへ到達するために使うサブ名前空間です。上の例では、テストの名前空間 `App\Test\TestCase\FooPath` が作成されます。
 
 ## BakeView クラスの設定
 

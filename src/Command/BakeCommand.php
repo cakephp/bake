@@ -22,7 +22,7 @@ use Bake\Utility\CommonOptionsTrait;
 use Bake\Utility\TemplateRenderer;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Event\Event;
@@ -83,6 +83,17 @@ abstract class BakeCommand extends Command
     }
 
     /**
+     * Set arguments
+     *
+     * @param \Cake\Console\Arguments $args Arguments to set
+     * @return void
+     */
+    public function setArgs(Arguments $args): void
+    {
+        $this->args = $args;
+    }
+
+    /**
      * Handles splitting up the plugin prefix and classname.
      *
      * Sets the plugin parameter and plugin property.
@@ -90,7 +101,7 @@ abstract class BakeCommand extends Command
      * @param string $name The name to possibly split.
      * @return string The name without the plugin prefix.
      */
-    protected function _getName(string $name): string
+    protected function getNameWithoutPrefix(string $name): string
     {
         if (strpos($name, '.')) {
             [$plugin, $name] = pluginSplit($name);
@@ -105,35 +116,33 @@ abstract class BakeCommand extends Command
      *
      * Handles camelcasing each namespace in the prefix path.
      *
-     * @param \Cake\Console\Arguments $args Arguments instance to read the prefix option from.
      * @return string The inflected prefix path.
      */
-    protected function getPrefix(Arguments $args): string
+    protected function getPrefix(): string
     {
         /** @var string|null $prefix */
-        $prefix = $args->getOption('prefix');
+        $prefix = $this->args->getOption('prefix');
         if (!$prefix) {
             return '';
         }
         $parts = explode('/', $prefix);
 
-        return implode('/', array_map($this->_camelize(...), $parts));
+        return implode('/', array_map($this->camelize(...), $parts));
     }
 
     /**
      * Gets the path for output. Checks the plugin property
      * and returns the correct path.
      *
-     * @param \Cake\Console\Arguments $args Arguments instance to read the prefix option from.
      * @return string Path to output.
      */
-    public function getPath(Arguments $args): string
+    public function getPath(): string
     {
         $path = APP . $this->pathFragment;
         if ($this->plugin) {
-            $path = $this->_pluginPath($this->plugin) . 'src/' . $this->pathFragment;
+            $path = $this->pluginPath($this->plugin) . 'src/' . $this->pathFragment;
         }
-        $prefix = $this->getPrefix($args);
+        $prefix = $this->getPrefix();
         if ($prefix) {
             $path .= $prefix . DIRECTORY_SEPARATOR;
         }
@@ -144,14 +153,13 @@ abstract class BakeCommand extends Command
     /**
      * Gets the path to the template path for the application or plugin.
      *
-     * @param \Cake\Console\Arguments $args Arguments instance to read the prefix option from.
      * @param string|null $container The container directory in the templates directory.
      * @return string Path to output.
      */
-    public function getTemplatePath(Arguments $args, ?string $container = null): string
+    public function getTemplatePath(?string $container = null): string
     {
         $paths = (array)Configure::read('App.paths.templates');
-        if (empty($paths)) {
+        if ($paths === []) {
             throw new InvalidArgumentException(
                 'Could not read template paths. ' .
                 'Ensure `App.paths.templates` is defined in your application configuration.',
@@ -159,12 +167,12 @@ abstract class BakeCommand extends Command
         }
         $path = $paths[0];
         if ($this->plugin) {
-            $path = $this->_pluginPath($this->plugin) . 'templates' . DIRECTORY_SEPARATOR;
+            $path = $this->pluginPath($this->plugin) . 'templates' . DIRECTORY_SEPARATOR;
         }
         if ($container) {
             $path .= $container . DIRECTORY_SEPARATOR;
         }
-        $prefix = $this->getPrefix($args);
+        $prefix = $this->getPrefix();
         if ($prefix) {
             $path .= $prefix . DIRECTORY_SEPARATOR;
         }
@@ -189,14 +197,13 @@ abstract class BakeCommand extends Command
      * Delete empty file in a given path
      *
      * @param string $path Path to folder which contains 'empty' file.
-     * @param \Cake\Console\ConsoleIo $io ConsoleIo to delete file with.
      * @return void
      */
-    protected function deleteEmptyFile(string $path, ConsoleIo $io): void
+    protected function deleteEmptyFile(string $path): void
     {
         if (file_exists($path)) {
             unlink($path);
-            $io->out(sprintf('<success>Deleted</success> `%s`', $path));
+            $this->io->out(sprintf('<success>Deleted</success> `%s`', $path));
         }
     }
 
@@ -229,7 +236,7 @@ abstract class BakeCommand extends Command
                 return null;
             }
 
-            return (new CodeParser())->parseFile($contents);
+            return new CodeParser()->parseFile($contents);
         }
 
         return null;
@@ -238,7 +245,7 @@ abstract class BakeCommand extends Command
     /**
      * Write file contents out to path and prompt user with options with file exists.
      *
-     * @param \Cake\Console\ConsoleIo $io Console io
+     * @param \Cake\Console\ConsoleIoInterface $io The console io
      * @param string $path The path to create the file at
      * @param string $contents The contents to put into the file
      * @param bool $forceOverwrite Whether the file should be overwritten without prompting the user
@@ -248,7 +255,7 @@ abstract class BakeCommand extends Command
      *   to whether a file should be overwritten.
      */
     protected function writeFile(
-        ConsoleIo $io,
+        ConsoleIoInterface $io,
         string $path,
         string $contents,
         bool $forceOverwrite = false,

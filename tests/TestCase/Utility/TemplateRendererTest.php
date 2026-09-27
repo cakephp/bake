@@ -38,7 +38,7 @@ class TemplateRendererTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'TemplateRenderer' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'TemplateRenderer' . DS;
         $this->renderer = new TemplateRenderer();
     }
 
@@ -72,7 +72,7 @@ class TemplateRendererTest extends TestCase
      */
     public function testGenerateWithTemplateOverride(): void
     {
-        $this->_loadTestPlugin('TestBakeTheme', true);
+        $this->loadTestPlugin('TestBakeTheme', true);
         $renderer = new TemplateRenderer('TestBakeTheme');
         $renderer->set([
             'plugin' => 'Special',
@@ -89,7 +89,7 @@ class TemplateRendererTest extends TestCase
      */
     public function testGenerateWithTemplateFallbacks(): void
     {
-        $this->_loadTestPlugin('TestBakeTheme', true);
+        $this->loadTestPlugin('TestBakeTheme', true);
         $renderer = new TemplateRenderer('TestBakeTheme');
         $renderer->set([
             'name' => 'Articles',

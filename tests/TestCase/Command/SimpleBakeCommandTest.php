@@ -34,7 +34,7 @@ class SimpleBakeCommandTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS
             . 'Plugin' . DS . 'Simple' . DS;
         $this->setAppNamespace('Bake\Test\App');
     }
@@ -94,7 +94,7 @@ class SimpleBakeCommandTest extends TestCase
 
     public function testBakeWithTheme(): void
     {
-        $this->_loadTestPlugin('TestBakeTheme');
+        $this->loadTestPlugin('TestBakeTheme');
 
         $this->generatedFile = APP . 'Model/Behavior/FooBarBehavior.php';
         $this->exec('bake behavior --no-test --theme TestBakeTheme FooBar');
@@ -110,7 +110,7 @@ class SimpleBakeCommandTest extends TestCase
      */
     public function testBakePlugin(): void
     {
-        $this->_loadTestPlugin('TestBake');
+        $this->loadTestPlugin('TestBake');
         $path = Plugin::path('TestBake');
 
         $this->generatedFiles = [

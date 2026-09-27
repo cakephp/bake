@@ -25,7 +25,7 @@ class User extends Entity
      *
      * @var array<string>
      */
-    protected array $_hidden = [
+    protected array $hidden = [
         'password',
     ];
 }

@@ -21,28 +21,6 @@ namespace Bake\CodeGen;
  */
 class ParsedClass
 {
-    public string $name;
-
-    /**
-     * @var array<string>
-     */
-    public array $implements;
-
-    /**
-     * @var array<string, string>
-     */
-    public array $constants;
-
-    /**
-     * @var array<string, string>
-     */
-    public array $properties;
-
-    /**
-     * @var array<string, string>
-     */
-    public array $methods;
-
     /**
      * @param string $name Class name
      * @param array<string> $implements List of implements
@@ -50,12 +28,12 @@ class ParsedClass
      * @param array<string, string> $properties Class properties
      * @param array<string, string> $methods Class methods
      */
-    public function __construct(string $name, array $implements, array $constants, array $properties, array $methods)
-    {
-        $this->name = $name;
-        $this->implements = $implements;
-        $this->constants = $constants;
-        $this->properties = $properties;
-        $this->methods = $methods;
+    public function __construct(
+        public string $name,
+        public array $implements,
+        public array $constants,
+        public array $properties,
+        public array $methods,
+    ) {
     }
 }

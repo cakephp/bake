@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace Bake\CodeGen;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
@@ -60,7 +61,7 @@ class CodeParser extends NodeVisitorAbstract
     public function __construct()
     {
         $version = PhpVersion::fromComponents(8, 1);
-        $this->parser = (new ParserFactory())->createForVersion($version);
+        $this->parser = new ParserFactory()->createForVersion($version);
         $this->traverser = new NodeTraverser();
         $this->traverser->addVisitor($this);
     }
@@ -223,7 +224,7 @@ class CodeParser extends NodeVisitorAbstract
     {
         $code = '';
 
-        $doc = $node->getDocComment() ? $node->getDocComment()->getText() : '';
+        $doc = $node->getDocComment() instanceof Doc ? $node->getDocComment()->getText() : '';
         if ($doc) {
             $code = static::INDENT . $doc . "\n";
         }

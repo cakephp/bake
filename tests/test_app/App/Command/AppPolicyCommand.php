@@ -29,10 +29,9 @@ use Cake\Console\ConsoleIo;
 
 class AppPolicyCommand extends BakeCommand
 {
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute()
     {
-        $io->out('App Policy Generated');
-
+        $this->io->out('App Policy Generated');
         return static::CODE_SUCCESS;
     }
 }

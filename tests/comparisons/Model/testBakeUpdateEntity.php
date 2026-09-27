@@ -37,11 +37,11 @@ class TodoItem extends Entity implements IdentityInterface
      *
      * @var array<string>
      */
-    protected array $_hidden = [
+    protected array $hidden = [
         'user_id',
     ];
 
-    protected array $_accessible = [
+    protected array $patchable = [
         // should not get overwritten
     ];
 

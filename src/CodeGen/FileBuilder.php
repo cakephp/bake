@@ -16,12 +16,10 @@ declare(strict_types=1);
  */
 namespace Bake\CodeGen;
 
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 
 class FileBuilder
 {
-    protected ConsoleIo $io;
-
     protected string $namespace;
 
     protected ?ParsedFile $parsedFile;
@@ -29,11 +27,11 @@ class FileBuilder
     protected ClassBuilder $classBuilder;
 
     /**
-     * @param \Cake\Console\ConsoleIo $io Console io
+     * @param \Cake\Console\ConsoleIoInterface $io Console io
      * @param string $namespace File namespace
      * @param \Bake\CodeGen\ParsedFile $parsedFile Parsed file it already exists
      */
-    public function __construct(ConsoleIo $io, string $namespace, ?ParsedFile $parsedFile = null)
+    public function __construct(protected ConsoleIoInterface $io, string $namespace, ?ParsedFile $parsedFile = null)
     {
         if ($parsedFile instanceof ParsedFile && $parsedFile->namespace !== $namespace) {
             throw new ParseException(sprintf(
@@ -42,8 +40,6 @@ class FileBuilder
                 $namespace,
             ));
         }
-
-        $this->io = $io;
         $this->namespace = $namespace;
         $this->parsedFile = $parsedFile;
         $this->classBuilder = new ClassBuilder($parsedFile->class ?? null);

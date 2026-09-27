@@ -78,20 +78,18 @@ class BakeView extends TwigView
     {
         assert($template !== null, 'Template name must be provided.');
 
-        $viewFileName = $this->_getTemplateFileName($template);
+        $viewFileName = $this->getTemplateFileName($template);
         [, $templateEventName] = pluginSplit($template);
         $templateEventName = str_replace(['/', '\\'], '.', $templateEventName);
 
-        $this->_currentType = static::TYPE_TEMPLATE;
+        $this->currentType = static::TYPE_TEMPLATE;
         $this->dispatchEvent('View.beforeRender', [$viewFileName]);
         $this->dispatchEvent('View.beforeRender.' . $templateEventName, [$viewFileName]);
-        $this->Blocks->set('content', $this->_render($viewFileName));
+        $this->Blocks->set('content', $this->renderFile($viewFileName));
         $this->dispatchEvent('View.afterRender', [$viewFileName]);
         $this->dispatchEvent('View.afterRender.' . $templateEventName, [$viewFileName]);
 
-        if ($layout === null) {
-            $layout = $this->layout;
-        }
+        $layout ??= $this->layout;
         if ($layout && $this->autoLayout) {
             $this->Blocks->set('content', $this->renderLayout('', $layout));
         }
@@ -126,9 +124,9 @@ class BakeView extends TwigView
      * @param bool $cached Set to false to force a refresh of view paths. Default true.
      * @return array<string> paths
      */
-    protected function _paths(?string $plugin = null, bool $cached = true): array
+    protected function paths(?string $plugin = null, bool $cached = true): array
     {
-        $paths = parent::_paths($plugin, false);
+        $paths = parent::paths($plugin, false);
         foreach ($paths as &$path) {
             // Append 'bake' to all directories that aren't the application override directory.
             if (!str_contains($path, 'plugin' . DS . 'Bake')) {

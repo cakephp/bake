@@ -16,8 +16,6 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Utility\Inflector;
@@ -52,14 +50,13 @@ abstract class SimpleBakeCommand extends BakeCommand
     /**
      * Get template data.
      *
-     * @param \Cake\Console\Arguments $arguments The arguments for the command
      * @return array<string, mixed>
      */
-    public function templateData(Arguments $arguments): array
+    public function templateData(): array
     {
         $namespace = Configure::read('App.namespace');
         if ($this->plugin) {
-            $namespace = $this->_pluginNamespace($this->plugin);
+            $namespace = $this->pluginNamespace($this->plugin);
         }
 
         return ['namespace' => $namespace];
@@ -68,22 +65,20 @@ abstract class SimpleBakeCommand extends BakeCommand
     /**
      * Execute the command.
      *
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io): ?int
+    public function execute(): ?int
     {
-        $this->extractCommonProperties($args);
-        $name = $args->getArgumentAt(0);
+        $this->extractCommonProperties($this->args);
+        $name = $this->args->getArgumentAt(0);
         if (empty($name)) {
-            $io->error('You must provide a name to bake a ' . $this->name());
+            $this->io->error('You must provide a name to bake a ' . $this->name());
             $this->abort();
         }
-        $name = $this->_getName($name);
+        $name = $this->getNameWithoutPrefix($name);
         $name = Inflector::camelize($name);
-        $this->bake($name, $args, $io);
-        $this->bakeTest($name, $args, $io);
+        $this->bake($name);
+        $this->bakeTest($name);
 
         return static::CODE_SUCCESS;
     }
@@ -92,40 +87,38 @@ abstract class SimpleBakeCommand extends BakeCommand
      * Generate a class stub
      *
      * @param string $name The class name
-     * @param \Cake\Console\Arguments $args The console arguments
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function bake(string $name, Arguments $args, ConsoleIo $io): void
+    protected function bake(string $name): void
     {
         $contents = $this->createTemplateRenderer()
             ->set('name', $name)
-            ->set($this->templateData($args))
+            ->set($this->templateData())
             ->generate($this->template());
 
-        $filename = $this->getPath($args) . $this->fileName($name);
-        $io->createFile($filename, $contents, $this->force);
+        $filename = $this->getPath() . $this->fileName($name);
+        $this->io->createFile($filename, $contents, $this->force);
 
-        $emptyFile = $this->getPath($args) . '.gitkeep';
-        $this->deleteEmptyFile($emptyFile, $io);
+        $emptyFile = $this->getPath() . '.gitkeep';
+        $this->deleteEmptyFile($emptyFile);
     }
 
     /**
      * Generate a test case.
      *
      * @param string $className The class to bake a test for.
-     * @param \Cake\Console\Arguments $args The console arguments
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bakeTest(string $className, Arguments $args, ConsoleIo $io): void
+    public function bakeTest(string $className): void
     {
-        if ($args->getOption('no-test')) {
+        if ($this->args->getOption('no-test')) {
             return;
         }
         $test = new TestCommand();
         $test->plugin = $this->plugin;
-        $test->bake($this->name(), $className, $args, $io);
+        $test->setArgs($this->args);
+        $test->setIo($this->io);
+        $test->bake($this->name(), $className);
     }
 
     /**
@@ -136,7 +129,7 @@ abstract class SimpleBakeCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = $this->_setCommonOptions($parser);
+        $parser = $this->setCommonOptions($parser);
         $name = $this->name();
         $parser->setDescription(
             sprintf('Bake a %s class file.', $name),

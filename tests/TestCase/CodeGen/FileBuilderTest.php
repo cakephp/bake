@@ -27,11 +27,6 @@ use Cake\Console\TestSuite\StubConsoleOutput;
 class FileBuilderTest extends TestCase
 {
     /**
-     * @var \Cake\TestSuite\Stub\ConsoleOutput
-     */
-    protected $out;
-
-    /**
      * @var \Cake\Console\ConsoleIo
      */
     protected $io;

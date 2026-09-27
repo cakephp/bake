@@ -11,7 +11,7 @@ Before trying to use or extend Bake, make sure it is installed in your applicati
 Bake is provided as a plugin that you can install with Composer:
 
 ```bash
-composer require --dev cakephp/bake:"^3.0"
+composer require --dev cakephp/bake:"^4.0"
 ```
 
 The above installs Bake as a development dependency, so it will not be installed during production deployments.

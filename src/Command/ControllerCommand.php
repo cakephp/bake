@@ -18,7 +18,6 @@ namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
 use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
@@ -45,30 +44,26 @@ class ControllerCommand extends BakeCommand
     /**
      * Execute the command.
      *
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io): ?int
+    public function execute(): ?int
     {
-        $this->extractCommonProperties($args);
-        $name = $args->getArgument('name') ?? '';
-        $name = $this->_getName($name);
-
+        $this->extractCommonProperties($this->args);
+        $name = $this->args->getArgument('name') ?? '';
+        $name = $this->getNameWithoutPrefix($name);
         if (empty($name)) {
             /** @var \Cake\Database\Connection $connection */
             $connection = ConnectionManager::get($this->connection);
             $scanner = new TableScanner($connection);
-            $io->out('Possible controllers based on your current database:');
+            $this->io->out('Possible controllers based on your current database:');
             foreach ($scanner->listUnskipped() as $table) {
-                $io->out('- ' . $this->_camelize($table));
+                $this->io->out('- ' . $this->camelize($table));
             }
 
             return static::CODE_SUCCESS;
         }
-
-        $controller = $this->_camelize($name);
-        $this->bake($controller, $args, $io);
+        $controller = $this->camelize($name);
+        $this->bake($controller);
 
         return static::CODE_SUCCESS;
     }
@@ -77,38 +72,36 @@ class ControllerCommand extends BakeCommand
      * Assembles and writes a Controller file
      *
      * @param string $controllerName Controller name already pluralized and correctly cased.
-     * @param \Cake\Console\Arguments $args The console arguments
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bake(string $controllerName, Arguments $args, ConsoleIo $io): void
+    public function bake(string $controllerName): void
     {
-        $io->quiet(sprintf('Baking controller class for %s...', $controllerName));
+        $this->io->quiet(sprintf('Baking controller class for %s...', $controllerName));
 
         $actions = [];
-        if (!$args->getOption('no-actions') && !$args->getOption('actions')) {
+        if (!$this->args->getOption('no-actions') && !$this->args->getOption('actions')) {
             $actions = ['index', 'view', 'add', 'edit', 'delete'];
         }
-        if ($args->getOption('actions')) {
-            $actions = array_map('trim', explode(',', (string)$args->getOption('actions')));
+        if ($this->args->getOption('actions')) {
+            $actions = array_map('trim', explode(',', (string)$this->args->getOption('actions')));
             $actions = array_filter($actions);
         }
-        if (!$args->getOption('actions') && Plugin::isLoaded('Authentication') && $controllerName === 'Users') {
+        if (!$this->args->getOption('actions') && Plugin::isLoaded('Authentication') && $controllerName === 'Users') {
             $actions[] = 'login';
         }
 
-        $helpers = $this->getHelpers($args);
-        $components = $this->getComponents($args);
+        $helpers = $this->getHelpers();
+        $components = $this->getComponents();
 
-        $prefix = $this->getPrefix($args);
+        $prefix = $this->getPrefix();
         if ($prefix) {
             $prefix = '\\' . str_replace('/', '\\', $prefix);
         }
-
         // Controllers default to importing AppController from `App`
-        $baseNamespace = $namespace = Configure::read('App.namespace');
+        $baseNamespace = Configure::read('App.namespace');
+        $namespace = $baseNamespace;
         if ($this->plugin) {
-            $namespace = $this->_pluginNamespace($this->plugin);
+            $namespace = $this->pluginNamespace($this->plugin);
         }
         // If the plugin has an AppController other plugin controllers
         // should inherit from it.
@@ -131,10 +124,10 @@ class ControllerCommand extends BakeCommand
             ]);
         }
 
-        $pluralName = $this->_variableName($currentModelName);
-        $singularName = $this->_singularName($currentModelName);
-        $singularHumanName = $this->_singularHumanName($controllerName);
-        $pluralHumanName = $this->_variableName($controllerName);
+        $pluralName = $this->variableName($currentModelName);
+        $singularName = $this->singularName($currentModelName);
+        $singularHumanName = $this->singularHumanName($controllerName);
+        $pluralHumanName = $this->variableName($controllerName);
 
         // Handle cases where singular and plural are identical (e.g., "news", "sheep")
         // to avoid variable collisions in generated controller code
@@ -146,7 +139,7 @@ class ControllerCommand extends BakeCommand
         if (!class_exists($defaultModel)) {
             $defaultModel = null;
         }
-        $entityClassName = $this->_entityName($modelObj->getAlias());
+        $entityClassName = $this->entityName($modelObj->getAlias());
 
         $data = compact(
             'actions',
@@ -167,8 +160,8 @@ class ControllerCommand extends BakeCommand
         );
         $data['name'] = $controllerName;
 
-        $this->bakeController($controllerName, $data, $args, $io);
-        $this->bakeTest($controllerName, $args, $io);
+        $this->bakeController($controllerName, $data);
+        $this->bakeTest($controllerName);
     }
 
     /**
@@ -176,11 +169,9 @@ class ControllerCommand extends BakeCommand
      *
      * @param string $controllerName The name of the controller.
      * @param array<string, mixed> $data The data to turn into code.
-     * @param \Cake\Console\Arguments $args The console args
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bakeController(string $controllerName, array $data, Arguments $args, ConsoleIo $io): void
+    public function bakeController(string $controllerName, array $data): void
     {
         $data += [
             'name' => null,
@@ -197,44 +188,43 @@ class ControllerCommand extends BakeCommand
             ->set($data)
             ->generate('Bake.Controller/controller');
 
-        $path = $this->getPath($args);
+        $path = $this->getPath();
         $filename = $path . $controllerName . 'Controller.php';
-        $io->createFile($filename, $contents, $this->force);
+        $this->io->createFile($filename, $contents, $this->force);
     }
 
     /**
      * Assembles and writes a unit test file
      *
      * @param string $className Controller class name
-     * @param \Cake\Console\Arguments $args The console arguments
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    public function bakeTest(string $className, Arguments $args, ConsoleIo $io): void
+    public function bakeTest(string $className): void
     {
-        if ($args->getOption('no-test')) {
+        if ($this->args->getOption('no-test')) {
             return;
         }
         $test = new TestCommand();
         $testArgs = new Arguments(
             ['controller', $className],
-            $args->getOptions(),
+            $this->args->getOptions(),
             ['type', 'name'],
         );
-        $test->execute($testArgs, $io);
+        $test->setArgs($testArgs);
+        $test->setIo($this->io);
+        $test->execute();
     }
 
     /**
      * Get the list of components for the controller.
      *
-     * @param \Cake\Console\Arguments $args The console arguments
      * @return array<string>
      */
-    public function getComponents(Arguments $args): array
+    public function getComponents(): array
     {
         $components = [];
-        if ($args->getOption('components')) {
-            $components = explode(',', (string)$args->getOption('components'));
+        if ($this->args->getOption('components')) {
+            $components = explode(',', (string)$this->args->getOption('components'));
             $components = array_values(array_filter(array_map('trim', $components)));
         } elseif (Plugin::isLoaded('Authorization')) {
             $components[] = 'Authorization.Authorization';
@@ -246,14 +236,13 @@ class ControllerCommand extends BakeCommand
     /**
      * Get the list of helpers for the controller.
      *
-     * @param \Cake\Console\Arguments $args The console arguments
      * @return array<string>
      */
-    public function getHelpers(Arguments $args): array
+    public function getHelpers(): array
     {
         $helpers = [];
-        if ($args->getOption('helpers')) {
-            $helpers = explode(',', (string)$args->getOption('helpers'));
+        if ($this->args->getOption('helpers')) {
+            $helpers = explode(',', (string)$this->args->getOption('helpers'));
             $helpers = array_values(array_filter(array_map('trim', $helpers)));
         }
 
@@ -268,7 +257,7 @@ class ControllerCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = $this->_setCommonOptions($parser);
+        $parser = $this->setCommonOptions($parser);
         $parser->setDescription(
             'Bake a controller skeleton.',
         )->addArgument('name', [

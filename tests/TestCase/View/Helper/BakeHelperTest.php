@@ -93,10 +93,10 @@ class BakeHelperTest extends TestCase
         ]);
         $this->BakeHelper = $this->getMockBuilder('Bake\View\Helper\BakeHelper')
             ->disableOriginalConstructor()
-            ->onlyMethods(['_filterHasManyAssociationsAliases'])
+            ->onlyMethods(['filterHasManyAssociationsAliases'])
             ->getMock();
         $this->BakeHelper->expects($this->once())
-            ->method('_filterHasManyAssociationsAliases')
+            ->method('filterHasManyAssociationsAliases')
             ->with($table, ['ArticlesTags']);
         $result = $this->BakeHelper->aliasExtractor($table, 'HasMany');
         $this->assertEmpty($result);

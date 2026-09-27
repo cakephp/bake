@@ -88,7 +88,7 @@ class ExamplePlugin extends BasePlugin
      *
      * @param \Cake\Core\ContainerInterface $container The Container to update.
      * @return void
-     * @link https://book.cakephp.org/5/en/development/dependency-injection.html#dependency-injection
+     * @link https://book.cakephp.org/6/en/development/dependency-injection.html#dependency-injection
      */
     public function services(ContainerInterface $container): void
     {

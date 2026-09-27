@@ -16,8 +16,6 @@ declare(strict_types=1);
  */
 namespace Bake\Command;
 
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 
@@ -66,19 +64,18 @@ class CellCommand extends SimpleBakeCommand
     /**
      * Get template data.
      *
-     * @param \Cake\Console\Arguments $arguments Arguments object.
      * @return array<string, mixed>
      */
-    public function templateData(Arguments $arguments): array
+    public function templateData(): array
     {
-        $prefix = $this->getPrefix($arguments);
+        $prefix = $this->getPrefix();
         if ($prefix) {
             $prefix = '\\' . str_replace('/', '\\', $prefix);
         }
 
         $namespace = Configure::read('App.namespace');
         if ($this->plugin) {
-            $namespace = $this->_pluginNamespace($this->plugin);
+            $namespace = $this->pluginNamespace($this->plugin);
         }
 
         return compact('namespace', 'prefix');
@@ -88,31 +85,27 @@ class CellCommand extends SimpleBakeCommand
      * Bake the Cell class and template file.
      *
      * @param string $name The name of the cell to make.
-     * @param \Cake\Console\Arguments $args The console arguments
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function bake(string $name, Arguments $args, ConsoleIo $io): void
+    protected function bake(string $name): void
     {
-        $this->bakeTemplate($name, $args, $io);
+        $this->bakeTemplate($name);
 
-        parent::bake($name, $args, $io);
+        parent::bake($name);
     }
 
     /**
      * Bake an empty file for a cell.
      *
      * @param string $name The name of the cell a template is needed for.
-     * @param \Cake\Console\Arguments $args The console arguments
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function bakeTemplate(string $name, Arguments $args, ConsoleIo $io): void
+    protected function bakeTemplate(string $name): void
     {
-        $path = $this->getTemplatePath($args, 'cell');
+        $path = $this->getTemplatePath('cell');
         $path .= implode(DS, [$name, 'display.php']);
 
-        $io->createFile($path, '', $this->force);
+        $this->io->createFile($path, '', $this->force);
     }
 
     /**

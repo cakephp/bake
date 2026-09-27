@@ -1,117 +1,134 @@
 # Генерация кода с помощью Bake
 
-Консоль Cake запускается с использованием PHP CLI.
+Консоль Bake запускается с использованием PHP CLI.
 Если у вас возникли проблемы с запуском скрипта, убедитесь, что:
 
 1. У вас установлен PHP CLI и включены нужные модули, например MySQL и `intl`.
 2. Если хост базы данных указан как `localhost`, попробуйте `127.0.0.1`, потому что `localhost` может вызывать проблемы в PHP CLI.
-3. В зависимости от того, как настроен ваш компьютер, вам может потребоваться выдать права на выполнение скрипта, чтобы запускать `bin/cake bake`.
+3. В зависимости от того, как настроен ваш компьютер, вам может потребоваться выдать права на выполнение скрипта Cake, чтобы запускать `bin/cake bake`.
 
 Перед запуском Bake вы должны убедиться, что у вас настроено хотя бы одно соединение с базой данных.
 
-При запуске без аргументов `bin/cake bake` выводит список доступных задач.
-Вы должны увидеть что-то вроде:
-
-```bash
-$ bin/cake bake
-
-Welcome to CakePHP v3.4.6 Console
----------------------------------------------------------------
-App : src
-Path: /var/www/cakephp.dev/src/
-PHP : 5.6.20
----------------------------------------------------------------
-The following commands can be used to generate skeleton code for your application.
-
-Available bake commands:
-
-- all
-- behavior
-- cell
-- component
-- controller
-- fixture
-- form
-- helper
-- mailer
-- migration
-- migration_diff
-- migration_snapshot
-- model
-- plugin
-- seed
-- task
-- template
-- test
-
-By using `cake bake [name]` you can invoke a specific bake task.
-```
-
-Дополнительную информацию о задачах и доступных параметрах можно получить через `--help`:
+Получить список доступных команд bake можно, запустив `bin/cake bake --help`.
+В Windows используйте `bin\cake bake --help`:
 
 ```bash
 $ bin/cake bake --help
+bake:
+  bake all
+  bake behavior         Create a model behavior and test.
+  bake cell             Create a view cell, template and test.
+  bake command          Create a console command and test.
+  bake command_helper   Create a console command helper and test.
+  bake component
+  bake controller       Create a controller and test
+  bake controller all   Create all controllers for an application or plugin.
+  bake enum             Create a model Enum
+  bake fixture          Create a test fixture class.
+  bake fixture all      Create all fixtures for an application or plugin.
+  bake form             Create a form class and test.
+  bake helper           Create a view helper and test.
+  bake mailer           Create a mailer and test.
+  bake middleware       Create a middleware class and test.
+  bake model            Create a table class and its related entity, enums,
+                        test fixture and tests.
+  bake model all        Create all models, fixtures and tests in an application
+                        or plugin.
+  bake plugin           Create a plugin.
+  bake template         Create a view template.
+  bake template all     Create all view templates for all controllers in an
+                        application or plugin.
+  bake test             Create a test case skeleton for a class.
 
-Welcome to CakePHP v3.4.6 Console
----------------------------------------------------------------
-App : src
-Path: /var/www/cakephp.dev/src/
-PHP : 5.6.20
----------------------------------------------------------------
-The Bake script generates controllers, models and template files for
-your application. If run with no command line arguments, Bake guides the
-user through the class creation process. You can customize the
-generation process by telling Bake where different parts of your
-application are using command line arguments.
+To run a command, type `cake command_name [args|options]`
+To get help on a specific command, type `cake command_name --help`
+To see full descriptions and plugin grouping, use `cake --help -v`
+```
 
-Usage:
-cake bake.bake [subcommand] [options]
+## Модели Bake
 
-Subcommands:
+Модели генерируются на основе существующих таблиц базы данных.
+Применяются соглашения CakePHP, поэтому Bake определяет связи по внешним ключам `thing_id`, ссылающимся на таблицы `things` с их первичными ключами `id`.
 
-all                 Bake a complete MVC skeleton.
-behavior            Bake a behavior class file.
-cell                Bake a cell class file.
-component           Bake a component class file.
-controller          Bake a controller skeleton.
-fixture             Generate fixtures for use with the test suite. You
-                    can use `bake fixture all` to bake all fixtures.
-form                Bake a form class file.
-helper              Bake a helper class file.
-mailer              Bake a mailer class file.
-migration           Bake migration class.
-migration_diff      Bake migration class.
-migration_snapshot  Bake migration snapshot class.
-model               Bake table and entity classes.
-plugin              Create the directory structure, AppController class
-                    and testing setup for a new plugin. Can create
-                    plugins in any of your bootstrapped plugin paths.
-seed                Bake seed class.
-task                Bake a task class file.
-template            Bake views for a controller, using built-in or
-                    custom templates.
-test                Bake test case skeletons for classes.
+Для нестандартных связей можно использовать ссылки в ограничениях или определениях внешних ключей, чтобы Bake определил связи:
 
-To see help on a subcommand use `cake bake.bake [subcommand] --help`
+```php
+->addForeignKey('billing_country_id', 'countries') // defaults to `id`
+->addForeignKey('shipping_country_id', 'countries', 'cid')
+```
 
-Options:
+## Enum'ы Bake
 
---connection, -c   Database connection to use in conjunction with `bake
-                   all`. (default: default)
---everything       Bake a complete MVC skeleton, using all the available
-                   tables. Usage: "bake all --everything"
---force, -f        Force overwriting existing files without prompting.
---help, -h         Display this help.
---plugin, -p       Plugin to bake into.
---prefix           Prefix to bake controllers and templates into.
---quiet, -q        Enable quiet output.
---tablePrefix      Table prefix to be used in models.
---theme, -t        The theme to use when baking code. (choices:
-                   Bake|Migrations)
---verbose, -v      Enable verbose output.
+С помощью Bake можно генерировать [backed enum'ы](https://www.php.net/manual/en/language.enumerations.backed.php) для использования в ваших моделях.
+Enum'ы размещаются в `src/Model/Enum/`, реализуют `EnumLabelInterface` и используют `EnumLabelTrait`, который предоставляет метод `label()` для отображения в человекочитаемом виде.
+
+Чтобы сгенерировать enum со строковыми значениями:
+
+```bash
+bin/cake bake enum ArticleStatus draft,published,archived
+```
+
+В результате создаётся `src/Model/Enum/ArticleStatus.php`:
+
+```php
+<?php
+declare(strict_types=1);
+
+namespace App\Model\Enum;
+
+use Cake\Database\Type\EnumLabelInterface;
+use Cake\Database\Type\EnumLabelTrait;
+
+/**
+ * ArticleStatus Enum
+ */
+enum ArticleStatus: string implements EnumLabelInterface
+{
+    use EnumLabelTrait;
+
+    case Draft = 'draft';
+    case Published = 'published';
+    case Archived = 'archived';
+}
+```
+
+Для enum с целочисленными значениями используйте параметр `-i` и передавайте значения через двоеточие:
+
+```bash
+bin/cake bake enum Priority low:1,medium:2,high:3 -i
+```
+
+В результате создаётся enum с целочисленными значениями:
+
+```php
+<?php
+declare(strict_types=1);
+
+namespace App\Model\Enum;
+
+use Cake\Database\Type\EnumLabelInterface;
+use Cake\Database\Type\EnumLabelTrait;
+
+/**
+ * Priority Enum
+ */
+enum Priority: int implements EnumLabelInterface
+{
+    use EnumLabelTrait;
+
+    case Low = 1;
+    case Medium = 2;
+    case High = 3;
+}
+```
+
+Enum'ы также можно генерировать внутри плагинов:
+
+```bash
+bin/cake bake enum MyPlugin.OrderStatus pending,processing,shipped
 ```
 
 ## Темы Bake
 
-Параметр `theme` является общим для всех команд Bake и позволяет изменять файлы шаблонов, используемые при генерации.
+Параметр `theme` является общим для всех команд bake и позволяет изменять файлы шаблонов, используемые при генерации.
 Чтобы создать свои шаблоны, см. [Создание темы Bake](/ru/development#создание-темы-bake).

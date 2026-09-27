@@ -18,7 +18,6 @@ namespace Bake\Command;
 
 use Bake\Utility\TableScanner;
 use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Locator\LocatorAwareTrait;
@@ -51,21 +50,20 @@ class ControllerAllCommand extends BakeCommand
     /**
      * Execute the command.
      *
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io): ?int
+    public function execute(): ?int
     {
-        $this->extractCommonProperties($args);
-
+        $this->extractCommonProperties($this->args);
         /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
         foreach ($scanner->listUnskipped() as $table) {
             $this->getTableLocator()->clear();
-            $controllerArgs = new Arguments([$table], $args->getOptions(), ['name']);
-            $this->controllerCommand->execute($controllerArgs, $io);
+            $controllerArgs = new Arguments([$table], $this->args->getOptions(), ['name']);
+            $this->controllerCommand->setArgs($controllerArgs);
+            $this->controllerCommand->setIo($this->io);
+            $this->controllerCommand->execute();
         }
 
         return static::CODE_SUCCESS;

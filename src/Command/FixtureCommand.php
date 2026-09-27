@@ -20,8 +20,6 @@ use Bake\Utility\TableScanner;
 use Brick\VarExporter\VarExporter;
 use Cake\Chronos\Chronos;
 use Cake\Chronos\ChronosDate;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Core\Exception\CakeException;
@@ -50,15 +48,14 @@ class FixtureCommand extends BakeCommand
     /**
      * Get the file path.
      *
-     * @param \Cake\Console\Arguments $args Arguments instance to read the prefix option from.
      * @return string Path to output.
      */
-    public function getPath(Arguments $args): string
+    public function getPath(): string
     {
         $dir = 'Fixture/';
         $path = defined('TESTS') ? TESTS . $dir : ROOT . DS . 'tests' . DS . $dir;
         if ($this->plugin) {
-            $path = $this->_pluginPath($this->plugin) . 'tests/' . $dir;
+            $path = $this->pluginPath($this->plugin) . 'tests/' . $dir;
         }
 
         return str_replace('/', DS, $path);
@@ -72,7 +69,7 @@ class FixtureCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = $this->_setCommonOptions($parser);
+        $parser = $this->setCommonOptions($parser);
 
         $parser = $parser->setDescription(
             'Generate fixtures for use with the test suite. You can use `bake fixture all` to bake all fixtures.',
@@ -108,31 +105,27 @@ class FixtureCommand extends BakeCommand
     /**
      * Execute the command.
      *
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io): ?int
+    public function execute(): ?int
     {
-        $this->extractCommonProperties($args);
-        $name = $args->getArgument('name') ?? '';
-        $name = $this->_getName($name);
-
+        $this->extractCommonProperties($this->args);
+        $name = $this->args->getArgument('name') ?? '';
+        $name = $this->getNameWithoutPrefix($name);
         /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);
         $scanner = new TableScanner($connection);
         if (empty($name)) {
-            $io->out('Choose a fixture to bake from the following:');
+            $this->io->out('Choose a fixture to bake from the following:');
             foreach ($scanner->listUnskipped() as $table) {
-                $io->out('- ' . $this->_camelize($table));
+                $this->io->out('- ' . $this->camelize($table));
             }
 
             return static::CODE_SUCCESS;
         }
-
-        $table = (string)$args->getOption('table');
-        $model = $this->_camelize($name);
-        $this->bake($model, $table, $args, $io);
+        $table = (string)$this->args->getOption('table');
+        $model = $this->camelize($name);
+        $this->bake($model, $table);
 
         return static::CODE_SUCCESS;
     }
@@ -142,15 +135,16 @@ class FixtureCommand extends BakeCommand
      *
      * @param string $model Name of model to bake.
      * @param string $useTable Name of table to use.
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      * @throws \RuntimeException
      */
-    protected function bake(string $model, string $useTable, Arguments $args, ConsoleIo $io): void
+    protected function bake(string $model, string $useTable): void
     {
-        $table = $schema = $records = $import = $modelImport = null;
-
+        $table = null;
+        $schema = null;
+        $records = null;
+        $import = null;
+        $modelImport = null;
         if (!$useTable) {
             $useTable = Inflector::tableize($model);
         } elseif ($useTable !== Inflector::tableize($model)) {
@@ -158,14 +152,14 @@ class FixtureCommand extends BakeCommand
         }
 
         $importBits = [];
-        if ($args->getOption('schema')) {
+        if ($this->args->getOption('schema')) {
             $modelImport = true;
             $importBits[] = "'table' => '{$useTable}'";
         }
-        if (!empty($importBits) && $this->connection !== 'default') {
+        if ($importBits !== [] && $this->connection !== 'default') {
             $importBits[] = "'connection' => '{$this->connection}'";
         }
-        if (!empty($importBits)) {
+        if ($importBits !== []) {
             $import = sprintf('[%s]', implode(', ', $importBits));
         }
 
@@ -178,23 +172,23 @@ class FixtureCommand extends BakeCommand
             $data = $this->readSchema($model, $useTable);
         }
 
-        $this->validateNames($data, $io);
+        $this->validateNames($data);
 
         if ($modelImport === null) {
-            $schema = $this->_generateSchema($data);
+            $schema = $this->generateSchema($data);
         }
 
-        if ($args->getOption('records')) {
-            $records = $this->_makeRecordString($this->_getRecordsFromTable($args, $model, $useTable));
+        if ($this->args->getOption('records')) {
+            $records = $this->makeRecordString($this->getRecordsFromTable($model, $useTable));
         } else {
             $recordCount = 1;
-            if ($args->hasOption('count')) {
-                $recordCount = (int)$args->getOption('count');
+            if ($this->args->hasOption('count')) {
+                $recordCount = (int)$this->args->getOption('count');
             }
-            $records = $this->_makeRecordString($this->_generateRecords($data, $recordCount));
+            $records = $this->makeRecordString($this->generateRecords($data, $recordCount));
         }
 
-        $this->generateFixtureFile($args, $io, $model, compact('records', 'table', 'schema', 'import'));
+        $this->generateFixtureFile($model, compact('records', 'table', 'schema', 'import'));
     }
 
     /**
@@ -224,15 +218,14 @@ class FixtureCommand extends BakeCommand
      * Validates table and column names are supported.
      *
      * @param \Cake\Database\Schema\TableSchemaInterface $schema Table schema
-     * @param \Cake\Console\ConsoleIo $io Console io
      * @return void
      * @throws \Cake\Console\Exception\StopException When table or column names are not supported
      */
-    public function validateNames(TableSchemaInterface $schema, ConsoleIo $io): void
+    public function validateNames(TableSchemaInterface $schema): void
     {
         foreach ($schema->columns() as $column) {
             if (!$this->isValidColumnName($column)) {
-                $io->abort(sprintf(
+                $this->io->abort(sprintf(
                     'Unable to bake model. Table column name must start with a letter or underscore and
                     cannot contain special characters. Found `%s`.',
                     $column,
@@ -244,13 +237,11 @@ class FixtureCommand extends BakeCommand
     /**
      * Generate the fixture file, and write to disk
      *
-     * @param \Cake\Console\Arguments $args The CLI arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io instance.
      * @param string $model name of the model being generated
      * @param array<string, mixed> $otherVars Contents of the fixture file.
      * @return void
      */
-    public function generateFixtureFile(Arguments $args, ConsoleIo $io, string $model, array $otherVars): void
+    public function generateFixtureFile(string $model, array $otherVars): void
     {
         $defaults = [
             'name' => $model,
@@ -262,14 +253,14 @@ class FixtureCommand extends BakeCommand
             'namespace' => Configure::read('App.namespace'),
         ];
         if ($this->plugin) {
-            $defaults['namespace'] = $this->_pluginNamespace($this->plugin);
+            $defaults['namespace'] = $this->pluginNamespace($this->plugin);
         }
         $vars = $otherVars + $defaults;
-        if (!$args->getOption('fields')) {
+        if (!$this->args->getOption('fields')) {
             $vars['schema'] = null;
         }
 
-        $path = $this->getPath($args);
+        $path = $this->getPath();
         $filename = $vars['name'] . 'Fixture.php';
 
         $contents = $this->createTemplateRenderer()
@@ -277,10 +268,10 @@ class FixtureCommand extends BakeCommand
             ->set($vars)
             ->generate('Bake.tests/fixture');
 
-        $io->out("\n" . sprintf('Baking test fixture for %s...', $model));
-        $io->createFile($path . $filename, $contents, $this->force);
+        $this->io->out("\n" . sprintf('Baking test fixture for %s...', $model));
+        $this->io->createFile($path . $filename, $contents, $this->force);
         $emptyFile = $path . '.gitkeep';
-        $this->deleteEmptyFile($emptyFile, $io);
+        $this->deleteEmptyFile($emptyFile);
     }
 
     /**
@@ -289,37 +280,39 @@ class FixtureCommand extends BakeCommand
      * @param \Cake\Database\Schema\TableSchemaInterface $table Table schema
      * @return string fields definitions
      */
-    protected function _generateSchema(TableSchemaInterface $table): string
+    protected function generateSchema(TableSchemaInterface $table): string
     {
-        $cols = $indexes = $constraints = [];
+        $cols = [];
+        $indexes = [];
+        $constraints = [];
         foreach ($table->columns() as $field) {
             /** @var array<string, mixed> $fieldData */
             $fieldData = $table->getColumn($field);
-            $properties = implode(', ', $this->_values($fieldData));
+            $properties = implode(', ', $this->values($fieldData));
             $cols[] = "        '{$field}' => [{$properties}],";
         }
         foreach ($table->indexes() as $index) {
             /** @var array<string, mixed> $fieldData */
             $fieldData = $table->getIndex($index);
-            $properties = implode(', ', $this->_values($fieldData));
+            $properties = implode(', ', $this->values($fieldData));
             $indexes[] = "            '{$index}' => [{$properties}],";
         }
         foreach ($table->constraints() as $index) {
             /** @var array<string, mixed> $fieldData */
             $fieldData = $table->getConstraint($index);
-            $properties = implode(', ', $this->_values($fieldData));
+            $properties = implode(', ', $this->values($fieldData));
             $constraints[] = "            '{$index}' => [{$properties}],";
         }
-        $options = $this->_values($table->getOptions());
+        $options = $this->values($table->getOptions());
 
         $content = implode("\n", $cols) . "\n";
-        if (!empty($indexes)) {
+        if ($indexes !== []) {
             $content .= "        '_indexes' => [\n" . implode("\n", $indexes) . "\n        ],\n";
         }
-        if (!empty($constraints)) {
+        if ($constraints !== []) {
             $content .= "        '_constraints' => [\n" . implode("\n", $constraints) . "\n        ],\n";
         }
-        if (!empty($options)) {
+        if ($options !== []) {
             foreach ($options as &$option) {
                 $option = '            ' . $option;
             }
@@ -335,13 +328,13 @@ class FixtureCommand extends BakeCommand
      * @param array<string, mixed> $values options keys(type, null, default, key, length, extra)
      * @return array<string> Formatted values
      */
-    protected function _values(array $values): array
+    protected function values(array $values): array
     {
         $vals = [];
 
         foreach ($values as $key => $val) {
             if (is_array($val)) {
-                $vals[] = "'{$key}' => [" . implode(', ', $this->_values($val)) . ']';
+                $vals[] = "'{$key}' => [" . implode(', ', $this->values($val)) . ']';
             } else {
                 $val = var_export($val, true);
                 if ($val === 'NULL') {
@@ -361,7 +354,7 @@ class FixtureCommand extends BakeCommand
      * @param int $recordCount The number of records to generate.
      * @return array<array-key, array<string, mixed>> Array of records to use in the fixture.
      */
-    protected function _generateRecords(TableSchemaInterface $table, int $recordCount = 1): array
+    protected function generateRecords(TableSchemaInterface $table, int $recordCount = 1): array
     {
         $records = [];
         for ($i = 0; $i < $recordCount; $i++) {
@@ -445,7 +438,7 @@ class FixtureCommand extends BakeCommand
                                 }
                             } else {
                                 $cases = $reflectionEnum->getCases();
-                                if ($cases) {
+                                if ($cases !== []) {
                                     $firstCase = array_shift($cases);
                                     /** @var \BackedEnum $firstValue */
                                     $firstValue = $firstCase->getValue();
@@ -471,7 +464,7 @@ class FixtureCommand extends BakeCommand
      * @return string A string value of the $records array.
      * @throws \Brick\VarExporter\ExportException
      */
-    protected function _makeRecordString(array $records): string
+    protected function makeRecordString(array $records): string
     {
         foreach ($records as &$record) {
             array_walk($record, function (&$value): void {
@@ -490,16 +483,15 @@ class FixtureCommand extends BakeCommand
      * Interact with the user to get a custom SQL condition and use that to extract data
      * to build a fixture.
      *
-     * @param \Cake\Console\Arguments $args CLI arguments
      * @param string $modelName name of the model to take records from.
      * @param string|null $useTable Name of table to use.
      * @return array<array-key, mixed> Array of records.
      */
-    protected function _getRecordsFromTable(Arguments $args, string $modelName, ?string $useTable = null): array
+    protected function getRecordsFromTable(string $modelName, ?string $useTable = null): array
     {
-        $recordCount = ($args->getOption('count') ?? 10);
+        $recordCount = ($this->args->getOption('count') ?? 10);
         /** @var string $conditions */
-        $conditions = ($args->getOption('conditions') ?? '1=1');
+        $conditions = ($this->args->getOption('conditions') ?? '1=1');
         if ($this->getTableLocator()->exists($modelName)) {
             $model = $this->getTableLocator()->get($modelName);
         } else {

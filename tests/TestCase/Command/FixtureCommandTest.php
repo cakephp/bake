@@ -55,7 +55,7 @@ class FixtureCommandTest extends TestCase
     {
         parent::setUp();
 
-        $this->_compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
+        $this->compareBasePath = Plugin::path('Bake') . 'tests' . DS . 'comparisons' . DS . 'Fixture' . DS;
         $this->setAppNamespace('Bake\Test\App');
     }
 
@@ -73,7 +73,8 @@ class FixtureCommandTest extends TestCase
         $abortCalled = false;
         try {
             $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
-            $command->validateNames($schema, $io);
+            $command->setIo($io);
+            $command->validateNames($schema);
         } catch (StopException) {
             $abortCalled = true;
         }
@@ -93,7 +94,8 @@ class FixtureCommandTest extends TestCase
 
         $this->expectException(StopException::class);
         $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
-        $command->validateNames($schema, $io);
+        $command->setIo($io);
+        $command->validateNames($schema);
     }
 
     /**
@@ -109,7 +111,8 @@ class FixtureCommandTest extends TestCase
 
         $this->expectException(StopException::class);
         $io = new ConsoleIo(new StubConsoleOutput(), new StubConsoleOutput(), new StubConsoleInput([]));
-        $command->validateNames($schema, $io);
+        $command->setIo($io);
+        $command->validateNames($schema);
     }
 
     /**
@@ -295,7 +298,7 @@ class FixtureCommandTest extends TestCase
         $this->assertStringContainsString("'columns' => ['id']", $result);
         $this->assertStringContainsString("'uuid' => ['type' => 'uuid'", $result);
         $this->assertMatchesRegularExpression(
-            "/(\s+)('uuid' => ')([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})(')/",
+            "/(\s+)('uuid' => ')([a-f0-9]{8}-[a-f0-9]{4}-[7][a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12})(')/",
             $result,
         );
     }
@@ -358,7 +361,7 @@ class FixtureCommandTest extends TestCase
      */
     public function testGeneratePluginFixtureFile(): void
     {
-        $this->_loadTestPlugin('TestBake');
+        $this->loadTestPlugin('TestBake');
         $root = Plugin::path('TestBake');
 
         $this->generatedFile = $root . 'tests/Fixture/ArticlesFixture.php';

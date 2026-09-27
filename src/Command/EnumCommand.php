@@ -17,8 +17,6 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Bake\Utility\Model\EnumParser;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Utility\Inflector;
 use InvalidArgumentException;
@@ -68,11 +66,11 @@ class EnumCommand extends SimpleBakeCommand
     /**
      * Get template data.
      *
-     * @param \Cake\Console\Arguments $arguments The arguments for the command
      * @return array<string, mixed>
      */
-    public function templateData(Arguments $arguments): array
+    public function templateData(): array
     {
+        $arguments = $this->args;
         $cases = EnumParser::parseCases($arguments->getArgument('cases'), (bool)$arguments->getOption('int'));
         $isOfTypeInt = $this->isOfTypeInt($cases);
         $backingType = $isOfTypeInt ? 'int' : 'string';
@@ -84,7 +82,7 @@ class EnumCommand extends SimpleBakeCommand
             $backingType = 'int';
         }
 
-        $data = parent::templateData($arguments);
+        $data = parent::templateData();
         $data['backingType'] = $backingType;
         $data['cases'] = $this->formatCases($cases);
 
@@ -99,7 +97,7 @@ class EnumCommand extends SimpleBakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = $this->_setCommonOptions($parser);
+        $parser = $this->setCommonOptions($parser);
 
         $parser->setDescription(
             'Bake backed enums for use in models.',
@@ -123,17 +121,11 @@ class EnumCommand extends SimpleBakeCommand
      */
     protected function isOfTypeInt(array $definition): bool
     {
-        if (!$definition) {
+        if ($definition === []) {
             return false;
         }
 
-        foreach ($definition as $value) {
-            if (!is_int($value)) {
-                return false;
-            }
-        }
-
-        return true;
+        return array_all($definition, fn($value) => is_int($value));
     }
 
     /**
@@ -158,15 +150,13 @@ class EnumCommand extends SimpleBakeCommand
      * Generate a class stub
      *
      * @param string $name The class name
-     * @param \Cake\Console\Arguments $args The console arguments
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return void
      */
-    protected function bake(string $name, Arguments $args, ConsoleIo $io): void
+    protected function bake(string $name): void
     {
-        parent::bake($name, $args, $io);
+        parent::bake($name);
 
-        $path = $this->getPath($args);
+        $path = $this->getPath();
         $filename = $path . $name . '.php';
 
         // Work around composer caching that classes/files do not exist.

@@ -34,7 +34,7 @@ class TodoItem extends Entity
      *
      * @var array<string, bool>
      */
-    protected array $_accessible = [
+    protected array $patchable = [
         'id' => true,
         'title' => true,
         'body' => true,

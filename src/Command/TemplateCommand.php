@@ -18,8 +18,6 @@ namespace Bake\Command;
 
 use Bake\Utility\Model\AssociationFilter;
 use Bake\Utility\TableScanner;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\App;
 use Cake\Core\Configure;
@@ -69,7 +67,7 @@ class TemplateCommand extends BakeCommand
     /**
      * AssociationFilter utility
      */
-    protected ?AssociationFilter $_associationFilter = null;
+    protected ?AssociationFilter $associationFilter = null;
 
     /**
      * Template path.
@@ -112,53 +110,46 @@ class TemplateCommand extends BakeCommand
     /**
      * Execute the command.
      *
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io): ?int
+    public function execute(): ?int
     {
-        $this->extractCommonProperties($args);
-        $name = $args->getArgument('name') ?? '';
-        $name = $this->_getName($name);
-
+        $this->extractCommonProperties($this->args);
+        $name = $this->args->getArgument('name') ?? '';
+        $name = $this->getNameWithoutPrefix($name);
         if (empty($name)) {
-            $io->out('Possible tables to bake view templates for based on your current database:');
+            $this->io->out('Possible tables to bake view templates for based on your current database:');
             /** @var \Cake\Database\Connection $connection */
             $connection = ConnectionManager::get($this->connection);
             $scanner = new TableScanner($connection);
             foreach ($scanner->listUnskipped() as $table) {
-                $io->out('- ' . $this->_camelize($table));
+                $this->io->out('- ' . $this->camelize($table));
             }
 
             return static::CODE_SUCCESS;
         }
-        $template = $args->getArgument('template');
-        $action = $args->getArgument('action');
-
-        $this->controller($args, $name, (string)$args->getOption('controller'));
+        $template = $this->args->getArgument('template');
+        $action = $this->args->getArgument('action');
+        $this->controller($name, (string)$this->args->getOption('controller'));
         $this->model($name);
-
         if ($template && $action === null) {
             $action = $template;
         }
         if ($template) {
-            $this->bake($args, $io, $template, true, $action);
+            $this->bake($template, true, $action);
 
             return static::CODE_SUCCESS;
         }
-
-        $vars = $this->_loadController($io);
-        $methods = $this->_methodsToBake();
-
+        $vars = $this->loadController();
+        $methods = $this->methodsToBake();
         foreach ($methods as $method) {
             try {
-                $content = $this->getContent($args, $io, $method, $vars);
-                $this->bake($args, $io, $method, $content);
+                $content = $this->getContent($method, $vars);
+                $this->bake($method, $content);
             } catch (MissingTemplateException $e) {
-                $io->verbose($e->getMessage());
+                $this->io->verbose($e->getMessage());
             } catch (RuntimeException $e) {
-                $io->error($e->getMessage());
+                $this->io->error($e->getMessage());
             }
         }
 
@@ -173,7 +164,7 @@ class TemplateCommand extends BakeCommand
      */
     public function model(string $table): void
     {
-        $tableName = $this->_camelize($table);
+        $tableName = $this->camelize($table);
         $plugin = $this->plugin;
         if ($plugin) {
             $plugin .= '.';
@@ -184,14 +175,13 @@ class TemplateCommand extends BakeCommand
     /**
      * Set the controller related properties.
      *
-     * @param \Cake\Console\Arguments $args The arguments
      * @param string $table The table/model that is being baked.
      * @param string|null $controller The controller name if specified.
      * @return void
      */
-    public function controller(Arguments $args, string $table, ?string $controller = null): void
+    public function controller(string $table, ?string $controller = null): void
     {
-        $tableName = $this->_camelize($table);
+        $tableName = $this->camelize($table);
         if (empty($controller)) {
             $controller = $tableName;
         }
@@ -201,7 +191,7 @@ class TemplateCommand extends BakeCommand
         if ($plugin) {
             $plugin .= '.';
         }
-        $prefix = $this->getPrefix($args);
+        $prefix = $this->getPrefix();
         if ($prefix) {
             $prefix .= '/';
         }
@@ -211,13 +201,12 @@ class TemplateCommand extends BakeCommand
     /**
      * Get the path base for view templates.
      *
-     * @param \Cake\Console\Arguments $args The arguments
      * @param string|null $container Unused.
      * @return string
      */
-    public function getTemplatePath(Arguments $args, ?string $container = null): string
+    public function getTemplatePath(?string $container = null): string
     {
-        $path = parent::getTemplatePath($args, $container);
+        $path = parent::getTemplatePath($container);
 
         return $path . $this->controllerName . DS;
     }
@@ -227,7 +216,7 @@ class TemplateCommand extends BakeCommand
      *
      * @return array<string> Array of action names that should be baked
      */
-    protected function _methodsToBake(): array
+    protected function methodsToBake(): array
     {
         $base = Configure::read('App.namespace');
 
@@ -244,7 +233,7 @@ class TemplateCommand extends BakeCommand
                 ),
             );
         }
-        if (empty($methods)) {
+        if ($methods === []) {
             $methods = $this->scaffoldActions;
         }
         foreach ($methods as $i => $method) {
@@ -273,10 +262,9 @@ class TemplateCommand extends BakeCommand
      * - 'keyFields'
      * - 'schema'
      *
-     * @param \Cake\Console\ConsoleIo $io Instance of the ConsoleIO
      * @return array<string, mixed> Returns variables to be made available to a view template
      */
-    protected function _loadController(ConsoleIo $io): array
+    protected function loadController(): array
     {
         if ($this->getTableLocator()->exists($this->modelName)) {
             $modelObject = $this->getTableLocator()->get($this->modelName);
@@ -285,48 +273,47 @@ class TemplateCommand extends BakeCommand
                 'connectionName' => $this->connection,
             ]);
         }
-
         $namespace = Configure::read('App.namespace');
-
-        $primaryKey = $displayField = $singularVar = $singularHumanName = null;
-        $schema = $fields = $hidden = $modelClass = null;
+        $primaryKey = null;
+        $displayField = null;
+        $singularVar = null;
+        $singularHumanName = null;
+        $schema = null;
+        $fields = null;
+        $hidden = null;
+        $modelClass = null;
         try {
             $primaryKey = (array)$modelObject->getPrimaryKey();
             $displayField = $modelObject->getDisplayField();
-            $singularVar = $this->_singularName($this->controllerName);
-            $singularHumanName = $this->_singularHumanName($this->controllerName);
+            $singularVar = $this->singularName($this->controllerName);
+            $singularHumanName = $this->singularHumanName($this->controllerName);
             $schema = $modelObject->getSchema();
             $fields = $schema->columns();
             $hidden = $modelObject->newEmptyEntity()->getHidden() ?: ['token', 'password', 'passwd'];
             $modelClass = $this->modelName;
         } catch (Exception $exception) {
-            $io->error($exception->getMessage());
+            $this->io->error($exception->getMessage());
             $this->abort();
         }
-
-        [, $entityClass] = namespaceSplit($this->_entityName($this->modelName));
+        [, $entityClass] = namespaceSplit($this->entityName($this->modelName));
         $entityClass = sprintf('%s\Model\Entity\%s', $namespace, $entityClass);
         if (!class_exists($entityClass)) {
             $entityClass = EntityInterface::class;
         }
-        $associations = $this->_filteredAssociations($modelObject);
+        $associations = $this->filteredAssociations($modelObject);
         $keyFields = [];
-
         if (isset($associations['BelongsToMany'])) {
             foreach ($associations['BelongsToMany'] as $assoc) {
                 $keyFields[$assoc['foreignKey']] = $assoc['variable'];
             }
         }
-
         if (isset($associations['BelongsTo'])) {
             foreach ($associations['BelongsTo'] as $assoc) {
                 $keyFields[$assoc['foreignKey']] = $assoc['variable'];
             }
         }
-
         $pluralVar = Inflector::variable($this->controllerName);
-        $pluralHumanName = $this->_pluralHumanName($this->controllerName);
-
+        $pluralHumanName = $this->pluralHumanName($this->controllerName);
         // Handle cases where singular and plural are identical (e.g., "news", "sheep")
         // to avoid generating invalid code like `foreach ($news as $news)`
         if ($singularVar === $pluralVar) {
@@ -355,56 +342,48 @@ class TemplateCommand extends BakeCommand
     /**
      * Assembles and writes bakes the view file.
      *
-     * @param \Cake\Console\Arguments $args CLI arguments
-     * @param \Cake\Console\ConsoleIo $io Console io
      * @param string $template Template file to use.
      * @param string|true $content Content to write.
      * @param ?string $outputFile The output file to create. If null will use `$template`
      * @return void
      */
     public function bake(
-        Arguments $args,
-        ConsoleIo $io,
         string $template,
         string|bool $content = '',
         ?string $outputFile = null,
     ): void {
-        if ($outputFile === null) {
-            $outputFile = $template;
-        }
+        $outputFile ??= $template;
         if ($content === true) {
-            $content = $this->getContent($args, $io, $template);
+            $content = $this->getContent($template);
         }
         if (empty($content)) {
             // phpcs:ignore Generic.Files.LineLength
-            $io->warning("No generated content for '{$template}.{$this->ext}', not generating template.");
+            $this->io->warning("No generated content for '{$template}.{$this->ext}', not generating template.");
 
             return;
         }
-        $path = $this->getTemplatePath($args);
+        $path = $this->getTemplatePath();
         $filename = $path . Inflector::underscore($outputFile) . '.' . $this->ext;
 
-        $io->out("\n" . sprintf('Baking `%s` view template file...', $outputFile));
-        $io->createFile($filename, $content, $this->force);
+        $this->io->out("\n" . sprintf('Baking `%s` view template file...', $outputFile));
+        $this->io->createFile($filename, $content, $this->force);
     }
 
     /**
      * Builds content from template and variables
      *
-     * @param \Cake\Console\Arguments $args The CLI arguments
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @param string $action name to generate content to
      * @param array<string, mixed>|null $vars passed for use in templates
      * @return string Content from template
      */
-    public function getContent(Arguments $args, ConsoleIo $io, string $action, ?array $vars = null): string
+    public function getContent(string $action, ?array $vars = null): string
     {
         if (!$vars) {
-            $vars = $this->_loadController($io);
+            $vars = $this->loadController();
         }
 
         if (empty($vars['primaryKey'])) {
-            $io->error('Cannot generate views for models with no primary key');
+            $this->io->error('Cannot generate views for models with no primary key');
             $this->abort();
         }
 
@@ -418,8 +397,8 @@ class TemplateCommand extends BakeCommand
             ->set($vars);
 
         $indexColumns = 0;
-        if ($action === 'index' && $args->getOption('index-columns') !== null) {
-            $indexColumns = $args->getOption('index-columns');
+        if ($action === 'index' && $this->args->getOption('index-columns') !== null) {
+            $indexColumns = $this->args->getOption('index-columns');
         }
         $renderer->set('indexColumns', $indexColumns);
 
@@ -438,7 +417,7 @@ class TemplateCommand extends BakeCommand
      */
     protected function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
-        $parser = $this->_setCommonOptions($parser);
+        $parser = $this->setCommonOptions($parser);
 
         $parser->setDescription(
             'Bake views for a controller, using built-in or custom templates. ',
@@ -467,12 +446,12 @@ class TemplateCommand extends BakeCommand
      * @param \Cake\ORM\Table $model Table
      * @return array<string, array<string, mixed>> associations
      */
-    protected function _filteredAssociations(Table $model): array
+    protected function filteredAssociations(Table $model): array
     {
-        if (!$this->_associationFilter instanceof AssociationFilter) {
-            $this->_associationFilter = new AssociationFilter();
+        if (!$this->associationFilter instanceof AssociationFilter) {
+            $this->associationFilter = new AssociationFilter();
         }
 
-        return $this->_associationFilter->filterAssociations($model);
+        return $this->associationFilter->filterAssociations($model);
     }
 }

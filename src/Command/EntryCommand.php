@@ -17,11 +17,10 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
 use Cake\Console\Command\HelpCommand;
 use Cake\Console\CommandCollection;
 use Cake\Console\CommandCollectionAwareInterface;
-use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Exception\ConsoleException;
 
@@ -62,57 +61,63 @@ class EntryCommand extends Command implements CommandCollectionAwareInterface
      * Override the run() method for special handling of the `--help` option.
      *
      * @param array<int, string> $argv Arguments from the CLI environment.
-     * @param \Cake\Console\ConsoleIo $io The console io
+     * @param \Cake\Console\ConsoleIoInterface|null $io The console io
+     *   instance if the default one shouldn't be used
      * @return int|null Exit code or null for success.
      */
-    public function run(array $argv, ConsoleIo $io): ?int
+    public function run(array $argv, ?ConsoleIoInterface $io = null): ?int
     {
-        $this->initialize();
+        if ($io !== null) {
+            $this->io = $io;
+        }
 
         $parser = $this->getOptionParser();
         try {
-            [$options, $arguments] = $parser->parse($argv);
-            $args = new Arguments(
-                $arguments,
-                $options,
-                $parser->argumentNames(),
-            );
+            $this->parseArguments($parser, $argv);
         } catch (ConsoleException $e) {
-            $io->error('Error: ' . $e->getMessage());
+            $this->io->error('Error: ' . $e->getMessage());
 
             return static::CODE_ERROR;
         }
-        $this->setOutputLevel($args, $io);
+        $this->setOutputLevel();
 
         // This is the variance from Command::run()
-        if (!$args->getArgumentAt(0) && $args->getOption('help')) {
-            $this->executeCommand($this->help, [], $io);
+        if (!$this->args->getArgumentAt(0) && $this->args->getOption('help')) {
+            $this->executeCommand($this->help, []);
 
             return static::CODE_SUCCESS;
         }
 
-        return $this->execute($args, $io);
+        if ($this->args->getOption('quiet')) {
+            $this->io->setInteractive(false);
+        }
+
+        $this->initialize();
+
+        $this->dispatchEvent('Command.beforeExecute', ['args' => $this->args, 'io' => $this->io]);
+        $result = $this->execute();
+        $this->dispatchEvent('Command.afterExecute', ['args' => $this->args, 'io' => $this->io, 'result' => $result]);
+
+        return $result;
     }
 
     /**
      * Execute the command.
      *
-     * @param \Cake\Console\Arguments $args The command arguments.
-     * @param \Cake\Console\ConsoleIo $io The console io
      * @return int|null The exit code or null for success
      */
-    public function execute(Arguments $args, ConsoleIo $io): ?int
+    public function execute(): ?int
     {
-        if ($args->hasArgumentAt(0)) {
-            $name = $args->getArgumentAt(0);
-            $io->error(
+        if ($this->args->hasArgumentAt(0)) {
+            $name = $this->args->getArgumentAt(0);
+            $this->io->error(
                 "Could not find bake command named `{$name}`."
                 . ' Run `bake --help` to get a list of commands.',
             );
 
             return static::CODE_ERROR;
         }
-        $io->warning('No command provided. Run `bake --help` to get a list of commands.');
+        $this->io->warning('No command provided. Run `bake --help` to get a list of commands.');
 
         return static::CODE_ERROR;
     }
