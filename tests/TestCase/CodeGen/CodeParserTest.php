@@ -146,6 +146,55 @@ PARSE,);
         );
     }
 
+    /**
+     * Test that PHP 8.4 syntax like `protected(set)` properties and
+     * property hooks can be parsed and round tripped.
+     *
+     * @return void
+     */
+    public function testParseConcreteProperties(): void
+    {
+        $parser = new CodeParser();
+        $file = $parser->parseFile(<<<'PARSE'
+<?php
+
+namespace Test;
+
+use Cake\ORM\Entity;
+
+class Article extends Entity
+{
+    public protected(set) int $id;
+
+    public protected(set) ?string $title = null;
+
+    public protected(set) ?string $password {
+        set (?string $value) {
+            $this->password = $value === null ? null : password_hash($value, PASSWORD_DEFAULT);
+        }
+    }
+}
+PARSE,);
+
+        $this->assertSame(
+            [
+                'id',
+                'title',
+                'password',
+            ],
+            array_keys($file->class->properties),
+        );
+
+        $code = <<<'PARSE'
+    public protected(set) ?string $password {
+        set (?string $value) {
+            $this->password = $value === null ? null : password_hash($value, PASSWORD_DEFAULT);
+        }
+    }
+PARSE;
+        $this->assertSame($code, $file->class->properties['password']);
+    }
+
     public function testUseStatements(): void
     {
         $parser = new CodeParser();

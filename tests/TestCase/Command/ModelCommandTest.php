@@ -2181,6 +2181,75 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * test baking an entity class with concrete properties for columns and associations.
+     *
+     * @return void
+     */
+    public function testBakeEntityConcreteProperties(): void
+    {
+        $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --concrete-properties todo_items');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertPhpLints($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an entity class with concrete properties and no accessible fields.
+     *
+     * @return void
+     */
+    public function testBakeEntityConcretePropertiesNoFields(): void
+    {
+        $this->generatedFile = APP . 'Model/Entity/User.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden --concrete-properties users');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertPhpLints($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an entity with concrete properties over an existing entity does not duplicate them.
+     *
+     * @return void
+     */
+    public function testBakeEntityConcretePropertiesUpdate(): void
+    {
+        $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
+        $expected = file_get_contents($this->compareBasePath . 'testBakeEntityConcreteProperties.php');
+        file_put_contents($this->generatedFile, str_replace("\r\n", "\n", $expected));
+
+        $this->exec('bake model --no-test --no-fixture --no-table --concrete-properties --update todo_items');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertSame($expected, file_get_contents($this->generatedFile));
+    }
+
+    /**
+     * test baking an entity class with an enum column and concrete properties.
+     *
+     * @return void
+     */
+    public function testBakeEntityConcretePropertiesEnum(): void
+    {
+        $this->generatedFile = APP . 'Model/Entity/Article.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields --concrete-properties Articles');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertPhpLints($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
      * test baking an entity class
      *
      * @return void
