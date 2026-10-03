@@ -1,10 +1,10 @@
 ---
-name: 'deploy_docs_3x'
+name: 'deploy_docs_4x'
 
 on:
   push:
     branches:
-      - 3.x
+      - 4.x
   workflow_dispatch:
 
 permissions:
@@ -22,6 +22,7 @@ jobs:
       - name: Push to dokku
         uses: dokku/github-action@cc7dec1d2b9fed249a14ae462bc953bba436f78c # v1.10.0
         with:
-          git_remote_url: 'ssh://dokku@apps.cakephp.org:22/bake-docs-3'
+          git_remote_url: 'ssh://dokku@apps.cakephp.org:22/bake-docs-4'
+          git_push_flags: '-f'
           ssh_private_key: ${{ secrets.DOKKU_SSH_PRIVATE_KEY }}
-          branch: '3.x'
+          branch: '4.x'
