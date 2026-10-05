@@ -168,6 +168,7 @@ class ModelCommand extends BakeCommand
         $connection = $this->connection;
         $hidden = $this->getHiddenFields($tableObject);
         $enumSchema = $this->getEnumDefinitions($tableObject->getSchema());
+        $concreteProperties = (bool)$this->args->getOption('concrete-properties');
 
         return compact(
             'associations',
@@ -183,6 +184,7 @@ class ModelCommand extends BakeCommand
             'connection',
             'hidden',
             'enumSchema',
+            'concreteProperties',
         );
     }
 
@@ -1366,6 +1368,10 @@ class ModelCommand extends BakeCommand
         ])->addOption('no-hidden', [
             'boolean' => true,
             'help' => 'Disable generating hidden fields in the entity.',
+        ])->addOption('concrete-properties', [
+            'boolean' => true,
+            'help' => 'Declare concrete class properties on the entity for its columns and associated entities. '
+                . 'Note that writes to these properties must go through set() as they use `protected(set)` visibility.',
         ])->addOption('hidden', [
             'help' => 'A comma separated list of fields to hide.',
         ])->addOption('primary-key', [
