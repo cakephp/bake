@@ -89,9 +89,7 @@ class BakeView extends TwigView
         $this->dispatchEvent('View.afterRender', [$viewFileName]);
         $this->dispatchEvent('View.afterRender.' . $templateEventName, [$viewFileName]);
 
-        if ($layout === null) {
-            $layout = $this->layout;
-        }
+        $layout ??= $this->layout;
         if ($layout && $this->autoLayout) {
             $this->Blocks->set('content', $this->renderLayout('', $layout));
         }

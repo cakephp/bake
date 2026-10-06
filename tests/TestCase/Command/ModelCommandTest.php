@@ -2494,8 +2494,6 @@ PARSE;
 
     /**
      * data provider for testMainWithNamedModelVariations
-     *
-     * @return void
      */
     public static function nameVariations(): array
     {

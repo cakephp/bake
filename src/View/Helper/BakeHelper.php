@@ -546,9 +546,7 @@ class BakeHelper extends Helper
      */
     protected function _filterHasManyAssociationsAliases(Table $table, array $aliases): array
     {
-        if (is_null($this->_associationFilter)) {
-            $this->_associationFilter = new AssociationFilter();
-        }
+        $this->_associationFilter ??= new AssociationFilter();
 
         return $this->_associationFilter->filterHasManyAssociationsAliases($table, $aliases);
     }
