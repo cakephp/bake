@@ -46,9 +46,7 @@ class TableScanner
     public function __construct(Connection $connection, ?array $ignore = null)
     {
         $this->connection = $connection;
-        if ($ignore === null) {
-            $ignore = ['i18n', 'cake_sessions', 'cake_migrations', 'cake_seeds', 'sessions', '/phinxlog/'];
-        }
+        $ignore ??= ['i18n', 'cake_sessions', 'cake_migrations', 'cake_seeds', 'sessions', '/phinxlog/'];
         $this->ignore = $ignore;
     }
 

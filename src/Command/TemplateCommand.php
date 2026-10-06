@@ -369,9 +369,7 @@ class TemplateCommand extends BakeCommand
         string|bool $content = '',
         ?string $outputFile = null,
     ): void {
-        if ($outputFile === null) {
-            $outputFile = $template;
-        }
+        $outputFile ??= $template;
         if ($content === true) {
             $content = $this->getContent($args, $io, $template);
         }

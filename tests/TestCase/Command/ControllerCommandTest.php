@@ -369,8 +369,6 @@ class ControllerCommandTest extends TestCase
 
     /**
      * data provider for testMainWithControllerNameVariations
-     *
-     * @return void
      */
     public static function nameVariations(): array
     {

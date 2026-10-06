@@ -841,8 +841,6 @@ class TemplateCommandTest extends TestCase
 
     /**
      * static dataprovider for test cases
-     *
-     * @return void
      */
     public static function nameVariations(): array
     {
