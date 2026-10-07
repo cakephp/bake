@@ -267,6 +267,24 @@ class TestCommandTest extends TestCase
     }
 
     /**
+     * The alias of the default table does not have to match the controller's table name.
+     *
+     * @return void
+     */
+    public function testFixtureGenerationFromControllerWithCustomAlias()
+    {
+        $this->getTableLocator()->get('Posts')->setAlias('RenamedPosts');
+
+        $subject = new PostsController(new Request(), new Response());
+        $command = new TestCommand();
+        $result = $command->generateFixtureList($subject);
+        $expected = [
+            'app.RenamedPosts',
+        ];
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Dataprovider for class name generation.
      *
      * @return array

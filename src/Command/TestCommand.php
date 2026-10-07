@@ -496,11 +496,7 @@ class TestCommand extends BakeCommand
             return;
         }
 
-        $models = [$model->getAlias()];
-        foreach ($models as $model) {
-            [, $model] = pluginSplit($model);
-            $this->_processModel($subject->{$model});
-        }
+        $this->_processModel($model);
     }
 
     /**
