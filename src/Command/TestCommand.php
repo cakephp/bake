@@ -495,6 +495,9 @@ class TestCommand extends BakeCommand
             // No fixtures needed or possible
             return;
         }
+        if (!$model instanceof Table) {
+            return;
+        }
 
         $this->_processModel($model);
     }
