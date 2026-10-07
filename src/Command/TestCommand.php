@@ -495,12 +495,11 @@ class TestCommand extends BakeCommand
             // No fixtures needed or possible
             return;
         }
-
-        $models = [$model->getAlias()];
-        foreach ($models as $model) {
-            [, $model] = pluginSplit($model);
-            $this->_processModel($subject->{$model});
+        if (!$model instanceof Table) {
+            return;
         }
+
+        $this->_processModel($model);
     }
 
     /**
