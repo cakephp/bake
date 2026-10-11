@@ -59,24 +59,38 @@ For non-conventional relations, you can use references in constraints or foreign
 
 ### Concrete Entity Properties
 
-By default entity fields are stored as dynamic fields. Pass `--concrete-properties` to have Bake
-declare real PHP properties on the baked entity class, following
+By default Bake declares real PHP properties on the baked entity class for its
+columns and associated entities, following
 [Declaring Concrete Properties](https://book.cakephp.org/6.x/orm/entities.html#declaring-concrete-properties)
-in the CakePHP book:
+in the CakePHP book. Pass `--no-concrete-properties` if you want to keep entity
+fields as dynamic fields, for example to upgrade a codebase at its own pace:
 
 ```bash
-bin/cake bake model Articles --concrete-properties
+bin/cake bake model Articles --no-concrete-properties
 ```
 
 The generated properties use `public protected(set)` visibility, so they can be read directly
 while writes still go through the entity's `set()` API. Class types are referenced by their
-short name instead of a fully qualified name:
+short name instead of a fully qualified name. The `@property` annotations in the class
+docblock are still generated as they can express types like an array of entities that PHP
+property types cannot:
 
 ```php
 use App\Model\Enum\Status;
 use Cake\I18n\DateTime;
 use Cake\ORM\Entity;
 
+/**
+ * Article Entity
+ *
+ * @property int $id
+ * @property string|null $title
+ * @property \Cake\I18n\DateTime|null $created
+ * @property \App\Model\Enum\Status|null $status
+ * @property bool $published
+ * @property \App\Model\Entity\User|null $author
+ * @property array<\App\Model\Entity\Comment> $comments
+ */
 class Article extends Entity
 {
     public protected(set) int $id;
@@ -89,11 +103,6 @@ class Article extends Entity
 }
 ```
 
-Classes outside the entity's namespace, like `Cake\I18n\DateTime` or the `Status` enum, are
-imported, with imports kept alphabetically ordered. Classes in the same namespace, like the
-`User` association (`App\Model\Entity\User`), don't need an import and are referenced by their
-short name directly.
-
 Note that:
 
 - Fields used by `Cake\ORM\Entity` itself, such as `hidden`, `patchable`, `dirty` and `errors`,
@@ -103,10 +112,7 @@ Note that:
   raises an `Error` about accessing an uninitialized property. The entity API handles this
   safely: `$article->get('author')` and `hasValue('author')` return `null` and `false`
   respectively for such fields.
-- The `@property` annotations in the class docblock are still generated as they can express
-  types like an array of entities that PHP property types cannot.
-- Re-baking an existing entity with the option and `--update` does not duplicate the
-  declarations.
+- Re-baking an existing entity with `--update` does not duplicate the declarations.
 
 ## Bake Enums
 

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Model\Entity;
 
+use Cake\I18n\DateTime;
 use Cake\ORM\Entity;
 
 /**
@@ -28,4 +29,13 @@ class User extends Entity
         'foo',
         'bar',
     ];
+
+    public protected(set) int $id;
+    public protected(set) ?string $username;
+    public protected(set) ?string $password;
+    public protected(set) ?DateTime $created;
+    public protected(set) ?DateTime $updated;
+    public protected(set) ?array $comments;
+    public protected(set) ?array $relations;
+    public protected(set) ?array $todo_items;
 }

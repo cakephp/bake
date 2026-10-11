@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Model\Entity;
 
+use Bake\Test\App\Model\Enum\ArticleStatus;
 use Cake\ORM\Entity;
 
 /**
@@ -19,4 +20,12 @@ use Cake\ORM\Entity;
  */
 class Article extends Entity
 {
+    public protected(set) int $id;
+    public protected(set) ?int $author_id;
+    public protected(set) ?string $title;
+    public protected(set) ?string $body;
+    public protected(set) ?ArticleStatus $published;
+    public protected(set) ?Author $author;
+    public protected(set) ?array $tags;
+    public protected(set) ?array $articles_tags;
 }

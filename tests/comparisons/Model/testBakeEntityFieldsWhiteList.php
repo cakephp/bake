@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Model\Entity;
 
+use Cake\I18n\DateTime;
 use Cake\ORM\Entity;
 
 /**
@@ -39,4 +40,18 @@ class TodoItem extends Entity
         'body' => true,
         'completed' => true,
     ];
+
+    public protected(set) int $id;
+    public protected(set) int $user_id;
+    public protected(set) string $title;
+    public protected(set) ?string $body;
+    public protected(set) string $effort;
+    public protected(set) bool $completed;
+    public protected(set) int $todo_task_count;
+    public protected(set) ?DateTime $created;
+    public protected(set) ?DateTime $updated;
+    public protected(set) ?User $user;
+    public protected(set) ?TodoReminder $todo_reminder;
+    public protected(set) ?array $todo_tasks;
+    public protected(set) ?array $todo_labels;
 }

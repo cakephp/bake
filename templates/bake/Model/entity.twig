@@ -15,10 +15,6 @@
 #}
 {% set propertyHintMap = DocBlock.buildEntityPropertyHintTypeMap(propertySchema ?: []) %}
 {% set associationHintMap = DocBlock.buildEntityAssociationHintTypeMap(propertySchema ?: []) %}
-{% set fileNamespace = fileBuilder.namespace %}
-{% set propertyImports = concreteProperties|default(false) ? DocBlock.buildEntityPropertyImports(propertySchema ?: [], fileNamespace) : [] %}
-{% set classImports = fileBuilder.classImports(['Cake\\ORM\\Entity']|merge(propertyImports)) %}
-{% set concreteDeclarations = concreteProperties|default(false) ? DocBlock.buildEntityPropertyDeclarations(propertySchema ?: [], classImports, fileNamespace) : {} %}
 {% set annotations = DocBlock.propertyHints(propertyHintMap) %}
 
 {%- if associationHintMap %}
