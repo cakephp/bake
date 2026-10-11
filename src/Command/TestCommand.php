@@ -30,7 +30,6 @@ use Cake\Utility\Inflector;
 use ReflectionClass;
 use UnexpectedValueException;
 use function Cake\Core\namespaceSplit;
-use function Cake\Core\pluginSplit;
 
 /**
  * Command class for generating test files.
@@ -580,11 +579,7 @@ class TestCommand extends BakeCommand
             return;
         }
 
-        $models = [$model->getAlias()];
-        foreach ($models as $model) {
-            [, $model] = pluginSplit($model);
-            $this->_processModel($subject->{$model});
-        }
+        $this->_processModel($model);
     }
 
     /**
