@@ -64,6 +64,7 @@ use Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector;
 use Rector\Php80\Rector\FuncCall\ClassOnObjectRector;
 use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
+use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
 use Rector\Set\ValueObject\SetList;
 use Rector\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector;
 use Rector\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector;
@@ -189,6 +190,7 @@ return RectorConfig::configure()
         TypedPropertyFromStrictSetUpRector::class,
         WhileNullableToInstanceofRector::class,
         RestoreDefaultNullToNullableTypePropertyRector::class,
+        AddOverrideAttributeToOverriddenPropertiesRector::class,
 
         // Manual - only appliable for part of the code
         UseIdenticalOverEqualWithSameTypeRector::class,
