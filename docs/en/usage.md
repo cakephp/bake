@@ -61,6 +61,20 @@ For non-conventional relations, you can use references in constraints or foreign
 ->addForeignKey('shipping_country_id', 'countries', 'cid')
 ```
 
+### Fixture Factories
+
+When a Fixture Factories plugin such as
+[dereuromark/cakephp-fixture-factories](https://github.com/dereuromark/cakephp-fixture-factories)
+is installed, `bake model` does not generate a fixture class, and baked test
+cases have no `$fixtures` property. Bake the factory with that plugin's own command:
+
+```bash
+bin/cake bake fixture_factory Articles
+```
+
+`bake fixture` still generates a fixture class when you ask for one, and
+`bake test` honors an explicit `--fixtures` list.
+
 ## Bake Enums
 
 You can use Bake to generate [backed enums](https://www.php.net/manual/en/language.enumerations.backed.php) for use in your models.
