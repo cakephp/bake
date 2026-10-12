@@ -51,5 +51,7 @@ class FormCommandTest extends TestCase
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertFileContains('class TestForm extends Form', $this->generatedFiles[0]);
+        $this->assertFileContains('protected function buildSchema(Schema $schema): Schema', $this->generatedFiles[0]);
+        $this->assertFileContains('protected function process(array $data): bool', $this->generatedFiles[0]);
     }
 }
