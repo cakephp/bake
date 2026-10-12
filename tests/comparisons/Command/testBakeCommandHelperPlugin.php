@@ -11,7 +11,7 @@ use Cake\Console\Helper;
 class ErrorHelper extends Helper
 {
     /**
-     * This method should output content using `$this->_io`.
+     * This method should output content using `$this->io`.
      *
      * @param array $args The arguments for the helper.
      * @return void
