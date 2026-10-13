@@ -64,7 +64,8 @@ For non-conventional relations, you can use references in constraints or foreign
 ### Fixture Factories
 
 When a Fixture Factories plugin such as
-[dereuromark/cakephp-fixture-factories](https://github.com/dereuromark/cakephp-fixture-factories)
+[vierge-noire/cakephp-fixture-factories](https://github.com/vierge-noire/cakephp-fixture-factories)
+or [dereuromark/cakephp-fixture-factories](https://github.com/dereuromark/cakephp-fixture-factories)
 is installed, `bake model` does not generate a fixture class, and baked test
 cases have no `$fixtures` property. Bake the factory with that plugin's own command:
 
