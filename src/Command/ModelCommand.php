@@ -1435,6 +1435,12 @@ class ModelCommand extends BakeCommand
         if ($args->getOption('no-fixture')) {
             return;
         }
+        if ($this->hasFixtureFactories()) {
+            $io->info('Fixture Factories plugin detected - skipping fixture generation.');
+            $io->info(sprintf('Bake a factory instead: `bin/cake bake fixture_factory %s`', $className));
+
+            return;
+        }
         $fixture = new FixtureCommand();
         $fixtureArgs = new Arguments(
             [$className],

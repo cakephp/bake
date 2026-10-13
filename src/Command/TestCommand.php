@@ -300,11 +300,11 @@ class TestCommand extends BakeCommand
         $hasFixtureFactories = $this->hasFixtureFactories();
 
         if (!$args->getOption('no-fixture')) {
-            if ($hasFixtureFactories) {
-                $io->info('Fixture Factories plugin detected - skipping fixture property generation.');
-            } elseif ($args->getOption('fixtures')) {
+            if ($args->getOption('fixtures')) {
                 $fixtures = array_map('trim', explode(',', (string)$args->getOption('fixtures')));
                 $this->_fixtures = array_filter($fixtures);
+            } elseif ($hasFixtureFactories) {
+                $io->info('Fixture Factories plugin detected - skipping fixture property generation.');
             } elseif ($this->typeCanDetectFixtures($type) && class_exists($fullClassName)) {
                 $io->out('Bake is detecting possible fixtures...');
                 $testSubject = $this->buildTestSubject($type, $fullClassName);
@@ -371,17 +371,6 @@ class TestCommand extends BakeCommand
         }
 
         return false;
-    }
-
-    /**
-     * Check if the CakePHP Fixture Factories plugin is available
-     *
-     * @return bool
-     */
-    protected function hasFixtureFactories(): bool
-    {
-        return class_exists('CakephpFixtureFactories\Plugin')
-            || class_exists('CakephpFixtureFactories\CakephpFixtureFactoriesPlugin');
     }
 
     /**
