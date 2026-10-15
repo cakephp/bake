@@ -2106,6 +2106,7 @@ class ModelCommandTest extends TestCase
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
+        $this->assertPhpLints($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }
@@ -2173,6 +2174,40 @@ class ModelCommandTest extends TestCase
 
         $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
         $this->exec('bake model --no-test --no-fixture --no-table --no-fields todo_items');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $result = file_get_contents($this->generatedFile);
+        $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * test baking an entity with concrete properties over an existing entity does not duplicate them.
+     *
+     * @return void
+     */
+    public function testBakeEntityUpdateConcreteProperties(): void
+    {
+        $this->generatedFile = APP . 'Model/Entity/TodoItem.php';
+        $expected = file_get_contents($this->compareBasePath . 'testBakeEntityFieldsDefaults.php');
+        file_put_contents($this->generatedFile, str_replace("\r\n", "\n", $expected));
+
+        $this->exec('bake model --no-test --no-fixture --no-table --update todo_items');
+
+        $this->assertExitCode(CommandInterface::CODE_SUCCESS);
+        $this->assertFileExists($this->generatedFile);
+        $this->assertSame($expected, file_get_contents($this->generatedFile));
+    }
+
+    /**
+     * test baking an entity class with dynamic fields instead of concrete properties.
+     *
+     * @return void
+     */
+    public function testBakeEntityDynamicProperties(): void
+    {
+        $this->generatedFile = APP . 'Model/Entity/User.php';
+        $this->exec('bake model --no-test --no-fixture --no-table --no-fields --no-hidden --no-concrete-properties users');
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
@@ -2378,6 +2413,7 @@ class ModelCommandTest extends TestCase
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFileExists($this->generatedFile);
+        $this->assertPhpLints($this->generatedFile);
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
     }

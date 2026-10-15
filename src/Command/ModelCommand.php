@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Bake\Command;
 
 use Bake\CodeGen\ColumnTypeExtractor;
+use Bake\CodeGen\EntityPropertyBuilder;
 use Bake\CodeGen\FileBuilder;
 use Bake\CodeGen\ParsedFile;
 use Bake\Utility\Model\EnumParser;
@@ -61,6 +62,11 @@ class ModelCommand extends BakeCommand
      * @var array<string>
      */
     protected array $tables = [];
+
+    /**
+     * @var \Bake\CodeGen\EntityPropertyBuilder|null
+     */
+    protected ?EntityPropertyBuilder $propertyBuilder = null;
 
     /**
      * @inheritDoc
@@ -1174,13 +1180,41 @@ class ModelCommand extends BakeCommand
             $parsedFile = $this->parseFile($filename);
         }
 
+        $entityNamespace = "{$namespace}\Model\Entity";
+        $fileBuilder = new FileBuilder($this->io, $entityNamespace, $parsedFile);
+
+        // Concrete properties are the default; `--no-concrete-properties` is the
+        // escape hatch that keeps entity fields as dynamic fields.
+        $propertySchema = $data['propertySchema'] ?? [];
+        $concreteDeclarations = [];
+        $classImports = ['Cake\\ORM\\Entity'];
+        if (!$this->args->getOption('no-concrete-properties')) {
+            $builder = $this->getPropertyBuilder();
+            $classImports = array_merge(
+                $classImports,
+                $builder->buildEntityPropertyImports($propertySchema, $entityNamespace),
+            );
+            // Resolve the imports against any existing file imports so that
+            // declarations use the same aliases as the file header.
+            $classImports = $fileBuilder->getClassImports($classImports);
+            $concreteDeclarations = $builder->buildEntityPropertyDeclarations(
+                $propertySchema,
+                $classImports,
+                $entityNamespace,
+            );
+        } else {
+            $classImports = $fileBuilder->getClassImports($classImports);
+        }
+
         $data += [
             'name' => $name,
             'namespace' => $namespace,
             'plugin' => $this->plugin,
             'pluginPath' => $pluginPath,
             'primaryKey' => [],
-            'fileBuilder' => new FileBuilder($this->io, "{$namespace}\Model\Entity", $parsedFile),
+            'fileBuilder' => $fileBuilder,
+            'classImports' => $classImports,
+            'concreteDeclarations' => $concreteDeclarations,
         ];
 
         $contents = $this->createTemplateRenderer()
@@ -1191,6 +1225,17 @@ class ModelCommand extends BakeCommand
 
         $emptyFile = $path . 'Entity' . DS . '.gitkeep';
         $this->deleteEmptyFile($emptyFile);
+    }
+
+    /**
+     * Gets the shared entity property builder used for generating concrete
+     * entity property declarations.
+     *
+     * @return \Bake\CodeGen\EntityPropertyBuilder
+     */
+    protected function getPropertyBuilder(): EntityPropertyBuilder
+    {
+        return $this->propertyBuilder ??= new EntityPropertyBuilder();
     }
 
     /**
@@ -1366,6 +1411,10 @@ class ModelCommand extends BakeCommand
         ])->addOption('no-hidden', [
             'boolean' => true,
             'help' => 'Disable generating hidden fields in the entity.',
+        ])->addOption('no-concrete-properties', [
+            'boolean' => true,
+            'help' => 'Store entity fields as dynamic fields instead of declaring concrete class properties '
+                . 'for its columns and associated entities.',
         ])->addOption('hidden', [
             'help' => 'A comma separated list of fields to hide.',
         ])->addOption('primary-key', [

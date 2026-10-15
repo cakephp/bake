@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Bake\View\Helper;
 
+use Bake\CodeGen\EntityPropertyBuilder;
 use Cake\Collection\Collection;
 use Cake\Core\App;
-use Cake\Database\Type\EnumType;
-use Cake\Database\TypeFactory;
 use Cake\ORM\Association;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
@@ -22,6 +21,11 @@ class DocBlockHelper extends Helper
      * @var bool Whether to add a blank line between different class annotations
      */
     protected bool $annotationSpacing = false;
+
+    /**
+     * @var \Bake\CodeGen\EntityPropertyBuilder|null
+     */
+    protected ?EntityPropertyBuilder $propertyBuilder = null;
 
     /**
      * Writes the DocBlock header for a class which includes the property and method declarations. Annotations are
@@ -76,15 +80,7 @@ class DocBlockHelper extends Helper
      */
     public function associatedEntityTypeToHintType(string $type, Association $association): string
     {
-        $annotationType = $association->type();
-        if (
-            $annotationType === Association::MANY_TO_MANY ||
-            $annotationType === Association::ONE_TO_MANY
-        ) {
-            return 'array<' . $type . '>';
-        }
-
-        return $type;
+        return $this->getPropertyBuilder()->associatedEntityTypeToHintType($type, $association);
     }
 
     /**
@@ -177,75 +173,18 @@ class DocBlockHelper extends Helper
      */
     public function columnTypeToHintType(string $type): ?string
     {
-        switch ($type) {
-            case 'char':
-            case 'string':
-            case 'text':
-            case 'uuid':
-            case 'decimal':
-                return 'string';
+        return $this->getPropertyBuilder()->columnTypeToHintType($type);
+    }
 
-            case 'integer':
-            case 'biginteger':
-            case 'smallinteger':
-            case 'tinyinteger':
-                return 'int';
-
-            case 'float':
-                return 'float';
-
-            case 'boolean':
-                return 'bool';
-
-            case 'array':
-            case 'json':
-                return 'array';
-
-            case 'binary':
-                return 'string|resource';
-
-            case 'date':
-                $dbType = TypeFactory::build($type);
-                if (method_exists($dbType, 'getDateClassName')) {
-                    // allow custom Date class which should extend \Cake\I18n\Date
-                    return '\\' . $dbType->getDateClassName();
-                }
-
-                return '\Cake\I18n\Date';
-
-            case 'datetime':
-            case 'datetimefractional':
-            case 'timestamp':
-            case 'timestampfractional':
-            case 'timestamptimezone':
-                $dbType = TypeFactory::build($type);
-                if (method_exists($dbType, 'getDateTimeClassName')) {
-                    // allow custom DateTime class which should extend \Cake\I18n\DateTime
-                    return '\\' . $dbType->getDateTimeClassName();
-                }
-
-                return '\Cake\I18n\DateTime';
-
-            case 'time':
-                $dbType = TypeFactory::build($type);
-                if (method_exists($dbType, 'getTimeClassName')) {
-                    // allow custom Time class which should extend \Cake\I18n\Time
-                    return '\\' . $dbType->getTimeClassName();
-                }
-
-                return '\Cake\I18n\Time';
-
-            default:
-                if (str_starts_with($type, 'enum-')) {
-                    $dbType = TypeFactory::build($type);
-                    if ($dbType instanceof EnumType) {
-                        return '\\' . $dbType->getEnumClassName();
-                    }
-                }
-        }
-
-        // Any unique or custom types will have a `string` type hint
-        return 'string';
+    /**
+     * Gets the shared entity property builder used for resolving column and
+     * association types.
+     *
+     * @return \Bake\CodeGen\EntityPropertyBuilder
+     */
+    protected function getPropertyBuilder(): EntityPropertyBuilder
+    {
+        return $this->propertyBuilder ??= new EntityPropertyBuilder();
     }
 
     /**
