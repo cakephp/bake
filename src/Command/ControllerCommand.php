@@ -218,7 +218,7 @@ class ControllerCommand extends BakeCommand
         $scopePath = '/' . Inflector::dasherize($controllerName);
         $prefixName = str_replace('\\', '/', ltrim($data['prefix'] ?? '', '\\'));
         $prefixPath = null;
-        if ($actions) {
+        if ($actions !== []) {
             $imports = ['Cake\\Routing\\Attribute\\Route', 'Cake\\Routing\\Attribute\\Scope'];
             if ($data['plugin']) {
                 $pluginPath = '/' . Inflector::dasherize($data['plugin']);
