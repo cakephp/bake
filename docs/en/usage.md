@@ -51,7 +51,7 @@ For CakePHP 6, Bake generates routing attributes on controllers by default.
 This applies to `bake controller`, `bake controller all`, and `bake all`.
 Generated plugin skeletons also omit fallback routes by default.
 
-### Generated URLs and Method Checks
+### Generated URLs
 
 For `ArticlesController`, Bake generates these routes:
 
@@ -65,11 +65,7 @@ For `ArticlesController`, Bake generates these routes:
 | login, when generated | `/users/login` for `UsersController` |
 
 Routes use `#[Route]` attributes without HTTP method restrictions; index has an
-additional attribute for its `/index` alias. Method handling remains in the
-controller actions, preserving the previous behavior. The generated delete action
-uses `allowMethod(['post', 'delete'])`, and the login action uses
-`allowMethod(['get', 'post'])`. Unsupported methods for those actions receive the
-existing 405 response. Other actions retain their existing request handling.
+additional attribute for its `/index` alias.
 
 Existing array-based links, form actions, and redirects work without fallbacks or
 additional `_method` routing hints, with `/articles` as the index URL:
@@ -79,14 +75,10 @@ $this->Form->postLink('Delete', ['action' => 'delete', $article->id]);
 ```
 
 Identifiers are not restricted to integers, so UUIDs and other string keys work too.
-Only actions selected for generation receive routes. Empty controllers receive no
-routing attributes.
 
-Prefixes retain their namespace paths: `--prefix Admin/Management` produces
-`/admin/management/articles`. Plugin routes include the conventional plugin path:
-`Blog.Articles` produces `/blog/articles`, and adding `--prefix Admin` produces
-`/blog/admin/articles`. Customize the generated `Scope` or `Prefix` attributes if
-your plugin uses a different mount path.
+When generating prefixed controllers with `--prefix Admin/Management`, routing
+attributes will include both the plugin and prefix path components. You can customize
+the `Scope` or `Prefix` attributes as required.
 
 ### Project Default and Command Overrides
 

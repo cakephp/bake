@@ -100,8 +100,7 @@ metadata: `routingActions`, `routingImports`, `routingScopePath`,
 `routingPrefixName`, and `routingPrefixPath`. The default controller template uses
 this metadata for its imports and class attributes. Built-in action elements
 render their own `Route` attributes without HTTP method restrictions. Themes can
-override those elements to customize paths or add method restrictions; the
-default templates preserve method checks inside the controller actions.
+override those elements to customize paths or add method restrictions.
 
 Custom action elements must define their own routes when attribute routing is
 enabled. Use fully qualified attribute names or add their imports in the theme's

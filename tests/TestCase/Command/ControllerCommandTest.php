@@ -307,6 +307,34 @@ class ControllerCommandTest extends TestCase
     }
 
     /**
+     * @return array<string, array{string, string, string}>
+     */
+    public static function prefixedPluginRoutingProvider(): array
+    {
+        return [
+            'plugin' => ['BakeTest', 'Admin', '/bake-test/admin'],
+            'vendor plugin' => ['Company/Pastry', 'Admin/Management', '/company/pastry/admin/management'],
+        ];
+    }
+
+    #[DataProvider('prefixedPluginRoutingProvider')]
+    public function testBakePrefixedPluginRouting(string $plugin, string $prefix, string $path): void
+    {
+        $this->loadTestPlugin($plugin);
+        $this->generatedFile = Plugin::path($plugin) . 'src/Controller/' . $prefix . '/BakeArticlesController.php';
+        $this->exec('bake controller --connection test --no-test --plugin ' . $plugin .
+            ' --prefix ' . $prefix . ' BakeArticles');
+
+        $this->assertExitSuccess();
+        $this->assertFileContains("#[Scope('/bake-articles')]", $this->generatedFile);
+        $this->assertFileContains('use Cake\\Routing\\Attribute\\Prefix;', $this->generatedFile);
+        $this->assertFileContains(
+            "#[Prefix('" . $prefix . "', path: '" . $path . "')]",
+            $this->generatedFile,
+        );
+    }
+
+    /**
      * test that bakeActions is creating the correct controller Code. (Using sessions)
      *
      * @return void
