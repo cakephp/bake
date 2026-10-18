@@ -48,12 +48,12 @@ class BakeArticlesController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Bake Article id.
+     * @param string|int|null $id Bake Article id.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/view/{id}')]
-    public function view(mixed $id = null)
+    public function view(int|string|null $id = null)
     {
         $bakeArticle = $this->BakeArticles->get($id, contain: ['BakeUsers', 'BakeTags', 'BakeComments']);
         $this->Authorization->authorize($bakeArticle);
@@ -87,12 +87,12 @@ class BakeArticlesController extends AppController
     /**
      * Edit method
      *
-     * @param string|null $id Bake Article id.
+     * @param string|int|null $id Bake Article id.
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/edit/{id}')]
-    public function edit(mixed $id = null)
+    public function edit(int|string|null $id = null)
     {
         $bakeArticle = $this->BakeArticles->get($id, contain: ['BakeTags']);
         $this->Authorization->authorize($bakeArticle);
@@ -113,12 +113,12 @@ class BakeArticlesController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Bake Article id.
+     * @param string|int|null $id Bake Article id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/delete/{id}')]
-    public function delete(mixed $id = null): ?Response
+    public function delete(int|string|null $id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);
         $bakeArticle = $this->BakeArticles->get($id);
