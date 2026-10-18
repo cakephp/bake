@@ -19,7 +19,7 @@
 #}
 {{ element('Bake.file_header', {
     namespace: "#{namespace}\\Controller#{prefix}",
-    classImports: (plugin or prefix) ? ["#{baseNamespace}\\Controller\\AppController"] : [],
+    classImports: ((plugin or prefix) ? ["#{baseNamespace}\\Controller\\AppController"] : [])|merge(routingImports),
 }) }}
 {% set has_login = 'login' in actions and Bake.hasPlugin('Authentication') %}
 {% set include_initialize = components or helpers or has_login %}
@@ -36,6 +36,12 @@
  * @property {{ classInfo.fqn }} ${{ classInfo.name }}
 {% endfor %}
  */
+{% if routingActions %}
+#[Scope('{{ routingScopePath }}')]
+{% if routingPrefixPath %}
+#[Prefix('{{ routingPrefixName }}', path: '{{ routingPrefixPath }}')]
+{% endif %}
+{% endif %}
 class {{ name }}Controller extends AppController
 {
 {% if include_initialize %}

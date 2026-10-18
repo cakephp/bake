@@ -19,7 +19,9 @@ namespace Bake\Test\TestCase\Command;
 use Bake\Test\TestCase\TestCase;
 use Bake\Utility\SubsetSchemaCollection;
 use Cake\Console\CommandInterface;
+use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * AllCommand Test
@@ -70,12 +72,27 @@ class AllCommandTest extends TestCase
     }
 
     /**
+     * @return array<string, array{bool, string, bool}>
+     */
+    public static function attributeRoutingProvider(): array
+    {
+        return [
+            'enabled' => [true, '', true],
+            'disabled' => [false, '', false],
+            'enable override' => [false, '--attribute-routing', true],
+            'disable override' => [true, '--no-attribute-routing', false],
+        ];
+    }
+
+    /**
      * Test execute() generating a full stack
      *
      * @return void
      */
-    public function testExecute(): void
+    #[DataProvider('attributeRoutingProvider')]
+    public function testExecute(bool $configured, string $option, bool $enabled): void
     {
+        Configure::write('Bake.attributeRouting', $configured);
         $path = APP;
         $testsPath = ROOT . 'tests' . DS;
         $templatesPath = ROOT . 'templates' . DS;
@@ -92,10 +109,13 @@ class AllCommandTest extends TestCase
             $testsPath . 'TestCase/Model/Table/ProductsTableTest.php',
             $testsPath . 'TestCase/Controller/ProductsControllerTest.php',
         ];
-        $this->exec('bake all --connection test Products', ['y']);
+        $this->exec('bake all --connection test ' . $option . ' Products', ['y']);
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
+        $controller = file_get_contents(APP . 'Controller/ProductsController.php');
+        $this->assertSame($enabled, str_contains($controller, '#[Scope('));
+
         $this->assertOutputContains('Bake All complete');
     }
 

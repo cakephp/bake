@@ -3,10 +3,14 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Controller;
 
+use Cake\Routing\Attribute\Route;
+use Cake\Routing\Attribute\Scope;
+
 /**
  * Users Controller
  *
  */
+#[Scope('/users')]
 class UsersController extends AppController
 {
     /**
@@ -26,6 +30,8 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
+    #[Route('/')]
+    #[Route('/index')]
     public function index()
     {
         $query = $this->Users->find();
@@ -41,6 +47,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+    #[Route('/view/{id}')]
     public function view($id = null)
     {
         $user = $this->Users->get($id, contain: []);
@@ -52,6 +59,7 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
+    #[Route('/add')]
     public function add()
     {
         $user = $this->Users->newEmptyEntity();
@@ -74,6 +82,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+    #[Route('/edit/{id}')]
     public function edit($id = null)
     {
         $user = $this->Users->get($id, contain: []);
@@ -96,6 +105,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+    #[Route('/delete/{id}')]
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -114,6 +124,7 @@ class UsersController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful login, renders view otherwise.
      */
+    #[Route('/login')]
     public function login()
     {
         $this->request->allowMethod(['get', 'post']);

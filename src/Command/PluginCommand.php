@@ -56,6 +56,10 @@ class PluginCommand extends BakeCommand
      */
     public function execute(): ?int
     {
+        if (!$this->validateAttributeRoutingOptions()) {
+            return static::CODE_ERROR;
+        }
+
         $name = $this->args->getArgument('name');
         if (empty($name)) {
             $this->io->error('You must provide a plugin name in CamelCase format.');
@@ -204,6 +208,7 @@ class PluginCommand extends BakeCommand
 
         $renderer = $this->createTemplateRenderer()
             ->set([
+                'attributeRouting' => $this->useAttributeRouting(),
                 'name' => $name,
                 'package' => $package,
                 'namespace' => $namespace,
@@ -379,7 +384,7 @@ class PluginCommand extends BakeCommand
             'help' => 'Generate only the plugin class.',
         ]);
 
-        return $parser;
+        return $this->addAttributeRoutingOptions($parser);
     }
 
     /**

@@ -61,8 +61,10 @@ class {{ name }}Plugin extends BasePlugin
             ['path' => '/{{ routePath }}'],
             function (RouteBuilder $builder) {
                 // Add custom routes here
+{% if not attributeRouting %}
 
                 $builder->fallbacks();
+{% endif %}
             }
         );
         parent::routes($routes);

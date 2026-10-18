@@ -18,6 +18,9 @@
      *
      * @return \Cake\Http\Response|null|void Redirects on successful login, renders view otherwise.
      */
+{% if attributeRouting %}
+    #[Route('/login')]
+{% endif %}
     public function login()
     {
 {% if Bake.hasPlugin('Authorization') %}

@@ -93,6 +93,25 @@ EventManager::instance()->on(
 
 By scoping event listeners to specific bake templates, you can simplify your bake-related event logic and provide callbacks that are easier to test.
 
+## Routing Attributes in Custom Themes
+
+Controller templates receive the resolved `attributeRouting` boolean and routing
+metadata: `routingActions`, `routingImports`, `routingScopePath`,
+`routingPrefixName`, and `routingPrefixPath`. The default controller template uses
+this metadata for its imports and class attributes. Built-in action elements
+render their own `Route` attributes without HTTP method restrictions. Themes can
+override those elements to customize paths or add method restrictions; the
+default templates preserve method checks inside the controller actions.
+
+Custom action elements must define their own routes when attribute routing is
+enabled. Use fully qualified attribute names or add their imports in the theme's
+controller template. Overriding the entire controller template also makes the
+theme responsible for rendering class attributes and routing imports. Honor
+`attributeRouting` when supporting both routing modes.
+
+Plugin templates receive `attributeRouting` too. Attribute-enabled plugin
+skeletons omit fallback routes.
+
 ## Bake Template Syntax
 
 Bake template files use the [Twig](https://twig.symfony.com/) template syntax.

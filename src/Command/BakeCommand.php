@@ -23,6 +23,7 @@ use Bake\Utility\TemplateRenderer;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIoInterface;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Core\ConventionsTrait;
 use Cake\Event\Event;
@@ -91,6 +92,56 @@ abstract class BakeCommand extends Command
     public function setArgs(Arguments $args): void
     {
         $this->args = $args;
+    }
+
+    /**
+     * Add the per-command overrides for the project routing default.
+     *
+     * @param \Cake\Console\ConsoleOptionParser $parser Option parser.
+     * @return \Cake\Console\ConsoleOptionParser
+     */
+    protected function addAttributeRoutingOptions(ConsoleOptionParser $parser): ConsoleOptionParser
+    {
+        return $parser->addOption('attribute-routing', [
+            'boolean' => true,
+            'help' => 'Generate routing attributes, overriding Bake.attributeRouting.',
+        ])->addOption('no-attribute-routing', [
+            'boolean' => true,
+            'help' => 'Generate without routing attributes, overriding Bake.attributeRouting.',
+        ]);
+    }
+
+    /**
+     * Reject conflicting overrides before generating any files.
+     *
+     * @return bool
+     */
+    protected function validateAttributeRoutingOptions(): bool
+    {
+        if ($this->args->getOption('attribute-routing') && $this->args->getOption('no-attribute-routing')) {
+            $this->io->error('The --attribute-routing and --no-attribute-routing options cannot be used together.');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Resolve explicit command options before the project default.
+     *
+     * @return bool
+     */
+    protected function useAttributeRouting(): bool
+    {
+        if ($this->args->getOption('no-attribute-routing')) {
+            return false;
+        }
+        if ($this->args->getOption('attribute-routing')) {
+            return true;
+        }
+
+        return (bool)Configure::read('Bake.attributeRouting', true);
     }
 
     /**

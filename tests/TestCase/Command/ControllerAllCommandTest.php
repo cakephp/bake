@@ -22,9 +22,11 @@ use Bake\Test\TestCase\TestCase;
 use Bake\Utility\SubsetSchemaCollection;
 use Cake\Console\CommandInterface;
 use Cake\Console\ConsoleOptionParser;
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * ControllerAllCommand test
@@ -81,21 +83,38 @@ class ControllerAllCommandTest extends TestCase
     }
 
     /**
+     * @return array<string, array{bool, string, bool}>
+     */
+    public static function attributeRoutingProvider(): array
+    {
+        return [
+            'enabled' => [true, '', true],
+            'disabled' => [false, '', false],
+            'enable override' => [false, '--attribute-routing', true],
+            'disable override' => [true, '--no-attribute-routing', false],
+        ];
+    }
+
+    /**
      * test that execute runs all when the first arg == all
      *
      * @return void
      */
-    public function testExecute(): void
+    #[DataProvider('attributeRoutingProvider')]
+    public function testExecute(bool $configured, string $option, bool $enabled): void
     {
+        Configure::write('Bake.attributeRouting', $configured);
         foreach ($this->tables as $table) {
             $plural = Inflector::camelize($table);
 
             $this->generatedFiles[] = APP . "Controller/{$plural}Controller.php";
         }
-        $this->exec('bake controller all --connection test --no-test --quiet');
+        $this->exec('bake controller all --connection test --no-test ' . $option);
 
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
+        $controller = file_get_contents(APP . 'Controller/BakeArticlesController.php');
+        $this->assertSame($enabled, str_contains($controller, '#[Scope('));
 
         $this->assertFileDoesNotExist(
             ROOT . 'tests/TestCase/Controller/BakeArticlesControllerTest.php',

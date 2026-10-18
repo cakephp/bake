@@ -46,8 +46,6 @@ class SimpleExamplePlugin extends BasePlugin
             ['path' => '/simple-example'],
             function (RouteBuilder $builder) {
                 // Add custom routes here
-
-                $builder->fallbacks();
             }
         );
         parent::routes($routes);

@@ -45,6 +45,73 @@ To get help on a specific command, type `cake command_name --help`
 To see full descriptions and plugin grouping, use `cake --help -v`
 ```
 
+## Controller Routing
+
+For CakePHP 6, Bake generates routing attributes on controllers by default.
+This applies to `bake controller`, `bake controller all`, and `bake all`.
+Generated plugin skeletons also omit fallback routes by default.
+
+### Generated URLs and Method Checks
+
+For `ArticlesController`, Bake generates these routes:
+
+| Action | Path |
+| --- | --- |
+| index | `/articles` and `/articles/index` |
+| view | `/articles/view/{id}` |
+| add | `/articles/add` |
+| edit | `/articles/edit/{id}` |
+| delete | `/articles/delete/{id}` |
+| login, when generated | `/users/login` for `UsersController` |
+
+Routes use `#[Route]` attributes without HTTP method restrictions; index has an
+additional attribute for its `/index` alias. Method handling remains in the
+controller actions, preserving the previous behavior. The generated delete action
+uses `allowMethod(['post', 'delete'])`, and the login action uses
+`allowMethod(['get', 'post'])`. Unsupported methods for those actions receive the
+existing 405 response. Other actions retain their existing request handling.
+
+Existing array-based links, form actions, and redirects work without fallbacks or
+additional `_method` routing hints, with `/articles` as the index URL:
+
+```php
+$this->Form->postLink('Delete', ['action' => 'delete', $article->id]);
+```
+
+Identifiers are not restricted to integers, so UUIDs and other string keys work too.
+Only actions selected for generation receive routes. Empty controllers receive no
+routing attributes.
+
+Prefixes retain their namespace paths: `--prefix Admin/Management` produces
+`/admin/management/articles`. Plugin routes include the conventional plugin path:
+`Blog.Articles` produces `/blog/articles`, and adding `--prefix Admin` produces
+`/blog/admin/articles`. Customize the generated `Scope` or `Prefix` attributes if
+your plugin uses a different mount path.
+
+### Project Default and Command Overrides
+
+Projects managing their routes in configuration can disable attribute generation
+in their CLI bootstrap:
+
+```php
+use Cake\Core\Configure;
+
+Configure::write('Bake.attributeRouting', false);
+```
+
+Override either project default for an individual invocation:
+
+```bash
+bin/cake bake controller Articles --attribute-routing
+bin/cake bake all Articles --no-attribute-routing
+bin/cake bake controller all --no-attribute-routing
+bin/cake bake plugin Blog --attribute-routing
+```
+
+`--attribute-routing` and `--no-attribute-routing` cannot be combined. Disabling
+attributes preserves the previous generated output, including the plugin
+skeleton's fallback route. It does not change existing files' routing setup.
+
 ## Bake Models
 
 Models are generically baked from existing database tables.

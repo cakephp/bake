@@ -25,6 +25,7 @@ use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Utility\Filesystem;
+use PHPUnit\Framework\Attributes\DataProvider;
 use SplFileInfo;
 
 /**
@@ -242,6 +243,30 @@ class PluginCommandTest extends TestCase
         $this->assertFileContains('use Cake\Core\BasePlugin', $pluginClass);
 
         $this->assertFileDoesNotExist($bakedRoot . 'ClassOnly/webroot');
+    }
+
+    /**
+     * @return array<string, array{bool, string, bool}>
+     */
+    public static function attributeRoutingProvider(): array
+    {
+        return [
+            'enabled' => [true, '', true],
+            'disabled' => [false, '', false],
+            'enable override' => [false, '--attribute-routing', true],
+            'disable override' => [true, '--no-attribute-routing', false],
+        ];
+    }
+
+    #[DataProvider('attributeRoutingProvider')]
+    public function testAttributeRoutingOptions(bool $configured, string $option, bool $enabled): void
+    {
+        Configure::write('Bake.attributeRouting', $configured);
+        $this->exec(rtrim('bake plugin SimpleExample ' . $option), ['y', 'n']);
+
+        $this->assertExitSuccess();
+        $result = file_get_contents($this->pluginsPath . 'SimpleExample/src/SimpleExamplePlugin.php');
+        $this->assertSame(!$enabled, str_contains($result, '$builder->fallbacks();'));
     }
 
     /**

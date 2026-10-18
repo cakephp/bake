@@ -22,6 +22,7 @@ use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
+use Cake\Utility\Inflector;
 
 /**
  * Task class for creating and updating controller files.
@@ -48,6 +49,10 @@ class ControllerCommand extends BakeCommand
      */
     public function execute(): ?int
     {
+        if (!$this->validateAttributeRoutingOptions()) {
+            return static::CODE_ERROR;
+        }
+
         $this->extractCommonProperties($this->args);
         $name = $this->args->getArgument('name') ?? '';
         $name = $this->getNameWithoutPrefix($name);
@@ -184,6 +189,8 @@ class ControllerCommand extends BakeCommand
             'pluginPath' => null,
         ];
 
+        $data += $this->getAttributeRoutingData($controllerName, $data);
+
         $contents = $this->createTemplateRenderer()
             ->set($data)
             ->generate('Bake.Controller/controller');
@@ -191,6 +198,50 @@ class ControllerCommand extends BakeCommand
         $path = $this->getPath();
         $filename = $path . $controllerName . 'Controller.php';
         $this->io->createFile($filename, $contents, $this->force);
+    }
+
+    /**
+     * Prepare routing metadata while leaving the PHP source customizable in templates.
+     *
+     * @param string $controllerName Controller name.
+     * @param array<string, mixed> $data Controller template variables.
+     * @return array<string, mixed>
+     */
+    protected function getAttributeRoutingData(string $controllerName, array $data): array
+    {
+        $enabled = $data['attributeRouting'] ?? $this->useAttributeRouting();
+        $actions = $enabled ? array_values(array_intersect(
+            $data['actions'] ?? [],
+            ['index', 'view', 'add', 'edit', 'delete', 'login'],
+        )) : [];
+        $imports = [];
+        $scopePath = '/' . Inflector::dasherize($controllerName);
+        $prefixName = str_replace('\\', '/', ltrim($data['prefix'] ?? '', '\\'));
+        $prefixPath = null;
+        if ($actions) {
+            $imports = ['Cake\\Routing\\Attribute\\Route', 'Cake\\Routing\\Attribute\\Scope'];
+            if ($data['plugin']) {
+                $pluginPath = '/' . Inflector::dasherize($data['plugin']);
+                if ($prefixName) {
+                    $imports[] = 'Cake\\Routing\\Attribute\\Prefix';
+                    $prefixPath = $pluginPath . '/' . implode('/', array_map(
+                        Inflector::dasherize(...),
+                        explode('/', $prefixName),
+                    ));
+                } else {
+                    $scopePath = $pluginPath . $scopePath;
+                }
+            }
+        }
+
+        return [
+            'attributeRouting' => $enabled,
+            'routingActions' => $actions,
+            'routingImports' => $imports,
+            'routingScopePath' => $scopePath,
+            'routingPrefixName' => $prefixName,
+            'routingPrefixPath' => $prefixPath,
+        ];
     }
 
     /**
@@ -280,6 +331,6 @@ class ControllerCommand extends BakeCommand
             'help' => 'Do not generate basic CRUD action methods.',
         ]);
 
-        return $parser;
+        return $this->addAttributeRoutingOptions($parser);
     }
 }
