@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Controller;
 
+use Cake\Http\Response;
 use Cake\Routing\Attribute\Route;
 use Cake\Routing\Attribute\Scope;
 
@@ -54,7 +55,7 @@ class BakeArticlesController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/view/{id}')]
-    public function view($id = null)
+    public function view(mixed $id = null)
     {
         $bakeArticle = $this->BakeArticles->get($id, contain: ['BakeUsers', 'BakeTags', 'BakeComments']);
         $this->set(compact('bakeArticle'));
@@ -91,7 +92,7 @@ class BakeArticlesController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/edit/{id}')]
-    public function edit($id = null)
+    public function edit(mixed $id = null)
     {
         $bakeArticle = $this->BakeArticles->get($id, contain: ['BakeTags']);
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -116,7 +117,7 @@ class BakeArticlesController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/delete/{id}')]
-    public function delete($id = null)
+    public function delete(mixed $id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);
         $bakeArticle = $this->BakeArticles->get($id);

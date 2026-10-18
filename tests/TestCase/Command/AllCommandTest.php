@@ -200,7 +200,7 @@ class AllCommandTest extends TestCase
             $path . 'Controller/Admin/ProductsController.php',
         );
         $this->assertFileContains(
-            'use Bake\Test\App\Controller\Admin\ProductsController;',
+            '@link \Bake\Test\App\Controller\Admin\ProductsController',
             $testsPath . 'TestCase/Controller/Admin/ProductsControllerTest.php',
         );
         $this->assertOutputContains('Bake All complete');

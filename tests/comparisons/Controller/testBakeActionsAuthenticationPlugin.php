@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Controller;
 
+use Cake\Http\Response;
 use Cake\Routing\Attribute\Route;
 use Cake\Routing\Attribute\Scope;
 
@@ -48,7 +49,7 @@ class UsersController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/view/{id}')]
-    public function view($id = null)
+    public function view(mixed $id = null)
     {
         $user = $this->Users->get($id, contain: []);
         $this->set(compact('user'));
@@ -83,7 +84,7 @@ class UsersController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/edit/{id}')]
-    public function edit($id = null)
+    public function edit(mixed $id = null)
     {
         $user = $this->Users->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -106,7 +107,7 @@ class UsersController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/delete/{id}')]
-    public function delete($id = null)
+    public function delete(mixed $id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);

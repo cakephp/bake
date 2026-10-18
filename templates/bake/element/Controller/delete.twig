@@ -23,7 +23,7 @@
 {% if attributeRouting %}
     #[Route('/delete/{id}')]
 {% endif %}
-    public function delete($id = null)
+    public function delete(mixed $id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);
         ${{ singularName }} = $this->{{ currentModelName }}->get($id);

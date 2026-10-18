@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace BakeTest\Model\Table;
 
-use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
-use Cake\Validation\Validator;
 
 /**
  * Users Model

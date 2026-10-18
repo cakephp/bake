@@ -15,9 +15,16 @@
 #}
 {% set annotations = DocBlock.buildTableAnnotations(associations, associationInfo, behaviors, entity, namespace) %}
 {% set generatedFunctions = ['initialize'] %}
+{% set classImports = ['Cake\\ORM\\Table'] %}
+{% if validation %}
+    {%~ set classImports = classImports|merge(['Cake\\Validation\\Validator']) %}
+{% endif %}
+{% if rulesChecker %}
+    {%~ set classImports = classImports|merge(['Cake\\ORM\\RulesChecker']) %}
+{% endif %}
 {{ element('Bake.file_header', {
     namespace: fileBuilder.namespace,
-    classImports: fileBuilder.classImports(['Cake\\ORM\\Query\\SelectQuery', 'Cake\\ORM\\RulesChecker', 'Cake\\ORM\\Table', 'Cake\\Validation\\Validator']),
+    classImports: fileBuilder.classImports(classImports),
 }) }}
 
 {{ DocBlock.classDescription(name, 'Model', annotations)|raw }}

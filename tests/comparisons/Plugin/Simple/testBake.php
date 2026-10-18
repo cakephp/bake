@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Bake\Test\App\Model\Behavior;
 
 use Cake\ORM\Behavior;
-use Cake\ORM\Table;
 
 /**
  * Example behavior

@@ -59,13 +59,13 @@ class {{ name }}Plugin extends BasePlugin
         $routes->plugin(
             '{{ plugin }}',
             ['path' => '/{{ routePath }}'],
-            function (RouteBuilder $builder) {
+            function (RouteBuilder $builder): void {
                 // Add custom routes here
 {% if not attributeRouting %}
 
                 $builder->fallbacks();
 {% endif %}
-            }
+            },
         );
         parent::routes($routes);
     }

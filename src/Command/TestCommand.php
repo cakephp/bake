@@ -752,7 +752,9 @@ class TestCommand extends BakeCommand
         if ($type === 'Behavior') {
             $uses[] = 'Cake\ORM\Table';
         }
-        $uses[] = $fullClassName;
+        if (!in_array($type, ['Controller', 'Command'], true)) {
+            $uses[] = $fullClassName;
+        }
 
         return $uses;
     }

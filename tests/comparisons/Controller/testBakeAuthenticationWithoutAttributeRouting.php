@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Controller;
 
+use Cake\Http\Response;
+
 /**
  * Users Controller
  *
@@ -41,7 +43,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(mixed $id = null)
     {
         $user = $this->Users->get($id, contain: []);
         $this->set(compact('user'));
@@ -74,7 +76,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(mixed $id = null)
     {
         $user = $this->Users->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -96,7 +98,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(mixed $id = null): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);

@@ -26,7 +26,7 @@
 {% if attributeRouting %}
     #[Route('/edit/{id}')]
 {% endif %}
-    public function edit($id = null)
+    public function edit(mixed $id = null)
     {
         ${{ singularName }} = $this->{{ currentModelName }}->get($id, contain: {{ Bake.exportArray(belongsToMany)|raw }});
 {% if Bake.hasPlugin('Authorization') %}

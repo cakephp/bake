@@ -32,7 +32,7 @@ class ExampleCell extends Cell
      *
      * @return void
      */
-    public function display()
+    public function display(): void
     {
     }
 }

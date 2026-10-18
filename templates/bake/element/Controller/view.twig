@@ -27,7 +27,7 @@
 {% if attributeRouting %}
     #[Route('/view/{id}')]
 {% endif %}
-    public function view($id = null)
+    public function view(mixed $id = null)
     {
         ${{ singularName }} = $this->{{ currentModelName }}->get($id, contain: {{ Bake.exportArray(allAssociations)|raw }});
 {% if Bake.hasPlugin('Authorization') %}
