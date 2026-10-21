@@ -45,6 +45,65 @@ To get help on a specific command, type `cake command_name --help`
 To see full descriptions and plugin grouping, use `cake --help -v`
 ```
 
+## Controller Routing
+
+For CakePHP 6, Bake generates routing attributes on controllers by default.
+This applies to `bake controller`, `bake controller all`, and `bake all`.
+Generated plugin skeletons also omit fallback routes by default.
+
+### Generated URLs
+
+For `ArticlesController`, Bake generates these routes:
+
+| Action | Path |
+| --- | --- |
+| index | `/articles` and `/articles/index` |
+| view | `/articles/view/{id}` |
+| add | `/articles/add` |
+| edit | `/articles/edit/{id}` |
+| delete | `/articles/delete/{id}` |
+| login, when generated | `/users/login` for `UsersController` |
+
+Routes use `#[Route]` attributes without HTTP method restrictions; index has an
+additional attribute for its `/index` alias.
+
+Existing array-based links, form actions, and redirects work without fallbacks or
+additional `_method` routing hints, with `/articles` as the index URL:
+
+```php
+$this->Form->postLink('Delete', ['action' => 'delete', $article->id]);
+```
+
+Identifiers are not restricted to integers, so UUIDs and other string keys work too.
+
+When generating prefixed controllers with `--prefix Admin/Management`, routing
+attributes will include both the plugin and prefix path components. You can customize
+the `Scope` or `Prefix` attributes as required.
+
+### Project Default and Command Overrides
+
+Projects managing their routes in configuration can disable attribute generation
+in their CLI bootstrap:
+
+```php
+use Cake\Core\Configure;
+
+Configure::write('Bake.attributeRouting', false);
+```
+
+Override either project default for an individual invocation:
+
+```bash
+bin/cake bake controller Articles --attribute-routing
+bin/cake bake all Articles --no-attribute-routing
+bin/cake bake controller all --no-attribute-routing
+bin/cake bake plugin Blog --attribute-routing
+```
+
+`--attribute-routing` and `--no-attribute-routing` cannot be combined. Disabling
+attributes preserves the previous generated output, including the plugin
+skeleton's fallback route. It does not change existing files' routing setup.
+
 ## Bake Models
 
 Models are generically baked from existing database tables.

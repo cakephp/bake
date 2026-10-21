@@ -3,11 +3,15 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Controller;
 
+use Cake\Routing\Attribute\Route;
+use Cake\Routing\Attribute\Scope;
+
 /**
  * BakeArticles Controller
  *
  * @property \Bake\Test\App\Model\Table\BakeArticlesTable $BakeArticles
  */
+#[Scope('/bake-articles')]
 class BakeArticlesController extends AppController
 {
     /**
@@ -15,6 +19,8 @@ class BakeArticlesController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
+    #[Route('/')]
+    #[Route('/index')]
     public function index()
     {
         $query = $this->BakeArticles->find()
@@ -31,6 +37,7 @@ class BakeArticlesController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+    #[Route('/view/{id}')]
     public function view($id = null)
     {
         $bakeArticle = $this->BakeArticles->get($id, contain: ['BakeUsers', 'BakeTags', 'BakeComments']);
@@ -42,6 +49,7 @@ class BakeArticlesController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
+    #[Route('/add')]
     public function add()
     {
         $bakeArticle = $this->BakeArticles->newEmptyEntity();
@@ -66,6 +74,7 @@ class BakeArticlesController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+    #[Route('/edit/{id}')]
     public function edit($id = null)
     {
         $bakeArticle = $this->BakeArticles->get($id, contain: ['BakeTags']);
@@ -90,6 +99,7 @@ class BakeArticlesController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+    #[Route('/delete/{id}')]
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);

@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Controller;
 
+use Cake\Routing\Attribute\Route;
+use Cake\Routing\Attribute\Scope;
+
 /**
  * BakeArticles Controller
  *
@@ -10,6 +13,7 @@ namespace Bake\Test\App\Controller;
  * @property \Cake\Controller\Component\FormProtectionComponent $FormProtection
  * @property \Cake\Controller\Component\FlashComponent $Flash
  */
+#[Scope('/bake-articles')]
 class BakeArticlesController extends AppController
 {
     /**
@@ -31,6 +35,8 @@ class BakeArticlesController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
+    #[Route('/')]
+    #[Route('/index')]
     public function index()
     {
         $query = $this->BakeArticles->find()

@@ -19,6 +19,9 @@
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
+{% if attributeRouting %}
+    #[Route('/add')]
+{% endif %}
     public function add()
     {
         ${{ singularName }} = $this->{{ currentModelName }}->newEmptyEntity();

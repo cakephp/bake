@@ -61,7 +61,7 @@ class AllCommand extends BakeCommand
             'default' => false,
         ]);
 
-        return $parser;
+        return $this->addAttributeRoutingOptions($parser);
     }
 
     /**
@@ -71,6 +71,10 @@ class AllCommand extends BakeCommand
      */
     public function execute(): ?int
     {
+        if (!$this->validateAttributeRoutingOptions()) {
+            return static::CODE_ERROR;
+        }
+
         $this->extractCommonProperties($this->args);
         $name = $this->args->getArgument('name') ?? '';
         $name = $this->getNameWithoutPrefix($name);
@@ -97,6 +101,12 @@ class AllCommand extends BakeCommand
             $command = new $commandName($this->factory);
 
             $options = $this->args->getOptions();
+            if ($command instanceof ControllerCommand) {
+                $options['attribute-routing'] = $this->useAttributeRouting();
+                $options['no-attribute-routing'] = !$this->useAttributeRouting();
+            } else {
+                unset($options['attribute-routing'], $options['no-attribute-routing']);
+            }
             if (
                 $this->args->hasOption('prefix') &&
                 !($command instanceof ControllerCommand) &&

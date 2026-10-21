@@ -54,6 +54,10 @@ class ControllerAllCommand extends BakeCommand
      */
     public function execute(): ?int
     {
+        if (!$this->validateAttributeRoutingOptions()) {
+            return static::CODE_ERROR;
+        }
+
         $this->extractCommonProperties($this->args);
         /** @var \Cake\Database\Connection $connection */
         $connection = ConnectionManager::get($this->connection);

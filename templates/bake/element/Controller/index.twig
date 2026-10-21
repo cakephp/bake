@@ -18,6 +18,10 @@
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
+{% if attributeRouting %}
+    #[Route('/')]
+    #[Route('/index')]
+{% endif %}
     public function index()
     {
 {% set belongsTo = Bake.aliasExtractor(modelObj, 'BelongsTo') %}

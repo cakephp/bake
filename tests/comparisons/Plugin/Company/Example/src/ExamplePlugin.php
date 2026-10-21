@@ -46,8 +46,6 @@ class ExamplePlugin extends BasePlugin
             ['path' => '/company/example'],
             function (RouteBuilder $builder) {
                 // Add custom routes here
-
-                $builder->fallbacks();
             }
         );
         parent::routes($routes);

@@ -21,6 +21,7 @@ use Bake\Test\App\Model\Table\BakeArticlesTable;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\Arguments;
 use Cake\Console\CommandInterface;
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -306,6 +307,34 @@ class ControllerCommandTest extends TestCase
     }
 
     /**
+     * @return array<string, array{string, string, string}>
+     */
+    public static function prefixedPluginRoutingProvider(): array
+    {
+        return [
+            'plugin' => ['BakeTest', 'Admin', '/bake-test/admin'],
+            'vendor plugin' => ['Company/Pastry', 'Admin/Management', '/company/pastry/admin/management'],
+        ];
+    }
+
+    #[DataProvider('prefixedPluginRoutingProvider')]
+    public function testBakePrefixedPluginRouting(string $plugin, string $prefix, string $path): void
+    {
+        $this->loadTestPlugin($plugin);
+        $this->generatedFile = Plugin::path($plugin) . 'src/Controller/' . $prefix . '/BakeArticlesController.php';
+        $this->exec('bake controller --connection test --no-test --plugin ' . $plugin .
+            ' --prefix ' . $prefix . ' BakeArticles');
+
+        $this->assertExitSuccess();
+        $this->assertFileContains("#[Scope('/bake-articles')]", $this->generatedFile);
+        $this->assertFileContains('use Cake\\Routing\\Attribute\\Prefix;', $this->generatedFile);
+        $this->assertFileContains(
+            "#[Prefix('" . $prefix . "', path: '" . $path . "')]",
+            $this->generatedFile,
+        );
+    }
+
+    /**
      * test that bakeActions is creating the correct controller Code. (Using sessions)
      *
      * @return void
@@ -317,6 +346,63 @@ class ControllerCommandTest extends TestCase
 
         $result = file_get_contents($this->generatedFile);
         $this->assertSameAsFile(__FUNCTION__ . '.php', $result);
+    }
+
+    /**
+     * @return array<string, array{bool|null, string, bool}>
+     */
+    public static function attributeRoutingProvider(): array
+    {
+        return [
+            'default' => [null, '', true],
+            'project enabled' => [true, '', true],
+            'project disabled' => [false, '', false],
+            'enable override' => [false, '--attribute-routing', true],
+            'disable override' => [true, '--no-attribute-routing', false],
+        ];
+    }
+
+    #[DataProvider('attributeRoutingProvider')]
+    public function testAttributeRoutingOptions(?bool $configured, string $option, bool $enabled): void
+    {
+        Configure::delete('Bake.attributeRouting');
+        if ($configured !== null) {
+            Configure::write('Bake.attributeRouting', $configured);
+        }
+        $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
+        $this->exec('bake controller --connection test --no-test ' . $option . ' BakeArticles');
+
+        $this->assertExitSuccess();
+        $result = file_get_contents($this->generatedFile);
+        if ($enabled) {
+            $this->assertStringContainsString("#[Scope('/bake-articles')]", $result);
+        } else {
+            $this->assertSameAsFile('testBakeWithoutAttributeRouting.php', $result);
+        }
+    }
+
+    public function testBakeAuthenticationWithoutAttributeRouting(): void
+    {
+        $this->loadTestPlugin('Authentication');
+        $this->generatedFile = APP . 'Controller/UsersController.php';
+        $original = file_get_contents($this->generatedFile);
+        try {
+            $this->exec('bake controller --connection test --no-test --force --no-attribute-routing Users');
+            $this->assertExitSuccess();
+            $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFile));
+        } finally {
+            file_put_contents($this->generatedFile, $original);
+            $this->generatedFile = '';
+        }
+    }
+
+    public function testNoActionsOmitsRoutingAttributes(): void
+    {
+        $this->generatedFile = APP . 'Controller/BakeArticlesController.php';
+        $this->exec('bake controller --connection test --no-test --no-actions BakeArticles');
+
+        $this->assertExitSuccess();
+        $this->assertStringNotContainsString('Cake\\Routing\\Attribute', file_get_contents($this->generatedFile));
     }
 
     /**
