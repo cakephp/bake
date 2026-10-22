@@ -610,10 +610,10 @@ class TestCommandTest extends TestCase
         $this->assertEquals($expected, $result);
 
         $result = $command->generateUses('Controller', 'App\Controller\PostsController');
-        $expected = [
-            'App\Controller\PostsController',
-        ];
-        $this->assertEquals($expected, $result);
+        $this->assertSame([], $result);
+
+        $result = $command->generateUses('Command', 'App\Command\ExampleCommand');
+        $this->assertSame([], $result);
 
         $result = $command->generateUses('Helper', 'App\View\Helper\FormHelper');
         $expected = [

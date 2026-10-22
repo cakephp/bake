@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bake\Test\App\Controller;
 
+use Cake\Http\Response;
 use Cake\Routing\Attribute\Route;
 use Cake\Routing\Attribute\Scope;
 
@@ -33,12 +34,12 @@ class BakeArticlesController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Bake Article id.
+     * @param string|int $id Bake Article id.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/view/{id}')]
-    public function view($id = null)
+    public function view(int|string $id)
     {
         $bakeArticle = $this->BakeArticles->get($id, contain: ['BakeUsers', 'BakeTags', 'BakeComments']);
         $this->set(compact('bakeArticle'));
@@ -70,12 +71,12 @@ class BakeArticlesController extends AppController
     /**
      * Edit method
      *
-     * @param string|null $id Bake Article id.
+     * @param string|int $id Bake Article id.
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/edit/{id}')]
-    public function edit($id = null)
+    public function edit(int|string $id)
     {
         $bakeArticle = $this->BakeArticles->get($id, contain: ['BakeTags']);
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -95,12 +96,12 @@ class BakeArticlesController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Bake Article id.
+     * @param string|int $id Bake Article id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     #[Route('/delete/{id}')]
-    public function delete($id = null)
+    public function delete(int|string $id): ?Response
     {
         $this->request->allowMethod(['post', 'delete']);
         $bakeArticle = $this->BakeArticles->get($id);

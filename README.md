@@ -37,3 +37,14 @@ without having to manually edit each one:
 ```bash
 UPDATE_TEST_COMPARISON_FILES=1 vendor/bin/phpunit
 ```
+
+Generated PHP registered by command tests is checked with `php -l` before cleanup.
+A dedicated integration test also bakes classes, a complete CRUD stack, and plugin
+skeletons and checks them against the CakePHP coding standard and the project's
+Rector rules. PHPCS uses the generated files' intended application paths so
+test-fixture exclusions cannot hide violations. Rector runs in dry-run mode and
+fails if it proposes changes; generated files are never rewritten by the checks:
+
+```bash
+vendor/bin/phpunit tests/TestCase/GeneratedCodeTest.php
+```

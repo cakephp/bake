@@ -17,9 +17,13 @@
  * @license       https://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
+{% set classImports = ((plugin or prefix) ? ["#{baseNamespace}\\Controller\\AppController"] : [])|merge(routingImports) %}
+{% if 'delete' in actions %}
+    {%~ set classImports = classImports|merge(['Cake\\Http\\Response']) %}
+{% endif %}
 {{ element('Bake.file_header', {
     namespace: "#{namespace}\\Controller#{prefix}",
-    classImports: ((plugin or prefix) ? ["#{baseNamespace}\\Controller\\AppController"] : [])|merge(routingImports),
+    classImports: classImports,
 }) }}
 {% set has_login = 'login' in actions and Bake.hasPlugin('Authentication') %}
 {% set include_initialize = components or helpers or has_login %}
