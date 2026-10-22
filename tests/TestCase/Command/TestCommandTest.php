@@ -22,6 +22,9 @@ use Bake\Test\App\Model\Table\ArticlesTable;
 use Bake\Test\App\Model\Table\CategoryThreadsTable;
 use Bake\Test\TestCase\TestCase;
 use Cake\Console\CommandInterface;
+use Cake\Console\ConsoleIo;
+use Cake\Console\TestSuite\StubConsoleInput;
+use Cake\Console\TestSuite\StubConsoleOutput;
 use Cake\Core\Plugin;
 use Cake\Http\ServerRequest as Request;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -384,6 +387,62 @@ class TestCommandTest extends TestCase
         $this->assertExitCode(CommandInterface::CODE_SUCCESS);
         $this->assertFilesExist($this->generatedFiles);
         $this->assertSameAsFile(__FUNCTION__ . '.php', file_get_contents($this->generatedFiles[0]));
+    }
+
+    /**
+     * Fixtures are left out when a Fixture Factories plugin is installed.
+     *
+     * @return void
+     */
+    public function testBakeWithFixtureFactories(): void
+    {
+        $this->generatedFiles = [
+            ROOT . 'tests/TestCase/Model/Table/AuthorsTableTest.php',
+        ];
+        $out = new StubConsoleOutput();
+        $io = new ConsoleIo($out, new StubConsoleOutput(), new StubConsoleInput([]));
+
+        $result = $this->fixtureFactoriesCommand()->run(['table', 'Authors'], $io);
+
+        $this->assertSame(CommandInterface::CODE_SUCCESS, $result);
+        $this->assertStringContainsString('Fixture Factories plugin detected', $out->output());
+        $this->assertStringNotContainsString('$fixtures', (string)file_get_contents($this->generatedFiles[0]));
+    }
+
+    /**
+     * An explicit fixture list is used even if a Fixture Factories plugin is installed.
+     *
+     * @return void
+     */
+    public function testBakeFixturesParamWithFixtureFactories(): void
+    {
+        $this->generatedFiles = [
+            ROOT . 'tests/TestCase/Model/Table/AuthorsTableTest.php',
+        ];
+        $out = new StubConsoleOutput();
+        $io = new ConsoleIo($out, new StubConsoleOutput(), new StubConsoleInput([]));
+
+        $result = $this->fixtureFactoriesCommand()->run(
+            ['table', 'Authors', '--fixtures', 'app.Posts,app.Comments,app.Users'],
+            $io,
+        );
+
+        $this->assertSame(CommandInterface::CODE_SUCCESS, $result);
+        $this->assertStringNotContainsString('Fixture Factories plugin detected', $out->output());
+        $this->assertSameAsFile('testBakeFixturesParam.php', file_get_contents($this->generatedFiles[0]));
+    }
+
+    /**
+     * @return \Bake\Command\TestCommand
+     */
+    protected function fixtureFactoriesCommand(): TestCommand
+    {
+        return new class extends TestCommand {
+            protected function hasFixtureFactories(): bool
+            {
+                return true;
+            }
+        };
     }
 
     /**

@@ -63,7 +63,7 @@ class {{ className }}Test extends TestCase
     {%~ endfor %}
 {% endif %}
 
-{%- if fixtures and not (hasFixtureFactories|default(false)) %}
+{%- if fixtures %}
     /**
      * Fixtures
      *
