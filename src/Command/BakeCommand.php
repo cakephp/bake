@@ -186,6 +186,17 @@ abstract class BakeCommand extends Command
     }
 
     /**
+     * Check if a Fixture Factories plugin is installed.
+     *
+     * @return bool
+     */
+    protected function hasFixtureFactories(): bool
+    {
+        return class_exists('CakephpFixtureFactories\Plugin')
+            || class_exists('CakephpFixtureFactories\CakephpFixtureFactoriesPlugin');
+    }
+
+    /**
      * Delete empty file in a given path
      *
      * @param string $path Path to folder which contains 'empty' file.

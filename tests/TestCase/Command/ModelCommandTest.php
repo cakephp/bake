@@ -1836,6 +1836,32 @@ class ModelCommandTest extends TestCase
     }
 
     /**
+     * No fixture is baked when a Fixture Factories plugin is installed.
+     *
+     * @return void
+     */
+    public function testBakeFixtureWithFixtureFactories(): void
+    {
+        $this->generatedFiles = [
+            ROOT . 'tests/Fixture/TodoItemsFixture.php',
+        ];
+        $command = new class extends ModelCommand {
+            protected function hasFixtureFactories(): bool
+            {
+                return true;
+            }
+        };
+        $out = new StubConsoleOutput();
+        $io = new ConsoleIo($out, new StubConsoleOutput(), new StubConsoleInput([]));
+
+        $command->bakeFixture('TodoItems', 'todo_items', new Arguments([], [], []), $io);
+
+        $this->assertFileDoesNotExist($this->generatedFiles[0]);
+        $this->assertStringContainsString('skipping fixture generation', $out->output());
+        $this->assertStringContainsString('bin/cake bake fixture_factory TodoItems', $out->output());
+    }
+
+    /**
      * Ensure that the test object is correctly called.
      *
      * @return void
